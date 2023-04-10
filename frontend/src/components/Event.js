@@ -1,6 +1,6 @@
 import React from "react";
 
-const Event = ({ id, title, desc, date, img }) => {
+const Event = (props) => {
   const handleSignUp = (eventId) => {
     console.log("Signed up");
   };
@@ -9,12 +9,12 @@ const Event = ({ id, title, desc, date, img }) => {
     <>
       <div>
         <h1>
-          {title}
-          <span> {date}</span>
+          {props.title}
+          <span> {props.date}</span>
         </h1>
-        <img src={img} alt="test"></img>
-        <p>{desc}</p>
-        <button onClick={() => handleSignUp(id)}>Sign Up</button>
+        <img src={props.img} alt="test"></img>
+        <p>{props.desc}</p>
+        <button onClick={() => handleSignUp(props.id)}>Sign Up</button>
       </div>
     </>
   );
