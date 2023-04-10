@@ -1,7 +1,11 @@
 const ContactForm = () => {
+    
+    const handleSubmit = () => {
+        console.log("Form submitted");
+    };
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div>
                 <input 
                     type="text"
