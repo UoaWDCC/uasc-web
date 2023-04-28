@@ -17,11 +17,7 @@ const Event = (props) => {
 
   const handleSignUp = () => {
     const user = app.auth().currentUser;
-    if (user) {
-      navigate(`/events/${props.id}/signup`);
-    } else {
-      navigate("/login");
-    }
+    user ? navigate(`/events/${props.id}/signup`) : navigate("/login");
   };
 
   return (
