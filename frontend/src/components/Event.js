@@ -8,15 +8,13 @@ import {
   Button,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import app from "../firebase";
-import "firebase/compat/firestore";
-import "firebase/compat/auth";
+import { auth } from "../firebase";
 
 const Event = (props) => {
   const navigate = useNavigate();
 
   const handleSignUp = () => {
-    const user = app.auth().currentUser;
+    const user = auth.currentUser;
     user ? navigate(`/events/${props.id}/signup`) : navigate("/login");
   };
 
