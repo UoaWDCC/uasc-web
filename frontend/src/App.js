@@ -10,8 +10,21 @@ import Checkout from "./pages/Checkout";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
+import { useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebase";
 
 function App() {
+	useEffect(() => {
+		getDoc(doc(db, "users", "uGdwHGfwmuqb0Px3iiSj")).then((doc) => {
+			if (doc.exists()) {
+				console.log(doc.data());
+			} else {
+				console.log("Doc did not exist");
+			}
+		}).catch(console.error);
+	}, [])
+
 	return (
 		<div style={{ backgroundColor: "darkgray" }}>
 			<ThemeProvider theme={theme}>
