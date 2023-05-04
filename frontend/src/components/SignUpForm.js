@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { auth } from '../firebase';
+import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../firebase'; // Update the import path if necessary
+import { addDoc, collection } from '@firebase/firestore';
 
 const SignUpForm = () => {
   const [formState, setFormState] = useState({
@@ -9,7 +11,7 @@ const SignUpForm = () => {
     password: '',
     confirmPassword: '',
   });
-
+  const auth = getAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -20,10 +22,18 @@ const SignUpForm = () => {
       return;
     }
     try {
-      const { user } = await auth.createUserWithEmailAndPassword(email, password);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await user.updateProfile({ displayName: username });
       console.log('User created successfully');
-      navigate('/success'); // Replace '/success' with the URL of the next page
+  
+      // Adding user data to the collection in the Firebase
+      await addDoc(collection(db, 'users'), {
+        uid: user.uid,
+        username,
+        email,
+      });
+  
+      navigate('/success'); // Replace '/success' with the URL of the next page, e.g., the home page
     } catch (error) {
       console.error('Error creating user:', error);
       alert(error.message);
