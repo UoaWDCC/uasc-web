@@ -3,6 +3,8 @@ import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase'; // Update the import path if necessary
 import { addDoc, collection } from '@firebase/firestore';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 const SignUpForm = () => {
   const [formState, setFormState] = useState({
@@ -48,33 +50,61 @@ const SignUpForm = () => {
     }));
   };
 
+  const textFieldStyle = {
+    marginBottom: '16px',
+    width: '100%',
+  };
+  
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" required onChange={handleChange} />
-      </div>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" name="email" required onChange={handleChange} />
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required onChange={handleChange} />
-      </div>
-      <div>
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
+      <div style={textFieldStyle}>
+        <TextField
+          id="username"
+          label="Username"
+          variant="outlined"
           required
           onChange={handleChange}
+          style={{ width: '100%' }}
         />
       </div>
-      <button type="submit">Submit</button>
+      <div style={textFieldStyle}>
+        <TextField
+          id="email"
+          label="Email"
+          variant="outlined"
+          type="email"
+          required
+          onChange={handleChange}
+          style={{ width: '100%' }}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="password"
+          label="Password"
+          variant="outlined"
+          type="password"
+          required
+          onChange={handleChange}
+          style={{ width: '100%' }}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="confirmPassword"
+          label="Confirm Password"
+          variant="outlined"
+          type="password"
+          required
+          onChange={handleChange}
+          style={{ width: '100%' }}
+        />
+      </div>
+      <Button variant="contained" type="submit">
+        Submit
+      </Button>
     </form>
   );
-};
+}
 
 export default SignUpForm;
