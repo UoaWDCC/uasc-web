@@ -1,3 +1,5 @@
+import { Button, FormControl, FormLabel, TextField } from '@mui/material';
+
 const ContactForm = () => {
     
     const handleSubmit = () => {
@@ -6,28 +8,21 @@ const ContactForm = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div>
-                <input 
-                    type="text"
-                    id="name"
-                    placeholder="Name"
-                    required
-                />
-            </div>
-            <div>
-                <input 
-                    type="email"
-                    id="email" 
-                    placeholder="Email Address"
-                
-                />
-            </div>
-            <div>
-                <textarea id="message" rows="5" placeholder="Message"></textarea>
-            </div>
-            <button type="submit">Submit</button>
+            <FormControl>
+                <FormLabel style={{ "textAlign": "left" }}>Name</FormLabel>
+                <TextField required></TextField>
+                <FormLabel style={{ "textAlign": "left" }}>Email Address</FormLabel>
+                <TextField required></TextField>
+                <FormLabel style={{ "textAlign": "left" }}>Message</FormLabel>
+                <TextField multiline required></TextField>
+                <Button type="submit" variant="contained">Submit</Button>
+            </FormControl>
         </form>
     );
 };
+
+<style>
+    
+</style>
 
 export default ContactForm;
