@@ -13,28 +13,46 @@ const SignUpForm = () => {
     password: '',
     confirmPassword: '',
   });
+  const [errors, setErrors] = useState({
+    username: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+
   const auth = getAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { username, email, password, confirmPassword } = formState;
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
+
+    // Validate form input
+    const newErrors = {
+      username: !username,
+      email: !email,
+      password: !password,
+      confirmPassword: confirmPassword !== password,
+    };
+
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some((error) => error)) {
       return;
     }
+
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await user.updateProfile({ displayName: username });
       console.log('User created successfully');
-  
+
       // Adding user data to the collection in the Firebase
       await addDoc(collection(db, 'users'), {
         uid: user.uid,
         username,
         email,
       });
-  
+
       navigate('/success'); // Replace '/success' with the URL of the next page, e.g., the home page
     } catch (error) {
       console.error('Error creating user:', error);
@@ -50,6 +68,7 @@ const SignUpForm = () => {
     }));
   };
 
+
   const textFieldStyle = {
     marginBottom: '16px',
     width: '100%',
@@ -60,43 +79,55 @@ const SignUpForm = () => {
       <div style={textFieldStyle}>
         <TextField
           id="username"
+          name="username"
           label="Username"
           variant="outlined"
           required
           onChange={handleChange}
+          error={errors.username}
+          helperText={errors.username ? 'Username is required' : ''}
           style={{ width: '100%' }}
         />
       </div>
       <div style={textFieldStyle}>
         <TextField
           id="email"
+          name="email"
           label="Email"
           variant="outlined"
           type="email"
           required
           onChange={handleChange}
+          error={errors.email}
+          helperText={errors.email ? 'Email is required' : ''}
           style={{ width: '100%' }}
         />
       </div>
       <div style={textFieldStyle}>
         <TextField
           id="password"
+          name="password"
           label="Password"
           variant="outlined"
           type="password"
           required
           onChange={handleChange}
+          error={errors.password}
+          helperText={errors.password ? 'Password is required' : ''}
           style={{ width: '100%' }}
         />
       </div>
       <div style={textFieldStyle}>
         <TextField
           id="confirmPassword"
+          name="confirmPassword"
           label="Confirm Password"
           variant="outlined"
           type="password"
           required
           onChange={handleChange}
+          error={errors.confirmPassword}
+          helperText={errors.confirmPassword ? 'Passwords do not match' : ''}
           style={{ width: '100%' }}
         />
       </div>
