@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Events from "./pages/Events";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
+import Profile from "./pages/Profile";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
