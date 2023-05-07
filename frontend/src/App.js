@@ -16,7 +16,7 @@ import { db } from "./firebase";
 
 function App() {
 	useEffect(() => {
-		getDoc(doc(db, "users", "uGdwHGfwmuqb0Px3iiSj")).then((doc) => {
+		getDoc(doc(db, "users", "lVsOjAp06AfD6atT8bnrVEpcdcg2")).then((doc) => {
 			if (doc.exists()) {
 				console.log(doc.data());
 			} else {
