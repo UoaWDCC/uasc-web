@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 const BookingForm = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(dayjs(Date.now()));
-  const [selectedEndDate, setSelectedEndDate] = useState(dayjs(Date.now()));
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
 
   // dummy data to test
   const existingBookedDateRanges = [
@@ -59,6 +59,17 @@ const BookingForm = () => {
     );
   };
 
+  const handleChangeStartDate = (startDate) => {
+    if (startDate > selectedEndDate) {
+      setSelectedEndDate(null);
+    }
+    setSelectedStartDate(startDate);
+  };
+
+  const handleChangeEndDate = (endDate) => {
+    setSelectedEndDate(endDate);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(
@@ -73,9 +84,10 @@ const BookingForm = () => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             value={selectedStartDate}
-            onChange={(newStartDate) => setSelectedStartDate(newStartDate)}
+            onChange={handleChangeStartDate}
             shouldDisableDate={isStartDateInvalid}
             disablePast
+            disableHighlightToday
           />
         </LocalizationProvider>
         <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
@@ -84,9 +96,10 @@ const BookingForm = () => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             value={selectedEndDate}
-            onChange={(newEndDate) => setSelectedEndDate(newEndDate)}
+            onChange={handleChangeEndDate}
             shouldDisableDate={isEndDateInvalid}
             disablePast
+            disableHighlightToday
           />
         </LocalizationProvider>
         <Button
