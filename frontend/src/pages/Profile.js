@@ -1,3 +1,5 @@
+import { DateCalendar } from "@mui/x-date-pickers";
+
 const Profile = () => {
   return (
     <div>
@@ -9,6 +11,7 @@ const Profile = () => {
       </div>
       <div>
         <h2>Current Bookings</h2>
+        <DateCalendar />
       </div>
     </div>
   );
