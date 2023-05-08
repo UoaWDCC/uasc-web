@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { addDoc, collection } from '@firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
@@ -48,7 +48,7 @@ const SignUpForm = () => {
       await updateProfile(user, { displayName: username });
 
       // Adding user data to the collection in the Firebase
-      await addDoc(collection(db, 'users'), {
+      await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         username,
         email,
