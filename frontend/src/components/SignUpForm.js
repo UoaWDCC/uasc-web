@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../firebase'; // Update the import path if necessary
+import { db } from '../firebase';
 import { addDoc, collection } from '@firebase/firestore';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -43,8 +43,9 @@ const SignUpForm = () => {
 
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      await user.updateProfile({ displayName: username });
-      console.log('User created successfully');
+    
+      // Update the user's display name
+      await updateProfile(user, { displayName: username });
 
       // Adding user data to the collection in the Firebase
       await addDoc(collection(db, 'users'), {
