@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "uasc-ceebc",
   storageBucket: "uasc-ceebc.appspot.com",
   messagingSenderId: "270675768091",
-  appId: "1:270675768091:web:ea81f130925433bf5219be"
+  appId: "1:270675768091:web:ea81f130925433bf5219be",
 };
 
 const app = initializeApp(firebaseConfig);
