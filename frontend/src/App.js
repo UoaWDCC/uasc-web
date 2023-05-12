@@ -13,7 +13,22 @@ import { ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import theme from "./theme";
+import { useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebase";
+
 function App() {
+  useEffect(() => {
+    getDoc(doc(db, "users", "lVsOjAp06AfD6atT8bnrVEpcdcg2"))
+      .then((doc) => {
+        if (doc.exists()) {
+          console.log(doc.data());
+        } else {
+          console.log("Doc did not exist");
+        }
+      })
+      .catch(console.error);
+  }, []);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div style={{ backgroundColor: "darkgray" }}>
