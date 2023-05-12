@@ -15,18 +15,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import theme from "./theme";
 
 function App() {
-<<<<<<< HEAD
-  useEffect(() => {
-    getDoc(doc(db, "users", "lVsOjAp06AfD6atT8bnrVEpcdcg2"))
-      .then((doc) => {
-        if (doc.exists()) {
-          console.log(doc.data());
-        } else {
-          console.log("Doc did not exist");
-        }
-      })
-      .catch(console.error);
-  }, []);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div style={{ backgroundColor: "darkgray" }}>
@@ -52,36 +41,6 @@ function App() {
       </div>
     </LocalizationProvider>
   );
-=======
-	return (
-		<div style={{ backgroundColor: "darkgray" }}>
-			<ThemeProvider theme={theme}>
-				<Router>
-					<div className="App">
-						<Navbar />
-						<div className="content">
-							<Routes>
-								<Route path="/" element={<Home />} />
-								<Route path="/about" element={<About />} />
-								<Route path="/events" element={<Events />} />
-								<Route path="/contact" element={<Contact />} />
-								<Route
-									path="/register"
-									element={<Register />}
-								/>
-								<Route path="/login" element={<Login />} />
-								<Route
-									path="/checkout"
-									element={<Checkout />}
-								/>
-							</Routes>
-						</div>
-					</div>
-				</Router>
-			</ThemeProvider>
-		</div>
-	);
->>>>>>> main
 }
 
 export default App;
