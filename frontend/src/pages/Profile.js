@@ -1,5 +1,4 @@
-import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateCalendar } from "@mui/x-date-pickers";
 
 const Profile = () => {
   return (
@@ -12,9 +11,7 @@ const Profile = () => {
       </div>
       <div>
         <h2>Current Bookings</h2>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateCalendar />
-        </LocalizationProvider>
+        <DateCalendar />
       </div>
     </div>
   );
