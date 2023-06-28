@@ -15,7 +15,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import theme from "./theme";
 
 function App() {
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div style={{ backgroundColor: "darkgray" }}>
@@ -35,6 +34,11 @@ function App() {
                   <Route path="/profile" element={<Profile />} />
                 </Routes>
               </div>
+            </div>
+            <div>
+              <h1 style={{ fontSize: "300px" }}>
+                I just needed to add this so I could test scrolling
+              </h1>
             </div>
           </Router>
         </ThemeProvider>
