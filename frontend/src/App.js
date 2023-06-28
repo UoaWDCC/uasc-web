@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Events from "./pages/Events";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
+import Booking from "./pages/Booking";
 import Profile from "./pages/Profile";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
@@ -31,6 +32,7 @@ function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/booking" element={<Booking />} />
                   <Route path="/profile" element={<Profile />} />
                 </Routes>
               </div>
