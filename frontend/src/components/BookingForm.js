@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FormControl, FormLabel, Button } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 const BookingForm = () => {
@@ -73,6 +72,12 @@ const BookingForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!selectedEndDate) {
+      alert("Please select an end date before submitting"); // will replace with mui modal or something later
+      return;
+    }
+
     console.log(
       `Selected Date Range:\n${selectedStartDate.$d} - \n${selectedEndDate.$d}`
     );
@@ -83,27 +88,23 @@ const BookingForm = () => {
     <form onSubmit={handleSubmit}>
       <FormControl style={{ margin: "1.5rem" }}>
         <FormLabel style={{ textAlign: "left" }}>Select a Start Date</FormLabel>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            value={selectedStartDate}
-            onChange={handleChangeStartDate}
-            shouldDisableDate={isStartDateInvalid}
-            disablePast
-            disableHighlightToday
-          />
-        </LocalizationProvider>
+        <DatePicker
+          value={selectedStartDate}
+          onChange={handleChangeStartDate}
+          shouldDisableDate={isStartDateInvalid}
+          disablePast
+          disableHighlightToday
+        />
         <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
           Select an End Date
         </FormLabel>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            value={selectedEndDate}
-            onChange={handleChangeEndDate}
-            shouldDisableDate={isEndDateInvalid}
-            disablePast
-            disableHighlightToday
-          />
-        </LocalizationProvider>
+        <DatePicker
+          value={selectedEndDate}
+          onChange={handleChangeEndDate}
+          shouldDisableDate={isEndDateInvalid}
+          disablePast
+          disableHighlightToday
+        />
         <Button
           type="submit"
           variant="contained"
