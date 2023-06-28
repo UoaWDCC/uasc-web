@@ -37,11 +37,6 @@ function App() {
                 </Routes>
               </div>
             </div>
-            <div>
-              <h1 style={{ fontSize: "300px" }}>
-                I just needed to add this so I could test scrolling
-              </h1>
-            </div>
           </Router>
         </ThemeProvider>
       </div>
