@@ -8,14 +8,15 @@ const BookingForm = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(dayjs(Date.now()));
   const [selectedEndDate, setSelectedEndDate] = useState(null);
 
-  // dummy data to test
+  // dummy data to test, kinda just assuming that the booking documents
+  // in firestore will contain a start and end property
   const existingBookedDateRanges = [
-    { start: "2023-05-21", end: "2023-05-23" },
-    { start: "2023-05-26", end: "2023-05-27" },
-    { start: "2023-05-29", end: "2023-05-31" },
+    { start: "2023-07-21", end: "2023-07-23" },
+    { start: "2023-07-26", end: "2023-07-27" },
+    { start: "2023-07-29", end: "2023-07-31" },
   ];
 
-  const isDateWithinBookedRange = (dateToCheck) => {
+  const isDateWithinExistingBookedDates = (dateToCheck) => {
     for (const existingBookedRange of existingBookedDateRanges) {
       const existingStart = new Date(existingBookedRange.start);
       const existingEnd = new Date(existingBookedRange.end);
@@ -27,7 +28,7 @@ const BookingForm = () => {
     return false;
   };
 
-  const doesEndDateIncludeExistingDateRange = (newEndDate) => {
+  const doesEndDateIncludeExistingBookedDates = (newEndDate) => {
     for (const existingBookedRange of existingBookedDateRanges) {
       const existingStart = new Date(existingBookedRange.start);
       const existingEnd = new Date(existingBookedRange.end);
@@ -42,7 +43,7 @@ const BookingForm = () => {
   const isStartDateInvalid = (date) => {
     const startDateString = dayjs(date).format("YYYY-MM-DD"); // needed to convert using dayjs otherwise disabled dates would be 1 day ahead
     const startDate = new Date(startDateString);
-    return isDateWithinBookedRange(startDate);
+    return isDateWithinExistingBookedDates(startDate);
   };
 
   const isEndDateInvalid = (date) => {
@@ -54,8 +55,8 @@ const BookingForm = () => {
     }
 
     return (
-      isDateWithinBookedRange(endDate) ||
-      doesEndDateIncludeExistingDateRange(endDate)
+      isDateWithinExistingBookedDates(endDate) ||
+      doesEndDateIncludeExistingBookedDates(endDate)
     );
   };
 
@@ -75,6 +76,7 @@ const BookingForm = () => {
     console.log(
       `Selected Date Range:\n${selectedStartDate.$d} - \n${selectedEndDate.$d}`
     );
+    // need to add booking to firestore
   };
 
   return (
