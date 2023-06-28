@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const navbarStyles = {
   display: "flex",
@@ -12,34 +12,39 @@ const navbarStyles = {
 };
 
 const Navbar = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const navRef = useRef();
+  const homeLocation = "/";
+  const pageLocation = useLocation().pathname;
+  const onHomePage = pageLocation === homeLocation;
+  const [isVisible, setIsVisible] = useState(!onHomePage);
 
   useEffect(() => {
+    if (!onHomePage) {
+      setIsVisible(true);
+      return;
+    }
+
+    setIsVisible(false);
+
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
-      const navbarHeight = navRef.current.getBoundingClientRect().height;
-      currentScrollPos > navbarHeight
+      const proportionOfWindowHeight = window.innerHeight * 0.3;
+      currentScrollPos > proportionOfWindowHeight
         ? setIsVisible(true)
         : setIsVisible(false);
     };
 
     window.addEventListener("scroll", handleScroll);
 
-    // remove event listener after effect has run and before component unmounts
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pageLocation]);
 
   return (
     <nav
-      ref={navRef}
       className="navbar"
       style={
         isVisible
           ? { ...navbarStyles, opacity: "1" }
-          : { ...navbarStyles, opacity: "0" }
+          : { ...navbarStyles, opacity: "0", pointerEvents: "none" }
       }
     >
       <h1> UASC </h1>
