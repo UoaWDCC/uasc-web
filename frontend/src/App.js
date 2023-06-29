@@ -9,6 +9,7 @@ import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Booking from "./pages/Booking";
 import Profile from "./pages/Profile";
+import Faq from "./pages/Faq";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -29,6 +30,7 @@ function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/events" element={<Events />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/faq" element={<Faq />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/checkout" element={<Checkout />} />
