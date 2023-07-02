@@ -1,23 +1,46 @@
-import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { db } from '../firebase';
-import { setDoc, doc } from 'firebase/firestore';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import React, { useState } from "react";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { setDoc, doc } from "firebase/firestore";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 const SignUpForm = () => {
   const [formState, setFormState] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    firstName: "",
+    lastName: "",
+    password: "",
+    confirmPassword: "",
+    email: "",
+    confirmEmail: "",
+    phoneNumber: "",
+    dob: "",
+    studentId: "",
+    yearLevel: "",
+    faculty: "",
+    sportType: "",
+    interestedInRacing: "",
   });
+
   const [errors, setErrors] = useState({
-    username: false,
-    email: false,
+    firstName: false,
+    lastName: false,
     password: false,
     confirmPassword: false,
+    email: false,
+    confirmEmail: false,
+    phoneNumber: false,
+    dob: false,
+    studentId: false,
+    yearLevel: false,
+    faculty: false,
+    sportType: false,
+    interestedInRacing: false,
   });
 
   const auth = getAuth();
@@ -25,14 +48,37 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { username, email, password, confirmPassword } = formState;
+    const {
+      firstName,
+      lastName,
+      password,
+      confirmPassword,
+      email,
+      confirmEmail,
+      phoneNumber,
+      dob,
+      studentId,
+      yearLevel,
+      faculty,
+      sportType,
+      interestedInRacing,
+    } = formState;
 
     // Validate form input
     const newErrors = {
-      username: !username,
-      email: !email,
+      firstName: !firstName,
+      lastName: !lastName,
       password: !password,
       confirmPassword: confirmPassword !== password,
+      email: !email,
+      confirmEmail: email !== confirmEmail,
+      phoneNumber: !phoneNumber,
+      dob: !dob,
+      studentId: !studentId,
+      yearLevel: !yearLevel,
+      faculty: !faculty,
+      sportType: !sportType,
+      interestedInRacing: !interestedInRacing,
     };
 
     setErrors(newErrors);
@@ -42,21 +88,33 @@ const SignUpForm = () => {
     }
 
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
-    
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
       // Update the user's display name
-      await updateProfile(user, { displayName: username });
+      await updateProfile(user, { displayName: `${firstName} ${lastName}` });
 
       // Adding user data to the collection in the Firebase
-      await setDoc(doc(db, 'users', user.uid), {
+      await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
-        username,
+        firstName,
+        lastName,
         email,
+        phoneNumber,
+        dob,
+        studentId,
+        yearLevel,
+        faculty,
+        sportType,
+        interestedInRacing,
       });
 
-      navigate('/success'); // Replace '/success' with the URL of the next page, e.g., the home page
+      navigate("/success"); // Replace '/success' with the URL of the next page, e.g., the home page
     } catch (error) {
-      console.error('Error creating user:', error);
+      console.error("Error creating user:", error);
       alert(error.message);
     }
   };
@@ -69,39 +127,37 @@ const SignUpForm = () => {
     }));
   };
 
-
   const textFieldStyle = {
-    marginBottom: '16px',
-    width: '100%',
+    marginBottom: "16px",
+    width: "100%",
   };
-  
+
   return (
     <form onSubmit={handleSubmit}>
       <div style={textFieldStyle}>
         <TextField
-          id="username"
-          name="username"
-          label="Username"
+          id="firstName"
+          name="firstName"
+          label="First Name"
           variant="outlined"
           required
           onChange={handleChange}
-          error={errors.username}
-          helperText={errors.username ? 'Username is required' : ''}
-          style={{ width: '100%' }}
+          error={errors.firstName}
+          helperText={errors.firstName ? "First name is required" : ""}
+          style={textFieldStyle}
         />
       </div>
       <div style={textFieldStyle}>
         <TextField
-          id="email"
-          name="email"
-          label="Email"
+          id="lastName"
+          name="lastName"
+          label="Last Name"
           variant="outlined"
-          type="email"
           required
           onChange={handleChange}
-          error={errors.email}
-          helperText={errors.email ? 'Email is required' : ''}
-          style={{ width: '100%' }}
+          error={errors.lastName}
+          helperText={errors.lastName ? "Last name is required" : ""}
+          style={textFieldStyle}
         />
       </div>
       <div style={textFieldStyle}>
@@ -114,8 +170,8 @@ const SignUpForm = () => {
           required
           onChange={handleChange}
           error={errors.password}
-          helperText={errors.password ? 'Password is required' : ''}
-          style={{ width: '100%' }}
+          helperText={errors.password ? "Password is required" : ""}
+          style={textFieldStyle}
         />
       </div>
       <div style={textFieldStyle}>
@@ -128,8 +184,137 @@ const SignUpForm = () => {
           required
           onChange={handleChange}
           error={errors.confirmPassword}
-          helperText={errors.confirmPassword ? 'Passwords do not match' : ''}
-          style={{ width: '100%' }}
+          helperText={errors.confirmPassword ? "Passwords do not match" : ""}
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="email"
+          name="email"
+          label="Email Address"
+          variant="outlined"
+          type="email"
+          required
+          onChange={handleChange}
+          error={errors.email}
+          helperText={errors.email ? "Email is required" : ""}
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="confirmEmail"
+          name="confirmEmail"
+          label="Confirm Email Address"
+          variant="outlined"
+          type="email"
+          required
+          onChange={handleChange}
+          error={errors.confirmEmail}
+          helperText={errors.confirmEmail ? "Email addresses do not match" : ""}
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="phoneNumber"
+          name="phoneNumber"
+          label="Phone Number"
+          variant="outlined"
+          required
+          onChange={handleChange}
+          error={errors.phoneNumber}
+          helperText={errors.phoneNumber ? "Phone number is required" : ""}
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="dob"
+          name="dob"
+          label="Date of Birth"
+          variant="outlined"
+          type="date"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          required
+          onChange={handleChange}
+          error={errors.dob}
+          helperText={errors.dob ? "Date of birth is required" : ""}
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="studentId"
+          name="studentId"
+          label="UoA Student ID (Enter 0 if not you're not a UoA Student)"
+          variant="outlined"
+          required
+          onChange={handleChange}
+          error={errors.studentId}
+          helperText={
+            errors.studentId
+              ? "UoA Student ID is required (Enter 0 if not a UoA student)"
+              : ""
+          }
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="yearLevel"
+          name="yearLevel"
+          label="What year level are you in?"
+          variant="outlined"
+          required
+          onChange={handleChange}
+          error={errors.yearLevel}
+          helperText={errors.yearLevel ? "Year level is required" : ""}
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="faculty"
+          name="faculty"
+          label="What faculty are you in?"
+          variant="outlined"
+          required
+          onChange={handleChange}
+          error={errors.faculty}
+          helperText={errors.faculty ? "Faculty is required" : ""}
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="sportType"
+          name="sportType"
+          label="Are you a Skier/Boarder/Both or New to the sport?"
+          variant="outlined"
+          required
+          onChange={handleChange}
+          error={errors.sportType}
+          helperText={errors.sportType ? "This information is required" : ""}
+          style={textFieldStyle}
+        />
+      </div>
+      <div style={textFieldStyle}>
+        <TextField
+          id="interestedInRacing"
+          name="interestedInRacing"
+          label="Would you be interested in racing?"
+          variant="outlined"
+          required
+          onChange={handleChange}
+          error={errors.interestedInRacing}
+          helperText={
+            errors.interestedInRacing ? "This information is required" : ""
+          }
+          style={textFieldStyle}
         />
       </div>
       <Button variant="contained" type="submit">
@@ -137,6 +322,6 @@ const SignUpForm = () => {
       </Button>
     </form>
   );
-}
+};
 
 export default SignUpForm;
