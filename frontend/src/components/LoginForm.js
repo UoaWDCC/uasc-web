@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, FormControl, FormLabel, TextField } from "@mui/material";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -6,14 +7,16 @@ const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = () => {
-        const auth = getAuth();
+    const navigate = useNavigate();
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // The user is successfully signed in
                 const user = userCredential.user;
-                console.log(user);
+                navigate("/profile");
             })
             .catch((error) => {
                 const errorCode = error.code;
