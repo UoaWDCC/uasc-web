@@ -1,0 +1,38 @@
+/* Remove borders from the Accordion */
+.MuiAccordion-root {
+  border: none;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+/* Remove borders from the Accordion Summary */
+.MuiAccordionSummary-root {
+  border-bottom: none;
+  padding: 0;
+}
+
+/* Remove borders from the Accordion Details */
+.MuiAccordionDetails-root {
+  border-top: none;
+  padding-bottom: 25 !important;
+  padding-top: 0 !important;
+}
+
+/* Remove line between adjacent Accordions */
+.MuiAccordion-root + .MuiAccordion-root:before {
+  display: none;
+}
+
+.MuiBox-root + .MuiAccordion-root:before {
+  display: none;
+}
+
+.MuiGrid-root {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+}
+
+.MuiContainer-root {
+  margin-bottom: auto !important;
+}
