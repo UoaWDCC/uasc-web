@@ -1,8 +1,9 @@
 import { DateCalendar } from "@mui/x-date-pickers";
+import "../styles/Profile.css";
 
 const Profile = () => {
   return (
-    <div>
+    <div className="profilePage">
       <h1>Profile page</h1>
       <div>
         <h2>Name</h2>
