@@ -1,11 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormControl, FormLabel, Button } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { db } from "../firebase";
+import {
+  getDocs,
+  addDoc,
+  deleteDoc,
+  collection,
+  doc,
+} from "firebase/firestore";
 
 const BookingForm = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(dayjs(Date.now()));
   const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [existingBookings, setExistingBookings] = useState([]);
+  const bookingCollectionRef = collection(db, "bookings");
+
+  const addBookingForTest = async () => {
+    await addDoc(bookingCollectionRef, {
+      checkIn: "20 July 2023 at 00:00:00 UTC+12",
+      checkOut: "28 July 2023 at 00:00:00 UTC+12",
+      uid: "/users/jZBNOl0e7mWPNgTuTEwcED2RniG3",
+    });
+  };
+
+  const deleteBookingForTest = async () => {
+    const ids = [];
+    for (const id of ids) {
+      const docRef = doc(db, "bookings", id);
+      await deleteDoc(docRef);
+    }
+  };
+
+  const getExistingBookings = async () => {
+    const querySnapshot = await getDocs(bookingCollectionRef);
+    const bookings = [];
+    querySnapshot.forEach((doc) => {
+      bookings.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+    setExistingBookings(bookings);
+  };
+
+  useEffect(() => {
+    getExistingBookings();
+  }, []);
 
   // dummy data to test, kinda just assuming that the booking documents
   // in firestore will contain a start and end property
