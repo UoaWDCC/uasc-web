@@ -68,3 +68,15 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Firebase Setup
+
+This project uses Firebase to manage user authentication, hosting, and database storage (using firestore).
+
+The [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) is needed.
+
+To setup the local emulator suite to test changes locally, please see the [Emulator Suite - Get Started](https://firebase.google.com/docs/emulator-suite/connect_and_prototype) docs. Run `npm run start:firebase` to get the emulators running.
+
+## Manual Deployment
+
+Manual Deployments can be triggered with the `firebase deploy` command.

@@ -1,7 +1,7 @@
 // setup firebase
 import { initializeApp } from '@firebase/app';
-import { getAuth } from '@firebase/auth';
-import { getFirestore } from '@firebase/firestore';
+import { getAuth, connectAuthEmulator } from '@firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from '@firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVkhnuTBofnvjRXzwB9YmPKzkZm3Pa920",
@@ -15,5 +15,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// use emulator suite if running locally
+if (process.env.NODE_ENV === "development") {
+	connectFirestoreEmulator(db, "localhost", 8080);
+	connectAuthEmulator(auth, "http://localhost:9099");
+}
 
 export { auth, db };
