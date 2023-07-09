@@ -1,2 +1,52 @@
+hr {
+  border: none;
+  background-color: black;
+  height: 0.75px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+h2 {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+p {
+  font-size: 26px;
+}
+
 .profilePage {
+  background-color: white;
+  font-size: 18px;
+}
+
+.profileSection {
+  margin-top: 25px;
+  display: flex;
+}
+
+.userSection,
+.bookingSection {
+  float: left;
+  width: 50%;
+  padding: 25px;
+  text-align: left;
+}
+
+.userSection {
+  background-color: lightgray;
+  margin-left: 20px;
+  border-radius: 5% 0 0 5%;
+}
+
+.userInfo {
+  margin-top: 10px;
+}
+
+.bookingSection {
+  background-color: darkgray;
 }
