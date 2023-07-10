@@ -26,7 +26,6 @@ const LoginForm = () => {
                 }, 2000);
             })
             .catch((error) => {
-                console.log(error.code)
                 switch (error.code) {
                     case "auth/wrong-password":
                         setLoginErrorMessage("Incorrect password");
