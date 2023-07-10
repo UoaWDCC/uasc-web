@@ -18,8 +18,6 @@ const LoginForm = () => {
             .then((userCredential) => {
                 setLoginSuccessful(true);
                 // The user is successfully signed in
-                const user = userCredential.user;
-                
                 setTimeout(() => {
                     setLoginSuccessful(false);
                     navigate("/profile");
@@ -35,6 +33,12 @@ const LoginForm = () => {
                         break;
                     case "auth/user-not-found":
                         setLoginErrorMessage("User not found");
+                        setTimeout(() => {
+                            setLoginErrorMessage("");
+                        }, 2000);
+                        break;
+                    default:
+                        setLoginErrorMessage("An error occurred");
                         setTimeout(() => {
                             setLoginErrorMessage("");
                         }, 2000);
