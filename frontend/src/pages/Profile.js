@@ -27,6 +27,8 @@ const Profile = () => {
           <DateCalendar />
           <h1>BOOKING HISTORY</h1>
           <hr></hr>
+          <p>JAN 1ST - JAN 3RD</p>
+          <p>JAN 5TH - JAN 7TH</p>
         </div>
       </div>
     </div>
