@@ -25,6 +25,12 @@ const LoginForm = () => {
             })
             .catch((error) => {
                 switch (error.code) {
+                    case "auth/invalid-email":
+                        setLoginErrorMessage("Incorrect email address");
+                        setTimeout(() => {
+                            setLoginErrorMessage("");
+                        }, 2000);
+                        break;
                     case "auth/wrong-password":
                         setLoginErrorMessage("Incorrect password");
                         setTimeout(() => {
@@ -32,7 +38,7 @@ const LoginForm = () => {
                         }, 2000);
                         break;
                     case "auth/user-not-found":
-                        setLoginErrorMessage("User not found");
+                        setLoginErrorMessage("Email does not have an account associated with it");
                         setTimeout(() => {
                             setLoginErrorMessage("");
                         }, 2000);
