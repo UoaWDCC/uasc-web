@@ -15,12 +15,14 @@ const BookingForm = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(dayjs(Date.now()));
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [existingBookings, setExistingBookings] = useState([]);
+  const [dateAvailability, setDateAvailability] = useState(new Map());
   const bookingCollectionRef = collection(db, "bookings");
+  const maxSpotsAvailable = 50;
 
   const addBookingForTest = async () => {
     await addDoc(bookingCollectionRef, {
-      checkIn: "20 July 2023 at 00:00:00 UTC+12",
-      checkOut: "28 July 2023 at 00:00:00 UTC+12",
+      checkIn: "Sat Jul 15 2023 12:00:00 GMT+1200 (New Zealand Standard Time)",
+      checkOut: "Sat Jul 22 2023 12:00:00 GMT+1200 (New Zealand Standard Time)",
       uid: "/users/jZBNOl0e7mWPNgTuTEwcED2RniG3",
     });
   };
@@ -33,9 +35,25 @@ const BookingForm = () => {
     }
   };
 
-  const getExistingBookings = async () => {
+  // fetch bookings on component mount
+  useEffect(() => {
+    retrieveExistingBookings();
+  }, []);
+
+  // build hashmap of booked spot availability once existingBookings state has been set
+  useEffect(() => {
+    setSpotAvailabilityByDate();
+  }, [existingBookings]);
+
+  // testing log
+  useEffect(() => {
+    console.log(existingBookings);
+    console.log(dateAvailability);
+  }, [dateAvailability]);
+
+  const retrieveExistingBookings = async () => {
     const querySnapshot = await getDocs(bookingCollectionRef);
-    const bookings = [];
+    let bookings = [];
     querySnapshot.forEach((doc) => {
       bookings.push({
         ...doc.data(),
@@ -45,12 +63,34 @@ const BookingForm = () => {
     setExistingBookings(bookings);
   };
 
-  useEffect(() => {
-    getExistingBookings();
-  }, []);
+  const setSpotAvailabilityByDate = () => {
+    const availability = new Map();
 
-  // dummy data to test, kinda just assuming that the booking documents
-  // in firestore will contain a start and end property
+    existingBookings.forEach((booking) => {
+      const dateRange = getDateRangeArray(booking.checkIn, booking.checkOut);
+      dateRange.forEach((date) => {
+        const dateKey = date.toDateString();
+        const spotsTaken = (availability.get(dateKey) || 0) + 1;
+        availability.set(dateKey, spotsTaken);
+      });
+    });
+
+    setDateAvailability(availability);
+  };
+
+  const getDateRangeArray = (checkIn, checkOut) => {
+    let dates = [];
+    let currDate = new Date(checkIn);
+    const endDate = new Date(checkOut);
+
+    while (currDate < endDate) {
+      dates.push(new Date(currDate.getTime()));
+      currDate.setDate(currDate.getDate() + 1);
+    }
+
+    return dates;
+  };
+
   const existingBookedDateRanges = [
     { start: "2023-07-21", end: "2023-07-23" },
     { start: "2023-07-26", end: "2023-07-27" },
