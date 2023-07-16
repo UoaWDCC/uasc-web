@@ -12,17 +12,17 @@ import {
 } from "firebase/firestore";
 
 const BookingForm = () => {
-  const [selectedStartDate, setSelectedStartDate] = useState(dayjs(Date.now()));
+  const [selectedStartDate, setSelectedStartDate] = useState(dayjs());
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [existingBookings, setExistingBookings] = useState([]);
-  const [dateAvailability, setDateAvailability] = useState(new Map());
+  const [dateAvailabilities, setDateAvailabilities] = useState(new Map());
   const bookingCollectionRef = collection(db, "bookings");
-  const maxSpotsAvailable = 50;
+  const maxSpotsAvailablePerDay = 50;
 
   const addBookingForTest = async () => {
     await addDoc(bookingCollectionRef, {
-      checkIn: "Sat Jul 15 2023 12:00:00 GMT+1200 (New Zealand Standard Time)",
-      checkOut: "Sat Jul 22 2023 12:00:00 GMT+1200 (New Zealand Standard Time)",
+      checkIn: "Tue Aug 01 2023 12:00:00 GMT+1200 (New Zealand Standard Time)",
+      checkOut: "Tue Aug 08 2023 12:00:00 GMT+1200 (New Zealand Standard Time)",
       uid: "/users/jZBNOl0e7mWPNgTuTEwcED2RniG3",
     });
   };
@@ -37,6 +37,7 @@ const BookingForm = () => {
 
   // fetch bookings on component mount
   useEffect(() => {
+    // addBookingForTest();
     retrieveExistingBookings();
   }, []);
 
@@ -45,11 +46,10 @@ const BookingForm = () => {
     setSpotAvailabilityByDate();
   }, [existingBookings]);
 
-  // testing log
-  useEffect(() => {
-    console.log(existingBookings);
-    console.log(dateAvailability);
-  }, [dateAvailability]);
+  // useEffect(() => {
+  //   console.log("bookings", existingBookings);
+  //   console.log("spots", dateAvailabilities);
+  // }, [dateAvailabilities]);
 
   const retrieveExistingBookings = async () => {
     const querySnapshot = await getDocs(bookingCollectionRef);
@@ -64,24 +64,22 @@ const BookingForm = () => {
   };
 
   const setSpotAvailabilityByDate = () => {
-    const availability = new Map();
-
+    let availabilities = new Map();
     existingBookings.forEach((booking) => {
       const dateRange = getDateRangeArray(booking.checkIn, booking.checkOut);
       dateRange.forEach((date) => {
         const dateKey = date.toDateString();
-        const spotsTaken = (availability.get(dateKey) || 0) + 1;
-        availability.set(dateKey, spotsTaken);
+        const spotsTaken = (availabilities.get(dateKey) || 0) + 1;
+        availabilities.set(dateKey, spotsTaken);
       });
     });
-
-    setDateAvailability(availability);
+    setDateAvailabilities(availabilities);
   };
 
   const getDateRangeArray = (checkIn, checkOut) => {
     let dates = [];
-    let currDate = new Date(checkIn);
-    const endDate = new Date(checkOut);
+    let currDate = new Date(formatDateString(checkIn));
+    const endDate = new Date(formatDateString(checkOut));
 
     while (currDate < endDate) {
       dates.push(new Date(currDate.getTime()));
@@ -91,79 +89,64 @@ const BookingForm = () => {
     return dates;
   };
 
-  const existingBookedDateRanges = [
-    { start: "2023-07-21", end: "2023-07-23" },
-    { start: "2023-07-26", end: "2023-07-27" },
-    { start: "2023-07-29", end: "2023-07-31" },
-  ];
-
-  const isDateWithinExistingBookedDates = (dateToCheck) => {
-    for (const existingBookedRange of existingBookedDateRanges) {
-      const existingStart = new Date(existingBookedRange.start);
-      const existingEnd = new Date(existingBookedRange.end);
-
-      if (dateToCheck >= existingStart && dateToCheck <= existingEnd) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const doesEndDateIncludeExistingBookedDates = (newEndDate) => {
-    for (const existingBookedRange of existingBookedDateRanges) {
-      const existingStart = new Date(existingBookedRange.start);
-      const existingEnd = new Date(existingBookedRange.end);
-
-      if (selectedStartDate <= existingStart && newEndDate >= existingEnd) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const isStartDateInvalid = (date) => {
-    const startDateString = dayjs(date).format("YYYY-MM-DD"); // needed to convert using dayjs otherwise disabled dates would be 1 day ahead
-    const startDate = new Date(startDateString);
-    return isDateWithinExistingBookedDates(startDate);
+    const startDate = new Date(formatDateString(date));
+    return isDateBookedOut(startDate);
   };
 
   const isEndDateInvalid = (date) => {
-    const endDateString = dayjs(date).format("YYYY-MM-DD");
-    const endDate = new Date(endDateString);
-
-    if (endDate < selectedStartDate) {
+    const endDate = new Date(formatDateString(date));
+    if (endDate <= selectedStartDate) {
       return true;
     }
 
-    return (
-      isDateWithinExistingBookedDates(endDate) ||
-      doesEndDateIncludeExistingBookedDates(endDate)
-    );
+    const dateRange = getDateRangeArray(selectedStartDate, endDate);
+    dateRange.forEach((date) => {
+      if (isDateBookedOut(date)) {
+        return true;
+      }
+    });
+
+    return false;
+  };
+
+  const isDateBookedOut = (dateToCheck) => {
+    const spotsTaken = dateAvailabilities.get(dateToCheck.toDateString()) || 0;
+    const spotsLeft = maxSpotsAvailablePerDay - spotsTaken;
+    if (spotsLeft <= 0) {
+      return true;
+    }
+
+    return false;
   };
 
   const handleChangeStartDate = (startDate) => {
-    if (startDate > selectedEndDate) {
+    if (startDate >= selectedEndDate) {
       setSelectedEndDate(null);
     }
-    setSelectedStartDate(startDate);
+    const selectedDate = dayjs(formatDateString(startDate));
+    setSelectedStartDate(selectedDate);
   };
 
   const handleChangeEndDate = (endDate) => {
-    setSelectedEndDate(endDate);
+    const selectedDate = dayjs(formatDateString(endDate));
+    setSelectedEndDate(selectedDate);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!selectedEndDate) {
       alert("Please select an end date before submitting"); // will replace with mui modal or something later
       return;
     }
-
     console.log(
-      `Selected Date Range:\n${selectedStartDate.$d} - \n${selectedEndDate.$d}`
+      `Selected Date Range:\n${selectedStartDate} - \n${selectedEndDate}`
     );
     // need to add booking to firestore
+  };
+
+  const formatDateString = (date) => {
+    return dayjs(date).format("YYYY-MM-DD");
   };
 
   return (
