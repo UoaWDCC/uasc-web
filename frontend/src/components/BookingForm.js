@@ -19,25 +19,8 @@ const BookingForm = () => {
   const bookingCollectionRef = collection(db, "bookings");
   const maxSpotsAvailablePerDay = 50;
 
-  const addBookingForTest = async () => {
-    await addDoc(bookingCollectionRef, {
-      checkIn: "Tue Aug 01 2023 12:00:00 GMT+1200 (New Zealand Standard Time)",
-      checkOut: "Tue Aug 08 2023 12:00:00 GMT+1200 (New Zealand Standard Time)",
-      uid: "/users/jZBNOl0e7mWPNgTuTEwcED2RniG3",
-    });
-  };
-
-  const deleteBookingForTest = async () => {
-    const ids = [];
-    for (const id of ids) {
-      const docRef = doc(db, "bookings", id);
-      await deleteDoc(docRef);
-    }
-  };
-
   // fetch bookings on component mount
   useEffect(() => {
-    // addBookingForTest();
     retrieveExistingBookings();
   }, []);
 
@@ -65,28 +48,32 @@ const BookingForm = () => {
 
   const setSpotAvailabilityByDate = () => {
     let availabilities = new Map();
+
     existingBookings.forEach((booking) => {
-      const dateRange = getDateRangeArray(booking.checkIn, booking.checkOut);
-      dateRange.forEach((date) => {
-        const dateKey = date.toDateString();
+      let currDate = new Date(formatDateString(booking.checkIn));
+      const endDate = new Date(formatDateString(booking.checkOut));
+
+      while (currDate < endDate) {
+        const dateKey = currDate.toDateString();
         const spotsTaken = (availabilities.get(dateKey) || 0) + 1;
         availabilities.set(dateKey, spotsTaken);
-      });
+
+        currDate.setDate(currDate.getDate() + 1);
+      }
     });
+
     setDateAvailabilities(availabilities);
   };
 
-  const getDateRangeArray = (checkIn, checkOut) => {
-    let dates = [];
-    let currDate = new Date(formatDateString(checkIn));
-    const endDate = new Date(formatDateString(checkOut));
-
-    while (currDate < endDate) {
-      dates.push(new Date(currDate.getTime()));
-      currDate.setDate(currDate.getDate() + 1);
+  const isDateBookedOut = (dateToCheck) => {
+    const dateKey = dateToCheck.toDateString();
+    const spotsTaken = dateAvailabilities.get(dateKey) || 0;
+    const spotsLeft = maxSpotsAvailablePerDay - spotsTaken;
+    if (spotsLeft <= 0) {
+      return true;
     }
 
-    return dates;
+    return false;
   };
 
   const isStartDateInvalid = (date) => {
@@ -100,21 +87,12 @@ const BookingForm = () => {
       return true;
     }
 
-    const dateRange = getDateRangeArray(selectedStartDate, endDate);
-    dateRange.forEach((date) => {
-      if (isDateBookedOut(date)) {
+    let currDate = new Date(selectedStartDate);
+    while (currDate <= endDate) {
+      if (isDateBookedOut(currDate)) {
         return true;
       }
-    });
-
-    return false;
-  };
-
-  const isDateBookedOut = (dateToCheck) => {
-    const spotsTaken = dateAvailabilities.get(dateToCheck.toDateString()) || 0;
-    const spotsLeft = maxSpotsAvailablePerDay - spotsTaken;
-    if (spotsLeft <= 0) {
-      return true;
+      currDate.setDate(currDate.getDate() + 1);
     }
 
     return false;
@@ -133,6 +111,10 @@ const BookingForm = () => {
     setSelectedEndDate(selectedDate);
   };
 
+  const formatDateString = (date) => {
+    return dayjs(date).format("YYYY-MM-DD");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!selectedEndDate) {
@@ -143,10 +125,6 @@ const BookingForm = () => {
       `Selected Date Range:\n${selectedStartDate} - \n${selectedEndDate}`
     );
     // need to add booking to firestore
-  };
-
-  const formatDateString = (date) => {
-    return dayjs(date).format("YYYY-MM-DD");
   };
 
   return (
