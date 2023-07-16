@@ -3,21 +3,15 @@ import { FormControl, FormLabel, Button } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { db } from "../firebase";
-import {
-  getDocs,
-  addDoc,
-  deleteDoc,
-  collection,
-  doc,
-} from "firebase/firestore";
+import { getDocs, collection } from "firebase/firestore";
 
 const BookingForm = () => {
-  const [selectedStartDate, setSelectedStartDate] = useState(dayjs());
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [selectedCheckInDate, setSelectedCheckInDate] = useState(null);
+  const [selectedCheckOutDate, setSelectedCheckOutDate] = useState(null);
   const [existingBookings, setExistingBookings] = useState([]);
   const [dateAvailabilities, setDateAvailabilities] = useState(new Map());
   const bookingCollectionRef = collection(db, "bookings");
-  const maxSpotsAvailablePerDay = 50;
+  const maxSpotsAvailablePerDay = 5;
 
   // fetch bookings on component mount
   useEffect(() => {
@@ -29,10 +23,11 @@ const BookingForm = () => {
     setSpotAvailabilityByDate();
   }, [existingBookings]);
 
-  // useEffect(() => {
-  //   console.log("bookings", existingBookings);
-  //   console.log("spots", dateAvailabilities);
-  // }, [dateAvailabilities]);
+  useEffect(() => {
+    console.log("bookings", existingBookings);
+    console.log("spots", dateAvailabilities);
+    setEarliestDefaultCheckInDate();
+  }, [dateAvailabilities]);
 
   const retrieveExistingBookings = async () => {
     const querySnapshot = await getDocs(bookingCollectionRef);
@@ -83,11 +78,11 @@ const BookingForm = () => {
 
   const isEndDateInvalid = (date) => {
     const endDate = new Date(getFormattedDateString(date));
-    if (endDate <= selectedStartDate) {
+    if (endDate <= selectedCheckInDate) {
       return true;
     }
 
-    let currDate = new Date(selectedStartDate);
+    let currDate = new Date(selectedCheckInDate);
     while (currDate <= endDate) {
       if (isDateBookedOut(currDate)) {
         return true;
@@ -99,16 +94,16 @@ const BookingForm = () => {
   };
 
   const handleChangeStartDate = (startDate) => {
-    if (startDate >= selectedEndDate) {
-      setSelectedEndDate(null);
+    if (startDate >= selectedCheckOutDate) {
+      setSelectedCheckOutDate(null);
     }
-    const selectedDate = new Date(getFormattedDateString(startDate));
-    setSelectedStartDate(dayjs(selectedDate)); // need to use dayjs because
+    const newCheckInDate = new Date(getFormattedDateString(startDate));
+    setSelectedCheckInDate(dayjs(newCheckInDate)); // need to use dayjs because thats the MUI datepicker value type
   };
 
   const handleChangeEndDate = (endDate) => {
-    const selectedDate = new Date(getFormattedDateString(endDate));
-    setSelectedEndDate(dayjs(selectedDate));
+    const newCheckOutDate = new Date(getFormattedDateString(endDate));
+    setSelectedCheckOutDate(dayjs(newCheckOutDate));
   };
 
   const getFormattedDateString = (date) => {
@@ -117,14 +112,29 @@ const BookingForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!selectedEndDate) {
+    if (!selectedCheckOutDate) {
       alert("Please select an end date before submitting"); // will replace with mui modal or something later
       return;
     }
     console.log(
-      `Selected Date Range:\n${selectedStartDate} - \n${selectedEndDate}`
+      `Selected Date Range:\n${selectedCheckInDate} - \n${selectedCheckOutDate}`
     );
     // need to add booking to firestore
+  };
+
+  const setEarliestDefaultCheckInDate = () => {
+    let currDate = new Date();
+    let dateKey = currDate.toDateString();
+
+    while (
+      dateAvailabilities.has(dateKey) &&
+      dateAvailabilities.get(dateKey) >= maxSpotsAvailablePerDay
+    ) {
+      currDate.setDate(currDate.getDate() + 1);
+      dateKey = currDate.toDateString();
+    }
+
+    setSelectedCheckInDate(dayjs(currDate));
   };
 
   return (
@@ -134,7 +144,7 @@ const BookingForm = () => {
           Select a Check-In Date
         </FormLabel>
         <DatePicker
-          value={selectedStartDate}
+          value={selectedCheckInDate}
           onChange={handleChangeStartDate}
           shouldDisableDate={isStartDateInvalid}
           disablePast
@@ -144,7 +154,7 @@ const BookingForm = () => {
           Select a Check-Out Date
         </FormLabel>
         <DatePicker
-          value={selectedEndDate}
+          value={selectedCheckOutDate}
           onChange={handleChangeEndDate}
           shouldDisableDate={isEndDateInvalid}
           disablePast
