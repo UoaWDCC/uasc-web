@@ -50,8 +50,8 @@ const BookingForm = () => {
     let availabilities = new Map();
 
     existingBookings.forEach((booking) => {
-      let currDate = new Date(formatDateString(booking.checkIn));
-      const endDate = new Date(formatDateString(booking.checkOut));
+      let currDate = new Date(getFormattedDateString(booking.checkIn));
+      const endDate = new Date(getFormattedDateString(booking.checkOut));
 
       while (currDate < endDate) {
         const dateKey = currDate.toDateString();
@@ -77,12 +77,12 @@ const BookingForm = () => {
   };
 
   const isStartDateInvalid = (date) => {
-    const startDate = new Date(formatDateString(date));
+    const startDate = new Date(getFormattedDateString(date));
     return isDateBookedOut(startDate);
   };
 
   const isEndDateInvalid = (date) => {
-    const endDate = new Date(formatDateString(date));
+    const endDate = new Date(getFormattedDateString(date));
     if (endDate <= selectedStartDate) {
       return true;
     }
@@ -102,16 +102,16 @@ const BookingForm = () => {
     if (startDate >= selectedEndDate) {
       setSelectedEndDate(null);
     }
-    const selectedDate = dayjs(formatDateString(startDate));
-    setSelectedStartDate(selectedDate);
+    const selectedDate = new Date(getFormattedDateString(startDate));
+    setSelectedStartDate(dayjs(selectedDate)); // need to use dayjs because
   };
 
   const handleChangeEndDate = (endDate) => {
-    const selectedDate = dayjs(formatDateString(endDate));
-    setSelectedEndDate(selectedDate);
+    const selectedDate = new Date(getFormattedDateString(endDate));
+    setSelectedEndDate(dayjs(selectedDate));
   };
 
-  const formatDateString = (date) => {
+  const getFormattedDateString = (date) => {
     return dayjs(date).format("YYYY-MM-DD");
   };
 
@@ -130,7 +130,9 @@ const BookingForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <FormControl style={{ margin: "1.5rem" }}>
-        <FormLabel style={{ textAlign: "left" }}>Select a Start Date</FormLabel>
+        <FormLabel style={{ textAlign: "left" }}>
+          Select a Check-In Date
+        </FormLabel>
         <DatePicker
           value={selectedStartDate}
           onChange={handleChangeStartDate}
@@ -139,7 +141,7 @@ const BookingForm = () => {
           disableHighlightToday
         />
         <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
-          Select an End Date
+          Select a Check-Out Date
         </FormLabel>
         <DatePicker
           value={selectedEndDate}
