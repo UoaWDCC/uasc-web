@@ -1,0 +1,21 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "parserOptions": {
+        "requireConfigFile": false,
+        "babelOptions": {
+            "presets": [
+                "@babel/preset-react"
+            ]
+        }
+    },
+    "parser": "@babel/eslint-parser",
+    "extends": [
+        "plugin:react/recommended",
+        "eslint:recommended",
+        "prettier"
+    ]
+}
