@@ -1,5 +1,5 @@
-import React from "react";
-import BookingForm from "../components/BookingForm";
+import React from "react"
+import BookingForm from "../components/BookingForm"
 
 const Booking = () => {
   return (
@@ -7,7 +7,7 @@ const Booking = () => {
       <h1>Make a Cabin Booking</h1>
       <BookingForm />
     </div>
-  );
-};
+  )
+}
 
-export default Booking;
+export default Booking

@@ -1,6 +1,6 @@
-import React from 'react';
-import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from "react"
+import { useEffect, useState } from "react"
+import { Link, useLocation } from "react-router-dom"
 
 const navbarStyles = {
   display: "flex",
@@ -10,34 +10,34 @@ const navbarStyles = {
   top: 0,
   width: "100%",
   transition: "opacity 0.5s ease-in-out",
-};
+}
 
 const Navbar = () => {
-  const homeLocation = "/";
-  const pageLocation = useLocation().pathname;
-  const onHomePage = pageLocation === homeLocation;
-  const [isVisible, setIsVisible] = useState(!onHomePage);
+  const homeLocation = "/"
+  const pageLocation = useLocation().pathname
+  const onHomePage = pageLocation === homeLocation
+  const [isVisible, setIsVisible] = useState(!onHomePage)
 
   useEffect(() => {
     if (!onHomePage) {
-      setIsVisible(true);
-      return;
+      setIsVisible(true)
+      return
     }
 
-    setIsVisible(false);
+    setIsVisible(false)
 
     const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-      const proportionOfWindowHeight = window.innerHeight * 0.3;
+      const currentScrollPos = window.scrollY
+      const proportionOfWindowHeight = window.innerHeight * 0.3
       currentScrollPos > proportionOfWindowHeight
         ? setIsVisible(true)
-        : setIsVisible(false);
-    };
+        : setIsVisible(false)
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll)
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [onHomePage]);
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [onHomePage])
 
   return (
     <nav
@@ -61,7 +61,7 @@ const Navbar = () => {
         <Link to="/admin">Admin</Link>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
