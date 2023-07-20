@@ -1,3 +1,4 @@
+import React from 'react';
 import { Paper, Divider, Typography, Stack } from "@mui/material";
 import Requests from "../components/AdminRequests";
 import Bookings from "../components/AdminBookings";

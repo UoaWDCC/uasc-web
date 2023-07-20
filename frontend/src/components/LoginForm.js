@@ -15,7 +15,8 @@ const LoginForm = () => {
         event.preventDefault();
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
+            .then(() => {
+                //Removed userCredential for now. Will add back later when needed.
                 setLoginSuccessful(true);
                 // The user is successfully signed in
                 setTimeout(() => {
