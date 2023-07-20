@@ -17,5 +17,9 @@
         "plugin:react/recommended",
         "eslint:recommended",
         "prettier"
-    ]
+    ],
+    "rules": {
+        "react/prop-types": "off",
+        "react/no-unescaped-entities": 0
+    }
 }
