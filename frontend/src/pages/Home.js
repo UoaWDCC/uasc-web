@@ -1,5 +1,6 @@
-import logo from "../assets/2023_logo1-768x262-uasc.png";
-import { Typography } from "@mui/material";
+import React from "react"
+import logo from "../assets/2023_logo1-768x262-uasc.png"
+import { Typography } from "@mui/material"
 
 const Home = () => {
   return (
@@ -23,7 +24,7 @@ const Home = () => {
         </h1>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

@@ -1,22 +1,22 @@
-import { DateCalendar } from "@mui/x-date-pickers";
-import { db } from "../firebase";
-import React, { useEffect, useState } from "react";
-import { getDoc, doc } from "firebase/firestore";
+import { DateCalendar } from "@mui/x-date-pickers"
+import { db } from "../firebase"
+import React, { useEffect, useState } from "react"
+import { getDoc, doc } from "firebase/firestore"
 
 const Profile = () => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null)
 
   useEffect(() => {
     getDoc(doc(db, "users", "lVsOjAp06AfD6atT8bnrVEpcdcg2"))
       .then((doc) => {
         if (doc.exists()) {
-          setUserData(doc.data());
+          setUserData(doc.data())
         } else {
-          console.log("Doc does not exist");
+          console.log("Doc does not exist")
         }
       })
-      .catch(console.error);
-  }, []);
+      .catch(console.error)
+  }, [])
 
   return (
     <div>
@@ -35,7 +35,7 @@ const Profile = () => {
         <DateCalendar />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile
