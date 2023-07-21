@@ -5,9 +5,9 @@ nav {
 ul {
     display: flex;
     list-style-type: none;
-    padding: 2px;
+    padding: 1px;
     padding-left: 39em;
-    padding-top: 0.6em;
+    padding-top: 0.4em;
 }
 
 li {
@@ -23,8 +23,8 @@ a {
 }
 
 img {
-    padding-left: 5px;
-    padding: 10px;
-    width: 55px;
-    height: 50px;
+    padding-left: 1px;
+    padding: 2px;
+    width: 45px;
+    height: 40px;
 }
