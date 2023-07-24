@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import "./Navbar.css" // Import the CSS file for styling
 
 const navbarStyles = {
@@ -40,9 +40,9 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [onHomePage])
 
-  const handleLogin = () => {
-    setIsLoggedIn(true)
-  }
+  // const handleLogin = () => {
+  //   setIsLoggedIn(true)
+  // }
 
   const handleLogout = () => {
     setIsLoggedIn(false)
