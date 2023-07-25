@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
-} from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { db } from "../firebase";
-import { setDoc, doc } from "firebase/firestore";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
+} from "firebase/auth"
+import { useNavigate } from "react-router-dom"
+import { db } from "../firebase"
+import { setDoc, doc } from "firebase/firestore"
+import Button from "@mui/material/Button"
+import TextField from "@mui/material/TextField"
+import Snackbar from "@mui/material/Snackbar"
+import MuiAlert from "@mui/material/Alert"
 
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
+import Dialog from "@mui/material/Dialog"
+import DialogContent from "@mui/material/DialogContent"
+import DialogContentText from "@mui/material/DialogContentText"
 
 const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+})
 
 const SignUpForm = () => {
   const [formState, setFormState] = useState({
@@ -35,7 +35,7 @@ const SignUpForm = () => {
     faculty: "",
     sportType: "",
     interestedInRacing: "",
-  });
+  })
 
   const [errors, setErrors] = useState({
     firstName: false,
@@ -51,21 +51,21 @@ const SignUpForm = () => {
     faculty: false,
     sportType: false,
     interestedInRacing: false,
-  });
+  })
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
-      return;
+      return
     }
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
-  const auth = getAuth();
-  const navigate = useNavigate();
+  const auth = getAuth()
+  const navigate = useNavigate()
 
-  <Dialog
+  ;<Dialog
     open={open}
     onClose={() => setOpen(false)}
     aria-labelledby="alert-dialog-title"
@@ -76,10 +76,10 @@ const SignUpForm = () => {
         You've successfully signed up!
       </DialogContentText>
     </DialogContent>
-  </Dialog>;
+  </Dialog>
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     const {
       firstName,
       lastName,
@@ -94,7 +94,7 @@ const SignUpForm = () => {
       faculty,
       sportType,
       interestedInRacing,
-    } = formState;
+    } = formState
 
     const newErrors = {
       firstName: !firstName,
@@ -110,12 +110,12 @@ const SignUpForm = () => {
       faculty: !faculty,
       sportType: !sportType,
       interestedInRacing: !interestedInRacing,
-    };
+    }
 
-    setErrors(newErrors);
+    setErrors(newErrors)
 
     if (Object.values(newErrors).some((error) => error)) {
-      return;
+      return
     }
 
     try {
@@ -123,11 +123,11 @@ const SignUpForm = () => {
         auth,
         email,
         password
-      );
-      console.log("User created");
+      )
+      console.log("User created")
 
-      await updateProfile(user, { displayName: `${firstName} ${lastName}` });
-      console.log("Profile updated");
+      await updateProfile(user, { displayName: `${firstName} ${lastName}` })
+      console.log("Profile updated")
 
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
@@ -141,32 +141,32 @@ const SignUpForm = () => {
         faculty,
         sportType,
         interestedInRacing,
-      });
-      console.log("Document set in Firestore");
+      })
+      console.log("Document set in Firestore")
 
-      setOpen(true);
+      setOpen(true)
       setTimeout(() => {
-        navigate("/"); // Replace '/' with the URL of your homepage
-      }, 5000);
-      console.log("Navigate called");
+        navigate("/") // Replace '/' with the URL of your homepage
+      }, 5000)
+      console.log("Navigate called")
     } catch (error) {
-      console.error("Error creating user:", error);
-      alert(error.message);
+      console.error("Error creating user:", error)
+      alert(error.message)
     }
-  };
+  }
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setFormState((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const textFieldStyle = {
     marginBottom: "16px",
     width: "100%",
-  };
+  }
 
   return (
     <>
@@ -356,7 +356,11 @@ const SignUpForm = () => {
             style={textFieldStyle}
           />
         </div>
-        <Button variant="contained" type="submit" style={{ marginBottom: "50px" }}>
+        <Button
+          variant="contained"
+          type="submit"
+          style={{ marginBottom: "50px" }}
+        >
           Submit
         </Button>
       </form>
@@ -367,7 +371,7 @@ const SignUpForm = () => {
         </Alert>
       </Snackbar>
     </>
-  );
-};
+  )
+}
 
-export default SignUpForm;
+export default SignUpForm
