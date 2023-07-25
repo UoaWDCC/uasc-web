@@ -1,7 +1,24 @@
-import { DateCalendar } from "@mui/x-date-pickers";
+import { DateCalendar } from "@mui/x-date-pickers"
+import { db } from "../firebase"
+import React, { useEffect, useState } from "react"
+import { getDoc, doc } from "firebase/firestore"
 import "../styles/Profile.css";
 
 const Profile = () => {
+  const [userData, setUserData] = useState(null)
+
+  useEffect(() => {
+    getDoc(doc(db, "users", "lVsOjAp06AfD6atT8bnrVEpcdcg2"))
+      .then((doc) => {
+        if (doc.exists()) {
+          setUserData(doc.data())
+        } else {
+          console.log("Doc does not exist")
+        }
+      })
+      .catch(console.error)
+  }, [])
+
   return (
     <div className="profilePage">
       <h1>Profile page</h1>
@@ -32,7 +49,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile
