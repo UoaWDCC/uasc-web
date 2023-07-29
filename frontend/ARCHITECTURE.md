@@ -6,7 +6,6 @@ This manages all requests by users to the executive team at UASC.
 
 | **Field**       	| **Type**    	| **Example Value**                 	|
 |-----------------	|-------------	|-----------------------------------	|
-| --------------- 	| ----------- 	| --------------------------------- 	|
 | user_id         	| string      	| lVsOjAp06AfD6atT8bnrVEpcdcg2      	|
 | booking_id      	| string      	| 8mYj7rWOMH6hGy4FzMed              	|
 | query           	| string      	| Hello, when is your next event?   	|
@@ -30,7 +29,6 @@ Has no additional fields specified.
 The following additional fields are specified:
 | **Field**       	| **Type**    	| **Example Value**                 	|
 |-----------------	|-------------	|-----------------------------------	|
-| --------------- 	| ----------- 	| --------------------------------- 	|
 | old_start_date  	| Timestamp   	| 25-07-2023                        	|
 | old_end_date    	| Timestamp   	| 27-07-2023                        	|
 | new_start_date  	| Timestamp   	| 26-07-2023                        	|
