@@ -6,7 +6,6 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  useMediaQuery,
   Box,
 } from "@mui/material";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material/";
@@ -20,9 +19,6 @@ import Grid from "@mui/material/Grid";
 import { useRef } from "react";
 
 function App() {
-  const isSmallScreen = useMediaQuery("(max-width: 900px)");
-  const tableCount = isSmallScreen ? 1 : 3;
-
   const ref = useRef(null);
 
   const handleClick = () => {
@@ -114,7 +110,7 @@ function App() {
             // }}
           >
             <Box sx={{ boxShadow: 0 }} style={useStyles.headerTable1}>
-              <h1 align="center">Membership:</h1>
+              <h1>Membership:</h1>
             </Box>
             <Accordion style={useStyles.accordionTable1}>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -198,7 +194,7 @@ function App() {
           {/* events */}
           <Grid item xs={12} md={3.9}>
             <Box sx={{ boxShadow: 0 }} style={useStyles.headerTable1}>
-              <h1 align="center">Events:</h1>
+              <h1>Events:</h1>
             </Box>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -252,7 +248,7 @@ function App() {
           {/* bookings */}
           <Grid item xs={12} md={3.9}>
             <Box sx={{ boxShadow: 0 }} style={useStyles.headerTable1}>
-              <h1 align="center">Bookings:</h1>
+              <h1>Bookings:</h1>
             </Box>
             <Accordion style={useStyles.gridItem5}>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -304,7 +300,7 @@ function App() {
           {/* lodge */}
           <Grid item xs={12} md={5.9}>
             <Box sx={{ boxShadow: 0 }} style={useStyles.headerTable1}>
-              <h1 align="center">Lodge:</h1>
+              <h1>Lodge:</h1>
             </Box>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -486,7 +482,7 @@ function App() {
           {/* gear and lift passes */}
           <Grid item xs={12} md={5.9} styles={{ marginBottom: "60px" }}>
             <Box sx={{ boxShadow: 0 }} style={useStyles.headerTable1}>
-              <h1 align="center">Gear and Lift passes:</h1>
+              <h1>Gear and Lift passes:</h1>
             </Box>
             <Accordion style={useStyles.gridItem5}>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
