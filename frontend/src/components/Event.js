@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   Card,
   CardHeader,
@@ -6,17 +6,17 @@ import {
   CardContent,
   Typography,
   Button,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
+} from "@mui/material"
+import { useNavigate } from "react-router-dom"
+import { auth } from "../firebase"
 
 const Event = (props) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSignUp = () => {
-    const user = auth.currentUser;
-    user ? navigate(`/events/${props.id}/signup`) : navigate("/login");
-  };
+    const user = auth.currentUser
+    user ? navigate(`/events/${props.id}/signup`) : navigate("/login")
+  }
 
   return (
     <Card style={{ boxShadow: "0px 0px 5px 1px rgba(0, 0, 0, 0.2)" }}>
@@ -58,7 +58,7 @@ const Event = (props) => {
         </Button>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default Event;
+export default Event
