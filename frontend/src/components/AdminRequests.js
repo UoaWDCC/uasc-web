@@ -1,4 +1,4 @@
-import { Grid, Typography, Box, Divider, Paper } from "@mui/material";
+import { Grid, Typography, Box, Divider, Paper } from "@mui/material"
 
 const AdminDashboardRequest = () => {
   const gridItemStyle = {
@@ -23,12 +23,12 @@ const AdminDashboardRequest = () => {
       boxShadow: "none",
       marginBottom: "5px",
     },
-  };
+  }
 
   const textBreakStyle = {
     display: "block",
     marginBottom: -6,
-  };
+  }
 
   return (
     <div>
@@ -220,6 +220,6 @@ const AdminDashboardRequest = () => {
         </Grid>
       </Grid>
     </div>
-  );
-};
-export default AdminDashboardRequest;
+  )
+}
+export default AdminDashboardRequest

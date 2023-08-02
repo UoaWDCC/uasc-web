@@ -1,6 +1,7 @@
-import { Paper, Divider, Typography, Stack } from "@mui/material";
-import Requests from "../components/AdminRequests";
-import Bookings from "../components/AdminBookings";
+import React from "react"
+import { Paper, Divider, Typography, Stack } from "@mui/material"
+import Requests from "../components/AdminRequests"
+import Bookings from "../components/AdminBookings"
 
 const Admin = () => {
   return (
@@ -26,7 +27,7 @@ const Admin = () => {
         </Stack>
       </Paper>
     </div>
-  );
-};
+  )
+}
 
-export default Admin;
+export default Admin
