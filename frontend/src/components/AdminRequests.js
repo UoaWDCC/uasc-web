@@ -22,8 +22,8 @@ const AdminDashboardRequest = () => {
         {
           user_id: "whatsgood",
           booking_id: "8mYj7rWOMH6hGy4FzMed",
-          query: "I'd like to cancel my booking.",
-          query_type: "cancellation",
+          query: "I'd like to change my booking.",
+          query_type: "date change",
           status: "unresolved",
         },
         {
@@ -43,8 +43,8 @@ const AdminDashboardRequest = () => {
         {
           user_id: "bowling",
           booking_id: "8mYj7rWOMH6hGy4FzMed",
-          query: "I'd like to cancel my booking.",
-          query_type: "cancellation",
+          query: "I'd like to change my booking.",
+          query_type: "date change",
           status: "unresolved",
         },
       ])
@@ -55,15 +55,20 @@ const AdminDashboardRequest = () => {
 
   return (
     <div>
-      <Grid container rowSpacing={2} paddingTop="20px" sx={{ width: "100%" }}>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h4" align="left">
+      <Grid container rowSpacing={2} paddingTop="20px" sx={{ width: 600 }}>
+        <Grid item xs={12} md={8}>
+          <Typography variant="h4" align="left" sx={{ fontWeight: "bold" }}>
             REQUESTS
           </Typography>
-          <Divider />
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h4" align="right">
+        <Grid item xs={12} md={4}>
+          <Typography
+            variant="h5"
+            align="right"
+            paddingTop="9px"
+            paddingBottom="1px"
+            sx={{ fontWeight: "bold" }}
+          >
             MANAGE
           </Typography>
           <Divider />
@@ -78,12 +83,8 @@ const AdminDashboardRequest = () => {
                 maxHeight: "600px",
               }}
             >
-              {requests.map((request, index) => (
-                <RequestBlock
-                  key={request.user_id}
-                  requestData={request}
-                  counter={index}
-                />
+              {requests.map((request) => (
+                <RequestBlock key={request} requestData={request} />
               ))}
             </Grid>
           </Paper>
