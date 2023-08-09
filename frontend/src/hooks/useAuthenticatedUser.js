@@ -15,7 +15,6 @@ export function useAuthenticatedUser() {
     const getUserData = async () => {
       const userMetadata = await getDoc(doc(db, "users", user.uid))
       if (userMetadata.exists()) {
-        console.log(userMetadata.data())
         setUserData(userMetadata.data())
       }
     }
