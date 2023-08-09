@@ -12,7 +12,7 @@ const BookingForm = () => {
   const [dateAvailabilities, setDateAvailabilities] = useState(new Map())
   const [dateArray, setDateArray] = useState([])
   const bookingCollectionRef = collection(db, "bookings")
-  const maxSpotsAvailablePerDay = 5
+  const maxSpotsAvailablePerDay = 50
 
   // fetch bookings on component mount
   useEffect(() => {
@@ -116,7 +116,7 @@ const BookingForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!selectedCheckOutDate) {
-      alert("Please select an end date before submitting") // will replace with mui modal or something later
+      alert("Please select an end date before submitting")
       return
     }
     console.log(
@@ -142,15 +142,7 @@ const BookingForm = () => {
 
   const getDateRangeArray = () => {
     if (!selectedCheckInDate || !selectedCheckOutDate) {
-      return [
-        "2 August 2023 - Spots left: 38",
-        "3 August 2023 - Spots left: 39",
-        "4 August 2023 - Spots left: 42",
-        "5 August 2023 - Spots left: 12",
-        "6 August 2023 - Spots left: 30",
-        "7 August 2023 - Spots left: 34",
-        "8 August 2023 - Spots left: 47",
-      ] // placeholder dates just to check if rendering them in the list works (should be empty)
+      return []
     }
 
     let dates = []
@@ -169,59 +161,76 @@ const BookingForm = () => {
     <div
       style={{
         display: "flex",
+        alignItems: "center",
         justifyContent: "center",
+        height: "90%",
       }}
     >
       <div
         style={{
           display: "flex",
-          alignItems: "center",
-          margin: "1rem",
+          justifyContent: "space-evenly",
+          width: "60%",
         }}
       >
-        <form onSubmit={handleSubmit} style={{ padding: "1rem" }}>
-          <FormControl style={{ margin: "1.5rem" }}>
-            <FormLabel style={{ textAlign: "left" }}>
-              Select a Check-In Date
-            </FormLabel>
-            <DatePicker
-              value={selectedCheckInDate}
-              onChange={handleChangeStartDate}
-              shouldDisableDate={isStartDateInvalid}
-              disablePast
-              disableHighlightToday
-            />
-            <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
-              Select a Check-Out Date
-            </FormLabel>
-            <DatePicker
-              value={selectedCheckOutDate}
-              onChange={handleChangeEndDate}
-              shouldDisableDate={isEndDateInvalid}
-              disablePast
-              disableHighlightToday
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              style={{ marginTop: "1.5rem" }}
-            >
-              Submit
-            </Button>
-          </FormControl>
-        </form>
-        <div style={{ padding: "1rem" }}>
+        <div>
           <h2
             style={{
               fontWeight: "bold",
               fontSize: "1.5rem",
-              marginBottom: "0.5rem",
+              margin: "1.5rem",
             }}
           >
-            Booked Date Availabilities:
+            Make a Booking
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <FormControl style={{ margin: "1.5rem" }}>
+              <FormLabel style={{ textAlign: "left" }}>
+                Select a Check-In Date
+              </FormLabel>
+              <DatePicker
+                value={selectedCheckInDate}
+                onChange={handleChangeStartDate}
+                shouldDisableDate={isStartDateInvalid}
+                disablePast
+                disableHighlightToday
+              />
+              <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
+                Select a Check-Out Date
+              </FormLabel>
+              <DatePicker
+                value={selectedCheckOutDate}
+                onChange={handleChangeEndDate}
+                shouldDisableDate={isEndDateInvalid}
+                disablePast
+                disableHighlightToday
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                style={{ marginTop: "1.5rem" }}
+              >
+                Submit
+              </Button>
+            </FormControl>
+          </form>
+        </div>
+        <div>
+          <h2
+            style={{
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+              margin: "1.5rem",
+            }}
+          >
+            Available Spots Left:
           </h2>
           <ul
-            style={{ display: "flex", flexDirection: "column", padding: "0" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              padding: "0",
+            }}
           >
             {dateArray.map((d, index) => {
               return (
@@ -232,7 +241,11 @@ const BookingForm = () => {
                     margin: "0",
                   }}
                 >
-                  {d}
+                  {`${d.toDateString()}: ${
+                    maxSpotsAvailablePerDay -
+                      dateAvailabilities.get(d.toDateString()) ||
+                    maxSpotsAvailablePerDay
+                  }`}
                 </li>
               )
             })}
