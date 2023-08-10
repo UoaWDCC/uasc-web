@@ -1,5 +1,3 @@
-/* Admin.css */
-
 .bookings-header {
   display: flex;
   justify-content: space-between;
@@ -7,11 +5,11 @@
 }
 
 .manage-bookings-button {
-  font-size: 0.8rem; /* Adjust the size as needed */
+  font-size: 0.8rem; 
 }
 
 .bookings-section {
-  width: 50%; /* Make it only the right side of the page */
+  width: 50%; 
   margin-left: 2rem;
 }
 
@@ -26,7 +24,7 @@
   padding: 0.5rem;
   border-right: 1px solid #ccc;
   flex-grow: 1;
-  text-align: center; /* Centering content */
+  text-align: center;
 }
 
 .day-container:last-child {
@@ -36,7 +34,7 @@
 .user-buttons-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the buttons */
+  align-items: center;
 }
 
 .user-button {
@@ -45,4 +43,14 @@
   margin: 0.25rem 0;
   padding: 0.25rem;
   text-transform: none;
+}
+
+.container-header {
+  display: flex;
+  align-items: center;
+}
+
+.date-range {
+  flex-grow: 1;
+  text-align: center;
 }
