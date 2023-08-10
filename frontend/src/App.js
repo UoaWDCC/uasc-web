@@ -11,7 +11,6 @@ import Checkout from "./pages/Checkout"
 import Booking from "./pages/Booking"
 import Profile from "./pages/Profile"
 import Admin from "./pages/Admin"
-import AdminDashBoard from "./components/AdminDashboard"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { ThemeProvider } from "@mui/material"
 import { LocalizationProvider } from "@mui/x-date-pickers"
@@ -38,7 +37,6 @@ function App() {
                   <Route path="/booking" element={<Booking />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/admin" element={<Admin />} />
-                  <Route path="/adminDashBoard" element={<AdminDashBoard />} />
                 </Routes>
               </div>
             </div>
