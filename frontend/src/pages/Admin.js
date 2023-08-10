@@ -1,21 +1,36 @@
-// Admin.js
-
-import React from "react";
-import { Paper, Divider, Typography, Stack, Button, Grid } from "@mui/material";
-import Requests from "../components/AdminRequests";
-import './Admin.css'; // Import the CSS file
+import React, { useState } from "react"
+import {
+  Paper,
+  Divider,
+  Typography,
+  Stack,
+  Button,
+  Grid,
+  IconButton,
+} from "@mui/material"
+import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
+import Requests from "../components/AdminRequests"
+import "./Admin.css"
 
 const Admin = () => {
-  const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - startDate.getDay());
-  const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + 6);
+  const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+  const [weekOffset, setWeekOffset] = useState(0)
+
+  const startDate = new Date()
+  startDate.setDate(startDate.getDate() - startDate.getDay() + weekOffset * 7)
+  const endDate = new Date(startDate)
+  endDate.setDate(endDate.getDate() + 6)
+
+  // Fake dataset for now - will be replaced with API call
+  const bookings = {
+    SUN: ["User A"],
+    MON: [],
+    TUE: ["User A", "User B"],
+  }
 
   const handleUserClick = (user) => {
-    // Placeholder for click
-    alert(`Clicked on ${user}`);
-  };
+    alert(`Clicked on ${user}`)
+  }
 
   return (
     <div>
@@ -29,40 +44,86 @@ const Admin = () => {
           borderRadius: "32px 0px 32px 0px",
         }}
       >
-        <Typography variant="h3" align="left">ADMIN DASHBOARD</Typography>
+        <Typography variant="h3" align="left">
+          ADMIN DASHBOARD
+        </Typography>
         <Divider />
         <Stack direction="row" justifyContent="space-between">
           <Requests />
           <div className="bookings-section">
             <div className="bookings-header">
-              <Typography variant="h4" align="left">BOOKINGS</Typography>
-              <Button variant="contained" color="primary" className="manage-bookings-button">
+              <Typography variant="h4" align="left">
+                BOOKINGS
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                className="manage-bookings-button"
+              >
                 Manage Bookings
               </Button>
             </div>
-            <Paper elevation={2} sx={{ padding: "32px", borderRadius: "16px", background: "#D9D9D9" }} className="calendar-container">
+            <Paper
+              elevation={2}
+              sx={{
+                padding: "32px",
+                borderRadius: "16px",
+                background: "#D9D9D9",
+              }}
+              className="calendar-container"
+            >
               <div className="container-header">
-                <Typography variant="subtitle1" paddingLeft="1rem">
-                  {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
+                <IconButton onClick={() => setWeekOffset(weekOffset - 1)}>
+                  <ArrowBackIos />
+                </IconButton>
+                <Typography
+                  variant="subtitle1"
+                  paddingLeft="1rem"
+                  className="date-range"
+                >
+                  {startDate.toLocaleDateString()} -{" "}
+                  {endDate.toLocaleDateString()}
                 </Typography>
+                <IconButton onClick={() => setWeekOffset(weekOffset + 1)}>
+                  <ArrowForwardIos />
+                </IconButton>
               </div>
               <Grid container spacing={1}>
                 {daysOfWeek.map((day, index) => (
-                  <Grid key={index} item xs={12} md={12 / daysOfWeek.length} className="day-container">
+                  <Grid
+                    key={index}
+                    item
+                    xs={12}
+                    md={12 / daysOfWeek.length}
+                    className="day-container"
+                  >
                     <Typography align="center">{day}</Typography>
                     <div className="user-buttons-container">
-                      <Button onClick={() => handleUserClick("User A")} className="user-button">User A</Button>
-                      <Button onClick={() => handleUserClick("User B")} className="user-button">User B</Button>
+                      {bookings[day]?.length > 0 ? (
+                        bookings[day].map((user, userIndex) => (
+                          <Button
+                            key={userIndex}
+                            onClick={() => handleUserClick(user)}
+                            className="user-button"
+                          >
+                            {user}
+                          </Button>
+                        ))
+                      ) : (
+                        <Typography variant="body2">
+                          No bookings on this day
+                        </Typography>
+                      )}
                     </div>
                   </Grid>
                 ))}
               </Grid>
-            </Paper> 
+            </Paper>
           </div>
         </Stack>
       </Paper>
     </div>
-  );
-};
+  )
+}
 
-export default Admin;
+export default Admin
