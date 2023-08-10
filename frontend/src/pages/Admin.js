@@ -26,6 +26,10 @@ const Admin = () => {
     SUN: ["User A"],
     MON: [],
     TUE: ["User A", "User B"],
+    WED: ["User A", "User C", "User D"],
+    THU: [],
+    FRI: ["User A", "User B", "User C", "User D"],
+    SAT: ["User C", "User D"],
   }
 
   const handleUserClick = (user) => {
@@ -77,7 +81,7 @@ const Admin = () => {
                   <ArrowBackIos />
                 </IconButton>
                 <Typography
-                  variant="subtitle1"
+                  variant="h6"
                   paddingLeft="1rem"
                   className="date-range"
                 >
@@ -97,7 +101,7 @@ const Admin = () => {
                     md={12 / daysOfWeek.length}
                     className="day-container"
                   >
-                    <Typography align="center">{day}</Typography>
+                    <Typography align="center" variant="h6">{day}</Typography>
                     <div className="user-buttons-container">
                       {bookings[day]?.length > 0 ? (
                         bookings[day].map((user, userIndex) => (
@@ -110,8 +114,8 @@ const Admin = () => {
                           </Button>
                         ))
                       ) : (
-                        <Typography variant="body2">
-                          No bookings on this day
+                        <Typography variant="no-booking">
+                          No bookings
                         </Typography>
                       )}
                     </div>
