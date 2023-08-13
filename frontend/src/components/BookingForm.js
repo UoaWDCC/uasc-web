@@ -1,119 +1,258 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FormControl, FormLabel, Button } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
+import { db } from "../firebase"
+import { getDocs, collection } from "firebase/firestore"
 
 const BookingForm = () => {
-  const [selectedStartDate, setSelectedStartDate] = useState(dayjs(Date.now()))
-  const [selectedEndDate, setSelectedEndDate] = useState(null)
+  const [selectedCheckInDate, setSelectedCheckInDate] = useState(null)
+  const [selectedCheckOutDate, setSelectedCheckOutDate] = useState(null)
+  const [existingBookings, setExistingBookings] = useState([])
+  const [dateAvailabilities, setDateAvailabilities] = useState(new Map())
+  const [dateArray, setDateArray] = useState([])
+  const bookingCollectionRef = collection(db, "bookings")
+  const maxSpotsAvailablePerDay = 50
 
-  // dummy data to test, kinda just assuming that the booking documents
-  // in firestore will contain a start and end property
-  const existingBookedDateRanges = [
-    { start: "2023-07-21", end: "2023-07-23" },
-    { start: "2023-07-26", end: "2023-07-27" },
-    { start: "2023-07-29", end: "2023-07-31" },
-  ]
+  // fetch bookings on component mount
+  useEffect(() => {
+    retrieveExistingBookings()
+  }, [])
 
-  const isDateWithinExistingBookedDates = (dateToCheck) => {
-    for (const existingBookedRange of existingBookedDateRanges) {
-      const existingStart = new Date(existingBookedRange.start)
-      const existingEnd = new Date(existingBookedRange.end)
+  // build hashmap of booked spot availability once existingBookings state has been set
+  useEffect(() => {
+    setSpotAvailabilityByDate()
+  }, [existingBookings])
 
-      if (dateToCheck >= existingStart && dateToCheck <= existingEnd) {
-        return true
-      }
-    }
-    return false
+  useEffect(() => {
+    setEarliestDefaultCheckInDate()
+  }, [dateAvailabilities])
+
+  useEffect(() => {
+    setDateArray(getDateRangeArray())
+  }, [selectedCheckInDate, selectedCheckOutDate])
+
+  const retrieveExistingBookings = async () => {
+    const querySnapshot = await getDocs(bookingCollectionRef)
+    let bookings = []
+    querySnapshot.forEach((doc) => {
+      bookings.push({
+        ...doc.data(),
+        id: doc.id,
+      })
+    })
+    setExistingBookings(bookings)
   }
 
-  const doesEndDateIncludeExistingBookedDates = (newEndDate) => {
-    for (const existingBookedRange of existingBookedDateRanges) {
-      const existingStart = new Date(existingBookedRange.start)
-      const existingEnd = new Date(existingBookedRange.end)
+  const setSpotAvailabilityByDate = () => {
+    let availabilities = new Map()
 
-      if (selectedStartDate <= existingStart && newEndDate >= existingEnd) {
-        return true
+    existingBookings.forEach((booking) => {
+      let currDate = new Date(getFormattedDateString(booking.checkIn))
+      const endDate = new Date(getFormattedDateString(booking.checkOut))
+
+      while (currDate < endDate) {
+        const dateKey = currDate.toDateString()
+        const spotsTaken = (availabilities.get(dateKey) || 0) + 1
+        availabilities.set(dateKey, spotsTaken)
+
+        currDate.setDate(currDate.getDate() + 1)
       }
+    })
+
+    setDateAvailabilities(availabilities)
+  }
+
+  const isDateBookedOut = (dateToCheck) => {
+    const dateKey = dateToCheck.toDateString()
+    const spotsTaken = dateAvailabilities.get(dateKey) || 0
+    const spotsLeft = maxSpotsAvailablePerDay - spotsTaken
+    if (spotsLeft <= 0) {
+      return true
     }
+
     return false
   }
 
   const isStartDateInvalid = (date) => {
-    const startDateString = dayjs(date).format("YYYY-MM-DD") // needed to convert using dayjs otherwise disabled dates would be 1 day ahead
-    const startDate = new Date(startDateString)
-    return isDateWithinExistingBookedDates(startDate)
+    const startDate = new Date(getFormattedDateString(date))
+    return isDateBookedOut(startDate)
   }
 
   const isEndDateInvalid = (date) => {
-    const endDateString = dayjs(date).format("YYYY-MM-DD")
-    const endDate = new Date(endDateString)
-
-    if (endDate < selectedStartDate) {
+    const endDate = new Date(getFormattedDateString(date))
+    if (endDate <= selectedCheckInDate) {
       return true
     }
 
-    return (
-      isDateWithinExistingBookedDates(endDate) ||
-      doesEndDateIncludeExistingBookedDates(endDate)
-    )
+    let currDate = new Date(selectedCheckInDate)
+    while (currDate <= endDate) {
+      if (isDateBookedOut(currDate)) {
+        return true
+      }
+      currDate.setDate(currDate.getDate() + 1)
+    }
+
+    return false
   }
 
   const handleChangeStartDate = (startDate) => {
-    if (startDate > selectedEndDate) {
-      setSelectedEndDate(null)
+    if (startDate >= selectedCheckOutDate) {
+      setSelectedCheckOutDate(null)
     }
-    setSelectedStartDate(startDate)
+    const newCheckInDate = new Date(getFormattedDateString(startDate))
+    setSelectedCheckInDate(dayjs(newCheckInDate)) // need to use dayjs because thats the MUI datepicker value type
   }
 
   const handleChangeEndDate = (endDate) => {
-    setSelectedEndDate(endDate)
+    const newCheckOutDate = new Date(getFormattedDateString(endDate))
+    setSelectedCheckOutDate(dayjs(newCheckOutDate))
+  }
+
+  const getFormattedDateString = (date) => {
+    return dayjs(date).format("YYYY-MM-DD")
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
-    if (!selectedEndDate) {
-      alert("Please select an end date before submitting") // will replace with mui modal or something later
+    if (!selectedCheckOutDate) {
+      alert("Please select an end date before submitting")
       return
     }
-
     console.log(
-      `Selected Date Range:\n${selectedStartDate.$d} - \n${selectedEndDate.$d}`
+      `Selected Date Range:\n${selectedCheckInDate} - \n${selectedCheckOutDate}`
     )
     // need to add booking to firestore
   }
 
+  const setEarliestDefaultCheckInDate = () => {
+    let currDate = new Date()
+    let dateKey = currDate.toDateString()
+
+    while (
+      dateAvailabilities.has(dateKey) &&
+      dateAvailabilities.get(dateKey) >= maxSpotsAvailablePerDay
+    ) {
+      currDate.setDate(currDate.getDate() + 1)
+      dateKey = currDate.toDateString()
+    }
+
+    setSelectedCheckInDate(dayjs(currDate))
+  }
+
+  const getDateRangeArray = () => {
+    if (!selectedCheckInDate || !selectedCheckOutDate) {
+      return []
+    }
+
+    let dates = []
+    let currDate = new Date(getFormattedDateString(selectedCheckInDate))
+    const endDate = new Date(getFormattedDateString(selectedCheckOutDate))
+
+    while (currDate < endDate) {
+      dates.push(new Date(currDate.getTime()))
+      currDate.setDate(currDate.getDate() + 1)
+    }
+
+    return dates
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl style={{ margin: "1.5rem" }}>
-        <FormLabel style={{ textAlign: "left" }}>Select a Start Date</FormLabel>
-        <DatePicker
-          value={selectedStartDate}
-          onChange={handleChangeStartDate}
-          shouldDisableDate={isStartDateInvalid}
-          disablePast
-          disableHighlightToday
-        />
-        <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
-          Select an End Date
-        </FormLabel>
-        <DatePicker
-          value={selectedEndDate}
-          onChange={handleChangeEndDate}
-          shouldDisableDate={isEndDateInvalid}
-          disablePast
-          disableHighlightToday
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          style={{ marginTop: "1.5rem" }}
-        >
-          Submit
-        </Button>
-      </FormControl>
-    </form>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "90%",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          width: "60%",
+        }}
+      >
+        <div>
+          <h2
+            style={{
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+              margin: "1.5rem",
+            }}
+          >
+            Make a Booking
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <FormControl style={{ margin: "1.5rem" }}>
+              <FormLabel style={{ textAlign: "left" }}>
+                Select a Check-In Date
+              </FormLabel>
+              <DatePicker
+                value={selectedCheckInDate}
+                onChange={handleChangeStartDate}
+                shouldDisableDate={isStartDateInvalid}
+                disablePast
+                disableHighlightToday
+              />
+              <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
+                Select a Check-Out Date
+              </FormLabel>
+              <DatePicker
+                value={selectedCheckOutDate}
+                onChange={handleChangeEndDate}
+                shouldDisableDate={isEndDateInvalid}
+                disablePast
+                disableHighlightToday
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                style={{ marginTop: "1.5rem" }}
+              >
+                Submit
+              </Button>
+            </FormControl>
+          </form>
+        </div>
+        <div>
+          <h2
+            style={{
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+              margin: "1.5rem",
+            }}
+          >
+            Available Spots Left:
+          </h2>
+          <ul
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              padding: "0",
+            }}
+          >
+            {dateArray.map((d, index) => {
+              return (
+                <li
+                  key={index}
+                  style={{
+                    listStyleType: "none",
+                    margin: "0",
+                  }}
+                >
+                  {`${d.toDateString()}: ${
+                    maxSpotsAvailablePerDay -
+                      dateAvailabilities.get(d.toDateString()) ||
+                    maxSpotsAvailablePerDay
+                  }`}
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </div>
+    </div>
   )
 }
 

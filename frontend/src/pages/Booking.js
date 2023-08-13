@@ -3,8 +3,7 @@ import BookingForm from "../components/BookingForm"
 
 const Booking = () => {
   return (
-    <div>
-      <h1>Make a Cabin Booking</h1>
+    <div style={{ height: "100%" }}>
       <BookingForm />
     </div>
   )
