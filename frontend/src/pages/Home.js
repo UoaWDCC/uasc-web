@@ -1,8 +1,11 @@
 import React from "react"
 import logo from "../assets/2023_logo1-768x262-uasc.png"
 import { Typography } from "@mui/material"
+import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const Home = () => {
+  const [user, metadata] = useAuthenticatedUser()
+
   return (
     <>
       <div>
@@ -20,7 +23,9 @@ const Home = () => {
       </div>
       <div>
         <h1 style={{ fontSize: "300px" }}>
-          I just needed to add this so I could test scrolling
+          {user && metadata
+            ? `👋, ${user.displayName} ${metadata.email}`
+            : "Welcome to UASC!"}
         </h1>
       </div>
     </>
