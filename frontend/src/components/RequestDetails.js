@@ -1,6 +1,7 @@
 import { Grid, Typography, Box, Divider, Paper, Button } from "@mui/material"
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 
-const RequestDetails = () => {
+const RequestDetails = ({ booking_id, setSelectedUser }) => {
   const styles = {
     outerBackground: {
       borderRadius: 15,
@@ -35,6 +36,7 @@ const RequestDetails = () => {
             paddingTop="9px"
             paddingBottom="1px"
             sx={{ fontWeight: "bold" }}
+            onClick={() => setSelectedUser(null)}
           >
             HIDE
           </Typography>
@@ -49,7 +51,7 @@ const RequestDetails = () => {
                   align="left"
                   sx={{ fontWeight: "bold" }}
                 >
-                  badabing
+                  {booking_id}
                 </Typography>
                 <Divider width="200px" />
                 <Typography
@@ -57,29 +59,21 @@ const RequestDetails = () => {
                   align="left"
                   sx={{ fontWeight: "bold" }}
                 >
-                  blah
+                  {booking_id}
                   <span style={textBreakStyle}></span>
                   blah blah blah
                   <span style={textBreakStyle}></span>
                   blah blah blah
                 </Typography>
                 <Grid container rowSpacing={2} paddingTop="25px">
-                  <Grid item xs={12} md={6} align="center">
+                  <Grid item xs={12} md={6} align="center" sx={{ padding: 0 }}>
                     <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                      old dates
+                      OLD DATES
                     </Typography>
-                    <Box
-                      sx={{
-                        height: "300px",
-                        width: "300px",
-                      }}
-                    >
-                      <Paper
-                        elevation={0}
-                        style={styles.outerBackground}
-                        sx={{ height: 1 }}
-                      ></Paper>
-                    </Box>
+                    <DateCalendar
+                      style={{ backgroundColor: "white", borderRadius: 15 }}
+                      sx={{ height: 300, margin: 0 }}
+                    />
                     <Button
                       variant="contained"
                       color="success"
@@ -94,20 +88,15 @@ const RequestDetails = () => {
                   </Grid>
                   <Grid item xs={12} md={6} align="center">
                     <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                      new dates
+                      NEW DATES
                     </Typography>
-                    <Box
-                      sx={{
-                        height: "300px",
-                        width: "300px",
+                    <DateCalendar
+                      style={{
+                        backgroundColor: "white",
+                        borderRadius: 15,
                       }}
-                    >
-                      <Paper
-                        elevation={0}
-                        style={styles.outerBackground}
-                        sx={{ height: 1 }}
-                      ></Paper>
-                    </Box>
+                      sx={{ height: 300, margin: 0 }}
+                    />
                     <Button
                       variant="contained"
                       color="error"

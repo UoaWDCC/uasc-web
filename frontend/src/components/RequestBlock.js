@@ -1,6 +1,6 @@
 import { Grid, Typography, Box, Divider, Paper } from "@mui/material"
 
-const RequestBlock = ({ requestData }) => {
+const RequestBlock = ({ requestData, setSelectedUser }) => {
   const gridItemStyle = {
     gridItem: {
       borderRadius: 15, // Change the value as needed
@@ -19,7 +19,7 @@ const RequestBlock = ({ requestData }) => {
     requestData.query_type == "cancellation" ? "pink" : "lightblue"
 
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} onClick={() => setSelectedUser(requestData.booking_id)}>
       <Paper
         elevation={0}
         style={{ ...gridItemStyle.gridItem, backgroundColor }}
@@ -35,7 +35,9 @@ const RequestBlock = ({ requestData }) => {
             sx={{ fontWeight: "bold" }}
             textTransform="uppercase"
           >
-            {requestData.query_type}
+            {requestData.query_type == "cancellation"
+              ? "cancellation"
+              : "date change"}
             <span style={textBreakStyle}></span>
             5/7 - 7/7 -&gt; 7/7 - 9/7
           </Typography>

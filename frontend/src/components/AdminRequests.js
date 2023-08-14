@@ -2,7 +2,7 @@ import { Grid, Typography, Divider, Paper } from "@mui/material"
 import RequestBlock from "./RequestBlock"
 import { useState, useEffect } from "react"
 
-const AdminDashboardRequest = () => {
+const AdminDashboardRequest = ({ setSelectedUser }) => {
   const gridItemStyle = {
     requestBackground: {
       borderRadius: 15, // Change the value as needed
@@ -21,30 +21,30 @@ const AdminDashboardRequest = () => {
       setRequests([
         {
           user_id: "whatsgood",
-          booking_id: "8mYj7rWOMH6hGy4FzMed",
+          booking_id: "AHHHHHHHHHHHHHH",
           query: "I'd like to change my booking.",
-          query_type: "date change",
+          query_type: "dateChange",
           status: "unresolved",
         },
         {
           user_id: "deez",
-          booking_id: "8mYj7rWOMH6hGy4FzMed",
+          booking_id: "HAHAHAHAHAHAHAH",
           query: "I'd like to cancel my booking.",
           query_type: "cancellation",
           status: "unresolved",
         },
         {
           user_id: "hello",
-          booking_id: "8mYj7rWOMH6hGy4FzMed",
+          booking_id: "GNHSIHGSU",
           query: "I'd like to cancel my booking.",
           query_type: "cancellation",
           status: "unresolved",
         },
         {
           user_id: "bowling",
-          booking_id: "8mYj7rWOMH6hGy4FzMed",
+          booking_id: "LMAOOOOOOOOOOOOOOO",
           query: "I'd like to change my booking.",
-          query_type: "date change",
+          query_type: "dateChange",
           status: "unresolved",
         },
       ])
@@ -84,7 +84,11 @@ const AdminDashboardRequest = () => {
               }}
             >
               {requests.map((request) => (
-                <RequestBlock key={request} requestData={request} />
+                <RequestBlock
+                  key={request.booking_id}
+                  requestData={request}
+                  setSelectedUser={setSelectedUser}
+                />
               ))}
             </Grid>
           </Paper>
