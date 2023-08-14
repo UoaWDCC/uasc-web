@@ -7,6 +7,7 @@ import { getDocs, where, query, collection } from "firebase/firestore"
 import { Avatar, Divider, Paper, Stack, Typography } from "@mui/material"
 import "../styles/Profile.css"
 import ProfileCard from "../components/ProfileCard"
+import ProfileCalendarCard from "../components/ProfileCalendarCard"
 
 const Profile = () => {
   // const [userData, setUserData] = useState(null)
@@ -196,8 +197,14 @@ const Profile = () => {
         <Typography variant="h1" align="left" color="#474747">
           Profile
         </Typography>
-        <Stack direction="row">
+        <Stack direction="row" spacing={6}>
           <ProfileCard />
+          <Stack spacing={3}>
+            <Typography variant="h3" align="left" color="#457CC3">
+              My Bookings
+            </Typography>
+            <ProfileCalendarCard />
+          </Stack>
         </Stack>
       </Stack>
     </div>
