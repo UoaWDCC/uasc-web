@@ -9,6 +9,7 @@ import "../styles/Profile.css"
 import ProfileCard from "../components/ProfileCard"
 import ProfileCalendarCard from "../components/ProfileCalendarCard"
 import ProfileCurrentBookings from "../components/ProfileCurrentBookings"
+import ProfileBookingHistory from "../components/ProfileBookingHistory"
 
 const Profile = () => {
   // const [userData, setUserData] = useState(null)
@@ -206,6 +207,7 @@ const Profile = () => {
             </Typography>
             <ProfileCalendarCard />
             <ProfileCurrentBookings />
+            <ProfileBookingHistory />
           </Stack>
         </Stack>
       </Stack>
