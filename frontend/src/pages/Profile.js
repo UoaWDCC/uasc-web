@@ -8,6 +8,7 @@ import { Avatar, Divider, Paper, Stack, Typography } from "@mui/material"
 import "../styles/Profile.css"
 import ProfileCard from "../components/ProfileCard"
 import ProfileCalendarCard from "../components/ProfileCalendarCard"
+import ProfileCurrentBookings from "../components/ProfileCurrentBookings"
 
 const Profile = () => {
   // const [userData, setUserData] = useState(null)
@@ -204,6 +205,7 @@ const Profile = () => {
               My Bookings
             </Typography>
             <ProfileCalendarCard />
+            <ProfileCurrentBookings />
           </Stack>
         </Stack>
       </Stack>

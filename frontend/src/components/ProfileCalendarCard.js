@@ -1,8 +1,5 @@
-import { CardContent, Stack } from "@mui/material"
+import { Card, Typography, CardContent, Stack, Box } from "@mui/material"
 import React from "react"
-
-import { Card, Typography } from "@mui/material"
-import { Box } from "@mui/system"
 import { DateCalendar } from "@mui/x-date-pickers"
 
 function ProfileCalendarCard() {
@@ -12,6 +9,7 @@ function ProfileCalendarCard() {
         sx={{
           boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
           backgroundColor: "white",
+          borderRadius: "15px",
         }}
       >
         <CardContent sx={{ padding: "36px" }}>

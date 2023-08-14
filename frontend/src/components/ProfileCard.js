@@ -12,6 +12,7 @@ function ProfileCard() {
         sx={{
           boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
           backgroundColor: "white",
+          borderRadius: "15px",
         }}
       >
         <CardContent sx={{ padding: "36px" }}>
