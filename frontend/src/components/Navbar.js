@@ -52,9 +52,10 @@ const Navbar = () => {
     <nav
       className="navbar"
       style={
-        isVisible
+        (isVisible
           ? { ...navbarStyles, opacity: "1" }
-          : { ...navbarStyles, opacity: "0", pointerEvents: "none" }
+          : { ...navbarStyles, opacity: "0", pointerEvents: "none" },
+        { zIndex: "1000", position: "fixed", width: "100%" })
       }
     >
       <div id="zero" style={{ display: "flex" }}>
