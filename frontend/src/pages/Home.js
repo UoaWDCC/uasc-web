@@ -7,8 +7,13 @@ import image2 from "../assets/facebook.png";
 import pricing from "../assets/pricing.png";
 import details from "../assets/details.png";
 import './Home.css';
+import logo from "../assets/2023_logo1-768x262-uasc.png"
+import { Typography } from "@mui/material"
+import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const Home = () => {
+  const [user, metadata] = useAuthenticatedUser()
+
   return (
   <div className="split-container">
     <div className="top-left-section">
@@ -62,6 +67,7 @@ const Home = () => {
       />
       </div>
 
+
     <div className="bottom-left-section" style={{ height: '800px' }}>
       <img
       src="https://images.pexels.com/photos/896815/pexels-photo-896815.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
@@ -94,5 +100,15 @@ const Home = () => {
   );
 };
 
+      <div>
+        <h1 style={{ fontSize: "300px" }}>
+          {user && metadata
+            ? `👋, ${user.displayName} ${metadata.email}`
+            : "Welcome to UASC!"}
+        </h1>
+      </div>
+    </>
+  )
+}
 
-export default Home;
+export default Home
