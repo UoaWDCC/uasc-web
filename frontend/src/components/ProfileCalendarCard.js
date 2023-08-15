@@ -14,7 +14,12 @@ function ProfileCalendarCard() {
       >
         <CardContent sx={{ padding: "36px" }}>
           <Stack spacing={2}>
-            <Typography variant="h6" align="left">
+            <Typography
+              variant="h4"
+              align="left"
+              color="#457CC3"
+              sx={{ fontWeight: "900" }}
+            >
               Calendar{" "}
             </Typography>
             <Box sx={{}}>
