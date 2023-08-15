@@ -1,5 +1,18 @@
-import { CardContent, Stack, Card, Typography, Button } from "@mui/material"
+/* eslint-disable */
+
+import {
+  CardContent,
+  Stack,
+  Card,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+} from "@mui/material"
 import React from "react"
+import { useState } from "react"
 
 function ProfileCurrentBookings() {
   const mockCurrentBookingData = [
@@ -22,6 +35,16 @@ function ProfileCurrentBookings() {
       booking_id: 2,
     },
   ]
+
+  const [open, setOpen] = useState(false)
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   return (
     <div>
@@ -72,6 +95,24 @@ function ProfileCurrentBookings() {
           </Stack>
         </CardContent>
       </Card>
+      <Button onClick={handleOpen}>Open</Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{ sx: { borderRadius: "15px" } }}
+      >
+        <DialogContent>
+          <Card sx={{ padding: "32px" }}>
+            <CardContent sx={{ padding: "32px" }}>
+              <Stack spacing={4}>
+                <Typography variant="h5" align="left" color="#457CC3">
+                  Request Change
+                </Typography>
+              </Stack>
+            </CardContent>
+          </Card>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

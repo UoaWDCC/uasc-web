@@ -33,7 +33,12 @@ function ProfileBookingHistory() {
       >
         <CardContent sx={{ padding: "36px" }}>
           <Stack spacing={4}>
-            <Typography variant="h6" align="left">
+            <Typography
+              variant="h5"
+              align="left"
+              color="#457CC3"
+              sx={{ fontWeight: "900" }}
+            >
               Booking History{" "}
             </Typography>
             <Stack spacing={2}>
