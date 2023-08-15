@@ -1,11 +1,24 @@
-import { Avatar, CardContent, Stack, Button } from "@mui/material"
+import {
+  Card,
+  Typography,
+  Avatar,
+  CardContent,
+  Stack,
+  Button,
+} from "@mui/material"
 import React from "react"
-
-import { Card, Typography } from "@mui/material"
+import { useState } from "react"
 
 const textType = "body1"
 
 function ProfileCard() {
+  const [expanded, setExpanded] = useState(false)
+
+  //Expanding the more details on the user page
+  const expandDetails = () => {
+    setExpanded(!expanded)
+  }
+
   return (
     <div style={{ width: "100%" }}>
       <Card
@@ -24,7 +37,7 @@ function ProfileCard() {
             >
               <Stack direction="row" alignItems="center">
                 <Avatar sx={{ minWidth: "100px", minHeight: "100px" }} />
-                <Typography variant="h6" sx={{ marginLeft: "32px" }}>
+                <Typography variant="h4" sx={{ marginLeft: "32px" }}>
                   John Doe
                 </Typography>
               </Stack>
@@ -38,12 +51,14 @@ function ProfileCard() {
                 Edit{" "}
               </Button>
             </Stack>
-            <Stack align="left">
+            <Stack align="left" spacing={1}>
               <Stack direction="row">
                 <Typography
                   variant={textType}
+                  color="#787B7D"
                   sx={{
-                    minWidth: "160px",
+                    minWidth: "25%",
+                    maxWidth: "25%",
                   }}
                 >
                   Phone
@@ -60,8 +75,10 @@ function ProfileCard() {
               <Stack direction="row">
                 <Typography
                   variant={textType}
+                  color="#787B7D"
                   sx={{
-                    minWidth: "160px",
+                    minWidth: "25%",
+                    maxWidth: "25%",
                   }}
                 >
                   Email
@@ -78,8 +95,10 @@ function ProfileCard() {
               <Stack direction="row">
                 <Typography
                   variant={textType}
+                  color="#787B7D"
                   sx={{
-                    minWidth: "160px",
+                    minWidth: "25%",
+                    maxWidth: "25%",
                   }}
                 >
                   Membership
@@ -95,7 +114,79 @@ function ProfileCard() {
               </Stack>
             </Stack>
             <Stack>
-              <Typography variant={textType}>Other Details</Typography>
+              {expanded ? (
+                <Stack spacing={1} align="left">
+                  <Stack direction="row">
+                    <Typography
+                      variant={textType}
+                      color="#787B7D"
+                      sx={{
+                        minWidth: "25%",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Emergency Contact Name
+                    </Typography>
+                    <Typography
+                      variant={textType}
+                      sx={{
+                        minWidth: "300px",
+                      }}
+                    >
+                      Jane Doe
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row">
+                    <Typography
+                      variant={textType}
+                      color="#787B7D"
+                      sx={{
+                        minWidth: "25%",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Emergency Contact Number
+                    </Typography>
+                    <Typography
+                      variant={textType}
+                      sx={{
+                        minWidth: "300px",
+                      }}
+                    >
+                      +64 2400 420 422
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row">
+                    <Typography
+                      variant={textType}
+                      color="#787B7D"
+                      sx={{
+                        minWidth: "25%",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Emergency Contact Relation
+                    </Typography>
+                    <Typography
+                      variant={textType}
+                      sx={{
+                        minWidth: "300px",
+                      }}
+                    >
+                      Mother
+                    </Typography>
+                  </Stack>
+                </Stack>
+              ) : (
+                <div></div>
+              )}
+              <Typography
+                variant={textType}
+                color="#787B7D"
+                onClick={expandDetails}
+              >
+                {expanded ? "Hide Details" : "More Details"}
+              </Typography>
             </Stack>
           </Stack>
         </CardContent>
