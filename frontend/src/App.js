@@ -20,7 +20,7 @@ import theme from "./theme"
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div style={{ backgroundColor: "darkgray", height: "100vh" }}>
+      <div style={{ backgroundColor: "f4f4f4", height: "100vh" }}>
         <ThemeProvider theme={theme}>
           <Router>
             <div className="App" style={{ height: "100%" }}>

@@ -194,14 +194,23 @@ const Profile = () => {
     //       </Stack>
     //     </Paper>
     //   </Stack>
-    <div>
+    <div
+      style={{
+        backgroundColor: "#f4f4f4",
+        height: "150%",
+        // minHeight: "100vh",
+        width: "100%",
+        backgroundImage:
+          "radial-gradient(ellipse 50% 50% at 30% 30%, #81c7ebaa, #ffffff)",
+      }}
+    >
       <Stack spacing={3} sx={{ padding: "148px" }}>
         <Typography variant="h1" align="left" color="#474747">
           Profile
         </Typography>
-        <Stack direction="row" spacing={6}>
+        <Stack direction="row" spacing={12} justifyContent="space-between">
           <ProfileCard />
-          <Stack spacing={3}>
+          <Stack spacing={3} sx={{ width: "100%" }}>
             <Typography variant="h3" align="left" color="#457CC3">
               My Bookings
             </Typography>
