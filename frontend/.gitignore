@@ -10,6 +10,7 @@
 
 # production
 /build
+.firebase/*
 
 # misc
 .DS_Store
@@ -18,6 +19,10 @@
 .env.test.local
 .env.production.local
 
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
