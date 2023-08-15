@@ -7,9 +7,7 @@ import {
   Typography,
   Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
+  TextField,
 } from "@mui/material"
 import React from "react"
 import { useState } from "react"
@@ -43,6 +41,12 @@ function ProfileCurrentBookings() {
   }
 
   const handleClose = () => {
+    setOpen(false)
+  }
+
+  //TODO Need to make this handle changes
+  const handleRequestSubmit = () => {
+    console.log("Request submitted")
     setOpen(false)
   }
 
@@ -85,6 +89,7 @@ function ProfileCurrentBookings() {
                       paddingX: "24px",
                       textTransform: "none",
                     }}
+                    onClick={handleOpen}
                   >
                     {" "}
                     Request Change{" "}
@@ -95,23 +100,160 @@ function ProfileCurrentBookings() {
           </Stack>
         </CardContent>
       </Card>
-      <Button onClick={handleOpen}>Open</Button>
       <Dialog
         open={open}
         onClose={handleClose}
+        maxWidth="md"
+        fullWidth={false}
         PaperProps={{ sx: { borderRadius: "15px" } }}
       >
-        <DialogContent>
-          <Card sx={{ padding: "32px" }}>
-            <CardContent sx={{ padding: "32px" }}>
-              <Stack spacing={4}>
-                <Typography variant="h5" align="left" color="#457CC3">
-                  Request Change
-                </Typography>
+        <Card sx={{ padding: "32px", width: "100%" }}>
+          <CardContent sx={{ width: "100%" }}>
+            <Stack spacing={4}>
+              <Typography
+                variant="h4"
+                align="left"
+                color="#474747"
+                sx={{ fontWeight: "900" }}
+              >
+                Request Change
+              </Typography>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                spacing={12}
+              >
+                <Stack align="left" spacing={2}>
+                  <Typography variant="h6" color="#457CC3">
+                    Current Booking details
+                  </Typography>
+                  <Stack direction="row">
+                    <Typography
+                      variant="body1"
+                      color="#787B7D"
+                      sx={{
+                        minWidth: "200px",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Check-in Date:
+                    </Typography>
+                    <Typography variant="body1" color="#787B7D" sx={{}}>
+                      05/07/2023
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row">
+                    <Typography
+                      variant="body1"
+                      color="#787B7D"
+                      sx={{
+                        minWidth: "200px",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Check-out Date:
+                    </Typography>
+                    <Typography variant="body1" color="#787B7D" sx={{}}>
+                      07/07/2023
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row">
+                    <Typography
+                      variant="body1"
+                      color="#787B7D"
+                      sx={{
+                        minWidth: "200px",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Total Days:
+                    </Typography>
+                    <Typography variant="body1" color="#787B7D" sx={{}}>
+                      3
+                    </Typography>
+                  </Stack>
+                </Stack>
+                <Stack align="left" spacing={2}>
+                  <Typography variant="h6" color="#457CC3">
+                    Request Details
+                  </Typography>
+                  <Stack direction="row">
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        minWidth: "200px",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Check-in Date:
+                    </Typography>
+                    <Typography variant="body1">05/07/2023</Typography>
+                  </Stack>
+                  <Stack direction="row">
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        minWidth: "200px",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Check-out Date:
+                    </Typography>
+                    <Typography variant="body1">07/07/2023</Typography>
+                  </Stack>
+                  <Stack direction="row">
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        minWidth: "200px",
+                        maxWidth: "25%",
+                      }}
+                    >
+                      Total Days:
+                    </Typography>
+                    <Typography variant="body1">3</Typography>
+                  </Stack>
+                </Stack>
               </Stack>
-            </CardContent>
-          </Card>
-        </DialogContent>
+              <Typography variant="h6" color="#457CC3">
+                Request Message:
+              </Typography>
+              <TextField
+                variant="standard"
+                multiline
+                rows={6}
+                InputProps={{
+                  disableUnderline: true,
+                }}
+                style={{
+                  width: "100%",
+                  background: "#EDF8FF",
+                  "&:hover": {
+                    borderColor: "transparent",
+                  },
+                  borderRadius: "15px",
+                }}
+              />
+              <Stack justifyContent="center" alignItems="center">
+                <Button
+                  variant="contained"
+                  color="buttonPrimary"
+                  size="small"
+                  sx={{
+                    borderRadius: "100px",
+                    paddingX: "24px",
+                    textTransform: "none",
+                    width: "fit-content",
+                  }}
+                  onClick={handleRequestSubmit}
+                >
+                  {" "}
+                  Request Change{" "}
+                </Button>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
       </Dialog>
     </div>
   )
