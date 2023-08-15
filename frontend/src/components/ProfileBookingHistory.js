@@ -2,7 +2,26 @@ import React from "react"
 import { CardContent, Stack, Card, Typography } from "@mui/material"
 
 function ProfileBookingHistory() {
-  const mockBookingData = [0, 1, 2]
+  const mockBookingHistoryData = [
+    {
+      check_in: "Jan 1st 2021",
+      check_out: "Jan 4th 2021",
+      total_days: 4,
+      booking_id: 0,
+    },
+    {
+      check_in: "Aug 21st 2021",
+      check_out: "Aug 22nd 2021",
+      total_days: 2,
+      booking_id: 1,
+    },
+    {
+      check_in: "Sep 25th 2022",
+      check_out: "Sep 26th 2022",
+      total_days: 2,
+      booking_id: 2,
+    },
+  ]
   return (
     <div>
       <Card
@@ -18,15 +37,15 @@ function ProfileBookingHistory() {
               Booking History{" "}
             </Typography>
             <Stack spacing={2}>
-              {mockBookingData.map((booking) => (
+              {mockBookingHistoryData.map((booking) => (
                 <Stack
-                  key={booking}
+                  key={booking.booking_id}
                   direction="row"
                   justifyContent="space-between"
                 >
                   <Typography variant="body1" align="left">
                     {" "}
-                    Booking {booking}{" "}
+                    {booking.check_in} - {booking.check_out}{" "}
                   </Typography>
                 </Stack>
               ))}
