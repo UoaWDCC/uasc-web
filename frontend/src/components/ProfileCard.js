@@ -45,7 +45,11 @@ function ProfileCard() {
                 variant="contained"
                 color="buttonPrimary"
                 size="small"
-                sx={{ borderRadius: "100px", paddingX: "24px" }}
+                sx={{
+                  borderRadius: "100px",
+                  paddingX: "24px",
+                  textTransform: "none",
+                }}
               >
                 {" "}
                 Edit{" "}
