@@ -1,4 +1,4 @@
-import { Avatar, CardContent, Stack } from "@mui/material"
+import { Avatar, CardContent, Stack, Button } from "@mui/material"
 import React from "react"
 
 import { Card, Typography } from "@mui/material"
@@ -7,7 +7,7 @@ const textType = "body1"
 
 function ProfileCard() {
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Card
         sx={{
           boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
@@ -17,11 +17,26 @@ function ProfileCard() {
       >
         <CardContent sx={{ padding: "36px" }}>
           <Stack spacing={2}>
-            <Stack direction="row" alignItems="center">
-              <Avatar sx={{ minWidth: "100px", minHeight: "100px" }} />
-              <Typography variant="h6" sx={{ marginLeft: "32px" }}>
-                John Doe
-              </Typography>
+            <Stack
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="space-between"
+            >
+              <Stack direction="row" alignItems="center">
+                <Avatar sx={{ minWidth: "100px", minHeight: "100px" }} />
+                <Typography variant="h6" sx={{ marginLeft: "32px" }}>
+                  John Doe
+                </Typography>
+              </Stack>
+              <Button
+                variant="contained"
+                color="buttonPrimary"
+                size="small"
+                sx={{ borderRadius: "100px", paddingX: "24px" }}
+              >
+                {" "}
+                Edit{" "}
+              </Button>
             </Stack>
             <Stack align="left">
               <Stack direction="row">
