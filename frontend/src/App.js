@@ -20,12 +20,12 @@ import theme from "./theme"
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div style={{ backgroundColor: "darkgray" }}>
+      <div style={{ backgroundColor: "f4f4f4", height: "100vh" }}>
         <ThemeProvider theme={theme}>
           <Router>
-            <div className="App">
+            <div className="App" style={{ height: "100%" }}>
               <Navbar />
-              <div className="content">
+              <div className="content" style={{ height: "100%" }}>
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/about" element={<About />} />
