@@ -1,0 +1,64 @@
+.bookings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.manage-bookings-button {
+  font-size: 0.8rem;
+}
+
+.bookings-section {
+  width: 50%;
+  margin-left: 2rem;
+  background-color: #a8adb0;
+}
+
+.calendar-container {
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  background-color: white;
+}
+
+.day-container {
+  padding: 0.5rem;
+  border-right: 1px solid #ccc;
+  flex-grow: 1;
+  text-align: center;
+  background-color: white;
+  border-top: none;
+  border-bottom: none;
+}
+
+.day-container:last-child {
+  border-right: none;
+}
+
+.user-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-button {
+  background-color: #d9d9d9;
+  text-align: center;
+  margin: 0.25rem 0;
+  padding: 0.25rem;
+  text-transform: none;
+}
+
+.container-header {
+  display: flex;
+  align-items: center;
+}
+
+.date-range {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.no-booking {
+  text-align: center;
+  margin: 1rem 0;
+}
