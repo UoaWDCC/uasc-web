@@ -198,20 +198,29 @@ const Profile = () => {
       style={{
         backgroundColor: "#f4f4f4",
         height: "150%",
-        // minHeight: "100vh",
         width: "100%",
         backgroundImage:
           "radial-gradient(ellipse 50% 50% at 30% 30%, #81c7ebaa, #ffffff)",
       }}
     >
       <Stack spacing={3} sx={{ padding: "148px" }}>
-        <Typography variant="h1" align="left" color="#474747">
+        <Typography
+          variant="h1"
+          align="left"
+          color="#474747"
+          sx={{ fontWeight: "bold" }}
+        >
           Profile
         </Typography>
         <Stack direction="row" spacing={12} justifyContent="space-between">
           <ProfileCard />
           <Stack spacing={3} sx={{ width: "100%" }}>
-            <Typography variant="h3" align="left" color="#457CC3">
+            <Typography
+              variant="h3"
+              align="left"
+              color="#457CC3"
+              sx={{ fontWeight: "900" }}
+            >
               My Bookings
             </Typography>
             <ProfileCalendarCard />

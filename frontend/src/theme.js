@@ -19,4 +19,7 @@ export default createTheme({
       contrastText: "#fff",
     },
   },
+  typography: {
+    fontFamily: "Lato",
+  },
 })
