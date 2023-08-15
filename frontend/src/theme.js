@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from "@mui/material"
 
 export default createTheme({
 	palette: {
@@ -18,8 +18,13 @@ export default createTheme({
 			main: "#BD8FFF", // Purple color 1
 			secondary: "#8966FF", // Purple color 2
 		  },
+      buttonPrimary: {
+      main: "#54B3E5",
+      contrastText: "#fff",
+    },
 	},
 	typography: {
-		fontFamily: "Rubix Medium",
+		fontFamily: "Lato",
 	  },
 });
+
