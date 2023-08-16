@@ -1,4 +1,3 @@
-/* eslint-disable */
 import logo from "../assets/updated2023logo.png"
 import ski from "../assets/skiimage.png"
 import { Typography } from "@mui/material"
@@ -163,13 +162,13 @@ const Home = () => {
         </div>
       </div>
       {/* Campbell's section */}
-      {/* <div>
+      <div>
         <h1 style={{ fontSize: "300px" }}>
           {user && metadata
             ? `👋, ${user.displayName} ${metadata.email}`
             : "Welcome to UASC!"}
         </h1>
-      </div> */}
+      </div>
     </div>
   )
 }
