@@ -20,31 +20,24 @@ const AdminDashboardRequest = ({ setSelectedUser }) => {
     setTimeout(() => {
       setRequests([
         {
-          user_id: "whatsgood",
-          booking_id: "AHHHHHHHHHHHHHH",
+          user_id: "User 1",
+          booking_id: "User-1-Booking-1",
           query: "I'd like to change my booking.",
           query_type: "dateChange",
           status: "unresolved",
         },
         {
-          user_id: "deez",
-          booking_id: "HAHAHAHAHAHAHAH",
+          user_id: "User 2",
+          booking_id: "User-2-Booking-1",
           query: "I'd like to cancel my booking.",
-          query_type: "cancellation",
-          status: "unresolved",
-        },
-        {
-          user_id: "hello",
-          booking_id: "GNHSIHGSU",
-          query: "I'd like to cancel my booking.",
-          query_type: "cancellation",
-          status: "unresolved",
-        },
-        {
-          user_id: "bowling",
-          booking_id: "LMAOOOOOOOOOOOOOOO",
-          query: "I'd like to change my booking.",
           query_type: "dateChange",
+          status: "unresolved",
+        },
+        {
+          user_id: "User 3",
+          booking_id: "User-3-Booking-1",
+          query: "I'd like to cancel my booking.",
+          query_type: "cancellation",
           status: "unresolved",
         },
       ])
