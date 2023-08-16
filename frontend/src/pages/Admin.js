@@ -10,6 +10,7 @@ import {
 } from "@mui/material"
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import Requests from "../components/AdminRequests"
+import RequestDetails from "../components/RequestDetails"
 import "./Admin.css"
 
 const Admin = () => {
@@ -36,12 +37,15 @@ const Admin = () => {
     alert(`Clicked on ${user}`)
   }
 
+  const [selectedUser, setSelectedUser] = useState(null)
+
   return (
     <div>
       <Paper
         elevation={2}
         sx={{
-          margin: "0px 64px 64px 64px",
+          margin: "32px",
+          marginTop: "64px",
           padding: "32px",
           backgroundColor: "#A8ADB0",
           borderRadius: "32px 0px 32px 0px",
@@ -52,79 +56,86 @@ const Admin = () => {
         </Typography>
         <Divider />
         <Stack direction="row" justifyContent="space-between">
-          <Requests />
-          <div className="bookings-section">
-            <div className="bookings-header">
-              <Typography variant="h4" align="left">
-                BOOKINGS
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                className="manage-bookings-button"
-              >
-                Manage Bookings
-              </Button>
-            </div>
-            <Paper
-              elevation={2}
-              sx={{
-                padding: "32px",
-                borderRadius: "16px",
-                background: "#D9D9D9",
-              }}
-              className="calendar-container"
-            >
-              <div className="container-header">
-                <IconButton onClick={() => setWeekOffset(weekOffset - 1)}>
-                  <ArrowBackIos />
-                </IconButton>
-                <Typography
-                  variant="h6"
-                  paddingLeft="1rem"
-                  className="date-range"
-                >
-                  {startDate.toLocaleDateString()} -{" "}
-                  {endDate.toLocaleDateString()}
+          <Requests setSelectedUser={setSelectedUser} />
+          {selectedUser ? (
+            <RequestDetails
+              booking_id={selectedUser}
+              setSelectedUser={setSelectedUser}
+            />
+          ) : (
+            <div className="bookings-section">
+              <div className="bookings-header">
+                <Typography variant="h4" align="left">
+                  BOOKINGS
                 </Typography>
-                <IconButton onClick={() => setWeekOffset(weekOffset + 1)}>
-                  <ArrowForwardIos />
-                </IconButton>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="manage-bookings-button"
+                >
+                  Manage Bookings
+                </Button>
               </div>
-              <Grid container spacing={1}>
-                {daysOfWeek.map((day, index) => (
-                  <Grid
-                    key={index}
-                    item
-                    xs={12}
-                    md={12 / daysOfWeek.length}
-                    className="day-container"
+              <Paper
+                elevation={2}
+                sx={{
+                  padding: "32px",
+                  borderRadius: "16px",
+                  background: "#D9D9D9",
+                }}
+                className="calendar-container"
+              >
+                <div className="container-header">
+                  <IconButton onClick={() => setWeekOffset(weekOffset - 1)}>
+                    <ArrowBackIos />
+                  </IconButton>
+                  <Typography
+                    variant="h6"
+                    paddingLeft="1rem"
+                    className="date-range"
                   >
-                    <Typography align="center" variant="h6">
-                      {day}
-                    </Typography>
-                    <div className="user-buttons-container">
-                      {bookings[day]?.length > 0 ? (
-                        bookings[day].map((user, userIndex) => (
-                          <Button
-                            key={userIndex}
-                            onClick={() => handleUserClick(user)}
-                            className="user-button"
-                          >
-                            {user}
-                          </Button>
-                        ))
-                      ) : (
-                        <Typography variant="no-booking">
-                          No bookings
-                        </Typography>
-                      )}
-                    </div>
-                  </Grid>
-                ))}
-              </Grid>
-            </Paper>
-          </div>
+                    {startDate.toLocaleDateString()} -{" "}
+                    {endDate.toLocaleDateString()}
+                  </Typography>
+                  <IconButton onClick={() => setWeekOffset(weekOffset + 1)}>
+                    <ArrowForwardIos />
+                  </IconButton>
+                </div>
+                <Grid container spacing={1}>
+                  {daysOfWeek.map((day, index) => (
+                    <Grid
+                      key={index}
+                      item
+                      xs={12}
+                      md={12 / daysOfWeek.length}
+                      className="day-container"
+                    >
+                      <Typography align="center" variant="h6">
+                        {day}
+                      </Typography>
+                      <div className="user-buttons-container">
+                        {bookings[day]?.length > 0 ? (
+                          bookings[day].map((user, userIndex) => (
+                            <Button
+                              key={userIndex}
+                              onClick={() => handleUserClick(user)}
+                              className="user-button"
+                            >
+                              {user}
+                            </Button>
+                          ))
+                        ) : (
+                          <Typography variant="no-booking">
+                            No bookings
+                          </Typography>
+                        )}
+                      </div>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </div>
+          )}
         </Stack>
       </Paper>
     </div>
