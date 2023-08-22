@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import "./Navbar.css" // Import the CSS file for styling
+import { Typography, Stack, Link } from "@mui/material"
 
 const navbarStyles = {
   display: "flex",
@@ -17,7 +18,7 @@ const Navbar = () => {
   const pageLocation = useLocation().pathname
   const onHomePage = pageLocation === homeLocation
   const [isVisible, setIsVisible] = useState(!onHomePage)
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // State for login status
+  const [isLoggedIn, setIsLoggedIn] = useState(true) // State for login status
 
   useEffect(() => {
     if (!onHomePage) {
@@ -58,52 +59,107 @@ const Navbar = () => {
         { zIndex: "1000", position: "fixed", width: "100%" })
       }
     >
-      <div id="zero" style={{ display: "flex" }}>
-        <div id="one">
-          <img
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        sx={{
+          paddingX: "32px",
+          paddingY: "8px",
+          backgroundColor: "#ffffff40",
+        }}
+      >
+        <Stack direction="row" alignItems="center">
+          {/* <img
             src="https://uasc.co.nz/wp-content/uploads/2021/05/UASC-LOGO-White.png"
             alt="logo"
-          />
-        </div>
-        <div id="two">
-          <ul>
-            <li>
-              <a href="/home">Home</a>
-            </li>
-            <li>
-              <a href="/about">About</a>
-            </li>
-            <li>
-              <a href="/events">Events</a>
-            </li>
-            <li>
-              <a href="/contact">Contact</a>
-            </li>
-            {isLoggedIn ? (
-              <>
-                <li>
-                  <a href="/bookings">Bookings</a>
-                </li>
-                <li>
-                  <a href="/profile">My Profile</a>
-                </li>
-                <li>
-                  <button onClick={handleLogout}>Logout</button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <a href="/register">Register</a>
-                </li>
-                <li>
-                  <a href="/login">Login</a>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-      </div>
+            style={{ width: "48px", height: "48px" }}
+          /> */}
+          <Typography
+            variant="h3"
+            align="left"
+            color="primary.quaternary"
+            sx={{ fontWeight: "bold" }}
+          >
+            UASC
+          </Typography>
+        </Stack>
+        <Stack direction="row" spacing={4} alignItems="center">
+          <Link href="/" variant="h6" underline="none" color="common.darkGrey">
+            Home
+          </Link>
+          <Link
+            href="/about"
+            variant="h6"
+            underline="none"
+            color="common.darkGrey"
+          >
+            About
+          </Link>
+          <Link
+            href="/events"
+            variant="h6"
+            underline="none"
+            color="common.darkGrey"
+          >
+            Events
+          </Link>
+          <Link
+            href="/contact"
+            variant="h6"
+            underline="none"
+            color="common.darkGrey"
+          >
+            Contact
+          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link
+                href="/booking"
+                variant="h6"
+                underline="none"
+                color="common.darkGrey"
+              >
+                Bookings
+              </Link>
+              <Link
+                href="/profile"
+                variant="h6"
+                underline="none"
+                color="common.darkGrey"
+              >
+                Profile
+              </Link>
+              <Typography
+                variant="h6"
+                underline="none"
+                color="common.darkGrey"
+                onClick={handleLogout}
+              >
+                Logout
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/register"
+                variant="h6"
+                underline="none"
+                color="common.darkGrey"
+              >
+                Register
+              </Link>
+              <Link
+                href="/login"
+                variant="h6"
+                underline="none"
+                color="common.darkGrey"
+              >
+                Login
+              </Link>
+            </>
+          )}
+        </Stack>
+      </Stack>
     </nav>
   )
 }
