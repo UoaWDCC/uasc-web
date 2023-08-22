@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import {
   Paper,
-  Divider,
   Typography,
   Stack,
   Button,
@@ -40,21 +39,30 @@ const Admin = () => {
   const [selectedUser, setSelectedUser] = useState(null)
 
   return (
-    <div>
-      <Paper
-        elevation={2}
-        sx={{
-          margin: "32px 32px 32px 32px",
-          padding: "32px",
-          backgroundColor: "#A8ADB0",
-          borderRadius: "32px 0px 32px 0px",
-        }}
-      >
-        <Typography variant="h3" align="left">
-          ADMIN DASHBOARD
+    <div
+      style={{
+        backgroundColor: "#f4f4f4",
+        height: "150%",
+        width: "100%",
+        backgroundImage:
+          "radial-gradient(ellipse 50% 50% at 30% 30%, #81c7ebaa, #ffffff)",
+      }}
+    >
+      <Stack spacing={3} sx={{ padding: "148px" }}>
+        <Typography
+          variant="h1"
+          align="left"
+          color="#474747"
+          sx={{ fontWeight: "bold" }}
+        >
+          Admin Dashboard
         </Typography>
-        <Divider />
-        <Stack direction="row" justifyContent="space-between">
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          sx={{ width: "100%" }}
+          spacing={12}
+        >
           <Requests setSelectedUser={setSelectedUser} />
           {selectedUser ? (
             <RequestDetails
@@ -136,7 +144,7 @@ const Admin = () => {
             </div>
           )}
         </Stack>
-      </Paper>
+      </Stack>
     </div>
   )
 }
