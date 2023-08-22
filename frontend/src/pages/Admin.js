@@ -44,7 +44,7 @@ const Admin = () => {
       <Paper
         elevation={2}
         sx={{
-          margin: "0px 32px 32px 32px",
+          margin: "32px 32px 32px 32px",
           padding: "32px",
           backgroundColor: "#A8ADB0",
           borderRadius: "32px 0px 32px 0px",
