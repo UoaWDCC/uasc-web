@@ -1,4 +1,4 @@
-import { Grid, Typography, Divider, Paper } from "@mui/material"
+import { Grid, Typography, Paper } from "@mui/material"
 import RequestBlock from "./RequestBlock"
 import { useState, useEffect } from "react"
 
@@ -6,9 +6,9 @@ const AdminDashboardRequest = ({ setSelectedUser }) => {
   const gridItemStyle = {
     requestBackground: {
       borderRadius: 15, // Change the value as needed
-      backgroundColor: "gray", // Change the background color as needed
+      backgroundColor: "white", // Change the background color as needed
       padding: "20px", // Add padding as needed
-      boxShadow: "none",
+      boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
     },
   }
 
@@ -40,6 +40,48 @@ const AdminDashboardRequest = ({ setSelectedUser }) => {
           query_type: "cancellation",
           status: "unresolved",
         },
+        {
+          user_id: "User 2",
+          booking_id: "User-2-Booking-1",
+          query: "I'd like to cancel my booking.",
+          query_type: "dateChange",
+          status: "unresolved",
+        },
+        {
+          user_id: "User 3",
+          booking_id: "User-3-Booking-1",
+          query: "I'd like to cancel my booking.",
+          query_type: "cancellation",
+          status: "unresolved",
+        },
+        {
+          user_id: "User 2",
+          booking_id: "User-2-Booking-1",
+          query: "I'd like to cancel my booking.",
+          query_type: "dateChange",
+          status: "unresolved",
+        },
+        {
+          user_id: "User 3",
+          booking_id: "User-3-Booking-1",
+          query: "I'd like to cancel my booking.",
+          query_type: "cancellation",
+          status: "unresolved",
+        },
+        {
+          user_id: "User 2",
+          booking_id: "User-2-Booking-1",
+          query: "I'd like to cancel my booking.",
+          query_type: "dateChange",
+          status: "unresolved",
+        },
+        {
+          user_id: "User 3",
+          booking_id: "User-3-Booking-1",
+          query: "I'd like to cancel my booking.",
+          query_type: "cancellation",
+          status: "unresolved",
+        },
       ])
     }, 1000)
   }, [])
@@ -47,31 +89,25 @@ const AdminDashboardRequest = ({ setSelectedUser }) => {
   // now use requests to display the data
 
   return (
-    <div>
-      <Grid container rowSpacing={2} paddingTop="20px" sx={{ width: 600 }}>
+    <div style={{ width: "50%" }}>
+      <Grid container rowSpacing={2} paddingTop="20px" sx={{ width: "100%" }}>
         <Grid item xs={12} md={8}>
-          <Typography variant="h4" align="left" sx={{ fontWeight: "bold" }}>
-            REQUESTS
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={4}>
           <Typography
-            variant="h5"
-            align="right"
-            paddingTop="9px"
-            paddingBottom="1px"
-            sx={{ fontWeight: "bold" }}
+            variant="h3"
+            align="left"
+            color="#457CC3"
+            sx={{ fontWeight: "900" }}
           >
-            MANAGE
+            Requests
           </Typography>
-          <Divider />
         </Grid>
 
         <Grid item xs={12}>
           <Paper elevation={0} style={gridItemStyle.requestBackground}>
             <Grid
               sx={{
-                overflowY: "scroll",
+                overflowY: "auto ",
+                // overflow: "hidden",
                 height: "600px",
                 maxHeight: "600px",
               }}
