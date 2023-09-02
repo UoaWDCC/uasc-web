@@ -9,10 +9,12 @@ import {
 } from "@mui/material"
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import "../pages/Admin.css"
+import { useNavigate } from "react-router-dom"
 
 const AdminBookings = () => {
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
   const [weekOffset, setWeekOffset] = useState(0)
+  const navigate = useNavigate()
 
   const startDate = new Date()
   startDate.setDate(startDate.getDate() - startDate.getDay() + weekOffset * 7)
@@ -28,6 +30,10 @@ const AdminBookings = () => {
     THU: [],
     FRI: ["User A", "User B", "User C", "User D"],
     SAT: ["User C", "User D"],
+  }
+
+  const handleBookingsClick = () => {
+    navigate("/admin/bookings")
   }
 
   const handleUserClick = (user) => {
@@ -54,6 +60,7 @@ const AdminBookings = () => {
           variant="contained"
           color="primary"
           className="manage-bookings-button"
+          onClick={() => handleBookingsClick() }
         >
           Manage Bookings
         </Button>
