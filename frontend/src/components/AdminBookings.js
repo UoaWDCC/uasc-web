@@ -1,4 +1,3 @@
-import React, { useState } from "react"
 import {
   Paper,
   Typography,
@@ -9,29 +8,86 @@ import {
 } from "@mui/material"
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import "../pages/Admin.css"
+import React, { useState, useEffect } from "react"
+import { collection, getDocs } from "firebase/firestore"
+import { db } from "../firebase"
+// import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const AdminBookings = () => {
+  // const [ userMetadata] = useAuthenticatedUser()
+
+  // // Check if the user is an admin before proceeding
+  // if (userMetadata?.role !== "admin") {
+  //   return <p>You do not have permission to view this page.</p>
+  // }
+
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
   const [weekOffset, setWeekOffset] = useState(0)
+  const [bookings, setBookings] = useState({
+    SUN: [],
+    MON: [],
+    TUE: [],
+    WED: [],
+    THU: [],
+    FRI: [],
+    SAT: [],
+  })
+  const [error, setError] = useState(null)
 
   const startDate = new Date()
   startDate.setDate(startDate.getDate() - startDate.getDay() + weekOffset * 7)
   const endDate = new Date(startDate)
   endDate.setDate(endDate.getDate() + 6)
 
-  // Fake dataset for now - will be replaced with API call
-  const bookings = {
-    SUN: ["User A"],
-    MON: [],
-    TUE: ["User A", "User B"],
-    WED: ["User A", "User C", "User D"],
-    THU: [],
-    FRI: ["User A", "User B", "User C", "User D"],
-    SAT: ["User C", "User D"],
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bookingCol = collection(db, "bookings")
+        const querySnapshot = await getDocs(bookingCol)
+
+        const bookingsData = {
+          SUN: [],
+          MON: [],
+          TUE: [],
+          WED: [],
+          THU: [],
+          FRI: [],
+          SAT: [],
+        }
+
+        querySnapshot.forEach((doc) => {
+          const data = doc.data()
+          const checkInDate = data.check_in.toDate()
+          const dayOfWeek = daysOfWeek[checkInDate.getDay()]
+
+          if (dayOfWeek && bookingsData[dayOfWeek]) {
+            bookingsData[dayOfWeek].push({
+              userId: data.user_id,
+              checkIn: data.check_in.toDate(),
+              checkOut: data.check_out.toDate(),
+              // ... any other fields you want to retrieve
+            })
+          }
+        })
+
+        setBookings(bookingsData)
+      } catch (error) {
+        setError("Failed to fetch bookings. Please try again later.")
+      }
+    }
+
+    fetchData()
+  }, [weekOffset])
+
+  const handleUserClick = (booking) => {
+    alert(`User ID: ${booking.userId}
+         Check-In Date: ${booking.checkIn.toLocaleDateString()}
+         Check-Out Date: ${booking.checkOut.toLocaleDateString()}
+         `)
   }
 
-  const handleUserClick = (user) => {
-    alert(`Clicked on ${user}`)
+  if (error) {
+    return <div>Error fetching data. Please try again later.</div>
   }
 
   return (
@@ -89,9 +145,9 @@ const AdminBookings = () => {
           </IconButton>
         </div>
         <Grid container spacing={1}>
-          {daysOfWeek.map((day, index) => (
+          {daysOfWeek.map((day, dayIndex) => (
             <Grid
-              key={index}
+              key={dayIndex} // This key should be sufficient for the days
               item
               xs={12}
               md={12 / daysOfWeek.length}
@@ -105,14 +161,14 @@ const AdminBookings = () => {
               </Typography>
               <div className="user-buttons-container">
                 {bookings[day]?.length > 0 ? (
-                  bookings[day].map((user, userIndex) => (
+                  bookings[day].map((booking, userIndex) => (
                     <Button
-                      key={userIndex}
-                      onClick={() => handleUserClick(user)}
+                      key={`${day}-${userIndex}`}
+                      onClick={() => handleUserClick(booking)}
                       className="user-button"
                       sx={{ color: "primary.quaternary" }}
                     >
-                      {user}
+                      {booking.userId}
                     </Button>
                   ))
                 ) : (
