@@ -126,15 +126,12 @@ const BookingForm = () => {
     const checkInFormatted = selectedCheckInDate.toDate()
     const checkOutFormatted = selectedCheckOutDate.toDate()
 
-    console.log(checkInFormatted, checkOutFormatted)
-
     try {
       const booking = {
         checkIn: checkInFormatted,
         checkOut: checkOutFormatted,
         uid: "/users/SomeUserId",
       }
-
       const docRef = await addDoc(bookingCollectionRef, booking)
 
       if (docRef.id) {
@@ -142,11 +139,9 @@ const BookingForm = () => {
         setTimeout(() => {
           setBookingSuccessful(false)
         }, 3000)
-
         setExistingBookings([...existingBookings, booking])
       }
     } catch (error) {
-      console.error("Error adding document: ", error)
       setBookingErrorMessage("Failed to make booking. Please try again.")
       setTimeout(() => {
         setBookingErrorMessage("")
