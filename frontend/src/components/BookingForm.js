@@ -129,17 +129,21 @@ const BookingForm = () => {
     console.log(checkInFormatted, checkOutFormatted)
 
     try {
-      const docRef = await addDoc(bookingCollectionRef, {
+      const booking = {
         checkIn: checkInFormatted,
         checkOut: checkOutFormatted,
         uid: "/users/SomeUserId",
-      })
+      }
+
+      const docRef = await addDoc(bookingCollectionRef, booking)
 
       if (docRef.id) {
         setBookingSuccessful(true)
         setTimeout(() => {
           setBookingSuccessful(false)
         }, 3000)
+
+        setExistingBookings([...existingBookings, booking])
       }
     } catch (error) {
       console.error("Error adding document: ", error)
