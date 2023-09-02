@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react"
-import { FormControl, FormLabel, Button } from "@mui/material"
+import { Alert, FormControl, FormLabel, Button } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { db } from "../firebase"
-import { getDocs, collection } from "firebase/firestore"
+import { getDocs, collection, addDoc } from "firebase/firestore"
 
 const BookingForm = () => {
   const [selectedCheckInDate, setSelectedCheckInDate] = useState(null)
   const [selectedCheckOutDate, setSelectedCheckOutDate] = useState(null)
   const [existingBookings, setExistingBookings] = useState([])
   const [dateAvailabilities, setDateAvailabilities] = useState(new Map())
-  const [dateArray, setDateArray] = useState([])
+  const [dateRange, setDateRange] = useState([])
   const bookingCollectionRef = collection(db, "bookings")
   const maxSpotsAvailablePerDay = 50
+  const [bookingSuccessful, setBookingSuccessful] = useState(false)
+  const [bookingErrorMessage, setBookingErrorMessage] = useState("")
 
   // fetch bookings on component mount
   useEffect(() => {
@@ -29,7 +31,7 @@ const BookingForm = () => {
   }, [dateAvailabilities])
 
   useEffect(() => {
-    setDateArray(getDateRangeArray())
+    setDateRange(getDateRangeArray())
   }, [selectedCheckInDate, selectedCheckOutDate])
 
   const retrieveExistingBookings = async () => {
@@ -113,16 +115,39 @@ const BookingForm = () => {
     return dayjs(date).format("YYYY-MM-DD")
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
     if (!selectedCheckOutDate) {
       alert("Please select an end date before submitting")
       return
     }
-    console.log(
-      `Selected Date Range:\n${selectedCheckInDate} - \n${selectedCheckOutDate}`
-    )
-    // need to add booking to firestore
+
+    const checkInFormatted = selectedCheckInDate.toDate()
+    const checkOutFormatted = selectedCheckOutDate.toDate()
+
+    console.log(checkInFormatted, checkOutFormatted)
+
+    try {
+      const docRef = await addDoc(bookingCollectionRef, {
+        checkIn: checkInFormatted,
+        checkOut: checkOutFormatted,
+        uid: "/users/SomeUserId",
+      })
+
+      if (docRef.id) {
+        setBookingSuccessful(true)
+        setTimeout(() => {
+          setBookingSuccessful(false)
+        }, 3000)
+      }
+    } catch (error) {
+      console.error("Error adding document: ", error)
+      setBookingErrorMessage("Failed to make booking. Please try again.")
+      setTimeout(() => {
+        setBookingErrorMessage("")
+      }, 3000)
+    }
   }
 
   const setEarliestDefaultCheckInDate = () => {
@@ -158,101 +183,109 @@ const BookingForm = () => {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "90%",
-      }}
-    >
+    <>
       <div
         style={{
           display: "flex",
-          justifyContent: "space-evenly",
-          width: "60%",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "90%",
         }}
       >
-        <div>
-          <h2
-            style={{
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-              margin: "1.5rem",
-            }}
-          >
-            Make a Booking
-          </h2>
-          <form onSubmit={handleSubmit}>
-            <FormControl style={{ margin: "1.5rem" }}>
-              <FormLabel style={{ textAlign: "left" }}>
-                Select a Check-In Date
-              </FormLabel>
-              <DatePicker
-                value={selectedCheckInDate}
-                onChange={handleChangeStartDate}
-                shouldDisableDate={isStartDateInvalid}
-                disablePast
-                disableHighlightToday
-              />
-              <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
-                Select a Check-Out Date
-              </FormLabel>
-              <DatePicker
-                value={selectedCheckOutDate}
-                onChange={handleChangeEndDate}
-                shouldDisableDate={isEndDateInvalid}
-                disablePast
-                disableHighlightToday
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                style={{ marginTop: "1.5rem" }}
-              >
-                Submit
-              </Button>
-            </FormControl>
-          </form>
-        </div>
-        <div>
-          <h2
-            style={{
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-              margin: "1.5rem",
-            }}
-          >
-            Available Spots Left:
-          </h2>
-          <ul
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              padding: "0",
-            }}
-          >
-            {dateArray.map((d, index) => {
-              return (
-                <li
-                  key={index}
-                  style={{
-                    listStyleType: "none",
-                    margin: "0",
-                  }}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            width: "60%",
+          }}
+        >
+          <div>
+            <h2
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                margin: "1.5rem",
+              }}
+            >
+              Make a Booking
+            </h2>
+            <form onSubmit={handleSubmit}>
+              <FormControl style={{ margin: "1.5rem" }}>
+                <FormLabel style={{ textAlign: "left" }}>
+                  Select a Check-In Date
+                </FormLabel>
+                <DatePicker
+                  value={selectedCheckInDate}
+                  onChange={handleChangeStartDate}
+                  shouldDisableDate={isStartDateInvalid}
+                  disablePast
+                  disableHighlightToday
+                />
+                <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
+                  Select a Check-Out Date
+                </FormLabel>
+                <DatePicker
+                  value={selectedCheckOutDate}
+                  onChange={handleChangeEndDate}
+                  shouldDisableDate={isEndDateInvalid}
+                  disablePast
+                  disableHighlightToday
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  style={{ marginTop: "1.5rem" }}
                 >
-                  {`${d.toDateString()}: ${
-                    maxSpotsAvailablePerDay -
-                      dateAvailabilities.get(d.toDateString()) ||
-                    maxSpotsAvailablePerDay
-                  }`}
-                </li>
-              )
-            })}
-          </ul>
+                  Submit
+                </Button>
+              </FormControl>
+            </form>
+          </div>
+          <div>
+            <h2
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                margin: "1.5rem",
+              }}
+            >
+              Available Spots Left:
+            </h2>
+            <ul
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0",
+              }}
+            >
+              {dateRange.map((d, index) => {
+                return (
+                  <li
+                    key={index}
+                    style={{
+                      listStyleType: "none",
+                      margin: "0",
+                    }}
+                  >
+                    {`${d.toDateString()}: ${
+                      maxSpotsAvailablePerDay -
+                        dateAvailabilities.get(d.toDateString()) ||
+                      maxSpotsAvailablePerDay
+                    }`}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+      {bookingSuccessful ? (
+        <Alert severity="success">Booking was made successfully</Alert>
+      ) : null}
+      {bookingErrorMessage !== "" ? (
+        <Alert severity="error">{bookingErrorMessage}</Alert>
+      ) : null}
+    </>
   )
 }
 
