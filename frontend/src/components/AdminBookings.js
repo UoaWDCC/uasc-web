@@ -65,7 +65,6 @@ const AdminBookings = () => {
               userId: data.user_id,
               checkIn: data.check_in.toDate(),
               checkOut: data.check_out.toDate(),
-              // ... any other fields you want to retrieve
             })
           }
         })
@@ -73,6 +72,8 @@ const AdminBookings = () => {
         setBookings(bookingsData)
       } catch (error) {
         setError("Failed to fetch bookings. Please try again later.")
+        console.log("Error is here")
+        console.error("Error fetching bookings: ", error)
       }
     }
 
@@ -91,19 +92,9 @@ const AdminBookings = () => {
   }
 
   return (
-    <div style={{ width: "50%", backgroundColor: "transparent" }}>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ paddingTop: "20px" }}
-      >
-        <Typography
-          variant="h3"
-          align="left"
-          color="#457CC3"
-          sx={{ fontWeight: "900" }}
-        >
+    <div className="bookings-section">
+      <Stack direction="row" className="bookings-header">
+        <Typography variant="h3" className="bookings-title">
           Bookings
         </Typography>
         <Button
@@ -114,30 +105,15 @@ const AdminBookings = () => {
           Manage Bookings
         </Button>
       </Stack>
-      <Paper
-        elevation={2}
-        sx={{
-          padding: "32px",
-          borderRadius: "15px",
-          background: "white",
-          boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
-          marginTop: "16px",
-        }}
-        className="calendar-container"
-      >
-        <Typography
-          variant="h5"
-          align="left"
-          color="#457CC3"
-          sx={{ fontWeight: "900" }}
-        >
+      <Paper elevation={2} className="calendar-container">
+        <Typography variant="h5" className="calendar-title">
           Calendar Overview
         </Typography>
         <div className="container-header">
           <IconButton onClick={() => setWeekOffset(weekOffset - 1)}>
             <ArrowBackIos />
           </IconButton>
-          <Typography variant="h6" paddingLeft="1rem" className="date-range">
+          <Typography variant="h6" className="date-range">
             {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
           </Typography>
           <IconButton onClick={() => setWeekOffset(weekOffset + 1)}>
@@ -147,14 +123,11 @@ const AdminBookings = () => {
         <Grid container spacing={1}>
           {daysOfWeek.map((day, dayIndex) => (
             <Grid
-              key={dayIndex} // This key should be sufficient for the days
+              key={dayIndex}
               item
               xs={12}
               md={12 / daysOfWeek.length}
               className="day-container"
-              sx={{
-                backgroundColor: "common.grey",
-              }}
             >
               <Typography align="center" variant="h6">
                 {day}
@@ -166,13 +139,12 @@ const AdminBookings = () => {
                       key={`${day}-${userIndex}`}
                       onClick={() => handleUserClick(booking)}
                       className="user-button"
-                      sx={{ color: "primary.quaternary" }}
                     >
                       {booking.userId}
                     </Button>
                   ))
                 ) : (
-                  <Typography variant="no-booking">No bookings</Typography>
+                  <Typography className="no-booking">No bookings</Typography>
                 )}
               </div>
             </Grid>

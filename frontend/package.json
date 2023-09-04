@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/eslint-parser": "^7.22.9",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.22.5",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
