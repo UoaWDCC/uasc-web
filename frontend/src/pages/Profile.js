@@ -19,7 +19,7 @@ const Profile = () => {
     }
   }, [user, userMetadata])
 
-	// todo: early return if we aren't logged in (i.e., user === undefined)
+  // todo: early return if we aren't logged in (i.e., user === undefined)
 
   // Retrieve current bookings from firebase
   const getBookings = (userId) => {
