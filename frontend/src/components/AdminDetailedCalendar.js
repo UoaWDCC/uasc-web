@@ -10,7 +10,7 @@ import {
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import "../pages/Admin.css"
 
-const AdminBookings = () => {
+const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate }) => {
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
   const [weekOffset, setWeekOffset] = useState(0)
 
@@ -30,12 +30,16 @@ const AdminBookings = () => {
     SAT: ["User C", "User D"],
   }
 
-  const handleUserClick = (user) => {
-    alert(`Clicked on ${user}`)
+  const handleUserClick = (user, index) => {
+    setSelectedUser(user)
+
+    var clickedDate = new Date(startDate.valueOf())
+    clickedDate.setDate(clickedDate.getDate() + index)
+    setCheckInDate(clickedDate.toLocaleDateString())
   }
 
   return (
-    <div style={{ width: "50%", backgroundColor: "transparent" }}>
+    <div style={{ width: "60%", backgroundColor: "transparent" }}>
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -92,7 +96,7 @@ const AdminBookings = () => {
                   bookings[day].map((user, userIndex) => (
                     <Button
                       key={userIndex}
-                      onClick={() => handleUserClick(user)}
+                      onClick={() => handleUserClick(user, index)}
                       className="user-button"
                       sx={{ color: "primary.quaternary" }}
                     >
@@ -111,4 +115,4 @@ const AdminBookings = () => {
   )
 }
 
-export default AdminBookings
+export default AdminDetailedCalendar
