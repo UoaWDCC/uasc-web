@@ -16,7 +16,7 @@ function SingularBookingDetails({ booking, onRequestChange }) {
   return (
     <Stack key={booking._uid} direction="row" justifyContent="space-between">
       <Typography variant="body1" align="left">
-        {booking.check_in} - {booking.check_out}
+        {new Date(booking.data().check_in).toDateString()} to {new Date(booking.data().check_out).toDateString()}
       </Typography>
       <Button
         variant="contained"
@@ -76,13 +76,15 @@ function ProfileCurrentBookings({ bookings }) {
             ) : (
               <Stack spacing={2}>
                 {bookings.map((booking) => (
-                  <SingularBookingDetails booking={booking} onRequestChange={handleOpen} />
+                  <SingularBookingDetails key={booking.id} booking={booking} onRequestChange={handleOpen} />
                 ))}
               </Stack>
             )}
           </Stack>
         </CardContent>
       </Card>
+
+			{/* edit details dialog */}
       <Dialog
         open={open}
         onClose={handleClose}

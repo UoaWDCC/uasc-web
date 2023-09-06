@@ -19,8 +19,9 @@ const Profile = () => {
     }
   }, [user, userMetadata])
 
-  // Retrieve current bookings from firebase
+	// todo: early return if we aren't logged in (i.e., user === undefined)
 
+  // Retrieve current bookings from firebase
   const getBookings = (userId) => {
     getDocs(query(collection(db, "bookings"), where("user_id", "==", userId)))
       .then((bookings) => {
