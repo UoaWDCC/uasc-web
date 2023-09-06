@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Divider, Paper, Typography  } from "@mui/material"
-import DetailedBookings from "../components/AdminDetailedBookings";
+import DetailedBookingsCalendar from "../components/AdminDetailedCalendar";
+import BookingDetails from "../components/AdminBookingDetails";
 
 const AdminBookingsDetailedView = () => {
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [checkInDate, setCheckInDate] = useState("")
+
     return (
         <div>
           <Paper
@@ -20,9 +24,10 @@ const AdminBookingsDetailedView = () => {
               ADMIN DASHBOARD{" "}
             </Typography>
             <Divider />
-            <Container maxWidth={false} disableGutters={true} sx={{ display: "flex", justifyContent: "space-between", marginRight: "40%" }}>
-                <Container maxWidth={false} disableGutters={true}>
-                  <DetailedBookings />
+            <Container maxWidth={false} disableGutters={true}>
+                <Container maxWidth={false} disableGutters={true} sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <DetailedBookingsCalendar setSelectedUser={ setSelectedUser } setCheckInDate={ setCheckInDate } />
+                  <BookingDetails selectedUser={ selectedUser } checkInDate={ checkInDate }/>
                 </Container>
             </Container>
           </Paper>
