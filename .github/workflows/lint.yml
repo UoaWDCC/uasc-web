@@ -19,4 +19,6 @@ jobs:
           npm ci
 
       - name: Run ESLint
-        run: npm run eslint
+        run: |
+          cd frontend
+          npm run eslint
