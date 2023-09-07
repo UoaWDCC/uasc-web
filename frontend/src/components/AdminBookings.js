@@ -11,16 +11,8 @@ import "../pages/Admin.css"
 import React, { useState, useEffect } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../firebase"
-// import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const AdminBookings = () => {
-  // const [ userMetadata] = useAuthenticatedUser()
-
-  // // Check if the user is an admin before proceeding
-  // if (userMetadata?.role !== "admin") {
-  //   return <p>You do not have permission to view this page.</p>
-  // }
-
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
   const [weekOffset, setWeekOffset] = useState(0)
   const [bookings, setBookings] = useState({
@@ -35,8 +27,11 @@ const AdminBookings = () => {
   const [error, setError] = useState(null)
 
   const startDate = new Date()
+  startDate.setHours(0, 0, 0, 0)
   startDate.setDate(startDate.getDate() - startDate.getDay() + weekOffset * 7)
+
   const endDate = new Date(startDate)
+  endDate.setHours(0, 0, 0, 0)
   endDate.setDate(endDate.getDate() + 6)
 
   useEffect(() => {
@@ -57,34 +52,63 @@ const AdminBookings = () => {
 
         querySnapshot.forEach((doc) => {
           const data = doc.data()
-          const checkInDate = data.check_in.toDate()
-          const dayOfWeek = daysOfWeek[checkInDate.getDay()]
+          let checkInDate, checkOutDate
 
-          if (dayOfWeek && bookingsData[dayOfWeek]) {
-            bookingsData[dayOfWeek].push({
-              userId: data.user_id,
-              checkIn: data.check_in.toDate(),
-              checkOut: data.check_out.toDate(),
-            })
+          if (data.check_in?.toDate) {
+            checkInDate = data.check_in.toDate()
+            checkInDate.setHours(0, 0, 0, 0)
+            console.log(checkInDate + " 1")
+          } else if (typeof data.check_in === "string") {
+            const [day, month, year] = data.check_in.split("-")
+            checkInDate = new Date(`${year}-${month}-${day}`)
+            checkInDate.setHours(0, 0, 0, 0)
+            console.log(checkInDate + " 2")
+          }
+
+          if (data.check_out?.toDate) {
+            checkOutDate = data.check_out.toDate()
+          } else if (typeof data.check_out === "string") {
+            const [day, month, year] = data.check_out.split("-")
+            checkOutDate = new Date(`${year}-${month}-${day}`)
+          }
+
+          if (checkInDate) {
+            const dayOfWeek = daysOfWeek[checkInDate.getDay()]
+
+            if (
+              checkInDate >= startDate &&
+              checkInDate <= endDate &&
+              dayOfWeek &&
+              bookingsData[dayOfWeek]
+            ) {
+              bookingsData[dayOfWeek].push({
+                userId: data.user_id,
+                checkIn: checkInDate,
+                checkOut: checkOutDate,
+              })
+            }
           }
         })
 
         setBookings(bookingsData)
       } catch (error) {
         setError("Failed to fetch bookings. Please try again later.")
-        console.log("Error is here")
         console.error("Error fetching bookings: ", error)
       }
     }
 
     fetchData()
+
+    // This log will help you verify the date range:
+    console.log("Checking range:", startDate, endDate)
   }, [weekOffset])
 
   const handleUserClick = (booking) => {
-    alert(`User ID: ${booking.userId}
+    alert(
+      `User ID: ${booking.userId}
          Check-In Date: ${booking.checkIn.toLocaleDateString()}
-         Check-Out Date: ${booking.checkOut.toLocaleDateString()}
-         `)
+         Check-Out Date: ${booking.checkOut.toLocaleDateString()}`
+    )
   }
 
   if (error) {
@@ -133,19 +157,18 @@ const AdminBookings = () => {
                 {day}
               </Typography>
               <div className="user-buttons-container">
-                {bookings[day]?.length > 0 ? (
-                  bookings[day].map((booking, userIndex) => (
-                    <Button
-                      key={`${day}-${userIndex}`}
-                      onClick={() => handleUserClick(booking)}
-                      className="user-button"
-                    >
-                      {booking.userId}
-                    </Button>
-                  ))
-                ) : (
-                  <Typography className="no-booking">No bookings</Typography>
-                )}
+                {bookings[day]?.map((booking, userIndex) => (
+                  <Button
+                    key={`${day}-${userIndex}`}
+                    onClick={() => handleUserClick(booking)}
+                    className="user-button"
+                  >
+                    {`Booking ${userIndex + 1}`}
+                  </Button>
+                ))}
+                <Typography className="total-bookings">
+                  {`Total Bookings: ${bookings[day]?.length || 0}`}
+                </Typography>
               </div>
             </Grid>
           ))}
