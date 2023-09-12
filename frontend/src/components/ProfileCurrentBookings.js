@@ -12,28 +12,30 @@ import {
 import React from "react"
 import { useState } from "react"
 
-function ProfileCurrentBookings() {
-  const mockCurrentBookingData = [
-    {
-      check_in: "Feb 5th 2023",
-      check_out: "Feb 7th 2023",
-      total_days: 3,
-      booking_id: 0,
-    },
-    {
-      check_in: "Mar 12th 2023",
-      check_out: "Mar 13th 2023",
-      total_days: 2,
-      booking_id: 1,
-    },
-    {
-      check_in: "Jul 5th 2023",
-      check_out: "Jul 7th 2023",
-      total_days: 3,
-      booking_id: 2,
-    },
-  ]
+function SingularBookingDetails({ booking, onRequestChange }) {
+  return (
+    <Stack key={booking._uid} direction="row" justifyContent="space-between">
+      <Typography variant="body1" align="left">
+        {new Date(booking.data().check_in).toDateString()} to {new Date(booking.data().check_out).toDateString()}
+      </Typography>
+      <Button
+        variant="contained"
+        color="buttonPrimary"
+        size="small"
+        sx={{
+          borderRadius: "100px",
+          paddingX: "24px",
+          textTransform: "none",
+        }}
+        onClick={onRequestChange}
+      >
+        Request Change
+      </Button>
+    </Stack>
+  )
+}
 
+function ProfileCurrentBookings({ bookings }) {
   const [open, setOpen] = useState(false)
 
   const handleOpen = () => {
@@ -67,39 +69,22 @@ function ProfileCurrentBookings() {
               color="#457CC3"
               sx={{ fontWeight: "900" }}
             >
-              Current Bookings{" "}
+              Current Bookings
             </Typography>
-            <Stack spacing={2}>
-              {mockCurrentBookingData.map((booking) => (
-                <Stack
-                  key={booking.booking_id}
-                  direction="row"
-                  justifyContent="space-between"
-                >
-                  <Typography variant="body1" align="left">
-                    {" "}
-                    {booking.check_in} - {booking.check_out}{" "}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="buttonPrimary"
-                    size="small"
-                    sx={{
-                      borderRadius: "100px",
-                      paddingX: "24px",
-                      textTransform: "none",
-                    }}
-                    onClick={handleOpen}
-                  >
-                    {" "}
-                    Request Change{" "}
-                  </Button>
-                </Stack>
-              ))}
-            </Stack>
+            {!bookings ? (
+              "Retrieving bookings..."
+            ) : (
+              <Stack spacing={2}>
+                {bookings.map((booking) => (
+                  <SingularBookingDetails key={booking.id} booking={booking} onRequestChange={handleOpen} />
+                ))}
+              </Stack>
+            )}
           </Stack>
         </CardContent>
       </Card>
+
+			{/* edit details dialog */}
       <Dialog
         open={open}
         onClose={handleClose}
