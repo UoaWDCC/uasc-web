@@ -16,8 +16,8 @@ function SingularBookingDetails({ booking, onRequestChange }) {
   return (
     <Stack key={booking._uid} direction="row" justifyContent="space-between">
       <Typography variant="body1" align="left">
-        {new Date(booking.data().check_in).toDateString()} to{" "}
-        {new Date(booking.data().check_out).toDateString()}
+        {new Date(booking.data().check_in.seconds * 1000).toDateString()} to{" "}
+        {new Date(booking.data().check_out.seconds * 1000).toDateString()}
       </Typography>
       <Button
         variant="contained"
