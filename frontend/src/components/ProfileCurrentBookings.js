@@ -14,7 +14,9 @@ import { useState } from "react"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import dayjs from "dayjs"
 
-function SingularBookingDetails({ booking, onRequestChange }) {
+function SingularBookingDetails({ booking, onRequestChange, index }) {
+  // console.log(booking.data())
+
   return (
     <Stack key={booking._uid} direction="row" justifyContent="space-between">
       <Typography variant="body1" align="left">
@@ -30,7 +32,7 @@ function SingularBookingDetails({ booking, onRequestChange }) {
           paddingX: "24px",
           textTransform: "none",
         }}
-        onClick={onRequestChange}
+        onClick={() => onRequestChange(index)}
       >
         Request Change
       </Button>
@@ -42,21 +44,13 @@ function BookingRequestModal({
   booking,
   open,
   handleClose,
+  index,
   handleRequestSubmit,
 }) {
-  console.log(
-    Math.ceil(
-      (new Date(booking.data().check_out.seconds) -
-        new Date(booking.data().check_in.seconds)) /
-        (3600 * 24)
-    )
-  )
-
   const [checkInDate, setCheckInDate] = useState(null)
   const [checkOutDate, setCheckOutDate] = useState(null)
   const [newTotalDays, setNewTotalDays] = useState(0)
 
-  //TODO: REVIEW THIS SECTION OF CODE FROM MITCHELL"S BOOKING FORM
   const handleChangeStartDate = (startDate) => {
     if (startDate >= checkOutDate) {
       setCheckOutDate(null)
@@ -95,18 +89,14 @@ function BookingRequestModal({
 
   useEffect(() => {
     if (checkInDate && checkOutDate) {
-      console.log("Both checkin and checkout dates are valid")
-      console.log(checkOutDate.diff(checkInDate, "day"))
       setNewTotalDays(checkOutDate.diff(checkInDate, "day"))
-    } else {
-      console.log("One of the dates is invalid")
     }
   }, [checkInDate, checkOutDate])
 
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={() => handleClose(index)}
       maxWidth="md"
       fullWidth={false}
       PaperProps={{ sx: { borderRadius: "15px" } }}
@@ -282,14 +272,19 @@ function BookingRequestModal({
 }
 
 function ProfileCurrentBookings({ bookings }) {
-  const [open, setOpen] = useState(false)
+  const bookingsLength = bookings ? bookings.length : 0
+  const [open, setOpen] = useState([])
 
-  const handleOpen = () => {
-    setOpen(true)
+  const handleOpen = (pos) => {
+    const newOpen = open.slice()
+    newOpen[pos] = true
+    setOpen(newOpen)
   }
 
-  const handleClose = () => {
-    setOpen(false)
+  const handleClose = (pos) => {
+    const newOpen = open.slice()
+    newOpen[pos] = false
+    setOpen(newOpen)
   }
 
   //TODO Need to make this handle changes
@@ -297,6 +292,11 @@ function ProfileCurrentBookings({ bookings }) {
     console.log("Request submitted")
     setOpen(false)
   }
+
+  useEffect(() => {
+    setOpen([...Array(bookingsLength).fill(false)])
+    console.log("Open array: ", open)
+  }, [])
 
   return (
     <div>
@@ -321,18 +321,20 @@ function ProfileCurrentBookings({ bookings }) {
               "Retrieving bookings..."
             ) : (
               <Stack spacing={2}>
-                {bookings.map((booking) => (
+                {bookings.map((booking, index) => (
                   <>
                     <SingularBookingDetails
                       key={booking.id}
                       booking={booking}
                       onRequestChange={handleOpen}
+                      index={index}
                     />
                     <BookingRequestModal
                       key={booking.id}
                       booking={booking}
-                      open={open}
+                      open={open[index]}
                       handleClose={handleClose}
+                      index={index}
                       handleRequestSubmit={handleRequestSubmit}
                     />
                   </>
