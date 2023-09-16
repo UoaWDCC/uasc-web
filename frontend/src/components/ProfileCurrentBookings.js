@@ -13,6 +13,8 @@ import React, { useEffect } from "react"
 import { useState } from "react"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import dayjs from "dayjs"
+import { db } from "../firebase"
+import { getDocs, collection, addDoc } from "firebase/firestore"
 
 function SingularBookingDetails({ booking, onRequestChange, index }) {
   // console.log(booking.data())
@@ -40,16 +42,12 @@ function SingularBookingDetails({ booking, onRequestChange, index }) {
   )
 }
 
-function BookingRequestModal({
-  booking,
-  open,
-  handleClose,
-  index,
-  handleRequestSubmit,
-}) {
+function BookingRequestModal({ booking, open, handleClose, index }) {
   const [checkInDate, setCheckInDate] = useState(null)
   const [checkOutDate, setCheckOutDate] = useState(null)
   const [newTotalDays, setNewTotalDays] = useState(0)
+  const [requestMessage, setRequestMessage] = useState("")
+  const bookingRequestCollectionRef = collection(db, "booking_requests")
 
   const handleChangeStartDate = (startDate) => {
     if (startDate >= checkOutDate) {
@@ -85,6 +83,54 @@ function BookingRequestModal({
 
   const getFormattedDateString = (date) => {
     return dayjs(date).format("YYYY-MM-DD")
+  }
+
+  //TODO Need to make this handle changes
+  //TODO Need to change alerts to MUI alerts
+  const handleRequestSubmit = async () => {
+    if (checkInDate === null || checkOutDate === null) {
+      alert("EMPTY FIELDS")
+    } else if (
+      newTotalDays !==
+      Math.ceil(
+        (new Date(booking.data().check_out.seconds) -
+          new Date(booking.data().check_in.seconds)) /
+          (3600 * 24)
+      )
+    ) {
+      //Note: Current booking changes require the dates to be the same. This will be changed later to increase/decrease number of days.
+      alert("TOTAL DAYS DO NOT MATCH")
+    } else {
+      try {
+        const bookingRequest = {
+          check_in: checkInDate,
+          check_out: checkOutDate,
+          query: requestMessage,
+          query_type: "change",
+          creation_time: new Date(),
+          status: "unresolved",
+          user_id: "/users/SomeUserId",
+        }
+        const docRef = await addDoc(bookingRequestCollectionRef, bookingRequest)
+
+        console.log(docRef)
+        console.log(docRef.id)
+
+        if (docRef.id) {
+          setTimeout(() => {
+            console.log("Request submitted successfully")
+            alert("Request submitted successfully")
+          }, 3000)
+          handleClose(index)
+        }
+      } catch (error) {
+        setTimeout(() => {
+          console.log(error)
+          console.log("Request submission failed")
+          alert("Request submission failed")
+        }, 3000)
+      }
+    }
   }
 
   useEffect(() => {
@@ -235,6 +281,8 @@ function BookingRequestModal({
               variant="standard"
               multiline
               rows={6}
+              placeholder="Enter your message here..."
+              onChange={(e) => setRequestMessage(e.target.value)}
               InputProps={{
                 disableUnderline: true,
               }}
@@ -287,12 +335,6 @@ function ProfileCurrentBookings({ bookings }) {
     setOpen(newOpen)
   }
 
-  //TODO Need to make this handle changes
-  const handleRequestSubmit = () => {
-    console.log("Request submitted")
-    setOpen(false)
-  }
-
   useEffect(() => {
     setOpen([...Array(bookingsLength).fill(false)])
     console.log("Open array: ", open)
@@ -335,7 +377,6 @@ function ProfileCurrentBookings({ bookings }) {
                       open={open[index]}
                       handleClose={handleClose}
                       index={index}
-                      handleRequestSubmit={handleRequestSubmit}
                     />
                   </>
                 ))}
