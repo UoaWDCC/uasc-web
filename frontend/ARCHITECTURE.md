@@ -30,12 +30,12 @@ Has no additional fields specified.
 
 The following additional fields are specified:
 
-| **Field**      | **Type**  | **Example Value** |
-| -------------- | --------- | ----------------- |
-| old_start_date | Timestamp | 25-07-2023        |
-| old_end_date   | Timestamp | 27-07-2023        |
-| new_start_date | Timestamp | 26-07-2023        |
-| new_end_date   | Timestamp | 28-07-2023        |
+| **Field**     | **Type**  | **Example Value** |
+| ------------- | --------- | ----------------- |
+| old_check_in  | Timestamp | 25-07-2023        |
+| old_check_out | Timestamp | 27-07-2023        |
+| new_check_in  | Timestamp | 26-07-2023        |
+| new_check_out | Timestamp | 28-07-2023        |
 
 Implementors should ensure that the range between
 `old_end_date - old_start_date` and `new_end_date` - `new_start_date` do not
