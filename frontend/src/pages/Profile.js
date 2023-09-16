@@ -12,12 +12,21 @@ import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 const Profile = () => {
   const [user, userMetadata] = useAuthenticatedUser()
   const [bookings, setBookings] = useState(undefined)
+  // const [userData, setUserData] = useState(undefined)
 
   useEffect(() => {
     if (user) {
       getBookings(user.uid)
     }
   }, [user, userMetadata])
+
+  // useEffect(() => {
+  //   if (userMetadata) {
+  //     setUserData(userMetadata)
+  //   }
+  //   console.log("dfhsdiofhsod")
+  //   console.log(userData)
+  // }, [userMetadata])
 
   // todo: early return if we aren't logged in (i.e., user === undefined)
 
