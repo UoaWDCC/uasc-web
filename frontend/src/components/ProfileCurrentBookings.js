@@ -47,7 +47,7 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
   const [checkOutDate, setCheckOutDate] = useState(null)
   const [newTotalDays, setNewTotalDays] = useState(0)
   const [requestMessage, setRequestMessage] = useState("")
-  const bookingRequestCollectionRef = collection(db, "booking_requests")
+  const bookingRequestCollectionRef = collection(db, "requests")
 
   const handleChangeStartDate = (startDate) => {
     if (startDate >= checkOutDate) {
@@ -102,19 +102,28 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
       alert("TOTAL DAYS DO NOT MATCH")
     } else {
       try {
+        const newCheckInFormatted = checkInDate.toDate()
+        const newCheckOutFormatted = checkOutDate.toDate()
+        const oldCheckInFormatted = new Date(
+          booking.data().check_in.seconds * 1000
+        )
+        const oldCheckOutFormatted = new Date(
+          booking.data().check_out.seconds * 1000
+        )
+
         const bookingRequest = {
-          check_in: checkInDate,
-          check_out: checkOutDate,
+          user_id: booking.data().user_id,
+          booking_id: booking.id,
           query: requestMessage,
-          query_type: "change",
-          creation_time: new Date(),
+          query_type: "dateChange",
           status: "unresolved",
-          user_id: "/users/SomeUserId",
+          creation_time: new Date(),
+          new_check_in: newCheckInFormatted,
+          new_check_out: newCheckOutFormatted,
+          old_check_in: oldCheckInFormatted,
+          old_check_out: oldCheckOutFormatted,
         }
         const docRef = await addDoc(bookingRequestCollectionRef, bookingRequest)
-
-        console.log(docRef)
-        console.log(docRef.id)
 
         if (docRef.id) {
           setTimeout(() => {

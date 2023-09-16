@@ -38,7 +38,7 @@ The following additional fields are specified:
 | new_check_out | Timestamp | 28-07-2023        |
 
 Implementors should ensure that the range between
-`old_end_date - old_start_date` and `new_end_date` - `new_start_date` do not
+`old_check_out - old_check_in` and `new_check_out` - `new_check_in` do not
 differ (i.e., the amount of days in the booking does not change).
 
 ## `bookings` collection
