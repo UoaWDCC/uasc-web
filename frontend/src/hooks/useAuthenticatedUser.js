@@ -19,7 +19,7 @@ export function useAuthenticatedUser() {
       }
     }
 
-    user ? getUserData() : setUserData(null)
+    user ? getUserData() : setUserData(undefined)
   }, [user])
 
   return [user, userMetadata]
