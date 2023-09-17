@@ -7,9 +7,7 @@ const StyledCalendarDay = styled(PickersDay, {
   shouldForwardProp: (prop) => prop !== "isBookedDate",
 })(
   /**
-   *
    * @param {{isBookedDate: boolean}}
-   * @returns
    */
   ({ theme, isBookedDate }) => ({
     ...(isBookedDate && {
