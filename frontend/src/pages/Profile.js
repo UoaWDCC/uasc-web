@@ -14,7 +14,7 @@ import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
  * @typedef {{ data(): { user_id: string, check_in: require("firebase/firestore").Timestamp, check_out: require("firebase/firestore").Timestamp } }} Booking
  */
 
-const Profile = () => {
+export default function Profile() {
   const [user, userMetadata] = useAuthenticatedUser()
   /**
    * @type {[Array<Booking>, React.Dispatch<Array<Booking>>]}
@@ -87,5 +87,3 @@ const Profile = () => {
     </div>
   )
 }
-
-export default Profile
