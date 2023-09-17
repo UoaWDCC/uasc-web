@@ -20,8 +20,7 @@ const BookingForm = () => {
   const [bookingSuccessful, setBookingSuccessful] = useState(false)
   const [bookingErrorMessage, setBookingErrorMessage] = useState("")
 
-  const [user, userMetadata] = useAuthenticatedUser()
-  const [userData, setUserData] = useState(undefined)
+  const [, userData] = useAuthenticatedUser()
 
   useEffect(() => {
     retrieveExistingBookings()
@@ -38,10 +37,6 @@ const BookingForm = () => {
   useEffect(() => {
     setDateRange(getDateRangeArray())
   }, [selectedCheckInDate, selectedCheckOutDate])
-
-  useEffect(() => {
-    setUserData(userMetadata)
-  }, [user, userMetadata])
 
   const retrieveExistingBookings = async () => {
     const querySnapshot = await getDocs(bookingCollectionRef)
