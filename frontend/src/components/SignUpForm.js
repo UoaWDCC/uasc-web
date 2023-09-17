@@ -11,7 +11,7 @@ import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import Snackbar from "@mui/material/Snackbar"
 import MuiAlert from "@mui/material/Alert"
-
+import Stack from "@mui/material/Stack"
 import Dialog from "@mui/material/Dialog"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
@@ -164,38 +164,47 @@ const SignUpForm = () => {
   }
 
   const textFieldStyle = {
-    marginBottom: "16px",
+    marginBottom: "12px",
     width: "100%",
   }
 
   return (
-    <>
+    <div
+      style={{
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "15px",
+        boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
+      }}
+    >
       <form onSubmit={handleSubmit}>
         <div style={textFieldStyle}>
-          <TextField
-            id="firstName"
-            name="firstName"
-            label="First Name"
-            variant="outlined"
-            required
-            onChange={handleChange}
-            error={errors.firstName}
-            helperText={errors.firstName ? "First name is required" : ""}
-            style={textFieldStyle}
-          />
-        </div>
-        <div style={textFieldStyle}>
-          <TextField
-            id="lastName"
-            name="lastName"
-            label="Last Name"
-            variant="outlined"
-            required
-            onChange={handleChange}
-            error={errors.lastName}
-            helperText={errors.lastName ? "Last name is required" : ""}
-            style={textFieldStyle}
-          />
+          <Stack direction="row" spacing={2}>
+            <TextField
+              id="firstName"
+              name="firstName"
+              label="First Name"
+              variant="outlined"
+              required
+              onChange={handleChange}
+              error={errors.firstName}
+              helperText={errors.firstName ? "First name is required" : ""}
+              style={textFieldStyle}
+              size="small"
+            />
+            <TextField
+              id="lastName"
+              name="lastName"
+              label="Last Name"
+              variant="outlined"
+              required
+              onChange={handleChange}
+              error={errors.lastName}
+              helperText={errors.lastName ? "Last name is required" : ""}
+              size="small"
+              style={textFieldStyle}
+            />
+          </Stack>
         </div>
         <div style={textFieldStyle}>
           <TextField
@@ -208,6 +217,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             error={errors.password}
             helperText={errors.password ? "Password is required" : ""}
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -222,6 +232,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             error={errors.confirmPassword}
             helperText={errors.confirmPassword ? "Passwords do not match" : ""}
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -236,6 +247,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             error={errors.email}
             helperText={errors.email ? "Email is required" : ""}
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -252,6 +264,7 @@ const SignUpForm = () => {
             helperText={
               errors.confirmEmail ? "Email addresses do not match" : ""
             }
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -265,6 +278,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             error={errors.phoneNumber}
             helperText={errors.phoneNumber ? "Phone number is required" : ""}
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -282,6 +296,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             error={errors.dob}
             helperText={errors.dob ? "Date of birth is required" : ""}
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -299,6 +314,7 @@ const SignUpForm = () => {
                 ? "UoA Student ID is required (Enter 0 if not a UoA student)"
                 : ""
             }
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -312,6 +328,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             error={errors.yearLevel}
             helperText={errors.yearLevel ? "Year level is required" : ""}
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -325,6 +342,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             error={errors.faculty}
             helperText={errors.faculty ? "Faculty is required" : ""}
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -338,6 +356,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             error={errors.sportType}
             helperText={errors.sportType ? "This information is required" : ""}
+            size="small"
             style={textFieldStyle}
           />
         </div>
@@ -353,15 +372,23 @@ const SignUpForm = () => {
             helperText={
               errors.interestedInRacing ? "This information is required" : ""
             }
+            size="small"
             style={textFieldStyle}
           />
         </div>
         <Button
           variant="contained"
+          color="buttonPrimary"
+          size="small"
+          sx={{
+            borderRadius: "100px",
+            paddingX: "24px",
+            textTransform: "none",
+            width: "fit-content",
+          }}
           type="submit"
-          style={{ marginBottom: "50px" }}
         >
-          Submit
+          SUBMIT
         </Button>
       </form>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
@@ -370,7 +397,7 @@ const SignUpForm = () => {
           home page!
         </Alert>
       </Snackbar>
-    </>
+    </div>
   )
 }
 
