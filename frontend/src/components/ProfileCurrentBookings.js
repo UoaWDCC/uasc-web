@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import {
   CardContent,
   Stack,
@@ -12,11 +10,17 @@ import {
 import React from "react"
 import { useState } from "react"
 
+/**
+ * Displays a single booking to be inserted into a Stack.
+ * @param {{ booking: Booking, onRequestChange: React.MouseEventHandler<HTMLAnchorElement>}}
+ * @returns
+ */
 function SingularBookingDetails({ booking, onRequestChange }) {
   return (
     <Stack key={booking._uid} direction="row" justifyContent="space-between">
       <Typography variant="body1" align="left">
-        {new Date(booking.data().check_in).toDateString()} to {new Date(booking.data().check_out).toDateString()}
+        {new Date(booking.data().check_in.toDate()).toDateString()} to{" "}
+        {new Date(booking.data().check_out.toDate()).toDateString()}
       </Typography>
       <Button
         variant="contained"
@@ -35,6 +39,11 @@ function SingularBookingDetails({ booking, onRequestChange }) {
   )
 }
 
+/**
+ * Renders the current bookings the user has.
+ * @param {{bookings: Array<Booking> | undefined}} bookings The current user bookings.
+ * @returns
+ */
 function ProfileCurrentBookings({ bookings }) {
   const [open, setOpen] = useState(false)
 
@@ -73,10 +82,16 @@ function ProfileCurrentBookings({ bookings }) {
             </Typography>
             {!bookings ? (
               "Retrieving bookings..."
+            ) : bookings.length === 0 ? (
+              "You have no bookings currently."
             ) : (
               <Stack spacing={2}>
                 {bookings.map((booking) => (
-                  <SingularBookingDetails key={booking.id} booking={booking} onRequestChange={handleOpen} />
+                  <SingularBookingDetails
+                    key={booking.id}
+                    booking={booking}
+                    onRequestChange={handleOpen}
+                  />
                 ))}
               </Stack>
             )}
@@ -84,7 +99,7 @@ function ProfileCurrentBookings({ bookings }) {
         </CardContent>
       </Card>
 
-			{/* edit details dialog */}
+      {/* edit details dialog */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -232,8 +247,7 @@ function ProfileCurrentBookings({ bookings }) {
                   }}
                   onClick={handleRequestSubmit}
                 >
-                  {" "}
-                  Request Change{" "}
+                  Request Change
                 </Button>
               </Stack>
             </Stack>
