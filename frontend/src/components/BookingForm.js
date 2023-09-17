@@ -4,17 +4,24 @@ import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { db } from "../firebase"
 import { getDocs, collection, addDoc } from "firebase/firestore"
+import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const BookingForm = () => {
   const [selectedCheckInDate, setSelectedCheckInDate] = useState(null)
   const [selectedCheckOutDate, setSelectedCheckOutDate] = useState(null)
+
   const [existingBookings, setExistingBookings] = useState([])
   const [dateAvailabilities, setDateAvailabilities] = useState(new Map())
   const [dateRange, setDateRange] = useState([])
+
   const bookingCollectionRef = collection(db, "bookings")
   const maxSpotsAvailablePerDay = 50
+
   const [bookingSuccessful, setBookingSuccessful] = useState(false)
   const [bookingErrorMessage, setBookingErrorMessage] = useState("")
+
+  const [user, userMetadata] = useAuthenticatedUser()
+  const [userData, setUserData] = useState(undefined)
 
   // fetch bookings on component mount
   useEffect(() => {
@@ -34,6 +41,10 @@ const BookingForm = () => {
     setDateRange(getDateRangeArray())
   }, [selectedCheckInDate, selectedCheckOutDate])
 
+  useEffect(() => {
+    setUserData(userMetadata)
+  }, [user, userMetadata])
+
   const retrieveExistingBookings = async () => {
     const querySnapshot = await getDocs(bookingCollectionRef)
     let bookings = []
@@ -50,8 +61,8 @@ const BookingForm = () => {
     let availabilities = new Map()
 
     existingBookings.forEach((booking) => {
-      let currDate = new Date(getFormattedDateString(booking.checkIn))
-      const endDate = new Date(getFormattedDateString(booking.checkOut))
+      let currDate = new Date(getFormattedDateString(booking.check_in))
+      const endDate = new Date(getFormattedDateString(booking.check_out))
 
       while (currDate < endDate) {
         const dateKey = currDate.toDateString()
@@ -123,14 +134,19 @@ const BookingForm = () => {
       return
     }
 
+    if (!userData) {
+      alert("Please login to your account before booking!")
+      return
+    }
+
     const checkInFormatted = selectedCheckInDate.toDate()
     const checkOutFormatted = selectedCheckOutDate.toDate()
 
     try {
       const booking = {
-        checkIn: checkInFormatted,
-        checkOut: checkOutFormatted,
-        uid: "/users/SomeUserId",
+        check_in: checkInFormatted,
+        check_out: checkOutFormatted,
+        user_id: `/users/${userData.uid}`,
       }
       const docRef = await addDoc(bookingCollectionRef, booking)
 

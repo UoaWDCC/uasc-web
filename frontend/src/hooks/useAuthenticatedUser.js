@@ -21,6 +21,8 @@ export function useAuthenticatedUser() {
 
     if (user) {
       getUserData()
+    } else {
+      setUserData(null)
     }
   }, [user])
 
