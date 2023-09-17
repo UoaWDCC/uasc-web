@@ -41,7 +41,7 @@ const BookingForm = () => {
 
   useEffect(() => {
     setUserData(userMetadata)
-  }, [user])
+  }, [user, userMetadata])
 
   const retrieveExistingBookings = async () => {
     const querySnapshot = await getDocs(bookingCollectionRef)
