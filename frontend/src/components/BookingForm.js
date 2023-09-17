@@ -23,12 +23,10 @@ const BookingForm = () => {
   const [user, userMetadata] = useAuthenticatedUser()
   const [userData, setUserData] = useState(undefined)
 
-  // fetch bookings on component mount
   useEffect(() => {
     retrieveExistingBookings()
   }, [])
 
-  // build hashmap of booked spot availability once existingBookings state has been set
   useEffect(() => {
     setSpotAvailabilityByDate()
   }, [existingBookings])
@@ -43,7 +41,7 @@ const BookingForm = () => {
 
   useEffect(() => {
     setUserData(userMetadata)
-  }, [user, userMetadata])
+  }, [user])
 
   const retrieveExistingBookings = async () => {
     const querySnapshot = await getDocs(bookingCollectionRef)
