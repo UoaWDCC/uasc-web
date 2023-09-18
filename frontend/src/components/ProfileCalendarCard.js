@@ -1,8 +1,49 @@
 import { Card, Typography, CardContent, Stack, Box } from "@mui/material"
 import React from "react"
-import { DateCalendar } from "@mui/x-date-pickers"
+import { DateCalendar, PickersDay } from "@mui/x-date-pickers"
+import { styled } from "@mui/material/styles"
 
-function ProfileCalendarCard() {
+const StyledCalendarDay = styled(PickersDay, {
+  shouldForwardProp: (prop) => prop !== "isBookedDate",
+})(
+  /**
+   * @param {{isBookedDate: boolean}}
+   */
+  ({ theme, isBookedDate }) => ({
+    ...(isBookedDate && {
+      backgroundColor: theme.palette.primary[theme.palette.mode],
+      "&:hover, &:focus": {
+        backgroundColor: theme.palette.primary[theme.palette.mode],
+      },
+      borderTopLeftRadius: "50%",
+      borderBottomLeftRadius: "50%",
+      borderTopRightRadius: "50%",
+      borderBottomRightRadius: "50%",
+    }),
+  })
+)
+
+function CalendarDay(props) {
+  const { bookings, ...others } = props
+
+  const isBookedDate = bookings.some((booking) => {
+    const start = booking.data().check_in.toDate()
+    const end = booking.data().check_out.toDate()
+
+    const calendarDate = others.day.toDate()
+
+    return start <= calendarDate && end >= calendarDate
+  })
+
+  return <StyledCalendarDay {...others} isBookedDate={isBookedDate} />
+}
+
+/**
+ * @param {{bookings: Array<Booking>}}
+ */
+function ProfileCalendarCard({ bookings }) {
+  // construct all the dates
+
   return (
     <div>
       <Card
@@ -20,10 +61,19 @@ function ProfileCalendarCard() {
               color="#457CC3"
               sx={{ fontWeight: "900" }}
             >
-              Calendar{" "}
+              Calendar
             </Typography>
-            <Box sx={{}}>
-              <DateCalendar />
+            <Box>
+              <DateCalendar
+                readOnly
+                loading={bookings === undefined}
+                slots={{ day: CalendarDay }}
+                slotProps={{
+                  day: () => ({
+                    bookings,
+                  }),
+                }}
+              />
             </Box>
           </Stack>
         </CardContent>
