@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import {
   CardContent,
   Stack,
@@ -14,16 +12,20 @@ import { useState } from "react"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import dayjs from "dayjs"
 import { db } from "../firebase"
-import { getDocs, collection, addDoc } from "firebase/firestore"
+import { collection, addDoc } from "firebase/firestore"
 
+/**
+ * Displays a single booking to be inserted into a Stack.
+ * @param {{ booking: Booking, onRequestChange: React.MouseEventHandler<HTMLAnchorElement>}}
+ * @returns
+ */
 function SingularBookingDetails({ booking, onRequestChange, index }) {
-  // console.log(booking.data())
-
   return (
     <Stack key={booking._uid} direction="row" justifyContent="space-between">
       <Typography variant="body1" align="left">
-        {new Date(booking.data().check_in.seconds * 1000).toDateString()} to{" "}
-        {new Date(booking.data().check_out.seconds * 1000).toDateString()}
+        {new Date(booking.data().check_in.toDate()).toDateString()}
+        {" to "}
+        {new Date(booking.data().check_out.toDate()).toDateString()}
       </Typography>
       <Button
         variant="contained"
@@ -328,7 +330,12 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
   )
 }
 
-function ProfileCurrentBookings({ bookings }) {
+/**
+ * Renders the current bookings the user has.
+ * @param {{bookings: Array<Booking> | undefined}} bookings The current user bookings.
+ * @returns
+ */
+export default function ProfileCurrentBookings({ bookings }) {
   const bookingsLength = bookings ? bookings.length : 0
   const [open, setOpen] = useState([])
 
@@ -346,7 +353,6 @@ function ProfileCurrentBookings({ bookings }) {
 
   useEffect(() => {
     setOpen([...Array(bookingsLength).fill(false)])
-    console.log("Open array: ", open)
   }, [])
 
   return (
@@ -370,24 +376,26 @@ function ProfileCurrentBookings({ bookings }) {
             </Typography>
             {!bookings ? (
               "Retrieving bookings..."
+            ) : bookings.length === 0 ? (
+              "You have no bookings currently."
             ) : (
               <Stack spacing={2}>
                 {bookings.map((booking, index) => (
-                  <>
+                  <React.Fragment key={booking.id}>
                     <SingularBookingDetails
-                      key={booking.id}
+                      key={`${booking.id}-details`}
                       booking={booking}
                       onRequestChange={handleOpen}
                       index={index}
                     />
                     <BookingRequestModal
-                      key={booking.id}
+                      key={`${booking.id}-modal`}
                       booking={booking}
-                      open={open[index]}
+                      open={open[index] ?? false}
                       handleClose={handleClose}
                       index={index}
                     />
-                  </>
+                  </React.Fragment>
                 ))}
               </Stack>
             )}
@@ -397,5 +405,3 @@ function ProfileCurrentBookings({ bookings }) {
     </div>
   )
 }
-
-export default ProfileCurrentBookings
