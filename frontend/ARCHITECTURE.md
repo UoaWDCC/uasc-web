@@ -46,11 +46,11 @@ differ (i.e., the amount of days in the booking does not change).
 This manages the link between users and booking IDs, and references the current
 check-in and check-out dates of the booking.
 
-| **Field** | **Type**  | **Example Value**            |
-| --------- | --------- | ---------------------------- |
-| user_id   | string    | lVsOjAp06AfD6atT8bnrVEpcdcg2 |
-| check_in  | Timestamp | 26-07-2023                   |
-| check_out | Timestamp | 26-07-2023                   |
+| **Field** | **Type**  | **Example Value**                   |
+| --------- | --------- | ----------------------------------- |
+| user_id   | Reference | /users/lVsOjAp06AfD6atT8bnrVEpcdcg2 |
+| check_in  | Timestamp | 26-07-2023                          |
+| check_out | Timestamp | 26-07-2023                          |
 
 ## `booking_changes` collection
 
