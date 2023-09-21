@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Alert, FormControl, FormLabel, Button } from "@mui/material"
+import { Alert, Button, Typography, Stack } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { db } from "../firebase"
@@ -192,7 +192,124 @@ const BookingForm = () => {
 
   return (
     <>
-      <div
+      <Stack spacing={12} direction="row" justifyContent="space-between">
+        <Stack spacing={3} sx={{ width: "100%" }}>
+          <Typography
+            variant="h4"
+            align="left"
+            color="#457CC3"
+            sx={{ fontWeight: "900" }}
+          >
+            Make a Booking
+          </Typography>
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "15px",
+              boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
+              width: "100%",
+            }}
+          >
+            <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+              <Stack sx={{ marginBottom: "24px" }}>
+                <Typography
+                  variant="h5"
+                  align="left"
+                  color="black"
+                  sx={{ fontWeight: "700" }}
+                >
+                  Select Check-In Date
+                </Typography>
+                <DatePicker
+                  value={selectedCheckInDate}
+                  onChange={handleChangeStartDate}
+                  shouldDisableDate={isStartDateInvalid}
+                  disablePast
+                  disableHighlightToday
+                  sx={{ backgroundColor: "#EDF8FF" }}
+                />
+              </Stack>
+              <Stack sx={{ marginBottom: "24px" }}>
+                <Typography
+                  variant="h5"
+                  align="left"
+                  color="black"
+                  sx={{ fontWeight: "700" }}
+                >
+                  Select Check-In Date
+                </Typography>
+                <DatePicker
+                  value={selectedCheckOutDate}
+                  onChange={handleChangeEndDate}
+                  shouldDisableDate={isEndDateInvalid}
+                  disablePast
+                  disableHighlightToday
+                  sx={{ backgroundColor: "#EDF8FF" }}
+                />
+              </Stack>
+              <Button
+                type="submit"
+                variant="contained"
+                color="buttonPrimary"
+                size="small"
+                sx={{
+                  borderRadius: "100px",
+                  paddingX: "24px",
+                  textTransform: "none",
+                }}
+              >
+                SUBMIT
+              </Button>
+            </form>
+          </div>
+        </Stack>
+        <Stack spacing={3} sx={{ width: "100%" }}>
+          <Typography
+            variant="h4"
+            align="left"
+            color="#457CC3"
+            sx={{ fontWeight: "900" }}
+          >
+            Availability
+          </Typography>
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "15px",
+              boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
+            }}
+          >
+            <ul
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0",
+              }}
+            >
+              {dateRange.map((d, index) => {
+                return (
+                  <li
+                    key={index}
+                    style={{
+                      listStyleType: "none",
+                      margin: "0",
+                    }}
+                  >
+                    {`${d.toDateString()}: ${
+                      maxSpotsAvailablePerDay -
+                        dateAvailabilities.get(d.toDateString()) ||
+                      maxSpotsAvailablePerDay
+                    }`}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </Stack>
+      </Stack>
+      {/* <div
         style={{
           display: "flex",
           alignItems: "center",
@@ -286,7 +403,7 @@ const BookingForm = () => {
             </ul>
           </div>
         </div>
-      </div>
+      </div> */}
       {bookingSuccessful ? (
         <Alert severity="success">Booking was made successfully</Alert>
       ) : null}
