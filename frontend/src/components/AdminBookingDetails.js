@@ -1,6 +1,6 @@
 import { Grid, Typography, Box, Divider, Paper } from "@mui/material"
 
-const AdminBookingDetails = ({ selectedUser, checkInDate }) => {
+const AdminBookingDetails = ({ selectedUser, checkInDate, checkOutDate, totalDays }) => {
   const styles = {
     outerBackground: {
       borderRadius: 15,
@@ -60,6 +60,20 @@ const AdminBookingDetails = ({ selectedUser, checkInDate }) => {
                   sx={{ fontWeight: "bold" }}
                 >
                   Check In Date: {checkInDate}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  align="left"
+                  sx={{ fontWeight: "bold" }}
+                >
+                  Check Out Date: {checkOutDate}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  align="left"
+                  sx={{ fontWeight: "bold" }}
+                >
+                  Total Days: {totalDays}
                 </Typography>
               </Box>
             </Paper>
