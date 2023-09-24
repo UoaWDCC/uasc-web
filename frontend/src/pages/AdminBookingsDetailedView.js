@@ -6,6 +6,8 @@ import BookingDetails from "../components/AdminBookingDetails";
 const AdminBookingsDetailedView = () => {
   const [selectedUser, setSelectedUser] = useState(null)
   const [checkInDate, setCheckInDate] = useState("")
+  const [checkOutDate, setCheckOutDate] = useState("")
+  const [totalDays, setTotalDays] = useState(0)
 
     return (
         <div>
@@ -26,8 +28,8 @@ const AdminBookingsDetailedView = () => {
             <Divider />
             <Container maxWidth={false} disableGutters={true}>
                 <Container maxWidth={false} disableGutters={true} sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <DetailedBookingsCalendar setSelectedUser={ setSelectedUser } setCheckInDate={ setCheckInDate } />
-                  <BookingDetails selectedUser={ selectedUser } checkInDate={ checkInDate }/>
+                  <DetailedBookingsCalendar setSelectedUser={ setSelectedUser } setCheckInDate={ setCheckInDate } setCheckOutDate={ setCheckOutDate } setTotalDays={ setTotalDays }/>
+                  <BookingDetails selectedUser={ selectedUser } checkInDate={ checkInDate } checkOutDate={ checkOutDate } totalDays={ totalDays }/>
                 </Container>
             </Container>
           </Paper>

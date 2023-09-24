@@ -10,7 +10,7 @@ import {
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import "../pages/Admin.css"
 
-const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate }) => {
+const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate, setCheckOutDate, setTotalDays }) => {
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
   const [weekOffset, setWeekOffset] = useState(0)
 
@@ -36,6 +36,12 @@ const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate }) => {
     var clickedDate = new Date(startDate.valueOf())
     clickedDate.setDate(clickedDate.getDate() + index)
     setCheckInDate(clickedDate.toLocaleDateString())
+
+    var checkOutDate = new Date(clickedDate.valueOf())
+    checkOutDate.setDate(checkOutDate.getDate() + 3)
+    setCheckOutDate(checkOutDate.toLocaleDateString())
+
+    setTotalDays(Math.ceil(checkOutDate.getTime() - clickedDate.getTime()) / (1000 * 3600 * 24))
   }
 
   return (
