@@ -23,11 +23,13 @@
     "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
+    "stripe": "^13.7.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "start:firebase": "firebase emulators:start",
+    "start:stripe": "node src/stripe.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
