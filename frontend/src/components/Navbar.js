@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Typography, Stack, Link, Box, AppBar } from "@mui/material"
+import { auth } from "../firebase"
 
 const Navbar = () => {
   const homeLocation = "/"
@@ -34,8 +35,13 @@ const Navbar = () => {
   //   setIsLoggedIn(true)
   // }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setIsLoggedIn(false)
+    try {
+      await auth.signOut()
+    } catch (error) {
+      console.error("Failed to sign out: ", error)
+    }
   }
 
   return (

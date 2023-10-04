@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from "react"
-import { FormControl, FormLabel, Button } from "@mui/material"
+import { Alert, Button, Typography, Stack } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { db } from "../firebase"
-import { getDocs, collection } from "firebase/firestore"
+import { getDocs, collection, addDoc } from "firebase/firestore"
+import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const BookingForm = () => {
   const [selectedCheckInDate, setSelectedCheckInDate] = useState(null)
   const [selectedCheckOutDate, setSelectedCheckOutDate] = useState(null)
+
   const [existingBookings, setExistingBookings] = useState([])
   const [dateAvailabilities, setDateAvailabilities] = useState(new Map())
-  const [dateArray, setDateArray] = useState([])
+  const [dateRange, setDateRange] = useState([])
+
   const bookingCollectionRef = collection(db, "bookings")
   const maxSpotsAvailablePerDay = 50
 
-  // fetch bookings on component mount
+  const [bookingSuccessful, setBookingSuccessful] = useState(false)
+  const [bookingErrorMessage, setBookingErrorMessage] = useState("")
+
+  const [, userData] = useAuthenticatedUser()
+
   useEffect(() => {
     retrieveExistingBookings()
   }, [])
 
-  // build hashmap of booked spot availability once existingBookings state has been set
   useEffect(() => {
     setSpotAvailabilityByDate()
   }, [existingBookings])
@@ -29,7 +35,7 @@ const BookingForm = () => {
   }, [dateAvailabilities])
 
   useEffect(() => {
-    setDateArray(getDateRangeArray())
+    setDateRange(getDateRangeArray())
   }, [selectedCheckInDate, selectedCheckOutDate])
 
   const retrieveExistingBookings = async () => {
@@ -48,8 +54,8 @@ const BookingForm = () => {
     let availabilities = new Map()
 
     existingBookings.forEach((booking) => {
-      let currDate = new Date(getFormattedDateString(booking.checkIn))
-      const endDate = new Date(getFormattedDateString(booking.checkOut))
+      let currDate = new Date(getFormattedDateString(booking.check_in))
+      const endDate = new Date(getFormattedDateString(booking.check_out))
 
       while (currDate < endDate) {
         const dateKey = currDate.toDateString()
@@ -113,16 +119,43 @@ const BookingForm = () => {
     return dayjs(date).format("YYYY-MM-DD")
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
     if (!selectedCheckOutDate) {
       alert("Please select an end date before submitting")
       return
     }
-    console.log(
-      `Selected Date Range:\n${selectedCheckInDate} - \n${selectedCheckOutDate}`
-    )
-    // need to add booking to firestore
+
+    if (!userData) {
+      alert("Please login to your account before booking!")
+      return
+    }
+
+    const checkInFormatted = selectedCheckInDate.toDate()
+    const checkOutFormatted = selectedCheckOutDate.toDate()
+
+    try {
+      const booking = {
+        check_in: checkInFormatted,
+        check_out: checkOutFormatted,
+        user_id: `/users/${userData.uid}`,
+      }
+      const docRef = await addDoc(bookingCollectionRef, booking)
+
+      if (docRef.id) {
+        setBookingSuccessful(true)
+        setTimeout(() => {
+          setBookingSuccessful(false)
+        }, 3000)
+        setExistingBookings([...existingBookings, booking])
+      }
+    } catch (error) {
+      setBookingErrorMessage("Failed to make booking. Please try again.")
+      setTimeout(() => {
+        setBookingErrorMessage("")
+      }, 3000)
+    }
   }
 
   const setEarliestDefaultCheckInDate = () => {
@@ -158,101 +191,226 @@ const BookingForm = () => {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "90%",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          width: "60%",
-        }}
-      >
-        <div>
-          <h2
-            style={{
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-              margin: "1.5rem",
-            }}
+    <>
+      <Stack spacing={12} direction="row" justifyContent="space-between">
+        <Stack spacing={3} sx={{ width: "100%" }}>
+          <Typography
+            variant="h4"
+            align="left"
+            color="#457CC3"
+            sx={{ fontWeight: "900" }}
           >
             Make a Booking
-          </h2>
-          <form onSubmit={handleSubmit}>
-            <FormControl style={{ margin: "1.5rem" }}>
-              <FormLabel style={{ textAlign: "left" }}>
-                Select a Check-In Date
-              </FormLabel>
-              <DatePicker
-                value={selectedCheckInDate}
-                onChange={handleChangeStartDate}
-                shouldDisableDate={isStartDateInvalid}
-                disablePast
-                disableHighlightToday
-              />
-              <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
-                Select a Check-Out Date
-              </FormLabel>
-              <DatePicker
-                value={selectedCheckOutDate}
-                onChange={handleChangeEndDate}
-                shouldDisableDate={isEndDateInvalid}
-                disablePast
-                disableHighlightToday
-              />
+          </Typography>
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "15px",
+              boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
+              width: "100%",
+            }}
+          >
+            <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+              <Stack sx={{ marginBottom: "24px" }}>
+                <Typography
+                  variant="h5"
+                  align="left"
+                  color="black"
+                  sx={{ fontWeight: "700" }}
+                >
+                  Select Check-In Date
+                </Typography>
+                <DatePicker
+                  value={selectedCheckInDate}
+                  onChange={handleChangeStartDate}
+                  shouldDisableDate={isStartDateInvalid}
+                  disablePast
+                  disableHighlightToday
+                  sx={{ backgroundColor: "#EDF8FF" }}
+                />
+              </Stack>
+              <Stack sx={{ marginBottom: "24px" }}>
+                <Typography
+                  variant="h5"
+                  align="left"
+                  color="black"
+                  sx={{ fontWeight: "700" }}
+                >
+                  Select Check-In Date
+                </Typography>
+                <DatePicker
+                  value={selectedCheckOutDate}
+                  onChange={handleChangeEndDate}
+                  shouldDisableDate={isEndDateInvalid}
+                  disablePast
+                  disableHighlightToday
+                  sx={{ backgroundColor: "#EDF8FF" }}
+                />
+              </Stack>
               <Button
                 type="submit"
                 variant="contained"
-                style={{ marginTop: "1.5rem" }}
+                color="buttonPrimary"
+                size="small"
+                sx={{
+                  borderRadius: "100px",
+                  paddingX: "24px",
+                  textTransform: "none",
+                }}
               >
-                Submit
+                SUBMIT
               </Button>
-            </FormControl>
-          </form>
-        </div>
-        <div>
-          <h2
+            </form>
+          </div>
+        </Stack>
+        <Stack spacing={3} sx={{ width: "100%" }}>
+          <Typography
+            variant="h4"
+            align="left"
+            color="#457CC3"
+            sx={{ fontWeight: "900" }}
+          >
+            Availability
+          </Typography>
+          <div
             style={{
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-              margin: "1.5rem",
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "15px",
+              boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
             }}
           >
-            Available Spots Left:
-          </h2>
-          <ul
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              padding: "0",
-            }}
-          >
-            {dateArray.map((d, index) => {
-              return (
-                <li
-                  key={index}
-                  style={{
-                    listStyleType: "none",
-                    margin: "0",
-                  }}
+            <ul
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0",
+              }}
+            >
+              {dateRange.map((d, index) => {
+                return (
+                  <li
+                    key={index}
+                    style={{
+                      listStyleType: "none",
+                      margin: "0",
+                    }}
+                  >
+                    {`${d.toDateString()}: ${
+                      maxSpotsAvailablePerDay -
+                        dateAvailabilities.get(d.toDateString()) ||
+                      maxSpotsAvailablePerDay
+                    }`}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </Stack>
+      </Stack>
+      {/* <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "90%",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            width: "60%",
+          }}
+        >
+          <div>
+            <h2
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                margin: "1.5rem",
+              }}
+            >
+              Make a Booking
+            </h2>
+            <form onSubmit={handleSubmit}>
+              <FormControl style={{ margin: "1.5rem" }}>
+                <FormLabel style={{ textAlign: "left" }}>
+                  Select a Check-In Date
+                </FormLabel>
+                <DatePicker
+                  value={selectedCheckInDate}
+                  onChange={handleChangeStartDate}
+                  shouldDisableDate={isStartDateInvalid}
+                  disablePast
+                  disableHighlightToday
+                />
+                <FormLabel style={{ textAlign: "left", marginTop: "1rem" }}>
+                  Select a Check-Out Date
+                </FormLabel>
+                <DatePicker
+                  value={selectedCheckOutDate}
+                  onChange={handleChangeEndDate}
+                  shouldDisableDate={isEndDateInvalid}
+                  disablePast
+                  disableHighlightToday
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  style={{ marginTop: "1.5rem" }}
                 >
-                  {`${d.toDateString()}: ${
-                    maxSpotsAvailablePerDay -
-                      dateAvailabilities.get(d.toDateString()) ||
-                    maxSpotsAvailablePerDay
-                  }`}
-                </li>
-              )
-            })}
-          </ul>
+                  Submit
+                </Button>
+              </FormControl>
+            </form>
+          </div>
+          <div>
+            <h2
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                margin: "1.5rem",
+              }}
+            >
+              Available Spots Left:
+            </h2>
+            <ul
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0",
+              }}
+            >
+              {dateRange.map((d, index) => {
+                return (
+                  <li
+                    key={index}
+                    style={{
+                      listStyleType: "none",
+                      margin: "0",
+                    }}
+                  >
+                    {`${d.toDateString()}: ${
+                      maxSpotsAvailablePerDay -
+                        dateAvailabilities.get(d.toDateString()) ||
+                      maxSpotsAvailablePerDay
+                    }`}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         </div>
-      </div>
-    </div>
+      </div> */}
+      {bookingSuccessful ? (
+        <Alert severity="success">Booking was made successfully</Alert>
+      ) : null}
+      {bookingErrorMessage !== "" ? (
+        <Alert severity="error">{bookingErrorMessage}</Alert>
+      ) : null}
+    </>
   )
 }
 
