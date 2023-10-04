@@ -38,7 +38,11 @@ function App() {
                   <Route path="/booking" element={<Booking />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/admin" element={<Admin />} />
-                  <Route path="/admin/bookings" element={<AdminBookingsDetailedView />} exact />
+                  <Route
+                    path="/admin/bookings"
+                    element={<AdminBookingsDetailedView />}
+                    exact
+                  />
                 </Routes>
               </div>
             </div>
