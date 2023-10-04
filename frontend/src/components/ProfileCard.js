@@ -6,18 +6,27 @@ import {
   Stack,
   Button,
 } from "@mui/material"
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
+import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const textType = "body1"
 
 function ProfileCard() {
+  const [user, userMetadata] = useAuthenticatedUser()
+  const [userData, setUserData] = useState(undefined)
   const [expanded, setExpanded] = useState(false)
 
   //Expanding the more details on the user page
   const expandDetails = () => {
     setExpanded(!expanded)
   }
+
+  useEffect(() => {
+    if (userMetadata) {
+      setUserData(userMetadata)
+    }
+  }, [user, userMetadata])
 
   return (
     <div style={{ width: "100%" }}>
@@ -38,7 +47,9 @@ function ProfileCard() {
               <Stack direction="row" alignItems="center">
                 <Avatar sx={{ minWidth: "100px", minHeight: "100px" }} />
                 <Typography variant="h4" sx={{ marginLeft: "32px" }}>
-                  John Doe
+                  {userData
+                    ? userData.firstName + " " + userData.lastName
+                    : "John Doe"}
                 </Typography>
               </Stack>
               <Button
@@ -73,7 +84,7 @@ function ProfileCard() {
                     minWidth: "300px",
                   }}
                 >
-                  +64 2400 400 422
+                  {userData ? userData.phoneNumber : "N/A"}
                 </Typography>
               </Stack>
               <Stack direction="row">
@@ -93,7 +104,7 @@ function ProfileCard() {
                     minWidth: "300px",
                   }}
                 >
-                  Johndoe@gmail.com
+                  {userData ? userData.email : "N/A"}
                 </Typography>
               </Stack>
               <Stack direction="row">
@@ -113,7 +124,11 @@ function ProfileCard() {
                     minWidth: "300px",
                   }}
                 >
-                  UoA Student
+                  {userMetadata
+                    ? userMetadata.membership === undefined
+                      ? "Member"
+                      : userMetadata.membership
+                    : "N/A"}
                 </Typography>
               </Stack>
             </Stack>

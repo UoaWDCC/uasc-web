@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Alert, Button, FormControl, FormLabel, TextField } from "@mui/material"
+import { Alert, Button, TextField, Typography, Stack } from "@mui/material"
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
 const LoginForm = () => {
@@ -57,28 +57,84 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl>
-        <FormLabel style={{ textAlign: "left" }}>Email</FormLabel>
-        <TextField
-          id="email"
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        ></TextField>
-        <FormLabel style={{ textAlign: "left" }}>Password</FormLabel>
-        <TextField
-          type="password"
-          id="password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        ></TextField>
+    <div
+      style={{
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "15px",
+        boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)",
+      }}
+    >
+      <form onSubmit={handleSubmit}>
+        <Stack sx={{ marginBottom: "24px" }}>
+          <Typography
+            variant="h5"
+            align="left"
+            color="black"
+            sx={{ fontWeight: "700" }}
+          >
+            Email:
+          </Typography>
+
+          <TextField
+            variant="standard"
+            id="email"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            InputProps={{
+              disableUnderline: true,
+            }}
+            style={{
+              width: "100%",
+              background: "#EDF8FF",
+              "&:hover": {
+                borderColor: "transparent",
+              },
+              borderRadius: "5px",
+            }}
+          />
+        </Stack>
+        <Stack sx={{ marginBottom: "24px" }}>
+          <Typography
+            variant="h5"
+            align="left"
+            color="black"
+            sx={{ fontWeight: "700" }}
+          >
+            Password:
+          </Typography>
+          <TextField
+            variant="standard"
+            type="password"
+            id="password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            InputProps={{
+              disableUnderline: true,
+            }}
+            style={{
+              width: "100%",
+              background: "#EDF8FF",
+              "&:hover": {
+                borderColor: "transparent",
+              },
+              borderRadius: "5px",
+            }}
+          />
+        </Stack>
         <Button
           type="submit"
-          variant="contained"
           disabled={loginSuccessful}
-          sx={{ marginTop: "1vh" }}
+          variant="contained"
+          color="buttonPrimary"
+          size="small"
+          sx={{
+            borderRadius: "100px",
+            paddingX: "24px",
+            textTransform: "none",
+          }}
         >
-          Submit
+          SUBMIT
         </Button>
         {loginSuccessful ? (
           <Alert severity="success" sx={{ marginTop: "1vh" }}>
@@ -90,8 +146,8 @@ const LoginForm = () => {
             {loginErrorMessage}
           </Alert>
         ) : null}
-      </FormControl>
-    </form>
+      </form>
+    </div>
   )
 }
 
