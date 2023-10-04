@@ -131,7 +131,7 @@ const AdminBookings = () => {
           variant="contained"
           color="primary"
           className="manage-bookings-button"
-          onClick={() => handleBookingsClick() }
+          onClick={() => handleBookingsClick()}
         >
           Manage Bookings
         </Button>
