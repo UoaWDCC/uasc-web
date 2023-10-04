@@ -10,7 +10,14 @@ import {
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import "../pages/Admin.css"
 
-const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate, setCheckOutDate, setTotalDays }) => {
+const AdminDetailedCalendar = ({
+  setSelectedUser,
+  setCheckInDate,
+  setCheckOutDate,
+  setTotalDays,
+  showDetails,
+  setShowDetails,
+}) => {
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
   const [weekOffset, setWeekOffset] = useState(0)
 
@@ -32,6 +39,7 @@ const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate, setCheckOutDat
 
   const handleUserClick = (user, index) => {
     setSelectedUser(user)
+    setShowDetails(true)
 
     var clickedDate = new Date(startDate.valueOf())
     clickedDate.setDate(clickedDate.getDate() + index)
@@ -41,11 +49,19 @@ const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate, setCheckOutDat
     checkOutDate.setDate(checkOutDate.getDate() + 3)
     setCheckOutDate(checkOutDate.toLocaleDateString())
 
-    setTotalDays(Math.ceil(checkOutDate.getTime() - clickedDate.getTime()) / (1000 * 3600 * 24))
+    setTotalDays(
+      Math.ceil(checkOutDate.getTime() - clickedDate.getTime()) /
+        (1000 * 3600 * 24)
+    )
   }
 
   return (
-    <div style={{ width: "60%", backgroundColor: "transparent" }}>
+    <div
+      style={{
+        backgroundColor: "transparent",
+        width: showDetails ? "60%" : "100%",
+      }}
+    >
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -55,7 +71,7 @@ const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate, setCheckOutDat
         <Typography
           variant="h3"
           align="left"
-          sx={{ fontWeight: "900" }}
+          sx={{ fontWeight: "900", color: "#457CC3" }}
         >
           Bookings
         </Typography>
@@ -90,9 +106,6 @@ const AdminDetailedCalendar = ({ setSelectedUser, setCheckInDate, setCheckOutDat
               xs={12}
               md={12 / daysOfWeek.length}
               className="day-container"
-              sx={{
-                backgroundColor: "common.grey",
-              }}
             >
               <Typography align="center" variant="h6">
                 {day}

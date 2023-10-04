@@ -1,10 +1,15 @@
 import { Grid, Typography, Box, Divider, Paper } from "@mui/material"
 
-const AdminBookingDetails = ({ selectedUser, checkInDate, checkOutDate, totalDays }) => {
+const AdminBookingDetails = ({
+  selectedUser,
+  checkInDate,
+  checkOutDate,
+  totalDays,
+  setShowDetails,
+}) => {
   const styles = {
     outerBackground: {
       borderRadius: 15,
-      backgroundColor: "gray",
       padding: "20px",
       boxShadow: "none",
     },
@@ -19,7 +24,7 @@ const AdminBookingDetails = ({ selectedUser, checkInDate, checkOutDate, totalDay
 
   return (
     <div>
-      <Grid container rowSpacing={2} paddingTop="20px" sx={{ width: 850 }}>
+      <Grid container rowSpacing={2} paddingTop="32px" sx={{ width: 850 }}>
         <Grid item xs={12} md={8}>
           {" "}
         </Grid>
@@ -30,6 +35,7 @@ const AdminBookingDetails = ({ selectedUser, checkInDate, checkOutDate, totalDay
             paddingTop="9px"
             paddingBottom="1px"
             sx={{ fontWeight: "bold" }}
+            onClick={() => setShowDetails(false)}
           >
             HIDE
           </Typography>
