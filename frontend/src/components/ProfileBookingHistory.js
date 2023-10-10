@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react"
-import { db } from "../firebase"
+import React from "react"
 import {
   Table,
   TableBody,
@@ -13,48 +12,13 @@ import {
   Typography,
   Stack,
 } from "@mui/material"
-import {
-  doc,
-  collection,
-  where,
-  query,
-  orderBy,
-  getDocs,
-} from "@firebase/firestore"
 
-const ProfileBookingHistory = ({ userId }) => {
-  const [bookings, setBookings] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    if (!userId) return
-    setLoading(true)
-
-    const fetchData = async () => {
-      try {
-        const userDocRef = doc(db, "users", userId)
-        const q = query(
-          collection(db, "bookings"),
-          where("user_id", "==", userDocRef),
-          orderBy("check_in", "desc")
-        )
-
-        const querySnapshot = await getDocs(q)
-
-        const fetchedBookings = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        setBookings(fetchedBookings)
-      } catch (error) {
-        console.error("Error fetching user bookings: ", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [userId])
+const ProfileBookingHistory = ({ bookings }) => {
+  // Filter out bookings that have check-out dates in the past.
+  const pastBookings =
+    bookings?.filter(
+      (booking) => booking.data().check_out.toDate() < new Date()
+    ) || []
 
   return (
     <Card
@@ -74,12 +38,7 @@ const ProfileBookingHistory = ({ userId }) => {
           >
             Booking History
           </Typography>
-          {loading ? (
-            <Typography variant="body1" align="left">
-              {" "}
-              Loading...{" "}
-            </Typography>
-          ) : bookings.length === 0 ? (
+          {pastBookings.length === 0 ? (
             <Typography variant="body1" align="left">
               {" "}
               You have no past bookings.{" "}
@@ -94,16 +53,16 @@ const ProfileBookingHistory = ({ userId }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {bookings.map((booking) => (
+                  {pastBookings.map((booking) => (
                     <TableRow key={booking.id}>
                       <TableCell align="right">
                         {new Date(
-                          booking.check_in.seconds * 1000
+                          booking.data().check_in.seconds * 1000
                         ).toLocaleDateString("en-GB") || "N/A"}
                       </TableCell>
                       <TableCell align="right">
                         {new Date(
-                          booking.check_out.seconds * 1000
+                          booking.data().check_out.seconds * 1000
                         ).toLocaleDateString("en-GB") || "N/A"}
                       </TableCell>
                     </TableRow>
