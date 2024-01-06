@@ -8,6 +8,7 @@ import {
 } from "@mui/material"
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import "../pages/Admin.css"
+import { useNavigate } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../firebase"
@@ -15,6 +16,7 @@ import { db } from "../firebase"
 const AdminBookings = () => {
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
   const [weekOffset, setWeekOffset] = useState(0)
+  const navigate = useNavigate()
   const [bookings, setBookings] = useState({
     SUN: [],
     MON: [],
@@ -109,10 +111,14 @@ const AdminBookings = () => {
          Check-In Date: ${booking.checkIn.toLocaleDateString()}
          Check-Out Date: ${booking.checkOut.toLocaleDateString()}`
     )
+
+    if (error) {
+      return <div>Error fetching data. Please try again later.</div>
+    }
   }
 
-  if (error) {
-    return <div>Error fetching data. Please try again later.</div>
+  const handleBookingsClick = () => {
+    navigate("/admin/bookings")
   }
 
   return (
@@ -125,6 +131,7 @@ const AdminBookings = () => {
           variant="contained"
           color="primary"
           className="manage-bookings-button"
+          onClick={() => handleBookingsClick()}
         >
           Manage Bookings
         </Button>
