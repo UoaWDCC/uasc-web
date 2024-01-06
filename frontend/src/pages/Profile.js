@@ -80,7 +80,7 @@ export default function Profile() {
             </Typography>
             <ProfileCalendarCard bookings={bookings} />
             <ProfileCurrentBookings bookings={bookings} />
-            {user && <ProfileBookingHistory userId={user.uid} />}
+            <ProfileBookingHistory bookings={bookings} />
           </Stack>
         </Stack>
       </Stack>
