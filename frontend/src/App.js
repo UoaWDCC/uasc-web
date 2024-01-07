@@ -12,6 +12,7 @@ import Booking from "./pages/Booking"
 import Profile from "./pages/Profile"
 import Admin from "./pages/Admin"
 import Thanks from "./pages/Thanks"
+import AdminBookingsDetailedView from "./pages/AdminBookingsDetailedView"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { ThemeProvider } from "@mui/material"
 import { LocalizationProvider } from "@mui/x-date-pickers"
@@ -39,6 +40,11 @@ function App() {
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/thanks" element={<Thanks />} />
+                  <Route
+                    path="/admin/bookings"
+                    element={<AdminBookingsDetailedView />}
+                    exact
+                  />
                 </Routes>
               </div>
             </div>
