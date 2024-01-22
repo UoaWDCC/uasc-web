@@ -3,9 +3,8 @@ import { initializeApp } from "@firebase/app"
 import { getAuth, connectAuthEmulator } from "@firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore"
 
+// @ts-ignore
 const firebaseApiKey = import.meta.env.VITE_FIREBASE_API_KEY
-
-console.log(import.meta.env)
 
 const firebaseConfig = {
   apiKey: firebaseApiKey,
@@ -21,7 +20,7 @@ const auth = getAuth(app)
 const db = getFirestore(app)
 
 // use emulator suite if running locally
-if (process.env.NODE_ENV === "development") {
+if (import.meta.env.VITE_ENV === "development") {
   connectFirestoreEmulator(db, "localhost", 8080)
   connectAuthEmulator(auth, "http://localhost:9099")
 }
