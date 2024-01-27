@@ -81,8 +81,10 @@ const AdminBookings = () => {
               checkInDate >= startDate &&
               checkInDate <= endDate &&
               dayOfWeek &&
+              // @ts-ignore
               bookingsData[dayOfWeek]
             ) {
+              // @ts-ignore
               bookingsData[dayOfWeek].push({
                 userId: data.user_id,
                 checkIn: checkInDate,
@@ -94,6 +96,7 @@ const AdminBookings = () => {
 
         setBookings(bookingsData)
       } catch (error) {
+        // @ts-ignore
         setError("Failed to fetch bookings. Please try again later.")
         console.error("Error fetching bookings: ", error)
       }
@@ -105,7 +108,7 @@ const AdminBookings = () => {
     console.log("Checking range:", startDate, endDate)
   }, [weekOffset])
 
-  const handleUserClick = (booking) => {
+  const handleUserClick = (booking: any) => {
     alert(
       `User ID: ${booking.userId}
          Check-In Date: ${booking.checkIn.toLocaleDateString()}
@@ -164,7 +167,8 @@ const AdminBookings = () => {
                 {day}
               </Typography>
               <div className="user-buttons-container">
-                {bookings[day]?.map((booking, userIndex) => (
+                {/* @ts-ignore */}
+                {bookings[day]?.map((booking: any, userIndex: number) => (
                   <Button
                     key={`${day}-${userIndex}`}
                     onClick={() => handleUserClick(booking)}
@@ -174,6 +178,7 @@ const AdminBookings = () => {
                   </Button>
                 ))}
                 <Typography className="total-bookings">
+                  {/* @ts-ignore */}
                   {`Total Bookings: ${bookings[day]?.length || 0}`}
                 </Typography>
               </div>

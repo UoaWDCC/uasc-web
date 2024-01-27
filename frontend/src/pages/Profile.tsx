@@ -1,6 +1,14 @@
 import { db } from "../firebase"
 import React, { useEffect, useState } from "react"
-import { getDocs, where, query, collection, doc } from "firebase/firestore"
+import {
+  getDocs,
+  where,
+  query,
+  collection,
+  doc,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from "firebase/firestore"
 import { Stack, Typography } from "@mui/material"
 import "../styles/Profile.css"
 import ProfileCard from "../components/ProfileCard"
@@ -19,13 +27,15 @@ export default function Profile() {
   /**
    * @type {[Array<Booking>, React.Dispatch<Array<Booking>>]}
    */
-  const [bookings, setBookings] = useState(undefined)
+  const [bookings, setBookings] = useState<
+    QueryDocumentSnapshot<DocumentData, DocumentData>[] | undefined
+  >(undefined)
 
   /**
    * Retrieves the current user bookings from firestore.
    * @param {string} userId
    */
-  const getBookings = (userId) => {
+  const getBookings = (userId: any) => {
     getDocs(
       query(
         collection(db, "bookings"),

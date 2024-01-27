@@ -1,7 +1,7 @@
 import { Grid, Typography, Box, Divider, Paper, Button } from "@mui/material"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 
-const RequestDetails = ({ booking_id, setSelectedUser }) => {
+const RequestDetails = ({ booking_id, setSelectedUser }: any) => {
   const styles = {
     outerBackground: {
       borderRadius: 15,
@@ -53,7 +53,7 @@ const RequestDetails = ({ booking_id, setSelectedUser }) => {
                 >
                   {booking_id}
                 </Typography>
-                <Divider width="200px" />
+                <Divider />
                 <Typography
                   variant="h6"
                   align="left"
@@ -73,13 +73,18 @@ const RequestDetails = ({ booking_id, setSelectedUser }) => {
                   blah blah blah
                 </Typography>
                 <Grid container rowSpacing={2} paddingTop="25px">
-                  <Grid item xs={12} md={6} align="center" sx={{ padding: 0 }}>
+                  {/* @ts-ignore */}
+                  <Grid xs={12} md={6} align="center" sx={{ padding: 0 }}>
                     <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                       OLD DATES
                     </Typography>
                     <DateCalendar
-                      style={{ backgroundColor: "white", borderRadius: 15 }}
-                      sx={{ height: 300, margin: 0 }}
+                      sx={{
+                        backgroundColor: "white",
+                        borderRadius: 15,
+                        height: 300,
+                        margin: 0,
+                      }}
                     />
                     <Button
                       variant="contained"
@@ -93,16 +98,18 @@ const RequestDetails = ({ booking_id, setSelectedUser }) => {
                       APPROVE
                     </Button>
                   </Grid>
+                  {/* @ts-ignore */}
                   <Grid item xs={12} md={6} align="center">
                     <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                       NEW DATES
                     </Typography>
                     <DateCalendar
-                      style={{
+                      sx={{
+                        height: 300,
+                        margin: 0,
                         backgroundColor: "white",
                         borderRadius: 15,
                       }}
-                      sx={{ height: 300, margin: 0 }}
                     />
                     <Button
                       variant="contained"

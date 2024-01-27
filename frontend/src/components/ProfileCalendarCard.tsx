@@ -9,7 +9,7 @@ const StyledCalendarDay = styled(PickersDay, {
   /**
    * @param {{isBookedDate: boolean}}
    */
-  ({ theme, isBookedDate }) => ({
+  ({ theme, isBookedDate }: any) => ({
     ...(isBookedDate && {
       backgroundColor: theme.palette.primary[theme.palette.mode],
       "&:hover, &:focus": {
@@ -23,10 +23,10 @@ const StyledCalendarDay = styled(PickersDay, {
   })
 )
 
-function CalendarDay(props) {
+function CalendarDay(props: any) {
   const { bookings, ...others } = props
 
-  const isBookedDate = bookings.some((booking) => {
+  const isBookedDate = bookings.some((booking: any) => {
     const start = booking.data().check_in.toDate()
     const end = booking.data().check_out.toDate()
 
@@ -41,7 +41,7 @@ function CalendarDay(props) {
 /**
  * @param {{bookings: Array<Booking>}}
  */
-function ProfileCalendarCard({ bookings }) {
+function ProfileCalendarCard({ bookings }: any) {
   // construct all the dates
 
   return (
@@ -69,6 +69,7 @@ function ProfileCalendarCard({ bookings }) {
                 loading={bookings === undefined}
                 slots={{ day: CalendarDay }}
                 slotProps={{
+                  // @ts-ignore
                   day: () => ({
                     bookings,
                   }),

@@ -129,6 +129,7 @@ const Navbar = () => {
                 >
                   Profile
                 </Link>
+                {/* @ts-ignore */}
                 <Typography
                   variant="h6"
                   underline="none"

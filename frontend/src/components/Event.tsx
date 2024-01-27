@@ -10,7 +10,7 @@ import {
 import { useNavigate } from "react-router-dom"
 import { auth } from "../firebase"
 
-const Event = (props) => {
+const Event = (props: any) => {
   const navigate = useNavigate()
 
   const handleSignUp = () => {

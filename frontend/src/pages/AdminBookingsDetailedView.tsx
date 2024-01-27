@@ -59,7 +59,6 @@ const AdminBookingsDetailedView = () => {
                 checkInDate={checkInDate}
                 checkOutDate={checkOutDate}
                 totalDays={totalDays}
-                showDetails={showDetails}
                 setShowDetails={setShowDetails}
               />
             ) : (

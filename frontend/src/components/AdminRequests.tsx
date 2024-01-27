@@ -2,7 +2,7 @@ import { Grid, Typography, Paper } from "@mui/material"
 import RequestBlock from "./RequestBlock"
 import { useState, useEffect } from "react"
 
-const AdminDashboardRequest = ({ setSelectedUser }) => {
+const AdminDashboardRequest = ({ setSelectedUser }: any) => {
   const gridItemStyle = {
     requestBackground: {
       borderRadius: 15, // Change the value as needed
@@ -12,7 +12,7 @@ const AdminDashboardRequest = ({ setSelectedUser }) => {
     },
   }
 
-  const [requests, setRequests] = useState([])
+  const [requests, setRequests] = useState<any[]>([])
 
   useEffect(() => {
     // eventually, we make this actually ask for the requests from firebase
@@ -112,7 +112,7 @@ const AdminDashboardRequest = ({ setSelectedUser }) => {
                 maxHeight: "600px",
               }}
             >
-              {requests.map((request) => (
+              {requests.map((request: any) => (
                 <RequestBlock
                   key={request.booking_id}
                   requestData={request}
