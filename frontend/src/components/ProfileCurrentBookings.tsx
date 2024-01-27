@@ -10,7 +10,7 @@ import {
 import React, { useEffect } from "react"
 import { useState } from "react"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
-import dayjs from "dayjs"
+import dayjs, { Dayjs } from "dayjs"
 import { db } from "../firebase"
 import { collection, addDoc } from "firebase/firestore"
 
@@ -19,7 +19,7 @@ import { collection, addDoc } from "firebase/firestore"
  * @param {{ booking: Booking, onRequestChange: React.MouseEventHandler<HTMLAnchorElement>}}
  * @returns
  */
-function SingularBookingDetails({ booking, onRequestChange, index }) {
+function SingularBookingDetails({ booking, onRequestChange, index }: any) {
   return (
     <Stack key={booking._uid} direction="row" justifyContent="space-between">
       <Typography variant="body1" align="left">
@@ -29,7 +29,7 @@ function SingularBookingDetails({ booking, onRequestChange, index }) {
       </Typography>
       <Button
         variant="contained"
-        color="buttonPrimary"
+        color="primary"
         size="small"
         sx={{
           borderRadius: "100px",
@@ -44,14 +44,15 @@ function SingularBookingDetails({ booking, onRequestChange, index }) {
   )
 }
 
-function BookingRequestModal({ booking, open, handleClose, index }) {
-  const [checkInDate, setCheckInDate] = useState(null)
-  const [checkOutDate, setCheckOutDate] = useState(null)
+function BookingRequestModal({ booking, open, handleClose, index }: any) {
+  const [checkInDate, setCheckInDate] = useState<any | null>(null)
+  const [checkOutDate, setCheckOutDate] = useState<any | null>(null)
   const [newTotalDays, setNewTotalDays] = useState(0)
   const [requestMessage, setRequestMessage] = useState("")
   const bookingRequestCollectionRef = collection(db, "requests")
 
-  const handleChangeStartDate = (startDate) => {
+  const handleChangeStartDate = (startDate: any) => {
+    if (!checkOutDate) return
     if (startDate >= checkOutDate) {
       setCheckOutDate(null)
     }
@@ -59,20 +60,21 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
     setCheckInDate(dayjs(newCheckInDate)) // need to use dayjs because thats the MUI datepicker value type
   }
 
-  const handleChangeEndDate = (endDate) => {
+  const handleChangeEndDate = (endDate: any) => {
     const newCheckOutDate = new Date(getFormattedDateString(endDate))
     setCheckOutDate(dayjs(newCheckOutDate))
   }
 
-  const isEndDateInvalid = (date) => {
-    const endDate = new Date(getFormattedDateString(date))
+  const isEndDateInvalid = (date: any) => {
+    if (!checkInDate) return
+    const endDate = dayjs(new Date(getFormattedDateString(date)))
     if (endDate <= checkInDate) {
       return true
     }
     return false
   }
 
-  const isStartDateInvalid = (date) => {
+  const isStartDateInvalid = (date: any) => {
     const startDate = new Date(getFormattedDateString(date))
     const currDate = new Date()
 
@@ -83,7 +85,7 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
     return false
   }
 
-  const getFormattedDateString = (date) => {
+  const getFormattedDateString = (date: any) => {
     return dayjs(date).format("YYYY-MM-DD")
   }
 
@@ -94,8 +96,11 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
       alert("EMPTY FIELDS")
     } else if (
       newTotalDays !==
+      // @ts-ignore
       Math.ceil(
+        // @ts-ignore
         (new Date(booking.data().check_out.seconds) -
+          // @ts-ignore
           new Date(booking.data().check_in.seconds)) /
           (3600 * 24)
       )
@@ -171,6 +176,7 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
             </Typography>
 
             <Stack direction="row" justifyContent="space-between" spacing={12}>
+              {/* @ts-ignore */}
               <Stack align="left" spacing={2}>
                 <Typography variant="h6" color="#457CC3">
                   Current Booking details
@@ -222,13 +228,16 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
                   </Typography>
                   <Typography variant="body1" color="#787B7D" sx={{}}>
                     {Math.ceil(
+                      // @ts-ignore
                       (new Date(booking.data().check_out.seconds) -
+                        // @ts-ignore
                         new Date(booking.data().check_in.seconds)) /
                         (3600 * 24)
                     )}
                   </Typography>
                 </Stack>
               </Stack>
+              {/* @ts-ignore */}
               <Stack align="left" spacing={2}>
                 <Typography variant="h6" color="#457CC3">
                   Request Details
@@ -266,6 +275,7 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
                   <DatePicker
                     value={checkOutDate}
                     onChange={handleChangeEndDate}
+                    // @ts-ignore
                     shouldDisableDate={isEndDateInvalid}
                     label="New Check-out Date"
                     slotProps={{ textField: { size: "small" } }}
@@ -300,6 +310,7 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
               style={{
                 width: "100%",
                 background: "#EDF8FF",
+                // @ts-ignore
                 "&:hover": {
                   borderColor: "transparent",
                 },
@@ -309,7 +320,7 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
             <Stack justifyContent="center" alignItems="center">
               <Button
                 variant="contained"
-                color="buttonPrimary"
+                color="primary"
                 size="small"
                 sx={{
                   borderRadius: "100px",
@@ -335,23 +346,26 @@ function BookingRequestModal({ booking, open, handleClose, index }) {
  * @param {{bookings: Array<Booking> | undefined}} bookings The current user bookings.
  * @returns
  */
-export default function ProfileCurrentBookings({ bookings }) {
+export default function ProfileCurrentBookings({ bookings }: any) {
   const bookingsLength = bookings ? bookings.length : 0
   const [open, setOpen] = useState([])
 
-  const handleOpen = (pos) => {
+  const handleOpen = (pos: any) => {
     const newOpen = open.slice()
+    // @ts-ignore
     newOpen[pos] = true
     setOpen(newOpen)
   }
 
-  const handleClose = (pos) => {
+  const handleClose = (pos: any) => {
     const newOpen = open.slice()
+    // @ts-ignore
     newOpen[pos] = false
     setOpen(newOpen)
   }
 
   useEffect(() => {
+    // @ts-ignore
     setOpen([...Array(bookingsLength).fill(false)])
   }, [])
 
@@ -380,7 +394,7 @@ export default function ProfileCurrentBookings({ bookings }) {
               "You have no bookings currently."
             ) : (
               <Stack spacing={2}>
-                {bookings.map((booking, index) => (
+                {bookings.map((booking: any, index: number) => (
                   <React.Fragment key={booking.id}>
                     <SingularBookingDetails
                       key={`${booking.id}-details`}

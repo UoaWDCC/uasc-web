@@ -1,6 +1,6 @@
 import { Grid, Typography, Box, Divider, Paper } from "@mui/material"
 
-const RequestBlock = ({ requestData, setSelectedUser }) => {
+const RequestBlock = ({ requestData, setSelectedUser }: any) => {
   const gridItemStyle = {
     gridItem: {
       borderRadius: 15, // Change the value as needed
@@ -28,7 +28,7 @@ const RequestBlock = ({ requestData, setSelectedUser }) => {
           <Typography variant="h5" align="left" sx={{ fontWeight: "bold" }}>
             {requestData.user_id}
           </Typography>
-          <Divider width="200px" />
+          <Divider />
           <Typography
             variant="h6"
             align="left"

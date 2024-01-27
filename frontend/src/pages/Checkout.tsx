@@ -21,7 +21,7 @@ const ProductDisplay = () => (
   </section>
 )
 
-const Message = ({ message }) => (
+const Message = ({ message }: any) => (
   <section>
     <p>{message}</p>
   </section>

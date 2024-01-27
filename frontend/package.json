@@ -15,6 +15,8 @@
     "@mui/x-date-pickers": "^6.10.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^13.5.0",
+    "@types/react-dom": "^18.2.18",
+    "@types/stripe": "^8.0.417",
     "@vitejs/plugin-react": "^4.2.1",
     "dayjs": "^1.11.7",
     "firebase": "^10.3.1",
@@ -28,12 +30,13 @@
     "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.10.0",
     "stripe": "^13.7.0",
+    "typescript": "^5.3.3",
     "vite": "^5.0.11",
     "vite-tsconfig-paths": "^4.2.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "vite",
+    "start": "tsc && vite",
     "start:firebase": "firebase emulators:start",
     "start:stripe": "node src/stripe.js",
     "build": "tsc && vite build",
