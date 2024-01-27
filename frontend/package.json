@@ -64,8 +64,10 @@
   },
   "devDependencies": {
     "dotenv": "^16.3.1",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.2",
     "firebase-tools": "^12.4.7",
     "prettier": "^3.0.0"
   }
