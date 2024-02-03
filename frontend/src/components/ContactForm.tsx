@@ -31,6 +31,7 @@ const ContactForm = () => {
               style={{
                 width: "100%",
                 background: "#EDF8FF",
+                // @ts-ignore
                 "&:hover": {
                   borderColor: "transparent",
                 },
@@ -52,6 +53,7 @@ const ContactForm = () => {
               style={{
                 width: "100%",
                 background: "#EDF8FF",
+                // @ts-ignore
                 "&:hover": {
                   borderColor: "transparent",
                 },
@@ -75,6 +77,7 @@ const ContactForm = () => {
               style={{
                 width: "100%",
                 background: "#EDF8FF",
+                // @ts-ignore
                 "&:hover": {
                   borderColor: "transparent",
                 },
@@ -87,7 +90,7 @@ const ContactForm = () => {
             <Button
               type="submit"
               variant="contained"
-              color="buttonPrimary"
+              color="primary"
               sx={{
                 borderRadius: "100px",
                 paddingX: "24px",

@@ -13,11 +13,11 @@ import {
   Stack,
 } from "@mui/material"
 
-const ProfileBookingHistory = ({ bookings }) => {
+const ProfileBookingHistory = ({ bookings }: any) => {
   // Filter out bookings that have check-out dates in the past.
   const pastBookings =
     bookings?.filter(
-      (booking) => booking.data().check_out.toDate() < new Date()
+      (booking: any) => booking.data().check_out.toDate() < new Date()
     ) || []
 
   return (
@@ -53,7 +53,7 @@ const ProfileBookingHistory = ({ bookings }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {pastBookings.map((booking) => (
+                  {pastBookings.map((booking: any) => (
                     <TableRow key={booking.id}>
                       <TableCell align="right">
                         {new Date(

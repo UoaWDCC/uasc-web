@@ -17,7 +17,7 @@ const AdminDetailedCalendar = ({
   setTotalDays,
   showDetails,
   setShowDetails,
-}) => {
+}: any) => {
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
   const [weekOffset, setWeekOffset] = useState(0)
 
@@ -37,7 +37,7 @@ const AdminDetailedCalendar = ({
     SAT: ["User C", "User D"],
   }
 
-  const handleUserClick = (user, index) => {
+  const handleUserClick = (user: any, index: any) => {
     setSelectedUser(user)
     setShowDetails(true)
 
@@ -99,7 +99,7 @@ const AdminDetailedCalendar = ({
           </IconButton>
         </div>
         <Grid container spacing={1}>
-          {daysOfWeek.map((day, index) => (
+          {daysOfWeek.map((day: any, index: any) => (
             <Grid
               key={index}
               item
@@ -111,7 +111,9 @@ const AdminDetailedCalendar = ({
                 {day}
               </Typography>
               <div className="user-buttons-container">
+                {/* @ts-ignore */}
                 {bookings[day]?.length > 0 ? (
+                  // @ts-ignore
                   bookings[day].map((user, userIndex) => (
                     <Button
                       key={userIndex}
@@ -123,6 +125,7 @@ const AdminDetailedCalendar = ({
                     </Button>
                   ))
                 ) : (
+                  // @ts-ignore
                   <Typography variant="no-booking">No bookings</Typography>
                 )}
               </div>

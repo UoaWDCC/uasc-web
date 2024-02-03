@@ -11,7 +11,7 @@ const LoginForm = () => {
 
   const navigate = useNavigate()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault()
     const auth = getAuth()
     signInWithEmailAndPassword(auth, email, password)
@@ -87,7 +87,9 @@ const LoginForm = () => {
             style={{
               width: "100%",
               background: "#EDF8FF",
+              // @ts-ignore
               "&:hover": {
+                // @ts-ignore
                 borderColor: "transparent",
               },
               borderRadius: "5px",
@@ -115,6 +117,7 @@ const LoginForm = () => {
             style={{
               width: "100%",
               background: "#EDF8FF",
+              // @ts-ignore
               "&:hover": {
                 borderColor: "transparent",
               },
@@ -126,7 +129,7 @@ const LoginForm = () => {
           type="submit"
           disabled={loginSuccessful}
           variant="contained"
-          color="buttonPrimary"
+          color="primary"
           size="small"
           sx={{
             borderRadius: "100px",

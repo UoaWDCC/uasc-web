@@ -1,6 +1,6 @@
-import React from "react"
 import "./App.css"
 import Navbar from "./components/Navbar"
+import React from "react"
 import Home from "./pages/Home"
 import About from "./pages/About"
 import Register from "./pages/Register"
@@ -43,7 +43,6 @@ function App() {
                   <Route
                     path="/admin/bookings"
                     element={<AdminBookingsDetailedView />}
-                    exact
                   />
                 </Routes>
               </div>

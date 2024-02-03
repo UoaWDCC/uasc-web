@@ -17,7 +17,7 @@ const Thanks = () => {
         <Stack spacing={3} sx={{ paddingTop: "124px" }}>
           <Typography
             variant="h4"
-            align="middle"
+            align="center"
             color="#474747"
             sx={{ fontWeight: "bold" }}
           >

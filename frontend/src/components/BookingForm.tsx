@@ -7,12 +7,18 @@ import { getDocs, collection, addDoc } from "firebase/firestore"
 import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const BookingForm = () => {
-  const [selectedCheckInDate, setSelectedCheckInDate] = useState(null)
-  const [selectedCheckOutDate, setSelectedCheckOutDate] = useState(null)
+  const [selectedCheckInDate, setSelectedCheckInDate] = useState<any | null>(
+    null
+  )
+  const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<any | null>(
+    null
+  )
 
-  const [existingBookings, setExistingBookings] = useState([])
-  const [dateAvailabilities, setDateAvailabilities] = useState(new Map())
-  const [dateRange, setDateRange] = useState([])
+  const [existingBookings, setExistingBookings] = useState<any[]>([])
+  const [dateAvailabilities, setDateAvailabilities] = useState<Map<any, any>>(
+    new Map()
+  )
+  const [dateRange, setDateRange] = useState<any[]>([])
 
   const bookingCollectionRef = collection(db, "bookings")
   const maxSpotsAvailablePerDay = 50
@@ -40,7 +46,7 @@ const BookingForm = () => {
 
   const retrieveExistingBookings = async () => {
     const querySnapshot = await getDocs(bookingCollectionRef)
-    let bookings = []
+    let bookings: any[] = []
     querySnapshot.forEach((doc) => {
       bookings.push({
         ...doc.data(),
@@ -69,7 +75,7 @@ const BookingForm = () => {
     setDateAvailabilities(availabilities)
   }
 
-  const isDateBookedOut = (dateToCheck) => {
+  const isDateBookedOut = (dateToCheck: any) => {
     const dateKey = dateToCheck.toDateString()
     const spotsTaken = dateAvailabilities.get(dateKey) || 0
     const spotsLeft = maxSpotsAvailablePerDay - spotsTaken
@@ -80,12 +86,12 @@ const BookingForm = () => {
     return false
   }
 
-  const isStartDateInvalid = (date) => {
+  const isStartDateInvalid = (date: any) => {
     const startDate = new Date(getFormattedDateString(date))
     return isDateBookedOut(startDate)
   }
 
-  const isEndDateInvalid = (date) => {
+  const isEndDateInvalid = (date: any) => {
     const endDate = new Date(getFormattedDateString(date))
     if (endDate <= selectedCheckInDate) {
       return true
@@ -102,7 +108,7 @@ const BookingForm = () => {
     return false
   }
 
-  const handleChangeStartDate = (startDate) => {
+  const handleChangeStartDate = (startDate: any) => {
     if (startDate >= selectedCheckOutDate) {
       setSelectedCheckOutDate(null)
     }
@@ -110,16 +116,16 @@ const BookingForm = () => {
     setSelectedCheckInDate(dayjs(newCheckInDate)) // need to use dayjs because thats the MUI datepicker value type
   }
 
-  const handleChangeEndDate = (endDate) => {
+  const handleChangeEndDate = (endDate: any) => {
     const newCheckOutDate = new Date(getFormattedDateString(endDate))
     setSelectedCheckOutDate(dayjs(newCheckOutDate))
   }
 
-  const getFormattedDateString = (date) => {
+  const getFormattedDateString = (date: any) => {
     return dayjs(date).format("YYYY-MM-DD")
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
 
     if (!selectedCheckOutDate) {
@@ -251,7 +257,7 @@ const BookingForm = () => {
               <Button
                 type="submit"
                 variant="contained"
-                color="buttonPrimary"
+                color="primary"
                 size="small"
                 sx={{
                   borderRadius: "100px",

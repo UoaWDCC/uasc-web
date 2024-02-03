@@ -1,6 +1,7 @@
 import logo from "../assets/updated2023logo.png"
 import ski from "../assets/skiimage.png"
 import { Typography } from "@mui/material"
+import React from "react"
 import image1 from "../assets/instagram.png"
 import image2 from "../assets/facebook.png"
 import pricing from "../assets/pricing.png"
