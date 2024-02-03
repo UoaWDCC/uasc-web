@@ -6,7 +6,7 @@ const AdminBookingDetails = ({
   checkOutDate,
   totalDays,
   setShowDetails,
-}) => {
+}: any) => {
   const styles = {
     outerBackground: {
       borderRadius: 15,
@@ -52,7 +52,7 @@ const AdminBookingDetails = ({
                 >
                   BOOKING DETAILS
                 </Typography>
-                <Divider width="200px" />
+                <Divider />
                 <Typography
                   variant="h6"
                   align="left"

@@ -1,6 +1,6 @@
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth, db } from "../firebase"
-import { doc, getDoc } from "firebase/firestore"
+import { doc, getDoc, DocumentData } from "firebase/firestore"
 import { useEffect, useState } from "react"
 
 /**
@@ -9,10 +9,13 @@ import { useEffect, useState } from "react"
  */
 export function useAuthenticatedUser() {
   const [user] = useAuthState(auth)
-  const [userMetadata, setUserData] = useState(undefined)
+  const [userMetadata, setUserData] = useState<DocumentData | undefined>(
+    undefined
+  )
 
   useEffect(() => {
     const getUserData = async () => {
+      if (!user) return
       const userMetadata = await getDoc(doc(db, "users", user.uid))
       if (userMetadata.exists()) {
         setUserData(userMetadata.data())

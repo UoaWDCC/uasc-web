@@ -14,8 +14,8 @@ const textType = "body1"
 
 function ProfileCard() {
   const [user, userMetadata] = useAuthenticatedUser()
-  const [userData, setUserData] = useState(undefined)
-  const [expanded, setExpanded] = useState(false)
+  const [userData, setUserData] = useState<any | undefined>(undefined)
+  const [expanded, setExpanded] = useState<boolean>(false)
 
   //Expanding the more details on the user page
   const expandDetails = () => {
@@ -24,6 +24,7 @@ function ProfileCard() {
 
   useEffect(() => {
     if (userMetadata) {
+      // @ts-ignore
       setUserData(userMetadata)
     }
   }, [user, userMetadata])
@@ -54,7 +55,7 @@ function ProfileCard() {
               </Stack>
               <Button
                 variant="contained"
-                color="buttonPrimary"
+                color="primary"
                 size="small"
                 sx={{
                   borderRadius: "100px",
@@ -66,6 +67,7 @@ function ProfileCard() {
                 Edit{" "}
               </Button>
             </Stack>
+            {/* @ts-ignore */}
             <Stack align="left" spacing={1}>
               <Stack direction="row">
                 <Typography
@@ -125,15 +127,18 @@ function ProfileCard() {
                   }}
                 >
                   {userMetadata
-                    ? userMetadata.membership === undefined
+                    ? // @ts-ignore
+                      userMetadata.membership === undefined
                       ? "Member"
-                      : userMetadata.membership
+                      : // @ts-ignore
+                        userMetadata.membership
                     : "N/A"}
                 </Typography>
               </Stack>
             </Stack>
             <Stack>
               {expanded ? (
+                // @ts-ignore
                 <Stack spacing={1} align="left">
                   <Stack direction="row">
                     <Typography

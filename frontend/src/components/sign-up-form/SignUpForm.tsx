@@ -5,7 +5,7 @@ import {
   updateProfile,
 } from "firebase/auth"
 import { useNavigate } from "react-router-dom"
-import { db } from "../firebase"
+import { db } from "../../firebase"
 import { setDoc, doc } from "firebase/firestore"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
@@ -16,7 +16,7 @@ import Dialog from "@mui/material/Dialog"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = React.forwardRef(function Alert(props: any, ref: any) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
 
@@ -55,7 +55,7 @@ const SignUpForm = () => {
 
   const [open, setOpen] = useState(false)
 
-  const handleClose = (event, reason) => {
+  const handleClose = (event: any, reason: any) => {
     if (reason === "clickaway") {
       return
     }
@@ -65,20 +65,7 @@ const SignUpForm = () => {
   const auth = getAuth()
   const navigate = useNavigate()
 
-  ;<Dialog
-    open={open}
-    onClose={() => setOpen(false)}
-    aria-labelledby="alert-dialog-title"
-    aria-describedby="alert-dialog-description"
-  >
-    <DialogContent>
-      <DialogContentText id="alert-dialog-description">
-        You've successfully signed up!
-      </DialogContentText>
-    </DialogContent>
-  </Dialog>
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault()
     const {
       firstName,
@@ -149,13 +136,13 @@ const SignUpForm = () => {
         navigate("/") // Replace '/' with the URL of your homepage
       }, 5000)
       console.log("Navigate called")
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating user:", error)
       alert(error.message)
     }
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target
     setFormState((prevState) => ({
       ...prevState,
@@ -378,7 +365,7 @@ const SignUpForm = () => {
         </div>
         <Button
           variant="contained"
-          color="buttonPrimary"
+          color="primary"
           size="small"
           sx={{
             borderRadius: "100px",
@@ -397,6 +384,18 @@ const SignUpForm = () => {
           home page!
         </Alert>
       </Snackbar>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You've successfully signed up!
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
