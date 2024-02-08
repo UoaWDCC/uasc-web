@@ -1,0 +1,37 @@
+name: Deploy DEV
+
+on: [workflow_dispatch]
+
+jobs:
+  DeployClient:
+    runs-on: ubuntu-latest
+    environment: DEV
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Create env file
+        run: echo ${{ secrets.UASC_DEV_FRONTEND_ENVFILE }} | base64 --decode > .env
+
+      - run: yarn
+      - run: CI=false yarn build
+
+      - uses: 'google-github-actions/auth@v0'
+        with:
+          # Credentials stored inside WDCC organisation secrets
+          credentials_json: '${{ secrets.UASC_DEV_GCP_DEPLOYMENT_SA_CREDENTIALS }}'
+
+      - uses: 'google-github-actions/upload-cloud-storage@v0'
+        with:
+          # Build path (path is excluded due to parent: false flag)
+          path: 'web-build'
+          parent: false
+
+          # Bucket to add contents into
+          destination: 'uasc-dev.wdcc.co.nz'
