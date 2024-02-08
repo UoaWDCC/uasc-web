@@ -8,7 +8,7 @@ jobs:
     environment: DEV
     defaults:
       run:
-        working-directory: .
+        working-directory: ./frontend
 
     steps:
       - uses: actions/checkout@v3
