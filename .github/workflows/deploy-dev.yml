@@ -30,7 +30,8 @@ jobs:
       - uses: 'google-github-actions/upload-cloud-storage@v2'
         with:
           # Build path (path is excluded if parent: false flag)
-          path: '../frontend/build'
+          path: 'frontend/build'
+          parent: false
 
           # Bucket to add contents into
           destination: 'uasc-dev.wdcc.co.nz'
