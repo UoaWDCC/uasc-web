@@ -1,0 +1,66 @@
+{
+  "name": "uasc-web",
+  "version": "1.0.0",
+  "description": "Monorepo for the UASC project (by WDCC @ UoA)",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.23",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin": "^1.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "lint-staged": "^15.2.2",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,jsx,ts,tsx,vue}": [
+      "yarn test",
+      "yarn lint",
+      "yarn prettier"
+    ]
+  },
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint",
+    "lint-all": "./node_modules/.bin/eslint .",
+    "prettier": "prettier . --write",
+    "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode",
+    "postinstall": "husky",
+    "lint-and-fix": "./node_modules/.bin/eslint . --fix",
+    "dev-client": "yarn workspace client start",
+    "dev-server": "yarn workspace server start",
+    "storybook": "yarn workspace client storybook",
+    "test": "./node_modules/.bin/jest --passWithNoTests"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "jest": {
+    "projects": [
+      "<rootDir>/client/jest.config.client.ts",
+      "<rootDir>/server/jest.config.server.ts"
+    ]
+  }
+}
