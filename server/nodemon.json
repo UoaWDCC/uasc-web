@@ -1,0 +1,9 @@
+{
+  "exec": "yarn tsoa spec-and-routes && ts-node -r tsconfig-paths/register ./src/index.ts",
+  "watch": ["src"],
+  "ignore": ["src/routes/__generated__/*"],
+  "events": {
+    "crash": "yarn tsoa spec-and-routes && yarn tsoa spec-and-routes && yarn --cwd=\"../..\" workspace client generate-types"
+  },
+  "ext": "ts"
+}
