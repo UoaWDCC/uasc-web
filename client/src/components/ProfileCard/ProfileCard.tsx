@@ -8,7 +8,7 @@ import {
 } from "@mui/material"
 import React, { useEffect, useState } from "react"
 
-import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
+import { useAuthenticatedUser } from "hooks/useAuthenticatedUser"
 
 const textType = "body1"
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { Typography, Stack } from "@mui/material"
-import Requests from "components/AdminRequests"
-import RequestDetails from "components/RequestDetails"
-import AdminBookings from "components/AdminBookings"
+import Requests from "components/AdminRequests/AdminRequests"
+import RequestDetails from "components/RequestDetails/RequestDetails"
+import AdminBookings from "components/AdminBookings/AdminBookings"
 import "./Admin.css"
 
 const Admin = () => {
