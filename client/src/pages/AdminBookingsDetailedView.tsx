@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Container, Paper, Typography } from "@mui/material"
-import DetailedBookingsCalendar from "components/AdminDetailedCalendar"
-import BookingDetails from "components/AdminBookingDetails"
+import DetailedBookingsCalendar from "components/AdminDetailedCalendar/AdminDetailedCalendar"
+import BookingDetails from "components/AdminBookingDetails/AdminBookingDetails"
 import "pages/Admin.css"
 
 const AdminBookingsDetailedView = () => {
