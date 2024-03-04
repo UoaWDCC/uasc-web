@@ -1,5 +1,4 @@
-import React from "react"
-import SignUpForm from "components/sign-up-form/SignUpForm"
+import SignUpForm from "components/SignUpForm/SignUpForm"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import Box from "@mui/material/Box"

@@ -11,7 +11,7 @@ import "pages/Admin.css"
 import { useNavigate } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import { collection, getDocs } from "firebase/firestore"
-import { db } from "../firebase"
+import { db } from "firebase"
 
 const AdminBookings = () => {
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]

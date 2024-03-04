@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react"
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import dayjs from "dayjs"
-import { db } from "../firebase"
+import { db } from "firebase"
 import { collection, addDoc } from "firebase/firestore"
 
 /**

@@ -1,5 +1,5 @@
 import { Grid, Typography, Paper } from "@mui/material"
-import RequestBlock from "./RequestBlock"
+import RequestBlock from "./RequestBlock/RequestBlock"
 import { useState, useEffect } from "react"
 
 const AdminDashboardRequest = ({ setSelectedUser }: any) => {

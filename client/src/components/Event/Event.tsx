@@ -8,7 +8,7 @@ import {
   Button
 } from "@mui/material"
 import { useNavigate } from "react-router-dom"
-import { auth } from "../firebase"
+import { auth } from "firebase"
 
 const Event = (props: any) => {
   const navigate = useNavigate()
