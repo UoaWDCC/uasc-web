@@ -33,5 +33,5 @@ jobs:
           path: "client/build"
           parent: false
 
-          # Bucket to add contents into
+          # Cloud Storage Buckets to add contents into
           destination: "uasc-dev.wdcc.co.nz"
