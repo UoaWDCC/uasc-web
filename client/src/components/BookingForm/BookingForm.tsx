@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react"
 import { Alert, Button, Typography, Stack } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
-import { db } from "../firebase"
+import { db } from "firebase"
 import { getDocs, collection, addDoc } from "firebase/firestore"
-import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
+import { useAuthenticatedUser } from "hooks/useAuthenticatedUser"
 
 const BookingForm = () => {
   const [selectedCheckInDate, setSelectedCheckInDate] = useState<any | null>(
