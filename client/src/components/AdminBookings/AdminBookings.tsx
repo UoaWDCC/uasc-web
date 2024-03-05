@@ -9,7 +9,7 @@ import {
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
 import "pages/Admin.css"
 import { useNavigate } from "react-router-dom"
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "firebase"
 
