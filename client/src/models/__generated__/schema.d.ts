@@ -5,10 +5,8 @@
 
 
 export interface paths {
-  "/users/{userId}": {
-    get: operations["GetUser"];
-  };
   "/users": {
+    get: operations["GetUser"];
     post: operations["CreateUser"];
   };
 }
@@ -17,6 +15,39 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    /**
+     * @description A `Timestamp` represents a point in time independent of any time zone or
+     * calendar, represented as seconds and fractions of seconds at nanosecond
+     * resolution in UTC Epoch time.
+     *
+     * It is encoded using the Proleptic Gregorian Calendar which extends the
+     * Gregorian calendar backwards to year one. It is encoded assuming all minutes
+     * are 60 seconds long, i.e. leap seconds are "smeared" so that no leap second
+     * table is needed for interpretation. Range is from 0001-01-01T00:00:00Z to
+     * 9999-12-31T23:59:59.999999999Z.
+     *
+     * For examples and further specifications, refer to the
+     * {@link https://github.com/google/protobuf/blob/master/src/google/protobuf/timestamp.proto Timestamp definition}.
+     */
+    Timestamp: {
+      /** Format: double */
+      nanoseconds: number;
+      /** Format: double */
+      seconds: number;
+    };
+    UserAdditionalInfo: {
+      date_of_birth: components["schemas"]["Timestamp"];
+      does_freestyle: boolean;
+      does_racing: boolean;
+      does_ski: boolean;
+      emergency_name: string;
+      emergency_phone: string;
+      emergency_relation: string;
+      first_name: string;
+      last_name: string;
+      /** @enum {string} */
+      membership: "admin" | "member";
+    };
   };
   responses: {
   };
@@ -36,19 +67,11 @@ export type external = Record<string, never>;
 export interface operations {
 
   GetUser: {
-    parameters: {
-      query?: {
-        name?: string;
-      };
-      path: {
-        userId: number;
-      };
-    };
     responses: {
       /** @description Ok */
       200: {
         content: {
-          "application/json": number;
+          "application/json": components["schemas"]["UserAdditionalInfo"][];
         };
       };
     };

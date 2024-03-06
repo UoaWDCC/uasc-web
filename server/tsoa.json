@@ -1,12 +1,23 @@
 {
   "entryFile": "src/index.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/controllers/**"],
+  "controllerPathGlobs": ["src/service-layer/controllers/**"],
   "spec": {
     "outputDirectory": "../common/__generated__",
-    "specVersion": 3
+    "specVersion": 3,
+    "securityDefinitions": {
+      "jwt": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "compilerOptions": {
+    "baseUrl": "src"
   },
   "routes": {
-    "routesDir": "src/routes/__generated__"
+    "routesDir": "src/middleware/__generated__",
+    "authenticationModule": "src/business-layer/security/Authentication.ts"
   }
 }

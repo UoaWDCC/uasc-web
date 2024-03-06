@@ -1,5 +1,7 @@
+import { Timestamp } from "firebase/firestore"
+
 export interface UserAdditionalInfo {
-  date_of_birth: Date // Assuming this is a timestamp
+  date_of_birth: Timestamp // Assuming this is a timestamp
   does_freestyle: boolean
   does_racing: boolean
   does_ski: boolean
@@ -36,23 +38,23 @@ export interface Cancellation extends UserRequest {}
 differ (i.e., the amount of days in the booking does not change).
  */
 export interface DateChange extends UserRequest {
-  old_check_in: Date
-  old_check_out: Date
-  new_check_in: Date
-  new_check_out: Date
+  old_check_in: Timestamp
+  old_check_out: Timestamp
+  new_check_in: Timestamp
+  new_check_out: Timestamp
 }
 
 export interface Booking {
   user_id: string // Reference to user ID
-  check_in: Date // Timestamp for check-in
-  check_out: Date // Timestamp for check-out
+  check_in: Timestamp // Timestamp for check-in
+  check_out: Timestamp // Timestamp for check-out
 }
 
 // Interface for booking changes
 export interface BookingChange {
   booking_id: string // Reference to booking ID
-  old_check_in: Date // Old check-in timestamp
-  old_check_out: Date // Old check-out timestamp
-  new_check_in: Date // New check-in timestamp
-  new_check_out: Date // New check-out timestamp
+  old_check_in: Timestamp // Old check-in timestamp
+  old_check_out: Timestamp // Old check-out timestamp
+  new_check_in: Timestamp // New check-in timestamp
+  new_check_out: Timestamp // New check-out timestamp
 }

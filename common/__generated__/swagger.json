@@ -6,8 +6,85 @@
 		"parameters": {},
 		"requestBodies": {},
 		"responses": {},
-		"schemas": {},
-		"securitySchemes": {}
+		"schemas": {
+			"Timestamp": {
+				"properties": {
+					"nanoseconds": {
+						"type": "number",
+						"format": "double"
+					},
+					"seconds": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"nanoseconds",
+					"seconds"
+				],
+				"type": "object",
+				"description": "A `Timestamp` represents a point in time independent of any time zone or\ncalendar, represented as seconds and fractions of seconds at nanosecond\nresolution in UTC Epoch time.\n\nIt is encoded using the Proleptic Gregorian Calendar which extends the\nGregorian calendar backwards to year one. It is encoded assuming all minutes\nare 60 seconds long, i.e. leap seconds are \"smeared\" so that no leap second\ntable is needed for interpretation. Range is from 0001-01-01T00:00:00Z to\n9999-12-31T23:59:59.999999999Z.\n\nFor examples and further specifications, refer to the\n{@link https://github.com/google/protobuf/blob/master/src/google/protobuf/timestamp.proto Timestamp definition}."
+			},
+			"UserAdditionalInfo": {
+				"properties": {
+					"date_of_birth": {
+						"$ref": "#/components/schemas/Timestamp"
+					},
+					"does_freestyle": {
+						"type": "boolean"
+					},
+					"does_racing": {
+						"type": "boolean"
+					},
+					"does_ski": {
+						"type": "boolean"
+					},
+					"emergency_name": {
+						"type": "string"
+					},
+					"emergency_phone": {
+						"type": "string"
+					},
+					"emergency_relation": {
+						"type": "string"
+					},
+					"first_name": {
+						"type": "string"
+					},
+					"last_name": {
+						"type": "string"
+					},
+					"membership": {
+						"type": "string",
+						"enum": [
+							"admin",
+							"member"
+						]
+					}
+				},
+				"required": [
+					"date_of_birth",
+					"does_freestyle",
+					"does_racing",
+					"does_ski",
+					"emergency_name",
+					"emergency_phone",
+					"emergency_relation",
+					"first_name",
+					"last_name",
+					"membership"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
 	},
 	"info": {
 		"title": "server",
@@ -15,7 +92,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/users/{userId}": {
+		"/users": {
 			"get": {
 				"operationId": "GetUser",
 				"responses": {
@@ -24,36 +101,24 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "number",
-									"format": "double"
+									"items": {
+										"$ref": "#/components/schemas/UserAdditionalInfo"
+									},
+									"type": "array"
 								}
 							}
 						}
 					}
 				},
-				"security": [],
-				"parameters": [
+				"security": [
 					{
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					},
-					{
-						"in": "query",
-						"name": "name",
-						"required": false,
-						"schema": {
-							"type": "string"
-						}
+						"jwt": [
+							"user"
+						]
 					}
-				]
-			}
-		},
-		"/users": {
+				],
+				"parameters": []
+			},
 			"post": {
 				"operationId": "CreateUser",
 				"responses": {

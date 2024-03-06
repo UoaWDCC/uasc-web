@@ -34,7 +34,6 @@
   },
   "lint-staged": {
     "*.{js,mjs,cjs,jsx,ts,tsx,vue}": [
-      "yarn test",
       "yarn lint",
       "yarn prettier"
     ]
@@ -49,7 +48,9 @@
     "dev-client": "yarn workspace client start",
     "dev-server": "yarn workspace server start",
     "storybook": "yarn workspace client storybook",
-    "test": "./node_modules/.bin/jest --passWithNoTests"
+    "test-server": "./node_modules/.bin/jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src",
+    "test-client": "./node_modules/.bin/jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/client",
+    "test": "yarn test-client && yarn workspace server test"
   },
   "eslintConfig": {
     "extends": [
