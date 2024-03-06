@@ -5,13 +5,16 @@
     "module": "commonjs",
     "outDir": "./dist",
     "baseUrl": "src",
+    "lib": ["ES2021"],
     "strict": true,
     "esModuleInterop": true,
+    "strictNullChecks": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "types": ["jest"],
     "experimentalDecorators": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "src/business-layer/security/FirebaseAuth.ts"],
+  "exclude": ["node_modules", "dist", "src/middleware/__generated__/routes.ts"]
 }

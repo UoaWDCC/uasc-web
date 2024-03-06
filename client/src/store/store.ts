@@ -5,21 +5,17 @@ import {
   createHook
 } from "react-sweet-state"
 
-type State = { userData: { name: string } }
+type State = { userData: number }
 
 const initialState: State = {
-  userData: { name: "test" }
+  userData: 1000
 }
 
 const actions = {
-  increment:
-    (to: string = "foo"): Action<State> =>
-    ({ setState }) => {
-      setState({
-        userData: {
-          name: to
-        }
-      })
+  loadUsers:
+    (): Action<State> =>
+    async ({ setState }) => {
+      setState({})
     }
 }
 

@@ -1,23 +1,21 @@
-import UserService from "services/UserService"
+import { UserAdditionalInfo } from "data-layer/models/firebase"
+import UserService from "data-layer/services/UserService"
 import {
   Body,
   Controller,
   Get,
-  Path,
   Post,
-  Query,
   Route,
+  Security,
   SuccessResponse
 } from "tsoa"
 
 @Route("users")
 export class UsersController extends Controller {
-  @Get("{userId}")
-  public async getUser(
-    @Path() userId: number,
-    @Query() name?: string
-  ): Promise<number> {
-    return new UserService().testGetter()
+  @Security("jwt", ["user"])
+  @Get()
+  public async getUser(): Promise<UserAdditionalInfo[]> {
+    return new UserService().getUsers()
   }
 
   @SuccessResponse("200", "Created") // Custom success response

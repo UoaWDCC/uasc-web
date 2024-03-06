@@ -69,7 +69,15 @@ We make use of `openapi-typescript` to create types for the frontend (based on `
 
 Testing is handled with jest and tests should be written where possible
 
-To test everything, run `yarn test`. Otherwise find the relative path of the file to test use `yarn test <relative-file-path>`
+- To test everything, run `yarn test`. Otherwise find the relative path of the file to test use `npx jest <file-name>`.
+
+- To test everyting in backend run `yarn workspace server test` (IMPORTANT if you do not have firebase emulator running!)
+
+- To test everyting in frontend run `yarn test-client` (TODO: fix naming haha)
+
+## Emulators
+
+Don't play around with the prod DB during development. Make sure you have firebase cli installed globally with `npm install -g firebase-tools` and run `firebase emulators:start`. Both the server and client should be running using the same config. This is also important when writing integration tests for the backend.
 
 ## ENV File format
 
@@ -85,4 +93,5 @@ VITE_BACKEND_BASE_URL=
 
 ```
 DEV=
+GOOGLE_APPLICATION_CREDENTIALS = .firebase/service-account.json
 ```

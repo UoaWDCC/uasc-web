@@ -1,8 +1,8 @@
-import dotenv from "dotenv"
+import "dotenv/config"
 import express, { Express, Request, Response } from "express"
 import cors from "cors"
 import swaggerUi from "swagger-ui-express"
-import { RegisterRoutes } from "routes/__generated__/routes"
+import { RegisterRoutes } from "middleware/__generated__/routes"
 import helmet from "helmet"
 
 let spec: swaggerUi.JsonObject | undefined
@@ -11,8 +11,6 @@ const importSwaggerJson = async () => {
     spec = await import("../../common/__generated__/swagger.json")
   }
 }
-
-dotenv.config()
 
 const app: Express = express()
 
