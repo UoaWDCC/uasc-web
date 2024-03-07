@@ -37,7 +37,7 @@
     "start": "./node_modules/.bin/concurrently \"yarn nodemon -e ts,js --exec \" \"yarn tsoa spec-and-routes && yarn --cwd=\"../..\" workspace client generate-types\"",
     "tsoa": "./node_modules/.bin/tsoa",
     "nodemon": "../node_modules/.bin/nodemon",
-    "build": "tsc",
+    "build": "tsc -p ./tsconfig.prod.json",
     "serve": "node dist/index.js"
   }
 }

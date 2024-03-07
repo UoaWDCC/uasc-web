@@ -15,7 +15,7 @@ import {
   EMULATOR_FIRESTORE_PORT,
   EMULATOR_HOST,
   EMULATOR_PROJECT_ID
-} from "test-config/TestConfig"
+} from "./EmulatorConfig"
 
 if (process.env.DEV || process.env.JEST_WORKER_ID !== undefined) {
   initializeApp({ projectId: EMULATOR_PROJECT_ID })

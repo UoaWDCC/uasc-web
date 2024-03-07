@@ -15,6 +15,10 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "src/business-layer/security/FirebaseAuth.ts"],
+  "include": [
+    "src/**/*",
+    "src/business-layer/security/FirebaseAuth.ts",
+    "src/data-layer/adapters/EmulatorConfig.ts"
+  ],
   "exclude": ["node_modules", "dist", "src/middleware/__generated__/routes.ts"]
 }
