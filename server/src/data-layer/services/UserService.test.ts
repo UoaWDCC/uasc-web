@@ -1,4 +1,4 @@
-import { additionalInfoMock } from "mocks/UserMocks"
+import { additionalInfoMock } from "test-config/mocks/UserMocks"
 import UserService from "./UserService"
 import { cleanFirestore } from "test-config/TestUtils"
 
