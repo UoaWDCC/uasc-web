@@ -2,7 +2,7 @@ import {
   EMULATOR_FIRESTORE_PORT,
   EMULATOR_HOST,
   EMULATOR_PROJECT_ID
-} from "./TestConfig"
+} from "data-layer/adapters/EmulatorConfig"
 
 export async function cleanFirestore() {
   const response = await fetch(
