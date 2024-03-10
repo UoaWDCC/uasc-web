@@ -8,7 +8,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
-    "firebase": "^10.8.1",
     "firebase-admin": "^12.0.0",
     "helmet": "^7.1.0",
     "supertest": "^6.3.4",
@@ -39,6 +38,7 @@
     "tsoa": "./node_modules/.bin/tsoa",
     "nodemon": "../node_modules/.bin/nodemon",
     "build": "tsc -p ./tsconfig.prod.json && tsc-alias",
-    "serve": "node --es-module-specifier-resolution=node dist/server/src/index.js"
+    "serve": "node --es-module-specifier-resolution=node dist/server/src/index.js",
+    "token": "ts-node ./tooling/login-prod.ts"
   }
 }

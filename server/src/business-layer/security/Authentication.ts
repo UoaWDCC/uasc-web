@@ -1,5 +1,6 @@
 import * as express from "express"
-import auth from "./FirebaseAuth"
+import { auth } from "./Firebase"
+import FireBaseError from "data-layer/utils/FirebaseError"
 
 export function expressAuthentication(
   request: express.Request,
@@ -14,7 +15,7 @@ export function expressAuthentication(
         reject(new Error("No token provided"))
       }
 
-      const token = authHeader.split(" ")[1] // Gets part after Bearer
+      const token = authHeader.split(" ")[2] // Gets part after Bearer
 
       auth
         .verifyIdToken(token)
@@ -22,8 +23,8 @@ export function expressAuthentication(
           const { uid } = decodedToken
           auth.getUser(uid).then((user) => {
             for (const scope of scopes!) {
-              if (!user.customClaims![scope]) {
-                reject(new Error("No scope"))
+              if (!user.customClaims[scope]) {
+                throw new Error("No scope")
               }
             }
             resolve(user)
@@ -31,7 +32,7 @@ export function expressAuthentication(
         })
         .catch((reason) => {
           console.error(reason)
-          reject(new Error("Invalid token"))
+          throw new FireBaseError("Authentication Error", 401, reason)
         })
     })
   }

@@ -112,9 +112,7 @@
 				},
 				"security": [
 					{
-						"jwt": [
-							"user"
-						]
+						"jwt": []
 					}
 				],
 				"parameters": []

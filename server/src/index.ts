@@ -6,6 +6,7 @@ import { RegisterRoutes } from "middleware/__generated__/routes"
 import helmet from "helmet"
 
 let spec: swaggerUi.JsonObject | undefined
+let generatedHtml: string | undefined
 const importSwaggerJson = async () => {
   if (!process.env.DEV) {
     spec = await import("../../common/__generated__/swagger.json")
@@ -28,9 +29,10 @@ app.use("/api-docs", swaggerUi.serve, async (_req: Request, res: Response) => {
   } else {
     // Prod
     if (!spec) {
-      importSwaggerJson()
+      await importSwaggerJson()
+      generatedHtml = swaggerUi.generateHTML(spec)
     }
-    return res.send(swaggerUi.setup(spec))
+    return res.send(generatedHtml)
   }
 })
 app.get("/", (req: Request, res: Response) => {

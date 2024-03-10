@@ -7530,7 +7530,7 @@ firebase-tools@^12.4.7:
     winston-transport "^4.4.0"
     ws "^7.2.3"
 
-firebase@^10.3.1, firebase@^10.8.1:
+firebase@^10.3.1:
   version "10.8.1"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-10.8.1.tgz#d7eee67129a35fcfabda0c125e6b94abb9c420fb"
   integrity sha512-4B2jzhU/aumfKL446MG41/T5+t+9d9urf5XGrjC0HRQUm4Ya/amV48HBchnje69ExaJP5f2WxO9OX3wh9ee4wA==
