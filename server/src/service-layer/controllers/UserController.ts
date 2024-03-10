@@ -1,5 +1,6 @@
 import UserDataService from "data-layer/services/UserDataService"
 import {
+  CreateUserRequestBody,
   EditUsersRequestBody,
   SelfRequestModel
 } from "service-layer/request-models/UserRequests"
@@ -8,11 +9,12 @@ import {
   Body,
   Controller,
   Get,
-  Post,
   Route,
   Security,
   SuccessResponse,
-  Request
+  Request,
+  Patch,
+  Put
 } from "tsoa"
 
 @Route("users")
@@ -37,15 +39,23 @@ export class UsersController extends Controller {
   }
 
   @SuccessResponse("200", "Created")
-  @Security("jwt")
-  @Post()
-  public async createUser(@Body() requestBody: { id: string }): Promise<void> {
-    this.setStatus(200) // set return status 200
+  @Security("jwt", ["admin"])
+  @Put("create")
+  public async createUser(
+    @Body() requestBody: CreateUserRequestBody
+  ): Promise<void> {
+    const { uid, user } = requestBody
+    if (await new UserDataService().userDataExists(uid)) {
+      this.setStatus(409)
+      return
+    }
+    await new UserDataService().createUserData(uid, user)
+    this.setStatus(200)
   }
 
   @SuccessResponse("200", "Edited")
   @Security("jwt", ["admin"])
-  @Post("bulk-edit")
+  @Patch("bulk-edit")
   public async editUsers(
     @Body() requestBody: EditUsersRequestBody
   ): Promise<void> {

@@ -5,6 +5,11 @@ export interface EditUsersRequestBody {
   users: { uid: string; updatedInformation: UserAdditionalInfo }[]
 }
 
+export interface CreateUserRequestBody {
+  uid: string
+  user: UserAdditionalInfo
+}
+
 export interface SelfRequestModel {
   user?: UserRecord
 }
