@@ -38,7 +38,7 @@ const createIdToken = async (uid: string) => {
 
     const data = (await res.json()) as any
     console.log("\nAuthorization Header:")
-    console.log("Bearer " + data.idToken)
+    console.log(data.idToken)
 
     return data.idToken
   } catch (e) {

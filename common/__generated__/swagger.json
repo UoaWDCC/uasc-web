@@ -7,28 +7,31 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"Timestamp": {
+			"FirebaseFirestore.Timestamp": {
+				"description": "A Timestamp represents a point in time independent of any time zone or\ncalendar, represented as seconds and fractions of seconds at nanosecond\nresolution in UTC Epoch time. It is encoded using the Proleptic Gregorian\nCalendar which extends the Gregorian calendar backwards to year one. It is\nencoded assuming all minutes are 60 seconds long, i.e. leap seconds are\n\"smeared\" so that no leap second table is needed for interpretation. Range\nis from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z.",
 				"properties": {
-					"nanoseconds": {
-						"type": "number",
-						"format": "double"
-					},
 					"seconds": {
 						"type": "number",
-						"format": "double"
+						"format": "double",
+						"description": "The number of seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z."
+					},
+					"nanoseconds": {
+						"type": "number",
+						"format": "double",
+						"description": "The non-negative fractions of a second at nanosecond resolution."
 					}
 				},
 				"required": [
-					"nanoseconds",
-					"seconds"
+					"seconds",
+					"nanoseconds"
 				],
 				"type": "object",
-				"description": "A `Timestamp` represents a point in time independent of any time zone or\ncalendar, represented as seconds and fractions of seconds at nanosecond\nresolution in UTC Epoch time.\n\nIt is encoded using the Proleptic Gregorian Calendar which extends the\nGregorian calendar backwards to year one. It is encoded assuming all minutes\nare 60 seconds long, i.e. leap seconds are \"smeared\" so that no leap second\ntable is needed for interpretation. Range is from 0001-01-01T00:00:00Z to\n9999-12-31T23:59:59.999999999Z.\n\nFor examples and further specifications, refer to the\n{@link https://github.com/google/protobuf/blob/master/src/google/protobuf/timestamp.proto Timestamp definition}."
+				"additionalProperties": false
 			},
 			"UserAdditionalInfo": {
 				"properties": {
 					"date_of_birth": {
-						"$ref": "#/components/schemas/Timestamp"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
 					"does_freestyle": {
 						"type": "boolean"
@@ -76,6 +79,55 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"FirebaseProperties": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserResponse": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/UserAdditionalInfo"
+					},
+					{
+						"$ref": "#/components/schemas/FirebaseProperties"
+					}
+				]
+			},
+			"EditUsersRequestBody": {
+				"properties": {
+					"users": {
+						"items": {
+							"properties": {
+								"updatedInformation": {
+									"$ref": "#/components/schemas/UserAdditionalInfo"
+								},
+								"uid": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"updatedInformation",
+								"uid"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"users"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -94,15 +146,15 @@
 	"paths": {
 		"/users": {
 			"get": {
-				"operationId": "GetUser",
+				"operationId": "GetAllUsers",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "Users found",
 						"content": {
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/UserAdditionalInfo"
+										"$ref": "#/components/schemas/UserResponse"
 									},
 									"type": "array"
 								}
@@ -112,7 +164,9 @@
 				},
 				"security": [
 					{
-						"jwt": []
+						"jwt": [
+							"admin"
+						]
 					}
 				],
 				"parameters": []
@@ -124,7 +178,11 @@
 						"description": "Created"
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -140,6 +198,57 @@
 									"id"
 								],
 								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/self": {
+			"get": {
+				"operationId": "GetSelf",
+				"responses": {
+					"200": {
+						"description": "Fetched self data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/users/bulk-edit": {
+			"post": {
+				"operationId": "EditUsers",
+				"responses": {
+					"200": {
+						"description": "Edited"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/EditUsersRequestBody"
 							}
 						}
 					}
