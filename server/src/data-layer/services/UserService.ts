@@ -1,25 +1,15 @@
-import { UsersCollection } from "data-layer/adapters/FirestoreCollections"
+import { db } from "data-layer/adapters/FirestoreCollections"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
-import {
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where
-} from "firebase/firestore"
 
 export default class UserService {
   // Create
   public async addUser(uid: string, additionalInfo: UserAdditionalInfo) {
-    await setDoc(doc(UsersCollection, uid), additionalInfo)
+    await db.users.doc(uid).set(additionalInfo)
   }
 
   // Read
   public async getUsers() {
-    const res = await getDocs(UsersCollection)
+    const res = await db.users.get()
     const users = res.docs.map((user) => {
       return user.data()
     })
@@ -27,18 +17,12 @@ export default class UserService {
   }
 
   public async getUser(uid: string) {
-    const userDoc = await getDoc(doc(UsersCollection, uid))
+    const userDoc = await db.users.doc(uid).get()
     return userDoc.data()
   }
 
   public async getFilteredUsers(filters: Partial<UserAdditionalInfo>) {
-    let q = query(UsersCollection)
-    for (const filter of Object.keys(filters)) {
-      const field = filter as keyof UserAdditionalInfo
-      q = query(q, where(filter, "==", filters[field]))
-    }
-    const filteredUsers = await getDocs(q)
-    return filteredUsers
+    // TODO
   }
 
   // Update
@@ -46,13 +30,11 @@ export default class UserService {
     uid: string,
     updatedFields: Partial<UserAdditionalInfo>
   ) {
-    const userRef = doc(UsersCollection, uid)
-    await updateDoc(userRef, updatedFields)
+    await db.users.doc(uid).set(updatedFields, { merge: true })
   }
 
   // Delete
   public async deleteUser(uid: string) {
-    const userRef = await doc(UsersCollection, uid)
-    await deleteDoc(userRef)
+    await db.users.doc(uid).delete()
   }
 }

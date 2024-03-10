@@ -12,7 +12,7 @@ import {
 
 @Route("users")
 export class UsersController extends Controller {
-  @Security("jwt", ["user"])
+  @Security("jwt")
   @Get()
   public async getUser(): Promise<UserAdditionalInfo[]> {
     return new UserService().getUsers()
