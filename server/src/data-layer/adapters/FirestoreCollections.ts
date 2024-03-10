@@ -8,7 +8,7 @@ const converter = <T>() => ({
   fromFirestore: (doc: any) => doc.data() as T
 })
 
-export const firestore = Object.assign(
+const firestore = Object.assign(
   () => {
     return admin.firestore()
   },
@@ -22,6 +22,8 @@ export const firestore = Object.assign(
   }
 )
 
-export const db = {
+const db = {
   users: firestore.collection<UserAdditionalInfo>("users")
 } as const
+
+export default db
