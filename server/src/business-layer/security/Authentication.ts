@@ -15,24 +15,41 @@ export function expressAuthentication(
         reject(new Error("No token provided"))
       }
 
-      const token = authHeader.split(" ")[2] // Gets part after Bearer
+      const token = authHeader.split(" ")[1] // Gets part after Bearer
 
       auth
         .verifyIdToken(token)
         .then((decodedToken) => {
           const { uid } = decodedToken
-          auth.getUser(uid).then((user) => {
-            for (const scope of scopes!) {
-              if (!user.customClaims[scope]) {
-                throw new Error("No scope")
+          auth
+            .getUser(uid)
+            .then((user) => {
+              for (const scope of scopes!) {
+                if (user.customClaims === undefined) {
+                  throw new FireBaseError(
+                    "Authentication Error",
+                    401,
+                    "No Scope"
+                  )
+                }
+                if (!(scope in user.customClaims)) {
+                  throw new FireBaseError(
+                    "Authentication Error",
+                    401,
+                    "No Scope"
+                  )
+                }
               }
-            }
-            resolve(user)
-          })
+              resolve(user)
+            })
+            .catch((reason) => {
+              console.error(reason)
+              reject(new FireBaseError("Authentication Error", 401, reason))
+            })
         })
         .catch((reason) => {
           console.error(reason)
-          throw new FireBaseError("Authentication Error", 401, reason)
+          reject(new FireBaseError("Authentication Error", 401, reason))
         })
     })
   }
