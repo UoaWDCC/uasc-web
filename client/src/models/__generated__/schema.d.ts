@@ -7,13 +7,15 @@
 export interface paths {
   "/users": {
     get: operations["GetAllUsers"];
-    post: operations["CreateUser"];
   };
   "/users/self": {
     get: operations["GetSelf"];
   };
+  "/users/create": {
+    put: operations["CreateUser"];
+  };
   "/users/bulk-edit": {
-    post: operations["EditUsers"];
+    patch: operations["EditUsers"];
   };
 }
 
@@ -59,6 +61,10 @@ export interface components {
       uid: string;
     };
     UserResponse: components["schemas"]["UserAdditionalInfo"] & components["schemas"]["FirebaseProperties"];
+    CreateUserRequestBody: {
+      uid: string;
+      user: components["schemas"]["UserAdditionalInfo"];
+    };
     EditUsersRequestBody: {
       users: {
           updatedInformation: components["schemas"]["UserAdditionalInfo"];
@@ -93,21 +99,6 @@ export interface operations {
       };
     };
   };
-  CreateUser: {
-    requestBody: {
-      content: {
-        "application/json": {
-          id: string;
-        };
-      };
-    };
-    responses: {
-      /** @description Created */
-      200: {
-        content: never;
-      };
-    };
-  };
   GetSelf: {
     responses: {
       /** @description Fetched self data */
@@ -115,6 +106,19 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["UserResponse"];
         };
+      };
+    };
+  };
+  CreateUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      200: {
+        content: never;
       };
     };
   };

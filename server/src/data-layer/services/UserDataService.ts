@@ -24,7 +24,14 @@ export default class UserDataService {
 
   public async getUserData(uid: string) {
     const userDoc = await FirestoreCollections.users.doc(uid).get()
+    const data = userDoc.data()
+    if (data === undefined) return undefined
     return { ...userDoc.data(), uid }
+  }
+
+  public async userDataExists(uid: string) {
+    const snapshot = await FirestoreCollections.users.doc(uid).get()
+    return snapshot.exists
   }
 
   public async getFilteredUsers(filters: Partial<UserAdditionalInfo>) {

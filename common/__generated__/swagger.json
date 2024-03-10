@@ -102,6 +102,22 @@
 					}
 				]
 			},
+			"CreateUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserAdditionalInfo"
+					}
+				},
+				"required": [
+					"uid",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"EditUsersRequestBody": {
 				"properties": {
 					"users": {
@@ -170,38 +186,6 @@
 					}
 				],
 				"parameters": []
-			},
-			"post": {
-				"operationId": "CreateUser",
-				"responses": {
-					"200": {
-						"description": "Created"
-					}
-				},
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"properties": {
-									"id": {
-										"type": "string"
-									}
-								},
-								"required": [
-									"id"
-								],
-								"type": "object"
-							}
-						}
-					}
-				}
 			}
 		},
 		"/users/self": {
@@ -227,8 +211,36 @@
 				"parameters": []
 			}
 		},
+		"/users/create": {
+			"put": {
+				"operationId": "CreateUser",
+				"responses": {
+					"200": {
+						"description": "Created"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/users/bulk-edit": {
-			"post": {
+			"patch": {
 				"operationId": "EditUsers",
 				"responses": {
 					"200": {
