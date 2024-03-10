@@ -1,15 +1,15 @@
-import { db } from "data-layer/adapters/FirestoreCollections"
+import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 
 export default class UserService {
   // Create
   public async addUser(uid: string, additionalInfo: UserAdditionalInfo) {
-    await db.users.doc(uid).set(additionalInfo)
+    await FirestoreCollections.users.doc(uid).set(additionalInfo)
   }
 
   // Read
   public async getUsers() {
-    const res = await db.users.get()
+    const res = await FirestoreCollections.users.get()
     const users = res.docs.map((user) => {
       return user.data()
     })
@@ -17,7 +17,7 @@ export default class UserService {
   }
 
   public async getUser(uid: string) {
-    const userDoc = await db.users.doc(uid).get()
+    const userDoc = await FirestoreCollections.users.doc(uid).get()
     return userDoc.data()
   }
 
@@ -30,11 +30,13 @@ export default class UserService {
     uid: string,
     updatedFields: Partial<UserAdditionalInfo>
   ) {
-    await db.users.doc(uid).set(updatedFields, { merge: true })
+    await FirestoreCollections.users
+      .doc(uid)
+      .set(updatedFields, { merge: true })
   }
 
   // Delete
   public async deleteUser(uid: string) {
-    await db.users.doc(uid).delete()
+    await FirestoreCollections.users.doc(uid).delete()
   }
 }
