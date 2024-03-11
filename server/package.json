@@ -38,7 +38,7 @@
     "tsoa": "./node_modules/.bin/tsoa",
     "nodemon": "../node_modules/.bin/nodemon",
     "build": "tsc -p ./tsconfig.prod.json && tsc-alias",
-    "serve": "node --es-module-specifier-resolution=node dist/server/src/index.js",
+    "serve": "node --es-module-specifier-resolution=node dist/index.js",
     "token": "ts-node ./tooling/login-prod.ts"
   }
 }
