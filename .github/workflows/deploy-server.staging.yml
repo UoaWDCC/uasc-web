@@ -26,3 +26,4 @@ jobs:
       - run: flyctl deploy --remote-only --config fly.staging.toml
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_STAGING_API_TOKEN }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.STAGING_SERVER_SERVICE_ACCOUNT }}

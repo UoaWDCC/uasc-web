@@ -34,8 +34,15 @@ export class UsersController extends Controller {
   public async getSelf(
     @Request() request: SelfRequestModel
   ): Promise<UserResponse> {
-    this.setStatus(200)
-    return await new UserDataService().getUserData(request.user.uid)
+    const data = await new UserDataService().getUserData(request.user.uid)
+
+    if (data !== undefined) {
+      this.setStatus(200)
+    } else {
+      this.setStatus(404)
+    }
+
+    return data
   }
 
   @SuccessResponse("200", "Created")
