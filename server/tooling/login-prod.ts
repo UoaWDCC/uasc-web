@@ -14,7 +14,9 @@ dotenv.config()
  */
 
 admin.initializeApp({
-  credential: admin.credential.applicationDefault()
+  credential: admin.credential.cert(
+    JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
+  )
 })
 
 const createIdToken = async (uid: string) => {
