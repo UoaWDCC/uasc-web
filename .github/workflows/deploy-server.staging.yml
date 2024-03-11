@@ -23,6 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --config fly.staging.toml && flyctl secrets set GOOGLE_SERVICE_ACCOUNT_JSON="${{ secrets.STAGING_SERVER_SERVICE_ACCOUNT }}"
+      - run: flyctl deploy --remote-only --config fly.staging.toml --env GOOGLE_SERVICE_ACCOUNT_JSON="${{ secrets.STAGING_SERVER_SERVICE_ACCOUNT }}"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_STAGING_API_TOKEN }}
