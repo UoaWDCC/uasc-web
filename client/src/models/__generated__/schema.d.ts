@@ -6,8 +6,16 @@
 
 export interface paths {
   "/users": {
-    get: operations["GetUser"];
-    post: operations["CreateUser"];
+    get: operations["GetAllUsers"];
+  };
+  "/users/self": {
+    get: operations["GetSelf"];
+  };
+  "/users/create": {
+    put: operations["CreateUser"];
+  };
+  "/users/bulk-edit": {
+    patch: operations["EditUsers"];
   };
 }
 
@@ -16,27 +24,28 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     /**
-     * @description A `Timestamp` represents a point in time independent of any time zone or
+     * @description A Timestamp represents a point in time independent of any time zone or
      * calendar, represented as seconds and fractions of seconds at nanosecond
-     * resolution in UTC Epoch time.
-     *
-     * It is encoded using the Proleptic Gregorian Calendar which extends the
-     * Gregorian calendar backwards to year one. It is encoded assuming all minutes
-     * are 60 seconds long, i.e. leap seconds are "smeared" so that no leap second
-     * table is needed for interpretation. Range is from 0001-01-01T00:00:00Z to
-     * 9999-12-31T23:59:59.999999999Z.
-     *
-     * For examples and further specifications, refer to the
-     * {@link https://github.com/google/protobuf/blob/master/src/google/protobuf/timestamp.proto Timestamp definition}.
+     * resolution in UTC Epoch time. It is encoded using the Proleptic Gregorian
+     * Calendar which extends the Gregorian calendar backwards to year one. It is
+     * encoded assuming all minutes are 60 seconds long, i.e. leap seconds are
+     * "smeared" so that no leap second table is needed for interpretation. Range
+     * is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z.
      */
-    Timestamp: {
-      /** Format: double */
-      nanoseconds: number;
-      /** Format: double */
+    "FirebaseFirestore.Timestamp": {
+      /**
+       * Format: double
+       * @description The number of seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z.
+       */
       seconds: number;
+      /**
+       * Format: double
+       * @description The non-negative fractions of a second at nanosecond resolution.
+       */
+      nanoseconds: number;
     };
     UserAdditionalInfo: {
-      date_of_birth: components["schemas"]["Timestamp"];
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_freestyle: boolean;
       does_racing: boolean;
       does_ski: boolean;
@@ -47,6 +56,20 @@ export interface components {
       last_name: string;
       /** @enum {string} */
       membership: "admin" | "member";
+    };
+    FirebaseProperties: {
+      uid: string;
+    };
+    UserResponse: components["schemas"]["UserAdditionalInfo"] & components["schemas"]["FirebaseProperties"];
+    CreateUserRequestBody: {
+      uid: string;
+      user: components["schemas"]["UserAdditionalInfo"];
+    };
+    EditUsersRequestBody: {
+      users: {
+          updatedInformation: components["schemas"]["UserAdditionalInfo"];
+          uid: string;
+        }[];
     };
   };
   responses: {
@@ -66,12 +89,22 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  GetUser: {
+  GetAllUsers: {
     responses: {
-      /** @description Ok */
+      /** @description Users found */
       200: {
         content: {
-          "application/json": components["schemas"]["UserAdditionalInfo"][];
+          "application/json": components["schemas"]["UserResponse"][];
+        };
+      };
+    };
+  };
+  GetSelf: {
+    responses: {
+      /** @description Fetched self data */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserResponse"];
         };
       };
     };
@@ -79,13 +112,24 @@ export interface operations {
   CreateUser: {
     requestBody: {
       content: {
-        "application/json": {
-          id: string;
-        };
+        "application/json": components["schemas"]["CreateUserRequestBody"];
       };
     };
     responses: {
       /** @description Created */
+      200: {
+        content: never;
+      };
+    };
+  };
+  EditUsers: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditUsersRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Edited */
       200: {
         content: never;
       };

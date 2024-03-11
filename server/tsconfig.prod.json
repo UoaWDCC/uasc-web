@@ -4,5 +4,5 @@
   },
   "extends": "./tsconfig.json",
   "include": ["src/middleware/__generated__/routes.ts"],
-  "exclude": ["**/*.test.ts", "**/*.mock.ts", "src/test-config"]
+  "exclude": ["**/*.test.ts", "**/*.mock.ts", "src/test-config", "tooling/**/*"]
 }

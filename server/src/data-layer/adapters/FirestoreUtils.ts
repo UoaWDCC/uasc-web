@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore"
+import { Timestamp } from "firebase-admin/firestore"
 
 export const firestoreTimestampToDate = (firestoreDate: Timestamp) => {
   return new Date(firestoreDate.seconds * 1000) // date takes ms

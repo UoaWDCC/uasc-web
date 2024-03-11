@@ -1,5 +1,6 @@
 import * as express from "express"
-import auth from "./FirebaseAuth"
+import { auth } from "./Firebase"
+import FireBaseError from "data-layer/utils/FirebaseError"
 
 export function expressAuthentication(
   request: express.Request,
@@ -20,18 +21,35 @@ export function expressAuthentication(
         .verifyIdToken(token)
         .then((decodedToken) => {
           const { uid } = decodedToken
-          auth.getUser(uid).then((user) => {
-            for (const scope of scopes!) {
-              if (!user.customClaims![scope]) {
-                reject(new Error("No scope"))
+          auth
+            .getUser(uid)
+            .then((user) => {
+              for (const scope of scopes!) {
+                if (user.customClaims === undefined) {
+                  throw new FireBaseError(
+                    "Authentication Error",
+                    401,
+                    "No Scope"
+                  )
+                }
+                if (!(scope in user.customClaims)) {
+                  throw new FireBaseError(
+                    "Authentication Error",
+                    401,
+                    "No Scope"
+                  )
+                }
               }
-            }
-            resolve(user)
-          })
+              resolve(user)
+            })
+            .catch((reason) => {
+              console.error(reason)
+              reject(new FireBaseError("Authentication Error", 401, reason))
+            })
         })
         .catch((reason) => {
           console.error(reason)
-          reject(new Error("Invalid token"))
+          reject(new FireBaseError("Authentication Error", 401, reason))
         })
     })
   }

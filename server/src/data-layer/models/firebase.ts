@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore"
+import { Timestamp } from "firebase-admin/firestore"
 
 export interface UserAdditionalInfo {
   date_of_birth: Timestamp // Assuming this is a timestamp
@@ -25,12 +25,13 @@ export interface UserRequest {
   user_id: string // Reference to user ID (e.g., /users/lVsOjAp06AfD6atT8bnrVEpcdcg2)
   booking_id: string // Reference to booking ID (e.g., /bookings/8mYj7rWOMH6hGy4FzMed)
   query: string
-  query_type: "cancellation" | "dateChange" // Possible query types
   status: "unresolved" | "resolved" // Status of the query
   creation_time: string // Timestamp (e.g., "1970-01-01T00:00:00Z")
 }
 
-export interface Cancellation extends UserRequest {}
+export interface Cancellation extends UserRequest {
+  query_type: "cancellation"
+}
 
 /**
  * @warning Implementors should ensure that the range between
@@ -42,6 +43,7 @@ export interface DateChange extends UserRequest {
   old_check_out: Timestamp
   new_check_in: Timestamp
   new_check_out: Timestamp
+  query_type: "dateChange" // Possible query types
 }
 
 export interface Booking {
