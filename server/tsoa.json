@@ -3,7 +3,7 @@
   "noImplicitAdditionalProperties": "throw-on-extras",
   "controllerPathGlobs": ["src/service-layer/controllers/**"],
   "spec": {
-    "outputDirectory": "../common/__generated__",
+    "outputDirectory": "src/middleware/__generated__",
     "specVersion": 3,
     "securityDefinitions": {
       "jwt": {

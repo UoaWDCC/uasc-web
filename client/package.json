@@ -45,7 +45,7 @@
     "eslint": "eslint src/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "generate-types": "./node_modules/.bin/openapi-typescript ../common/__generated__/swagger.json -o ./src/models/__generated__/schema.d.ts "
+    "generate-types": "./node_modules/.bin/openapi-typescript ../server/src/middleware/__generated__/swagger.json -o ./src/models/__generated__/schema.d.ts "
   },
   "browserslist": {
     "production": [

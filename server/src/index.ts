@@ -9,7 +9,7 @@ let spec: swaggerUi.JsonObject | undefined
 let generatedHtml: string | undefined
 const importSwaggerJson = async () => {
   if (!process.env.DEV) {
-    spec = await import("../../common/__generated__/swagger.json")
+    spec = await import("middleware/__generated__/swagger.json")
   }
 }
 
@@ -23,7 +23,7 @@ app.use("/api-docs", swaggerUi.serve, async (_req: Request, res: Response) => {
   if (process.env.DEV) {
     return res.send(
       swaggerUi.generateHTML(
-        await import("../../common/__generated__/swagger.json")
+        await import("middleware/__generated__/swagger.json")
       )
     )
   } else {
