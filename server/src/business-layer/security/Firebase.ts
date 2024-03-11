@@ -5,9 +5,11 @@ import {
 import * as _admin from "firebase-admin"
 
 const keysEnvVar = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
-if (!keysEnvVar) {
+
+if (!keysEnvVar && process.env.JEST_WORKER_ID !== undefined) {
   throw new Error("The $CREDS environment variable was not found!")
 }
+
 const keys = JSON.parse(keysEnvVar)
 
 if (process.env.DEV || process.env.JEST_WORKER_ID !== undefined) {
