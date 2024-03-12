@@ -1,16 +1,10 @@
-import fetchClient from "./FetchClient"
+import fetchClient from "./OpenApiFetchClient"
 
 const UserService = {
   getUsers: async function () {
-    const res = await fetchClient.GET("/users/{userId}", {
-      params: {
-        path: {
-          userId: 1232
-        }
-      }
-    })
-    return res.data
+    const { data } = await fetchClient.GET("/users", {})
+    return data
   }
-}
+} as const
 
 export default UserService

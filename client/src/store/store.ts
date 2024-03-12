@@ -5,18 +5,16 @@ import {
   createHook
 } from "react-sweet-state"
 
-type State = { userData: number }
+type State = { current: number }
 
 const initialState: State = {
-  userData: 1000
+  current: 1000
 }
 
 const actions = {
-  loadUsers:
+  loadInfo:
     (): Action<State> =>
-    async ({ setState }) => {
-      setState({})
-    }
+    async ({ setState }) => {}
 }
 
 type Actions = typeof actions

@@ -16,40 +16,44 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { ThemeProvider } from "@mui/material"
 import { LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import queryClient from "services/QueryClient"
 import theme from "theme"
+import { QueryClientProvider } from "@tanstack/react-query"
 
 function App() {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div style={{ backgroundColor: "f4f4f4", height: "100vh" }}>
-        <ThemeProvider theme={theme}>
-          <Router>
-            <div className="App" style={{ height: "100%" }}>
-              <Navbar />
-              <div className="content" style={{ height: "100%" }}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/events" element={<Events />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/booking" element={<Booking />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/admin" element={<Admin />} />
-                  <Route path="/thanks" element={<Thanks />} />
-                  <Route
-                    path="/admin/bookings"
-                    element={<AdminBookingsDetailedView />}
-                  />
-                </Routes>
+    <QueryClientProvider client={queryClient}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <div style={{ backgroundColor: "f4f4f4", height: "100vh" }}>
+          <ThemeProvider theme={theme}>
+            <Router>
+              <div className="App" style={{ height: "100%" }}>
+                <Navbar />
+                <div className="content" style={{ height: "100%" }}>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/events" element={<Events />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/booking" element={<Booking />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/thanks" element={<Thanks />} />
+                    <Route
+                      path="/admin/bookings"
+                      element={<AdminBookingsDetailedView />}
+                    />
+                  </Routes>
+                </div>
               </div>
-            </div>
-          </Router>
-        </ThemeProvider>
-      </div>
-    </LocalizationProvider>
+            </Router>
+          </ThemeProvider>
+        </div>
+      </LocalizationProvider>
+    </QueryClientProvider>
   )
 }
 
