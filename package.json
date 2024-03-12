@@ -8,6 +8,7 @@
     "server"
   ],
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.23",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
