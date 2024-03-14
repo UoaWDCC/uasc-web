@@ -1,25 +1,17 @@
 // Example copied off https://storybook.js.org/docs/get-started/setup
 import type { Meta, StoryObj } from "@storybook/react"
-import { BrowserRouter } from "react-router-dom"
 
-import Navbar from "./Navbar"
+import SignUpForm from "./SignUpForm"
 
 // 👇 This default export determines where your story goes in the story list
-const meta: Meta<typeof Navbar> = {
-  component: Navbar
+const meta: Meta<typeof SignUpForm> = {
+  component: SignUpForm
 }
 
 export default meta
-type Story = StoryObj<typeof Navbar>
+type Story = StoryObj<typeof SignUpForm>
 
 export const FirstStory: Story = {
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
-    )
-  ],
   args: {
     // 👇 The args you need here will depend on your component
   }
