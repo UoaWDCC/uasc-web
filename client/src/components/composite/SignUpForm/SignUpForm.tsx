@@ -5,7 +5,7 @@ import {
   updateProfile
 } from "firebase/auth"
 import { useNavigate } from "react-router-dom"
-import { db } from "../../firebase"
+import { db } from "../../../firebase"
 import { setDoc, doc } from "firebase/firestore"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"

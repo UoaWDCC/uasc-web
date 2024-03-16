@@ -11,10 +11,10 @@ import {
 } from "firebase/firestore"
 import { Stack, Typography } from "@mui/material"
 import "../styles/Profile.css"
-import ProfileCard from "components/ProfileCard/ProfileCard"
-import ProfileCalendarCard from "components/ProfileCalendarCard/ProfileCalendarCard"
-import ProfileCurrentBookings from "components/ProfileCurrentBookings/ProfileCurrentBookings"
-import ProfileBookingHistory from "components/ProfileBookingHistory/ProfileBookingHistory"
+import ProfileCard from "components/composite/ProfileCard/ProfileCard"
+import ProfileCalendarCard from "components/composite/ProfileCalendarCard/ProfileCalendarCard"
+import ProfileCurrentBookings from "components/composite/ProfileCurrentBookings/ProfileCurrentBookings"
+import ProfileBookingHistory from "components/composite/ProfileBookingHistory/ProfileBookingHistory"
 import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 /**

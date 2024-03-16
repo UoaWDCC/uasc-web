@@ -1,5 +1,5 @@
 import React from "react"
-import LoginForm from "components/LoginForm/LoginForm"
+import LoginForm from "components/composite/LoginForm/LoginForm"
 import { Typography, Stack, Container, Link } from "@mui/material"
 
 const Login = () => {

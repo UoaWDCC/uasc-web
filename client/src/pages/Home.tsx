@@ -15,13 +15,7 @@ const Home = () => {
   return (
     <div className="split-container">
       <div className="top-left-section">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: "80px"
-          }}
-        >
+        <div className="bg-black">
           <img src={ski} alt="ski" style={{ width: "35%", height: "160px" }} />
         </div>
         <div

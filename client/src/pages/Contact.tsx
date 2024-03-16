@@ -1,5 +1,5 @@
 import React from "react"
-import ContactForm from "components/ContactForm/ContactForm"
+import ContactForm from "components/composite/ContactForm/ContactForm"
 import { Typography, Stack, Container } from "@mui/material"
 
 const Contact = () => {

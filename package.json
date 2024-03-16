@@ -43,7 +43,7 @@
     "lint": "./node_modules/.bin/eslint",
     "lint-all": "./node_modules/.bin/eslint .",
     "prettier": "prettier . --write",
-    "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode",
+    "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
     "postinstall": "husky",
     "lint-and-fix": "./node_modules/.bin/eslint . --fix",
     "dev-client": "yarn workspace client start",
