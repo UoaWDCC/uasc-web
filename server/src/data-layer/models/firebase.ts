@@ -11,6 +11,12 @@ export interface UserAdditionalInfo {
   first_name: string
   last_name: string
   membership: "admin" | "member"
+  dietary_requirements: string
+  faculty: string | undefined
+  university: string | undefined
+  student_id: string | undefined
+  returning: boolean
+  university_year: string | undefined
 }
 
 export interface Demographic {
