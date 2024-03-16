@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { Typography, Stack, Link, Box, AppBar } from "@mui/material"
-import { auth } from "../../firebase"
+import { auth } from "../../../firebase"
 
 const Navbar = () => {
   const homeLocation = "/"

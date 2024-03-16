@@ -1,4 +1,4 @@
-# Components
+# Generic Components
 
 Components are the basic building blocks of react and we should build them up block by block.
 

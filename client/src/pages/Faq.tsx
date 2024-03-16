@@ -1,5 +1,5 @@
 import "./FaqApp.css"
-// import Header from "./components/Header";
+// import Header from "./components/composite/Header";
 import Container from "@mui/material/Container"
 import {
   Accordion,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material"
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material/"
 import Grid from "@mui/material/Grid"
-// import Navbar from "./components/Navbar";
+// import Navbar from "./components/composite/Navbar";
 // import {
 //   ThemeProvider,
 //   createTheme,

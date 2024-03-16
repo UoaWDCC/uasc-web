@@ -1,5 +1,5 @@
 import "App.css"
-import Navbar from "components/Navbar/Navbar"
+import Navbar from "components/composite/Navbar/Navbar"
 import Home from "pages/Home"
 import About from "pages/About"
 import Register from "pages/Register"
@@ -24,10 +24,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div style={{ backgroundColor: "f4f4f4", height: "100vh" }}>
+        <div className="h-screen">
           <ThemeProvider theme={theme}>
             <Router>
-              <div className="App" style={{ height: "100%" }}>
+              <div className="h-full">
                 <Navbar />
                 <div className="content" style={{ height: "100%" }}>
                   <Routes>

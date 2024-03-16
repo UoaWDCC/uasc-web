@@ -1,5 +1,5 @@
 import React from "react"
-import Event from "components/Event/Event"
+import Event from "components/composite/Event/Event"
 
 const Events = () => {
   // dummy state
