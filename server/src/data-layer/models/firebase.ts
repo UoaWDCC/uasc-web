@@ -11,7 +11,7 @@ export interface UserAdditionalInfo {
   first_name: string
   last_name: string
   membership: "admin" | "member"
-  dietary_requirements: string
+  dietary_requirements: string | undefined
   faculty: string | undefined
   university: string | undefined
   student_id: string | undefined
