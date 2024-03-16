@@ -19,6 +19,18 @@ export interface UserAdditionalInfo {
   university_year: string | undefined
 }
 
+export interface BookingSlot {
+  product_id: string
+  active: boolean
+  display_price: number
+  name: string
+  description: string
+  start_date: Timestamp
+  end_date: Timestamp
+  max_bookings: number
+  remaining_spots: number
+}
+
 export interface Demographic {
   faculty: string
   gender: string
@@ -54,8 +66,7 @@ export interface DateChange extends UserRequest {
 
 export interface Booking {
   user_id: string // Reference to user ID
-  check_in: Timestamp // Timestamp for check-in
-  check_out: Timestamp // Timestamp for check-out
+  booking_slot_id: string // Reference
 }
 
 // Interface for booking changes
