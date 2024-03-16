@@ -11,5 +11,11 @@ export const additionalInfoMock: UserAdditionalInfo = {
   emergency_relation: "relation",
   first_name: "first",
   last_name: "second",
-  membership: "member"
+  membership: "member",
+  dietary_requirements: "nothing",
+  faculty: "engineering",
+  university: "uoa",
+  student_id: "11299211",
+  returning: true,
+  university_year: "2nd"
 }
