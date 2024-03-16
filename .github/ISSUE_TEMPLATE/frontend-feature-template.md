@@ -3,8 +3,7 @@ name: Frontend feature template
 about: Features relating to the frontend
 title: "[FRONTEND]"
 labels: frontend
-assignees: ''
-
+assignees: ""
 ---
 
 **Is your feature request related to a problem? Please describe.**
@@ -20,8 +19,10 @@ A clear and concise description of any alternative solutions or features you've 
 Add any other context or screenshots about the feature request here.
 
 **BEFORE MERGING**
+
 - [ ] Storybooks created where possible
+- [ ] Tested with [nock](https://tanstack.com/query/v3/docs/framework/react/guides/testing) if data fetching
 - [ ] Tests written for critical interactions
 - [ ] PR Reviewed (For non-trivial changes)
-- [ ] Changes tested after rebasing on master or merging in master (*hint*: `git fetch origin master:master`, then `git rebase master` or `git merge master`)
+- [ ] Changes tested after rebasing on master or merging in master (_hint_: `git fetch origin master:master`, then `git rebase master` or `git merge master`)
 - [ ] All required PR checks passing
