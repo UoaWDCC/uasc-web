@@ -2,7 +2,7 @@
 name: Backend feature template
 about: Features relating to the backend
 title: "[BACKEND]"
-labels: backend
+labels: backend, frontend
 assignees: ''
 
 ---
