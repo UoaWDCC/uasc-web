@@ -5,7 +5,7 @@ name: Deploy client to Firebase Hosting on merge
 "on":
   push:
     branches:
-      - main
+      - master
 env:
   VITE_FIREBASE_API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
   VITE_ENV: production
