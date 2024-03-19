@@ -1,17 +1,15 @@
 // setup firebase
-import { initializeApp } from "@firebase/app"
+import { initializeApp, type FirebaseOptions } from "@firebase/app"
 import { getAuth, connectAuthEmulator } from "@firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore"
 
-const firebaseApiKey = import.meta.env.VITE_FIREBASE_API_KEY
-
-const firebaseConfig = {
-  apiKey: firebaseApiKey,
-  authDomain: "uasc-ceebc.firebaseapp.com",
-  projectId: "uasc-ceebc",
-  storageBucket: "uasc-ceebc.appspot.com",
-  messagingSenderId: "270675768091",
-  appId: "1:270675768091:web:ea81f130925433bf5219be"
+const firebaseConfig: FirebaseOptions = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 }
 
 const app = initializeApp(firebaseConfig)
