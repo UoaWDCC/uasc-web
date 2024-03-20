@@ -56,6 +56,12 @@ export interface components {
       last_name: string;
       /** @enum {string} */
       membership: "admin" | "member";
+      dietary_requirements?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning: boolean;
+      university_year?: string;
     };
     FirebaseProperties: {
       uid: string;

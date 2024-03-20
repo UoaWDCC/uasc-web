@@ -63,6 +63,24 @@
 							"admin",
 							"member"
 						]
+					},
+					"dietary_requirements": {
+						"type": "string"
+					},
+					"faculty": {
+						"type": "string"
+					},
+					"university": {
+						"type": "string"
+					},
+					"student_id": {
+						"type": "string"
+					},
+					"returning": {
+						"type": "boolean"
+					},
+					"university_year": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -75,7 +93,8 @@
 					"emergency_relation",
 					"first_name",
 					"last_name",
-					"membership"
+					"membership",
+					"returning"
 				],
 				"type": "object",
 				"additionalProperties": false

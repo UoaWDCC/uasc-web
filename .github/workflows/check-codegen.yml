@@ -1,0 +1,54 @@
+name: Code Generation Check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  Codegen-Check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies 
+        run: sudo yarn
+
+      - name: Generate server code
+        run: yarn workspace server tsoa spec-and-routes
+
+      - name: Write git diff
+        run: |
+          if git diff --quiet; then
+            echo "SERVER_DIFF=0" >> $GITHUB_ENV
+          else
+            echo "SERVER_DIFF=1" >> $GITHUB_ENV
+          fi
+
+      - name: Check for differences in server code
+        if: ${{ env.SERVER_DIFF != '0'}}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Your code generation for the server is not up to date. Run yarn workspace server tsoa spec-and-routes')
+
+      - name: Generate client code
+        run: yarn workspace client generate-types
+
+      - name: Write git diff
+        run: |
+          if git diff --quiet; then
+            echo "CLIENT_DIFF=0" >> $GITHUB_ENV
+          else
+            echo "CLIENT_DIFF=1" >> $GITHUB_ENV
+          fi
+
+      - name: Check for differences in client code
+        if: ${{ env.CLIENT_DIFF != '0'}}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Your code generation for the client is not up to date. Run yarn workspace client generate-types')
