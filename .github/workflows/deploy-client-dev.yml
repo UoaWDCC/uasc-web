@@ -16,6 +16,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Create env file
         run: echo ${{ secrets.UASC_DEV_FRONTEND_ENVFILE }} | base64 --decode > .env
 

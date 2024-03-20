@@ -7,6 +7,7 @@
     "client",
     "server"
   ],
+  "packageManager": "yarn@4.1.1+sha256.f3cc0eda8e5560e529c7147565b30faa43b4e472d90e8634d7134a37c7f59781",
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/jest": "^29.5.12",
@@ -40,18 +41,18 @@
     ]
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint",
-    "lint-all": "./node_modules/.bin/eslint .",
+    "lint": "eslint",
+    "lint-all": "eslint .",
     "prettier": "prettier . --write",
     "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
     "postinstall": "husky",
-    "lint-and-fix": "./node_modules/.bin/eslint . --fix",
+    "lint-and-fix": "eslint . --fix",
     "dev-client": "yarn workspace client start",
     "dev-server": "yarn workspace server start",
     "storybook": "yarn workspace client storybook",
-    "test-server": "node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src",
-    "test-client": "./node_modules/.bin/jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/client",
-    "test": "yarn test-client && yarn workspace server test"
+    "test-server": "firebase emulators:exec --only firestore \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
+    "test-client": "jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/client",
+    "test": "yarn test-client && yarn test-server"
   },
   "eslintConfig": {
     "extends": [

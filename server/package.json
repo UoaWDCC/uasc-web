@@ -1,5 +1,5 @@
 {
-  "private": "true",
+  "private": true,
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
@@ -33,10 +33,8 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "test": "firebase emulators:exec --only firestore  \"yarn --cwd=\"../..\" test-server\"",
-    "start": "./node_modules/.bin/concurrently \"yarn nodemon -e ts,js --exec \" \"yarn tsoa spec-and-routes && yarn --cwd=\"../..\" workspace client generate-types\"",
-    "tsoa": "./node_modules/.bin/tsoa",
-    "nodemon": "../node_modules/.bin/nodemon",
+    "start": "concurrently \"yarn nodemon -e ts,js --exec \" \"yarn tsoa spec-and-routes && yarn workspace client generate-types\"",
+    "nodemon": "nodemon",
     "build": "tsc -p ./tsconfig.prod.json && tsc-alias",
     "serve": "node --es-module-specifier-resolution=node dist/index.js",
     "token": "ts-node ./tooling/login-prod.ts"

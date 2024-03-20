@@ -9,8 +9,7 @@ LABEL fly_launch_runtime="Node.js"
 WORKDIR /app
 
 # Set production environment
-ARG YARN_VERSION=1.22.19
-RUN npm install -g yarn@$YARN_VERSION --force
+RUN corepack enable
 
 
 # Throw-away build stage to reduce size of final image

@@ -19,6 +19,9 @@ jobs:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     steps:
+      - name: Enable corepack
+        run: corepack enable
+
       - uses: actions/checkout@v3
       - run: cd client && yarn && yarn run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
