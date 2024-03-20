@@ -2,7 +2,7 @@
 name: Backend feature template
 about: Features relating to the backend
 title: "[BACKEND]"
-labels: backend, frontend
+labels: backend
 assignees: ''
 
 ---
@@ -21,6 +21,7 @@ Add any other context or screenshots about the feature request here.
 
 **BEFORE MERGING**
 - [ ] Integration test written for services
+- [ ] [Schemas annotated](https://tsoa-community.github.io/docs/annotations.html) if adding new models
 - [ ] Code generation run (*hint*: `yarn workspace server tsoa spec-and-routes`)
 - [ ] Appropriate mocks created where possible
 - [ ] PR Reviewed (For non-trivial changes)
