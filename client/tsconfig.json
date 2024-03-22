@@ -4,6 +4,7 @@
     "rootDir": ".",
     "outDir": "./dist",
     "baseUrl": "src",
+    "module": "ES2020",
     "sourceMap": true,
     "resolveJsonModule": true,
     "jsx": "react-jsx",
@@ -13,7 +14,7 @@
     "declaration": true,
     "declarationMap": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["jest"]
+    "types": ["jest", "vite/client"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "*.d.ts"]
