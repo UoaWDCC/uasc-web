@@ -8,6 +8,7 @@ Project initiated by WDCC in 2023.
 - Eddie Wang (Project Manager)
 
 ## 2024 Team Members
+- Kartik Malik
 - Logan Bellingham
 - Aziz Patel
 - Raymond Luo
@@ -15,6 +16,7 @@ Project initiated by WDCC in 2023.
 - Jeffery Ji
 - Albert Sun
 - Kunal Bhaskar
+- Miguel
 
 ## 2023 Team Leadership
 
