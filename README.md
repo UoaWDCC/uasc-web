@@ -13,6 +13,8 @@ Project initiated by WDCC in 2023.
 
 - Albert Sun
 
+- Kunal Bhaskar
+
 ## 2023 Team Leadership
 
 - Bill Wong (Project Manager)
