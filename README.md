@@ -10,6 +10,8 @@ Project initiated by WDCC in 2023.
 ## 2024 Team Members
 - Jeffery Ji
 
+- Albert Sun
+
 ## 2023 Team Leadership
 
 - Bill Wong (Project Manager)
