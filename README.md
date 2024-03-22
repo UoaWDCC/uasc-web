@@ -8,6 +8,7 @@ Project initiated by WDCC in 2023.
 - Eddie Wang (Project Manager)
 
 ## 2024 Team Members
+- Jeffery Ji
 
 ## 2023 Team Leadership
 
