@@ -8,6 +8,7 @@ Project initiated by WDCC in 2023.
 - Eddie Wang (Project Manager)
 
 ## 2024 Team Members
+- Aziz Patel
 - Raymond Luo
 - Ray Zhao
 - Jeffery Ji
