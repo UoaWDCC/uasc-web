@@ -1,0 +1,17 @@
+name: Run all tests
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  Run-Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - run: sudo yarn
+      - run: yarn prettier:ci
