@@ -24,3 +24,19 @@ export const FirstStory: Story = {
     // 👇 The args you need here will depend on your component
   }
 }
+
+export const TestStory: Story = {
+  decorators: [
+    (Story) => (
+      <>
+        <BrowserRouter>
+          <Story />
+          <div>Text for testing</div>
+        </BrowserRouter>
+      </>
+    )
+  ],
+  args: {
+    // 👇 The args you need here will depend on your component
+  }
+}
