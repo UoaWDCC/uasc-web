@@ -1,0 +1,2 @@
+yarn lint-all
+yarn prettier:ci
