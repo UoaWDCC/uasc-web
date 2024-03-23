@@ -44,6 +44,7 @@
     "lint": "eslint",
     "lint-all": "eslint .",
     "prettier": "prettier . --write",
+    "prettier:ci": "prettier . --check",
     "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
     "postinstall": "husky",
     "lint-and-fix": "eslint . --fix",
