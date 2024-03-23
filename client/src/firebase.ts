@@ -2,6 +2,7 @@
 import { initializeApp, type FirebaseOptions } from "@firebase/app"
 import { getAuth, connectAuthEmulator } from "@firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore"
+import { StoreInstance } from "store/store"
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -21,5 +22,9 @@ if (import.meta.env.VITE_NODE_ENV !== "production") {
   connectFirestoreEmulator(db, "localhost", 8080)
   connectAuthEmulator(auth, "http://localhost:9099")
 }
+
+auth.onIdTokenChanged((user) => {
+  StoreInstance.actions.setCurrentUser(user)
+})
 
 export { auth, db }
