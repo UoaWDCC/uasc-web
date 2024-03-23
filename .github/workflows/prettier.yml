@@ -1,4 +1,4 @@
-name: Run all tests
+name: Prettier
 on:
   pull_request:
   push:
