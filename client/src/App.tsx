@@ -22,7 +22,7 @@ import { QueryClientProvider } from "@tanstack/react-query"
 
 function App() {
   return (
-    <QueryClientProvider client={}>
+    <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <div className="h-screen">
           <ThemeProvider theme={theme}>
