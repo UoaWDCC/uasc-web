@@ -4,7 +4,10 @@ const Button = (props: Props) => {
   return (
     <>
       <button
-        className="bg-transparent hover:bg-blue-200 p-3 m-8
+        className="
+          relative flex h-[60px] 
+          bg-transparent 
+          hover:bg-blue-200 p-3 m-8
           font-semibold rounded-full
           before:ease 
           relative h-12 w-50 
@@ -25,11 +28,12 @@ const Button = (props: Props) => {
           hover:text-white 
           hover:before:-rotate-180"
       >
-        <span className="relative z-10 hover:text-white">sign up button</span>
+        <span className="relative z-10 hover:text-white">general button</span>
       </button>
 
       <button
-        className="relative flex h-[60px] 
+        className="
+        relative flex h-[60px] 
         border border-black
         w-40 
         items-center 
@@ -54,8 +58,33 @@ const Button = (props: Props) => {
         <span className="relative z-10 hover:text-white">sign up button</span>
       </button>
 
-      <button className="bg-orange-500 hover:bg-orange-200 p-1.5 m-8">
-        UASC web button v2
+      <button
+        className="
+        relative flex h-[50px] 
+        rounded-full
+        w-40 items-center 
+        justify-center 
+        overflow-hidden 
+        bg-blue-600 
+        font-medium 
+        text-white 
+        shadow-2xl 
+        transition-all 
+        duration-300 
+        before:absolute 
+        before:inset-0 
+        before:border-0 
+        before:border-white 
+        before:duration-100 
+        before:ease-linear 
+        hover:bg-white 
+        hover:text-blue-600 
+        hover:shadow-blue-600 
+        hover:before:border-[25px]
+        m-8
+      "
+      >
+        <span className="relative z-10">general button v2</span>
       </button>
     </>
   )
