@@ -6,7 +6,7 @@ export default {
     extend: {},
     colors:{
       'blue': '#283D87',
-      'light blue': '#4088C3',
+      'light-blue': '#4088C3',
       'orange': '#FF6D04',
     },
     fontFamily: {
