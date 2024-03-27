@@ -18,7 +18,7 @@ export default {
         {
           lineHeight: "3.125rem",
           letterSpacing: "-0.21875rem",
-          fontWeight: "900",
+          fontWeight: "900"
         }
       ],
       h2: [
