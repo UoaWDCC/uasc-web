@@ -18,15 +18,15 @@ export default {
         {
           lineHeight: "3.125rem",
           letterSpacing: "-0.21875rem",
-          fontWeight: "900"
+          fontWeight: "900",
         }
       ],
       h2: [
-        "",
+        "2.375rem",
         {
-          lineHeight: "",
-          letterSpacing: "",
-          fontWeight: ""
+          lineHeight: "2.375rem",
+          letterSpacing: "-0.16625rem",
+          fontWeight: "700"
         }
       ],
       h3: [
