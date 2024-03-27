@@ -33,7 +33,7 @@
     "react-router-dom": "^6.10.0",
     "react-sweet-state": "^2.7.1",
     "scheduler": "^0.23.0",
-    "stripe": "^13.7.0",
+    "stripe": "^14.22.0",
     "vite": "^4.1.0-beta.0",
     "vite-tsconfig-paths": "^4.2.3",
     "web-vitals": "^2.1.4"

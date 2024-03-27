@@ -7753,7 +7753,7 @@ __metadata:
     react-sweet-state: "npm:^2.7.1"
     scheduler: "npm:^0.23.0"
     storybook: "npm:^7.6.17"
-    stripe: "npm:^13.7.0"
+    stripe: "npm:^14.22.0"
     tailwindcss: "npm:^3.4.1"
     typescript: "npm:^5.3.3"
     vite: "npm:^4.1.0-beta.0"
@@ -17137,13 +17137,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stripe@npm:^13.7.0":
-  version: 13.11.0
-  resolution: "stripe@npm:13.11.0"
+"stripe@npm:^14.22.0":
+  version: 14.22.0
+  resolution: "stripe@npm:14.22.0"
   dependencies:
     "@types/node": "npm:>=8.1.0"
     qs: "npm:^6.11.0"
-  checksum: 10c0/ea9ad9397a4b5464bf5e2cc3a65683d14e035161c5db0146061370f2316851e6b919e4fe2be97ec0dc72a2856b09cceab69e7afcb4a86f9e3361ed630f2fbad2
+  checksum: 10c0/befb3a1d517c7bfcbf6cf9bebdebd6d86e3ba1d0f581a4634ff622d95f63c37f0e85266cb35897a0f1f4ac6e6aa6485ac2ffc85a6e66bf85759704ea345f4ebf
   languageName: node
   linkType: hard
 
