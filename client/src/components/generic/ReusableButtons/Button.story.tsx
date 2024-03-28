@@ -24,6 +24,10 @@ export const comparison: Story = {
         <>
           <button>test</button>
           <Button variant="v1">test</Button>
+          <button>test</button>
+          <Button variant="v2">test</Button>
+          <button>test</button>
+          <Button variant="signup">test</Button>
         </>
       )
     }
