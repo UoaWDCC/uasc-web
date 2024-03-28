@@ -1,12 +1,5 @@
 import React, { useState } from "react"
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile
-} from "firebase/auth"
 import { useNavigate } from "react-router-dom"
-import { db } from "../../../firebase"
-import { setDoc, doc } from "firebase/firestore"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import Snackbar from "@mui/material/Snackbar"
@@ -62,7 +55,6 @@ const SignUpForm = () => {
     setOpen(false)
   }
 
-  const auth = getAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (event: any) => {
@@ -106,29 +98,8 @@ const SignUpForm = () => {
     }
 
     try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      )
       console.log("User created")
 
-      await updateProfile(user, { displayName: `${firstName} ${lastName}` })
-      console.log("Profile updated")
-
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        dob,
-        studentId,
-        yearLevel,
-        faculty,
-        sportType,
-        interestedInRacing
-      })
       console.log("Document set in Firestore")
 
       setOpen(true)
