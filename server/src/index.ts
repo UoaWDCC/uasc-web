@@ -24,18 +24,6 @@ function keepRawBody(
     req.rawBody = buf
   }
 }
-})
-
-function keepRawBody(
-  req: any,
-  res: any,
-  buf: Buffer,
-  encoding: BufferEncoding
-) {
-  if (buf && buf.length) {
-    req.rawBody = buf
-  }
-}
 
 app.use(helmet())
 app.use(express.json({ verify: keepRawBody }))
