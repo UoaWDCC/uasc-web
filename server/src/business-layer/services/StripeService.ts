@@ -10,7 +10,7 @@ export default class StripeService {
     return result.data
   }
 
-  public async retrieveProducts(limit?: number, startingAfter?: string) {
+  public async retrieveAllProducts(limit?: number, startingAfter?: string) {
     const products = await stripe.products.list({
       limit,
       starting_after: startingAfter
