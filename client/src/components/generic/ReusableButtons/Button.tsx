@@ -1,9 +1,15 @@
-const Button = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+type buttonVariants = "v1" | "v2" | "signup" | "small"
+interface props {
+  children?: React.ReactNode
+  variant?: buttonVariants
+  props?: React.ButtonHTMLAttributes<HTMLButtonElement>
+}
+
+const V1 = ({ children, props }: props) => {
   return (
-    <>
-      <button
-        {...props}
-        className="
+    <button
+      {...props}
+      className="
           relative flex h-[60px] 
           bg-transparent 
           hover:bg-blue-200 p-3 m-8
@@ -26,39 +32,17 @@ const Button = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
           before:duration-300 
           hover:text-white 
           hover:before:-rotate-180"
-      >
-        <span className="relative z-10 hover:text-white">general button</span>
-      </button>
+    >
+      <span className="relative z-10 hover:text-white">{children}</span>
+    </button>
+  )
+}
 
-      <button
-        className="
-        relative flex h-[60px] 
-        border border-black
-        w-40 
-        items-center 
-        justify-center 
-        overflow-hidden 
-        bg-white
-        text-black
-        shadow-2xl 
-        transition-all 
-        before:absolute 
-        before:h-0
-        before:w-0
-        before:rounded-full 
-        before:bg-blue-600 
-        before:duration-700 
-        before:ease-out 
-        hover:shadow-blue-600 
-        hover:before:h-56 
-        hover:before:w-56 
-        m-8"
-      >
-        <span className="relative z-10 hover:text-white">sign up button</span>
-      </button>
-
-      <button
-        className="
+const V2 = ({ children, props }: props) => {
+  return (
+    <button
+      {...props}
+      className="
         relative flex h-[50px] 
         rounded-full
         w-40 items-center 
@@ -82,13 +66,50 @@ const Button = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
         hover:before:border-[25px]
         m-8
       "
-      >
-        <span className="relative z-10">general button v2</span>
-      </button>
+    >
+      <span className="relative z-10">{children}</span>
+    </button>
+  )
+}
 
-      <button
-        type="button"
-        className="
+const SignUp = ({ children, props }: props) => {
+  return (
+    <button
+      {...props}
+      className="
+        relative flex h-[60px] 
+        border border-black
+        w-40 
+        items-center 
+        justify-center 
+        overflow-hidden 
+        bg-white
+        text-black
+        shadow-2xl 
+        transition-all 
+        before:absolute 
+        before:h-0
+        before:w-0
+        before:rounded-full 
+        before:bg-blue-600 
+        before:duration-700 
+        before:ease-out 
+        hover:shadow-blue-600 
+        hover:before:h-56 
+        hover:before:w-56 
+        m-8"
+    >
+      <span className="relative z-10 hover:text-white">{children}</span>
+    </button>
+  )
+}
+
+const Small = ({ children, props }: props) => {
+  return (
+    <button
+      {...props}
+      type="button"
+      className="
         position:relative
         text-white 
         bg-gradient-to-r 
@@ -101,11 +122,23 @@ const Button = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
         ring-blue-800 
         shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 
         font-medium rounded-lg text-sm px-5 py-2.5 text-center ml-8"
-      >
-        UASC
-      </button>
-    </>
+    >
+      {children}
+    </button>
   )
+}
+const Button = ({ children, variant, props }: props) => {
+  switch (variant) {
+    case "v1":
+      return <V1 props={props}>{children}</V1>
+    case "v2":
+      return <V2 props={props}>{children}</V2>
+    case "signup":
+      return <SignUp props={props}>{children}</SignUp>
+    case "small":
+      return <Small props={props}>{children}</Small>
+  }
+  return <V1 props={props}>{children}</V1>
 }
 
 export default Button
