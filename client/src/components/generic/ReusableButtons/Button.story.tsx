@@ -1,10 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react"
 // importing button.tsx as the object
 import Button from "./Button"
+import { ArrowDropDown } from "@mui/icons-material"
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "Button"
+  title: "Button",
+  argTypes: {
+    variant: {
+      control: { type: "radio" },
+      options: ["v1", "v2", "signup", "small"]
+    },
+    children: {
+      name: "content"
+    }
+  }
 }
 
 export default meta
@@ -13,7 +23,7 @@ type Story = StoryObj<typeof meta>
 
 /** Button version 1, can be used under most situations */
 export const v1: Story = {
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   args: {
     variant: "v1",
     children: "test v1 button"
