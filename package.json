@@ -9,6 +9,9 @@
   ],
   "packageManager": "yarn@4.1.1+sha256.f3cc0eda8e5560e529c7147565b30faa43b4e472d90e8634d7134a37c7f59781",
   "devDependencies": {
+    "@storybook/addon-controls": "^8.0.5",
+    "@storybook/addon-interactions": "^8.0.5",
+    "@storybook/test": "^8.0.5",
     "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.23",
