@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 // importing button.tsx as the object
 import Button from "./Button"
-import { ArrowDropDown } from "@mui/icons-material"
-
 const meta: Meta<typeof Button> = {
   component: Button,
   title: "Button",
