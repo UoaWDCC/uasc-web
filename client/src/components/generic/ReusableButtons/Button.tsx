@@ -1,9 +1,8 @@
-type Props = object
-
-const Button = (props: Props) => {
+const Button = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <>
       <button
+        {...props}
         className="
           relative flex h-[60px] 
           bg-transparent 
