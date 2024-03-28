@@ -17,6 +17,9 @@ export interface paths {
   "/users/bulk-edit": {
     patch: operations["EditUsers"];
   };
+  "/webhook": {
+    post: operations["ReceiveWebhook"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -136,6 +139,14 @@ export interface operations {
     };
     responses: {
       /** @description Edited */
+      200: {
+        content: never;
+      };
+    };
+  };
+  ReceiveWebhook: {
+    responses: {
+      /** @description Webhook post received */
       200: {
         content: never;
       };
