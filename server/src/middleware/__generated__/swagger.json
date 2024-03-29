@@ -285,6 +285,18 @@
 					}
 				}
 			}
+		},
+		"/webhook": {
+			"post": {
+				"operationId": "ReceiveWebhook",
+				"responses": {
+					"200": {
+						"description": "Webhook post received"
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
 		}
 	},
 	"servers": [
