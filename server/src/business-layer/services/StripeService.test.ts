@@ -1,6 +1,7 @@
 import StripeService from "./StripeService"
 import { productMock } from "test-config/mocks/Stripe.mock"
 
+// 1. figure out how this stuff works
 jest.mock("stripe", () => {
   const stripe = jest.requireActual("stripe")
   jest
@@ -26,6 +27,7 @@ jest.mock("stripe", () => {
   return stripe
 })
 
+// 2. finish writing tests for methods in StripeService
 describe("Stripe service functionality", () => {
   it("should get a product with lookup key", async () => {
     const result = await new StripeService().getProductsWithLookupKey(
