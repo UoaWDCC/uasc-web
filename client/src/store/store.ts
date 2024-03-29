@@ -1,4 +1,5 @@
 import { User } from "firebase/auth"
+import { UserAdditionalInfo } from "models/User"
 import {
   defaultRegistry,
   createStore,
@@ -7,7 +8,11 @@ import {
   createHook
 } from "react-sweet-state"
 
-type State = { current: number; currentUser: User | null }
+type State = {
+  current: number
+  currentUser: User | null // firebase type
+  currentUserData?: UserAdditionalInfo
+}
 
 const initialState: State = {
   current: 1000,
@@ -22,6 +27,11 @@ const actions = {
     (user: User | null): Action<State> =>
     ({ setState }) => {
       setState({ currentUser: user })
+    },
+  setCurrentUserData:
+    (userData: UserAdditionalInfo | undefined): Action<State> =>
+    ({ setState }) => {
+      setState({ currentUserData: userData })
     }
 }
 

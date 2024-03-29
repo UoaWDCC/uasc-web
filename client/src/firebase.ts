@@ -2,6 +2,7 @@
 import { initializeApp, type FirebaseOptions } from "@firebase/app"
 import { getAuth, connectAuthEmulator } from "@firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore"
+import fetchClient from "services/OpenApiFetchClient"
 import { StoreInstance } from "store/store"
 
 const firebaseConfig: FirebaseOptions = {
@@ -23,8 +24,15 @@ if (import.meta.env.VITE_NODE_ENV !== "production") {
   connectAuthEmulator(auth, "http://localhost:9099")
 }
 
-auth.onIdTokenChanged((user) => {
+auth.onIdTokenChanged(async (user) => {
   StoreInstance.actions.setCurrentUser(user)
+  if (user === null) {
+    StoreInstance.actions.setCurrentUserData(undefined)
+    return
+  }
+  const { data } = await fetchClient.GET("/users/self")
+  const currentUserData = data
+  StoreInstance.actions.setCurrentUserData(currentUserData)
 })
 
 export { auth, db }
