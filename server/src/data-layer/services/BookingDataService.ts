@@ -13,11 +13,13 @@ export default class BookingDataService {
     const userIdsArray = result.docs.map(docs => docs.data())
     return userIdsArray
   }
+
   public async getBookingsByBookingId(bookingSlotID: string): Promise<Booking []> {
     const result =  await FirestoreCollections.bookings.where("booking_id", "==", bookingSlotID).get()
     const bookingIdArray = result.docs.map(docs => docs.data())
     return bookingIdArray
   }
+
   public async getBookingsByStripePaymentId(stripePaymentId: string): Promise<Booking []> {
     const result = await FirestoreCollections.bookings.where("stripe_payment_id", "==", stripePaymentId).get()
     const stripePaymentIdArray = result.docs.map(docs => docs.data())
