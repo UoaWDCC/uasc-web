@@ -67,6 +67,7 @@ export interface DateChange extends UserRequest {
 export interface Booking {
   user_id: string // Reference to user ID
   booking_slot_id: string // Reference
+  stripe_payment_id: string
 }
 
 // Interface for booking changes
