@@ -15,10 +15,9 @@ jest.mock("stripe", () => {
         starting_after?: string
       }
       const products = []
-      for (let i=0; i < limit; ++i) {
+      for (let i = 0; i < limit; ++i) {
         products.push(productMock)
       }
-      
     })
 
   jest
@@ -28,8 +27,7 @@ jest.mock("stripe", () => {
 })
 
 describe("Stripe service functionality", () => {
-  
-    it("should get a product with lookup key", async () => {
+  it("should get a product with lookup key", async () => {
     const result = await new StripeService().getProductsWithLookupKey(
       "random_lookupKey"
     )
@@ -47,8 +45,10 @@ describe("Stripe service functionality", () => {
   })
 
   it("should get a product by metadata", async () => {
-    const result = await new StripeService().getProductByMetadata("random_key", "random_value")
+    const result = await new StripeService().getProductByMetadata(
+      "random_key",
+      "random_value"
+    )
     expect(result).toEqual(productMock)
   })
-
 })
