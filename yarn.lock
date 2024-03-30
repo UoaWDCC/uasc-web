@@ -5371,6 +5371,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/react-stripe-js@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "@stripe/react-stripe-js@npm:2.6.2"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/ba3fbd4d4c2e5ba32bfbb4fe780f1ad8a2197c8ffeb61e83a7f19c31277ef72e68cd28550107004674ba861eef21a1843a142d3dda5bd984dc19a51c9fa4abda
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@stripe/stripe-js@npm:3.1.0"
+  checksum: 10c0/ee55d3431169944a277ea298c1ac663309c52808fca3db3dd1b7a7d73b56f57d8d625addb460f7bd82a56b306fc69c584654dcc7d8b869c19a1b3a0206f3bcb6
+  languageName: node
+  linkType: hard
+
 "@tanstack/eslint-plugin-query@npm:^5.20.1":
   version: 5.28.6
   resolution: "@tanstack/eslint-plugin-query@npm:5.28.6"
@@ -8051,6 +8071,8 @@ __metadata:
     "@storybook/react": "npm:^7.6.17"
     "@storybook/react-vite": "npm:^7.6.17"
     "@storybook/test": "npm:^7.6.17"
+    "@stripe/react-stripe-js": "npm:^2.6.2"
+    "@stripe/stripe-js": "npm:^3.1.0"
     "@tanstack/react-query": "npm:^5.26.3"
     "@testing-library/dom": "npm:^9.3.4"
     "@testing-library/jest-dom": "npm:^5.16.5"
