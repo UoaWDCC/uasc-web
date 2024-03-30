@@ -52,6 +52,7 @@ export interface components {
       does_freestyle: boolean;
       does_racing: boolean;
       does_ski: boolean;
+      gender: string;
       emergency_name: string;
       emergency_phone: string;
       emergency_relation: string;
@@ -59,12 +60,12 @@ export interface components {
       last_name: string;
       /** @enum {string} */
       membership: "admin" | "member";
-      dietary_requirements?: string;
+      dietary_requirements: string;
       faculty?: string;
       university?: string;
       student_id?: string;
       returning: boolean;
-      university_year?: string;
+      university_year: string;
     };
     FirebaseProperties: {
       uid: string;
