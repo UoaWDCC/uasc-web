@@ -26,19 +26,18 @@ if (import.meta.env.VITE_NODE_ENV !== "production") {
 }
 
 auth.onIdTokenChanged(async (user) => {
-  StoreInstance.actions.setCurrentUser(user)
-
   if (user === null) {
     // suggests a log out
     StoreInstance.actions.resetCurrentUserState()
     return
   }
 
+  StoreInstance.actions.setCurrentUser(user)
+
   const { claims } = await user.getIdTokenResult()
   StoreInstance.actions.setCurrentUserClaims(claims as UserClaims)
 
-  const { data } = await fetchClient.GET("/users/self")
-  const currentUserData = data
+  const { data: currentUserData } = await fetchClient.GET("/users/self")
   StoreInstance.actions.setCurrentUserData(currentUserData)
 })
 

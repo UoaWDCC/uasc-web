@@ -14,8 +14,14 @@ type State = {
   currentUserClaims?: UserClaims
 }
 
+const defaultUserState = {
+  currentUser: null,
+  currentUserClaims: undefined,
+  currentUserData: undefined
+}
+
 const initialState: State = {
-  currentUser: null
+  ...defaultUserState
 }
 
 const actions = {
@@ -37,7 +43,7 @@ const actions = {
   resetCurrentUserState:
     (): Action<State> =>
     ({ setState }) => {
-      setState({ currentUserClaims: undefined, currentUserData: undefined })
+      setState({ ...defaultUserState })
     }
 }
 
