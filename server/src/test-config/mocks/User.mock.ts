@@ -6,6 +6,7 @@ export const additionalInfoMock: UserAdditionalInfo = {
   does_freestyle: true,
   does_racing: true,
   does_ski: false,
+  gender: "non-binary",
   emergency_name: "emergency",
   emergency_phone: "111",
   emergency_relation: "relation",
