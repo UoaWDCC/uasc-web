@@ -1,22 +1,74 @@
 import { Timestamp } from "firebase-admin/firestore"
 
 export interface UserAdditionalInfo {
-  date_of_birth: Timestamp // Assuming this is a timestamp
+  /**
+   * @isDateTime Please Enter in the form dd/mm/yyyy
+   */
+  date_of_birth: Timestamp
+  /**
+   * @isbool Please enter true or false
+   */
   does_freestyle: boolean
+  /**
+   * @isbool Please enter true or false
+   */
   does_racing: boolean
+  /**
+   * @isbool Please enter true or false
+   */
   does_ski: boolean
+  /**
+   * @isString Please enter your pronouns
+   */
+  gender: string
+  /**
+   * @isString Please enter a name
+   */
   emergency_name: string
+  /**
+   * @isString Please type in your Phone Number
+   */
   emergency_phone: string
+  /**
+   * @isString Please enter a name
+   */
   emergency_relation: string
+  /**
+   * @isString Please enter your First Name
+   */
   first_name: string
+  /**
+   * @isString Please enter your Second Name
+   */
   last_name: string
+  /**
+   * @isString Please enter either Admin or Member
+   */
   membership: "admin" | "member"
-  dietary_requirements: string | undefined
+  /**
+   * @isString Please write your dietary requirements
+   */
+  dietary_requirements: string
+  /**
+   * @isString Please enter your faculty
+   */
   faculty: string | undefined
+  /**
+   * @isString Please enter your university
+   */
   university: string | undefined
+  /**
+   *@isString Please enter your student ID
+   */
   student_id: string | undefined
+  /**
+   * @isbool Please enter true or false
+   */
   returning: boolean
-  university_year: string | undefined
+  /**
+   * @isString Please enter your year of study
+   */
+  university_year: string
 }
 
 export interface BookingSlot {
