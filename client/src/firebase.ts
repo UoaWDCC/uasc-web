@@ -2,6 +2,7 @@
 import { initializeApp, type FirebaseOptions } from "@firebase/app"
 import { getAuth, connectAuthEmulator } from "@firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore"
+import { UserClaims } from "models/User"
 import fetchClient from "services/OpenApiFetchClient"
 import { StoreInstance } from "store/store"
 
@@ -26,10 +27,16 @@ if (import.meta.env.VITE_NODE_ENV !== "production") {
 
 auth.onIdTokenChanged(async (user) => {
   StoreInstance.actions.setCurrentUser(user)
+
   if (user === null) {
-    StoreInstance.actions.setCurrentUserData(undefined)
+    // suggests a log out
+    StoreInstance.actions.resetCurrentUserState()
     return
   }
+
+  const { claims } = await user.getIdTokenResult()
+  StoreInstance.actions.setCurrentUserClaims(claims as UserClaims)
+
   const { data } = await fetchClient.GET("/users/self")
   const currentUserData = data
   StoreInstance.actions.setCurrentUserData(currentUserData)
