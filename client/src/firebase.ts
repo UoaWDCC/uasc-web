@@ -32,13 +32,14 @@ auth.onIdTokenChanged(async (user) => {
     return
   }
 
-  StoreInstance.actions.setCurrentUser(user)
+  try {
+    const { claims } = await user.getIdTokenResult()
+    const { data: userData } = await fetchClient.GET("/users/self")
 
-  const { claims } = await user.getIdTokenResult()
-  StoreInstance.actions.setCurrentUserClaims(claims as UserClaims)
-
-  const { data: currentUserData } = await fetchClient.GET("/users/self")
-  StoreInstance.actions.setCurrentUserData(currentUserData)
+    StoreInstance.actions.setCurrentUser(user, userData, claims as UserClaims)
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 export { auth, db }

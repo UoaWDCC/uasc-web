@@ -26,19 +26,17 @@ const initialState: State = {
 
 const actions = {
   setCurrentUser:
-    (user: User | null): Action<State> =>
+    (
+      user: User | null,
+      userData: UserAdditionalInfo | undefined,
+      userClaims: UserClaims | undefined
+    ): Action<State> =>
     ({ setState }) => {
-      setState({ currentUser: user })
-    },
-  setCurrentUserData:
-    (userData: UserAdditionalInfo | undefined): Action<State> =>
-    ({ setState }) => {
-      setState({ currentUserData: userData })
-    },
-  setCurrentUserClaims:
-    (userClaims: UserClaims | undefined): Action<State> =>
-    ({ setState }) => {
-      setState({ currentUserClaims: userClaims })
+      setState({
+        currentUser: user,
+        currentUserData: userData,
+        currentUserClaims: userClaims
+      })
     },
   resetCurrentUserState:
     (): Action<State> =>
