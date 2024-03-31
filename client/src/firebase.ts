@@ -6,8 +6,6 @@ import { UserClaims } from "models/User"
 import fetchClient, { setToken } from "services/OpenApiFetchClient"
 import { StoreInstance } from "store/store"
 
-const TOKEN_LOCAL_STORAGE_KEY = "JWT_TOKEN_AUTH" as const
-
 const firebaseConfig: FirebaseOptions = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -57,4 +55,4 @@ auth.onIdTokenChanged(async (user) => {
   StoreInstance.actions.setCurrentUser(user, userData, claims as UserClaims)
 })
 
-export { auth, db, TOKEN_LOCAL_STORAGE_KEY }
+export { auth, db }
