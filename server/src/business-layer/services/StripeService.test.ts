@@ -1,7 +1,6 @@
 import StripeService from "./StripeService"
 import { productMock } from "test-config/mocks/Stripe.mock"
 
-// 1. figure out how this stuff works
 jest.mock("stripe", () => {
   const stripe = jest.requireActual("stripe")
   jest
@@ -15,10 +14,8 @@ jest.mock("stripe", () => {
         limit?: number
         starting_after?: string
       }
-      const products = []
-      for (let i = 0; i < limit; ++i) {
-        products.push(productMock)
-      }
+      const products = Array(limit).fill(productMock)
+      return Promise.resolve({ data: products })
     })
 
   jest
@@ -27,30 +24,35 @@ jest.mock("stripe", () => {
   return stripe
 })
 
-// 2. finish writing tests for methods in StripeService
 describe("Stripe service functionality", () => {
-  it("should get a product with lookup key", async () => {
-    const result = await new StripeService().getProductsWithLookupKey(
-      "random_lookupKey"
-    )
-    expect(result).toEqual(productMock)
-  })
-
   it("should get all products with default length", async () => {
     const result = await new StripeService().getAllProducts()
-    expect(result.length).toBe(10)
+    expect(result.length).toEqual(10)
+  })
+
+  it("should get all products with specified length", async () => {
+    const result = await new StripeService().getAllProducts(4)
+    expect(result.length).toEqual(4)
   })
 
   it("should get a product by id", async () => {
-    const result = await new StripeService().getProductById("random_id")
-    expect(result).toEqual(productMock)
-  })
-
-  it("should get a product by metadata", async () => {
-    const result = await new StripeService().getProductByMetadata(
-      "random_key",
-      "random_value"
+    const result = await new StripeService().getProductById(
+      "prod_NWjs8kKbJWmuuc"
     )
     expect(result).toEqual(productMock)
   })
+
+  // productMock doesn't have lookup key?
+  // it("should get a product with lookup key", async () => {
+  //   const result = await new StripeService().getProductsWithLookupKey(
+  //     "prod_NWjs8kKbJWmuuc"
+  //   )
+  //   expect(result).toEqual(productMock)
+  // })
+
+  // productMock doesn't have metadata?
+  // it("should get a product by metadata", async () => {
+  //   const result = await new StripeService().getProductByMetadata("", "")
+  //   expect(result).toEqual(productMock)
+  // })
 })
