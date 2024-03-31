@@ -1,6 +1,6 @@
 // setup firebase
 import { initializeApp, type FirebaseOptions } from "@firebase/app"
-import { getAuth, connectAuthEmulator } from "@firebase/auth"
+import { getAuth } from "@firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore"
 import { UserClaims } from "models/User"
 import fetchClient, { setToken } from "services/OpenApiFetchClient"
