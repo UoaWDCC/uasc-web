@@ -3,13 +3,6 @@ import Stripe from "stripe"
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
 export default class StripeService {
-  public async getProductsWithLookupKey(lookupKey: string) {
-    const result = await stripe.products.search({
-      query: `lookup_key:'${lookupKey}'`
-    })
-    return result.data
-  }
-
   public async getAllProducts(limit?: number, startingAfter?: string) {
     const products = await stripe.products.list({
       limit,

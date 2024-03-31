@@ -35,23 +35,8 @@ describe("Stripe service functionality", () => {
     expect(result.length).toEqual(4)
   })
 
-  // should be using mock id? what's the point of testing again for the thing specified above
   it("should get a product by id", async () => {
     const result = await new StripeService().getProductById("random_id")
     expect(result).toEqual({ ...productMock, id: "random_id" })
   })
-
-  // productMock doesn't have lookup key?
-  // it("should get a product with lookup key", async () => {
-  //   const result = await new StripeService().getProductsWithLookupKey(
-  //     "prod_NWjs8kKbJWmuuc"
-  //   )
-  //   expect(result).toEqual(productMock)
-  // })
-
-  // productMock doesn't have metadata?
-  // it("should get a product by metadata", async () => {
-  //   const result = await new StripeService().getProductByMetadata("", "")
-  //   expect(result).toEqual(productMock)
-  // })
 })
