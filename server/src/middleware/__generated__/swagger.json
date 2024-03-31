@@ -42,6 +42,9 @@
 					"does_ski": {
 						"type": "boolean"
 					},
+					"gender": {
+						"type": "string"
+					},
 					"emergency_name": {
 						"type": "string"
 					},
@@ -88,13 +91,16 @@
 					"does_freestyle",
 					"does_racing",
 					"does_ski",
+					"gender",
 					"emergency_name",
 					"emergency_phone",
 					"emergency_relation",
 					"first_name",
 					"last_name",
 					"membership",
-					"returning"
+					"dietary_requirements",
+					"returning",
+					"university_year"
 				],
 				"type": "object",
 				"additionalProperties": false
