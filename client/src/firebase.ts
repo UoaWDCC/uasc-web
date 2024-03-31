@@ -24,7 +24,6 @@ const db = getFirestore(app)
 // use emulator suite if running locally
 if (import.meta.env.VITE_NODE_ENV !== "production") {
   connectFirestoreEmulator(db, "localhost", 8080)
-  connectAuthEmulator(auth, "http://localhost:9099")
 }
 
 auth.onIdTokenChanged(async (user) => {
@@ -34,18 +33,28 @@ auth.onIdTokenChanged(async (user) => {
     return
   }
 
+  let userData, claims, token
   try {
-    const { claims } = await user.getIdTokenResult()
-
-    const token = await user.getIdToken()
-    setToken(token)
-
-    const { data: userData } = await fetchClient.GET("/users/self")
-
-    StoreInstance.actions.setCurrentUser(user, userData, claims as UserClaims)
+    ;({ claims } = await user.getIdTokenResult())
   } catch (error) {
     console.error(error)
   }
+
+  try {
+    token = await user.getIdToken()
+  } catch (error) {
+    console.error(error)
+  }
+
+  setToken(token)
+
+  try {
+    ;({ data: userData } = await fetchClient.GET("/users/self"))
+  } catch (error) {
+    console.error(error)
+  }
+
+  StoreInstance.actions.setCurrentUser(user, userData, claims as UserClaims)
 })
 
 export { auth, db, TOKEN_LOCAL_STORAGE_KEY }
