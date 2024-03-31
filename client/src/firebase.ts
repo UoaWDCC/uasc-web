@@ -3,8 +3,10 @@ import { initializeApp, type FirebaseOptions } from "@firebase/app"
 import { getAuth, connectAuthEmulator } from "@firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore"
 import { UserClaims } from "models/User"
-import fetchClient from "services/OpenApiFetchClient"
+import fetchClient, { setToken } from "services/OpenApiFetchClient"
 import { StoreInstance } from "store/store"
+
+const TOKEN_LOCAL_STORAGE_KEY = "JWT_TOKEN_AUTH" as const
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -34,6 +36,10 @@ auth.onIdTokenChanged(async (user) => {
 
   try {
     const { claims } = await user.getIdTokenResult()
+
+    const token = await user.getIdToken()
+    setToken(token)
+
     const { data: userData } = await fetchClient.GET("/users/self")
 
     StoreInstance.actions.setCurrentUser(user, userData, claims as UserClaims)
@@ -42,4 +48,4 @@ auth.onIdTokenChanged(async (user) => {
   }
 })
 
-export { auth, db }
+export { auth, db, TOKEN_LOCAL_STORAGE_KEY }
