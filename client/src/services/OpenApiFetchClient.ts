@@ -9,10 +9,9 @@ export const setToken = (token: string | undefined) => {
 
 const authMiddleware: Middleware = {
   async onRequest(req) {
-    if (!accessToken) {
-      return req
+    if (accessToken) {
+      req.headers.set("Authorization", `Bearer ${accessToken}`)
     }
-    req.headers.set("Authorization", `Bearer ${accessToken}`)
     return req
   }
 }
