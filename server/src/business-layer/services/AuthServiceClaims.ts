@@ -1,4 +1,4 @@
 export const AuthServiceClaims = {
-    MEMBER: 'member',
-    ADMIN: 'admin'
+  MEMBER: "member",
+  ADMIN: "admin"
 }
