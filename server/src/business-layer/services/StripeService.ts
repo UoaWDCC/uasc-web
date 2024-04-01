@@ -25,8 +25,11 @@ export default class StripeService {
   public async createCheckoutSession(
     client_reference_id: string,
     return_url: string,
-    line_item: any,
-    metadata: any
+    line_item: {
+      price: string
+      quantity: number
+    },
+    metadata: Record<string, string>
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
