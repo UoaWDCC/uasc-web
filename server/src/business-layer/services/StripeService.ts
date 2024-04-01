@@ -21,4 +21,24 @@ export default class StripeService {
     })
     return result.data
   }
+
+  public async createCheckoutSession(
+    client_reference_id: string,
+    return_url: string,
+    line_item: any,
+    metadata: any
+  ) {
+    const session = await stripe.checkout.sessions.create({
+      // consumer changeable
+      client_reference_id,
+      return_url,
+      line_items: [line_item],
+      metadata,
+      // configured internally and should not change
+      ui_mode: "embedded",
+      mode: "payment",
+      currency: "NZD"
+    })
+    return session.client_secret
+  }
 }
