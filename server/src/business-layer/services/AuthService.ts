@@ -31,28 +31,6 @@ export default class AuthService {
       throw err
     }
 
-    // set custom claim on user account
-    const userUid: string = userRecord.uid
-    getAuth()
-      .setCustomUserClaims(userUid, { [claimRole]: true })
-      .then(() => {})
-      .catch((err) => {
-        console.error("Error setting custom claim on user", err)
-        throw err
-      })
-
-    // generate password reset email link
-    const userEmail: string = userRecord.email
-    getAuth()
-      .generatePasswordResetLink(userEmail)
-      .then((link) => {
-        // do smth with the link
-      })
-      .catch((err) => {
-        console.error("Error sending password reset link", err)
-        throw err
-      })
-
     return userRecord
   }
 }
