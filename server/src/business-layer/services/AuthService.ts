@@ -1,30 +1,6 @@
 import { UserRecord, getAuth } from "firebase-admin/auth"
-import { Timestamp } from "firebase-admin/firestore"
 import { AuthServiceClaims } from "./AuthServiceClaims"
-
-interface createUserArgs {
-  email: string
-  displayName: string
-  photoURL: string
-  dateOfBirth: Timestamp
-  doesFreestyle: boolean
-  doesRacing: boolean
-  doesSnowboarding: boolean
-  doesSki: boolean
-  gender: string
-  emergencyName: string
-  emergencyPhone: string
-  emergencyRelation: string
-  firstName: string
-  lastName: string
-  membership: "admin" | "member"
-  dietaryRequirements: string
-  faculty: string | undefined
-  university: "UoA" | string | undefined
-  studentId: string | undefined
-  returning: boolean
-  universityYear: string
-}
+import { auth } from "business-layer/security/Firebase"
 
 export default class AuthService {
   /**
@@ -32,13 +8,9 @@ export default class AuthService {
    * @param uid
    */
   public async deleteUser(uid: string): Promise<void> {
-    getAuth()
-      .deleteUser(uid)
-      .then(() => {})
-      .catch((err) => {
-        console.error("Error deleting user", err)
-        throw err
-      })
+    try {
+      await auth.deleteUser(uid)
+    } catch (error) {}
   }
 
   /**
@@ -47,17 +19,17 @@ export default class AuthService {
    * @param claimRole
    */
   public async createUser(
-    args: createUserArgs,
+    email: string,
     claimRole: string = AuthServiceClaims.MEMBER
   ): Promise<UserRecord> {
     // get the user record
-    const userRecord: UserRecord = await getAuth()
-      .createUser({})
-      .then((userRecord: UserRecord) => userRecord)
-      .catch((err) => {
-        console.error("Error creating user", err)
-        throw err
-      })
+    let userRecord: UserRecord
+    try {
+      userRecord = await getAuth().createUser({ email })
+    } catch (err) {
+      console.error("Error creating user", err)
+      throw err
+    }
 
     // set custom claim on user account
     const userUid: string = userRecord.uid
