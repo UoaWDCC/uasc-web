@@ -34,6 +34,6 @@ describe("AuthService Integration Tests", () => {
     // refresh user record to get access to newly added custom claim
     createdUser = await auth.getUser(createdUser.uid)
 
-    expect(createdUser.customClaims["member"]).not.toBe(undefined)
+    expect(createdUser.customClaims.member).not.toBe(undefined)
   })
 })
