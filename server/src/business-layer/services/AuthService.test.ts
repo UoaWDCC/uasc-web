@@ -12,3 +12,14 @@ describe("AuthService Integration Tests", () => {
     expect(user).toBe(undefined)
   })
 })
+
+describe("AuthService Unit Tests", () => {
+  it("creates a user", async () => {
+    const createdUser = await new AuthService().createUser("test@gmail.com")
+    let user
+    try {
+      user = await auth.getUserByEmail("test@gmail.com")
+    } catch {}
+    expect(createdUser).toEqual(user)
+  })
+})
