@@ -20,3 +20,23 @@ export const additionalInfoMock: UserAdditionalInfo = {
   returning: true,
   university_year: "2nd"
 }
+
+export const additionalInfoMockSecond: UserAdditionalInfo = {
+  date_of_birth: dateToFirestoreTimeStamp(new Date(1000000000)),
+  does_freestyle: true,
+  does_racing: true,
+  does_ski: false,
+  gender: "non-ternary",
+  emergency_name: "emergency",
+  emergency_phone: "111",
+  emergency_relation: "relation",
+  first_name: "third",
+  last_name: "fourth",
+  membership: "member",
+  dietary_requirements: "halal",
+  faculty: "science",
+  university: "uoa",
+  student_id: "125366427",
+  returning: true,
+  university_year: "3rd"
+}

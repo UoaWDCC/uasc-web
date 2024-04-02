@@ -1,11 +1,11 @@
-import { additionalInfoMock } from "test-config/mocks/User.mock"
+import { additionalInfoMock, additionalInfoMockSecond } from "test-config/mocks/User.mock"
 import UserDataService from "./UserDataService"
 import { cleanFirestore } from "test-config/TestUtils"
 
 const TEST_UID_1 = "testUser"
 
 describe("UserService integration tests", () => {
-  let userService: UserDataService
+  let userService: UserDataService;
 
   afterEach(async () => {
     await cleanFirestore()
@@ -64,5 +64,33 @@ describe("UserService integration tests", () => {
     const users = await userService.getAllUserData()
 
     expect(users.length).toEqual(2)
+  })
+
+  it("should filter users by membership type", async  () => {
+    await userService.createUserData(TEST_UID_1, additionalInfoMock)
+    await userService.createUserData("testUser2", additionalInfoMock)
+
+    const filteredMemberUsers = await userService.getFilteredUsers({membership: "member"})
+    expect(filteredMemberUsers.length).toEqual(2);
+    expect(filteredMemberUsers[0].membership).toEqual("member");
+    expect(filteredMemberUsers[1].membership).toEqual("member");
+
+    const filteredAdminUsers = await userService.getFilteredUsers({membership: "admin"})
+    expect(filteredAdminUsers.length).toEqual(0);
+  })
+
+  it("should filter users by first name", async  () => {
+    await userService.createUserData(TEST_UID_1, additionalInfoMock)
+    await userService.createUserData("testUser2", additionalInfoMock)
+    await userService.createUserData("testUser3", additionalInfoMockSecond)
+
+    const filteredNameUsers = await userService.getFilteredUsers({first_name: "first"})
+    expect(filteredNameUsers.length).toEqual(2);
+    expect(filteredNameUsers[0].first_name).toEqual("first");
+    expect(filteredNameUsers[1].first_name).toEqual("first");
+
+    const filteredNameUser = await userService.getFilteredUsers({first_name: "third"})
+    expect(filteredNameUser.length).toEqual(1);
+    expect(filteredNameUser[0].first_name).toEqual("third");
   })
 })
