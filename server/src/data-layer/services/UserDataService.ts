@@ -35,7 +35,20 @@ export default class UserDataService {
   }
 
   public async getFilteredUsers(filters: Partial<UserAdditionalInfo>) {
-    // TODO
+    let users: FirebaseFirestore.Query<UserAdditionalInfo, FirebaseFirestore.DocumentData> = FirestoreCollections.users;
+    if (filters.membership){
+      users = users.where('membership', '==', filters.membership)
+    } else if (filters.first_name){
+      users = users.where('first_name', '==', filters.first_name)
+    } else if (filters.last_name){
+      users = users.where('last_name', '==', filters.last_name)
+    }
+    const snapshot = await users.get();
+    const fileteredUsers = snapshot.docs.map((user) => {
+      return { ...user.data(), uid: user.id }
+    })
+    return fileteredUsers;
+
   }
 
   // Update
