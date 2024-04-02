@@ -1,5 +1,4 @@
-import { UserRecord, getAuth } from "firebase-admin/auth"
-import { AuthServiceClaims } from "./AuthServiceClaims"
+import { UserRecord } from "firebase-admin/auth"
 import { auth } from "business-layer/security/Firebase"
 
 export default class AuthService {
@@ -10,7 +9,10 @@ export default class AuthService {
   public async deleteUser(uid: string): Promise<void> {
     try {
       await auth.deleteUser(uid)
-    } catch (error) {}
+    } catch (err) {
+      console.error("Error deleting user", err)
+      throw err
+    }
   }
 
   /**
@@ -18,14 +20,11 @@ export default class AuthService {
    * @param args
    * @param claimRole
    */
-  public async createUser(
-    email: string,
-    claimRole: string = AuthServiceClaims.MEMBER
-  ): Promise<UserRecord> {
+  public async createUser(email: string): Promise<UserRecord> {
     // get the user record
     let userRecord: UserRecord
     try {
-      userRecord = await getAuth().createUser({ email })
+      userRecord = await auth.createUser({ email })
     } catch (err) {
       console.error("Error creating user", err)
       throw err
