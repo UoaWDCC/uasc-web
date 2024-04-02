@@ -1,5 +1,6 @@
 import { UserRecord } from "firebase-admin/auth"
 import { auth } from "business-layer/security/Firebase"
+import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 
 export default class AuthService {
   /**
@@ -31,5 +32,19 @@ export default class AuthService {
     }
 
     return userRecord
+  }
+
+  public async setCustomUserClaim(
+    uid: string,
+    role: typeof AuthServiceClaims.MEMBER | typeof AuthServiceClaims.ADMIN
+  ) {
+    let userRecord: UserRecord
+    try {
+      userRecord = await auth.getUser(uid)
+      auth.setCustomUserClaims(userRecord.uid, { [role]: true })
+    } catch (err) {
+      console.error("Error setting custom claim on user", err)
+      throw err
+    }
   }
 }
