@@ -32,7 +32,7 @@ export const additionalInfoMockSecond: UserAdditionalInfo = {
   emergency_relation: "relation",
   first_name: "third",
   last_name: "fourth",
-  membership: "member",
+  membership: "admin",
   dietary_requirements: "halal",
   faculty: "science",
   university: "uoa",
