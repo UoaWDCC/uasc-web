@@ -20,7 +20,7 @@ export default class BookingDataService {
     bookingSlotID: string
   ): Promise<Booking[]> {
     const result = await FirestoreCollections.bookings
-      .where("booking_id", "==", bookingSlotID)
+      .where("booking_slot_id", "==", bookingSlotID)
       .get()
     const bookingIdArray = result.docs.map((docs) => docs.data())
     return bookingIdArray
@@ -37,10 +37,13 @@ export default class BookingDataService {
   }
 
   // Update
-  public async updateBooking(bookingslotId: string, bookingData: Booking) {
+  public async updateBooking(
+    bookingslotId: string,
+    bookingData: Partial<Booking>
+  ) {
     return await FirestoreCollections.bookings
       .doc(bookingslotId)
-      .update({ Booking: bookingData })
+      .update(bookingData)
   }
 
   // Delete

@@ -24,38 +24,47 @@ describe("BookingDataService", () => {
     })
   })
 
-  // it("Should get bookings based on specific id", async () => {
-  //   await new BookingDataService().createBooking({
-  //     user_id: "Person1",
-  //     booking_slot_id: "booking1",
-  //     stripe_payment_id: "stripeID1"
-  //   })
+  it("Should get bookings based on specific id", async () => {
+    await new BookingDataService().createBooking({
+      user_id: "Person1",
+      booking_slot_id: "booking1",
+      stripe_payment_id: "stripeID1"
+    })
 
-  //   const bookingsBy_UID = await new BookingDataService().getBookingsByUserId("Person1") //test for user_id input
+    const bookingsBy_UID = await new BookingDataService().getBookingsByUserId(
+      "Person1"
+    ) // test for user_id input
 
-  //   expect(bookingsBy_UID).not.toBe(undefined)
-  //   expect(bookingsBy_UID.length).toBe(1)
-  //   expect(bookingsBy_UID).toEqual({
-  //     user_id: "Person1"
-  //   })
+    expect(bookingsBy_UID).not.toBe(undefined)
+    expect(bookingsBy_UID.length).toBe(1)
+    expect(bookingsBy_UID[0]).toEqual({
+      user_id: "Person1",
+      booking_slot_id: "booking1",
+      stripe_payment_id: "stripeID1"
+    })
 
-  // const bookingsBy_BSID = await new BookingDataService().getBookingsByBookingId("booking1") //test for booking_slot_id input
+    const bookingsBy_BSID =
+      await new BookingDataService().getBookingsByBookingId("booking1") // test for booking_slot_id input
 
-  // expect(bookingsBy_BSID).not.toBe(undefined)
-  // expect(bookingsBy_BSID.length).toBe(1)
-  // expect(bookingsBy_BSID[0]).toEqual({
-  //   booking_slot_id: "booking1"
-  // })
+    expect(bookingsBy_BSID).not.toBe(undefined)
+    expect(bookingsBy_BSID.length).toBe(1)
+    expect(bookingsBy_BSID[0]).toEqual({
+      user_id: "Person1",
+      booking_slot_id: "booking1",
+      stripe_payment_id: "stripeID1"
+    })
 
-  // const bookingsBy_SPID = await new BookingDataService().getBookingsByStripePaymentId("stripeID1") //test for stripe_payment_id input
+    const bookingsBy_SPID =
+      await new BookingDataService().getBookingsByStripePaymentId("stripeID1") // test for stripe_payment_id input
 
-  // expect(bookingsBy_SPID).not.toBe(undefined)
-  // expect(bookingsBy_SPID.length).toBe(1)
-  // expect(bookingsBy_SPID[0]).toEqual({
-  //   stripe_payment_id: "stripeID1"
-  // })
-
-  // })
+    expect(bookingsBy_SPID).not.toBe(undefined)
+    expect(bookingsBy_SPID.length).toBe(1)
+    expect(bookingsBy_SPID[0]).toEqual({
+      user_id: "Person1",
+      booking_slot_id: "booking1",
+      stripe_payment_id: "stripeID1"
+    })
+  })
 
   it("Should update a booking in firestore", async () => {
     const { id } = await new BookingDataService().createBooking({
