@@ -10,9 +10,12 @@ export default {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans]
       },
       colors: {
-        blue: "#283D87",
-        "light-blue": "#4088C3",
+        "dark-blue-100": "#283D87",
+        "dark-blue-60": "#676E87",
+        "light-blue-100": "#4088C3",
+        "light-blue-60": "#92ADC3",
         orange: "#FF6D04",
+        "orange-60": "#FFA666",
         black: "#242424",
         "gray-4": "#575757",
         "gray-3": "#BDBDBD",
