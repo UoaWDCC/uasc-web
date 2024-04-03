@@ -1,42 +1,83 @@
 import type { Config } from "tailwindcss"
+import defaultTheme from "tailwindcss/defaultTheme"
 
 export default {
   content: ["./src/**/*.tsx"],
   theme: {
-    extend: {},
-    colors: {
-      blue: "#283D87",
-      "light-blue": "#4088C3",
-      orange: "#FF6D04"
-    },
-    fontFamily: {
-      sans: "Inter"
-    },
-    fontSize: {
-      h1: [
-        "3.125rem",
-        {
-          lineHeight: "3.125rem",
-          letterSpacing: "-0.21875rem",
-          fontWeight: "900"
-        }
-      ],
-      h2: [
-        "2.375rem",
-        {
-          lineHeight: "2.375rem",
-          letterSpacing: "-0.16625rem",
-          fontWeight: "700"
-        }
-      ],
-      h3: [
-        "",
-        {
-          lineHeight: "",
-          letterSpacing: "",
-          fontWeight: ""
-        }
-      ]
+    extend: {
+      fontFamily: {
+        sans: ["Inter var", ...defaultTheme.fontFamily.sans]
+      },
+      colors: {
+        blue: "#283D87",
+        "light-blue": "#4088C3",
+        orange: "#FF6D04",
+        black: "#242424",
+        "gray-4": "#575757",
+        "gray-3": "#BDBDBD",
+        "gray-2": "#E5E5E5",
+        "gray-1": "#FAFAFA",
+        red: "#9A141D",
+        green: "#109D27"
+      },
+      fontSize: {
+        h1: [
+          "3.125rem",
+          {
+            lineHeight: "normal",
+            fontWeight: "900",
+            letterSpacing: "-0.219rem"
+          }
+        ],
+        h2: [
+          "2.375rem",
+          {
+            lineHeight: "normal",
+            letterSpacing: "-0.16625rem",
+            fontWeight: "700"
+          }
+        ],
+        h3: [
+          "1.75rem",
+          {
+            lineHeight: "normal",
+            letterSpacing: "-0.123rem",
+            fontWeight: "700"
+          }
+        ],
+        h4: [
+          "1.313rem",
+          {
+            lineHeight: "normal",
+            letterSpacing: "-0.092rem",
+            fontWeight: "400"
+          }
+        ],
+        h5: [
+          "0.75rem",
+          {
+            lineHeight: "normal",
+            letterSpacing: "0.045rem",
+            fontWeight: "500"
+          }
+        ],
+        p: [
+          "1rem",
+          {
+            lineHeight: "normal",
+            letterSpacing: "-0.07rem",
+            fontWeight: "400"
+          }
+        ],
+        small: [
+          "0.75rem",
+          {
+            lineHeight: "normal",
+            letterSpacing: "-0.015rem",
+            fontWeight: "400"
+          }
+        ]
+      }
     }
   },
   plugins: []
