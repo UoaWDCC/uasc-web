@@ -29,7 +29,7 @@
 }
 
 html {
-  @apply text-black
+  @apply text-black;
 }
 
 body {
