@@ -4,7 +4,7 @@
 
 @layer base {
   h1 {
-    @apply text-h1 
+    @apply font-black text-h1 
   }
 
   h2 {
