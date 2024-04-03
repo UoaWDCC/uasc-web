@@ -1,4 +1,5 @@
 import {
+  EMULATOR_AUTH_PORT,
   EMULATOR_FIRESTORE_PORT,
   EMULATOR_HOST
 } from "data-layer/adapters/EmulatorConfig"
@@ -14,8 +15,9 @@ if (!keysEnvVar && !IS_JEST) {
 
 const keys = JSON.parse(keysEnvVar ?? "{}")
 
-if (process.env.DEV || IS_JEST) {
+if (IS_JEST) {
   process.env.FIRESTORE_EMULATOR_HOST = `${EMULATOR_HOST}:${EMULATOR_FIRESTORE_PORT}`
+  process.env.FIRESTORE_AUTH_EMULATOR_HOST = `${EMULATOR_HOST}:${EMULATOR_AUTH_PORT}`
 }
 
 const firebase = _admin.initializeApp(
