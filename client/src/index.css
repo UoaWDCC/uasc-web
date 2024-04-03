@@ -4,27 +4,27 @@
 
 @layer base {
   h1 {
-    @apply font-black text-h1 
+    @apply font-black text-h1;
   }
 
   h2 {
-    @apply text-h2
+    @apply text-h2;
   }
 
   h3 {
-    @apply text-h3
+    @apply text-h3;
   }
 
   h4 {
-    @apply text-h4
+    @apply text-h4;
   }
 
   h5 {
-    @apply text-h5
+    @apply text-h5;
   }
 
   p {
-    @apply text-p
+    @apply text-p;
   }
 }
 
