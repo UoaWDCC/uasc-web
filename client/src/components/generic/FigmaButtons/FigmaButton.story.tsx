@@ -24,7 +24,7 @@ export const defaultButton: Story = {
   tags: ["autodocs"],
   args: {
     variant: "default",
-    children: "default button variant"
+    children: "Default Button Variant"
   }
 }
 
@@ -32,7 +32,7 @@ export const defaultButton: Story = {
 export const alternativeButton: Story = {
   args: {
     variant: "alternative",
-    children: "alternative button variant"
+    children: "Alternative Button Variant"
   }
 }
 
@@ -40,7 +40,7 @@ export const alternativeButton: Story = {
 export const secondaryButton: Story = {
   args: {
     variant: "secondary",
-    children: "text"
+    children: "Secondary Button Variant"
   }
 }
 
