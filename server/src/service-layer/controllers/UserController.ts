@@ -95,8 +95,11 @@ export class UsersController extends Controller {
       requestBody.uid
     )
     if (!user) return this.setStatus(400) // bad request
-    if (user.membership === "admin") return this.setStatus(403) // admin forbidden
-    if (user.membership === "member") return this.setStatus(409) // conflict
+    const userClaimRole = await authService.getCustomerUserClaim(
+      requestBody.uid
+    )
+    if (userClaimRole?.admin) return this.setStatus(403) // admin forbidden
+    if (userClaimRole?.member) return this.setStatus(409) // conflict
     try {
       // update user in UserService
       await userService.editUserData(requestBody.uid, {
@@ -123,8 +126,11 @@ export class UsersController extends Controller {
       requestBody.uid
     )
     if (!user) return this.setStatus(400) // bad request
-    if (user.membership === "admin") return this.setStatus(403) // admin forbidden
-    if (user.membership === undefined) return this.setStatus(409) // conflict
+    const userClaimRole = await authService.getCustomerUserClaim(
+      requestBody.uid
+    )
+    if (userClaimRole?.admin) return this.setStatus(403) // admin forbidden
+    if (!userClaimRole?.member) return this.setStatus(409) // conflict
     try {
       // update user in UserService
       await userService.editUserData(requestBody.uid, {
