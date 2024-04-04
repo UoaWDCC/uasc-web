@@ -38,7 +38,8 @@ const SecondaryButton = ({ children, props }: props) => {
       {...props}
       className="
       bg-orange hover:bg-white hover:text-orange border border-orange text-white font-sans py-2 px-4 rounded-md;
-    ">
+    "
+    >
       {children}
     </button>
   )
