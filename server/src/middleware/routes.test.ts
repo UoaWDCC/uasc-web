@@ -1,6 +1,6 @@
 import "dotenv/config"
 import supertest from "supertest"
-import { app } from "../index"
+import { _app } from "../index"
 import { auth } from "business-layer/security/Firebase"
 import { initializeApp } from "@firebase/app"
 import {
@@ -20,7 +20,7 @@ const clientFirebase = initializeApp({
 })
 const clientAuth = getAuth(clientFirebase)
 connectAuthEmulator(clientAuth, "http://localhost:9099")
-const request = supertest(app)
+const request = supertest(_app)
 
 describe("Users endpoint", () => {
   let adminToken: string | undefined
@@ -34,6 +34,10 @@ describe("Users endpoint", () => {
     const customToken = await auth.createCustomToken(ADMIN_USER_UID)
     const { user } = await signInWithCustomToken(clientAuth, customToken)
     adminToken = await user.getIdToken()
+  })
+
+  afterEach(async () => {
+    _app.close()
   })
 
   it("Should get users", (done) => {
