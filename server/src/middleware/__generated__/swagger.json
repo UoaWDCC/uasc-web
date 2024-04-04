@@ -169,6 +169,30 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"promoteUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"demoteUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -286,6 +310,62 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/EditUsersRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/promote": {
+			"put": {
+				"operationId": "PromoteUser",
+				"responses": {
+					"200": {
+						"description": "Promoted user"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/promoteUserRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/demote": {
+			"put": {
+				"operationId": "DemoteUser",
+				"responses": {
+					"200": {
+						"description": "Demoted user"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/demoteUserRequestBody"
 							}
 						}
 					}
