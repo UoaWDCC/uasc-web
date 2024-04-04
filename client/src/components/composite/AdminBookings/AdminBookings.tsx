@@ -7,7 +7,6 @@ import {
   IconButton
 } from "@mui/material"
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material"
-import "pages/Admin.css"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { collection, getDocs } from "firebase/firestore"
