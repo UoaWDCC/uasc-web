@@ -8,43 +8,82 @@ import {
   signInWithCustomToken,
   connectAuthEmulator
 } from "firebase/auth"
-import { EMULATOR_PROJECT_ID } from "data-layer/adapters/EmulatorConfig"
+import {
+  EMULATOR_AUTH_PORT,
+  EMULATOR_HOST,
+  EMULATOR_PROJECT_ID
+} from "data-layer/adapters/EmulatorConfig"
+import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 
 const ADMIN_USER_UID = "admin-user"
-// const MEMBER_USER_ID = "member-user"
-// const GUEST_USER_ID = "guest-user"
+const MEMBER_USER_ID = "member-user"
+const GUEST_USER_ID = "guest-user"
 
 const clientFirebase = initializeApp({
   projectId: EMULATOR_PROJECT_ID,
   apiKey: process.env.API_KEY
 })
 const clientAuth = getAuth(clientFirebase)
-connectAuthEmulator(clientAuth, "http://localhost:9099")
+connectAuthEmulator(clientAuth, `http://${EMULATOR_HOST}:${EMULATOR_AUTH_PORT}`)
 const request = supertest(_app)
 
-describe("Users endpoint", () => {
+const createUserWithClaim = async (
+  uid: string,
+  claim?: typeof AuthServiceClaims.ADMIN | typeof AuthServiceClaims.MEMBER
+) => {
+  await auth.createUser({ uid })
+  if (claim) {
+    await auth.setCustomUserClaims(uid, { [claim]: true })
+  }
+
+  const customToken = await auth.createCustomToken(uid)
+  const { user } = await signInWithCustomToken(clientAuth, customToken)
+  return await user.getIdToken()
+}
+
+describe("Endpoints", () => {
   let adminToken: string | undefined
-  //  memberToken: string | undefined,
-  //  guestToken: string | undefined
+  let memberToken: string | undefined
+  let guestToken: string | undefined
 
   beforeAll(async () => {
-    await auth.createUser({ uid: ADMIN_USER_UID })
-    await auth.setCustomUserClaims(ADMIN_USER_UID, { admin: true })
+    // Create admin user token
+    adminToken = await createUserWithClaim(ADMIN_USER_UID, "admin")
 
-    const customToken = await auth.createCustomToken(ADMIN_USER_UID)
-    const { user } = await signInWithCustomToken(clientAuth, customToken)
-    adminToken = await user.getIdToken()
+    // Create member user token
+    memberToken = await createUserWithClaim(MEMBER_USER_ID, "member")
+
+    // Create guest user token
+    guestToken = await createUserWithClaim(GUEST_USER_ID)
   })
 
-  afterEach(async () => {
+  afterAll(async () => {
     _app.close()
   })
 
-  it("Should get users", (done) => {
-    request
-      .get("/users")
-      .set("Authorization", `Bearer ${adminToken}`)
-      .send({})
-      .expect(200, done)
+  describe("/Users", () => {
+    it("Should get users for admin", (done) => {
+      request
+        .get("/users")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+        .expect(200, done)
+    })
+
+    it("Should not allow members and guests to get users", (done) => {
+      request
+        .get("/users")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+        .expect(401, done)
+    })
+
+    it("Should not allow guests", (done) => {
+      request
+        .get("/users")
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send({})
+        .expect(401, done)
+    })
   })
 })
