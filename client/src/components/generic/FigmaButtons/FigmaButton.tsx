@@ -14,7 +14,7 @@ const DefaultButton = ({ children, props }: props) => {
         bg-dark-blue-100 hover:bg-white hover:text-dark-blue-100 border border-dark-blue-100 text-white font-bold py-2 px-4 rounded;
         "
     >
-      default button
+      default button color
     </button>
   )
 }
