@@ -1,4 +1,5 @@
 type buttonVariants = "default" | "alternative" | "secondary"
+
 interface props {
   children?: React.ReactNode
   variant?: buttonVariants
@@ -10,30 +11,10 @@ const DefaultButton = ({ children, props }: props) => {
     <button
       {...props}
       className="
-          relative flex h-[60px] 
-          bg-transparent 
-          hover:bg-blue-200 p-3 m-8
-          font-semibold rounded-full
-          before:ease 
-          relative h-12 w-50 
-          overflow-hidden 
-          border border-black 
-          before:absolute 
-          before:left-0 
-          before:-ml-2 
-          before:h-48 
-          before:w-48 
-          before:origin-top-right 
-          before:-translate-x-full 
-          before:translate-y-12 
-          before:-rotate-90 
-          before:bg-blue-700 
-          before:transition-all 
-          before:duration-300 
-          hover:text-white 
-          hover:before:-rotate-180"
+        bg-dark-blue-100 hover:bg-white hover:text-dark-blue-100 border border-dark-blue-100 text-white font-bold py-2 px-4 rounded;
+        "
     >
-      <span className="relative z-10 hover:text-white">{children}</span>
+      default button
     </button>
   )
 }

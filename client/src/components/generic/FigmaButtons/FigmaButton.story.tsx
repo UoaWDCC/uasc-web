@@ -28,6 +28,22 @@ export const defaultButton: Story = {
   }
 }
 
+/** Alternative button variant */
+export const alternativeButton: Story = {
+  args: {
+    variant: "alternative",
+    children: "alternative button variant"
+  }
+}
+
+/** Secondary button variant */
+export const secondaryButton: Story = {
+  args: {
+    variant: "secondary",
+    children: "text"
+  }
+}
+
 export const comparison: Story = {
   decorators: [
     () => {
@@ -43,19 +59,4 @@ export const comparison: Story = {
       )
     }
   ]
-}
-/** Alternative button variant */
-export const alternativeButton: Story = {
-  args: {
-    variant: "alternative",
-    children: "alternative button variant"
-  }
-}
-
-/** Secondary button variant */
-export const secondaryButton: Story = {
-  args: {
-    variant: "secondary",
-    children: "text"
-  }
 }
