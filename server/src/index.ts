@@ -13,7 +13,8 @@ const importSwaggerJson = async () => {
   }
 }
 
-const app: Express = express()
+export const app: Express = express()
+
 function keepRawBody(
   req: any,
   res: any,
