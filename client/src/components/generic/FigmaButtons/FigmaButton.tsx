@@ -10,8 +10,8 @@ const DefaultButton = ({ children, props }: props) => {
   return (
     <button
       {...props}
-      className="
-        bg-dark-blue-100 hover:bg-white hover:text-dark-blue-100 border border-dark-blue-100 text-white font-sans py-2 px-4 rounded-md;
+      className="rounded-md
+        bg-dark-blue-100 hover:bg-white hover:text-dark-blue-100 border border-dark-blue-100 text-white font-sans py-2 px-8 flex space-x-4;
         "
     >
       {children}
@@ -23,8 +23,8 @@ const AlternativeButton = ({ children, props }: props) => {
   return (
     <button
       {...props}
-      className="
-      bg-light-blue-100 hover:bg-white hover:text-light-blue-100 border border-light-blue-100 text-white font-sans py-2 px-4 rounded-md;
+      className=" rounded-md
+      bg-light-blue-100 hover:bg-white hover:text-light-blue-100 border border-light-blue-100 text-white font-sans py-2 px-8 flex space-x-4;
       "
     >
       {children}
@@ -36,8 +36,8 @@ const SecondaryButton = ({ children, props }: props) => {
   return (
     <button
       {...props}
-      className="
-      bg-orange hover:bg-white hover:text-orange border border-orange text-white font-sans py-2 px-4 rounded-md;
+      className="rounded-md
+      bg-orange hover:bg-white hover:text-orange border border-orange text-white font-sans py-2 px-8 flex space-x-4;
     "
     >
       {children}
