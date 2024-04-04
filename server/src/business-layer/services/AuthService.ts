@@ -36,12 +36,18 @@ export default class AuthService {
 
   public async setCustomUserClaim(
     uid: string,
-    role: typeof AuthServiceClaims.MEMBER | typeof AuthServiceClaims.ADMIN
+    role:
+      | typeof AuthServiceClaims.MEMBER
+      | typeof AuthServiceClaims.ADMIN
+      | null
   ) {
     let userRecord: UserRecord
     try {
       userRecord = await auth.getUser(uid)
-      auth.setCustomUserClaims(userRecord.uid, { [role]: true })
+      auth.setCustomUserClaims(
+        userRecord.uid,
+        role === null ? null : { [role]: true }
+      )
     } catch (err) {
       console.error("Error setting custom claim on user", err)
       throw err
