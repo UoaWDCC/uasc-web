@@ -59,4 +59,3 @@ export const secondaryButton: Story = {
     children: "text"
   }
 }
-
