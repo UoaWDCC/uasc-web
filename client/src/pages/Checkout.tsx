@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-// import "./App.css";
 
 // Using the https://stripe.com/docs/checkout/quickstart example
 
