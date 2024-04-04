@@ -70,7 +70,7 @@ describe("Endpoints", () => {
         .expect(200, done)
     })
 
-    it("Should not allow members and guests to get users", (done) => {
+    it("Should not allow members to get users", (done) => {
       request
         .get("/users")
         .set("Authorization", `Bearer ${memberToken}`)
