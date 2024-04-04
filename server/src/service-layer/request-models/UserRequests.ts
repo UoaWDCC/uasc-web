@@ -13,3 +13,8 @@ export interface CreateUserRequestBody {
 export interface SelfRequestModel {
   user?: UserRecord
 }
+
+export interface EditSelfRequestModel {
+  user?: UserRecord
+  updatedInformation?: UserAdditionalInfo
+}

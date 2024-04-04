@@ -2,9 +2,13 @@ import UserDataService from "data-layer/services/UserDataService"
 import {
   CreateUserRequestBody,
   EditUsersRequestBody,
-  SelfRequestModel
+  SelfRequestModel,
+  EditSelfRequestModel
 } from "service-layer/request-models/UserRequests"
-import { UserResponse } from "service-layer/response-models/UserResponse"
+import {
+  UserResponse,
+  EditSelfResponse,
+} from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
@@ -58,6 +62,23 @@ export class UsersController extends Controller {
     }
     await new UserDataService().createUserData(uid, user)
     this.setStatus(200)
+  }
+
+  @SuccessResponse("200", "Created")
+  @Security("jwt")
+  @Put("create")
+  public async editSelf(
+    @Request() request: EditSelfRequestModel
+  ): Promise<EditSelfResponse> {
+    // TODO: get information about user making request and edit them with the method from UserService
+    await new UserDataService().editUserData(request.user.uid, request.updatedInformation)
+    
+    // TODO: Set to 200 on success (read up on https codes)
+    this.setStatus(200)
+    return Promise.resolve(request.updatedInformation)
+
+    // 404 means not found, may not be appropriate in this case
+    this.setStatus(404)
   }
 
   @SuccessResponse("200", "Edited")
