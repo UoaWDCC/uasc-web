@@ -2,12 +2,12 @@ import "dotenv/config"
 import supertest from "supertest"
 import { _app } from "../index"
 import { auth } from "business-layer/security/Firebase"
-import { initializeApp } from "@firebase/app"
+import { initializeApp } from "firebase/app"
 import {
   getAuth,
   signInWithCustomToken,
   connectAuthEmulator
-} from "@firebase/auth"
+} from "firebase/auth"
 import { EMULATOR_PROJECT_ID } from "data-layer/adapters/EmulatorConfig"
 
 const ADMIN_USER_UID = "admin-user"
