@@ -44,7 +44,7 @@ export interface UserAdditionalInfo {
   /**
    * @isString Please enter either Admin or Member
    */
-  membership: "admin" | "member"
+  membership: "admin" | "member" | undefined
   /**
    * @isString Please write your dietary requirements
    */
