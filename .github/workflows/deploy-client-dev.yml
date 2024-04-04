@@ -22,7 +22,7 @@ jobs:
       - name: Create env file
         run: echo ${{ secrets.UASC_DEV_FRONTEND_ENVFILE }} | base64 --decode > .env
 
-      - run: sudo yarn workspaces focus client --production
+      - run: sudo yarn workspaces focus client
       - run: CI=false sudo yarn build
 
       - uses: "google-github-actions/auth@v2"
