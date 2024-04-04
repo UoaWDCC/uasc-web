@@ -80,7 +80,7 @@ export class UsersController extends Controller {
     this.setStatus(200)
 
     // 404 means not found, may not be appropriate in this case
-    this.setStatus(404)
+    // this.setStatus(404)
 
     return Promise.resolve(request.updatedInformation)
   }

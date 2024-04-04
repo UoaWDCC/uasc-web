@@ -14,6 +14,7 @@ export interface SelfRequestModel {
   user?: UserRecord
 }
 
+// not sure if correct
 export interface EditSelfRequestModel {
   user?: UserRecord
   updatedInformation?: UserAdditionalInfo
