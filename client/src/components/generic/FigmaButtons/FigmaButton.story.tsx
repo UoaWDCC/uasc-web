@@ -44,6 +44,27 @@ export const secondaryButton: Story = {
   }
 }
 
+export const Undefault: Story = {
+  args: {
+    variant: "undefault",
+    children: "Disabled default button"
+  }
+}
+
+export const Unalternative: Story = {
+  args: {
+    variant: "unalternative",
+    children: "Disabled alternative button"
+  }
+}
+
+export const Unsecondary: Story = {
+  args: {
+    variant: "unsecondary",
+    children: "Disabled secondary button"
+  }
+}
+
 export const comparison: Story = {
   decorators: [
     () => {
@@ -55,6 +76,12 @@ export const comparison: Story = {
           <Button variant="alternative">test</Button>
           <button>test</button>
           <Button variant="secondary">test</Button>
+          <button>test</button>
+          <Button variant="undefault">test</Button>
+          <button>test</button>
+          <Button variant="unalternative">test</Button>
+          <button>test</button>
+          <Button variant="unsecondary">test</Button>
         </>
       )
     }
