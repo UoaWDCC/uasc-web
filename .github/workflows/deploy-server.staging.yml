@@ -1,7 +1,6 @@
 name: Fly Deploy Staging
 
 on:
-  pull_request:
   push:
     branches:
       - master
