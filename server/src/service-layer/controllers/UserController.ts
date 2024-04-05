@@ -68,16 +68,16 @@ export class UsersController extends Controller {
   @Security("jwt")
   @Patch("edit-self")
   public async editSelf(
-    @Request() request: EditSelfRequestModel
+    @Body() requestBody: EditSelfRequestModel
   ): Promise<EditSelfResponse> {
     try {
       // need to add logic prevent editing role?
       await new UserDataService().editUserData(
-        request.user.uid,
-        request.updatedInformation
+        requestBody.user.uid,
+        requestBody.updatedInformation
       )
       this.setStatus(200)
-      return Promise.resolve(request.updatedInformation)
+      return Promise.resolve(requestBody.updatedInformation)
     } catch (error) {
       this.setStatus(401)
       return Promise.reject(error)
