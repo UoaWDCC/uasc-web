@@ -64,14 +64,13 @@ export class UsersController extends Controller {
     this.setStatus(200)
   }
 
-  @SuccessResponse("200", "Created")
+  @SuccessResponse("200", "Successful edit")
   @Security("jwt")
   @Put("create")
   public async editSelf(
     @Request() request: EditSelfRequestModel
   ): Promise<EditSelfResponse> {
     try {
-      // TODO: get information about user making request and edit them with the method from UserService
       await new UserDataService().editUserData(
         request.user.uid,
         request.updatedInformation
