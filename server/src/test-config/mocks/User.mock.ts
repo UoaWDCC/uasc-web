@@ -1,7 +1,7 @@
 import { dateToFirestoreTimeStamp } from "data-layer/adapters/FirestoreUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 
-export const additionalInfoMock: UserAdditionalInfo = {
+export const memberUserInfoMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(10000000000)),
   does_freestyle: true,
   does_racing: true,
@@ -21,7 +21,7 @@ export const additionalInfoMock: UserAdditionalInfo = {
   university_year: "2nd"
 }
 
-export const additionalInfoMockSecond: UserAdditionalInfo = {
+export const adminUserInfoMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(1000000000)),
   does_freestyle: true,
   does_racing: true,
@@ -41,7 +41,7 @@ export const additionalInfoMockSecond: UserAdditionalInfo = {
   university_year: "3rd"
 }
 
-export const additionalInfoMockThird: UserAdditionalInfo = {
+export const guestUserInfoMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(1000000000)),
   does_freestyle: true,
   does_racing: true,

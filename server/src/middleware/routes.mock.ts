@@ -15,9 +15,9 @@ import {
 } from "firebase/auth"
 
 import {
-  additionalInfoMock,
-  additionalInfoMockSecond,
-  additionalInfoMockThird
+  memberUserInfoMock,
+  adminUserInfoMock,
+  guestUserInfoMock
 } from "test-config/mocks/User.mock"
 
 type claims = typeof AuthServiceClaims.ADMIN | typeof AuthServiceClaims.MEMBER
@@ -44,13 +44,13 @@ export const GUEST_USER_UID = "guest-user"
 export const createUserData = async (uid: string, membership: memberships) => {
   switch (membership) {
     case "admin":
-      await userService.createUserData(uid, additionalInfoMockSecond)
+      await userService.createUserData(uid, adminUserInfoMock)
       break
     case "member":
-      await userService.createUserData(uid, additionalInfoMock)
+      await userService.createUserData(uid, memberUserInfoMock)
       break
     case "guest":
-      await userService.createUserData(uid, additionalInfoMockThird)
+      await userService.createUserData(uid, guestUserInfoMock)
       break
   }
 }
