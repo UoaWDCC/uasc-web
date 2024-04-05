@@ -25,19 +25,22 @@ describe("Endpoints", () => {
   let memberToken: string | undefined
   let guestToken: string | undefined
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     adminToken = await createUserWithClaim(ADMIN_USER_UID, "admin")
     memberToken = await createUserWithClaim(MEMBER_USER_UID, "member")
     guestToken = await createUserWithClaim(GUEST_USER_UID)
   })
 
-  afterAll(async () => {
+  afterEach(async () => {
     const uidsToDelete = usersToCreate.map((user) => {
       const { uid } = user
       return uid
     })
-    await _app.close()
     await deleteUsersFromAuth(uidsToDelete)
+  })
+
+  afterAll(async () => {
+    await _app.close()
   })
 
   describe("/Users", () => {
@@ -88,7 +91,7 @@ describe("Endpoints", () => {
       request
         .put("/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
-        .send({ uid: GUEST_USER_UID })
+        .send({ uid: MEMBER_USER_UID })
         .expect(200, done)
     })
     it("Should not allow admins to demote/promote admins", async () => {
