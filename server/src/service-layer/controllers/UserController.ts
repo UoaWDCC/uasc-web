@@ -70,19 +70,18 @@ export class UsersController extends Controller {
   public async editSelf(
     @Request() request: EditSelfRequestModel
   ): Promise<EditSelfResponse> {
-    // TODO: get information about user making request and edit them with the method from UserService
-    await new UserDataService().editUserData(
-      request.user.uid,
-      request.updatedInformation
-    )
-
-    // TODO: Set to 200 on success (read up on https codes)
-    this.setStatus(200)
-
-    // 404 means not found, may not be appropriate in this case
-    // this.setStatus(404)
-
-    return Promise.resolve(request.updatedInformation)
+    try {
+      // TODO: get information about user making request and edit them with the method from UserService
+      await new UserDataService().editUserData(
+        request.user.uid,
+        request.updatedInformation
+      )
+      this.setStatus(200)
+      return Promise.resolve(request.updatedInformation)
+    } catch (error) {
+      this.setStatus(401)
+      return Promise.reject(error)
+    }
   }
 
   @SuccessResponse("200", "Edited")
