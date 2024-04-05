@@ -1,7 +1,6 @@
 name: Fly Deploy Staging
 
 on:
-  pull_request:
   push:
     branches:
       - master
@@ -10,17 +9,6 @@ env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_STAGING_API_TOKEN }}
 
 jobs:
-  # deploy-web:
-  #   name: Deploy Web
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: superfly/flyctl-actions/setup-flyctl@master
-  #     - run: flyctl deploy --remote-only --config fly.staging.toml
-  #       working-directory: ./web
-  #       env:
-  #         FLY_API_TOKEN: ${{ secrets.FLY_WEB_STAGING_API_TOKEN }}
-
   deploy-api:
     name: Deploy Api
     runs-on: ubuntu-latest
