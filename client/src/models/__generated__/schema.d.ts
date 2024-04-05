@@ -65,7 +65,7 @@ export interface components {
       first_name: string;
       last_name: string;
       /** @enum {string} */
-      membership?: "admin" | "member";
+      membership: "admin" | "member" | "guest";
       dietary_requirements: string;
       faculty?: string;
       university?: string;
