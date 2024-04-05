@@ -14,6 +14,9 @@ export interface paths {
   "/users/create": {
     put: operations["CreateUser"];
   };
+  "/users/edit-self": {
+    patch: operations["EditSelf"];
+  };
   "/users/bulk-edit": {
     patch: operations["EditUsers"];
   };
@@ -75,6 +78,28 @@ export interface components {
       uid: string;
       user: components["schemas"]["UserAdditionalInfo"];
     };
+    /** @description Make all properties in T optional */
+    Partial_UserAdditionalInfo_: {
+      date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_freestyle?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      gender?: string;
+      emergency_name?: string;
+      emergency_phone?: string;
+      emergency_relation?: string;
+      first_name?: string;
+      last_name?: string;
+      /** @enum {string} */
+      membership?: "admin" | "member";
+      dietary_requirements?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning?: boolean;
+      university_year?: string;
+    };
+    EditSelfResponse: components["schemas"]["Partial_UserAdditionalInfo_"];
     EditUsersRequestBody: {
       users: {
           updatedInformation: components["schemas"]["UserAdditionalInfo"];
@@ -129,6 +154,16 @@ export interface operations {
       /** @description Created */
       200: {
         content: never;
+      };
+    };
+  };
+  EditSelf: {
+    responses: {
+      /** @description Successful edit */
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditSelfResponse"];
+        };
       };
     };
   };
