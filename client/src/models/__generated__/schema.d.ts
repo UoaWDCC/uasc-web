@@ -78,28 +78,7 @@ export interface components {
       uid: string;
       user: components["schemas"]["UserAdditionalInfo"];
     };
-    /** @description Make all properties in T optional */
-    Partial_UserAdditionalInfo_: {
-      date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_freestyle?: boolean;
-      does_racing?: boolean;
-      does_ski?: boolean;
-      gender?: string;
-      emergency_name?: string;
-      emergency_phone?: string;
-      emergency_relation?: string;
-      first_name?: string;
-      last_name?: string;
-      /** @enum {string} */
-      membership?: "admin" | "member";
-      dietary_requirements?: string;
-      faculty?: string;
-      university?: string;
-      student_id?: string;
-      returning?: boolean;
-      university_year?: string;
-    };
-    EditSelfResponse: components["schemas"]["Partial_UserAdditionalInfo_"];
+    EditSelfResponse: components["schemas"]["UserAdditionalInfo"];
     EditUsersRequestBody: {
       users: {
           updatedInformation: components["schemas"]["UserAdditionalInfo"];

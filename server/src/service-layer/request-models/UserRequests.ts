@@ -15,6 +15,6 @@ export interface SelfRequestModel {
 }
 
 export interface EditSelfRequestModel {
-  user?: UserRecord
-  updatedInformation?: Partial<UserAdditionalInfo>
+  user: UserRecord
+  updatedInformation: UserAdditionalInfo
 }

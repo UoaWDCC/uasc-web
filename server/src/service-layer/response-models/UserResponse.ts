@@ -4,4 +4,4 @@ import { UserAdditionalInfo } from "data-layer/models/firebase"
 export type UserResponse = UserAdditionalInfo & FirebaseProperties
 
 // TODO: find appropriate type
-export type EditSelfResponse = Partial<UserAdditionalInfo>
+export type EditSelfResponse = UserAdditionalInfo
