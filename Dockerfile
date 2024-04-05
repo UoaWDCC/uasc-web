@@ -21,7 +21,7 @@ RUN apt-get update -qq && \
 # Install node modules
 COPY --link package.json yarn.lock .yarnrc.yml tsconfig.json ./
 COPY --link ./server ./server
-RUN yarn workspaces focus server
+RUN yarn workspaces focus server --production
 
 # Copy application code
 
