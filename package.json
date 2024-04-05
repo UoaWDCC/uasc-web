@@ -44,15 +44,17 @@
     "lint": "eslint",
     "lint-all": "eslint .",
     "prettier": "prettier . --write",
+    "prettier:ci": "prettier . --check",
     "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
     "postinstall": "husky",
     "lint-and-fix": "eslint . --fix",
     "dev-client": "yarn workspace client start",
     "dev-server": "yarn workspace server start",
     "storybook": "yarn workspace client storybook",
-    "test-server": "firebase emulators:exec --only firestore \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
+    "test-server": "yarn firestore-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
     "test-client": "jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/client",
-    "test": "yarn test-client && yarn test-server"
+    "test": "yarn test-client && yarn test-server",
+    "firestore-test": "firebase emulators:exec --only firestore"
   },
   "eslintConfig": {
     "extends": [
