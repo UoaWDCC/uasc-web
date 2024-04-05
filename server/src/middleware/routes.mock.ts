@@ -23,15 +23,6 @@ import {
 type claims = typeof AuthServiceClaims.ADMIN | typeof AuthServiceClaims.MEMBER
 type memberships = UserAdditionalInfo["membership"]
 
-export type userToCreate = {
-  uid: string
-  membership: memberships
-}
-
-export const ADMIN_USER_UID = "admin-user"
-export const MEMBER_USER_UID = "member-user"
-export const GUEST_USER_UID = "guest-user"
-
 const clientFirebase = initializeApp({
   projectId: EMULATOR_PROJECT_ID,
   apiKey: process.env.API_KEY
@@ -41,6 +32,14 @@ const clientAuth = getAuth(clientFirebase)
 connectAuthEmulator(clientAuth, `http://${EMULATOR_HOST}:${EMULATOR_AUTH_PORT}`)
 
 const userService = new UserDataService()
+export type userToCreate = {
+  uid: string
+  membership: memberships
+}
+
+export const ADMIN_USER_UID = "admin-user"
+export const MEMBER_USER_UID = "member-user"
+export const GUEST_USER_UID = "guest-user"
 
 export const createUserData = async (uid: string, membership: memberships) => {
   switch (membership) {
