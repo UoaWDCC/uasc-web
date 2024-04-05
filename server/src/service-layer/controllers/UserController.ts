@@ -109,6 +109,7 @@ export class UsersController extends Controller {
       await authService.setCustomUserClaim(requestBody.uid, "member")
       this.setStatus(200)
     } catch (e) {
+      console.error(e)
       this.setStatus(500) // unknown server error?
     }
   }
@@ -134,12 +135,13 @@ export class UsersController extends Controller {
     try {
       // update user in UserService
       await userService.editUserData(requestBody.uid, {
-        membership: undefined
+        membership: "guest"
       })
       // update user claims in AuthService, set to null to delete the claim
       await authService.setCustomUserClaim(requestBody.uid, null)
       this.setStatus(200)
     } catch (e) {
+      console.error(e)
       this.setStatus(500) // unknown server error?
     }
   }

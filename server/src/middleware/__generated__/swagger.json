@@ -64,7 +64,8 @@
 						"type": "string",
 						"enum": [
 							"admin",
-							"member"
+							"member",
+							"guest"
 						]
 					},
 					"dietary_requirements": {
@@ -97,6 +98,7 @@
 					"emergency_relation",
 					"first_name",
 					"last_name",
+					"membership",
 					"dietary_requirements",
 					"returning",
 					"university_year"

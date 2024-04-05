@@ -38,7 +38,7 @@ const models: TsoaRoute.Models = {
             "emergency_relation": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter a name"}}},
             "first_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},
             "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
-            "membership": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["admin"]},{"dataType":"enum","enums":["member"]},{"dataType":"undefined"}],"required":true,"validators":{"isString":{"errorMsg":"Please enter either Admin or Member"}}},
+            "membership": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["admin"]},{"dataType":"enum","enums":["member"]},{"dataType":"enum","enums":["guest"]}],"required":true,"validators":{"isString":{"errorMsg":"Please enter either Admin or Member or Guest"}}},
             "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
             "faculty": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true,"validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
             "university": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true,"validators":{"isString":{"errorMsg":"Please enter your university"}}},
