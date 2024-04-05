@@ -1,9 +1,13 @@
 name: Fly Deploy Staging
 
 on:
+  pull_request:
   push:
     branches:
       - master
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_STAGING_API_TOKEN }}
 
 jobs:
   # deploy-web:
@@ -16,8 +20,6 @@ jobs:
   #       working-directory: ./web
   #       env:
   #         FLY_API_TOKEN: ${{ secrets.FLY_WEB_STAGING_API_TOKEN }}
-  env:
-    FLY_API_TOKEN: ${{ secrets.FLY_API_STAGING_API_TOKEN }}
 
   deploy-api:
     name: Deploy Api
