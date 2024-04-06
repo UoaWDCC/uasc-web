@@ -5,6 +5,9 @@
 
 
 export interface paths {
+  "/signup": {
+    post: operations["Signup"];
+  };
   "/users": {
     get: operations["GetAllUsers"];
   };
@@ -73,6 +76,10 @@ export interface components {
       returning: boolean;
       university_year: string;
     };
+    UserSignupBody: {
+      email: string;
+      user: components["schemas"]["UserAdditionalInfo"];
+    };
     FirebaseProperties: {
       uid: string;
     };
@@ -111,6 +118,20 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  Signup: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserSignupBody"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+    };
+  };
   GetAllUsers: {
     responses: {
       /** @description Users found */

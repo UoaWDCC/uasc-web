@@ -21,7 +21,7 @@ export class UserSignup extends Controller {
       return null
     }
     // check for a conflicting uid, status 409
-    if (await userService.userDataExists(user.uid)) return this.setStatus(409)
+    // if (await userService.userDataExists(user.uid)) return this.setStatus(409)
 
     await userService.createUserData(user.uid, requestBody.user)
     this.setStatus(200)
