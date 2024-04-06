@@ -10,9 +10,7 @@ import {
   DemoteUserRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
-import {
-  UserResponse
-} from "service-layer/response-models/UserResponse"
+import { UserResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
