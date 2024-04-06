@@ -8,9 +8,9 @@ const Tab = ({
   return (
     <button
       {...props}
-      className="text-h5 font-bold disabled:text-light-blue-100 
-      uppercase border-b-[3px] border-transparent disabled:border-light-blue-100
-    hover:text-light-blue-100 pb-2"
+      className="text-h5 disabled:text-light-blue-100 disabled:border-light-blue-100 
+      hover:text-light-blue-100 border-b-[3px] border-transparent pb-2
+    font-bold uppercase"
     >
       {children}
     </button>
