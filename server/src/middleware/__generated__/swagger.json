@@ -106,6 +106,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UserSignupBody": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserAdditionalInfo"
+					}
+				},
+				"required": [
+					"email",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"FirebaseProperties": {
 				"properties": {
 					"uid": {
@@ -210,6 +226,35 @@
 		"contact": {}
 	},
 	"paths": {
+		"/signup": {
+			"post": {
+				"operationId": "Signup",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserSignupBody"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/users": {
 			"get": {
 				"operationId": "GetAllUsers",
