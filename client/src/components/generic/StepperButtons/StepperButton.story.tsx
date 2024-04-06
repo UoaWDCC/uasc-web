@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 import StepperButton from "./StepperButton"
 const meta: Meta<typeof StepperButton> = {
   component: StepperButton,
-  title: "Button",
+  title: "StepperButton",
   argTypes: {
     variant: {
       control: { type: "radio" },
@@ -23,6 +23,17 @@ export const normal: Story = {
   tags: ["autodocs"],
   args: {
     variant: "normal",
-    children: "test"
+    children: "default test"
+  }
+}
+
+export const disabled: Story = {
+  tags: ["autodocs"],
+  args: {
+    variant: "disabled",
+    children: "disabled test",
+    props:{
+      disabled: true
+    }
   }
 }
