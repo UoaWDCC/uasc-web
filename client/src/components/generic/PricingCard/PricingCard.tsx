@@ -27,7 +27,9 @@ const PricingCard = ({
           {priceString}
         </h1>
         <small className="text-orange">{extraInfo}</small>
-        <img src={tick} className="ml-auto mr-auto mt-6 h-6 w-6" />
+        {selected && (
+          <img src={tick} className="ml-auto mr-auto mt-6 h-6 w-6" />
+        )}
       </div>
     </div>
   )
