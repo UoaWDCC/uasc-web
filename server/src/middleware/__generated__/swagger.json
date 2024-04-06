@@ -195,7 +195,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"promoteUserRequestBody": {
+			"PromoteUserRequestBody": {
 				"properties": {
 					"uid": {
 						"type": "string"
@@ -207,7 +207,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"demoteUserRequestBody": {
+			"DemoteUserRequestBody": {
 				"properties": {
 					"uid": {
 						"type": "string"
@@ -395,7 +395,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/promoteUserRequestBody"
+								"$ref": "#/components/schemas/PromoteUserRequestBody"
 							}
 						}
 					}
@@ -423,7 +423,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/demoteUserRequestBody"
+								"$ref": "#/components/schemas/DemoteUserRequestBody"
 							}
 						}
 					}

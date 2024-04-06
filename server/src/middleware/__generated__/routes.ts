@@ -98,7 +98,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "promoteUserRequestBody": {
+    "PromoteUserRequestBody": {
         "dataType": "refObject",
         "properties": {
             "uid": {"dataType":"string","required":true},
@@ -106,7 +106,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "demoteUserRequestBody": {
+    "DemoteUserRequestBody": {
         "dataType": "refObject",
         "properties": {
             "uid": {"dataType":"string","required":true},
@@ -285,7 +285,7 @@ export function RegisterRoutes(app: Router) {
 
             function UsersController_promoteUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"promoteUserRequestBody"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"PromoteUserRequestBody"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -316,7 +316,7 @@ export function RegisterRoutes(app: Router) {
 
             function UsersController_demoteUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"demoteUserRequestBody"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DemoteUserRequestBody"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

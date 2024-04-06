@@ -20,10 +20,10 @@ export interface EditSelfRequestModel {
 }
 
 // promote/demote users - ticket 202
-export interface promoteUserRequestBody {
+export interface PromoteUserRequestBody {
   uid: string
 }
 
-export interface demoteUserRequestBody {
+export interface DemoteUserRequestBody {
   uid: string
 }

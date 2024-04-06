@@ -97,10 +97,10 @@ export interface components {
           uid: string;
         }[];
     };
-    promoteUserRequestBody: {
+    PromoteUserRequestBody: {
       uid: string;
     };
-    demoteUserRequestBody: {
+    DemoteUserRequestBody: {
       uid: string;
     };
   };
@@ -185,7 +185,7 @@ export interface operations {
   PromoteUser: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["promoteUserRequestBody"];
+        "application/json": components["schemas"]["PromoteUserRequestBody"];
       };
     };
     responses: {
@@ -198,7 +198,7 @@ export interface operations {
   DemoteUser: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["demoteUserRequestBody"];
+        "application/json": components["schemas"]["DemoteUserRequestBody"];
       };
     };
     responses: {

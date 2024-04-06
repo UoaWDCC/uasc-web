@@ -6,8 +6,8 @@ import {
   EditUsersRequestBody,
   SelfRequestModel,
   EditSelfRequestModel,
-  demoteUserRequestBody,
-  promoteUserRequestBody
+  DemoteUserRequestBody,
+  PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import {
   UserResponse,
@@ -110,7 +110,7 @@ export class UsersController extends Controller {
   @Put("promote")
   // set user membership to "member"
   public async promoteUser(
-    @Body() requestBody: promoteUserRequestBody
+    @Body() requestBody: PromoteUserRequestBody
   ): Promise<void> {
     const userService = new UserDataService() // create a new data service
     const authService = new AuthService()
@@ -143,7 +143,7 @@ export class UsersController extends Controller {
   @Put("demote")
   // set user membership type to `undefined`
   public async demoteUser(
-    @Body() requestBody: demoteUserRequestBody
+    @Body() requestBody: DemoteUserRequestBody
   ): Promise<void> {
     const userService = new UserDataService()
     const authService = new AuthService()
