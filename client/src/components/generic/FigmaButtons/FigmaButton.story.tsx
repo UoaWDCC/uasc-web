@@ -47,21 +47,30 @@ export const secondaryButton: Story = {
 export const Undefault: Story = {
   args: {
     variant: "undefault",
-    children: "Disabled default button"
+    children: "Disabled default button",
+    props: {
+      disabled: true
+    }
   }
 }
 
 export const Unalternative: Story = {
   args: {
     variant: "unalternative",
-    children: "Disabled alternative button"
+    children: "Disabled alternative button",
+    props: {
+      disabled: true
+    }
   }
 }
 
 export const Unsecondary: Story = {
   args: {
     variant: "unsecondary",
-    children: "Disabled secondary button"
+    children: "Disabled secondary button",
+    props: {
+      disabled: true
+    }
   }
 }
 

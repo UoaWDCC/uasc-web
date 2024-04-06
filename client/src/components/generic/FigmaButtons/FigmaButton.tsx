@@ -59,7 +59,6 @@ const Undefault = ({ children, props }: props) => {
       className="rounded-md font-bold
         bg-dark-blue-60 text-gray-2 font-sans py-2 px-8 flex space-x-4;
         "
-      disabled
     >
       {children}
     </button>
@@ -73,7 +72,6 @@ const Unalternative = ({ children, props }: props) => {
       className=" rounded-md font-bold
       bg-light-blue-60 text-white font-sans py-2 px-8 flex space-x-4 text-gray-2;
       "
-      disabled
     >
       {children}
     </button>
@@ -87,7 +85,6 @@ const Unsecondary = ({ children, props }: props) => {
       className="rounded-md font-bold
       bg-orange-60 text-gray-2 font-sans py-2 px-8 flex space-x-4;
     "
-      disabled
     >
       {children}
     </button>
