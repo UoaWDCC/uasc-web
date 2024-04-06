@@ -2,7 +2,7 @@ import { UserAdditionalInfo } from "data-layer/models/firebase"
 import { UserRecord } from "firebase-admin/lib/auth/user-record"
 
 export interface EditUsersRequestBody {
-  users: { uid: string; updatedInformation: UserAdditionalInfo }[]
+  users: { uid: string; updatedInformation: Partial<UserAdditionalInfo> }[]
 }
 
 export interface CreateUserRequestBody {
@@ -15,8 +15,11 @@ export interface SelfRequestModel {
 }
 
 export interface EditSelfRequestModel {
-  user: UserRecord
-  updatedInformation: UserAdditionalInfo
+  user: { uid: string }
+}
+
+export interface EditSelfRequestBody {
+  updatedInformation: Omit<Partial<UserAdditionalInfo>, 'membership'>
 }
 
 // promote/demote users - ticket 202

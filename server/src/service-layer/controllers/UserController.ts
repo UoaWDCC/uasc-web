@@ -3,6 +3,7 @@ import { UserAdditionalInfo } from "data-layer/models/firebase"
 import UserDataService from "data-layer/services/UserDataService"
 import {
   CreateUserRequestBody,
+  EditSelfRequestBody,
   EditUsersRequestBody,
   SelfRequestModel,
   EditSelfRequestModel,
@@ -10,8 +11,7 @@ import {
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import {
-  UserResponse,
-  EditSelfResponse
+  UserResponse
 } from "service-layer/response-models/UserResponse"
 import {
   Body,
@@ -72,19 +72,18 @@ export class UsersController extends Controller {
   @Security("jwt")
   @Patch("edit-self")
   public async editSelf(
-    @Body() requestBody: EditSelfRequestModel
-  ): Promise<EditSelfResponse> {
+    @Request() request: EditSelfRequestModel,
+    @Body() requestBody: EditSelfRequestBody
+  ): Promise<void> {
     try {
-      // need to add logic prevent editing role?
       await new UserDataService().editUserData(
-        requestBody.user.uid,
+        request.user.uid,
         requestBody.updatedInformation
       )
       this.setStatus(200)
-      return Promise.resolve(requestBody.updatedInformation)
     } catch (error) {
+      console.error(error)
       this.setStatus(401)
-      return Promise.reject(error)
     }
   }
 
