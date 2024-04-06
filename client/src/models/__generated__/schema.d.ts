@@ -17,6 +17,12 @@ export interface paths {
   "/users/bulk-edit": {
     patch: operations["EditUsers"];
   };
+  "/users/promote": {
+    put: operations["PromoteUser"];
+  };
+  "/users/demote": {
+    put: operations["DemoteUser"];
+  };
   "/webhook": {
     post: operations["ReceiveWebhook"];
   };
@@ -59,7 +65,7 @@ export interface components {
       first_name: string;
       last_name: string;
       /** @enum {string} */
-      membership: "admin" | "member";
+      membership: "admin" | "member" | "guest";
       dietary_requirements: string;
       faculty?: string;
       university?: string;
@@ -80,6 +86,12 @@ export interface components {
           updatedInformation: components["schemas"]["UserAdditionalInfo"];
           uid: string;
         }[];
+    };
+    promoteUserRequestBody: {
+      uid: string;
+    };
+    demoteUserRequestBody: {
+      uid: string;
     };
   };
   responses: {
@@ -140,6 +152,32 @@ export interface operations {
     };
     responses: {
       /** @description Edited */
+      200: {
+        content: never;
+      };
+    };
+  };
+  PromoteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["promoteUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Promoted user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  DemoteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["demoteUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Demoted user */
       200: {
         content: never;
       };
