@@ -18,3 +18,12 @@ export interface EditSelfRequestModel {
   user: UserRecord
   updatedInformation: UserAdditionalInfo
 }
+
+// promote/demote users - ticket 202
+export interface promoteUserRequestBody {
+  uid: string
+}
+
+export interface demoteUserRequestBody {
+  uid: string
+}

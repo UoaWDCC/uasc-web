@@ -10,7 +10,6 @@ import {
   DocumentData
 } from "firebase/firestore"
 import { Stack, Typography } from "@mui/material"
-import "../styles/Profile.css"
 import ProfileCard from "components/composite/ProfileCard/ProfileCard"
 import ProfileCalendarCard from "components/composite/ProfileCalendarCard/ProfileCalendarCard"
 import ProfileCurrentBookings from "components/composite/ProfileCurrentBookings/ProfileCurrentBookings"

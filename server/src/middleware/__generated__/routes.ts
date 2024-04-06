@@ -38,7 +38,7 @@ const models: TsoaRoute.Models = {
             "emergency_relation": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter a name"}}},
             "first_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},
             "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
-            "membership": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["admin"]},{"dataType":"enum","enums":["member"]}],"required":true,"validators":{"isString":{"errorMsg":"Please enter either Admin or Member"}}},
+            "membership": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["admin"]},{"dataType":"enum","enums":["member"]},{"dataType":"enum","enums":["guest"]}],"required":true,"validators":{"isString":{"errorMsg":"Please enter either Admin or Member or Guest"}}},
             "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
             "faculty": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true,"validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
             "university": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true,"validators":{"isString":{"errorMsg":"Please enter your university"}}},
@@ -76,10 +76,40 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"UserAdditionalInfo","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserRecord": {
+        "dataType": "refAlias",
+        "type": {"dataType":"object","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "EditSelfRequestModel": {
+        "dataType": "refObject",
+        "properties": {
+            "user": {"ref":"UserRecord","required":true},
+            "updatedInformation": {"ref":"UserAdditionalInfo","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "EditUsersRequestBody": {
         "dataType": "refObject",
         "properties": {
             "users": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"updatedInformation":{"ref":"UserAdditionalInfo","required":true},"uid":{"dataType":"string","required":true}}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "promoteUserRequestBody": {
+        "dataType": "refObject",
+        "properties": {
+            "uid": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "demoteUserRequestBody": {
+        "dataType": "refObject",
+        "properties": {
+            "uid": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -193,7 +223,7 @@ export function RegisterRoutes(app: Router) {
 
             function UsersController_editSelf(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"EditSelfRequestModel"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -237,6 +267,68 @@ export function RegisterRoutes(app: Router) {
 
               templateService.apiHandler({
                 methodName: 'editUsers',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/users/promote',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(UsersController)),
+            ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.promoteUser)),
+
+            function UsersController_promoteUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"promoteUserRequestBody"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new UsersController();
+
+              templateService.apiHandler({
+                methodName: 'promoteUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/users/demote',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(UsersController)),
+            ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.demoteUser)),
+
+            function UsersController_demoteUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"demoteUserRequestBody"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new UsersController();
+
+              templateService.apiHandler({
+                methodName: 'demoteUser',
                 controller,
                 response,
                 next,

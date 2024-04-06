@@ -64,7 +64,8 @@
 						"type": "string",
 						"enum": [
 							"admin",
-							"member"
+							"member",
+							"guest"
 						]
 					},
 					"dietary_requirements": {
@@ -146,6 +147,27 @@
 			"EditSelfResponse": {
 				"$ref": "#/components/schemas/UserAdditionalInfo"
 			},
+			"UserRecord": {
+				"additionalProperties": false,
+				"type": "object",
+				"description": "Represents a user."
+			},
+			"EditSelfRequestModel": {
+				"properties": {
+					"user": {
+						"$ref": "#/components/schemas/UserRecord"
+					},
+					"updatedInformation": {
+						"$ref": "#/components/schemas/UserAdditionalInfo"
+					}
+				},
+				"required": [
+					"user",
+					"updatedInformation"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"EditUsersRequestBody": {
 				"properties": {
 					"users": {
@@ -169,6 +191,30 @@
 				},
 				"required": [
 					"users"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"promoteUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"demoteUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -287,7 +333,17 @@
 						"jwt": []
 					}
 				],
-				"parameters": []
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/EditSelfRequestModel"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/users/bulk-edit": {
@@ -312,6 +368,62 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/EditUsersRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/promote": {
+			"put": {
+				"operationId": "PromoteUser",
+				"responses": {
+					"200": {
+						"description": "Promoted user"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/promoteUserRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/demote": {
+			"put": {
+				"operationId": "DemoteUser",
+				"responses": {
+					"200": {
+						"description": "Demoted user"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/demoteUserRequestBody"
 							}
 						}
 					}

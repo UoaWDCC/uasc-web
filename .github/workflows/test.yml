@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+
+env:
+  API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
+
 jobs:
   Run-Tests:
     runs-on: ubuntu-latest
