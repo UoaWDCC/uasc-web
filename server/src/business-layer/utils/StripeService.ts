@@ -1,4 +1,4 @@
-export const CheckoutSubscriptions = {
+export const CHECKOUT_TYPE_VALUES = {
   MEMBERSHIP: "membership",
   BOOKING: "booking"
 } as const
@@ -9,3 +9,5 @@ export interface StripeMetadata {
    */
   type: "membership" | "booking"
 }
+
+export const CHECKOUT_TYPE_KEY = "type"
