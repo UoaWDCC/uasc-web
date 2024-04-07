@@ -34,6 +34,23 @@ export default class AuthService {
   }
 
   /**
+   * Creates a custom token for a user to sign in with
+   * @param uid identifier for the user
+   * @param claims claims that the token should have
+   * @returns the custom token
+   */
+  public async createCustomToken(uid: string, claims: { [key: string]: any }) {
+    let token: string
+    try {
+      token = await auth.createCustomToken(uid, claims)
+    } catch (err) {
+      console.error("Error creating custom token", err)
+      throw err
+    }
+    return token
+  }
+
+  /**
    * Sets a customers claim as target role in the Firebase Authentication Service.
    * @param uid
    * @param role

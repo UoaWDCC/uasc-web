@@ -53,7 +53,7 @@
     "dev-server": "yarn workspace server start",
     "storybook": "yarn workspace client storybook",
     "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
-    "test-client": "jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/client",
+    "test-client": "jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=client/src",
     "test": "yarn test-client && yarn test-server",
     "firebase-test": "firebase emulators:exec --only firestore,auth"
   },
