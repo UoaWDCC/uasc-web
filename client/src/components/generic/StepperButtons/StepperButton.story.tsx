@@ -23,7 +23,7 @@ export const first: Story = {
   tags: ["autodocs"],
   args: {
     variant: "first",
-    children: "first button test"
+    children: "confirm"
   }
 }
 
@@ -31,7 +31,7 @@ export const normal: Story = {
   tags: ["autodocs"],
   args: {
     variant: "normal",
-    children: "default test"
+    children: "Additional"
   }
 }
 
@@ -39,7 +39,7 @@ export const disabled: Story = {
   tags: ["autodocs"],
   args: {
     variant: "normal",
-    children: "disabled test",
+    children: "payment",
     disabled: true
   }
 }
