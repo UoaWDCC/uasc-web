@@ -17,9 +17,9 @@ const DefaultButton = ({ children, ...props }: props) => {
   return (
     <button
       {...props}
-      className="rounded-md font-bold
-        bg-dark-blue-100 hover:bg-white enabled:hover:text-dark-blue-100 border enabled:border-dark-blue-100 text-white font-sans py-2 px-8 flex space-x-4;
-        disabled:bg-dark-blue-60 flex-col items-center"
+      className="bg-dark-blue-100 enabled:hover:text-dark-blue-100 border-dark-blue-100
+        space-x-4; disabled:bg-dark-blue-60 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
+        text-white hover:bg-white enabled:border"
     >
       {children}
     </button>
@@ -30,9 +30,9 @@ const AlternativeButton = ({ children, ...props }: props) => {
   return (
     <button
       {...props}
-      className=" rounded-md font-bold
-      bg-light-blue-100 enabled:hover:bg-white enabled:hover:text-light-blue-100 border enabled:border-light-blue-100 text-white py-2 px-8 flex space-x-4;
-      disabled:bg-light-blue-60 flex-col items-center"
+      className=" bg-light-blue-100 enabled:hover:text-light-blue-100 border-light-blue-100
+      space-x-4; disabled:bg-light-blue-60 flex flex-col items-center rounded-md px-8 py-2 font-bold uppercase
+      text-white enabled:border enabled:hover:bg-white"
     >
       {children}
     </button>
@@ -43,10 +43,10 @@ const SecondaryButton = ({ children, ...props }: props) => {
   return (
     <button
       {...props}
-      className="rounded-md font-bold 
-       justify-center
-      bg-orange hover:bg-white enabled:hover:text-orange border enabled:border-orange text-white font-p py-2 px-8 flex space-x-4;
-      disabled:bg-orange-60 flex-col items-center
+      className="bg-orange enabled:hover:text-orange 
+       border-orange font-p
+      space-x-4; disabled:bg-orange-60 flex flex-col items-center justify-center rounded-md px-8 py-2 font-bold uppercase
+      text-white hover:bg-white enabled:border
     "
     >
       {children}
