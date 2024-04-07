@@ -2,6 +2,7 @@ import "dotenv/config"
 import { _app } from "../index"
 import { cleanFirestore } from "test-config/TestUtils"
 import supertest from "supertest"
+import UserDataService from "data-layer/services/UserDataService"
 import {
   ADMIN_USER_UID,
   GUEST_USER_UID,
@@ -137,6 +138,93 @@ describe("Endpoints", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
       expect(res.status).toEqual(409) // conflict
+    })
+  })
+
+  describe("/users/edit-self", () => {
+    beforeEach(async () => {
+      await createUserData(ADMIN_USER_UID, "admin")
+      await createUserData(MEMBER_USER_UID, "member")
+      await createUserData(GUEST_USER_UID, "guest")
+    })
+
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+    it("should edit the users information", async () => {
+      const res = await request
+        .patch("/users/edit-self")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ updatedInformation: { gender: "male" } })
+
+      expect(res.status).toEqual(200) // success
+      const updatedUser = await new UserDataService().getUserData(
+        ADMIN_USER_UID
+      )
+      expect(updatedUser.gender).toEqual("male")
+    })
+
+    it("should not edit the users role", async () => {
+      const res = await request
+        .patch("/users/edit-self")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({ updatedInformation: { membership: "admin" } })
+
+      expect(res.status).toEqual(400) // invalid request
+      const updatedUser = await new UserDataService().getUserData(
+        MEMBER_USER_UID
+      )
+      expect(updatedUser.membership).toEqual("member")
+      expect(updatedUser.membership).not.toEqual("admin")
+    })
+
+    it("should edit the user information for multiple attributes", async () => {
+      const res = await request
+        .patch("/users/edit-self")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          updatedInformation: { does_ski: true, university_year: "4th" }
+        })
+
+      expect(res.status).toEqual(200) // success
+      const updatedUser = await new UserDataService().getUserData(
+        MEMBER_USER_UID
+      )
+      expect(updatedUser.does_ski).toEqual(true)
+      expect(updatedUser.university_year).toEqual("4th")
+    })
+
+    it("should not edit users role for multiple attributes", async () => {
+      const res = await request
+        .patch("/users/edit-self")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          updatedInformation: {
+            faculty: "arts",
+            gender: "two spirit",
+            membership: "admin"
+          }
+        })
+
+      expect(res.status).toEqual(400) // invalid request
+      const updatedUser = await new UserDataService().getUserData(
+        MEMBER_USER_UID
+      )
+      expect(updatedUser.membership).toEqual("member")
+      expect(updatedUser.membership).not.toEqual("admin")
+    })
+
+    it("should not be able to put invalid domain into attribute", async () => {
+      const res = await request
+        .patch("/users/edit-self")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({ updatedInformation: { does_ski: "invalid" } })
+
+      expect(res.status).toEqual(400) // invalid request
+      const updatedUser = await new UserDataService().getUserData(
+        MEMBER_USER_UID
+      )
+      expect(updatedUser.does_ski).not.toEqual("invalid")
     })
   })
 })
