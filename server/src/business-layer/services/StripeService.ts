@@ -1,6 +1,10 @@
 import Stripe from "stripe"
 
-const stripe = new Stripe(process.env.STRIPE_API_KEY)
+const IS_JEST = process.env.JEST_WORKER_ID !== undefined
+
+const stripe = new Stripe(
+  IS_JEST ? process.env.STRIPE_API_SECRET : process.env.STRIPE_API_KEY
+)
 
 export default class StripeService {
   public async getAllProducts(limit?: number, startingAfter?: string) {
@@ -20,6 +24,12 @@ export default class StripeService {
       query: `metadata['${key}']:'${value}'`
     })
     return result.data
+  }
+
+  public async retrieveCheckoutSessionFromPaymentIntent(
+    paymentIntent: Stripe.PaymentIntent
+  ) {
+    return await stripe.checkout.sessions.retrieve(paymentIntent.id)
   }
 
   public async createCheckoutSession(
