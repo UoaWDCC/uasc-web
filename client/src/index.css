@@ -8,7 +8,7 @@
   }
 
   .first-stepper-shape {
-    clip-path: polygon(85% 0, 100% 50%, 85% 100%, 0% 100%, 15% 50%, 0% 0%);
+    clip-path: polygon(85% 0, 100% 50%, 85% 100%, 0% 100%, 0% 0%, 0% 0%);
   }
 }
 

@@ -19,6 +19,14 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
+export const first: Story = {
+  tags: ["autodocs"],
+  args: {
+    variant: "first",
+    children: "first button test"
+  }
+}
+
 export const normal: Story = {
   tags: ["autodocs"],
   args: {
