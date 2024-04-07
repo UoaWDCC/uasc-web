@@ -33,6 +33,12 @@ export default class AuthService {
     return userRecord
   }
 
+  /**
+   * Creates a custom token for a user to sign in with
+   * @param uid identifier for the user
+   * @param claims claims that the token should have
+   * @returns the custom token
+   */
   public async createCustomToken(uid: string, claims: { [key: string]: any }) {
     let token: string
     try {

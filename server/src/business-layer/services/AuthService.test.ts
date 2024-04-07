@@ -68,7 +68,6 @@ describe("AuthService Integration Tests", () => {
       customerClaims
     )
 
-    expect(token).not.toBe(undefined)
     expect(typeof token).toBe("string")
   })
 })
