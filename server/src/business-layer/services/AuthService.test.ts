@@ -25,7 +25,7 @@ describe("AuthService Integration Tests", () => {
 
   it("sets custom claim on a user", async () => {
     const authService: AuthService = new AuthService()
-    let createdUser: UserRecord = await authService.createUser("test2@mail.com")
+    let createdUser: UserRecord = await authService.createUser("test3@gmail.com")
 
     try {
       await authService.setCustomUserClaim(createdUser.uid, "member")
@@ -50,5 +50,20 @@ describe("AuthService Integration Tests", () => {
       createdUser.uid
     )
     expect(customerClaim).toEqual({ member: true })
+  })
+
+
+  it("create custom token", async () => {
+    const authService: AuthService = new AuthService();
+    const createdUser = await new AuthService().createUser("test4@gmail.com");
+
+    // Set role on user
+    await authService.setCustomUserClaim(createdUser.uid, "member");
+
+    const customerClaims = await authService.getCustomerUserClaim(createdUser.uid);
+    const token = await new AuthService().createCustomToken(createdUser.uid, customerClaims);
+
+    expect(token).not.toBe(undefined);
+    expect(typeof token).toBe("string");
   })
 })
