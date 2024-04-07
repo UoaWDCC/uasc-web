@@ -1,7 +1,7 @@
-type buttonVariants = "normal" | "first"
+type buttonVariants = "normal" | "first";
 interface IStepperButtonProps {
-  children?: React.ReactNode
-  variant?: buttonVariants
+  children?: React.ReactNode;
+  variant?: buttonVariants;
 }
 
 const Default = ({
@@ -15,8 +15,8 @@ const Default = ({
     >
       {children}
     </button>
-  )
-}
+  );
+};
 
 const First = ({
   children,
@@ -29,8 +29,8 @@ const First = ({
     >
       {children}
     </button>
-  )
-}
+  );
+};
 
 const StepperButton = ({
   children,
@@ -39,11 +39,11 @@ const StepperButton = ({
 }: IStepperButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   switch (variant) {
     case "normal":
-      return <Default {...props}>{children}</Default>
+      return <Default {...props}>{children}</Default>;
     case "first":
-      return <First {...props}>{children}</First>
+      return <First {...props}>{children}</First>;
   }
-  return <Default {...props}>{children}</Default>
-}
+  return <Default {...props}>{children}</Default>;
+};
 
-export default StepperButton
+export default StepperButton;
