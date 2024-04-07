@@ -18,8 +18,7 @@ export default class AuthService {
 
   /**
    * Creates a new user account in the Firebase Authentication Service.
-   * @param args
-   * @param claimRole
+   * @param email
    */
   public async createUser(email: string): Promise<UserRecord> {
     // get the user record
@@ -34,17 +33,43 @@ export default class AuthService {
     return userRecord
   }
 
+  /**
+   * Sets a customers claim as target role in the Firebase Authentication Service.
+   * @param uid
+   * @param role
+   */
   public async setCustomUserClaim(
     uid: string,
-    role: typeof AuthServiceClaims.MEMBER | typeof AuthServiceClaims.ADMIN
+    role:
+      | typeof AuthServiceClaims.MEMBER
+      | typeof AuthServiceClaims.ADMIN
+      | null
   ) {
     let userRecord: UserRecord
     try {
       userRecord = await auth.getUser(uid)
-      auth.setCustomUserClaims(userRecord.uid, { [role]: true })
+      auth.setCustomUserClaims(
+        userRecord.uid,
+        role === null ? null : { [role]: true }
+      )
     } catch (err) {
       console.error("Error setting custom claim on user", err)
       throw err
     }
+  }
+
+  /**
+   * Fetches custom user claims from a target uid in the Firebase Authentication Service.
+   * @param uid
+   */
+  public async getCustomerUserClaim(uid: string) {
+    let userRecord: UserRecord
+    try {
+      userRecord = await auth.getUser(uid)
+    } catch (err) {
+      console.error("Error fetching custom claim on user")
+      throw err
+    }
+    return userRecord.customClaims
   }
 }

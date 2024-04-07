@@ -3,5 +3,6 @@
   "semi": false,
   "singleQuote": false,
   "trailingComma": "none",
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
