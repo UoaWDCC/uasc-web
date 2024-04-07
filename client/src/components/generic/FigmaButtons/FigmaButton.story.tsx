@@ -46,31 +46,25 @@ export const secondaryButton: Story = {
 
 export const Undefault: Story = {
   args: {
-    variant: "undefault",
+    variant: "default",
     children: "Disabled default button",
-    props: {
-      disabled: true
-    }
+    disabled: true
   }
 }
 
 export const Unalternative: Story = {
   args: {
-    variant: "unalternative",
+    variant: "alternative",
     children: "Disabled alternative button",
-    props: {
-      disabled: true
-    }
+    disabled: true
   }
 }
 
 export const Unsecondary: Story = {
   args: {
-    variant: "unsecondary",
+    variant: "secondary",
     children: "Disabled secondary button",
-    props: {
-      disabled: true
-    }
+    disabled: true
   }
 }
 
@@ -78,20 +72,25 @@ export const comparison: Story = {
   decorators: [
     () => {
       return (
-        <>
-          <button>test</button>
+        <div className="flex flex-col gap-3 ">
           <Button variant="default">test</Button>
-          <button>test</button>
+
           <Button variant="alternative">test</Button>
-          <button>test</button>
+
           <Button variant="secondary">test</Button>
-          <button>test</button>
-          <Button variant="undefault">test</Button>
-          <button>test</button>
-          <Button variant="unalternative">test</Button>
-          <button>test</button>
-          <Button variant="unsecondary">test</Button>
-        </>
+
+          <Button variant="default" disabled>
+            test
+          </Button>
+
+          <Button variant="alternative" disabled>
+            test
+          </Button>
+
+          <Button variant="secondary" disabled>
+            test
+          </Button>
+        </div>
       )
     }
   ]
