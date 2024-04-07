@@ -6,8 +6,8 @@ interface IMenuListProps {
 
 const MenuList = ({ children }: IMenuListProps) => {
   return (
-    <div className="border-light-blue-100 flex w-fit rounded-b-md border-2 py-4 pl-4 pr-20">
-      <ul className="text-h5 col flex flex-col gap-3 font-bold uppercase">
+    <div className="border-light-blue-100 flex w-full rounded-b-md border-2 py-4 ">
+      <ul className="text-h5 col mr-20 flex w-full flex-col gap-3 pl-4 font-bold uppercase">
         {children}
       </ul>
     </div>
