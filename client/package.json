@@ -76,6 +76,7 @@
     "@storybook/test": "^7.6.17",
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.2.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/babel__core": "^7",
     "@types/eslint": "^8",
