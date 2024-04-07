@@ -33,6 +33,17 @@ export default class AuthService {
     return userRecord
   }
 
+  public async createCustomToken(uid: string, claims: {[key: string]: any}) {
+    let token: string;
+    try {
+      token = await auth.createCustomToken(uid, claims);
+    } catch (err) {
+      console.error("Error creating custom token", err);
+      throw err;
+    }
+    return token;
+  }
+
   /**
    * Sets a customers claim as target role in the Firebase Authentication Service.
    * @param uid
@@ -57,6 +68,7 @@ export default class AuthService {
       throw err
     }
   }
+  
 
   /**
    * Fetches custom user claims from a target uid in the Firebase Authentication Service.
