@@ -30,10 +30,8 @@ export const normal: Story = {
 export const disabled: Story = {
   tags: ["autodocs"],
   args: {
-    variant: "disabled",
+    variant: "normal",
     children: "disabled test",
-    props: {
-      disabled: true
-    }
+    disabled: true
   }
 }
