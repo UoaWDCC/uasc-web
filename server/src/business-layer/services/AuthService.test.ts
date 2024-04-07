@@ -36,4 +36,19 @@ describe("AuthService Integration Tests", () => {
 
     expect(createdUser.customClaims.member).not.toBe(undefined)
   })
+
+  it("fetches custom claim on a user", async () => {
+    const authService: AuthService = new AuthService()
+    const createdUser: UserRecord =
+      await authService.createUser("test3@mail.com")
+
+    try {
+      await authService.setCustomUserClaim(createdUser.uid, "member")
+    } catch {}
+
+    const customerClaim = await authService.getCustomerUserClaim(
+      createdUser.uid
+    )
+    expect(customerClaim).toEqual({ member: true })
+  })
 })
