@@ -1,5 +1,5 @@
 import StripeService from "./StripeService"
-import { productMock } from "test-config/mocks/Stripe.mock"
+import { PaymentIntentMock, productMock } from "test-config/mocks/Stripe.mock"
 
 jest.mock("stripe", () => {
   const stripe = jest.requireActual("stripe")
@@ -38,5 +38,13 @@ describe("Stripe service functionality", () => {
   it("should get a product by id", async () => {
     const result = await new StripeService().getProductById("random_id")
     expect(result).toEqual({ ...productMock, id: "random_id" })
+  })
+
+  it("should retrieve a stripe session based on a mock", async () => {
+    const result =
+      await new StripeService().retrieveCheckoutSessionFromPaymentIntent(
+        PaymentIntentMock
+      )
+    expect(result.id).toEqual(PaymentIntentMock.id)
   })
 })
