@@ -139,4 +139,25 @@ describe("Endpoints", () => {
       expect(res.status).toEqual(409) // conflict
     })
   })
+
+  // describe("/webhook", () => {
+  //   beforeEach(async () => {
+  //     await Promise.all(
+  //       usersToCreate.map(async (user) => {
+  //         const { uid, membership } = user
+  //         await createUserData(uid, membership)
+  //       })
+  //     )
+  //   })
+  //   afterEach(async () => {
+  //     await cleanFirestore()
+  //   })
+  //   it("Should accept the successful payment and give the uid membership", (done) => {
+  //     request
+  //       .post("/webhook")
+  //       .set("stripe-signature", null)
+  //       .send()
+  //       .expect(200, done)
+  //   })
+  // })
 })

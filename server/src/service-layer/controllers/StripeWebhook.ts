@@ -29,7 +29,9 @@ export class StripeWebhook extends Controller {
     // handle successful checkout
     // console.log(event.type)
     if (event.type === "checkout.session.completed") {
-      console.log("checkout.session.completed")
+      // if (event.type === "payment_intent.succeeded") {
+      // console.log("[WEBHOOK] received: payment_intent.succeeded")
+      console.log(request.body)
       const userService = new UserDataService()
       const authService = new AuthService()
       const uid = event.data.object.client_reference_id
