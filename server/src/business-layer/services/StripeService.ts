@@ -22,6 +22,19 @@ export default class StripeService {
     return result.data
   }
 
+  public async retrieveCheckoutSessionFromPaymentIntent(
+    payment_intent?: string,
+    customer?: string,
+    status?: Stripe.Checkout.Session.Status
+  ) {
+    return await stripe.checkout.sessions.list({
+      limit: 1,
+      payment_intent,
+      customer,
+      status
+    })
+  }
+
   public async createCheckoutSession(
     client_reference_id: string,
     return_url: string,
