@@ -15,10 +15,18 @@ const Default = ({ children, props }: props) => {
 const Disabled = ({ children, props }: props) => {
   return (
     <button {...props} className="w-164 h-40 font=sans">
-        <svg xmlns="http://www.w3.org/2000/svg" width="164" height="40" viewBox="0 0 164 40" fill="none">
-          <path d="M144 0H0L20 20L0 40H144L164 20L144 0Z" fill="#283D87"/>
-          <text x='30' y='25' fill="white">{children}</text>
-        </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="164"
+        height="40"
+        viewBox="0 0 164 40"
+        fill="none"
+      >
+        <path d="M144 0H0L20 20L0 40H144L164 20L144 0Z" fill="#283D87" />
+        <text x="30" y="25" fill="white">
+          {children}
+        </text>
+      </svg>
     </button>
   )
 }
