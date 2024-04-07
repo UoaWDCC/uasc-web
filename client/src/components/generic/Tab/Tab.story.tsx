@@ -19,9 +19,7 @@ export const DefaultTab: Story = {
 export const DisabledTab: Story = {
   args: {
     children: "Disabled Tab",
-    props: {
-      disabled: true
-    }
+    disabled: true
   }
 }
 
