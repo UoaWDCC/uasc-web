@@ -7,7 +7,7 @@ const meta: Meta<typeof StepperButton> = {
   argTypes: {
     variant: {
       control: { type: "radio" },
-      options: ["normal"]
+      options: ["normal", "disabled"]
     },
     children: {
       name: "content"
@@ -32,7 +32,7 @@ export const disabled: Story = {
   args: {
     variant: "disabled",
     children: "disabled test",
-    props:{
+    props: {
       disabled: true
     }
   }
