@@ -1,4 +1,3 @@
-import "./FaqApp.css"
 // import Header from "./components/composite/Header";
 import Container from "@mui/material/Container"
 import {
