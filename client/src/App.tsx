@@ -1,4 +1,3 @@
-import Navbar from "components/composite/Navbar/Navbar"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { ThemeProvider } from "@mui/material"
 import { LocalizationProvider } from "@mui/x-date-pickers"
