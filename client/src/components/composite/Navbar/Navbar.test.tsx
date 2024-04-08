@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Navbar, { INavbarProps } from "./Navbar"
-import { render, screen } from "@testing-library/react"
+import { act, render, screen } from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
 
 const TestNavbar = ({
@@ -40,7 +40,11 @@ describe("navbar", () => {
       />
     )
     const signInButton = screen.getByTestId("sign-in-button")
-    await signInButton.click()
+
+    await act(async () => {
+      await signInButton.click()
+    })
+
     expect(signInButton).not.toBeVisible()
 
     const profileIcon = screen.getByTestId("profile-icon")
@@ -60,8 +64,11 @@ describe("navbar", () => {
 
     const profileIcon = screen.getByTestId("profile-icon")
     expect(profileIcon).toBeVisible()
-    // open menu
-    await profileIcon.click()
+
+    // open menu - updates state so need to call act
+    await act(async () => {
+      await profileIcon.click()
+    })
 
     const signOutLink = screen.getByTestId("sign-out-link")
     await signOutLink.click()
