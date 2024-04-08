@@ -66,9 +66,9 @@ const navStyle = (active: boolean) => (active ? "text-light-blue-100" : "")
 
 const Navbar = (props: INavbarProps) => {
   return (
-    <div className="bg-gray-1 navbar-shadow fixed flex  w-screen px-4 pt-3">
+    <div className="bg-gray-1 navbar-shadow fixed flex w-screen px-4 pt-3">
       <div className="flex w-full">
-        <div className="ml-auto flex items-end justify-center gap-6 self-end pr-4">
+        <div className="ml-auto flex items-end justify-center gap-8 self-end pr-4">
           <WrappedTab to="/">Home</WrappedTab>
           <WrappedTab to="/bookings">Bookings</WrappedTab>
           <WrappedTab to="/events">Events</WrappedTab>
