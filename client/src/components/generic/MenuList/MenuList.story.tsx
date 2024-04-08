@@ -14,11 +14,11 @@ export const DefaultMenuList: Story = {
   args: {
     children: (
       <>
-        <li>item 1</li>
-        <li>item 2</li>
-        <li>item 3</li>
-        <li>item 4</li>
-        <li>item 5</li>
+        <a>item 1</a>
+        <a>item 2</a>
+        <a>item 3</a>
+        <a>item 4</a>
+        <a>item 5</a>
       </>
     )
   }
