@@ -23,3 +23,38 @@ export const DefaultMenuTab: Story = {
     )
   }
 }
+
+export const LongText: Story = {
+  args: {
+    displayText: "Default Tab",
+    children: (
+      <>
+        <a>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
+          veritatis voluptas explicabo excepturi obcaecati sint quisquam
+          voluptates impedit perspiciatis.
+        </a>
+        <a>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
+          veritatis voluptas explicabo excepturi obcaecati sint quisquam
+          voluptates impedit perspiciatis.
+        </a>
+        <a>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
+          veritatis voluptas explicabo excepturi obcaecati sint quisquam
+          voluptates impedit perspiciatis.
+        </a>
+        <a>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
+          veritatis voluptas explicabo excepturi obcaecati sint quisquam
+          voluptates impedit perspiciatis.
+        </a>
+        <a>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
+          veritatis voluptas explicabo excepturi obcaecati sint quisquam
+          voluptates impedit perspiciatis.
+        </a>
+      </>
+    )
+  }
+}
