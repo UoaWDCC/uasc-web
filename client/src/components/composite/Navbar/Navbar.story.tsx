@@ -12,7 +12,7 @@ const meta: Meta<typeof Navbar> = {
 export default meta
 type Story = StoryObj<typeof Navbar>
 
-export const FirstStory: Story = {
+export const LoggedInNavbar: Story = {
   decorators: [
     (Story) => (
       <BrowserRouter>
@@ -21,6 +21,19 @@ export const FirstStory: Story = {
     )
   ],
   args: {
-    // 👇 The args you need here will depend on your component
+    isLoggedIn: true
+  }
+}
+
+export const LoggedOutNavbar: Story = {
+  decorators: [
+    (Story) => (
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
+    )
+  ],
+  args: {
+    isLoggedIn: false
   }
 }

@@ -12,9 +12,9 @@ const MenuTab = ({ displayText, children, ...props }: props) => {
     <div
       onMouseEnter={() => setIsOpened(true)}
       onMouseLeave={() => setIsOpened(false)}
-      className=" hover:border-light-blue-100  
+      className=" hover:border-b-light-blue-100  
       relative flex w-fit items-start gap-[12px] border-b-[3px]
-      border-transparent pb-2 "
+      border-b-transparent pb-2 "
     >
       <button
         {...props}
@@ -22,7 +22,7 @@ const MenuTab = ({ displayText, children, ...props }: props) => {
       >
         {displayText}
       </button>
-      <div className="mt-[5.5px] flex h-[12px] w-[12px] items-start">
+      <div className="flex h-[12px] w-[12px] items-start pt-[5.5px]">
         <DownArrow
           className={
             isOpened
