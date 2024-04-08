@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 import { BrowserRouter } from "react-router-dom"
 
 import Navbar from "./Navbar"
+import { useState } from "react"
 
 // 👇 This default export determines where your story goes in the story list
 const meta: Meta<typeof Navbar> = {
@@ -36,4 +37,25 @@ export const LoggedOutNavbar: Story = {
   args: {
     isLoggedIn: false
   }
+}
+
+export const LoginAndSignout = () => {
+  const [loggedIn, setLoggedIn] = useState(false)
+  const signInHandler = () => {
+    setLoggedIn(true)
+  }
+  const signOutHandler = () => {
+    setLoggedIn(false)
+  }
+  return (
+    <>
+      <BrowserRouter>
+        <Navbar
+          signInHandler={signInHandler}
+          signOutHandler={signOutHandler}
+          isLoggedIn={loggedIn}
+        />
+      </BrowserRouter>
+    </>
+  )
 }

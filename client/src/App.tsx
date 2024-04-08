@@ -7,6 +7,7 @@ import queryClient from "services/QueryClient"
 import theme from "theme"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { AllRoutes, RouteProps } from "./routes/routes"
+import { AppNavbar } from "components/composite/Navbar/AppNavbar"
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <ThemeProvider theme={theme}>
             <Router>
               <div className="h-full">
-                <Navbar />
+                <AppNavbar />
                 <div className="content" style={{ height: "100%" }}>
                   <Routes>
                     {AllRoutes.map(

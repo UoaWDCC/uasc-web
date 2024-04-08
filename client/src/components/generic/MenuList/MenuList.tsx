@@ -1,15 +1,19 @@
 import { ReactNode } from "react"
 
 interface IMenuListProps {
+  anchor?: "left" | "right"
   children?: ReactNode
 }
 
-const MenuList = ({ children }: IMenuListProps) => {
+const MenuList = ({ children, anchor = "left" }: IMenuListProps) => {
   return (
     <div className="border-light-blue-100 bg-gray-1 flex w-full rounded-b-md border-2 py-4 ">
-      <ul className="text-h5 col mr-20 flex w-full flex-col gap-3 pl-4 font-bold uppercase">
+      <div
+        className={`text-h5 col flex w-full flex-col gap-3 font-bold uppercase
+             ${anchor === "left" ? "mr-14 pl-4" : "ml-14 pr-4"}`}
+      >
         {children}
-      </ul>
+      </div>
     </div>
   )
 }
