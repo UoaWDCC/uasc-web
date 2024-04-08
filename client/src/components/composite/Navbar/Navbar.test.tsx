@@ -71,7 +71,11 @@ describe("navbar", () => {
     })
 
     const signOutLink = screen.getByTestId("sign-out-link")
-    await signOutLink.click()
+
+    await act(async () => {
+      await signOutLink.click()
+    })
+
     expect(profileIcon).not.toBeVisible()
 
     expect(screen.getByTestId("sign-in-button")).toBeVisible()
