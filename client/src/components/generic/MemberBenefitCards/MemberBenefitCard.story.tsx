@@ -19,17 +19,17 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const BenefitCard1: Story = {
-    tags: ["autodocs"],
-    args: {
-      variant: "default",
-      children: "Default Card Variant"
-    }
-  }
-
-export const BenefitCard2: Story = {
-tags: ["autodocs"],
-args: {
+  tags: ["autodocs"],
+  args: {
     variant: "default",
     children: "Default Card Variant"
+  }
 }
+
+export const BenefitCard2: Story = {
+  tags: ["autodocs"],
+  args: {
+    variant: "default",
+    children: "Default Card Variant"
+  }
 }
