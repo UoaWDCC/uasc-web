@@ -14,7 +14,7 @@ const MenuTab = ({ displayText, children, ...props }: props) => {
       onMouseLeave={() => setIsOpened(false)}
       className=" hover:border-b-light-blue-100  
       relative flex w-fit items-start gap-[12px] border-b-[3px]
-      border-b-transparent pb-2 "
+      border-b-transparent pb-[10.5px]"
     >
       <button
         {...props}
