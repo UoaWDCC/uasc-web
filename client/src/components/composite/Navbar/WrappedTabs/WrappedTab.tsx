@@ -14,7 +14,10 @@ const WrappedTab = ({
 
   return (
     <NavLink to={to} state={{ to }}>
-      <Tab disabled={pathname === to || subroutes?.includes(pathname)}>
+      <Tab
+        aria-label={`link to ${to}`}
+        disabled={pathname === to || subroutes?.includes(pathname)}
+      >
         {children}
       </Tab>
     </NavLink>
