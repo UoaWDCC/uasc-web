@@ -1,66 +1,13 @@
 import { Link, NavLink } from "react-router-dom"
-import WrappedMenuTab from "./WrappedTabs/WrappedMenuTab"
-import WrappedTab from "./WrappedTabs/WrappedTab"
-import ProfileIcon from "assets/icons/profile.svg?react"
+import WrappedMenuTab from "./utils/WrappedMenuTab"
+import WrappedTab from "./utils/WrappedTab"
 import UASCLogo from "assets/logos/UASC-LOGO-White.svg?react"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import { useState } from "react"
-import MenuList from "components/generic/MenuList/MenuList"
+import LoginIndicator from "./utils/LoginIndicator"
 
 export interface INavbarProps {
   signInHandler: () => void
   signOutHandler: () => void
   isLoggedIn: boolean
-}
-
-const ProfileButton = ({
-  signOutHandler
-}: Pick<INavbarProps, "signOutHandler">) => {
-  const [isOpened, setIsOpened] = useState<boolean>(false)
-  return (
-    <div className="relative mb-2 h-4 w-4 cursor-pointer self-center">
-      <ProfileIcon
-        data-testid="profile-icon"
-        className="fill-black"
-        onClick={() => setIsOpened(!isOpened)}
-      />
-
-      {isOpened && (
-        <span className="w-min-[150%] absolute right-0 top-[calc(100%+13px)]">
-          <MenuList anchor="right">
-            <NavLink
-              data-testid="sign-out-link"
-              className="text-nowrap"
-              to="/login"
-              onClick={signOutHandler}
-            >
-              Log Out
-            </NavLink>
-          </MenuList>
-        </span>
-      )}
-    </div>
-  )
-}
-
-const LoginIndicator = ({
-  signInHandler,
-  signOutHandler,
-  isLoggedIn
-}: INavbarProps) => {
-  if (isLoggedIn) {
-    return <ProfileButton signOutHandler={signOutHandler} />
-  }
-  return (
-    <Button
-      variant="inverted-default-sm"
-      data-testid="sign-in-button"
-      className="self-start"
-      onClick={signInHandler}
-    >
-      Sign In
-    </Button>
-  )
 }
 
 const Logo = () => {
