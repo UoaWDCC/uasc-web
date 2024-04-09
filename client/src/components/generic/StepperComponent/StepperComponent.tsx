@@ -16,7 +16,7 @@ interface IStepperProps {
  */
 const Stepper = ({ steps, currentStep }: IStepperProps) => {
   return (
-    <span >
+    <span>
       {steps.map((step) => {
         const { name, index, onClick } = step
         return (
