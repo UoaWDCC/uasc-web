@@ -1,6 +1,6 @@
 import React from "react"
 import { Typography, Stack, Container } from "@mui/material"
-import tick from "assets/tick.png"
+import tick from "assets/images/tick.png"
 
 const Thanks = () => {
   return (
