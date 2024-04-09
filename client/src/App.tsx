@@ -12,28 +12,22 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className="h-screen">
-          <ThemeProvider theme={theme}>
-            <Router>
-              <div className="h-full">
-                <AppNavbar />
-                <div className="content" style={{ height: "100%" }}>
-                  <Routes>
-                    {AllRoutes.map(
-                      (routeDetails: RouteProps, index: number) => (
-                        <Route
-                          key={index}
-                          path={routeDetails.path}
-                          element={routeDetails.element}
-                        />
-                      )
-                    )}
-                  </Routes>
-                </div>
-              </div>
-            </Router>
-          </ThemeProvider>
-        </div>
+        <ThemeProvider theme={theme}>
+          <Router>
+            <AppNavbar />
+            <div className="pt-14">
+              <Routes>
+                {AllRoutes.map((routeDetails: RouteProps, index: number) => (
+                  <Route
+                    key={index}
+                    path={routeDetails.path}
+                    element={routeDetails.element}
+                  />
+                ))}
+              </Routes>
+            </div>
+          </Router>
+        </ThemeProvider>
       </LocalizationProvider>
     </QueryClientProvider>
   )
