@@ -22,7 +22,7 @@ const MenuTab = ({ displayText, children, ...props }: props) => {
       >
         {displayText}
       </button>
-      <div className="mt-[5px] flex h-[6px] w-[12px] items-start">
+      <div className="mt-[4px] flex h-[6px] w-[12px] items-start">
         <DownArrow
           className={
             isOpened
