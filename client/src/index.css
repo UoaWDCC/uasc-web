@@ -3,11 +3,10 @@
 @tailwind utilities;
 
 @layer utilities {
-
   .navbar-shadow {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
   }
-  
+
   .stepper-shape {
     clip-path: polygon(85% 0, 100% 50%, 85% 100%, 0% 100%, 15% 50%, 0% 0%);
   }
