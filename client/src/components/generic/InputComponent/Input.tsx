@@ -1,9 +1,9 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent } from "react"
 
 interface InputProps {
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
+  value: string
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void
+  placeholder?: string
 }
 
 const Input: React.FC<InputProps> = ({ value, onChange, placeholder }) => {
@@ -14,7 +14,7 @@ const Input: React.FC<InputProps> = ({ value, onChange, placeholder }) => {
       onChange={onChange}
       placeholder={placeholder}
     />
-  );
-};
+  )
+}
 
-export default Input;
+export default Input
