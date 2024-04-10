@@ -9,7 +9,7 @@ const Tab = ({
     <button
       {...props}
       className="text-h5 disabled:text-light-blue-100 disabled:border-light-blue-100 
-      hover:text-light-blue-100 border-b-[3px] border-transparent pb-2
+      hover:text-light-blue-100 border-b-[3px] border-transparent pb-3
     font-bold uppercase"
     >
       {children}
