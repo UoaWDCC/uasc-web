@@ -5,5 +5,9 @@ module.exports = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   moduleDirectories: ["node_modules", "src"],
   modulePaths: ["<rootDir>"],
-  testMatch: ["**/*.test.ts", "**/*.test.tsx"]
+  testMatch: ["**/*.test.ts", "**/*.test.tsx"],
+  setupFilesAfterEnv: ["<rootDir>/test-setup.ts"],
+  moduleNameMapper: {
+    "\\.svg": "<rootDir>/__mocks__/svg.ts"
+  }
 }
