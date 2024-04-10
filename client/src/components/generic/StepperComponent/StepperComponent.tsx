@@ -23,6 +23,7 @@ const Stepper = ({ steps, currentStep }: IStepperProps) => {
           <span key={index} className=" -ml-[16px]">
             <StepperButton
               variant={index === 0 ? "first" : "normal"}
+              data-testid={name}
               disabled={currentStep < index}
               onClick={onClick}
             >
