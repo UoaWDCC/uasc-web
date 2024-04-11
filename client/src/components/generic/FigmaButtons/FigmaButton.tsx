@@ -2,7 +2,7 @@ type buttonVariants =
   | "default"
   | "alternative"
   | "secondary"
-  | "undefault"
+  | "inverted-default-sm"
   | "unalternative"
   | "unsecondary"
 
@@ -20,6 +20,20 @@ const DefaultButton = ({ children, ...props }: props) => {
       className="bg-dark-blue-100 enabled:hover:text-dark-blue-100 border-dark-blue-100
         space-x-4; disabled:bg-dark-blue-60 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
         text-white hover:bg-white enabled:border"
+    >
+      {children}
+    </button>
+  )
+}
+
+const DefaultButtonInverted = ({ children, ...props }: props) => {
+  return (
+    <button
+      {...props}
+      className={
+        "border-dark-blue-100 text-h5 text-dark-blue-100 rounded-md border px-8 py-1 font-bold uppercase " +
+        props.className
+      }
     >
       {children}
     </button>
@@ -62,6 +76,10 @@ const Button = ({ children, variant, ...props }: props) => {
       return <AlternativeButton {...props}>{children}</AlternativeButton>
     case "secondary":
       return <SecondaryButton {...props}>{children}</SecondaryButton>
+    case "inverted-default-sm":
+      return (
+        <DefaultButtonInverted {...props}>{children}</DefaultButtonInverted>
+      )
   }
   return <DefaultButton {...props}>{children}</DefaultButton>
 }
