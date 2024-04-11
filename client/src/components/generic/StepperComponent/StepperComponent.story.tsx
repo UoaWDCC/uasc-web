@@ -63,21 +63,6 @@ export const DefaultStepper2 = () => {
       name: "third button long text",
       index: 2,
       onClick: () => setCurrentStep(2)
-    },
-    {
-      name: "ABCDEF",
-      index: 0,
-      onClick: () => setCurrentStep(0)
-    },
-    {
-      name: "ABCDEFGH",
-      index: 1,
-      onClick: () => setCurrentStep(1)
-    },
-    {
-      name: "ABCDEFGHIJK",
-      index: 2,
-      onClick: () => setCurrentStep(2)
     }
   ]
 
