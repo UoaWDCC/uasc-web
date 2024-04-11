@@ -30,7 +30,25 @@ export const DefaultStepper = () => {
       name: "third",
       index: 2,
       onClick: () => setCurrentStep(2)
-    },
+    }
+  ]
+
+  return (
+    <>
+      <Stepper currentStep={currentStep} steps={steps} />
+      <h1>Current Step: {currentStep}</h1>
+      <span className="flex gap-3">
+        <button onClick={() => setCurrentStep(currentStep - 1)}>back</button>
+        <button onClick={() => setCurrentStep(currentStep + 1)}>next</button>
+      </span>
+    </>
+  )
+}
+
+export const DefaultStepper2 = () => {
+  const [currentStep, setCurrentStep] = useState<number>(0)
+
+  const steps: StepProps[] = [
     {
       name: "first button long text",
       index: 0,
@@ -46,6 +64,39 @@ export const DefaultStepper = () => {
       index: 2,
       onClick: () => setCurrentStep(2)
     },
+    {
+      name: "ABCDEF",
+      index: 0,
+      onClick: () => setCurrentStep(0)
+    },
+    {
+      name: "ABCDEFGH",
+      index: 1,
+      onClick: () => setCurrentStep(1)
+    },
+    {
+      name: "ABCDEFGHIJK",
+      index: 2,
+      onClick: () => setCurrentStep(2)
+    }
+  ]
+
+  return (
+    <>
+      <Stepper currentStep={currentStep} steps={steps} />
+      <h1>Current Step: {currentStep}</h1>
+      <span className="flex gap-3">
+        <button onClick={() => setCurrentStep(currentStep - 1)}>back</button>
+        <button onClick={() => setCurrentStep(currentStep + 1)}>next</button>
+      </span>
+    </>
+  )
+}
+
+export const DefaultStepper3 = () => {
+  const [currentStep, setCurrentStep] = useState<number>(0)
+
+  const steps: StepProps[] = [
     {
       name: "ABCDEF",
       index: 0,
