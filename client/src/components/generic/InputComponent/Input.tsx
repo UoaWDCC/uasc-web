@@ -1,20 +1,12 @@
-// INCOMPLETE CODE!
+import React from "react"
 
-import React, { ChangeEvent } from "react"
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 
-interface InputProps {
-  value: string
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void
-  placeholder?: string
-}
-
-const Input: React.FC<InputProps> = ({ value, onChange, placeholder }) => {
+const Input = ({ ...props }: InputProps) => {
   return (
     <input
-      type="text"
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
+      className="invalid:border-red h-9 w-full rounded border"
+      {...props}
     />
   )
 }
