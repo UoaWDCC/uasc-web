@@ -45,7 +45,7 @@ export const DefaultStepper = () => {
   )
 }
 
-export const DefaultStepper2 = () => {
+export const DefaultStepperWithLongTexts = () => {
   const [currentStep, setCurrentStep] = useState<number>(0)
 
   const steps: StepProps[] = [
@@ -78,7 +78,7 @@ export const DefaultStepper2 = () => {
   )
 }
 
-export const DefaultStepper3 = () => {
+export const DefaultStepperWithDifferentTextsLength = () => {
   const [currentStep, setCurrentStep] = useState<number>(0)
 
   const steps: StepProps[] = [
