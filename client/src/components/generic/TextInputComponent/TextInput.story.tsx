@@ -14,7 +14,7 @@ export const TextInput: Story = {
   tags: ["autodocs"],
   args: {
     type: "text",
-    placeholder: "default"
+    placeholder: "Placeholder"
   }
 }
 
@@ -22,7 +22,16 @@ export const RequiredTextInput: Story = {
   tags: ["autodocs"],
   args: {
     type: "text",
-    placeholder: "default",
+    placeholder: "Error",
     required: true
+  }
+}
+
+export const SuccessTextInput: Story = {
+  tags: ["autodocs"],
+  args: {
+    type: "text",
+    placeholder: "Success",
+    success: true
   }
 }
