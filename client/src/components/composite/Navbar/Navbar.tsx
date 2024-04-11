@@ -1,168 +1,57 @@
-import React, { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
-import { Typography, Stack, Link, Box, AppBar } from "@mui/material"
-import { auth } from "../../../firebase"
+import { Link, NavLink } from "react-router-dom"
+import WrappedMenuTab from "./utils/WrappedMenuTab"
+import WrappedTab from "./utils/WrappedTab"
+import UASCLogo from "assets/logos/UASC-LOGO-White.svg?react"
+import LoginIndicator from "./utils/LoginIndicator"
 
-const Navbar = () => {
-  const homeLocation = "/"
-  const pageLocation = useLocation().pathname
-  const onHomePage = pageLocation === homeLocation
-  const [isVisible, setIsVisible] = useState(!onHomePage)
-  const [isLoggedIn, setIsLoggedIn] = useState(true) // State for login status
+export interface INavbarProps {
+  signInHandler: () => void
+  signOutHandler: () => void
+  isLoggedIn: boolean
+}
 
-  useEffect(() => {
-    if (!onHomePage) {
-      setIsVisible(true)
-      return
-    }
-
-    setIsVisible(false)
-
-    const handleScroll = () => {
-      const currentScrollPos = window.scrollY
-      const proportionOfWindowHeight = window.innerHeight * 0.3
-      currentScrollPos > proportionOfWindowHeight
-        ? setIsVisible(true)
-        : setIsVisible(false)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [onHomePage])
-
-  // const handleLogin = () => {
-  //   setIsLoggedIn(true)
-  // }
-
-  const handleLogout = async () => {
-    setIsLoggedIn(false)
-    try {
-      await auth.signOut()
-    } catch (error) {
-      console.error("Failed to sign out: ", error)
-    }
-  }
-
+const Logo = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar
-        position="fixed"
-        sx={{
-          backgroundColor: "#ffffff50",
-          opacity: isVisible ? "1" : "0",
-          pointerEvents: isVisible ? "auto" : "none",
-          transition: "opacity 0.5s ease-in-out"
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          sx={{
-            paddingX: "32px",
-            paddingY: "8px"
-          }}
-        >
-          <Stack direction="row" alignItems="center">
-            {/* <img
-            src="https://uasc.co.nz/wp-content/uploads/2021/05/UASC-LOGO-White.png"
-            alt="logo"
-            style={{ width: "48px", height: "48px" }}
-          /> */}
-            <Typography
-              variant="h3"
-              align="left"
-              color="primary.quaternary"
-              sx={{ fontWeight: "bold" }}
+    <Link to="/">
+      <div className="h-[39px] w-[36px]">
+        <UASCLogo className=" fill-light-blue-100" />
+      </div>
+    </Link>
+  )
+}
+
+const navStyle = (active: boolean) => (active ? "text-light-blue-100" : "")
+
+const Navbar = (props: INavbarProps) => {
+  return (
+    <div className="bg-gray-1 navbar-shadow fixed flex w-screen px-4 pt-3">
+      <div className="flex w-full">
+        <Logo />
+        <div className="ml-auto flex items-end justify-center gap-8 self-end pr-4">
+          <WrappedTab to="/">Home</WrappedTab>
+          <WrappedTab to="/bookings">Bookings</WrappedTab>
+          <WrappedTab to="/events">Events</WrappedTab>
+          <WrappedMenuTab displayName="about" to="/about">
+            <NavLink className={({ isActive }) => navStyle(isActive)} to="/faq">
+              FAQ
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => navStyle(isActive)}
+              to="/policy"
             >
-              UASC
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={4} alignItems="center">
-            <Link
-              href="/"
-              variant="h6"
-              underline="none"
-              color="common.darkGrey"
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              variant="h6"
-              underline="none"
-              color="common.darkGrey"
-            >
-              About
-            </Link>
-            <Link
-              href="/events"
-              variant="h6"
-              underline="none"
-              color="common.darkGrey"
-            >
-              Events
-            </Link>
-            <Link
-              href="/contact"
-              variant="h6"
-              underline="none"
-              color="common.darkGrey"
+              Policy
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => navStyle(isActive)}
+              to="/contact"
             >
               Contact
-            </Link>
-            {isLoggedIn ? (
-              <>
-                <Link
-                  href="/booking"
-                  variant="h6"
-                  underline="none"
-                  color="common.darkGrey"
-                >
-                  Bookings
-                </Link>
-                <Link
-                  href="/profile"
-                  variant="h6"
-                  underline="none"
-                  color="common.darkGrey"
-                >
-                  Profile
-                </Link>
-                {/* @ts-ignore */}
-                <Typography
-                  variant="h6"
-                  underline="none"
-                  color="common.darkGrey"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Typography>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/register"
-                  variant="h6"
-                  underline="none"
-                  color="common.darkGrey"
-                >
-                  Register
-                </Link>
-                <Link
-                  href="/login"
-                  variant="h6"
-                  underline="none"
-                  color="common.darkGrey"
-                >
-                  Login
-                </Link>
-              </>
-            )}
-          </Stack>
-        </Stack>
-      </AppBar>
-    </Box>
+            </NavLink>
+          </WrappedMenuTab>
+          <LoginIndicator {...props} />
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -14,8 +14,20 @@ export interface paths {
   "/users/create": {
     put: operations["CreateUser"];
   };
+  "/users/edit-self": {
+    patch: operations["EditSelf"];
+  };
   "/users/bulk-edit": {
     patch: operations["EditUsers"];
+  };
+  "/users/promote": {
+    put: operations["PromoteUser"];
+  };
+  "/users/demote": {
+    put: operations["DemoteUser"];
+  };
+  "/webhook": {
+    post: operations["ReceiveWebhook"];
   };
 }
 
@@ -49,19 +61,20 @@ export interface components {
       does_freestyle: boolean;
       does_racing: boolean;
       does_ski: boolean;
+      gender: string;
       emergency_name: string;
       emergency_phone: string;
       emergency_relation: string;
       first_name: string;
       last_name: string;
       /** @enum {string} */
-      membership: "admin" | "member";
-      dietary_requirements?: string;
+      membership: "admin" | "member" | "guest";
+      dietary_requirements: string;
       faculty?: string;
       university?: string;
       student_id?: string;
       returning: boolean;
-      university_year?: string;
+      university_year: string;
     };
     FirebaseProperties: {
       uid: string;
@@ -71,11 +84,62 @@ export interface components {
       uid: string;
       user: components["schemas"]["UserAdditionalInfo"];
     };
+    /** @description From T, pick a set of properties whose keys are in the union K */
+    "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership__": {
+      date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_freestyle?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      gender?: string;
+      emergency_name?: string;
+      emergency_phone?: string;
+      emergency_relation?: string;
+      first_name?: string;
+      last_name?: string;
+      dietary_requirements?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning?: boolean;
+      university_year?: string;
+    };
+    /** @description Construct a type with the properties of T except for those in type K. */
+    "Omit_Partial_UserAdditionalInfo_.membership_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership__"];
+    EditSelfRequestBody: {
+      updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.membership_"];
+    };
+    /** @description Make all properties in T optional */
+    Partial_UserAdditionalInfo_: {
+      date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_freestyle?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      gender?: string;
+      emergency_name?: string;
+      emergency_phone?: string;
+      emergency_relation?: string;
+      first_name?: string;
+      last_name?: string;
+      /** @enum {string} */
+      membership?: "admin" | "member" | "guest";
+      dietary_requirements?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning?: boolean;
+      university_year?: string;
+    };
     EditUsersRequestBody: {
       users: {
-          updatedInformation: components["schemas"]["UserAdditionalInfo"];
+          updatedInformation: components["schemas"]["Partial_UserAdditionalInfo_"];
           uid: string;
         }[];
+    };
+    PromoteUserRequestBody: {
+      uid: string;
+    };
+    DemoteUserRequestBody: {
+      uid: string;
     };
   };
   responses: {
@@ -128,6 +192,19 @@ export interface operations {
       };
     };
   };
+  EditSelf: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditSelfRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Successful edit */
+      200: {
+        content: never;
+      };
+    };
+  };
   EditUsers: {
     requestBody: {
       content: {
@@ -136,6 +213,40 @@ export interface operations {
     };
     responses: {
       /** @description Edited */
+      200: {
+        content: never;
+      };
+    };
+  };
+  PromoteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PromoteUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Promoted user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  DemoteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DemoteUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Demoted user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  ReceiveWebhook: {
+    responses: {
+      /** @description Webhook post received */
       200: {
         content: never;
       };

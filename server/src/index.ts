@@ -15,8 +15,19 @@ const importSwaggerJson = async () => {
 
 const app: Express = express()
 
+function keepRawBody(
+  req: any,
+  res: any,
+  buf: Buffer,
+  encoding: BufferEncoding
+) {
+  if (buf && buf.length) {
+    req.rawBody = buf
+  }
+}
+
 app.use(helmet())
-app.use(express.json())
+app.use(express.json({ verify: keepRawBody }))
 app.use(cors())
 
 app.use("/api-docs", swaggerUi.serve, async (_req: Request, res: Response) => {
@@ -43,6 +54,9 @@ RegisterRoutes(app)
 
 const port = process.env.PORT || 8000
 
-app.listen(port, () => {
+const _app = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+// So we can use for testing
+export { _app }

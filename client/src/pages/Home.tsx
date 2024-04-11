@@ -1,12 +1,11 @@
-import logo from "assets/updated2023logo.png"
-import ski from "assets/skiimage.png"
+import logo from "assets/logos/2023logowhite.png"
+import ski from "assets/images/skiimage.png"
 import { Typography } from "@mui/material"
 import React from "react"
-import image1 from "assets/instagram.png"
-import image2 from "assets/facebook.png"
-import pricing from "assets/pricing.png"
-import details from "assets/details.png"
-import "./Home.css"
+import image1 from "assets/logos/instagram.png"
+import image2 from "assets/logos/facebook.png"
+import pricing from "assets/images/pricing.png"
+import details from "assets/images/details.png"
 import { useAuthenticatedUser } from "../hooks/useAuthenticatedUser"
 
 const Home = () => {

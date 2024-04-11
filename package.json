@@ -30,6 +30,7 @@
     "lint-staged": "^15.2.2",
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.13",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
@@ -51,10 +52,10 @@
     "dev-client": "yarn workspace client start",
     "dev-server": "yarn workspace server start",
     "storybook": "yarn workspace client storybook",
-    "test-server": "yarn firestore-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
-    "test-client": "jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/client",
+    "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
+    "test-client": "jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=client/src",
     "test": "yarn test-client && yarn test-server",
-    "firestore-test": "firebase emulators:exec --only firestore"
+    "firebase-test": "firebase emulators:exec --only firestore,auth"
   },
   "eslintConfig": {
     "extends": [
@@ -67,5 +68,9 @@
       "<rootDir>/client/jest.config.client.ts",
       "<rootDir>/server/jest.config.server.ts"
     ]
+  },
+  "volta": {
+    "node": "20.0.0",
+    "yarn": "4.1.1"
   }
 }
