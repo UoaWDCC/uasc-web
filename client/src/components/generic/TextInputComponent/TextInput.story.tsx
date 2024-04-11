@@ -18,12 +18,12 @@ export const TextInput: Story = {
   }
 }
 
-export const RequiredTextInput: Story = {
+export const ErrorTextInput: Story = {
   tags: ["autodocs"],
   args: {
     type: "text",
     placeholder: "Error",
-    required: true
+    error: true
   }
 }
 

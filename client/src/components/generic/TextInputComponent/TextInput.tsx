@@ -2,16 +2,21 @@ import React from "react"
 
 type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   success?: boolean
+  error?: boolean
 }
 
-const TextInput = ({ success, ...props }: TextInputProps) => {
-  const borderColor = success ? "green" : "var(--Greys-100, #242424)"
+const TextInput = ({ success, error, ...props }: TextInputProps) => {
+  const borderColor = success
+    ? "var(--Other-Green, #109D27)"
+    : error
+      ? "var(--Other-Red, #9A141D)"
+      : "var(--Greys-100, #242424)"
   const paddingLeft = "20px"
-  const borderWidth = "2px"
+  const borderWidth = success || error ? "2px" : "1px"
 
   return (
     <input
-      className="invalid:border-red flex-shrink:0 border-radius: 0.25rem h-9 w-full rounded border border"
+      className="flex-shrink:0 border-radius: 0.25rem h-9 w-full rounded"
       style={{ borderColor, borderWidth, paddingLeft }}
       {...props}
     />
