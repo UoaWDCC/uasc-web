@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import Input from "./Input"
+import TextInputComponent from "./TextInput"
 
-const meta: Meta<typeof Input> = {
-  component: Input,
-  title: "Input Component"
+const meta: Meta<typeof TextInputComponent> = {
+  component: TextInputComponent,
+  title: "TextInput Component"
 }
 
 export default meta
