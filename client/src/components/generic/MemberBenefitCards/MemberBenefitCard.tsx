@@ -1,4 +1,6 @@
+import ticket from "./Ticket.png"
 type cardVariants = "default"
+
 
 interface ICardProps {
   children?: React.ReactNode
@@ -14,7 +16,7 @@ const BenefitCard = ({ children, ...props }: props) => {
         <div className="mb-2 text-xl font-bold">{children}</div>
       </span>
       <span>
-        <img className="w-full" src="./Ticket" alt="wwwww"></img>
+        <img className="w-full" src={ticket} alt="wwwww"></img>
       </span>
     </div>
   )
