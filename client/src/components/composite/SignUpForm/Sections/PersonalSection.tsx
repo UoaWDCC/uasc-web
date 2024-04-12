@@ -7,7 +7,7 @@ export const PersonalSectionFirst = () => {
     <div>
       <span className="flex">
         <TextField
-          value={first_name}
+          value={first_name || ""}
           onChange={(e) => updateFormData({ first_name: e.target?.value })}
           name="firstName"
           label="First Name"
@@ -16,7 +16,7 @@ export const PersonalSectionFirst = () => {
           size="small"
         />
         <TextField
-          value={last_name}
+          value={last_name || ""}
           onChange={(e) => updateFormData({ last_name: e.target?.value })}
           id="lastName"
           name="lastName"

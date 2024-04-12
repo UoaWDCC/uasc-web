@@ -4,6 +4,7 @@ import {
 } from "components/composite/SignUpForm/PageConfig/PageConfig"
 import { ProtectedSignUpForm } from "components/composite/SignUpForm/SignUpForm"
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom"
+import { SignUpFormContainer } from "store/signupform"
 
 const Register = () => {
   const navigateFn = useNavigate()
@@ -18,7 +19,12 @@ const Register = () => {
             <Route
               path=":step"
               element={
-                <ProtectedSignUpForm pageContent={pageContent} pages={pages} />
+                <SignUpFormContainer>
+                  <ProtectedSignUpForm
+                    pageContent={pageContent}
+                    pages={pages}
+                  />
+                </SignUpFormContainer>
               }
             />
           </Routes>
