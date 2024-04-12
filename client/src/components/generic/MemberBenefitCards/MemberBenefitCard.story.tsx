@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react"
 // importing button.tsx as the object
-import Button from "./MemberBenefitCard"
-const meta: Meta<typeof Button> = {
-  component: Button,
-  title: "Button Variants",
+import Card from "./MemberBenefitCard"
+const meta: Meta<typeof Card> = {
+  component: Card,
+  title: "Card",
   argTypes: {
     variant: {
       control: { type: "radio" },
-      options: ["default", "alternative", "secondary"]
+      options: ["default"]
     },
     children: {
-      name: "content"
+      name: "text for description"
     }
   }
 }
@@ -22,7 +22,7 @@ export const BenefitCard1: Story = {
   tags: ["autodocs"],
   args: {
     variant: "default",
-    children: "Default Card Variant"
+    children: "Book our cozy ski lodge on the Whakapapa skifield"
   }
 }
 

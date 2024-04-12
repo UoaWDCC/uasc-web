@@ -9,13 +9,16 @@ type props = ICardProps & React.HTMLAttributes<HTMLElement>
 
 const BenefitCard = ({ children, ...props }: props) => {
   return (
-    <div
-      className="flex border
+    <div className="flex max-w-sm overflow-hidden shadow-lg">
     
-    "
-    >
-      {children}
+      <span className="px-6 py-4">
+        <div className="font-bold text-xl mb-2">{children}</div>
+      </span>
+      <span>
+        <img className="w-full" src="./Ticket" alt="wwwww"></img>
+      </span>
     </div>
+    
   )
 }
 
