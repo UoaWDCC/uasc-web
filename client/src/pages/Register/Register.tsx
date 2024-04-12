@@ -2,7 +2,7 @@ import {
   PAGE_CONTENT,
   PAGINATED_FORM_PAGES
 } from "components/composite/SignUpForm/PageConfig/PageConfig"
-import { WrappedSignUpForm } from "components/composite/SignUpForm/SignUpForm"
+import { ProtectedSignUpForm } from "components/composite/SignUpForm/SignUpForm"
 import { Route, Routes, useNavigate } from "react-router-dom"
 
 const Register = () => {
@@ -17,7 +17,7 @@ const Register = () => {
             <Route
               path=":step"
               element={
-                <WrappedSignUpForm pageContent={pageContent} pages={pages} />
+                <ProtectedSignUpForm pageContent={pageContent} pages={pages} />
               }
             />
           </Routes>

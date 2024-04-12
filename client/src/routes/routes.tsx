@@ -1,5 +1,4 @@
 import AdminBookingDetails from "components/composite/AdminBookingDetails/AdminBookingDetails"
-import SignUpForm from "components/composite/SignUpForm/SignUpForm"
 import About from "pages/About"
 import Admin from "pages/Admin"
 import Booking from "pages/Booking"

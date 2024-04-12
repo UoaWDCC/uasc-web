@@ -13,7 +13,7 @@ interface ISignUpFormProps {
   pageContent: JSX.Element[]
 }
 
-export const WrappedSignUpForm = ({
+export const ProtectedSignUpForm = ({
   pages,
   pageContent
 }: Omit<ISignUpFormProps, "currentPage">) => {
