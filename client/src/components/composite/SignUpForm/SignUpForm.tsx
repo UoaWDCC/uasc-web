@@ -36,6 +36,7 @@ export const ProtectedSignUpForm = ({
         return <Navigate to={oneLevelUp(PAYMENT_ROUTE)} replace />
       }
       break
+    case PAGES.PaymentInfo:
     case PAGES.Payment:
       if (!currentUser) {
         return <Navigate to={oneLevelUp(PERSONAL_ROUTE_1)} replace />
