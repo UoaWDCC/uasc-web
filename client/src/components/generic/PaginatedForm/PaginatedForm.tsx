@@ -43,6 +43,7 @@ const PaginatedForm = ({
           <Button
             disabled={onBack === undefined || backDisabled}
             variant="progress-inverted"
+            data-testid="back-button"
             onClick={() => {
               onBack?.()
             }}
@@ -52,6 +53,7 @@ const PaginatedForm = ({
           <Button
             variant="progress-default"
             disabled={onNext === undefined || nextDisabled}
+            data-testid="next-button"
             onClick={() => {
               onNext?.()
             }}
