@@ -8,7 +8,7 @@ import Events from "pages/Events"
 import Home from "pages/Home"
 import Login from "pages/Login"
 import Profile from "pages/Profile"
-import Register from "pages/Register"
+import Register from "pages/Register/Register"
 import Thanks from "pages/Thanks"
 import { JSX } from "react"
 

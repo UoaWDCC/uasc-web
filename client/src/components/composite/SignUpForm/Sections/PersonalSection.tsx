@@ -1,12 +1,14 @@
 import { MenuItem, Select, TextField } from "@mui/material"
-import { Stack } from "@mui/system"
+import { useSignUpFormData } from "store/signupform"
 
 export const PersonalSectionFirst = () => {
+  const [{ first_name, last_name }, { updateFormData }] = useSignUpFormData()
   return (
     <div>
-      <Stack direction="row" spacing={2}>
+      <span className="flex">
         <TextField
-          id="firstName"
+          value={first_name}
+          onChange={(e) => updateFormData({ first_name: e.target?.value })}
           name="firstName"
           label="First Name"
           variant="outlined"
@@ -14,6 +16,8 @@ export const PersonalSectionFirst = () => {
           size="small"
         />
         <TextField
+          value={last_name}
+          onChange={(e) => updateFormData({ last_name: e.target?.value })}
           id="lastName"
           name="lastName"
           label="Last Name"
@@ -21,7 +25,7 @@ export const PersonalSectionFirst = () => {
           required
           size="small"
         />
-      </Stack>
+      </span>
 
       <Select
         id="gender"

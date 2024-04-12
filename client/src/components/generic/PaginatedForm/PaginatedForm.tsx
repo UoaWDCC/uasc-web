@@ -36,7 +36,7 @@ const PaginatedForm = ({
     <>
       <FormContainer>
         <div className="flex flex-col items-start gap-1 text-left sm:w-full">
-          <h2 className="text-dark-blue-100 italic">{title}</h2>
+          <h2 className="text-dark-blue-100 my-9 italic">{title}</h2>
           {children}
         </div>
         <span className="mt-8 flex justify-between gap-1 sm:w-full">
