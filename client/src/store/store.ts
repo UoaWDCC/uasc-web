@@ -4,7 +4,6 @@ import {
   defaultRegistry,
   createStore,
   Action,
-  createContainer,
   createHook
 } from "react-sweet-state"
 
