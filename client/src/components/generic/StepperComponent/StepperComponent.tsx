@@ -3,7 +3,7 @@ import StepperButton from "../StepperButtons/StepperButton"
 export type StepProps = {
   name: string
   index: number
-  onClick: () => void
+  onClick?: () => void
 }
 
 interface IStepperProps {
@@ -16,11 +16,11 @@ interface IStepperProps {
  */
 const Stepper = ({ steps, currentStep }: IStepperProps) => {
   return (
-    <span>
+    <span className="flex w-full justify-center">
       {steps.map((step) => {
         const { name, index, onClick } = step
         return (
-          <span key={index} className=" -ml-[16px]">
+          <span key={index} className="-ml-[16px] min-w-[153px]">
             <StepperButton
               variant={index === 0 ? "first" : "normal"}
               data-testid={name}

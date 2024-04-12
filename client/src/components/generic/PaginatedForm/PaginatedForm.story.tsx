@@ -26,7 +26,9 @@ export const ExampleUsage = () => {
       index: 0,
       onNext: () => {
         setCurrentPage(1)
-      }
+      },
+      onBack: () => {},
+      backButtonText: "Exit"
     },
 
     {

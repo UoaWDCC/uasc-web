@@ -15,12 +15,7 @@ const importSwaggerJson = async () => {
 
 const app: Express = express()
 
-function keepRawBody(
-  req: any,
-  res: any,
-  buf: Buffer,
-  encoding: BufferEncoding
-) {
+function keepRawBody(req: any, res: any, buf: Buffer) {
   if (buf && buf.length) {
     req.rawBody = buf
   }
