@@ -30,7 +30,8 @@ export const useCurrentStep = (): PAGES => {
 
     case "confirm":
       return PAGES.Confirm
+
     default:
-      return PAGES.Additional
+      return PAGES.Unknown
   }
 }

@@ -25,6 +25,8 @@ export const ProtectedSignUpForm = ({
    */
 
   switch (currentPage) {
+    case PAGES.Unknown:
+      return <Navigate to={"../personal_1"} replace />
     case PAGES.PersonalFirst:
     case PAGES.PersonalSecond:
     case PAGES.Contact:

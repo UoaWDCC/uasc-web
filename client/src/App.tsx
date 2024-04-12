@@ -1,4 +1,4 @@
-import { Router } from "react-router-dom"
+import { BrowserRouter } from "react-router-dom"
 import { ThemeProvider } from "@mui/material"
 import { LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
@@ -13,12 +13,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ThemeProvider theme={theme}>
-          <Router>
+          <BrowserRouter>
             <AppNavbar />
             <div className="pt-14">
               <AllRoutes />
             </div>
-          </Router>
+          </BrowserRouter>
         </ThemeProvider>
       </LocalizationProvider>
     </QueryClientProvider>

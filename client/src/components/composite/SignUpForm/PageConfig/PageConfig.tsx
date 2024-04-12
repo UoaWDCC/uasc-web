@@ -13,7 +13,8 @@ export enum PAGES {
   Contact,
   Additional,
   Payment,
-  Confirm
+  Confirm,
+  Unknown
 }
 
 export const PAGINATED_FORM_PAGES = (
