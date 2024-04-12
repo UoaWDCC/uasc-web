@@ -1,18 +1,68 @@
-import PaginatedForm from "components/generic/PaginatedForm/PaginatedForm"
-import { useState } from "react"
-import {
-  PAGES,
-  PAGE_CONTENT,
-  PAGINATED_FORM_PAGES,
-  STEPPER_PROPS
-} from "./PageConfig/PageConfig"
+import PaginatedForm, {
+  PageProps
+} from "components/generic/PaginatedForm/PaginatedForm"
+import { PAGES, STEPPER_PROPS } from "./PageConfig/PageConfig"
 import Stepper from "components/generic/StepperComponent/StepperComponent"
+import { useCurrentStep } from "./utils/Utils"
+import { useAppData } from "store/store"
+import { Navigate } from "react-router-dom"
 
-const SignUpForm = () => {
-  const [currentPage, setCurrentPage] = useState<PAGES>(PAGES.PersonalFirst)
+interface ISignUpFormProps {
+  currentPage: PAGES
+  pages: PageProps[]
+  pageContent: JSX.Element[]
+}
 
-  const pages = PAGINATED_FORM_PAGES(setCurrentPage)
-  const pageContent = PAGE_CONTENT
+export const WrappedSignUpForm = ({
+  pages,
+  pageContent
+}: Omit<ISignUpFormProps, "currentPage">) => {
+  const [{ currentUser, currentUserClaims }] = useAppData()
+  const currentPage = useCurrentStep()
+
+  /**
+   * Note that below our route is one level deeper than /register
+   */
+
+  switch (currentPage) {
+    case PAGES.PersonalFirst:
+    case PAGES.PersonalSecond:
+    case PAGES.Contact:
+    case PAGES.Additional:
+      if (currentUser) {
+        return <Navigate to={"../payment"} replace />
+      }
+      break
+    case PAGES.Payment:
+      if (!currentUser) {
+        return <Navigate to={"../personal_1"} replace />
+      }
+
+      // User has already paid for membership
+      if (currentUserClaims?.member) {
+        return <Navigate to={"../../profile"} replace />
+      }
+      break
+    case PAGES.Confirm:
+      // Can't get here unless signed in
+      if (!currentUser) {
+        return <Navigate to={"../personal_1"} replace />
+      }
+  }
+  return (
+    <SignUpForm
+      currentPage={currentPage}
+      pageContent={pageContent}
+      pages={pages}
+    />
+  )
+}
+
+export const SignUpForm = ({
+  pages,
+  currentPage,
+  pageContent
+}: ISignUpFormProps) => {
   const steps = STEPPER_PROPS
 
   return (
@@ -28,5 +78,3 @@ const SignUpForm = () => {
     </div>
   )
 }
-
-export default SignUpForm
