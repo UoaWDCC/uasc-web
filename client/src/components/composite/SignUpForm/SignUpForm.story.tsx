@@ -3,6 +3,7 @@ import type { Meta } from "@storybook/react"
 
 import { SignUpForm } from "./SignUpForm"
 import { useState } from "react"
+import { PAGE_CONTENT } from "./PageConfig/PageConfig"
 
 // 👇 This default export determines where your story goes in the story list
 const meta: Meta<typeof SignUpForm> = {
@@ -64,21 +65,26 @@ export const DefaultStory = () => {
             setCurrentPage(3)
           }
         },
+
         {
-          title: "last",
+          title: "sixth",
           index: 5,
+          onNext: () => {
+            setCurrentPage(6)
+          },
           onBack: () => {
             setCurrentPage(4)
           }
+        },
+        {
+          title: "last",
+          index: 6,
+          onBack: () => {
+            setCurrentPage(5)
+          }
         }
       ]}
-      pageContent={[
-        <>asdsa</>,
-        <>asdsd</>,
-        <>adssa</>,
-        <>asdsad</>,
-        <>asdsa</>
-      ]}
+      pageContent={PAGE_CONTENT}
       currentPage={currentPage}
     />
   )

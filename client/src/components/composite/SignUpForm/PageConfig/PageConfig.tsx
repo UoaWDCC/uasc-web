@@ -9,18 +9,27 @@ import {
   ADDITIONAL_ROUTE,
   CONFIRM_ROUTE,
   CONTACT_ROUTE,
+  PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
   RouteNames
 } from "../utils/RouteNames"
-import { PaymentSection } from "../Sections/PaymentSection"
+import {
+  PaymentInformationSection,
+  PaymentSection
+} from "../Sections/PaymentSection"
 import { ConfirmSection } from "../Sections/ConfirmSection"
+
+/**
+ * Order of all these matters!
+ */
 
 export enum PAGES {
   PersonalFirst = 0,
   PersonalSecond,
   Contact,
   Additional,
+  PaymentInfo,
   Payment,
   Confirm,
   Unknown
@@ -56,6 +65,11 @@ export const PAGINATED_FORM_PAGES = (
     }
   },
   {
+    index: PAGES.PaymentInfo,
+    title: "Payment",
+    onNext: () => navigateFn(PAYMENT_ROUTE)
+  },
+  {
     index: PAGES.Payment,
     title: "Payment",
     onNext: () => navigateFn(CONFIRM_ROUTE)
@@ -74,6 +88,7 @@ export const PAGE_CONTENT = [
   <PersonalSectionSecond key="personal-second" />,
   <ContactSection key="contact" />,
   <AdditionalSection key="additional" />,
+  <PaymentInformationSection key="payment-info" />,
   <PaymentSection key="payment" />,
   <ConfirmSection key="confirm" />
 ]
@@ -83,6 +98,6 @@ export const STEPPER_PROPS = [
   { name: "Personal", index: PAGES.PersonalFirst },
   { name: "Contact", index: PAGES.Contact },
   { name: "Additional", index: PAGES.Additional },
-  { name: "Payment", index: PAGES.Payment },
+  { name: "Payment", index: PAGES.PaymentInfo },
   { name: "Confirm", index: PAGES.Confirm }
 ]
