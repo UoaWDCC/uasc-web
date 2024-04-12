@@ -3,9 +3,10 @@ import PaginatedForm, {
 } from "components/generic/PaginatedForm/PaginatedForm"
 import { PAGES, STEPPER_PROPS } from "./PageConfig/PageConfig"
 import Stepper from "components/generic/StepperComponent/StepperComponent"
-import { useCurrentStep } from "./utils/Utils"
+import { oneLevelUp, useCurrentStep } from "./utils/Utils"
 import { useAppData } from "store/store"
 import { Navigate } from "react-router-dom"
+import { PAYMENT_ROUTE, PERSONAL_ROUTE_1 } from "./utils/RouteNames"
 
 interface ISignUpFormProps {
   currentPage: PAGES
@@ -26,18 +27,18 @@ export const ProtectedSignUpForm = ({
 
   switch (currentPage) {
     case PAGES.Unknown:
-      return <Navigate to={"../personal_1"} replace />
+      return <Navigate to={oneLevelUp(PERSONAL_ROUTE_1)} replace />
     case PAGES.PersonalFirst:
     case PAGES.PersonalSecond:
     case PAGES.Contact:
     case PAGES.Additional:
       if (currentUser) {
-        return <Navigate to={"../payment"} replace />
+        return <Navigate to={oneLevelUp(PAYMENT_ROUTE)} replace />
       }
       break
     case PAGES.Payment:
       if (!currentUser) {
-        return <Navigate to={"../personal_1"} replace />
+        return <Navigate to={oneLevelUp(PERSONAL_ROUTE_1)} replace />
       }
 
       // User has already paid for membership
@@ -48,7 +49,7 @@ export const ProtectedSignUpForm = ({
     case PAGES.Confirm:
       // Can't get here unless signed in
       if (!currentUser) {
-        return <Navigate to={"../personal_1"} replace />
+        return <Navigate to={oneLevelUp(PERSONAL_ROUTE_1)} replace />
       }
   }
   return (

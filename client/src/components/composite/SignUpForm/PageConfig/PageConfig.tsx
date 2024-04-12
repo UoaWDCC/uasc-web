@@ -5,7 +5,14 @@ import {
 } from "../Sections/PersonalSection"
 import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
-import { StepParam } from "../utils/Utils"
+import {
+  ADDITIONAL_ROUTE,
+  CONFIRM_ROUTE,
+  CONTACT_ROUTE,
+  PERSONAL_ROUTE_1,
+  PERSONAL_ROUTE_2,
+  RouteNames
+} from "../utils/RouteNames"
 
 export enum PAGES {
   PersonalFirst = 0,
@@ -18,30 +25,30 @@ export enum PAGES {
 }
 
 export const PAGINATED_FORM_PAGES = (
-  navigateFn: (route: StepParam) => void
+  navigateFn: (route: RouteNames) => void
 ): PageProps[] => [
   {
     index: PAGES.PersonalFirst,
     title: "Personal details",
-    onNext: () => navigateFn("personal_2")
+    onNext: () => navigateFn(PERSONAL_ROUTE_2)
   },
   {
     index: PAGES.PersonalSecond,
     title: "Personal details",
-    onBack: () => navigateFn("personal_1"),
-    onNext: () => navigateFn("contact")
+    onBack: () => navigateFn(PERSONAL_ROUTE_1),
+    onNext: () => navigateFn(CONTACT_ROUTE)
   },
   {
     index: PAGES.Contact,
     title: "Contact details",
-    onBack: () => navigateFn("personal_2"),
-    onNext: () => navigateFn("additional")
+    onBack: () => navigateFn(PERSONAL_ROUTE_2),
+    onNext: () => navigateFn(ADDITIONAL_ROUTE)
   },
   {
     index: PAGES.Additional,
     title: "Additional info",
     nextButtonText: "Confirm",
-    onBack: () => navigateFn("contact"),
+    onBack: () => navigateFn(CONTACT_ROUTE),
     onNext: () => {
       throw new Error("not implemented")
     }
@@ -49,7 +56,7 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Payment,
     title: "Payment",
-    onNext: () => navigateFn("confirm")
+    onNext: () => navigateFn(CONFIRM_ROUTE)
   },
   {
     index: PAGES.Confirm,

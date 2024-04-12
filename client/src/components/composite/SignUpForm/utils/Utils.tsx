@@ -1,37 +1,42 @@
 import { useParams } from "react-router-dom"
 import { PAGES } from "../PageConfig/PageConfig"
-
-export type StepParam =
-  | "personal_1"
-  | "personal_2"
-  | "contact"
-  | "additional"
-  | "payment"
-  | "confirm"
+import {
+  ADDITIONAL_ROUTE,
+  CONFIRM_ROUTE,
+  CONTACT_ROUTE,
+  PAYMENT_ROUTE,
+  PERSONAL_ROUTE_1,
+  PERSONAL_ROUTE_2,
+  RouteNames
+} from "./RouteNames"
 
 export const useCurrentStep = (): PAGES => {
-  const { step } = useParams<{ step: StepParam }>()
+  const { step } = useParams<{ step: RouteNames }>()
 
   switch (step) {
-    case "personal_1":
+    case PERSONAL_ROUTE_1:
       return PAGES.PersonalFirst
 
-    case "personal_2":
+    case PERSONAL_ROUTE_2:
       return PAGES.PersonalSecond
 
-    case "contact":
+    case CONTACT_ROUTE:
       return PAGES.Contact
 
-    case "additional":
+    case ADDITIONAL_ROUTE:
       return PAGES.Additional
 
-    case "payment":
+    case PAYMENT_ROUTE:
       return PAGES.Payment
 
-    case "confirm":
+    case CONFIRM_ROUTE:
       return PAGES.Confirm
 
     default:
       return PAGES.Unknown
   }
+}
+
+export const oneLevelUp = (route: string) => {
+  return `../${route}`
 }
