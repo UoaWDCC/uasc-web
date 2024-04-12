@@ -13,6 +13,8 @@ import {
   PERSONAL_ROUTE_2,
   RouteNames
 } from "../utils/RouteNames"
+import { PaymentSection } from "../Sections/PaymentSection"
+import { ConfirmSection } from "../Sections/ConfirmSection"
 
 export enum PAGES {
   PersonalFirst = 0,
@@ -71,7 +73,9 @@ export const PAGE_CONTENT = [
   <PersonalSectionFirst key="personal-first" />,
   <PersonalSectionSecond key="personal-second" />,
   <ContactSection key="contact" />,
-  <AdditionalSection key="additional" />
+  <AdditionalSection key="additional" />,
+  <PaymentSection key="payment" />,
+  <ConfirmSection key="confirm" />
 ]
 
 export const STEPPER_PROPS = [

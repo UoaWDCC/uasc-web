@@ -70,7 +70,7 @@ export const SignUpForm = ({
 
   return (
     <div className="relative flex h-full justify-center">
-      <span className="absolute -top-[17px] hidden lg:block">
+      <span className="absolute -top-[17px] ml-4 hidden lg:block">
         <Stepper steps={steps} currentStep={currentPage} />
       </span>
       <PaginatedForm pages={pages} currentPageIndex={currentPage}>
