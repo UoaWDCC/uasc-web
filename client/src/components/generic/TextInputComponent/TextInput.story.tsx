@@ -23,7 +23,7 @@ export const ErrorTextInput: Story = {
   args: {
     type: "text",
     placeholder: "Error",
-    error: true
+    variant: "error"
   }
 }
 
@@ -32,6 +32,6 @@ export const SuccessTextInput: Story = {
   args: {
     type: "text",
     placeholder: "Success",
-    success: true
+    variant: "success"
   }
 }
