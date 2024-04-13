@@ -59,21 +59,6 @@ const BookingForm = () => {
   const setSpotAvailabilityByDate = () => {
     const availabilities = new Map()
 
-    existingBookings.forEach((booking) => {
-      /*
-      const currDate = new Date(getFormattedDateString(booking.check_in))
-      const endDate = new Date(getFormattedDateString(booking.check_out))
-
-      while (currDate < endDate) {
-        const dateKey = currDate.toDateString()
-        const spotsTaken = (availabilities.get(dateKey) || 0) + 1
-        availabilities.set(dateKey, spotsTaken)
-
-        currDate.setDate(currDate.getDate() + 1)
-      }
-      */
-    })
-
     setDateAvailabilities(availabilities)
   }
 
@@ -91,25 +76,6 @@ const BookingForm = () => {
   const isStartDateInvalid = (date: any) => {
     const startDate = new Date(getFormattedDateString(date))
     return isDateBookedOut(startDate)
-  }
-
-  const isEndDateInvalid = (date: any) => {
-    /*
-    const endDate = new Date(getFormattedDateString(date))
-    if (endDate <= selectedCheckInDate) {
-      return true
-    }
-
-    const currDate = new Date(selectedCheckInDate)
-    while (currDate <= endDate) {
-      if (isDateBookedOut(currDate)) {
-        return true
-      }
-      currDate.setDate(currDate.getDate() + 1)
-    }
-    */
-
-    return false
   }
 
   const handleChangeStartDate = (startDate: any) => {

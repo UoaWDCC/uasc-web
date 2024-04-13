@@ -4,7 +4,6 @@ import {
   defaultRegistry,
   createStore,
   Action,
-  createContainer,
   createHook
 } from "react-sweet-state"
 
@@ -47,12 +46,9 @@ const actions = {
 
 type Actions = typeof actions
 
-export const AppDataContainer = createContainer()
-
 const Store = createStore<State, Actions>({
   initialState,
-  actions,
-  containedBy: AppDataContainer
+  actions
 })
 
 export const StoreInstance = defaultRegistry.getStore(Store)

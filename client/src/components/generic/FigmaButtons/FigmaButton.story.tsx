@@ -36,6 +36,13 @@ export const defaultButtonInvertedSm: Story = {
   }
 }
 
+export const progressButtons = () => (
+  <span className="flex items-center gap-2">
+    <Button variant="progress-inverted">Back</Button>
+    <Button variant="progress-default">Next</Button>
+  </span>
+)
+
 /** Alternative button variant */
 export const alternativeButton: Story = {
   args: {
