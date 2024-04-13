@@ -3,10 +3,12 @@ import { UserAdditionalInfo } from "data-layer/models/firebase"
 import UserDataService from "data-layer/services/UserDataService"
 import {
   CreateUserRequestBody,
+  EditSelfRequestBody,
   EditUsersRequestBody,
   SelfRequestModel,
-  demoteUserRequestBody,
-  promoteUserRequestBody
+  EditSelfRequestModel,
+  DemoteUserRequestBody,
+  PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import { UserResponse } from "service-layer/response-models/UserResponse"
 import {
@@ -64,6 +66,25 @@ export class UsersController extends Controller {
     this.setStatus(200)
   }
 
+  @SuccessResponse("200", "Successful edit")
+  @Security("jwt")
+  @Patch("edit-self")
+  public async editSelf(
+    @Request() request: EditSelfRequestModel,
+    @Body() requestBody: EditSelfRequestBody
+  ): Promise<void> {
+    try {
+      await new UserDataService().editUserData(
+        request.user.uid,
+        requestBody.updatedInformation
+      )
+      this.setStatus(200)
+    } catch (error) {
+      console.error(error)
+      this.setStatus(401)
+    }
+  }
+
   @SuccessResponse("200", "Edited")
   @Security("jwt", ["admin"])
   @Patch("bulk-edit")
@@ -86,7 +107,7 @@ export class UsersController extends Controller {
   @Put("promote")
   // set user membership to "member"
   public async promoteUser(
-    @Body() requestBody: promoteUserRequestBody
+    @Body() requestBody: PromoteUserRequestBody
   ): Promise<void> {
     const userService = new UserDataService() // create a new data service
     const authService = new AuthService()
@@ -119,7 +140,7 @@ export class UsersController extends Controller {
   @Put("demote")
   // set user membership type to `undefined`
   public async demoteUser(
-    @Body() requestBody: demoteUserRequestBody
+    @Body() requestBody: DemoteUserRequestBody
   ): Promise<void> {
     const userService = new UserDataService()
     const authService = new AuthService()
