@@ -6,6 +6,9 @@ export default {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      backgroundImage: {
+        "home-ski-image": "url('src/assets/images/homeski.png')"
+      },
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans]
       },
