@@ -1,5 +1,5 @@
 const AboutSection = () => (
-  <section>
+  <section id="about">
     <div
       className="bg-home-about-image relative
          z-0  flex

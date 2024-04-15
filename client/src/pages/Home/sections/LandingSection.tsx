@@ -32,7 +32,7 @@ const LandingSection = () => (
       </div>
 
       <h5 className="text-dark-blue-100 absolute bottom-9 uppercase">
-        Find out more
+        <a href="#about">Find out more</a>
       </h5>
     </div>
   </section>
