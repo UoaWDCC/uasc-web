@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr"
 import viteTsconfigPaths from "vite-tsconfig-paths"
 import tailwindcss from "tailwindcss"
+import { resolve } from "path"
 
 export default defineConfig({
   build: {
@@ -11,6 +12,11 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [tailwindcss()]
+    }
+  },
+  resolve: {
+    alias: {
+      $assets: resolve("./src/assets")
     }
   },
   base: "/",
