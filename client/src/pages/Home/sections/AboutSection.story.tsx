@@ -8,6 +8,6 @@ const meta: Meta<typeof AboutSection> = {
 
 export default meta
 
-export const DefaultLandingSection = () => {
+export const DefaultAboutSection = () => {
   return <AboutSection />
 }
