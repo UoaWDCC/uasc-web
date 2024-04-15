@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import PricingCard from "./PricingCard"
 const meta: Meta<typeof PricingCard> = {
-  component: PricingCard,
-  title: "Pricing Card"
+  component: PricingCard
 }
 
 export default meta
@@ -27,6 +26,47 @@ export const SelectedPricingCard: Story = {
   }
 }
 
+export const HomePricingCardWithDiscount: Story = {
+  args: {
+    variant: "home",
+    discountedPriceString: "$45",
+    title: "UoA Student",
+    priceString: "$65",
+    extraInfo: "Save $20",
+    selected: false
+  }
+}
+
+export const HomePricingCardWithoutDiscount: Story = {
+  args: {
+    variant: "home",
+    title: "UoA Student",
+    discountedPriceString: "$65",
+    selected: false
+  }
+}
+
+export const SideBySideHomePricingCard: Story = {
+  args: {
+    variant: "home",
+    discountedPriceString: "$45",
+    title: "UoA Student",
+    priceString: "$65",
+    extraInfo: "Save $20",
+    selected: false
+  },
+  decorators: [
+    (Story) => (
+      <div className="flex gap-3">
+        <Story />
+        <Story />
+        <Story />
+        <Story />
+      </div>
+    )
+  ]
+}
+
 export const SideBySidePricingCards: Story = {
   args: {
     title: "UoA Student",
@@ -37,6 +77,7 @@ export const SideBySidePricingCards: Story = {
     (Story) => (
       <div className="flex gap-3">
         <PricingCard
+          variant="default"
           title={"Selected Card"}
           priceString="$100"
           extraInfo="nothing"
