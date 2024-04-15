@@ -58,7 +58,7 @@ const PricingCardHome = ({
     <h3>{title}</h3>
     <div className="mt-6">
       <span className=" text-lg line-through">{priceString}</span>
-      <h1 className="-mt-4 italic">{discountedPriceString}</h1>
+      <h1 className="-mt-3 italic">{discountedPriceString}</h1>
     </div>
     <h5 className="text-orange mt-3 uppercase">{extraInfo}</h5>
   </div>
