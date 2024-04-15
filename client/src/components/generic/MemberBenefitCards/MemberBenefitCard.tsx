@@ -1,42 +1,41 @@
 import { SvgImport } from "components/utils/types"
-import ticket from "./Ticket.png"
 type cardVariants = "default"
 
 interface ICardProps {
-  svgIcon: SvgImport
-  children?: React.ReactNode
+  SvgIcon?: SvgImport
+  text: string
   variant?: cardVariants
 }
 
-type props = ICardProps & React.HTMLAttributes<HTMLElement>
+type props = ICardProps
 
-const BenefitCard = ({ children }: props) => {
+const BenefitCard = ({ text, SvgIcon }: props) => {
   return (
-    <div className="flex max-w-sm shadow-lg">
-      <span className="px-6 py-4">
-        <div className="mb-2 text-xl font-bold">{children}</div>
-      </span>
-      <span>
-        <img className="w-full" src={ticket} alt="image of a ticket"></img>
+    <div
+      className="border-light-blue-100 
+      bg-gray-1 flex max-h-[200px] 
+     max-w-[450px] items-center rounded-md border 
+     px-6 py-7 shadow-lg"
+    >
+      <h3 className="text-light-blue-100 mb-2 w-[270px] font-bold">{text}</h3>
+      <span className=" -ml-7 w-[138px] min-w-[138px] opacity-15">
+        {SvgIcon && <SvgIcon className="fill-light-blue-100" />}
       </span>
     </div>
   )
 }
 
-const Card = ({ svgIcon, children, variant, ...props }: props) => {
+/**
+ *
+ * Usage: pass in the SVG imported using the `import Icon from 'path/icon.svg?react'` syntax
+ *
+ */
+const Card = ({ SvgIcon, text, variant }: props) => {
   switch (variant) {
     case "default":
-      return (
-        <BenefitCard svgIcon={svgIcon} {...props}>
-          {children}
-        </BenefitCard>
-      )
+      return <BenefitCard SvgIcon={SvgIcon} text={text} />
   }
-  return (
-    <BenefitCard svgIcon={svgIcon} {...props}>
-      {children}
-    </BenefitCard>
-  )
+  return <BenefitCard SvgIcon={SvgIcon} text={text} />
 }
 
 export default Card

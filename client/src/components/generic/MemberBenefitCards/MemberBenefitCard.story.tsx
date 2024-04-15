@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
-// importing button.tsx as the object
+import TestIcon from "assets/icons/bell.svg?react"
+
 import Card from "./MemberBenefitCard"
 const meta: Meta<typeof Card> = {
   component: Card,
@@ -8,7 +9,7 @@ const meta: Meta<typeof Card> = {
       control: { type: "radio" },
       options: ["default"]
     },
-    children: {
+    text: {
       name: "text for description"
     }
   }
@@ -21,7 +22,8 @@ export const BenefitCard1: Story = {
   tags: ["autodocs"],
   args: {
     variant: "default",
-    children: "Book our cozy ski lodge on the Whakapapa skifield"
+    text: "Book our cozy ski lodge on the Whakapapa skifield",
+    SvgIcon: TestIcon
   }
 }
 
@@ -29,6 +31,7 @@ export const BenefitCard2: Story = {
   tags: ["autodocs"],
   args: {
     variant: "default",
-    children: "Default Card Variant"
+    text: "Default Card Variant",
+    SvgIcon: TestIcon
   }
 }
