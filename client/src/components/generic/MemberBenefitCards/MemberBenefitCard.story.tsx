@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react"
 import Card from "./MemberBenefitCard"
 const meta: Meta<typeof Card> = {
   component: Card,
-  title: "Card",
   argTypes: {
     variant: {
       control: { type: "radio" },

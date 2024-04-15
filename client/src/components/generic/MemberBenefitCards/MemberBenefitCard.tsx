@@ -1,7 +1,9 @@
+import { SvgImport } from "components/utils/types"
 import ticket from "./Ticket.png"
 type cardVariants = "default"
 
 interface ICardProps {
+  svgIcon: SvgImport
   children?: React.ReactNode
   variant?: cardVariants
 }
@@ -21,12 +23,20 @@ const BenefitCard = ({ children }: props) => {
   )
 }
 
-const Card = ({ children, variant, ...props }: props) => {
+const Card = ({ svgIcon, children, variant, ...props }: props) => {
   switch (variant) {
     case "default":
-      return <BenefitCard {...props}>{children}</BenefitCard>
+      return (
+        <BenefitCard svgIcon={svgIcon} {...props}>
+          {children}
+        </BenefitCard>
+      )
   }
-  return <BenefitCard {...props}>{children}</BenefitCard>
+  return (
+    <BenefitCard svgIcon={svgIcon} {...props}>
+      {children}
+    </BenefitCard>
+  )
 }
 
 export default Card
