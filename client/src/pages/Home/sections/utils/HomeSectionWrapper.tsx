@@ -5,7 +5,7 @@ const HomeSectionWrapper = ({ children }: { children: React.ReactNode }) => (
   <>
     <div className="flex flex-col items-center justify-center py-12">
       <span className="home-page-gradient mt-12" />
-      <div className="w-full lg:max-w-[900px]">{children}</div>
+      <div className="w-full lg:max-w-[1000px]">{children}</div>
     </div>
   </>
 )

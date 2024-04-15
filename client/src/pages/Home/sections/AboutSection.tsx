@@ -9,7 +9,7 @@ const AboutSection = () => (
     >
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="bg-gray-1 pointer-events-none absolute -z-20 h-screen w-full opacity-20" />
-        <div className="text-dark-blue-100 flex flex-col gap-6 text-center lg:max-w-[450px] lg:px-4 lg:text-left">
+        <div className="text-dark-blue-100 flex flex-col gap-6 text-center lg:max-w-[450px] lg:text-left">
           <h2 className="italic">Get ready for the best year of your life!</h2>
           <div>
             <h4>

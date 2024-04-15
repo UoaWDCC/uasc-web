@@ -7,7 +7,7 @@ const LandingSection = () => (
     <div
       className="bg-home-ski-image relative
          z-10 -mt-14 flex
-         h-screen min-h-screen flex-col 
+          min-h-screen flex-col 
          items-center
          justify-center overflow-hidden bg-cover bg-top bg-no-repeat"
     >
@@ -31,7 +31,7 @@ const LandingSection = () => (
         </Link>
       </div>
 
-      <h5 className="text-dark-blue-100 absolute bottom-9 uppercase">
+      <h5 className="text-dark-blue-100 bottom-9 uppercase sm:absolute">
         <a href="#about">Find out more</a>
       </h5>
     </div>

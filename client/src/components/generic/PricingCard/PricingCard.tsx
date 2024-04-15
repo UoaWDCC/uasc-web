@@ -7,7 +7,7 @@ interface IPricingCardDefault {
 }
 
 interface IPricingCardHome extends Omit<IPricingCardDefault, "selected"> {
-  discountedPriceString?: string
+  discountedPriceString: string
 }
 
 // Public interface

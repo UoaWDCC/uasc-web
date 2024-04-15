@@ -1,3 +1,5 @@
+import { IPricingBanner } from "components/generic/PricingBanner/PricingBanner"
+
 /**
  * This is the type of elements that are exported with the `import Icon from 'path/icon.svg?react` syntax
  */
@@ -22,3 +24,5 @@ export type Pricing = {
   discountedPrice: string
   extraInfo?: string
 }
+
+export type PricingBannerContent = IPricingBanner
