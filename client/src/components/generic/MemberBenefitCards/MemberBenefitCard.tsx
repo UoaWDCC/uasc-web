@@ -15,7 +15,7 @@ const BenefitCard = ({ text, SvgIcon }: props) => {
       className="border-light-blue-100 
       bg-gray-1 flex max-h-[200px] 
      max-w-[450px] items-center rounded-md border 
-     px-6 py-7 shadow-lg"
+     px-6 py-7"
     >
       <h3 className="text-light-blue-100 mb-2 w-[270px] font-bold">{text}</h3>
       <span className=" -ml-7 w-[138px] min-w-[138px] opacity-15">
