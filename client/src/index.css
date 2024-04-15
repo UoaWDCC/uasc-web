@@ -44,6 +44,7 @@
 
 html {
   @apply text-black;
+  scroll-behavior: smooth;
 }
 
 body {
