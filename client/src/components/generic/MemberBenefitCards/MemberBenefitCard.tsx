@@ -8,7 +8,7 @@ interface ICardProps {
 
 type props = ICardProps & React.HTMLAttributes<HTMLElement>
 
-const BenefitCard = ({ children, ...props }: props) => {
+const BenefitCard = ({ children }: props) => {
   return (
     <div className="flex max-w-sm shadow-lg">
       <span className="px-6 py-4">
