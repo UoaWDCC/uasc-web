@@ -18,6 +18,7 @@
   .home-page-gradient {
     z-index: -1;
     width: 100%;
+    overflow: hidden;
     height: 100%;
     position: absolute;
     opacity: 0.1;

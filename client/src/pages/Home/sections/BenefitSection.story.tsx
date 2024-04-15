@@ -1,6 +1,7 @@
 import type { Meta } from "@storybook/react"
 
 import BenefitSection from "./BenefitSection"
+import { benefits } from "./utils/Benefits"
 
 const meta: Meta<typeof BenefitSection> = {
   component: BenefitSection
@@ -8,6 +9,6 @@ const meta: Meta<typeof BenefitSection> = {
 
 export default meta
 
-export const DefaultBenefitSection = () => {
-  return <BenefitSection />
+export const DefaultPricingSection = () => {
+  return <BenefitSection benefits={benefits} />
 }
