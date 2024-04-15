@@ -1,6 +1,7 @@
 import type { Meta } from "@storybook/react"
 
 import Home from "./Home"
+import { MemoryRouter } from "react-router-dom"
 
 const meta: Meta<typeof Home> = {
   component: Home
@@ -9,5 +10,9 @@ const meta: Meta<typeof Home> = {
 export default meta
 
 export const DefaultHomePage = () => {
-  return <Home />
+  return (
+    <MemoryRouter initialEntries={["/"]}>
+      <Home />
+    </MemoryRouter>
+  )
 }

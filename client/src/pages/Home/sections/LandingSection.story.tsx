@@ -1,6 +1,7 @@
 import type { Meta } from "@storybook/react"
 
 import LandingSection from "./LandingSection"
+import { MemoryRouter } from "react-router-dom"
 
 const meta: Meta<typeof LandingSection> = {
   component: LandingSection
@@ -9,5 +10,9 @@ const meta: Meta<typeof LandingSection> = {
 export default meta
 
 export const DefaultLandingSection = () => {
-  return <LandingSection />
+  return (
+    <MemoryRouter initialEntries={["/"]}>
+      <LandingSection />
+    </MemoryRouter>
+  )
 }
