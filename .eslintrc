@@ -30,5 +30,12 @@
       "version": "detect"
     }
   },
-  "ignorePatterns": ["dist", "node_modules", "examples", "scripts", "*.d.ts"]
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "examples",
+    "scripts",
+    "*.d.ts",
+    "build"
+  ]
 }

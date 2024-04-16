@@ -24,7 +24,7 @@ const navStyle = (active: boolean) => (active ? "text-light-blue-100" : "")
 
 const Navbar = (props: INavbarProps) => {
   return (
-    <div className="bg-gray-1 navbar-shadow fixed z-10 flex w-screen px-4 pt-3">
+    <div className="bg-gray-1 navbar-shadow fixed z-[999] flex w-screen px-4 pt-3">
       <div className="flex w-full">
         <Logo />
         <div className="ml-auto flex items-end justify-center gap-8 self-end pr-4">
