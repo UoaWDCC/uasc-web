@@ -17,7 +17,9 @@ const BenefitCard = ({ text, SvgIcon }: props) => {
     w-full items-center justify-center rounded-md 
      border px-6 py-7"
     >
-      <h3 className="text-light-blue-100 mb-2 w-[270px] font-bold">{text}</h3>
+      <h3 className="text-light-blue-100 sm:text-h3 mb-2 w-[270px] text-lg font-bold">
+        {text}
+      </h3>
       <span className=" -ml-7 w-[138px] min-w-[138px] opacity-15">
         {SvgIcon && <SvgIcon className="fill-light-blue-100" />}
       </span>

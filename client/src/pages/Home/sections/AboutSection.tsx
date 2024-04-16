@@ -2,10 +2,10 @@ const AboutSection = () => (
   <section id="about">
     <div
       className="bg-home-about-image relative
-         z-0  flex
-         min-h-screen  flex-col items-center
-         justify-center overflow-hidden
-         bg-cover bg-top bg-no-repeat py-8 lg:min-h-fit lg:py-28"
+         z-0  flex min-h-screen
+         flex-col  items-center justify-center
+         overflow-hidden bg-cover
+         bg-top bg-no-repeat px-1 py-8 lg:min-h-fit lg:py-28"
     >
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="bg-gray-1 pointer-events-none absolute -z-20 h-screen w-full opacity-20" />
