@@ -10,7 +10,7 @@ type props = IDialogProps
 
 const ConfirmationDialog = ({ title, text }: props) => {
   return (
-    <div className="w-386 h-215 border border">
+    <div className="h-215 w-full border border">
       <h1 className="sm:text-h2 font-style: w-full text-lg font-bold italic">
         {title}
       </h1>
