@@ -22,6 +22,8 @@ export const ConfirmationDialog: Story = {
   args: {
     variant: "default",
     title: "Successful!",
-    text: "You can log in now"
+    text: "You can log in now",
+    buttonText1: "back to home",
+    buttonText2: "login"
   }
 }
