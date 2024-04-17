@@ -1,22 +1,30 @@
 type dialogVariants = "default"
 
 interface IDialogProps {
+  title: string
   text: string
   variant?: dialogVariants
 }
 
 type props = IDialogProps
 
-const ConfirmationDialog = ({ text }: props) => {
-  return <div>{text}</div>
+const ConfirmationDialog = ({ title, text }: props) => {
+  return (
+    <div className="w-386 h-215 border border">
+      <h1 className="sm:text-h2 font-style: w-full text-lg font-bold italic">
+        {title}
+      </h1>
+      {text}
+    </div>
+  )
 }
 
-const Dialog = ({ text, variant }: props) => {
+const Dialog = ({ title, text, variant }: props) => {
   switch (variant) {
     case "default":
-      return <ConfirmationDialog text={text} />
+      return <ConfirmationDialog title={title} text={text} />
   }
-  return <ConfirmationDialog text={text} />
+  return <ConfirmationDialog title={title} text={text} />
 }
 
 export default Dialog

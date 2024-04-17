@@ -17,10 +17,11 @@ const meta: Meta<typeof Dialog> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Dialog1: Story = {
+export const ConfirmationDialog: Story = {
   tags: ["autodocs"],
   args: {
     variant: "default",
+    title: "Successful!",
     text: "You can log in now"
   }
 }
