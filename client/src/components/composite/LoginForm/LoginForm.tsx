@@ -77,8 +77,8 @@ const LoginForm = ({ loginHandler, successHandler }: ILoginForm) => {
 
   return (
     <div
-      className="bg-gray-1 max-w-[400px] rounded-md border 
-                    border-black px-1 py-8 sm:px-5"
+      className="bg-gray-1 w-full max-w-[400px] 
+                    rounded-md border border-black px-1 py-8 sm:px-5"
     >
       <h2 className="italic">Login</h2>
       <form
