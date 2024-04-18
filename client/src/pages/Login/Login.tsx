@@ -11,11 +11,11 @@ const Login = () => {
   const navigate = useNavigate()
 
   const passwordResetHandler = () => {
-    navigate("reset")
+    navigate("/login/reset")
   }
 
   const backToLoginHandler = () => {
-    navigate("../")
+    navigate("/login")
   }
 
   if (currentUser) {
