@@ -36,7 +36,7 @@ describe("PasswordResetForm", () => {
     const passwordResetHandler = jest
       .fn()
       .mockResolvedValue({ success: false, error: { message: "Error" } })
-    const { getByTestId } = render(
+    const { getByTestId, findByText } = render(
       <PasswordResetForm passwordResetHandler={passwordResetHandler} />
     )
 
@@ -45,9 +45,11 @@ describe("PasswordResetForm", () => {
     })
     fireEvent.click(getByTestId("reset-button"))
 
+    const errorMessage = await findByText("Error")
+
     await waitFor(() => {
       expect(passwordResetHandler).toHaveBeenCalledWith("test@example.com")
-      expect(getByTestId("error-message")).toHaveTextContent("Error")
+      expect(errorMessage).toBeVisible()
     })
   })
 
