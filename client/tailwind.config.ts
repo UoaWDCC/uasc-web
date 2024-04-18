@@ -8,7 +8,9 @@ export default {
     extend: {
       backgroundImage: {
         "home-ski-image": "url('$assets/images/homeski.png')",
-        "home-about-image": "url('$assets/images/AboutBackgroundImage.png')"
+        "home-about-image": "url('$assets/images/AboutBackgroundImage.png')",
+        "mountain-background-image":
+          "url('$assets/images/MountainBackgroundImage.png')"
       },
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans]
