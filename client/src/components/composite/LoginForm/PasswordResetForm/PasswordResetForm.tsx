@@ -16,15 +16,17 @@ type FormState = {
 /**
  * Needs return true on success
  */
-interface ILoginForm {
+interface IPasswordResetForm {
   passwordResetHandler?: (email: string) => Promise<HandlerResponse>
   successHandler?: () => void
+  backHandler?: () => void
 }
 
 const PasswordResetForm = ({
+  backHandler,
   passwordResetHandler,
   successHandler
-}: ILoginForm) => {
+}: IPasswordResetForm) => {
   const [formData, setFormData] = useState<FormState>({
     email: ""
   })
@@ -36,11 +38,13 @@ const PasswordResetForm = ({
     if (isLoading || !passwordResetHandler) return
     try {
       setIsLoading(true)
-      const { success, error } = await passwordResetHandler(formData.email)
+      const { success, successMessage, error } = await passwordResetHandler(
+        formData.email
+      )
 
       setIsLoading(false)
       if (success) {
-        setMessages({ success: "Password reset" })
+        setMessages({ success: successMessage })
         if (successHandler !== undefined) successHandler()
       } else {
         // We want the messages to be overwritten
@@ -78,17 +82,26 @@ const PasswordResetForm = ({
             />
           </div>
         </div>
-
-        <Button
-          data-testid="reset-button"
-          type="submit"
-          disabled={isLoading}
-          variant="default-sm"
-        >
-          Reset
-        </Button>
+        <span className="flex gap-1">
+          <Button
+            data-testid="back-button"
+            onClick={backHandler}
+            disabled={isLoading}
+            variant="progress-inverted"
+          >
+            Back
+          </Button>
+          <Button
+            data-testid="reset-button"
+            type="submit"
+            disabled={isLoading}
+            variant="default-sm"
+          >
+            Reset
+          </Button>
+        </span>
         {messages.success && <>{messages.success}</>}
-        {messages.error && <> {messages.error}</>}
+        {messages.error && <>{messages.error}</>}
       </form>
     </div>
   )
