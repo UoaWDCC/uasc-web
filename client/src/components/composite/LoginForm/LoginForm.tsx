@@ -1,154 +1,143 @@
-import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { Alert, Button, TextField, Typography, Stack } from "@mui/material"
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { FormEvent, useState } from "react"
+import { Alert } from "@mui/material"
+import TextInput from "components/generic/TextInputComponent/TextInput"
+import Button from "components/generic/FigmaButtons/FigmaButton"
 
-const LoginForm = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+export type LoginHandlerArgs = {
+  email: string
+  password: string
+}
+
+export type HandlerResponse = {
+  success: boolean
+  successMessage?: string
+  error?: {
+    message: string
+  }
+}
+
+type MessageTypes = {
+  success?: string
+  error?: string
+  other?: string
+}
+
+type FormState = {
+  email: string
+  password: string
+}
+
+/**
+ * Needs return true on success
+ */
+interface ILoginForm {
+  loginHandler?: ({
+    email,
+    password
+  }: LoginHandlerArgs) => Promise<HandlerResponse>
+  passwordResetHandler?: (email: string) => Promise<HandlerResponse>
+  successHandler?: () => void
+}
+
+const LoginForm = ({ loginHandler, successHandler }: ILoginForm) => {
+  const [formData, setFormData] = useState<FormState>({
+    email: "",
+    password: ""
+  })
   const [loginSuccessful, setLoginSuccessful] = useState(false)
-  const [loginErrorMessage, setLoginErrorMessage] = useState("")
+  const [messages, setMessages] = useState<MessageTypes>({})
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const navigate = useNavigate()
-
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const auth = getAuth()
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // Removed userCredential for now. Will add back later when needed.
+    if (isLoading || !loginHandler) return
+    try {
+      setIsLoading(true)
+      const { success, error } = await loginHandler({
+        email: formData.email,
+        password: formData.password
+      })
+
+      setIsLoading(false)
+      if (success) {
         setLoginSuccessful(true)
-        // The user is successfully signed in
-        setTimeout(() => {
-          setLoginSuccessful(false)
-          navigate("/profile")
-        }, 2000)
-      })
-      .catch((error) => {
-        switch (error.code) {
-          case "auth/invalid-email":
-            setLoginErrorMessage("Incorrect email address")
-            setTimeout(() => {
-              setLoginErrorMessage("")
-            }, 2000)
-            break
-          case "auth/wrong-password":
-            setLoginErrorMessage("Incorrect password")
-            setTimeout(() => {
-              setLoginErrorMessage("")
-            }, 2000)
-            break
-          case "auth/user-not-found":
-            setLoginErrorMessage(
-              "Email does not have an account associated with it"
-            )
-            setTimeout(() => {
-              setLoginErrorMessage("")
-            }, 2000)
-            break
-          default:
-            setLoginErrorMessage("An error occurred")
-            setTimeout(() => {
-              setLoginErrorMessage("")
-            }, 2000)
-            break
-        }
-      })
+        setMessages({ success: "Logged In" })
+        if (successHandler !== undefined) successHandler()
+      } else {
+        setLoginSuccessful(false)
+        // We want the messages to be overwritten
+        setMessages({ error: error?.message || "Unknown Error Occured" })
+      }
+    } catch (e) {
+      console.error(e)
+      setLoginSuccessful(false)
+      setIsLoading(false)
+    }
   }
 
   return (
     <div
-      style={{
-        backgroundColor: "white",
-        padding: "20px",
-        borderRadius: "15px",
-        boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.14)"
-      }}
+      className="bg-gray-1 max-w-[400px] rounded-md border 
+                    border-black px-1 py-8 sm:px-5"
     >
-      <form onSubmit={handleSubmit}>
-        <Stack sx={{ marginBottom: "24px" }}>
-          <Typography
-            variant="h5"
-            align="left"
-            color="black"
-            sx={{ fontWeight: "700" }}
-          >
-            Email:
-          </Typography>
-
-          <TextField
-            variant="standard"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            InputProps={{
-              disableUnderline: true
-            }}
-            style={{
-              width: "100%",
-              background: "#EDF8FF",
-              // @ts-ignore
-              "&:hover": {
-                // @ts-ignore
-                borderColor: "transparent"
-              },
-              borderRadius: "5px"
-            }}
-          />
-        </Stack>
-        <Stack sx={{ marginBottom: "24px" }}>
-          <Typography
-            variant="h5"
-            align="left"
-            color="black"
-            sx={{ fontWeight: "700" }}
-          >
-            Password:
-          </Typography>
-          <TextField
-            variant="standard"
-            type="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            InputProps={{
-              disableUnderline: true
-            }}
-            style={{
-              width: "100%",
-              background: "#EDF8FF",
-              // @ts-ignore
-              "&:hover": {
-                borderColor: "transparent"
-              },
-              borderRadius: "5px"
-            }}
-          />
-        </Stack>
-        <Button
-          type="submit"
-          disabled={loginSuccessful}
-          variant="contained"
-          color="primary"
-          size="small"
-          sx={{
-            borderRadius: "100px",
-            paddingX: "24px",
-            textTransform: "none"
-          }}
+      <h2 className="italic">Login</h2>
+      <form
+        onSubmit={(e) => {
+          handleSubmit(e)
+        }}
+      >
+        <div className="mt-8 flex flex-col gap-5">
+          <div>
+            <p className="mb-1">Email</p>
+            <TextInput
+              data-testid="email-input"
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div>
+            <p className="mb-1">Password</p>
+            <TextInput
+              data-testid="password-input"
+              value={formData.password}
+              type="password"
+              id="password"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              required
+            />
+          </div>
+        </div>
+        <h5
+          data-testid="reset-password-button"
+          className="text-dark-blue-100 mb-10 mt-3 cursor-pointer uppercase"
         >
-          SUBMIT
+          Forgot your password?
+        </h5>
+        <Button
+          data-testid="login-button"
+          type="submit"
+          disabled={isLoading || loginSuccessful}
+          variant="default-sm"
+        >
+          Login
         </Button>
-        {loginSuccessful ? (
+        {messages.success && (
           <Alert severity="success" sx={{ marginTop: "1vh" }}>
-            Login Successful!
+            {messages.success}
           </Alert>
-        ) : null}
-        {loginErrorMessage !== "" ? (
+        )}
+        {messages.error && (
           <Alert severity="error" sx={{ marginTop: "1vh" }}>
-            {loginErrorMessage}
+            {messages.error}
           </Alert>
-        ) : null}
+        )}
       </form>
     </div>
   )
