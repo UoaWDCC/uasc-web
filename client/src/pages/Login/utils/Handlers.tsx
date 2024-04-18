@@ -5,14 +5,35 @@ import {
 import {
   getAuth,
   signInWithEmailAndPassword,
-  AuthErrorCodes
+  AuthErrorCodes,
+  sendPasswordResetEmail
 } from "firebase/auth"
+
+const auth = getAuth()
+
+export const resetPasswordHandler = async (
+  email: string
+): Promise<HandlerResponse> => {
+  try {
+    await sendPasswordResetEmail(auth, email)
+    return {
+      success: true,
+      successMessage: `Password reset link has been sent to your ${email}`
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        message: "Failed to reset password"
+      }
+    }
+  }
+}
 
 export const loginHandler = async ({
   email,
   password
 }: LoginHandlerArgs): Promise<HandlerResponse> => {
-  const auth = getAuth()
   try {
     await signInWithEmailAndPassword(auth, email, password)
     return { success: true }

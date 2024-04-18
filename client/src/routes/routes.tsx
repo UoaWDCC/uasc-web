@@ -20,7 +20,7 @@ export const AllRoutes = () => (
       <Route path="events" element={<Events />} />
       <Route path="contact" element={<Contact />} />
       <Route path="register/*" element={<Register />} />
-      <Route path="login" element={<Login />} />
+      <Route path="login/*" element={<Login />} />
       <Route path="checkout" element={<Checkout />} />
       <Route path="booking" element={<Booking />} />
       <Route path="profile" element={<Profile />} />

@@ -1,6 +1,6 @@
 import LoginForm from "components/composite/LoginForm/LoginForm"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
-import { Navigate, useNavigate } from "react-router-dom"
+import { Outlet, Route, Routes, useNavigate } from "react-router-dom"
 import { useAppData } from "store/store"
 import { loginHandler } from "./utils/Handlers"
 
@@ -19,10 +19,19 @@ const Login = () => {
 
   return (
     <FullPageBackgroundImage>
-      <LoginForm
-        loginHandler={loginHandler}
-        passwordResetHandler={passwordResetHandler}
-      />
+      <Routes>
+        <Route
+          index
+          element={
+            <LoginForm
+              loginHandler={loginHandler}
+              passwordResetHandler={passwordResetHandler}
+            />
+          }
+        />
+        <Route path="reset" element={<>lmao</>} />
+      </Routes>
+      <Outlet />
     </FullPageBackgroundImage>
   )
 }
