@@ -35,11 +35,15 @@ interface ILoginForm {
     email,
     password
   }: LoginHandlerArgs) => Promise<HandlerResponse>
-  passwordResetHandler?: (email: string) => Promise<HandlerResponse>
+  passwordResetHandler?: () => void
   successHandler?: () => void
 }
 
-const LoginForm = ({ loginHandler, successHandler }: ILoginForm) => {
+const LoginForm = ({
+  passwordResetHandler,
+  loginHandler,
+  successHandler
+}: ILoginForm) => {
   const [formData, setFormData] = useState<FormState>({
     email: "",
     password: ""
@@ -117,6 +121,7 @@ const LoginForm = ({ loginHandler, successHandler }: ILoginForm) => {
         <h5
           data-testid="reset-password-button"
           className="text-dark-blue-100 mb-10 mt-3 cursor-pointer uppercase"
+          onClick={passwordResetHandler}
         >
           Forgot your password?
         </h5>

@@ -1,58 +1,28 @@
-import LoginForm, {
-  LoginHandlerArgs,
-  HandlerResponse
-} from "components/composite/LoginForm/LoginForm"
+import LoginForm from "components/composite/LoginForm/LoginForm"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  AuthErrorCodes
-} from "firebase/auth"
-import { Navigate } from "react-router-dom"
+import { Navigate, useNavigate } from "react-router-dom"
 import { useAppData } from "store/store"
+import { loginHandler } from "./utils/Handlers"
 
 const Login = () => {
   const [{ currentUser }] = useAppData()
 
-  if (currentUser) {
-    return <Navigate to="/profile" />
+  const navigate = useNavigate()
+
+  const passwordResetHandler = () => {
+    navigate("reset")
   }
 
-  const loginHandler = async ({
-    email,
-    password
-  }: LoginHandlerArgs): Promise<HandlerResponse> => {
-    const auth = getAuth()
-    try {
-      await signInWithEmailAndPassword(auth, email, password)
-      return { success: true }
-    } catch (error) {
-      let message
-      switch (error.code) {
-        case AuthErrorCodes.INVALID_EMAIL:
-          message = "Invalid Email"
-          break
-        case AuthErrorCodes.INVALID_PASSWORD:
-          message = "Incorrect Password"
-          break
-        case AuthErrorCodes.USER_DELETED:
-          message = "User does not exist"
-          break
-        default:
-          message = "Unknown Error"
-          break
-      }
-      return {
-        success: false,
-        error: {
-          message
-        }
-      }
-    }
+  if (currentUser) {
+    navigate("/profile")
   }
+
   return (
     <FullPageBackgroundImage>
-      <LoginForm loginHandler={loginHandler} />
+      <LoginForm
+        loginHandler={loginHandler}
+        passwordResetHandler={passwordResetHandler}
+      />
     </FullPageBackgroundImage>
   )
 }
