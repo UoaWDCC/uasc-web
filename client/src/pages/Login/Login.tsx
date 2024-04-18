@@ -8,8 +8,16 @@ import {
   signInWithEmailAndPassword,
   AuthErrorCodes
 } from "firebase/auth"
+import { Navigate } from "react-router-dom"
+import { useAppData } from "store/store"
 
 const Login = () => {
+  const [{ currentUser }] = useAppData()
+
+  if (currentUser) {
+    return <Navigate to="/profile" />
+  }
+
   const loginHandler = async ({
     email,
     password
