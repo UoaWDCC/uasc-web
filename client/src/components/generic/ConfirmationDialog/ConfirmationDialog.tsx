@@ -5,52 +5,44 @@ interface IDialogProps {
   title: string
   text: string
   variant?: dialogVariants
-  buttonText1: string
-  buttonText2: string
+  left: string
+  right: string
 }
 
 type props = IDialogProps
 
-const ConfirmationDialog = ({
-  title,
-  text,
-  buttonText1,
-  buttonText2
-}: props) => {
+const ConfirmationDialog = ({ title, text, left, right }: props) => {
   return (
-    <div className="max-h-[215px] w-full rounded-md border border px-6 py-7 pb-10">
-      <h1 className="sm:text-h2 font-style: w-full pb-5 text-lg font-bold italic">
-        {title}
-      </h1>
-      <p className="text-p pb-5">{text}</p>
-      <span className="flex space-x-4">
-        <Button className="">{buttonText1}</Button>
+    <div className="flex max-h-[215px] max-w-[386px] flex-col items-center rounded-md border-2 px-6 py-7 pb-10">
+      <div className="flex flex-col">
+        <h1 className="sm:text-h2 font-style: w-full pb-5 text-lg font-bold italic">
+          {title}
+        </h1>
+        <p className="text-p pb-5">{text}</p>
+        <span className="flex space-x-4">
+          <Button className="">{left}</Button>
 
-        <Button className="">{buttonText2}</Button>
-      </span>
+          <Button className="">{right}</Button>
+        </span>
+      </div>
     </div>
   )
 }
 
-const Dialog = ({ title, text, variant, buttonText1, buttonText2 }: props) => {
+const Dialog = ({ title, text, variant, left, right }: props) => {
   switch (variant) {
     case "default":
       return (
         <ConfirmationDialog
           title={title}
           text={text}
-          buttonText1={buttonText1}
-          buttonText2={buttonText2}
+          left={left}
+          right={right}
         />
       )
   }
   return (
-    <ConfirmationDialog
-      title={title}
-      text={text}
-      buttonText1={buttonText1}
-      buttonText2={buttonText2}
-    />
+    <ConfirmationDialog title={title} text={text} left={left} right={right} />
   )
 }
 
