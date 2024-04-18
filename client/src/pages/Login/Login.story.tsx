@@ -13,7 +13,7 @@ type Story = StoryObj<typeof Login>
 export const DefaultLoginPage: Story = {
   decorators: [
     (Story) => (
-      <MemoryRouter>
+      <MemoryRouter initialEntries={[""]}>
         <Story />
       </MemoryRouter>
     )
