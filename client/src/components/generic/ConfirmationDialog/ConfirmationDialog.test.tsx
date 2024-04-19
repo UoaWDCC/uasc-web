@@ -16,7 +16,7 @@ test("Calls the correct function upon clicking on the buttons", async () => {
     />
   )
   const testLeft = screen.getByTestId("dialog-left")
-    expect(testLeft).toBeVisible()
+  expect(testLeft).toBeVisible()
 
   await act(async () => {
     await testLeft.click()

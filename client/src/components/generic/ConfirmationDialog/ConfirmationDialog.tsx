@@ -29,13 +29,17 @@ export const ConfirmationDialog = ({
         </h1>
         <p className="text-p pb-5">{text}</p>
         <span className="flex space-x-4">
-          <Button data-testid="dialog-left" onClick={()=>onClickLeft?.()} className="">
+          <Button
+            data-testid="dialog-left"
+            onClick={() => onClickLeft?.()}
+            className=""
+          >
             {left}
           </Button>
 
           <Button
             data-testid="dialog-right"
-            onClick={()=>onClickRight?.()}
+            onClick={() => onClickRight?.()}
             className=""
           >
             {right}
@@ -46,7 +50,15 @@ export const ConfirmationDialog = ({
   )
 }
 
-export const Dialog = ({ title, text, variant, left, right, onClickLeft, onClickRight }: props) => {
+export const Dialog = ({
+  title,
+  text,
+  variant,
+  left,
+  right,
+  onClickLeft,
+  onClickRight
+}: props) => {
   switch (variant) {
     case "default":
       return (
