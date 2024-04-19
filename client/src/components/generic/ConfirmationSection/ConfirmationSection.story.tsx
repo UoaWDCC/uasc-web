@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import TestIcon from "assets/icons/bell.svg?react"
+import TestIcon from "assets/icons/snowboarder.svg?react"
 
 import confirmationSection from "./ConfirmationSection"
 const meta: Meta<typeof confirmationSection> = {
@@ -20,9 +20,9 @@ export const ConfirmationSection: Story = {
   args: {
     SvgIcon: TestIcon,
     variant: "default",
-    mainHeader: "",
-    subHeader: "",
-    textTop: "",
-    textBottom: ""
+    mainHeader: "Confirmation",
+    subHeader: "Thank you!",
+    textTop: "Your application has been received, and you’ll be sent a confirmation email soon. ",
+    textBottom: "In the meantime, please set up your login details."
   }
 }
