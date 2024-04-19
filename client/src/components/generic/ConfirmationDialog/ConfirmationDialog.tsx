@@ -7,13 +7,20 @@ export interface IDialogProps {
   variant?: dialogVariants
   left: string
   right: string
-  onClickLeft?: ()=> void
-  onClickRight?: ()=> void 
+  onClickLeft?: () => void
+  onClickRight?: () => void
 }
 
 type props = IDialogProps
 
-const ConfirmationDialog = ({ title, text, left, right, onClickLeft, onClickRight }: props) => {
+const ConfirmationDialog = ({
+  title,
+  text,
+  left,
+  right,
+  onClickLeft,
+  onClickRight
+}: props) => {
   return (
     <div className="flex max-h-[215px] max-w-[386px] flex-col items-center rounded-md border-2 px-6 py-7 pb-10">
       <div className="flex flex-col">
@@ -22,11 +29,15 @@ const ConfirmationDialog = ({ title, text, left, right, onClickLeft, onClickRigh
         </h1>
         <p className="text-p pb-5">{text}</p>
         <span className="flex space-x-4">
-          <Button data-testid="dialog-left" onClick={onClickLeft} className="">
+          <Button data-testId="dialog-left" onClick={onClickLeft} className="">
             {left}
           </Button>
 
-          <Button data-testid="dialog-right" onClick={onClickRight} className="">
+          <Button
+            data-testId="dialog-right"
+            onClick={onClickRight}
+            className=""
+          >
             {right}
           </Button>
         </span>

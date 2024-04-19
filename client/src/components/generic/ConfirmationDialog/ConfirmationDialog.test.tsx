@@ -5,7 +5,16 @@ test("Calls the correct function upon clicking on the buttons", async () => {
   const leftFakeFunction = jest.fn()
   const rightFakeFunction = jest.fn()
 
-  render(<ConfirmationDialog title="w" text="w" left="" right="" onClickLeft={() => leftFakeFunction()} onClickRight={() => rightFakeFunction()} />)
+  render(
+    <ConfirmationDialog
+      title="w"
+      text="w"
+      left=""
+      right=""
+      onClickLeft={() => leftFakeFunction()}
+      onClickRight={() => rightFakeFunction()}
+    />
+  )
   const testLeft = screen.getByTestId("dialog-left")
 
   await act(async () => {
@@ -14,7 +23,7 @@ test("Calls the correct function upon clicking on the buttons", async () => {
 
   expect(leftFakeFunction).toHaveBeenCalledTimes(1)
 
-  const testRight = screen.getByTestId("dialog-left")
+  const testRight = screen.getByTestId("dialog-right")
 
   await act(async () => {
     await testRight.click()
