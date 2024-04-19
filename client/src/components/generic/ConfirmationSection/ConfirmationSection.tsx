@@ -24,7 +24,9 @@ const confirmationSection = ({
       <h3>{subHeader}</h3>
       <p>{textTop}</p>
       <p>{textBottom}</p>
-      <span>{SvgIcon && <SvgIcon className="" />}</span>
+        <span className="">
+          {SvgIcon && <SvgIcon className="fill-light-blue-100 max-w-[212.55px]"/>}
+        </span>
     </div>
   )
 }
