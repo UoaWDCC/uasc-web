@@ -1,27 +1,24 @@
-
-import  ConfirmationDialog from "./ConfirmationDialog";
+import ConfirmationDialog from "./ConfirmationDialog"
 import { render, act, screen } from "@testing-library/react"
 
-test("Calls the correct function upon clicking on the buttons", async ()=>{
-    const leftFakeFunction = jest.fn()
-    const rightFakeFunction = jest.fn()
-   
-    render(<ConfirmationDialog title="w" text="w" left="" right=""/>)
-    const testLeft = screen.getByTestId("dialog-left")
+test("Calls the correct function upon clicking on the buttons", async () => {
+  const leftFakeFunction = jest.fn()
+  const rightFakeFunction = jest.fn()
 
-    await act(async () => {
-        await testLeft.click()
-      })
-    
-    expect(leftFakeFunction).toHaveBeenCalledTimes(1)
+  render(<ConfirmationDialog title="w" text="w" left="" right="" />)
+  const testLeft = screen.getByTestId("dialog-left")
 
-    const testRight = screen.getByTestId("dialog-left")
+  await act(async () => {
+    await testLeft.click()
+  })
 
-    await act(async () => {
-        await testRight.click()
-      })
-    
-    expect(rightFakeFunction).toHaveBeenCalledTimes(1)
-}) 
+  expect(leftFakeFunction).toHaveBeenCalledTimes(1)
 
+  const testRight = screen.getByTestId("dialog-left")
 
+  await act(async () => {
+    await testRight.click()
+  })
+
+  expect(rightFakeFunction).toHaveBeenCalledTimes(1)
+})
