@@ -1,30 +1,36 @@
 interface Props {
-    data: { [key: string]: any }[];
+  data: { [key: string]: any }[]
 }
 
 const Table = ({ data }: Props) => {
-    const dataKeys = Object.keys(data[0])
-
-    return (
-        <table>
-            <thead>
-                <tr>
-                    {dataKeys.map((key) => (
-                        <th key={key}>{key}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {data.map((obj, index) => (
-                    <tr key={index}>
-                        {dataKeys.map((key) => (
-                            <td key={key}>{obj[key] || ""}</td>
-                        ))}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+  // ensures all data keys (columns) are used, regardless of whether some objects are missing keys
+  const dataKeys: string[] = []
+  data.forEach((obj) => {
+    Object.keys(obj).forEach(
+      (key) => !dataKeys.includes(key) && dataKeys.push(key)
     )
+  })
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          {dataKeys.map((key) => (
+            <th key={key}>{key}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((obj, index) => (
+          <tr key={index}>
+            {dataKeys.map((key) => (
+              <td key={key}>{obj[key] || ""}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
 }
 
-export default Table;
+export default Table
