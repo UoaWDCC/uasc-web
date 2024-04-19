@@ -9,13 +9,14 @@ test("Calls the correct function upon clicking on the buttons", async () => {
     <ConfirmationDialog
       title="w"
       text="w"
-      left=""
-      right=""
+      left="ray"
+      right="zhao"
       onClickLeft={() => leftFakeFunction()}
       onClickRight={() => rightFakeFunction()}
     />
   )
   const testLeft = screen.getByTestId("dialog-left")
+    expect(testLeft).toBeVisible()
 
   await act(async () => {
     await testLeft.click()

@@ -13,7 +13,7 @@ export interface IDialogProps {
 
 type props = IDialogProps
 
-const ConfirmationDialog = ({
+export const ConfirmationDialog = ({
   title,
   text,
   left,
@@ -29,13 +29,13 @@ const ConfirmationDialog = ({
         </h1>
         <p className="text-p pb-5">{text}</p>
         <span className="flex space-x-4">
-          <Button data-testId="dialog-left" onClick={onClickLeft} className="">
+          <Button data-testid="dialog-left" onClick={()=>onClickLeft?.()} className="">
             {left}
           </Button>
 
           <Button
-            data-testId="dialog-right"
-            onClick={onClickRight}
+            data-testid="dialog-right"
+            onClick={()=>onClickRight?.()}
             className=""
           >
             {right}
@@ -46,7 +46,7 @@ const ConfirmationDialog = ({
   )
 }
 
-const Dialog = ({ title, text, variant, left, right }: props) => {
+export const Dialog = ({ title, text, variant, left, right, onClickLeft, onClickRight }: props) => {
   switch (variant) {
     case "default":
       return (
@@ -55,6 +55,8 @@ const Dialog = ({ title, text, variant, left, right }: props) => {
           text={text}
           left={left}
           right={right}
+          onClickLeft={onClickLeft}
+          onClickRight={onClickRight}
         />
       )
   }
@@ -63,4 +65,4 @@ const Dialog = ({ title, text, variant, left, right }: props) => {
   )
 }
 
-export default Dialog
+export default ConfirmationDialog
