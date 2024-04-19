@@ -1,7 +1,7 @@
 import Button from "../FigmaButtons/FigmaButton"
 type dialogVariants = "default"
 
-interface IDialogProps {
+export interface IDialogProps {
   title: string
   text: string
   variant?: dialogVariants
@@ -20,9 +20,9 @@ const ConfirmationDialog = ({ title, text, left, right }: props) => {
         </h1>
         <p className="text-p pb-5">{text}</p>
         <span className="flex space-x-4">
-          <Button className="">{left}</Button>
+          <Button data-testid="dialog-left" className="">{left}</Button>
 
-          <Button className="">{right}</Button>
+          <Button data-testid="dialog-right" className="">{right}</Button>
         </span>
       </div>
     </div>

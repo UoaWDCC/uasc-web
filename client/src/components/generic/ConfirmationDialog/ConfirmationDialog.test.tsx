@@ -1,22 +1,27 @@
-/**
- * import Dialog, { ConfirmationDialog, IDialogProps } from "./ConfirmationDialog.story";
-import { useState } from "react"
+
+import  ConfirmationDialog from "./ConfirmationDialog";
 import { render, act, screen } from "@testing-library/react"
 
 test("Calls the correct function upon clicking on the buttons", async ()=>{
     const leftFakeFunction = jest.fn()
     const rightFakeFunction = jest.fn()
-    const TestComponent = () => {
-        return(
-            <ConfirmationDialog title='w' text='w' variant="default" left='w' right=''/>
-        )   
-    }
-    render(<ConfirmationDialog />)
-    const test1 = screen.getByTestId("first")
+   
+    render(<ConfirmationDialog title="w" text="w" left="" right=""/>)
+    const testLeft = screen.getByTestId("dialog-left")
 
-    await act(async ()=>){
-        await TestComponent
-    }
+    await act(async () => {
+        await testLeft.click()
+      })
+    
+    expect(leftFakeFunction).toHaveBeenCalledTimes(1)
+
+    const testRight = screen.getByTestId("dialog-left")
+
+    await act(async () => {
+        await testRight.click()
+      })
+    
+    expect(rightFakeFunction).toHaveBeenCalledTimes(1)
 }) 
 
-*/
+
