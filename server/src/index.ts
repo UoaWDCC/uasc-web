@@ -14,12 +14,8 @@ const importSwaggerJson = async () => {
 }
 
 const app: Express = express()
-function keepRawBody(
-  req: any,
-  res: any,
-  buf: Buffer,
-  encoding: BufferEncoding
-) {
+
+function keepRawBody(req: any, res: any, buf: Buffer) {
   if (buf && buf.length) {
     req.rawBody = buf
   }
@@ -53,6 +49,9 @@ RegisterRoutes(app)
 
 const port = process.env.PORT || 8000
 
-app.listen(port, () => {
+const _app = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+// So we can use for testing
+export { _app }

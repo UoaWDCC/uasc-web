@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "types": ["node"]
   },
   "extends": "./tsconfig.json",
   "exclude": ["**/*.test.ts", "**/*.mock.ts", "src/test-config", "tooling/**/*"]

@@ -42,9 +42,9 @@ export interface UserAdditionalInfo {
    */
   last_name: string
   /**
-   * @isString Please enter either Admin or Member
+   * @isString Please enter either Admin or Member or Guest
    */
-  membership: "admin" | "member"
+  membership: "admin" | "member" | "guest"
   /**
    * @isString Please write your dietary requirements
    */
@@ -119,6 +119,7 @@ export interface DateChange extends UserRequest {
 export interface Booking {
   user_id: string // Reference to user ID
   booking_slot_id: string // Reference
+  stripe_payment_id: string
 }
 
 // Interface for booking changes
