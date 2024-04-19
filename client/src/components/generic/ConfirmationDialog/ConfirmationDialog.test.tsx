@@ -5,7 +5,7 @@ test("Calls the correct function upon clicking on the buttons", async () => {
   const leftFakeFunction = jest.fn()
   const rightFakeFunction = jest.fn()
 
-  render(<ConfirmationDialog title="w" text="w" left="" right="" />)
+  render(<ConfirmationDialog title="w" text="w" left="" right="" onClickLeft={leftFakeFunction} onClickRight={rightFakeFunction} />)
   const testLeft = screen.getByTestId("dialog-left")
 
   await act(async () => {
