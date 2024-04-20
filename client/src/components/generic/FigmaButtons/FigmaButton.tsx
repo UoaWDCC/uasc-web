@@ -3,6 +3,7 @@ import LeftArrowIcon from "assets/icons/leftarrow.svg?react"
 
 type buttonVariants =
   | "default"
+  | "default-sm"
   | "alternative"
   | "secondary"
   | "inverted-default-sm"
@@ -28,6 +29,21 @@ const DefaultButton = ({ children, ...props }: props) => {
         text-white hover:bg-white enabled:border"
     >
       {children}
+    </button>
+  )
+}
+
+const DefaultButtonSmall = ({ children, ...props }: props) => {
+  return (
+    <button
+      {...props}
+      className="bg-dark-blue-100  border-dark-blue-100
+        space-x-4; disabled:bg-dark-blue-60 text-h5 items-center rounded-md px-11 py-2 uppercase
+        text-white enabled:border"
+    >
+      <span className="flex items-center gap-1">
+        <span>{children}</span>
+      </span>
     </button>
   )
 }
@@ -146,6 +162,8 @@ const Button = ({ iconSide, children, variant, ...props }: props) => {
       return (
         <DefaultButtonInverted {...props}>{children}</DefaultButtonInverted>
       )
+    case "default-sm":
+      return <DefaultButtonSmall {...props}>{children}</DefaultButtonSmall>
     case "progress-default":
       return (
         <DefaultProgressButton iconSide={iconSide} {...props}>

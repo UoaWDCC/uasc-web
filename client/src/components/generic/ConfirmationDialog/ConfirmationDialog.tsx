@@ -1,17 +1,26 @@
 import Button from "../FigmaButtons/FigmaButton"
 type dialogVariants = "default"
 
-interface IDialogProps {
+export interface IDialogProps {
   title: string
   text: string
   variant?: dialogVariants
-  leftButtonText: string
-  rightButtonText: string
+  left: string
+  right: string
+  onClickLeft?: () => void
+  onClickRight?: () => void
 }
 
 type props = IDialogProps
 
-const ConfirmationDialog = ({ title, text, leftButtonText, rightButtonText }: props) => {
+export const ConfirmationDialog = ({
+  title,
+  text,
+  left,
+  right,
+  onClickLeft,
+  onClickRight
+}: props) => {
   return (
     <div className="flex max-h-[215px] max-w-[386px] flex-col items-center rounded-md border-2 px-6 py-7 pb-10">
       <div className="flex flex-col">
@@ -20,30 +29,52 @@ const ConfirmationDialog = ({ title, text, leftButtonText, rightButtonText }: pr
         </h1>
         <p className="text-p pb-5">{text}</p>
         <span className="flex space-x-4">
-          <Button className="">{leftButtonText}</Button>
+          <Button
+            data-testid="dialog-left"
+            onClick={() => onClickLeft?.()}
+            className=""
+          >
+            {left}
+          </Button>
 
-          <Button className="">{rightButtonText}</Button>
+          <Button
+            data-testid="dialog-right"
+            onClick={() => onClickRight?.()}
+            className=""
+          >
+            {right}
+          </Button>
         </span>
       </div>
     </div>
   )
 }
 
-const Dialog = ({ title, text, variant, leftButtonText, rightButtonText }: props) => {
+export const Dialog = ({
+  title,
+  text,
+  variant,
+  left,
+  right,
+  onClickLeft,
+  onClickRight
+}: props) => {
   switch (variant) {
     case "default":
       return (
         <ConfirmationDialog
           title={title}
           text={text}
-          leftButtonText={leftButtonText}
-          rightButtonText={rightButtonText}
+          left={left}
+          right={right}
+          onClickLeft={onClickLeft}
+          onClickRight={onClickRight}
         />
       )
   }
   return (
-    <ConfirmationDialog title={title} text={text} leftButtonText={leftButtonText} rightButtonText={rightButtonText} />
+    <ConfirmationDialog title={title} text={text} left={left} right={right} />
   )
 }
 
-export default Dialog
+export default ConfirmationDialog
