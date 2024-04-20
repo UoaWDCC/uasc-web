@@ -1,5 +1,5 @@
 import { SvgImport } from "components/utils/types"
-// import Button from "components/generic/FigmaButtons"
+import Button from "../FigmaButtons/FigmaButton"
 type confirmationVariants = "default"
 interface ISectionProps {
   SvgIcon?: SvgImport
@@ -7,6 +7,8 @@ interface ISectionProps {
   subHeader: string
   textTop: string
   textBottom: string
+  buttonTextLeft: string
+  buttonTextRight: string
   variant?: confirmationVariants
 }
 
@@ -17,11 +19,13 @@ const confirmationSection = ({
   mainHeader,
   subHeader,
   textTop,
-  textBottom
+  textBottom,
+  buttonTextLeft,
+  buttonTextRight
 }: props) => {
   return (
     <div className="">
-      <div className="flex items-center justify-center">
+      <div className="flex flex-row items-center justify-center">
         <div className="max-w-[204px]">
           <h2 className="font-style: text-dark-blue-100 pb-[87px] italic">
             {mainHeader}
@@ -30,6 +34,7 @@ const confirmationSection = ({
           <p className="pb-[50px]">{textTop}</p>
           <p>{textBottom}</p>
         </div>
+
         <div className="pl-[71px]">
           {SvgIcon && (
             <SvgIcon
@@ -39,12 +44,10 @@ const confirmationSection = ({
             />
           )}
         </div>
-        <div>
-          
-        </div>
-        <div>
-          
-        </div>
+      </div>
+      <div className="flex flex-row items-center justify-center space-x-[204px] pt-[131px] ">
+        <Button>{buttonTextLeft}</Button>
+        <Button>{buttonTextRight}</Button>
       </div>
     </div>
   )
