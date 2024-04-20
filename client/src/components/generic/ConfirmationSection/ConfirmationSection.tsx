@@ -1,4 +1,5 @@
 import { SvgImport } from "components/utils/types"
+// import Button from "components/generic/FigmaButtons"
 type confirmationVariants = "default"
 interface ISectionProps {
   SvgIcon?: SvgImport
@@ -37,6 +38,12 @@ const confirmationSection = ({
               className="fill-light-blue-100"
             />
           )}
+        </div>
+        <div>
+          
+        </div>
+        <div>
+          
         </div>
       </div>
     </div>
