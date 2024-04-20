@@ -28,7 +28,7 @@ export const ConfirmationDialog = ({
           {title}
         </h1>
         <p className="text-p pb-5">{text}</p>
-        <span className="flex space-x-4">
+        <span className="flex space-x-4 text-p">
           <Button
             data-testid="dialog-left"
             onClick={() => onClickLeft?.()}
