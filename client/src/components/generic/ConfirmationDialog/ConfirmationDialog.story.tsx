@@ -23,7 +23,7 @@ export const ConfirmationDialog: Story = {
     variant: "default",
     title: "Successful!",
     text: "You can log in now",
-    left: "back to home",
-    right: "login"
+    leftButtonText: "back to home",
+    rightButtonText: "login"
   }
 }

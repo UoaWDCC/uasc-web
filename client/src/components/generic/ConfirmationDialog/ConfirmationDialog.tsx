@@ -5,13 +5,13 @@ interface IDialogProps {
   title: string
   text: string
   variant?: dialogVariants
-  left: string
-  right: string
+  leftButtonText: string
+  rightButtonText: string
 }
 
 type props = IDialogProps
 
-const ConfirmationDialog = ({ title, text, left, right }: props) => {
+const ConfirmationDialog = ({ title, text, leftButtonText, rightButtonText }: props) => {
   return (
     <div className="flex max-h-[215px] max-w-[386px] flex-col items-center rounded-md border-2 px-6 py-7 pb-10">
       <div className="flex flex-col">
@@ -20,29 +20,29 @@ const ConfirmationDialog = ({ title, text, left, right }: props) => {
         </h1>
         <p className="text-p pb-5">{text}</p>
         <span className="flex space-x-4">
-          <Button className="">{left}</Button>
+          <Button className="">{leftButtonText}</Button>
 
-          <Button className="">{right}</Button>
+          <Button className="">{rightButtonText}</Button>
         </span>
       </div>
     </div>
   )
 }
 
-const Dialog = ({ title, text, variant, left, right }: props) => {
+const Dialog = ({ title, text, variant, leftButtonText, rightButtonText }: props) => {
   switch (variant) {
     case "default":
       return (
         <ConfirmationDialog
           title={title}
           text={text}
-          left={left}
-          right={right}
+          leftButtonText={leftButtonText}
+          rightButtonText={rightButtonText}
         />
       )
   }
   return (
-    <ConfirmationDialog title={title} text={text} left={left} right={right} />
+    <ConfirmationDialog title={title} text={text} leftButtonText={leftButtonText} rightButtonText={rightButtonText} />
   )
 }
 
