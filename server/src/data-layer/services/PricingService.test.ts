@@ -11,7 +11,7 @@ describe("pricingService unit tests", () => {
 
   it("should return UOA returning membership type if user is from UOA and returning", async () => {
     const membershipType =
-      await pricingServiceTest.getMembershipType(memberUserInfoMock)
+      pricingServiceTest.getMembershipType(memberUserInfoMock)
 
     expect(membershipType).toEqual(MembershipType.UoaReturning)
   })
@@ -21,7 +21,7 @@ describe("pricingService unit tests", () => {
     memberUserInfoMock.returning = false
 
     const membershipType =
-      await pricingServiceTest.getMembershipType(memberUserInfoMock)
+      pricingServiceTest.getMembershipType(memberUserInfoMock)
 
     expect(membershipType).toEqual(MembershipType.OtherNew)
   })
@@ -31,18 +31,29 @@ describe("pricingService unit tests", () => {
     memberUserInfoMock.returning = true
 
     const membershipType =
-      await pricingServiceTest.getMembershipType(memberUserInfoMock)
+      pricingServiceTest.getMembershipType(memberUserInfoMock)
 
     expect(membershipType).toEqual(MembershipType.OtherReturning)
   })
 
   it("should return UOA new membership type if user is from UOA and not returning", async () => {
-    memberUserInfoMock.university = "11299211"
+    memberUserInfoMock.university = "uoa"
     memberUserInfoMock.returning = false
 
     const membershipType =
-      await pricingServiceTest.getMembershipType(memberUserInfoMock)
+      pricingServiceTest.getMembershipType(memberUserInfoMock)
 
     expect(membershipType).toEqual(MembershipType.UoaNew)
+  })
+
+  it("should return correct membership type when student_id is undefined", async () => {
+    memberUserInfoMock.university = "uoa"
+    memberUserInfoMock.returning = true
+    memberUserInfoMock.student_id = undefined
+
+    const membershipType =
+      pricingServiceTest.getMembershipType(memberUserInfoMock)
+
+    expect(membershipType).toEqual(MembershipType.OtherReturning)
   })
 })
