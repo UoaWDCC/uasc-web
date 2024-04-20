@@ -73,7 +73,12 @@ export const Dialog = ({
       )
   }
   return (
-    <ConfirmationDialog title={title} text={text} leftButtonText={leftButtonText} righButtonText={righButtonText} />
+    <ConfirmationDialog
+      title={title}
+      text={text}
+      leftButtonText={leftButtonText}
+      righButtonText={righButtonText}
+    />
   )
 }
 
