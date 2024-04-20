@@ -10,7 +10,7 @@ test("Calls the correct function upon clicking on the buttons", async () => {
       title="test title"
       text="test default text"
       leftButtonText="left text"
-      righButtonText="right text"
+      rightButtonText="right text"
       onClickLeft={() => leftFakeFunction()}
       onClickRight={() => rightFakeFunction()}
     />
