@@ -13,8 +13,8 @@ test("Calls the correct function when the 2 buttons are clicked", async () => {
       textBottom="real"
       buttonTextLeft="test button 1"
       buttonTextRight="test button 2"
-      onClickLeft={()=>leftFakeFunction()}
-      onClickRight={()=>rightFakeFunction()}
+      onClickLeft={() => leftFakeFunction()}
+      onClickRight={() => rightFakeFunction()}
     />
   )
 
