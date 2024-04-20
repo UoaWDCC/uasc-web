@@ -5,8 +5,8 @@ export interface IDialogProps {
   title: string
   text: string
   variant?: dialogVariants
-  left: string
-  right: string
+  leftButtonText: string
+  righButtonText: string
   onClickLeft?: () => void
   onClickRight?: () => void
 }
@@ -16,8 +16,8 @@ type props = IDialogProps
 export const ConfirmationDialog = ({
   title,
   text,
-  left,
-  right,
+  leftButtonText,
+  righButtonText,
   onClickLeft,
   onClickRight
 }: props) => {
@@ -34,7 +34,7 @@ export const ConfirmationDialog = ({
             onClick={() => onClickLeft?.()}
             className=""
           >
-            {left}
+            {leftButtonText}
           </Button>
 
           <Button
@@ -42,7 +42,7 @@ export const ConfirmationDialog = ({
             onClick={() => onClickRight?.()}
             className=""
           >
-            {right}
+            {righButtonText}
           </Button>
         </span>
       </div>
@@ -54,8 +54,8 @@ export const Dialog = ({
   title,
   text,
   variant,
-  left,
-  right,
+  leftButtonText,
+  righButtonText,
   onClickLeft,
   onClickRight
 }: props) => {
@@ -65,15 +65,15 @@ export const Dialog = ({
         <ConfirmationDialog
           title={title}
           text={text}
-          left={left}
-          right={right}
+          leftButtonText={leftButtonText}
+          righButtonText={righButtonText}
           onClickLeft={onClickLeft}
           onClickRight={onClickRight}
         />
       )
   }
   return (
-    <ConfirmationDialog title={title} text={text} left={left} right={right} />
+    <ConfirmationDialog title={title} text={text} leftButtonText={leftButtonText} righButtonText={righButtonText} />
   )
 }
 

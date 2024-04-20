@@ -9,8 +9,8 @@ test("Calls the correct function upon clicking on the buttons", async () => {
     <ConfirmationDialog
       title="w"
       text="w"
-      left="ray"
-      right="zhao"
+      leftButtonText="ray"
+      righButtonText="zhao"
       onClickLeft={() => leftFakeFunction()}
       onClickRight={() => rightFakeFunction()}
     />
