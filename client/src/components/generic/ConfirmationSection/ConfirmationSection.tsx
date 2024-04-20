@@ -39,7 +39,6 @@ export const confirmationSection = ({
           <p className="pb-[50px]">{textTop}</p>
           <p>{textBottom}</p>
         </div>
-
         <div className="pl-[71px]">
           {SvgIcon && (
             <SvgIcon
