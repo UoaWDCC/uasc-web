@@ -27,6 +27,3 @@ export const ConfirmationDialog: Story = {
     rightButtonText: "login"
   }
 }
-
-
-
