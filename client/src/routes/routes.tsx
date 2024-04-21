@@ -5,8 +5,8 @@ import Booking from "pages/Booking"
 import Checkout from "pages/Checkout"
 import Contact from "pages/Contact"
 import Events from "pages/Events"
-import Home from "pages/Home"
-import Login from "pages/Login"
+import Home from "pages/Home/Home"
+import Login from "pages/Login/Login"
 import Profile from "pages/Profile"
 import Register from "pages/Register/Register"
 import Thanks from "pages/Thanks"
@@ -20,7 +20,7 @@ export const AllRoutes = () => (
       <Route path="events" element={<Events />} />
       <Route path="contact" element={<Contact />} />
       <Route path="register/*" element={<Register />} />
-      <Route path="login" element={<Login />} />
+      <Route path="login/*" element={<Login />} />
       <Route path="checkout" element={<Checkout />} />
       <Route path="booking" element={<Booking />} />
       <Route path="profile" element={<Profile />} />

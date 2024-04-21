@@ -28,6 +28,14 @@ export const defaultButton: Story = {
   }
 }
 
+export const defaultButtonSm: Story = {
+  tags: ["autodocs"],
+  args: {
+    variant: "default-sm",
+    children: "Default Button Variant Small"
+  }
+}
+
 export const defaultButtonInvertedSm: Story = {
   tags: ["autodocs"],
   args: {
