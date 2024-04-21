@@ -1,6 +1,5 @@
 interface Props<T> {
   data: T[]
-  // data: { [key: string]: any }[]
 }
 
 const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
