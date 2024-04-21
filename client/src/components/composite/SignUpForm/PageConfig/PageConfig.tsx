@@ -18,8 +18,8 @@ import {
   PaymentInformationSection,
   PaymentSection
 } from "../Sections/PaymentSection"
-import { ConfirmSection } from "../Sections/ConfirmSection"
-
+import ConfirmationSection from "../Sections/ConfirmationSection"
+import TestIcon from "assets/icons/snowboarder.svg?react"
 /**
  * Order of all these matters!
  */
@@ -90,7 +90,14 @@ export const PAGE_CONTENT = [
   <AdditionalSection key="additional" />,
   <PaymentInformationSection key="payment-info" />,
   <PaymentSection key="payment" />,
-  <ConfirmSection key="confirm" />
+  <ConfirmationSection
+    key="confirm"
+    mainHeader="Confirmation"
+    subHeader="Thank you!"
+    textTop="Your application has been received, and you’ll be sent a confirmation email soon."
+    textBottom="In the meantime, please set up your login details."
+    SvgIcon={TestIcon}
+  />
 ]
 
 export const STEPPER_PROPS = [

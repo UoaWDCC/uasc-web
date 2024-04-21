@@ -23,7 +23,7 @@ export const ConfirmationSection: Story = {
     mainHeader: "Confirmation",
     subHeader: "Thank you!",
     textTop:
-      "Your application has been received, and you’ll be sent a confirmation email soon. ",
+      "Your application has been received, and you’ll be sent a confirmation email soon.",
     textBottom: "In the meantime, please set up your login details."
   }
 }
