@@ -1,8 +1,9 @@
-interface Props {
-  data: { [key: string]: any }[]
+interface Props<T> {
+  data: T[]
+  // data: { [key: string]: any }[]
 }
 
-const Table = ({ data }: Props) => {
+const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
   // ensures all data keys (columns) are used, regardless of whether some objects are missing keys
   const dataKeys: string[] = []
   data.forEach((obj) => {
