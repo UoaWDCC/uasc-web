@@ -1,9 +1,10 @@
 import PricingService from "business-layer/services/PricingService"
 import StripeService from "business-layer/services/StripeService"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
+import { MembershipType } from "business-layer/utils/MembershipType"
 import {
   CHECKOUT_TYPE_KEY,
-  CHECKOUT_TYPE_VALUES,
+  CheckoutTypeValues,
   MEMBERSHIP_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import UserDataService from "data-layer/services/UserDataService"
@@ -27,13 +28,29 @@ export class PaymentController extends Controller {
     @Request() request: SelfRequestModel
   ): Promise<MembershipPaymentResponse> {
     try {
-      const { uid, customClaims } = request.user
+      const { uid, email, customClaims } = request.user
       if (customClaims[AuthServiceClaims.MEMBER]) {
         // Can't pay for membership if already member
         this.setStatus(409)
         return { error: "Already a member" }
       }
-
+      /**
+       * See if user already has active session
+       */
+      const stripeService = new StripeService()
+      const { client_secret, metadata } =
+        await stripeService.getActiveSessionsForUser(
+          email,
+          CheckoutTypeValues.MEMBERSHIP
+        )
+      if (client_secret) {
+        this.setStatus(200)
+        return {
+          clientSecret: client_secret,
+          membershipType: metadata[MEMBERSHIP_TYPE_KEY] as MembershipType,
+          message: "existing session found"
+        }
+      }
       /**
        * Check what price user is going to pay based on the details they filled in
        */
@@ -45,7 +62,6 @@ export class PaymentController extends Controller {
       /**
        * Get required product and generate client secret
        */
-      const stripeService = new StripeService()
       const [requiredMembershipProduct] =
         await stripeService.getProductByMetadata(
           MEMBERSHIP_TYPE_KEY,
@@ -63,7 +79,7 @@ export class PaymentController extends Controller {
           quantity: 1
         },
         // Set metadata to be found in webhook later
-        { [CHECKOUT_TYPE_KEY]: CHECKOUT_TYPE_VALUES.MEMBERSHIP }
+        { [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.MEMBERSHIP }
       )
       return { clientSecret, membershipType: requiredMembership }
     } catch (error) {

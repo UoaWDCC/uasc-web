@@ -1,3 +1,7 @@
+import {
+  CHECKOUT_TYPE_KEY,
+  CheckoutTypeValues
+} from "business-layer/utils/StripeProductMetadata"
 import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
@@ -22,6 +26,31 @@ export default class StripeService {
     return result.data
   }
 
+  /**
+   * Used to return active payment sessions for user in the case of one session only payments (i.e memberships or bookings)
+   * I.e to avoid creating excessive sessions
+   * For events or payments that allow multiple sessions this method should NOT be used
+   * @param email of the user (ideally extracted from their JWT token)
+   * @param sessionType defined as the enum CheckoutTypeValues, only exists for `membership` and `booking` right now
+   *
+   * Will return undefined if no sessions found
+   */
+  public async getActiveSessionsForUser(
+    email: string,
+    sessionType: CheckoutTypeValues
+  ): Promise<Stripe.Checkout.Session> {
+    const { data } = await stripe.checkout.sessions.list({
+      customer_details: { email }
+    })
+    const currentlyActiveSession = data.find(
+      (session) =>
+        session.metadata[CHECKOUT_TYPE_KEY] === sessionType &&
+        session.status === "open"
+    )
+    // Might be undefined
+    return currentlyActiveSession
+  }
+
   public async retrieveCheckoutSessionFromPaymentIntent(
     payment_intent?: string,
     customer?: string,
@@ -35,6 +64,15 @@ export default class StripeService {
     })
   }
 
+  /**
+   *
+   * @param client_reference_id generally firebase id
+   * @param return_url
+   * @param line_item format `{price: <price id of item>, quantity: X}`
+   * @param metadata KVP of metadata
+   * @param expires_after_mins Must be over 30 and under 24 hours (1140)
+   * @returns client secret
+   */
   public async createCheckoutSession(
     client_reference_id: string,
     return_url: string,
@@ -42,7 +80,8 @@ export default class StripeService {
       price: string
       quantity: number
     },
-    metadata: Record<string, string>
+    metadata: Record<string, string>,
+    expires_after_mins?: number
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
@@ -53,7 +92,8 @@ export default class StripeService {
       // configured internally and should not change
       ui_mode: "embedded",
       mode: "payment",
-      currency: "NZD"
+      currency: "NZD",
+      expires_at: Date.now() + expires_after_mins * 60000 // 60000ms = 60secs
     })
     return session.client_secret
   }
