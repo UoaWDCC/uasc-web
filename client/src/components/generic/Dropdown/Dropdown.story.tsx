@@ -1,18 +1,20 @@
-import React, { useState } from "react"
-import { Meta, Story } from "@storybook/react"
+import React from "react"
+import { Meta, StoryObj } from "@storybook/react"
 import Dropdown from "./Dropdown"
 
-const meta: Meta = {
+const meta: Meta<typeof Dropdown> = {
   component: Dropdown,
   title: "Dropdown Component"
 }
 
 export default meta
 
-type DropdownStoryProps = React.SelectHTMLAttributes<HTMLSelectElement>
+type Story = StoryObj<typeof meta>
 
-const Template: Story<DropdownStoryProps> = (args) => {
-  const [selectedValue, setSelectedValue] = useState<string>("")
+type DropdownProps = React.SelectHTMLAttributes<HTMLSelectElement>
+
+export const defaultDropdown: Story = (args: DropdownProps) => {
+  const [selectedValue, setSelectedValue] = React.useState<string>("")
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedValue(event.target.value)
@@ -36,5 +38,6 @@ const Template: Story<DropdownStoryProps> = (args) => {
   )
 }
 
-export const DefaultDropdown: Story<DropdownStoryProps> = Template.bind({})
-DefaultDropdown.args = {}
+defaultDropdown.args = {
+  value: "defaultOption"
+}
