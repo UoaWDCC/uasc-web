@@ -326,6 +326,33 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"MembershipType": {
+				"enum": [
+					"uoa_returning",
+					"uoa_new",
+					"other_returning",
+					"other_new"
+				],
+				"type": "string"
+			},
+			"MembershipPaymentResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"clientSecret": {
+						"type": "string"
+					},
+					"membershipType": {
+						"$ref": "#/components/schemas/MembershipType"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -540,6 +567,29 @@
 					}
 				},
 				"security": [],
+				"parameters": []
+			}
+		},
+		"/payment/membership": {
+			"get": {
+				"operationId": "GetMembershipPayment",
+				"responses": {
+					"200": {
+						"description": "Users found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MembershipPaymentResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": []
 			}
 		}

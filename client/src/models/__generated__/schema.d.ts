@@ -29,6 +29,9 @@ export interface paths {
   "/webhook": {
     post: operations["ReceiveWebhook"];
   };
+  "/payment/membership": {
+    get: operations["GetMembershipPayment"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -141,6 +144,14 @@ export interface components {
     DemoteUserRequestBody: {
       uid: string;
     };
+    /** @enum {string} */
+    MembershipType: "uoa_returning" | "uoa_new" | "other_returning" | "other_new";
+    MembershipPaymentResponse: {
+      error?: string;
+      message?: string;
+      clientSecret?: string;
+      membershipType?: components["schemas"]["MembershipType"];
+    };
   };
   responses: {
   };
@@ -249,6 +260,16 @@ export interface operations {
       /** @description Webhook post received */
       200: {
         content: never;
+      };
+    };
+  };
+  GetMembershipPayment: {
+    responses: {
+      /** @description Users found */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MembershipPaymentResponse"];
+        };
       };
     };
   };
