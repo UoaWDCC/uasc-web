@@ -75,6 +75,7 @@ export default class StripeService {
    */
   public async createCheckoutSession(
     client_reference_id: string,
+    email: string,
     return_url: string,
     line_item: {
       price: string
@@ -85,6 +86,7 @@ export default class StripeService {
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
+      customer_email: email,
       client_reference_id,
       return_url,
       line_items: [line_item],
@@ -93,7 +95,9 @@ export default class StripeService {
       ui_mode: "embedded",
       mode: "payment",
       currency: "NZD",
-      expires_at: Date.now() + expires_after_mins * 60000 // 60000ms = 60secs
+      expires_at: expires_after_mins
+        ? Date.now() + expires_after_mins * 60000
+        : undefined // 60000ms = 60secs
     })
     return session.client_secret
   }

@@ -38,12 +38,12 @@ export class PaymentController extends Controller {
        * See if user already has active session
        */
       const stripeService = new StripeService()
-      const { client_secret, metadata } =
-        await stripeService.getActiveSessionsForUser(
-          email,
-          CheckoutTypeValues.MEMBERSHIP
-        )
-      if (client_secret) {
+      const activeSession = await stripeService.getActiveSessionsForUser(
+        email,
+        CheckoutTypeValues.MEMBERSHIP
+      )
+      if (activeSession) {
+        const { client_secret, metadata } = activeSession
         this.setStatus(200)
         return {
           clientSecret: client_secret,
@@ -73,13 +73,17 @@ export class PaymentController extends Controller {
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
+        email,
         process.env.FRONTEND_URL,
         {
           price: default_price as string,
           quantity: 1
         },
         // Set metadata to be found in webhook later
-        { [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.MEMBERSHIP }
+        {
+          [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.MEMBERSHIP,
+          [MEMBERSHIP_TYPE_KEY]: requiredMembership
+        }
       )
       return { clientSecret, membershipType: requiredMembership }
     } catch (error) {
