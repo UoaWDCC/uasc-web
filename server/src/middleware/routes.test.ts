@@ -21,6 +21,15 @@ const usersToCreate: userToCreate[] = [
   { uid: GUEST_USER_UID, membership: "guest" }
 ]
 
+const createUsers = async () => {
+  await Promise.all(
+    usersToCreate.map(async (user) => {
+      const { uid, membership } = user
+      await createUserData(uid, membership)
+    })
+  )
+}
+
 describe("Endpoints", () => {
   let adminToken: string | undefined
   let memberToken: string | undefined
@@ -65,6 +74,47 @@ describe("Endpoints", () => {
         .set("Authorization", `Bearer ${guestToken}`)
         .send({})
         .expect(401, done)
+    })
+  })
+
+  /**
+   *
+   * `/Payments`
+   *
+   */
+  describe("/payments", () => {
+    beforeEach(async () => {
+      await createUsers()
+    })
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+    describe("/membership", () => {
+      it("should not let members to try create sessions", async () => {
+        const res = await request
+          .get("/payment/membership")
+          .set("Authorization", `Bearer ${memberToken}`)
+          .send({})
+
+        expect(res.status).toEqual(409)
+      })
+
+      it("should let guests/admins to try create sessions", async () => {
+        let res = await request
+          .get("/payment/membership")
+          .set("Authorization", `Bearer ${guestToken}`)
+          .send({})
+        expect(res.status).toEqual(200)
+
+        /**
+         * Note admins should be able to create sessions for testing purposes, it is assumed that admin users will not try pay
+         */
+        res = await request
+          .get("/payment/membership")
+          .set("Authorization", `Bearer ${adminToken}`)
+          .send({})
+        expect(res.status).toEqual(200)
+      })
     })
   })
 
