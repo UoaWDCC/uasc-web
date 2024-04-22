@@ -1,5 +1,5 @@
 import { UserAdditionalInfo } from "data-layer/models/firebase"
-import { MembershipType } from "./MembershipType"
+import { MembershipType } from "../utils/MembershipType"
 
 export default class PricingService {
   public getMembershipType(user: UserAdditionalInfo): MembershipType {
