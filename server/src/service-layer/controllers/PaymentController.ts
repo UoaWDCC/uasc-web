@@ -21,7 +21,7 @@ import {
 
 @Route("payment")
 export class PaymentController extends Controller {
-  @SuccessResponse("200", "Users found")
+  @SuccessResponse("200", "Session created")
   @Security("jwt")
   @Get("membership")
   public async getMembershipPayment(
