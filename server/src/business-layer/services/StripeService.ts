@@ -35,7 +35,7 @@ export default class StripeService {
    *
    * Will return undefined if no sessions found
    */
-  public async getActiveSessionsForUser(
+  public async getActiveSessionForUser(
     email: string,
     sessionType: CheckoutTypeValues
   ): Promise<Stripe.Checkout.Session> {

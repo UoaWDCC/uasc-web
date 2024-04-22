@@ -38,7 +38,7 @@ export class PaymentController extends Controller {
        * See if user already has active session
        */
       const stripeService = new StripeService()
-      const activeSession = await stripeService.getActiveSessionsForUser(
+      const activeSession = await stripeService.getActiveSessionForUser(
         email,
         CheckoutTypeValues.MEMBERSHIP
       )
