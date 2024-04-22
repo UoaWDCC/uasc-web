@@ -82,7 +82,7 @@ export default class StripeService {
       quantity: number
     },
     metadata: Record<string, string>,
-    expires_after_mins?: number
+    expires_after_mins: number = 31
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
