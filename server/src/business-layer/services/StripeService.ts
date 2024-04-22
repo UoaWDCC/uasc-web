@@ -70,7 +70,7 @@ export default class StripeService {
    * @param return_url
    * @param line_item format `{price: <price id of item>, quantity: X}`
    * @param metadata KVP of metadata
-   * @param expires_after_mins Must be over 30 and under 24 hours (1140)
+   * @param expires_after_mins Must be over 30 and under 24 hours (1140) we default to 31 minutes
    * @returns client secret
    */
   public async createCheckoutSession(
@@ -95,9 +95,7 @@ export default class StripeService {
       ui_mode: "embedded",
       mode: "payment",
       currency: "NZD",
-      expires_at: expires_after_mins
-        ? Date.now() + expires_after_mins * 60000
-        : undefined // 60000ms = 60secs
+      expires_at: Date.now() + expires_after_mins * 60000
     })
     return session.client_secret
   }
