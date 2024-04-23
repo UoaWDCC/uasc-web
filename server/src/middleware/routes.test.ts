@@ -114,6 +114,7 @@ describe("Endpoints", () => {
       })
 
       it("should let guests/admins to try create sessions", async () => {
+        createUserData(GUEST_USER_UID, "guest")
         let res = await request
           .get("/payment/membership")
           .set("Authorization", `Bearer ${guestToken}`)

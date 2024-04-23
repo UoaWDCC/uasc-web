@@ -119,6 +119,7 @@ export class PaymentController extends Controller {
         },
         stripeCustomerId
       )
+      this.setStatus(200)
       return { clientSecret, membershipType: requiredMembership }
     } catch (error) {
       console.error(error)
