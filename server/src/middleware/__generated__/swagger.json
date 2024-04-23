@@ -88,7 +88,7 @@
 					},
 					"stripe_id": {
 						"type": "string",
-						"description": "For identification"
+						"description": "For identification DO NOT RETURN to users in exposed endpoints"
 					}
 				},
 				"required": [
@@ -278,7 +278,7 @@
 					},
 					"stripe_id": {
 						"type": "string",
-						"description": "For identification"
+						"description": "For identification DO NOT RETURN to users in exposed endpoints"
 					}
 				},
 				"type": "object",

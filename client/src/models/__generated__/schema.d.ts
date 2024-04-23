@@ -78,7 +78,7 @@ export interface components {
       student_id?: string;
       returning: boolean;
       university_year: string;
-      /** @description For identification */
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
     };
     FirebaseProperties: {
@@ -133,7 +133,7 @@ export interface components {
       student_id?: string;
       returning?: boolean;
       university_year?: string;
-      /** @description For identification */
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
     };
     EditUsersRequestBody: {
