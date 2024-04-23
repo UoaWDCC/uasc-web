@@ -68,6 +68,7 @@ export default class StripeService {
   /**
    *
    * @param client_reference_id generally firebase id
+   * @param email ideally extracted from user JWT
    * @param return_url
    * @param line_item format `{price: <price id of item>, quantity: X}`
    * @param metadata KVP of metadata
@@ -87,7 +88,7 @@ export default class StripeService {
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
-      customer_email: email,
+      customer_email: email, // to associate payment with a user
       client_reference_id,
       return_url,
       line_items: [line_item],
