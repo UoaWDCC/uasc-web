@@ -1,5 +1,5 @@
 import { UserAdditionalInfo } from "data-layer/models/firebase"
-import { MembershipType } from "../utils/MembershipType"
+import { MembershipType } from "business-layer/utils/StripeProductMetadata"
 
 export default class PricingService {
   public getMembershipType(user: UserAdditionalInfo): MembershipType {

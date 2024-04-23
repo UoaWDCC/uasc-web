@@ -1,6 +1,6 @@
 import { memberUserInfoMock } from "test-config/mocks/User.mock"
 import PricingService from "./PricingService"
-import { MembershipType } from "../utils/MembershipType"
+import { MembershipType } from "business-layer/utils/StripeProductMetadata"
 
 describe("pricingService unit tests", () => {
   let pricingServiceTest: PricingService

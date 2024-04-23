@@ -4,4 +4,11 @@ export enum CheckoutTypeValues {
   BOOKING = "booking"
 }
 
+export enum MembershipType {
+  UoaReturning = "uoa_returning",
+  UoaNew = "uoa_new",
+  OtherReturning = "other_returning",
+  OtherNew = "other_new"
+}
+
 export const MEMBERSHIP_TYPE_KEY = "membership_type"
