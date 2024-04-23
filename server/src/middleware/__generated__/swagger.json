@@ -575,7 +575,7 @@
 				"operationId": "GetMembershipPayment",
 				"responses": {
 					"200": {
-						"description": "Users found",
+						"description": "Session created",
 						"content": {
 							"application/json": {
 								"schema": {

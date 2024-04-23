@@ -265,7 +265,7 @@ export interface operations {
   };
   GetMembershipPayment: {
     responses: {
-      /** @description Users found */
+      /** @description Session created */
       200: {
         content: {
           "application/json": components["schemas"]["MembershipPaymentResponse"];
