@@ -70,7 +70,7 @@ export interface UserAdditionalInfo {
    */
   university_year: string
   /**
-   * For identification
+   * For identification DO NOT RETURN to users in exposed endpoints
    */
   stripe_id?: string
 }
