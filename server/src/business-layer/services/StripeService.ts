@@ -6,7 +6,10 @@ import {
 import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
-const ONE_MINUTE_MS = 60000
+const ONE_MINUTE_S = 60
+const dateNowSecs = () => {
+  return Math.ceil(Date.now() / 1000)
+}
 
 export default class StripeService {
   public async getAllProducts(limit?: number, startingAfter?: string) {
@@ -75,7 +78,7 @@ export default class StripeService {
     const { data } = await stripe.checkout.sessions.list({
       customer: customerId,
       created: {
-        gte: Date.now() - createdMinutesAgo * ONE_MINUTE_MS
+        gte: dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
       }
     })
     const hasRecentlyCompletedCheckoutSession = !!data.find(
@@ -88,17 +91,17 @@ export default class StripeService {
    * Used to return active payment sessions for user in the case of one session only payments (i.e memberships or bookings)
    * I.e to avoid creating excessive sessions
    * For events or payments that allow multiple sessions this method should NOT be used
-   * @param email of the user (ideally extracted from their JWT token)
+   * @param customerId of the user (extracted from firebase doc)
    * @param sessionType defined as the enum CheckoutTypeValues, only exists for `membership` and `booking` right now
    *
    * Will return undefined if no sessions found
    */
   public async getActiveSessionForUser(
-    email: string,
+    customerId: string,
     sessionType: CheckoutTypeValues
   ): Promise<Stripe.Checkout.Session> {
     const { data } = await stripe.checkout.sessions.list({
-      customer_details: { email }
+      customer: customerId
     })
     const currentlyActiveSession = data.find(
       (session) =>
@@ -134,7 +137,6 @@ export default class StripeService {
    */
   public async createCheckoutSession(
     client_reference_id: string,
-    email: string,
     return_url: string,
     line_item: {
       price: string
@@ -146,7 +148,6 @@ export default class StripeService {
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
-      customer_email: email, // to associate payment with a user
       client_reference_id,
       return_url,
       customer: customer_id,
@@ -156,7 +157,7 @@ export default class StripeService {
       ui_mode: "embedded",
       mode: "payment",
       currency: "NZD",
-      expires_at: Date.now() + expires_after_mins * ONE_MINUTE_MS
+      expires_at: dateNowSecs() + expires_after_mins * ONE_MINUTE_S
     })
     return session.client_secret
   }

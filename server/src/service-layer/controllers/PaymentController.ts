@@ -36,44 +36,9 @@ export class PaymentController extends Controller {
       }
 
       const stripeService = new StripeService()
+      const userDataService = new UserDataService()
 
-      /**
-       * See if user has pending payment or has recently paid
-       */
-      const userData = await new UserDataService().getUserData(uid)
-      const { stripe_id } = userData
-      if (
-        (await stripeService.hasRecentlyCompletedCheckoutSession(stripe_id)) ||
-        (await stripeService.hasProcessingPaymentIntent(stripe_id))
-      ) {
-        this.setStatus(409)
-        return {
-          message: "Payment is still being processed"
-        }
-      }
-      /**
-       * See if user already has active session
-       */
-      const activeSession = await stripeService.getActiveSessionForUser(
-        email,
-        CheckoutTypeValues.MEMBERSHIP
-      )
-      if (activeSession) {
-        const { client_secret, metadata } = activeSession
-        this.setStatus(200)
-        return {
-          clientSecret: client_secret,
-          membershipType: metadata[MEMBERSHIP_TYPE_KEY] as MembershipTypeValues,
-          message: "existing session found"
-        }
-      }
-      /**
-       * Check what price user is going to pay based on the details they filled in
-       */
-
-      const requiredMembership = new PricingService().getMembershipType(
-        userData
-      )
+      const userData = await userDataService.getUserData(uid)
 
       /**
        * Generate customer id if required
@@ -82,9 +47,50 @@ export class PaymentController extends Controller {
       if (!userData.stripe_id) {
         const { id } = await stripeService.createNewUser(email, uid)
         stripeCustomerId = id
+        await userDataService.editUserData(uid, { stripe_id: stripeCustomerId })
       } else {
         stripeCustomerId = userData.stripe_id
+        /**
+         * See if user already has active session
+         */
+        const activeSession = await stripeService.getActiveSessionForUser(
+          stripeCustomerId,
+          CheckoutTypeValues.MEMBERSHIP
+        )
+        if (activeSession) {
+          const { client_secret, metadata } = activeSession
+          this.setStatus(200)
+          return {
+            clientSecret: client_secret,
+            membershipType: metadata[
+              MEMBERSHIP_TYPE_KEY
+            ] as MembershipTypeValues,
+            message: "existing session found"
+          }
+        }
+        /**
+         * See if user has pending payment or has recently paid -> if user didn't have a stripe id that means
+         * they couldn't have a completed session
+         */
+        if (
+          (await stripeService.hasRecentlyCompletedCheckoutSession(
+            stripeCustomerId
+          )) ||
+          (await stripeService.hasProcessingPaymentIntent(stripeCustomerId))
+        ) {
+          this.setStatus(409)
+          return {
+            message: "Payment is still being processed"
+          }
+        }
       }
+
+      /**
+       * Check what price user is going to pay based on the details they filled in
+       */
+      const requiredMembership = new PricingService().getMembershipType(
+        userData
+      )
 
       /**
        * Get required product and generate client secret
@@ -100,7 +106,6 @@ export class PaymentController extends Controller {
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
-        email,
         // Note if the url changes workflows need to be updated to have the deployments work correctly
         `${process.env.FRONTEND_URL}/register/confirm`,
         {

@@ -1,7 +1,7 @@
-import { MembershipType } from "business-layer/utils/MembershipType"
+import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 import { CommonResponse } from "./CommonResponse"
 
 export interface MembershipPaymentResponse extends CommonResponse {
   clientSecret?: string
-  membershipType?: MembershipType
+  membershipType?: MembershipTypeValues
 }
