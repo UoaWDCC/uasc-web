@@ -6,7 +6,12 @@ import {
 import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
+
 const ONE_MINUTE_S = 60
+
+/**
+ * @warning Stripe uses seconds for its timestamp, while `Date.now()` gives the UTC epoch in `ms`
+ */
 const dateNowSecs = () => {
   return Math.ceil(Date.now() / 1000)
 }
