@@ -5,6 +5,7 @@ import {
 import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
+const ONE_MINUTE_MS = 60000
 
 export default class StripeService {
   public async getAllProducts(limit?: number, startingAfter?: string) {
@@ -95,7 +96,7 @@ export default class StripeService {
       ui_mode: "embedded",
       mode: "payment",
       currency: "NZD",
-      expires_at: Date.now() + expires_after_mins * 60000
+      expires_at: Date.now() + expires_after_mins * ONE_MINUTE_MS
     })
     return session.client_secret
   }
