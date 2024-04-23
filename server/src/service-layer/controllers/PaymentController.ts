@@ -1,8 +1,8 @@
 import PricingService from "business-layer/services/PricingService"
 import StripeService from "business-layer/services/StripeService"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
-import { MembershipType } from "business-layer/utils/MembershipType"
 import {
+  MembershipType,
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues,
   MEMBERSHIP_TYPE_KEY
