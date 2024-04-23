@@ -12,8 +12,35 @@ import {
   deleteUsersFromAuth,
   userToCreate
 } from "./routes.mock"
+import { productMock } from "test-config/mocks/Stripe.mock"
 
 const request = supertest(_app)
+jest.mock("stripe", () => {
+  return {
+    __esModule: true,
+    default: jest.fn().mockImplementation(() => {
+      return {
+        customers: {
+          create: () => {
+            return { id: "test" }
+          }
+        },
+        products: {
+          search: () => {
+            return { data: [productMock] }
+          }
+        },
+        checkout: {
+          sessions: {
+            create: () => {
+              return { client_secret: "test" }
+            }
+          }
+        }
+      }
+    })
+  }
+})
 
 const usersToCreate: userToCreate[] = [
   { uid: ADMIN_USER_UID, membership: "admin" },
