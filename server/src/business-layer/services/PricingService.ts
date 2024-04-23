@@ -1,20 +1,20 @@
 import { UserAdditionalInfo } from "data-layer/models/firebase"
-import { MembershipType } from "business-layer/utils/StripeProductMetadata"
+import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 
 export default class PricingService {
-  public getMembershipType(user: UserAdditionalInfo): MembershipType {
+  public getMembershipType(user: UserAdditionalInfo): MembershipTypeValues {
     if (user.university && user.returning && user.student_id !== undefined) {
-      return MembershipType.UoaReturning
+      return MembershipTypeValues.UoaReturning
     } else if (
       user.university &&
       !user.returning &&
       user.student_id !== undefined
     ) {
-      return MembershipType.UoaNew
+      return MembershipTypeValues.UoaNew
     } else if (user.returning) {
-      return MembershipType.OtherReturning
+      return MembershipTypeValues.OtherReturning
     } else {
-      return MembershipType.OtherNew
+      return MembershipTypeValues.OtherNew
     }
   }
 }

@@ -69,6 +69,10 @@ export interface UserAdditionalInfo {
    * @isString Please enter your year of study
    */
   university_year: string
+  /**
+   * For identification
+   */
+  stripe_id?: string
 }
 
 export interface BookingSlot {

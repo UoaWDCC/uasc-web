@@ -75,6 +75,20 @@ describe("Endpoints", () => {
         .send({})
         .expect(401, done)
     })
+    describe("/self", () => {
+      afterEach(async () => {
+        await cleanFirestore()
+      })
+      it("Should not allow members to fetch their own stripe id", async () => {
+        await createUserData(MEMBER_USER_UID, "member")
+        const res = await request
+          .get("/users/self")
+          .set("Authorization", `Bearer ${memberToken}`)
+          .send({})
+
+        expect(res.body.stripe_id).toBe(undefined)
+      })
+    })
   })
 
   /**
@@ -120,12 +134,7 @@ describe("Endpoints", () => {
 
   describe("/users/promote and /users/demote", () => {
     beforeEach(async () => {
-      await Promise.all(
-        usersToCreate.map(async (user) => {
-          const { uid, membership } = user
-          await createUserData(uid, membership)
-        })
-      )
+      await createUsers()
     })
 
     afterEach(async () => {
@@ -242,6 +251,25 @@ describe("Endpoints", () => {
       )
       expect(updatedUser.does_ski).toEqual(true)
       expect(updatedUser.university_year).toEqual("4th")
+    })
+
+    it("should not edit users stripe_id for multiple attributes", async () => {
+      const res = await request
+        .patch("/users/edit-self")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          updatedInformation: {
+            faculty: "arts",
+            gender: "two spirit",
+            stripe_id: "my fake stripe id"
+          }
+        })
+
+      expect(res.status).toEqual(400) // invalid request
+      const updatedUser = await new UserDataService().getUserData(
+        MEMBER_USER_UID
+      )
+      expect(updatedUser.stripe_id).not.toEqual("my fake stripe id")
     })
 
     it("should not edit users role for multiple attributes", async () => {

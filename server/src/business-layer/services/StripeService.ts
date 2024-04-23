@@ -1,6 +1,7 @@
 import {
   CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues
+  CheckoutTypeValues,
+  USER_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import Stripe from "stripe"
 
@@ -25,6 +26,62 @@ export default class StripeService {
       query: `metadata['${key}']:'${value}'`
     })
     return result.data
+  }
+
+  /**
+   *
+   * @param email ideally extracted from JWT
+   * @param uid ideally extracted from JWT
+   */
+  public async createNewUser(email: string, uid: string) {
+    return await stripe.customers.create({
+      email,
+      metadata: { [USER_ID_KEY]: uid }
+    })
+  }
+
+  /**
+   * Checks for processing payments from a user. Used to avoid
+   * users from double paying after completing a checkout session for membership payments.
+   *
+   * @warning This assumes that users won't be paying for membership right after booking
+   *
+   * @param customerId `stripe_id` from the firebase document
+   */
+  public async hasProcessingPaymentIntent(customerId: string) {
+    const { data } = await stripe.paymentIntents.list({
+      customer: customerId
+    })
+    const hasProcessingPaymentIntent = !!data.find(
+      (intent) => intent.status === "processing"
+    )
+
+    return hasProcessingPaymentIntent
+  }
+
+  /**
+   *
+   * Checks for processing payments from a user. Used to avoid
+   * users from double paying after completing a checkout session for membership payments.
+   *
+   * @param customerId `stripe_id` from the firebase document
+   * @param createdMinutesAgo how long ago to check for checkout sessions
+   * @returns true if user has completed checkout session from a default `2` minutes ago
+   */
+  public async hasRecentlyCompletedCheckoutSession(
+    customerId: string,
+    createdMinutesAgo: number = 2
+  ) {
+    const { data } = await stripe.checkout.sessions.list({
+      customer: customerId,
+      created: {
+        gte: Date.now() - createdMinutesAgo * ONE_MINUTE_MS
+      }
+    })
+    const hasRecentlyCompletedCheckoutSession = !!data.find(
+      (session) => session.status === "complete"
+    )
+    return hasRecentlyCompletedCheckoutSession
   }
 
   /**
@@ -84,6 +141,7 @@ export default class StripeService {
       quantity: number
     },
     metadata: Record<string, string>,
+    customer_id: string,
     expires_after_mins: number = 31
   ) {
     const session = await stripe.checkout.sessions.create({
@@ -91,6 +149,7 @@ export default class StripeService {
       customer_email: email, // to associate payment with a user
       client_reference_id,
       return_url,
+      customer: customer_id,
       line_items: [line_item],
       metadata,
       // configured internally and should not change

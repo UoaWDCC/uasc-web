@@ -42,6 +42,9 @@ export class UsersController extends Controller {
   ): Promise<UserResponse> {
     const data = await new UserDataService().getUserData(request.user.uid)
 
+    // Don't want users editing this
+    delete data.stripe_id
+
     if (data !== undefined) {
       this.setStatus(200)
     } else {
