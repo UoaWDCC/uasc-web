@@ -15,6 +15,10 @@ import {
 import { productMock } from "test-config/mocks/Stripe.mock"
 
 const request = supertest(_app)
+
+/**
+ * This needs to be updated as we add more stripe functions...
+ */
 jest.mock("stripe", () => {
   return {
     __esModule: true,
