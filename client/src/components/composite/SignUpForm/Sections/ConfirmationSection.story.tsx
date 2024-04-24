@@ -20,7 +20,6 @@ export const ConfirmationSection: Story = {
   args: {
     SvgIcon: TestIcon,
     variant: "default",
-    mainHeader: "Confirmation",
     subHeader: "Thank you!",
     textTop:
       "Your application has been received, and you’ll be sent a confirmation email soon.",

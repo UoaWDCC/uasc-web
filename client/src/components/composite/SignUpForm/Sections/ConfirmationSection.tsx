@@ -3,7 +3,6 @@ type confirmationVariants = "default"
 
 export interface ISectionProps {
   SvgIcon?: SvgImport
-  mainHeader: string
   subHeader: string
   textTop: string
   textBottom: string
@@ -14,7 +13,6 @@ type props = ISectionProps
 
 export const confirmationSection = ({
   SvgIcon,
-  mainHeader,
   subHeader,
   textTop,
   textBottom
@@ -23,9 +21,6 @@ export const confirmationSection = ({
     <div className="">
       <div className="flex flex-row items-center justify-center">
         <div className="max-w-[204px]">
-          <h2 className="font-style: text-dark-blue-100 pb-[87px] italic">
-            {mainHeader}
-          </h2>
           <h3>{subHeader}</h3>
           <p className="pb-[50px]">{textTop}</p>
           <p>{textBottom}</p>

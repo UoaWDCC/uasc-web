@@ -77,7 +77,7 @@ export const DefaultStory = () => {
           }
         },
         {
-          title: "",
+          title: "Confirmation",
           index: 6,
           onBack: () => {
             setCurrentPage(5)
