@@ -25,7 +25,7 @@ export const confirmationSection = ({
           <p className="pb-[50px]">{textTop}</p>
           <p>{textBottom}</p>
         </div>
-        <div className="pl-[71px]">
+        <div className="pl-[71px] max-sm:hidden">
           {SvgIcon && (
             <SvgIcon
               width="255px"
