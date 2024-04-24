@@ -21,9 +21,11 @@ export const confirmationSection = ({
     <div className="">
       <div className="flex flex-row items-center justify-center">
         <div className="max-w-[204px]">
-          <h3>{subHeader}</h3>
-          <p className="justify-center pb-[50px]">{textTop}</p>
-          <p>{textBottom}</p>
+          <h3 className="text-center">
+            {subHeader}
+            <p className="pb-[50px]">{textTop}</p>
+            <p>{textBottom}</p>
+          </h3>
         </div>
         <div className="pl-[71px] max-sm:hidden">
           {SvgIcon && (
