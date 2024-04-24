@@ -95,11 +95,19 @@ export class PaymentController extends Controller {
       /**
        * Get required product and generate client secret
        */
-      const [requiredMembershipProduct] =
+      const requiredMembershipProducts =
         await stripeService.getProductByMetadata(
           MEMBERSHIP_TYPE_KEY,
           requiredMembership
         )
+
+      const requiredMembershipProduct = requiredMembershipProducts.find(
+        (product) => product.active
+      )
+
+      if (requiredMembershipProduct === undefined) {
+        throw new Error("Product not found")
+      }
 
       // Note this will throw error if undefined (product wasn't found)
       const { default_price } = requiredMembershipProduct
