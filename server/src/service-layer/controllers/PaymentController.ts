@@ -101,6 +101,7 @@ export class PaymentController extends Controller {
           requiredMembership
         )
 
+      // We assume there will only be one active product at a time for memberships (needs to be communicated with admins)
       const requiredMembershipProduct = requiredMembershipProducts.find(
         (product) => product.active
       )
