@@ -92,7 +92,6 @@ export const PAGE_CONTENT = [
   <PaymentSection key="payment" />,
   <ConfirmationSection
     key="confirm"
-    mainHeader="Confirmation"
     subHeader="Thank you!"
     textTop="Your application has been received, and you’ll be sent a confirmation email soon."
     textBottom="In the meantime, please set up your login details."
