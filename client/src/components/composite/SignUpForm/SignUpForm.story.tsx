@@ -4,17 +4,10 @@ import type { Meta } from "@storybook/react"
 import { SignUpForm } from "./SignUpForm"
 import { useState } from "react"
 import { PAGE_CONTENT } from "./PageConfig/PageConfig"
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 
 // 👇 This default export determines where your story goes in the story list
 const meta: Meta<typeof SignUpForm> = {
-  component: SignUpForm,
-  parameters: {
-    viewport: {
-      viewports: INITIAL_VIEWPORTS,
-      defaultViewport: 'phone'
-    }
-  }
+  component: SignUpForm
 }
 
 export default meta
@@ -88,8 +81,7 @@ export const DefaultStory = () => {
           index: 6,
           onBack: () => {
             setCurrentPage(5)
-          },
-          
+          }
         }
       ]}
       pageContent={PAGE_CONTENT}
