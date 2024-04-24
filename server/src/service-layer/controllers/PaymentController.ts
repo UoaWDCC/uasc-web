@@ -116,7 +116,7 @@ export class PaymentController extends Controller {
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
         // Note if the url changes workflows need to be updated to have the deployments work correctly
-        `${process.env.FRONTEND_URL}/register/confirm`,
+        `${process.env.FRONTEND_URL}/register/confirm?session_id={CHECKOUT_SESSION_ID}`,
         {
           price: default_price as string,
           quantity: 1
