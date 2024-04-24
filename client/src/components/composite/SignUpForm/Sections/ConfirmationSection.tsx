@@ -22,7 +22,7 @@ export const confirmationSection = ({
       <div className="flex flex-row items-center justify-center">
         <div className="max-w-[204px]">
           <h3>{subHeader}</h3>
-          <p className="pb-[50px] justify-center">{textTop}</p>
+          <p className="justify-center pb-[50px]">{textTop}</p>
           <p>{textBottom}</p>
         </div>
         <div className="pl-[71px] max-sm:hidden">
