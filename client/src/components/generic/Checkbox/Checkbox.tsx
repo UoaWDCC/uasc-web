@@ -17,7 +17,7 @@ const Checkbox = ({ children, ...props }: props) => {
           type="checkbox"
           id="1"
           name="Checkbox"
-          checked = {props.checked}
+          checked={props.checked}
           disabled={props.disabled}
         />
         <div className="font-size-16 text-p pl-[12px]">{children}</div>
