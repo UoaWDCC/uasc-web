@@ -4,15 +4,19 @@ import { MembershipTypes } from "models/Payment"
 import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
 
 export const PaymentSection = () => {
-  const { data } = useMembershipClientSecretQuery()
+  const { data, error } = useMembershipClientSecretQuery()
   return (
     <>
       <div className="h-full w-full">
         {data ? (
-          <PaymentForm
-            onComplete={() => {}}
-            clientSecret={data?.stripeClientSecret as string}
-          ></PaymentForm>
+          <>
+            {error && <h2>{error.message}</h2>}
+            {data.message && <h2>{data.message}</h2>}
+            <PaymentForm
+              onComplete={() => {}}
+              clientSecret={data?.stripeClientSecret as string}
+            />
+          </>
         ) : (
           <>Error</>
         )}
@@ -29,25 +33,25 @@ const prices: {
   extraInfo: string
 }[] = [
   {
-    title: "UoA Student",
+    title: "UoA New",
     type: "uoa_new",
     priceString: "$45",
     extraInfo: "Special offer ends 17th March"
   },
   {
-    title: "UoA Student",
+    title: "UoA Returning",
     type: "uoa_returning",
     priceString: "$45",
     extraInfo: "Special offer ends 17th March"
   },
   {
-    title: "UoA Student",
+    title: "Other uni returning",
     type: "other_returning",
     priceString: "$45",
     extraInfo: "Special offer ends 17th March"
   },
   {
-    title: "UoA Student",
+    title: "Other uni new",
     type: "other_new",
     priceString: "$45",
     extraInfo: "Special offer ends 17th March"
@@ -58,6 +62,7 @@ export const PaymentInformationSection = () => {
   const { data } = useMembershipClientSecretQuery()
   return (
     <>
+      <h2>The membership you will pay for is</h2>
       {data ? (
         <div className="flex h-fit flex-col md:-ml-10 md:flex-row">
           {prices.map((price) => {
