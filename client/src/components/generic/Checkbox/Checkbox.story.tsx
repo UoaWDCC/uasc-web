@@ -7,7 +7,7 @@ const meta: Meta<typeof Checkbox> = {
   argTypes: {
     variant: {
       control: { type: "radio" },
-      options: ["unclicked", "clicked"]
+      options: ["default", "checked", "disabled"]
     },
     children: {
       name: "content"
@@ -18,10 +18,25 @@ const meta: Meta<typeof Checkbox> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Checkbox1: Story = {
+export const Default: Story = {
   tags: ["autodocs"],
   args: {
-    children: "hi",
-    variant: "clicked"
+    children: "default",
+    variant: "default"
+  }
+}
+export const Checked: Story = {
+  tags: ["autodocs"],
+  args: {
+    children: "checked",
+    variant: "checked"
+  }
+}
+
+export const Disabled: Story = {
+  tags: ["autodocs"],
+  args: {
+    children: "disabled",
+    variant: "disabled"
   }
 }
