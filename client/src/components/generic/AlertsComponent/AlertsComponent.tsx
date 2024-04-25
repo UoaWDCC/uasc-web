@@ -12,36 +12,36 @@ const AlertsComponent = ({ variant, message }: AlertsInputProp) => {
   if (variant === "success") {
     return (
       <div className="flex h-12 w-full items-center justify-between rounded-lg bg-[#109D27] text-left uppercase text-white">
-        <div className="ml-10 mr-5 w-5 h-5">
-            <TickIcon className="fill-white"/>
+        <div className="ml-10 mr-5 h-5 w-5">
+          <TickIcon className="fill-white" />
         </div>
         <span className="absolute left-20 ml-10"> {message} </span>
-        <div className="w-5 h-5 mr-10">
-            <XIcon className="fill-white"/>
+        <div className="mr-10 h-5 w-5">
+          <XIcon className="fill-white" />
         </div>
       </div>
     )
   } else if (variant === "error") {
     return (
       <div className="flex h-12 w-full items-center justify-between rounded-lg bg-[#9A141D] text-left uppercase text-white">
-        <div className="ml-10 mr-5 w-5 h-5">
-            <WarningIcon className="fill-white"/>
+        <div className="ml-10 mr-5 h-5 w-5">
+          <WarningIcon className="fill-white" />
         </div>
         <span className="absolute left-20 ml-10"> {message} </span>
-        <div className="w-5 h-5 mr-10">
-            <XIcon className="fill-white"/>
+        <div className="mr-10 h-5 w-5">
+          <XIcon className="fill-white" />
         </div>
       </div>
     )
   } else {
     return (
       <div className="flex h-12 w-full items-center justify-between rounded-lg bg-[#FF6D04] text-left uppercase text-white">
-        <div className="ml-10 mr-5 w-5 h-5">
-            <BellIcon className="fill-white"/>
+        <div className="ml-10 mr-5 h-5 w-5">
+          <BellIcon className="fill-white" />
         </div>
         <span className="absolute left-20 ml-10"> {message} </span>
-        <div className="w-5 h-5 mr-10">
-            <XIcon className="fill-white"/>
+        <div className="mr-10 h-5 w-5">
+          <XIcon className="fill-white" />
         </div>
       </div>
     )
