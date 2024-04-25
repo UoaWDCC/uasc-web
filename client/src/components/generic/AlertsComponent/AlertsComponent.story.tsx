@@ -12,7 +12,6 @@ export default meta
 type Story = StoryObj<typeof AlertsComponent>
 
 export const ErrorAlert: Story = {
-  tags: ["autodocs"],
   args: {
     message: "Error: Error Message",
     variant: "error"
@@ -20,7 +19,6 @@ export const ErrorAlert: Story = {
 }
 
 export const SuccessAlert: Story = {
-  tags: ["autodocs"],
   args: {
     message: "Success: Success Message",
     variant: "success"
@@ -28,7 +26,6 @@ export const SuccessAlert: Story = {
 }
 
 export const NotificationAlert: Story = {
-  tags: ["autodocs"],
   args: {
     message: "Notification: Notification Message",
     variant: "notification"
