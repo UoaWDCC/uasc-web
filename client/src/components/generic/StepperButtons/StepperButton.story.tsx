@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react"
 import StepperButton from "./StepperButton"
 const meta: Meta<typeof StepperButton> = {
   component: StepperButton,
-  title: "StepperButton",
   argTypes: {
     variant: {
       control: { type: "radio" },
