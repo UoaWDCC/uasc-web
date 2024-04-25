@@ -14,7 +14,7 @@ const Register = () => {
   return (
     <>
       <FullPageBackgroundImage>
-        <span className="fixed bottom-0 left-1/2 w-full -translate-x-1/2">
+        <span className="absolute bottom-0 left-1/2 h-fit w-full -translate-x-1/2 sm:fixed">
           <Routes>
             <Route index element={<Navigate to={"personal_1"} replace />} />
             <Route

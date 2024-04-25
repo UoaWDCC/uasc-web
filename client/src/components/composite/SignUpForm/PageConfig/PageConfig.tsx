@@ -9,6 +9,7 @@ import {
   ADDITIONAL_ROUTE,
   CONFIRM_ROUTE,
   CONTACT_ROUTE,
+  PAYMENT_INFORMATION_ROUTE,
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
@@ -72,6 +73,7 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Payment,
     title: "Payment",
+    onBack: () => navigateFn(PAYMENT_INFORMATION_ROUTE),
     onNext: () => navigateFn(CONFIRM_ROUTE)
   },
   {

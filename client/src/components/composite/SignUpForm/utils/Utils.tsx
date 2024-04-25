@@ -4,6 +4,7 @@ import {
   ADDITIONAL_ROUTE,
   CONFIRM_ROUTE,
   CONTACT_ROUTE,
+  PAYMENT_INFORMATION_ROUTE,
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
@@ -25,6 +26,9 @@ export const useCurrentStep = (): PAGES => {
 
     case ADDITIONAL_ROUTE:
       return PAGES.Additional
+
+    case PAYMENT_INFORMATION_ROUTE:
+      return PAGES.PaymentInfo
 
     case PAYMENT_ROUTE:
       return PAGES.Payment

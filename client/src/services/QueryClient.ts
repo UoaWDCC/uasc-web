@@ -3,7 +3,8 @@ import { QueryClient } from "@tanstack/react-query"
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      notifyOnChangeProps: ["data"]
+      notifyOnChangeProps: ["data"],
+      refetchOnWindowFocus: false
     }
   }
 })

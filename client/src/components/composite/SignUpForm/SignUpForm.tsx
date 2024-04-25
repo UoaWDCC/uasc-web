@@ -70,14 +70,12 @@ export const SignUpForm = ({
   const steps = STEPPER_PROPS
 
   return (
-    <div className="relative flex h-full justify-center">
-      <span className="absolute -top-[17px] ml-4 hidden lg:block">
+    <div className="relative flex justify-center">
+      <span className="absolute -top-[17px] z-10 ml-4 hidden lg:block">
         <Stepper steps={steps} currentStep={currentPage} />
       </span>
       <PaginatedForm pages={pages} currentPageIndex={currentPage}>
-        <div className="h-36 min-h-[40vh] lg:min-h-[45vh]">
-          {pageContent[currentPage]}
-        </div>
+        <div className="h-fit">{pageContent[currentPage]}</div>
       </PaginatedForm>
     </div>
   )

@@ -29,7 +29,7 @@ export class PaymentController extends Controller {
   ): Promise<MembershipPaymentResponse> {
     try {
       const { uid, email, customClaims } = request.user
-      if (customClaims[AuthServiceClaims.MEMBER]) {
+      if (customClaims && customClaims[AuthServiceClaims.MEMBER]) {
         // Can't pay for membership if already member
         this.setStatus(409)
         return { error: "Already a member" }
