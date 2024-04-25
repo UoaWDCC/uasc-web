@@ -18,4 +18,6 @@ const Checkbox = ({ children, ...props }: props) => {
   )
 }
 
+// waiting on implementing disabling function
+
 export default Checkbox

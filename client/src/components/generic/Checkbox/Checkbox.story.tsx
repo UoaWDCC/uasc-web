@@ -21,14 +21,14 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   tags: ["autodocs"],
   args: {
-    children: "default",
+    children: "Default",
     variant: "default"
   }
 }
 export const Checked: Story = {
   tags: ["autodocs"],
   args: {
-    children: "checked",
+    children: "Checked",
     variant: "checked"
   }
 }
@@ -36,7 +36,7 @@ export const Checked: Story = {
 export const Disabled: Story = {
   tags: ["autodocs"],
   args: {
-    children: "disabled",
+    children: "Disabled",
     variant: "disabled"
   }
 }
