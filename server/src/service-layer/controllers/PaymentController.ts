@@ -61,7 +61,7 @@ export class PaymentController extends Controller {
           const { client_secret, metadata } = activeSession
           this.setStatus(200)
           return {
-            clientSecret: client_secret,
+            stripeClientSecret: client_secret,
             membershipType: metadata[
               MEMBERSHIP_TYPE_KEY
             ] as MembershipTypeValues,
@@ -106,10 +106,6 @@ export class PaymentController extends Controller {
         (product) => product.active
       )
 
-      if (requiredMembershipProduct === undefined) {
-        throw new Error("Product not found")
-      }
-
       // Note this will throw error if undefined (product wasn't found)
       const { default_price } = requiredMembershipProduct
 
@@ -117,10 +113,12 @@ export class PaymentController extends Controller {
         uid,
         // Note if the url changes workflows need to be updated to have the deployments work correctly
         `${process.env.FRONTEND_URL}/register/confirm?session_id={CHECKOUT_SESSION_ID}`,
-        {
-          price: default_price as string,
-          quantity: 1
-        },
+        [
+          {
+            price: default_price as string,
+            quantity: 1
+          }
+        ],
         // Set metadata to be found in webhook later
         {
           [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.MEMBERSHIP,
@@ -129,7 +127,10 @@ export class PaymentController extends Controller {
         stripeCustomerId
       )
       this.setStatus(200)
-      return { clientSecret, membershipType: requiredMembership }
+      return {
+        stripeClientSecret: clientSecret,
+        membershipType: requiredMembership
+      }
     } catch (error) {
       console.error(error)
       this.setStatus(500)

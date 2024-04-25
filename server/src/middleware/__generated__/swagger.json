@@ -352,7 +352,7 @@
 					"message": {
 						"type": "string"
 					},
-					"clientSecret": {
+					"stripeClientSecret": {
 						"type": "string"
 					},
 					"membershipType": {

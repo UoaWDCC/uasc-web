@@ -143,10 +143,10 @@ export default class StripeService {
   public async createCheckoutSession(
     client_reference_id: string,
     return_url: string,
-    line_item: {
+    line_items: {
       price: string
       quantity: number
-    },
+    }[],
     metadata: Record<string, string>,
     customer_id: string,
     expires_after_mins: number = 31
@@ -156,7 +156,7 @@ export default class StripeService {
       client_reference_id,
       return_url,
       customer: customer_id,
-      line_items: [line_item],
+      line_items,
       metadata,
       // configured internally and should not change
       ui_mode: "embedded",

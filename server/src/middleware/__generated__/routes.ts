@@ -131,7 +131,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "error": {"dataType":"string"},
             "message": {"dataType":"string"},
-            "clientSecret": {"dataType":"string"},
+            "stripeClientSecret": {"dataType":"string"},
             "membershipType": {"ref":"MembershipTypeValues"},
         },
         "additionalProperties": false,

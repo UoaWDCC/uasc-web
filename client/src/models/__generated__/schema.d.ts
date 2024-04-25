@@ -153,7 +153,7 @@ export interface components {
     MembershipPaymentResponse: {
       error?: string;
       message?: string;
-      clientSecret?: string;
+      stripeClientSecret?: string;
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
   };
