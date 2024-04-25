@@ -61,8 +61,13 @@ export default class StripeService {
   public async updateProduct(
     productId: string,
     updateFields: {
-      active?: boolean, description?: string, metadata?: Record<string, string>, price?: string, name?: string
-    }) {
+      active?: boolean
+      description?: string
+      metadata?: Record<string, string>
+      price?: string
+      name?: string
+    }
+  ) {
     const productUpdateParams: Stripe.ProductUpdateParams = {}
     if (updateFields.active !== undefined) {
       productUpdateParams.active = updateFields.active
@@ -79,7 +84,10 @@ export default class StripeService {
     if (updateFields.name !== undefined) {
       productUpdateParams.name = updateFields.name
     }
-    const updatedProduct = await stripe.products.update(productId, productUpdateParams);
+    const updatedProduct = await stripe.products.update(
+      productId,
+      productUpdateParams
+    )
     return updatedProduct
   }
 }
