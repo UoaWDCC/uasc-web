@@ -4,8 +4,7 @@ import type { Meta } from "@storybook/react"
 import Stepper, { StepProps } from "./StepperComponent"
 
 const meta: Meta<typeof Stepper> = {
-  component: Stepper,
-  title: "StepperComponent"
+  component: Stepper
 }
 
 export default meta

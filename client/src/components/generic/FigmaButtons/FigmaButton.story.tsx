@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react"
 import Button from "./FigmaButton"
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "Button Variants",
   argTypes: {
     variant: {
       control: { type: "radio" },
