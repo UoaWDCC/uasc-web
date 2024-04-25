@@ -1,13 +1,14 @@
-/** import react from 'react'
-
 type checkboxVariants = "unclicked" | "clicked"
 
 interface ICheckboxProps {
-    variant?: checkboxVariants
+  children?: React.ReactNode
+  variant?: checkboxVariants
 }
 
 type props = ICheckboxProps & React.InputHTMLAttributes<HTMLInputElement>
 
-export const CheckBox = ({
-    
-}: props); */
+const Checkbox = ({ children, ...props }: props) => {
+  return <div {...props}> {children} </div>
+}
+
+export default Checkbox
