@@ -57,4 +57,29 @@ export default class StripeService {
     })
     return session.client_secret
   }
+
+  public async updateProduct(
+    productId: string,
+    updateFields: {
+      active?: boolean, description?: string, metadata?: Record<string, string>, price?: string, name?: string
+    }) {
+    const productUpdateParams: Stripe.ProductUpdateParams = {}
+    if (updateFields.active !== undefined) {
+      productUpdateParams.active = updateFields.active
+    }
+    if (updateFields.description !== undefined) {
+      productUpdateParams.description = updateFields.description
+    }
+    if (updateFields.metadata !== undefined) {
+      productUpdateParams.metadata = updateFields.metadata
+    }
+    if (updateFields.price !== undefined) {
+      productUpdateParams.default_price = updateFields.price
+    }
+    if (updateFields.name !== undefined) {
+      productUpdateParams.name = updateFields.name
+    }
+    const updatedProduct = await stripe.products.update(productId, productUpdateParams);
+    return updatedProduct
+  }
 }
