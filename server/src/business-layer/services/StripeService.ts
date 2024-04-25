@@ -1,7 +1,8 @@
 import {
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues,
-  USER_ID_KEY
+  USER_FIREBASE_EMAIL_KEY,
+  USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import Stripe from "stripe"
 
@@ -41,10 +42,13 @@ export default class StripeService {
    * @param email ideally extracted from JWT
    * @param uid ideally extracted from JWT
    */
-  public async createNewUser(email: string, uid: string) {
+  public async createNewUser(displayName: string, email: string, uid: string) {
     return await stripe.customers.create({
-      email,
-      metadata: { [USER_ID_KEY]: uid }
+      name: displayName,
+      metadata: {
+        [USER_FIREBASE_ID_KEY]: uid,
+        [USER_FIREBASE_EMAIL_KEY]: email
+      }
     })
   }
 

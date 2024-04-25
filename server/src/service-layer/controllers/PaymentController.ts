@@ -45,7 +45,13 @@ export class PaymentController extends Controller {
        */
       let stripeCustomerId: string
       if (!userData.stripe_id) {
-        const { id } = await stripeService.createNewUser(email, uid)
+        const { first_name, last_name } = userData // Assume user doesn't troll
+        const displayName = `${first_name} ${last_name} ${email}`
+        const { id } = await stripeService.createNewUser(
+          displayName,
+          email,
+          uid
+        )
         stripeCustomerId = id
         await userDataService.editUserData(uid, { stripe_id: stripeCustomerId })
       } else {

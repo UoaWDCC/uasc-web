@@ -21,4 +21,5 @@ export enum MembershipTypeValues {
 /**
  * For customer objects
  */
-export const USER_ID_KEY = "firebase_user_id"
+export const USER_FIREBASE_ID_KEY = "firebase_user_id"
+export const USER_FIREBASE_EMAIL_KEY = "firebase_user_email"
