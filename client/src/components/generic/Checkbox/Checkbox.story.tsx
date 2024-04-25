@@ -22,14 +22,18 @@ export const Default: Story = {
   tags: ["autodocs"],
   args: {
     children: "Default",
-    variant: "default"
+    variant: "default",
+    checked: false,
+    disabled: false
   }
 }
 export const Checked: Story = {
   tags: ["autodocs"],
   args: {
     children: "Checked",
-    variant: "checked"
+    variant: "checked",
+    checked: true,
+    disabled: false
   }
 }
 
@@ -37,6 +41,8 @@ export const Disabled: Story = {
   tags: ["autodocs"],
   args: {
     children: "Disabled",
-    variant: "disabled"
+    variant: "disabled",
+    checked: false,
+    disabled: true
   }
 }
