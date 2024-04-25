@@ -1,6 +1,6 @@
 import { memberUserInfoMock } from "test-config/mocks/User.mock"
 import PricingService from "./PricingService"
-import { MembershipType } from "./MembershipType"
+import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 
 describe("pricingService unit tests", () => {
   let pricingServiceTest: PricingService
@@ -13,7 +13,7 @@ describe("pricingService unit tests", () => {
     const membershipType =
       pricingServiceTest.getMembershipType(memberUserInfoMock)
 
-    expect(membershipType).toEqual(MembershipType.UoaReturning)
+    expect(membershipType).toEqual(MembershipTypeValues.UoaReturning)
   })
 
   it("should return Other new membership type if user is not from UOA and not returning", async () => {
@@ -23,7 +23,7 @@ describe("pricingService unit tests", () => {
     const membershipType =
       pricingServiceTest.getMembershipType(memberUserInfoMock)
 
-    expect(membershipType).toEqual(MembershipType.OtherNew)
+    expect(membershipType).toEqual(MembershipTypeValues.OtherNew)
   })
 
   it("should return Other returning membership type if user is not from UOA and returning", async () => {
@@ -33,7 +33,7 @@ describe("pricingService unit tests", () => {
     const membershipType =
       pricingServiceTest.getMembershipType(memberUserInfoMock)
 
-    expect(membershipType).toEqual(MembershipType.OtherReturning)
+    expect(membershipType).toEqual(MembershipTypeValues.OtherReturning)
   })
 
   it("should return UOA new membership type if user is from UOA and not returning", async () => {
@@ -43,7 +43,7 @@ describe("pricingService unit tests", () => {
     const membershipType =
       pricingServiceTest.getMembershipType(memberUserInfoMock)
 
-    expect(membershipType).toEqual(MembershipType.UoaNew)
+    expect(membershipType).toEqual(MembershipTypeValues.UoaNew)
   })
 
   it("should return correct membership type when student_id is undefined", async () => {
@@ -54,6 +54,6 @@ describe("pricingService unit tests", () => {
     const membershipType =
       pricingServiceTest.getMembershipType(memberUserInfoMock)
 
-    expect(membershipType).toEqual(MembershipType.OtherReturning)
+    expect(membershipType).toEqual(MembershipTypeValues.OtherReturning)
   })
 })

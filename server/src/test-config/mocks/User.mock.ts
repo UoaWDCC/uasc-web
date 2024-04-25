@@ -18,7 +18,8 @@ export const memberUserInfoMock: UserAdditionalInfo = {
   university: "uoa",
   student_id: "11299211",
   returning: true,
-  university_year: "2nd"
+  university_year: "2nd",
+  stripe_id: "default"
 }
 
 export const adminUserInfoMock: UserAdditionalInfo = {
