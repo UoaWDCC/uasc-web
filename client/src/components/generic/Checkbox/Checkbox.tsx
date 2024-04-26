@@ -1,9 +1,5 @@
-type checkboxVariants = "default" | "checked" | "disabled"
-
 interface ICheckboxProps {
   children: string
-  variant?: checkboxVariants
-  checked: boolean
   disabled: boolean
 }
 
@@ -20,8 +16,9 @@ const Checkbox = ({ children, ...props }: props) => {
           {...props}
           checked={props.checked}
           disabled={props.disabled}
+          className="border-light-blue-100 disabled:bg-gray-3 checked:bg-light-blue-100 h-[24px] w-[24px] rounded border disabled:border-none"
         />
-        <div className="font-size-16 text-p pl-[12px]">{children}</div>
+        <div className="font-size-16 text-p pl-[12px] pt-[2px]">{children}</div>
       </label>
     </div>
   )

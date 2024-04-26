@@ -29,6 +29,9 @@ export interface paths {
   "/webhook": {
     post: operations["ReceiveWebhook"];
   };
+  "/payment/membership": {
+    get: operations["GetMembershipPayment"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -75,6 +78,8 @@ export interface components {
       student_id?: string;
       returning: boolean;
       university_year: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
     };
     FirebaseProperties: {
       uid: string;
@@ -85,7 +90,7 @@ export interface components {
       user: components["schemas"]["UserAdditionalInfo"];
     };
     /** @description From T, pick a set of properties whose keys are in the union K */
-    "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership__": {
+    "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership-or-stripe_id__": {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_freestyle?: boolean;
       does_racing?: boolean;
@@ -104,9 +109,9 @@ export interface components {
       university_year?: string;
     };
     /** @description Construct a type with the properties of T except for those in type K. */
-    "Omit_Partial_UserAdditionalInfo_.membership_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership__"];
+    "Omit_Partial_UserAdditionalInfo_.membership-or-stripe_id_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership-or-stripe_id__"];
     EditSelfRequestBody: {
-      updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.membership_"];
+      updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.membership-or-stripe_id_"];
     };
     /** @description Make all properties in T optional */
     Partial_UserAdditionalInfo_: {
@@ -128,6 +133,8 @@ export interface components {
       student_id?: string;
       returning?: boolean;
       university_year?: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
     };
     EditUsersRequestBody: {
       users: {
@@ -140,6 +147,14 @@ export interface components {
     };
     DemoteUserRequestBody: {
       uid: string;
+    };
+    /** @enum {string} */
+    MembershipTypeValues: "uoa_returning" | "uoa_new" | "other_returning" | "other_new";
+    MembershipPaymentResponse: {
+      error?: string;
+      message?: string;
+      stripeClientSecret?: string;
+      membershipType?: components["schemas"]["MembershipTypeValues"];
     };
   };
   responses: {
@@ -249,6 +264,16 @@ export interface operations {
       /** @description Webhook post received */
       200: {
         content: never;
+      };
+    };
+  };
+  GetMembershipPayment: {
+    responses: {
+      /** @description Session created */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MembershipPaymentResponse"];
+        };
       };
     };
   };
