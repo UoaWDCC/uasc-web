@@ -10,24 +10,37 @@ export class UserSignup extends Controller {
   @SuccessResponse(200)
   // return a JWT token at the end
   public async signup(@Body() requestBody: UserSignupBody): Promise<string> {
+    // create services
     const userService = new UserDataService()
     const authService = new AuthService()
+
     let user: UserRecord
+    console.log(requestBody) // debug
     try {
+      // create user in auth service
+      // const user = await authService.createUser(requestBody.email)
       user = await authService.createUser(requestBody.email)
+      // create user in firestore
+      await userService.createUserData(user.uid, requestBody.user)
     } catch (e) {
       console.error(e)
-      this.setStatus(400) //
+      this.setStatus(400)
       return null
     }
-    await userService.createUserData(user.uid, requestBody.user)
+
     const membership = requestBody.user.membership
+    await authService.setCustomUserClaim(
+      user.uid,
+      membership === "guest" ? null : membership
+    )
+
     // create jwt token
     let jwtToken: string
     try {
-      jwtToken = await authService.createCustomToken(user.uid, {
-        [membership]: true
-      })
+      jwtToken = await authService.createCustomToken(
+        user.uid,
+        membership === "guest" ? null : { [membership]: true }
+      )
     } catch (e) {
       console.error(e)
       this.setStatus(500)
