@@ -85,6 +85,8 @@ export interface components {
       stripe_id?: string;
     };
     UserSignupBody: {
+      error?: string;
+      message?: string;
       email: string;
       user: components["schemas"]["UserAdditionalInfo"];
     };
@@ -188,6 +190,7 @@ export interface operations {
       };
     };
     responses: {
+      /** @description Signup successful */
       200: {
         content: {
           "application/json": string;

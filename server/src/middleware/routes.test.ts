@@ -14,7 +14,7 @@ import {
 } from "./routes.mock"
 
 import { productMock } from "test-config/mocks/Stripe.mock"
-import { memberUserInfoMock } from "test-config/mocks/User.mock"
+import { signupUserMock } from "test-config/mocks/User.mock"
 
 const request = supertest(_app)
 
@@ -339,7 +339,6 @@ describe("Endpoints", () => {
       expect(updatedUser.does_ski).not.toEqual("invalid")
     })
   })
-
   /**
    *
    * `/signup`
@@ -349,10 +348,34 @@ describe("Endpoints", () => {
     afterEach(async () => {
       await cleanFirestore()
     })
-    it("should return a JWT token for /signup POST endpoint", async () => {
+    it("should return a JWT token for guest /signup POST endpoint", async () => {
+      console.log(signupUserMock.date_of_birth)
       const res = await request.post("/signup").send({
         email: "test@mail.com",
-        user: memberUserInfoMock
+        user: signupUserMock
+        // user: {
+        //   date_of_birth: {
+        //     seconds: 0,
+        //     nanoseconds: 0
+        //   },
+        //   does_freestyle: true,
+        //   does_racing: true,
+        //   does_ski: true,
+        //   gender: "string",
+        //   emergency_name: "string",
+        //   emergency_phone: "string",
+        //   emergency_relation: "string",
+        //   first_name: "string",
+        //   last_name: "string",
+        //   membership: "admin",
+        //   dietary_requirements: "string",
+        //   faculty: "string",
+        //   university: "string",
+        //   student_id: "string",
+        //   returning: true,
+        //   university_year: "string",
+        //   stripe_id: "string"
+        // }
       })
       expect(res.status).toEqual(200)
     })

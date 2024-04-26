@@ -404,7 +404,7 @@
 				"operationId": "Signup",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Signup successful",
 						"content": {
 							"application/json": {
 								"schema": {
