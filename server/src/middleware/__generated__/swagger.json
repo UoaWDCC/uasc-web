@@ -112,6 +112,12 @@
 			},
 			"UserSignupBody": {
 				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
 					"email": {
 						"type": "string"
 					},

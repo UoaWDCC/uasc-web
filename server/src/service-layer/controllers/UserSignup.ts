@@ -14,8 +14,8 @@ export class UserSignup extends Controller {
     const authService = new AuthService()
 
     let uid: string
-    console.debug("UserSignup route DEBUG: ")
-    console.debug(requestBody) // debug
+    console.log("UserSignup route DEBUG: ")
+    console.log(requestBody) // debug
     try {
       // create user in auth service
       // const user = await authService.createUser(requestBody.email)
@@ -23,7 +23,7 @@ export class UserSignup extends Controller {
       // create user in firestore
       await userService.createUserData(uid, requestBody.user)
     } catch (e) {
-      console.error(e)
+      console.log(e)
       this.setStatus(400)
     }
 

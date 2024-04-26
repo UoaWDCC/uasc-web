@@ -57,6 +57,8 @@ const models: TsoaRoute.Models = {
     "UserSignupBody": {
         "dataType": "refObject",
         "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
             "email": {"dataType":"string","required":true},
             "user": {"ref":"UserAdditionalInfo","required":true},
         },
