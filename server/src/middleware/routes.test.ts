@@ -12,6 +12,7 @@ import {
   deleteUsersFromAuth,
   userToCreate
 } from "./routes.mock"
+import { memberUserInfoMock } from "test-config/mocks/User.mock"
 
 const request = supertest(_app)
 
@@ -225,6 +226,14 @@ describe("Endpoints", () => {
         MEMBER_USER_UID
       )
       expect(updatedUser.does_ski).not.toEqual("invalid")
+    })
+
+    it("should return a JWT token for /signup POST endpoint", async () => {
+      const res = await request.post("/signup").send({
+        email: "test@mail.com",
+        user: memberUserInfoMock
+      })
+      expect(res.status).toEqual(200)
     })
   })
 })
