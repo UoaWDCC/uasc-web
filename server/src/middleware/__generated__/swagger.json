@@ -85,6 +85,10 @@
 					},
 					"university_year": {
 						"type": "string"
+					},
+					"stripe_id": {
+						"type": "string",
+						"description": "For identification DO NOT RETURN to users in exposed endpoints"
 					}
 				},
 				"required": [
@@ -160,7 +164,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership__": {
+			"Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership-or-stripe_id__": {
 				"properties": {
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
@@ -214,14 +218,14 @@
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
 			},
-			"Omit_Partial_UserAdditionalInfo_.membership_": {
-				"$ref": "#/components/schemas/Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership__",
+			"Omit_Partial_UserAdditionalInfo_.membership-or-stripe_id_": {
+				"$ref": "#/components/schemas/Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership-or-stripe_id__",
 				"description": "Construct a type with the properties of T except for those in type K."
 			},
 			"EditSelfRequestBody": {
 				"properties": {
 					"updatedInformation": {
-						"$ref": "#/components/schemas/Omit_Partial_UserAdditionalInfo_.membership_"
+						"$ref": "#/components/schemas/Omit_Partial_UserAdditionalInfo_.membership-or-stripe_id_"
 					}
 				},
 				"required": [
@@ -287,6 +291,10 @@
 					},
 					"university_year": {
 						"type": "string"
+					},
+					"stripe_id": {
+						"type": "string",
+						"description": "For identification DO NOT RETURN to users in exposed endpoints"
 					}
 				},
 				"type": "object",
@@ -340,6 +348,33 @@
 				"required": [
 					"uid"
 				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MembershipTypeValues": {
+				"enum": [
+					"uoa_returning",
+					"uoa_new",
+					"other_returning",
+					"other_new"
+				],
+				"type": "string"
+			},
+			"MembershipPaymentResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stripeClientSecret": {
+						"type": "string"
+					},
+					"membershipType": {
+						"$ref": "#/components/schemas/MembershipTypeValues"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			}
@@ -585,6 +620,29 @@
 					}
 				},
 				"security": [],
+				"parameters": []
+			}
+		},
+		"/payment/membership": {
+			"get": {
+				"operationId": "GetMembershipPayment",
+				"responses": {
+					"200": {
+						"description": "Session created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MembershipPaymentResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": []
 			}
 		}

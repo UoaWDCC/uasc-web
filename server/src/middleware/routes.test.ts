@@ -16,11 +16,50 @@ import { memberUserInfoMock } from "test-config/mocks/User.mock"
 
 const request = supertest(_app)
 
+/**
+ * This needs to be updated as we add more stripe functions...
+ */
+jest.mock("stripe", () => {
+  return {
+    __esModule: true,
+    default: jest.fn().mockImplementation(() => {
+      return {
+        customers: {
+          create: () => {
+            return { id: "test" }
+          }
+        },
+        products: {
+          search: () => {
+            return { data: [productMock] }
+          }
+        },
+        checkout: {
+          sessions: {
+            create: () => {
+              return { client_secret: "test" }
+            }
+          }
+        }
+      }
+    })
+  }
+})
+
 const usersToCreate: userToCreate[] = [
   { uid: ADMIN_USER_UID, membership: "admin" },
   { uid: MEMBER_USER_UID, membership: "member" },
   { uid: GUEST_USER_UID, membership: "guest" }
 ]
+
+const createUsers = async () => {
+  await Promise.all(
+    usersToCreate.map(async (user) => {
+      const { uid, membership } = user
+      await createUserData(uid, membership)
+    })
+  )
+}
 
 describe("Endpoints", () => {
   let adminToken: string | undefined
@@ -67,16 +106,67 @@ describe("Endpoints", () => {
         .send({})
         .expect(401, done)
     })
+    describe("/self", () => {
+      afterEach(async () => {
+        await cleanFirestore()
+      })
+      it("Should not allow members to fetch their own stripe id", async () => {
+        await createUserData(MEMBER_USER_UID, "member")
+        const res = await request
+          .get("/users/self")
+          .set("Authorization", `Bearer ${memberToken}`)
+          .send({})
+
+        expect(res.body.stripe_id).toBe(undefined)
+      })
+    })
+  })
+
+  /**
+   *
+   * `/Payments`
+   *
+   */
+  describe("/payments", () => {
+    beforeEach(async () => {
+      await createUsers()
+    })
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+    describe("/membership", () => {
+      it("should not let members to try create sessions", async () => {
+        const res = await request
+          .get("/payment/membership")
+          .set("Authorization", `Bearer ${memberToken}`)
+          .send({})
+
+        expect(res.status).toEqual(409)
+      })
+
+      it("should let guests/admins to try create sessions", async () => {
+        createUserData(GUEST_USER_UID, "guest")
+        let res = await request
+          .get("/payment/membership")
+          .set("Authorization", `Bearer ${guestToken}`)
+          .send({})
+        expect(res.status).toEqual(200)
+
+        /**
+         * Note admins should be able to create sessions for testing purposes, it is assumed that admin users will not try pay
+         */
+        res = await request
+          .get("/payment/membership")
+          .set("Authorization", `Bearer ${adminToken}`)
+          .send({})
+        expect(res.status).toEqual(200)
+      })
+    })
   })
 
   describe("/users/promote and /users/demote", () => {
     beforeEach(async () => {
-      await Promise.all(
-        usersToCreate.map(async (user) => {
-          const { uid, membership } = user
-          await createUserData(uid, membership)
-        })
-      )
+      await createUsers()
     })
 
     afterEach(async () => {
@@ -193,6 +283,25 @@ describe("Endpoints", () => {
       )
       expect(updatedUser.does_ski).toEqual(true)
       expect(updatedUser.university_year).toEqual("4th")
+    })
+
+    it("should not edit users stripe_id for multiple attributes", async () => {
+      const res = await request
+        .patch("/users/edit-self")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          updatedInformation: {
+            faculty: "arts",
+            gender: "two spirit",
+            stripe_id: "my fake stripe id"
+          }
+        })
+
+      expect(res.status).toEqual(400) // invalid request
+      const updatedUser = await new UserDataService().getUserData(
+        MEMBER_USER_UID
+      )
+      expect(updatedUser.stripe_id).not.toEqual("my fake stripe id")
     })
 
     it("should not edit users role for multiple attributes", async () => {

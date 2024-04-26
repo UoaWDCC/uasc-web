@@ -5,29 +5,29 @@ import Booking from "pages/Booking"
 import Checkout from "pages/Checkout"
 import Contact from "pages/Contact"
 import Events from "pages/Events"
-import Home from "pages/Home"
-import Login from "pages/Login"
+import Home from "pages/Home/Home"
+import Login from "pages/Login/Login"
 import Profile from "pages/Profile"
-import Register from "pages/Register"
+import Register from "pages/Register/Register"
 import Thanks from "pages/Thanks"
-import { JSX } from "react"
+import { Route, Routes } from "react-router-dom"
 
-export interface RouteProps {
-  path: string
-  element: JSX.Element
-}
-
-export const AllRoutes: RouteProps[] = [
-  { path: "/", element: <Home /> },
-  { path: "/about", element: <About /> },
-  { path: "/events", element: <Events /> },
-  { path: "/contact", element: <Contact /> },
-  { path: "/register", element: <Register /> },
-  { path: "/login", element: <Login /> },
-  { path: "/checkout", element: <Checkout /> },
-  { path: "/booking", element: <Booking /> },
-  { path: "/profile", element: <Profile /> },
-  { path: "/admin", element: <Admin /> },
-  { path: "/thanks", element: <Thanks /> },
-  { path: "/admin/bookings", element: <AdminBookingDetails /> }
-]
+export const AllRoutes = () => (
+  <Routes>
+    <Route path="/">
+      <Route index element={<Home />} />
+      <Route path="about" element={<About />} />
+      <Route path="events" element={<Events />} />
+      <Route path="contact" element={<Contact />} />
+      <Route path="register/*" element={<Register />} />
+      <Route path="login/*" element={<Login />} />
+      <Route path="checkout" element={<Checkout />} />
+      <Route path="booking" element={<Booking />} />
+      <Route path="profile" element={<Profile />} />
+      <Route path="admin" element={<Admin />}>
+        <Route path="bookings" element={<AdminBookingDetails />} />
+      </Route>
+      <Route path="thanks" element={<Thanks />} />
+    </Route>
+  </Routes>
+)
