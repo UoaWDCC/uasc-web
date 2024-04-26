@@ -17,14 +17,23 @@ export class UserSignup extends Controller {
       user = await authService.createUser(requestBody.email)
     } catch (e) {
       console.error(e)
-      this.setStatus(400)
+      this.setStatus(400) //
       return null
     }
-    // check for a conflicting uid, status 409
-    // if (await userService.userDataExists(user.uid)) return this.setStatus(409)
-
     await userService.createUserData(user.uid, requestBody.user)
+    const membership = requestBody.user.membership
+    // create jwt token
+    let jwtToken: string
+    try {
+      jwtToken = await authService.createCustomToken(user.uid, {
+        [membership]: true
+      })
+    } catch (e) {
+      console.error(e)
+      this.setStatus(500)
+      return null
+    }
     this.setStatus(200)
-    return null
+    return jwtToken
   }
 }
