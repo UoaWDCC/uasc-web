@@ -12,6 +12,8 @@ import {
   deleteUsersFromAuth,
   userToCreate
 } from "./routes.mock"
+
+import { productMock } from "test-config/mocks/Stripe.mock"
 import { memberUserInfoMock } from "test-config/mocks/User.mock"
 
 const request = supertest(_app)
