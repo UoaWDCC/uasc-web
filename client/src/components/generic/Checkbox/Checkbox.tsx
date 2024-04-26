@@ -11,12 +11,13 @@ type props = ICheckboxProps & React.InputHTMLAttributes<HTMLInputElement>
 
 const Checkbox = ({ children, ...props }: props) => {
   return (
-    <div {...props}>
+    <div>
       <label className="flex">
         <input
           type="checkbox"
           id="1"
           name="Checkbox"
+          {...props}
           checked={props.checked}
           disabled={props.disabled}
         />
