@@ -338,7 +338,17 @@ describe("Endpoints", () => {
       )
       expect(updatedUser.does_ski).not.toEqual("invalid")
     })
+  })
 
+  /**
+   *
+   * `/signup`
+   *
+   */
+  describe("/signup", () => {
+    afterEach(async () => {
+      await cleanFirestore()
+    })
     it("should return a JWT token for /signup POST endpoint", async () => {
       const res = await request.post("/signup").send({
         email: "test@mail.com",
