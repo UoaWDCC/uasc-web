@@ -10,8 +10,8 @@ export const PaymentSection = () => {
       <div className="h-full w-full">
         {data ? (
           <>
-            {error && <h2>{error.message}</h2>}
-            {data.message && <h2>{data.message}</h2>}
+            {error && <p>{error.message}</p>}
+            {data.message && <p>{data.message}</p>}
             <PaymentForm
               onComplete={() => {}}
               clientSecret={data?.stripeClientSecret as string}
@@ -62,9 +62,8 @@ export const PaymentInformationSection = () => {
   const { data } = useMembershipClientSecretQuery()
   return (
     <>
-      <h2>The membership you will pay for is</h2>
       {data ? (
-        <div className="flex h-fit flex-col md:-ml-10 md:flex-row">
+        <div className="flex h-fit flex-col gap-2 md:-ml-16 md:flex-row">
           {prices.map((price) => {
             return (
               <PricingCard

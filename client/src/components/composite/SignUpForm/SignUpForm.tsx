@@ -6,7 +6,11 @@ import Stepper from "components/generic/StepperComponent/StepperComponent"
 import { oneLevelUp, useCurrentStep } from "./utils/Utils"
 import { useAppData } from "store/store"
 import { Navigate } from "react-router-dom"
-import { PAYMENT_ROUTE, PERSONAL_ROUTE_1 } from "./utils/RouteNames"
+import {
+  PAYMENT_INFORMATION_ROUTE,
+  PAYMENT_ROUTE,
+  PERSONAL_ROUTE_1
+} from "./utils/RouteNames"
 
 interface ISignUpFormProps {
   currentPage: PAGES
@@ -33,7 +37,7 @@ export const ProtectedSignUpForm = ({
     case PAGES.Contact:
     case PAGES.Additional:
       if (currentUser) {
-        return <Navigate to={oneLevelUp(PAYMENT_ROUTE)} replace />
+        return <Navigate to={oneLevelUp(PAYMENT_INFORMATION_ROUTE)} replace />
       }
       break
     case PAGES.PaymentInfo:
@@ -48,10 +52,7 @@ export const ProtectedSignUpForm = ({
       }
       break
     case PAGES.Confirm:
-      // Can't get here unless signed in
-      if (!currentUser) {
-        return <Navigate to={oneLevelUp(PERSONAL_ROUTE_1)} replace />
-      }
+      break
   }
   return (
     <SignUpForm
