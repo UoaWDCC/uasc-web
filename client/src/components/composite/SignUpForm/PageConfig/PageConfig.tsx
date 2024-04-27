@@ -74,6 +74,7 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Payment,
     title: "Payment",
+    nextButtonText: " ",
     onBack: () => navigateFn(PAYMENT_INFORMATION_ROUTE)
   },
   {

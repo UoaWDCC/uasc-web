@@ -50,6 +50,10 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         Note you will not be able to make any bookings until your payment has
         been confirmed by UASC.
       </p>
+      <p>
+        You will still have access to your account, and are able to set your
+        login details as well as edit your personal information
+      </p>
       <h4 className="font-bold">Click on an action</h4>
       <h5
         className="text-dark-blue-100  cursor-pointer font-bold uppercase"
@@ -108,7 +112,7 @@ export const PaymentSection = () => {
   }
   return (
     <>
-      <div className="flex h-full w-full flex-col gap-5">
+      <div className="flex h-full w-full flex-col gap-5 pb-4">
         {wantsBankTransfer ? (
           <BankTransferSection wantsBankTransfer={_setWantsBankTransfer} />
         ) : (
