@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
 import AlertsComponent from "./AlertsComponent"
-// import AlertsInputProp from "./AlertsComponent"
 
 const meta: Meta<typeof AlertsComponent> = {
   component: AlertsComponent
@@ -14,20 +13,23 @@ type Story = StoryObj<typeof AlertsComponent>
 export const ErrorAlert: Story = {
   args: {
     message: "Error: Error Message",
-    variant: "error"
+    variant: "error",
+    isButton: true
   }
 }
 
 export const SuccessAlert: Story = {
   args: {
     message: "Success: Success Message",
-    variant: "success"
+    variant: "success",
+    isButton: true
   }
 }
 
 export const NotificationAlert: Story = {
   args: {
     message: "Notification: Notification Message",
-    variant: "notification"
+    variant: "notification",
+    isButton: true
   }
 }
