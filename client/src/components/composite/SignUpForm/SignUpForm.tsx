@@ -72,7 +72,7 @@ export const SignUpForm = ({
         <Stepper steps={steps} currentStep={currentPage} />
       </span>
       <PaginatedForm pages={pages} currentPageIndex={currentPage}>
-        <div className="h-fit">{pageContent[currentPage]}</div>
+        <div className="h-fit w-full">{pageContent[currentPage]}</div>
       </PaginatedForm>
     </div>
   )

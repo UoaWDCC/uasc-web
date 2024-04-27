@@ -7,7 +7,6 @@ import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
 import {
   ADDITIONAL_ROUTE,
-  CONFIRM_ROUTE,
   CONTACT_ROUTE,
   PAYMENT_INFORMATION_ROUTE,
   PAYMENT_ROUTE,
@@ -21,10 +20,10 @@ import {
 } from "../Sections/PaymentSection"
 import ConfirmationSection from "../Sections/ConfirmationSection"
 import TestIcon from "assets/icons/snowboarder.svg?react"
+
 /**
  * Order of all these matters!
  */
-
 export enum PAGES {
   PersonalFirst = 0,
   PersonalSecond,
@@ -73,8 +72,7 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Payment,
     title: "Payment",
-    onBack: () => navigateFn(PAYMENT_INFORMATION_ROUTE),
-    onNext: () => navigateFn(CONFIRM_ROUTE)
+    onBack: () => navigateFn(PAYMENT_INFORMATION_ROUTE)
   },
   {
     index: PAGES.Confirm,
@@ -85,6 +83,9 @@ export const PAGINATED_FORM_PAGES = (
   }
 ]
 
+/**
+ * Make sure these are in order
+ */
 export const PAGE_CONTENT = [
   <PersonalSectionFirst key="personal-first" />,
   <PersonalSectionSecond key="personal-second" />,
@@ -101,6 +102,10 @@ export const PAGE_CONTENT = [
   />
 ]
 
+/**
+ * With the index, if each `step` has multiple stages we need to set the index of the step
+ * to the first `page` of that `step`
+ */
 export const STEPPER_PROPS = [
   // Hacky solution, need to revisit props for stepper
   { name: "Personal", index: PAGES.PersonalFirst },
