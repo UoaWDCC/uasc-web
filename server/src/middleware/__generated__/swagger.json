@@ -7,6 +7,24 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"UserSignupResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"jwtToken": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"FirebaseFirestore.Timestamp": {
 				"description": "A Timestamp represents a point in time independent of any time zone or\ncalendar, represented as seconds and fractions of seconds at nanosecond\nresolution in UTC Epoch time. It is encoded using the Proleptic Gregorian\nCalendar which extends the Gregorian calendar backwards to year one. It is\nencoded assuming all minutes are 60 seconds long, i.e. leap seconds are\n\"smeared\" so that no leap second table is needed for interpretation. Range\nis from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z.",
 				"properties": {
@@ -377,6 +395,33 @@
 		"contact": {}
 	},
 	"paths": {
+		"/signup": {
+			"post": {
+				"operationId": "Signup",
+				"responses": {
+					"200": {
+						"description": "Signup successful",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserSignupResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			}
+		},
 		"/users": {
 			"get": {
 				"operationId": "GetAllUsers",

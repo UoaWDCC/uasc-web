@@ -1,9 +1,6 @@
 import { Timestamp } from "firebase-admin/firestore"
 
 export interface UserAdditionalInfo {
-  /**
-   * @isDateTime Please Enter in the form dd/mm/yyyy
-   */
   date_of_birth: Timestamp
   /**
    * @isbool Please enter true or false

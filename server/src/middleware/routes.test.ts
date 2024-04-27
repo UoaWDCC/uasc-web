@@ -1,6 +1,6 @@
 import "dotenv/config"
 import { _app } from "../index"
-import { cleanFirestore } from "test-config/TestUtils"
+import { cleanFirestore, cleanAuth } from "test-config/TestUtils"
 import supertest from "supertest"
 import UserDataService from "data-layer/services/UserDataService"
 import {
@@ -12,7 +12,10 @@ import {
   deleteUsersFromAuth,
   userToCreate
 } from "./routes.mock"
+
 import { productMock } from "test-config/mocks/Stripe.mock"
+import { signupUserMock } from "test-config/mocks/User.mock"
+import AuthService from "business-layer/services/AuthService"
 
 const request = supertest(_app)
 
@@ -335,6 +338,51 @@ describe("Endpoints", () => {
         MEMBER_USER_UID
       )
       expect(updatedUser.does_ski).not.toEqual("invalid")
+    })
+  })
+  /**
+   *
+   * `/signup`
+   *
+   */
+  describe("/signup", () => {
+    afterAll(async () => {
+      await cleanFirestore()
+      await cleanAuth()
+    })
+    it("should return a JWT token for guest /signup POST endpoint", async () => {
+      const res = await request.post("/signup").send({
+        email: "test@mail.com",
+        user: signupUserMock
+      })
+      // ensure that response is 200
+      expect(res.status).toEqual(200)
+      // check if user custom claims exist
+      const { uid } = res.body
+      const claims = await new AuthService().getCustomerUserClaim(uid)
+      expect(claims).toEqual(undefined)
+    })
+    it("should return a 409 conflict when an email is already in use", async () => {
+      // console.log({ ...signupUserMock, membership: "admin" })
+      const res = await request.post("/signup").send({
+        email: "test@mail.com",
+        user: signupUserMock
+      })
+      // check for conflict
+      expect(res.status).toEqual(409)
+    })
+    it("should return no claims jwtToken regardless what membership", async () => {
+      // console.log({ ...signupUserMock, membership: "admin" })
+      const res = await request.post("/signup").send({
+        email: "testadmin@mail.com",
+        user: { ...signupUserMock, membership: "admin" }
+      })
+      // ensure that response is 200
+      expect(res.status).toEqual(200)
+      // check if user custom claims exist
+      const { uid } = res.body
+      const claims = await new AuthService().getCustomerUserClaim(uid)
+      expect(claims).toEqual(undefined)
     })
   })
 })
