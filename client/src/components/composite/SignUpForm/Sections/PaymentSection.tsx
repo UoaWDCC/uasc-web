@@ -19,12 +19,22 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const { data } = useBankPaymentDetailsQuery()
   return (
     <>
+      <h4 className="font-bold">How to pay through bank</h4>
       <p>
         Transfer $45 to the bank account <strong>{data?.bankAccount}</strong>,
-        and send a screenshot of the transfer to <strong>{data?.email}</strong>{" "}
+        and send a screenshot of the transfer to{" "}
+        <a className="text-light-blue-100" href={`mailto: ${data?.email}`}>
+          {data?.email}
+        </a>{" "}
         mentioning your name and email{" "}
         <strong>{currentUser?.email || ""}</strong>
       </p>
+
+      <p>
+        Note you will not be able to make any bookings until your payment has
+        been confirmed by UASC.
+      </p>
+      <h4 className="font-bold">Click on an action</h4>
       <h5
         className="text-dark-blue-100  cursor-pointer uppercase"
         onClick={() => wantsBankTransfer(false)}
