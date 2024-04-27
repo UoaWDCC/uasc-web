@@ -37,7 +37,7 @@ export enum PAGES {
 }
 
 export const PAGINATED_FORM_PAGES = (
-  navigateFn: (route: RouteNames) => void
+  navigateFn: (route: RouteNames | number) => void
 ): PageProps[] => [
   {
     index: PAGES.PersonalFirst,
@@ -84,7 +84,9 @@ export const PAGINATED_FORM_PAGES = (
   },
   {
     index: PAGES.AccountSetup,
-    title: "Account"
+    title: "Account",
+    // goes back to one page earlier in history, otherwise does nothing
+    onBack: () => navigateFn(-1)
   }
 ]
 

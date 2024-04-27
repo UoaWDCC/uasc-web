@@ -1,6 +1,6 @@
 import { SvgImport } from "components/utils/types"
 import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { oneLevelUp } from "../utils/Utils"
 import { PERSONAL_ROUTE_1 } from "../utils/RouteNames"
 type confirmationVariants = "default"
@@ -21,9 +21,9 @@ export const confirmationSection = ({
   textTop,
   textBottom
 }: props) => {
+  const [searchParams] = useSearchParams()
+  const sessionId = searchParams.get("session_id")
   const navigate = useNavigate()
-  const queryParameters = new URLSearchParams(window.location.search)
-  const sessionId = queryParameters.get("session_id")
   useEffect(() => {
     if (!sessionId) {
       navigate(oneLevelUp(PERSONAL_ROUTE_1))

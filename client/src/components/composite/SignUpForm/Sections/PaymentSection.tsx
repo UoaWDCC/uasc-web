@@ -1,7 +1,7 @@
 import { PaymentForm } from "components/generic/PaymentComponent/PaymentForm"
 import PricingCard from "components/generic/PricingCard/PricingCard"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
 import { useAppData } from "store/store"
 import { oneLevelUp } from "../utils/Utils"
@@ -68,14 +68,22 @@ const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
 }
 
 export const PaymentSection = () => {
-  const [wantsBankTransfer, setWantsBankTransfer] = useState<boolean>(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [wantsBankTransfer, setWantsBankTransfer] = useState<boolean>(
+    searchParams.get("bank") === "true"
+  )
+  const _setWantsBankTransfer = (state: boolean) => {
+    // keep in URL so if user goes back can return to correct state
+    setSearchParams({ bank: `${state}` })
+    setWantsBankTransfer(state)
+  }
   return (
     <>
       <div className="flex h-full w-full flex-col gap-5">
         {wantsBankTransfer ? (
-          <BankTransferSection wantsBankTransfer={setWantsBankTransfer} />
+          <BankTransferSection wantsBankTransfer={_setWantsBankTransfer} />
         ) : (
-          <CardPaymentSection wantsBankTransfer={setWantsBankTransfer} />
+          <CardPaymentSection wantsBankTransfer={_setWantsBankTransfer} />
         )}
       </div>
     </>
