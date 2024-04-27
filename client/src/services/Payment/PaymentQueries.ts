@@ -5,6 +5,6 @@ export function useMembershipClientSecretQuery() {
   return useQuery({
     queryKey: ["membershipClientSecret"],
     queryFn: () => PaymentService.getMembershipPaymentClientSecret(),
-    staleTime: 30000
+    staleTime: 300000 // 5 mins
   })
 }

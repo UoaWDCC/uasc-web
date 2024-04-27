@@ -16,14 +16,30 @@ type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const navigate = useNavigate()
   const [{ currentUser }] = useAppData()
+  const { data: prices } = useMembershipPricesQuery()
   const { data } = useBankPaymentDetailsQuery()
+  const { data: userMembershipDetails } = useMembershipClientSecretQuery()
+
+  /**
+   * Use data fetched to find the correct price
+   */
+  const requiredPrice = prices?.find(
+    (price) => price.type === userMembershipDetails?.membershipType
+  )
+
   return (
     <>
       <h4 className="font-bold">How to pay through bank</h4>
+      {/* TODO: update instructions to highlight correct procedure */}
       <p>
-        Transfer $45 to the bank account <strong>{data?.bankAccount}</strong>,
-        and send a screenshot of the transfer to{" "}
-        <a className="text-light-blue-100" href={`mailto: ${data?.email}`}>
+        Transfer <strong>{requiredPrice?.priceString}</strong> (price for{" "}
+        {requiredPrice?.title}) to the bank account{" "}
+        <strong>{data?.bankAccount}</strong>, and send a screenshot of the
+        transfer to{" "}
+        <a
+          className="text-light-blue-100 font-bold"
+          href={`mailto: ${data?.email}`}
+        >
           {data?.email}
         </a>{" "}
         mentioning your name and email{" "}
@@ -36,13 +52,13 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
       </p>
       <h4 className="font-bold">Click on an action</h4>
       <h5
-        className="text-dark-blue-100  cursor-pointer uppercase"
+        className="text-dark-blue-100  cursor-pointer font-bold uppercase"
         onClick={() => wantsBankTransfer(false)}
       >
         Pay with card instead
       </h5>
       <h5
-        className="text-dark-blue-100  cursor-pointer uppercase"
+        className="text-dark-blue-100  cursor-pointer font-bold uppercase"
         onClick={() => navigate(oneLevelUp(ACCOUNT_SETUP_ROUTE))}
       >
         Set up account in meantime
@@ -65,10 +81,13 @@ const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
           />
         </>
       ) : (
-        <>Loading</>
+        <>
+          {/* TODO: add skeleton or fallback */}
+          Loading
+        </>
       )}
       <h5
-        className="text-dark-blue-100 cursor-pointer uppercase"
+        className="text-dark-blue-100 mb-2 cursor-pointer font-bold uppercase"
         onClick={() => wantsBankTransfer(true)}
       >
         Can’t pay through card? Bank Transfer instead
@@ -106,7 +125,7 @@ export const PaymentInformationSection = () => {
   return (
     <>
       <div className="flex h-fit flex-col gap-2 md:-ml-16 md:flex-row">
-        {prices &&
+        {prices ? (
           prices.map((price) => {
             return (
               <PricingCard
@@ -118,7 +137,13 @@ export const PaymentInformationSection = () => {
                 discountedPriceString=""
               />
             )
-          })}
+          })
+        ) : (
+          <>
+            {/* TODO: add skeleton or fallback */}
+            Loading
+          </>
+        )}
       </div>
     </>
   )
