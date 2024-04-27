@@ -12,7 +12,6 @@
     "@emotion/styled": "^11.10.8",
     "@firebase/app": "^0.9.29",
     "@firebase/firestore": "^4.1.2",
-    "@material-tailwind/react": "^2.1.9",
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.2",
     "@mui/system": "^5.14.1",
