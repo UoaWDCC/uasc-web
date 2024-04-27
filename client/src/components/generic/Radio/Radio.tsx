@@ -12,12 +12,12 @@ const Radio = ({ children, ...props }: props) => {
         <input
           type="radio"
           id="1"
-          name="Radio"
+          name="default-radio"
           {...props}
           disabled={props.disabled}
-          className="disabled:bg-gray-2 disabled:border-transparent border border-light-blue-100 checked:bg-light-blue-100 w-[24px] h-[24px]"
+          className="disabled:bg-gray-2 border-light-blue-100  checked:bg-light-blue-100 h-[24px] w-[24px] checked:border-2 disabled:border-transparent"
         />
-        <div className="pl-[12px] text-p">{children}</div>
+        <div className="text-p pl-[12px]">{children}</div>
       </label>
     </div>
   )
