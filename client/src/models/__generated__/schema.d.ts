@@ -5,6 +5,9 @@
 
 
 export interface paths {
+  "/signup": {
+    post: operations["Signup"];
+  };
   "/users": {
     get: operations["GetAllUsers"];
   };
@@ -38,6 +41,12 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    UserSignupResponse: {
+      error?: string;
+      message?: string;
+      jwtToken?: string;
+      uid?: string;
+    };
     /**
      * @description A Timestamp represents a point in time independent of any time zone or
      * calendar, represented as seconds and fractions of seconds at nanosecond
@@ -174,6 +183,21 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  Signup: {
+    requestBody: {
+      content: {
+        "application/json": unknown;
+      };
+    };
+    responses: {
+      /** @description Signup successful */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSignupResponse"];
+        };
+      };
+    };
+  };
   GetAllUsers: {
     responses: {
       /** @description Users found */

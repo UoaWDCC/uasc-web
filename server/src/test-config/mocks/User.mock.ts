@@ -61,3 +61,24 @@ export const guestUserInfoMock: UserAdditionalInfo = {
   returning: true,
   university_year: "1st"
 }
+
+export const signupUserMock: UserAdditionalInfo = {
+  date_of_birth: dateToFirestoreTimeStamp(new Date(0)),
+  does_freestyle: true,
+  does_racing: true,
+  does_ski: true,
+  gender: "string",
+  emergency_name: "string",
+  emergency_phone: "string",
+  emergency_relation: "string",
+  first_name: "string",
+  last_name: "string",
+  membership: "guest",
+  dietary_requirements: "string",
+  faculty: "string",
+  university: "string",
+  student_id: "string",
+  returning: true,
+  university_year: "string",
+  stripe_id: "string"
+}
