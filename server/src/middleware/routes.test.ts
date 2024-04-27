@@ -1,6 +1,6 @@
 import "dotenv/config"
 import { _app } from "../index"
-import { cleanFirestore } from "test-config/TestUtils"
+import { cleanFirestore, cleanAuth } from "test-config/TestUtils"
 import supertest from "supertest"
 import UserDataService from "data-layer/services/UserDataService"
 import {
@@ -346,8 +346,9 @@ describe("Endpoints", () => {
    *
    */
   describe("/signup", () => {
-    afterEach(async () => {
+    afterAll(async () => {
       await cleanFirestore()
+      await cleanAuth()
     })
     it("should return a JWT token for guest /signup POST endpoint", async () => {
       const res = await request.post("/signup").send({
