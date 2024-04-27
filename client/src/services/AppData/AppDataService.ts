@@ -3,7 +3,7 @@ import { MembershipTypes } from "models/Payment"
 const AppDataService = {
   getBankPaymentDetails: async function () {
     // TODO: Dynamically fetch and make sure there is appropriate fallback
-    const data = { email: "uasc@gmail.com", bankAccount: "123121232" }
+    const data = { email: "uasc@gmail.com", bankAccount: "unknown" }
     return data
   },
   getMembershipPricingDetails: async function () {
@@ -17,22 +17,22 @@ const AppDataService = {
       {
         title: "UoA New",
         type: "uoa_new",
-        priceString: "$45"
+        priceString: "$75"
       },
       {
         title: "UoA Returning",
         type: "uoa_returning",
-        priceString: "$45"
+        priceString: "$65"
       },
       {
-        title: "Other uni returning",
+        title: "Other returning",
         type: "other_returning",
-        priceString: "$45"
+        priceString: "$75"
       },
       {
-        title: "Other uni new",
+        title: "New non-student",
         type: "other_new",
-        priceString: "$45"
+        priceString: "$95"
       }
     ]
     return prices
