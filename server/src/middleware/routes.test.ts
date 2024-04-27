@@ -15,6 +15,7 @@ import {
 
 import { productMock } from "test-config/mocks/Stripe.mock"
 import { signupUserMock } from "test-config/mocks/User.mock"
+import AuthService from "business-layer/services/AuthService"
 
 const request = supertest(_app)
 
@@ -348,36 +349,29 @@ describe("Endpoints", () => {
     afterEach(async () => {
       await cleanFirestore()
     })
-    it("should return a JWT token for guest /signup POST endpoint", async () => {
-      console.log(signupUserMock.date_of_birth)
+    it("should return a JWT token for /signup POST endpoint", async () => {
       const res = await request.post("/signup").send({
         email: "test@mail.com",
         user: signupUserMock
-        // user: {
-        //   date_of_birth: {
-        //     seconds: 0,
-        //     nanoseconds: 0
-        //   },
-        //   does_freestyle: true,
-        //   does_racing: true,
-        //   does_ski: true,
-        //   gender: "string",
-        //   emergency_name: "string",
-        //   emergency_phone: "string",
-        //   emergency_relation: "string",
-        //   first_name: "string",
-        //   last_name: "string",
-        //   membership: "admin",
-        //   dietary_requirements: "string",
-        //   faculty: "string",
-        //   university: "string",
-        //   student_id: "string",
-        //   returning: true,
-        //   university_year: "string",
-        //   stripe_id: "string"
-        // }
       })
+      // ensure that response is 200
       expect(res.status).toEqual(200)
+      // check if user custom claims exist
+      const { uid } = res.body
+      const claims = await new AuthService().getCustomerUserClaim(uid)
+      expect(claims).toEqual(undefined)
+    })
+    it("should create a user without claims regardless what membership type", async () => {
+      const res = await request.post("/signup").send({
+        email: "test2@mail.com",
+        user: { ...signupUserMock, membership: "admin" }
+      })
+      // ensure that response is 200
+      expect(res.status).toEqual(200)
+      // ensure that the custom claims is undefined
+      const { uid } = res.body
+      const claims = await new AuthService().getCustomerUserClaim(uid)
+      expect(claims).toEqual(undefined)
     })
   })
 })
