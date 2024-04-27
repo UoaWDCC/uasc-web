@@ -41,6 +41,12 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    UserSignupResponse: {
+      error?: string;
+      message?: string;
+      jwtToken: string;
+      uid: string;
+    };
     /**
      * @description A Timestamp represents a point in time independent of any time zone or
      * calendar, represented as seconds and fractions of seconds at nanosecond
@@ -61,6 +67,31 @@ export interface components {
        * @description The non-negative fractions of a second at nanosecond resolution.
        */
       nanoseconds: number;
+    };
+    /** @description From T, pick a set of properties whose keys are in the union K */
+    "Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.membership-or-stripe_id__": {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_freestyle: boolean;
+      does_racing: boolean;
+      does_ski: boolean;
+      gender: string;
+      emergency_name: string;
+      emergency_phone: string;
+      emergency_relation: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      faculty: string;
+      university: string;
+      student_id: string;
+      returning: boolean;
+      university_year: string;
+    };
+    /** @description Construct a type with the properties of T except for those in type K. */
+    "Omit_UserAdditionalInfo.membership-or-stripe_id_": components["schemas"]["Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.membership-or-stripe_id__"];
+    UserSignupBody: {
+      email: string;
+      user: components["schemas"]["Omit_UserAdditionalInfo.membership-or-stripe_id_"];
     };
     UserAdditionalInfo: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -83,12 +114,6 @@ export interface components {
       university_year: string;
       /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
-    };
-    UserSignupBody: {
-      error?: string;
-      message?: string;
-      email: string;
-      user: components["schemas"]["UserAdditionalInfo"];
     };
     FirebaseProperties: {
       uid: string;
@@ -193,7 +218,7 @@ export interface operations {
       /** @description Signup successful */
       200: {
         content: {
-          "application/json": string;
+          "application/json": components["schemas"]["UserSignupResponse"];
         };
       };
     };
