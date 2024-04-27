@@ -15,9 +15,9 @@ const Radio = ({ children, ...props }: props) => {
           name="Radio"
           {...props}
           disabled={props.disabled}
-          className="disabled:bg-gray-3 disabled:border-transparent"
+          className="disabled:bg-gray-2 disabled:border-transparent border border-light-blue-100 checked:bg-light-blue-100 w-[24px] h-[24px]"
         />
-        <div className="">{children}</div>
+        <div className="pl-[12px] text-p">{children}</div>
       </label>
     </div>
   )
