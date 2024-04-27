@@ -5,7 +5,7 @@ export const ADDITIONAL_ROUTE = "additional" as const
 export const PAYMENT_INFORMATION_ROUTE = "payment-info" as const
 export const PAYMENT_ROUTE = "payment" as const
 export const CONFIRM_ROUTE = "confirm" as const
-export const ACCOUNT_SETUP = "setup" as const
+export const ACCOUNT_SETUP_ROUTE = "setup" as const
 
 export type RouteNames =
   | typeof PERSONAL_ROUTE_1
@@ -14,4 +14,5 @@ export type RouteNames =
   | typeof ADDITIONAL_ROUTE
   | typeof PAYMENT_INFORMATION_ROUTE
   | typeof PAYMENT_ROUTE
-  | typeof ACCOUNT_SETUP
+  | typeof CONFIRM_ROUTE
+  | typeof ACCOUNT_SETUP_ROUTE

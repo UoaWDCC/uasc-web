@@ -49,6 +49,11 @@ export const ProtectedSignUpForm = ({
       break
     case PAGES.Confirm:
       break
+    case PAGES.AccountSetup:
+      if (!currentUser) {
+        return <Navigate to={oneLevelUp(PERSONAL_ROUTE_1)} />
+      }
+      break
   }
   return (
     <SignUpForm

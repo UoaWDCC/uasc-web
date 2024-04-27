@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom"
 import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
 import { useAppData } from "store/store"
 import { oneLevelUp } from "../utils/Utils"
-import { ACCOUNT_SETUP } from "../utils/RouteNames"
 import {
   useBankPaymentDetailsQuery,
   useMembershipPricesQuery
 } from "services/AppData/AppDataQueries"
+import { ACCOUNT_SETUP_ROUTE } from "../utils/RouteNames"
 
 type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 
@@ -20,9 +20,10 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   return (
     <>
       <p>
-        Transfer $45 to the bank account {data?.bankAccount}, and send a
-        screenshot of the transfer to {data?.email} metioning your name and
-        email {currentUser?.email || ""}
+        Transfer $45 to the bank account <strong>{data?.bankAccount}</strong>,
+        and send a screenshot of the transfer to <strong>{data?.email}</strong>{" "}
+        mentioning your name and email{" "}
+        <strong>{currentUser?.email || ""}</strong>
       </p>
       <h5
         className="text-dark-blue-100  cursor-pointer uppercase"
@@ -32,7 +33,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
       </h5>
       <h5
         className="text-dark-blue-100  cursor-pointer uppercase"
-        onClick={() => navigate(oneLevelUp(ACCOUNT_SETUP))}
+        onClick={() => navigate(oneLevelUp(ACCOUNT_SETUP_ROUTE))}
       >
         Set up account in meantime
       </h5>

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import { PAGES } from "../PageConfig/PageConfig"
 import {
+  ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
   CONFIRM_ROUTE,
   CONTACT_ROUTE,
@@ -35,6 +36,9 @@ export const useCurrentStep = (): PAGES => {
 
     case CONFIRM_ROUTE:
       return PAGES.Confirm
+
+    case ACCOUNT_SETUP_ROUTE:
+      return PAGES.AccountSetup
 
     default:
       return PAGES.Unknown

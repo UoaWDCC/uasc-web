@@ -32,6 +32,7 @@ export enum PAGES {
   PaymentInfo,
   Payment,
   Confirm,
+  AccountSetup,
   Unknown
 }
 
@@ -80,6 +81,10 @@ export const PAGINATED_FORM_PAGES = (
     onNext: () => {
       throw new Error("not implemented")
     }
+  },
+  {
+    index: PAGES.AccountSetup,
+    title: "Account"
   }
 ]
 
@@ -99,7 +104,9 @@ export const PAGE_CONTENT = [
     textTop="Your application has been received, and you’ll be sent a confirmation email soon."
     textBottom="In the meantime, please set up your login details."
     SvgIcon={TestIcon}
-  />
+  />,
+  // TODO: IMPLEMENT ACCOUNT SETUP SECTION HERE
+  <></>
 ]
 
 /**
@@ -112,5 +119,6 @@ export const STEPPER_PROPS = [
   { name: "Contact", index: PAGES.Contact },
   { name: "Additional", index: PAGES.Additional },
   { name: "Payment", index: PAGES.PaymentInfo },
-  { name: "Confirm", index: PAGES.Confirm }
+  { name: "Confirm", index: PAGES.Confirm },
+  { name: "Account", index: PAGES.AccountSetup }
 ]
