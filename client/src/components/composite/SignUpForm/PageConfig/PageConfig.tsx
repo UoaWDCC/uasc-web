@@ -5,10 +5,12 @@ import {
 } from "../Sections/PersonalSection"
 import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
+import ConfirmationSection from "../Sections/ConfirmationSection"
 import {
   ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
   CONTACT_ROUTE,
+  PAGES,
   PAYMENT_INFORMATION_ROUTE,
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
@@ -19,23 +21,7 @@ import {
   PaymentInformationSection,
   PaymentSection
 } from "../Sections/PaymentSection"
-import ConfirmationSection from "../Sections/ConfirmationSection"
 import TestIcon from "assets/icons/snowboarder.svg?react"
-
-/**
- * Order of all these matters!
- */
-export enum PAGES {
-  PersonalFirst = 0,
-  PersonalSecond,
-  Contact,
-  Additional,
-  PaymentInfo,
-  Payment,
-  Confirm,
-  AccountSetup,
-  Unknown
-}
 
 export const PAGINATED_FORM_PAGES = (
   navigateFn: (route: RouteNames | number) => void

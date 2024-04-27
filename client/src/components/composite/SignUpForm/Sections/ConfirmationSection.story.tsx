@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 import TestIcon from "assets/icons/snowboarder.svg?react"
 
 import confirmationSection from "./ConfirmationSection"
+import { MemoryRouter } from "react-router-dom"
 const meta: Meta<typeof confirmationSection> = {
   component: confirmationSection,
   argTypes: {
@@ -24,5 +25,12 @@ export const ConfirmationSection: Story = {
     textTop:
       "Your application has been received, and you’ll be sent a confirmation email soon.",
     textBottom: "In the meantime, please set up your login details."
-  }
+  },
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    )
+  ]
 }

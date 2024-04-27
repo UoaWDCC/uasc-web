@@ -1,16 +1,20 @@
 import { useParams } from "react-router-dom"
-import { PAGES } from "../PageConfig/PageConfig"
 import {
   ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
   CONFIRM_ROUTE,
   CONTACT_ROUTE,
+  PAGES,
   PAYMENT_INFORMATION_ROUTE,
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
   RouteNames
 } from "./RouteNames"
+
+export const oneLevelUp = (route: string) => {
+  return `../${route}`
+}
 
 export const useCurrentStep = (): PAGES => {
   const { step } = useParams<{ step: RouteNames }>()
@@ -43,8 +47,4 @@ export const useCurrentStep = (): PAGES => {
     default:
       return PAGES.Unknown
   }
-}
-
-export const oneLevelUp = (route: string) => {
-  return `../${route}`
 }

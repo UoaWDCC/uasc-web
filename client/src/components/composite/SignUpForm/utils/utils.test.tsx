@@ -1,7 +1,6 @@
 import { oneLevelUp, useCurrentStep } from "./Utils"
 import { renderHook } from "@testing-library/react"
-import { PAGES } from "../PageConfig/PageConfig"
-import { PERSONAL_ROUTE_1 } from "./RouteNames"
+import { PAGES, PERSONAL_ROUTE_1 } from "./RouteNames"
 
 describe("level up function", () => {
   it("should return the correct path", () => {

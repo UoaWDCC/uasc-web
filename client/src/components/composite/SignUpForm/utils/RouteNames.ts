@@ -16,3 +16,18 @@ export type RouteNames =
   | typeof PAYMENT_ROUTE
   | typeof CONFIRM_ROUTE
   | typeof ACCOUNT_SETUP_ROUTE
+
+/**
+ * Order of all these matters!
+ */
+export enum PAGES {
+  PersonalFirst = 0,
+  PersonalSecond,
+  Contact,
+  Additional,
+  PaymentInfo,
+  Payment,
+  Confirm,
+  AccountSetup,
+  Unknown
+}

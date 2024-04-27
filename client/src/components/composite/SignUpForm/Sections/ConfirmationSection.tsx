@@ -15,7 +15,7 @@ export interface ISectionProps {
 
 type props = ISectionProps
 
-export const confirmationSection = ({
+const ConfirmationSection = ({
   SvgIcon,
   subHeader,
   textTop,
@@ -53,4 +53,4 @@ export const confirmationSection = ({
   )
 }
 
-export default confirmationSection
+export default ConfirmationSection
