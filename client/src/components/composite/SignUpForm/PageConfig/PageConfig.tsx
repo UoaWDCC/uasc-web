@@ -6,6 +6,7 @@ import {
 import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
 import {
+  ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
   CONTACT_ROUTE,
   PAYMENT_INFORMATION_ROUTE,
@@ -78,9 +79,7 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Confirm,
     title: "Confirm",
-    onNext: () => {
-      throw new Error("not implemented")
-    }
+    onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE)
   },
   {
     index: PAGES.AccountSetup,
