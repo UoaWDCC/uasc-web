@@ -6,11 +6,7 @@ import Stepper from "components/generic/StepperComponent/StepperComponent"
 import { oneLevelUp, useCurrentStep } from "./utils/Utils"
 import { useAppData } from "store/store"
 import { Navigate } from "react-router-dom"
-import {
-  PAYMENT_INFORMATION_ROUTE,
-  PAYMENT_ROUTE,
-  PERSONAL_ROUTE_1
-} from "./utils/RouteNames"
+import { PAYMENT_INFORMATION_ROUTE, PERSONAL_ROUTE_1 } from "./utils/RouteNames"
 
 interface ISignUpFormProps {
   currentPage: PAGES
