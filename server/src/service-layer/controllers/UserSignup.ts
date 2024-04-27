@@ -1,6 +1,6 @@
 import AuthService from "business-layer/services/AuthService"
 import UserDataService from "data-layer/services/UserDataService"
-import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
+// import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
 import { UserSignupResponse } from "service-layer/response-models/UserSignupResponse"
 import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
 
@@ -9,18 +9,25 @@ export class UserSignup extends Controller {
   @Post()
   @SuccessResponse(200, "Signup successful")
   // return a JWT token at the end
-  public async signup(
-    @Body() requestBody: UserSignupBody
-  ): Promise<UserSignupResponse> {
+  public async signup(@Body() requestBody: any): Promise<UserSignupResponse> {
     const userService = new UserDataService()
     const authService = new AuthService()
 
     // Received userInfo omits membership and stripe_id
     const userInfo = requestBody.user
-
+    let userRecord
+    // Seperate try/catch to avoid conflicting emails.
     try {
       // Create user data in Auth Service
-      const userRecord = await authService.createUser(requestBody.email)
+      userRecord = await authService.createUser(requestBody.email)
+    } catch (e) {
+      this.setStatus(409)
+      return {
+        error: "Email in use."
+      }
+    }
+
+    try {
       // Create document with user info
       await userService.createUserData(userRecord.uid, {
         ...userInfo,
@@ -36,10 +43,7 @@ export class UserSignup extends Controller {
     } catch (error) {
       console.error(error)
       this.setStatus(500) // server error
-      return {
-        jwtToken: null,
-        uid: null
-      }
+      return {}
     }
   }
 }

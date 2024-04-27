@@ -349,7 +349,7 @@ describe("Endpoints", () => {
     afterEach(async () => {
       await cleanFirestore()
     })
-    it("should return a JWT token for /signup POST endpoint", async () => {
+    it("should return a JWT token for guest /signup POST endpoint", async () => {
       const res = await request.post("/signup").send({
         email: "test@mail.com",
         user: signupUserMock
@@ -361,14 +361,24 @@ describe("Endpoints", () => {
       const claims = await new AuthService().getCustomerUserClaim(uid)
       expect(claims).toEqual(undefined)
     })
-    it("should create a user without claims regardless what membership type", async () => {
+    it("should return a 409 conflict when an email is already in use", async () => {
+      // console.log({ ...signupUserMock, membership: "admin" })
       const res = await request.post("/signup").send({
-        email: "test2@mail.com",
+        email: "test@mail.com",
+        user: signupUserMock
+      })
+      // check for conflict
+      expect(res.status).toEqual(409)
+    })
+    it("should return no claims jwtToken regardless what membership", async () => {
+      // console.log({ ...signupUserMock, membership: "admin" })
+      const res = await request.post("/signup").send({
+        email: "testadmin@mail.com",
         user: { ...signupUserMock, membership: "admin" }
       })
       // ensure that response is 200
       expect(res.status).toEqual(200)
-      // ensure that the custom claims is undefined
+      // check if user custom claims exist
       const { uid } = res.body
       const claims = await new AuthService().getCustomerUserClaim(uid)
       expect(claims).toEqual(undefined)
