@@ -15,7 +15,7 @@ const AlertsComponent = ({ variant, message, isButton }: AlertsInputProp) => {
 
   const SuccessAlert = () => {
     return (
-      <div className="flex h-12 w-full items-center justify-between rounded-lg bg-[#109D27]">
+      <div className="bg-green flex h-12 w-full items-center justify-between rounded-lg">
         <div className="ml-10 mr-5 h-5 w-5">
           <TickIcon className="fill-white" />
         </div>
@@ -39,7 +39,7 @@ const AlertsComponent = ({ variant, message, isButton }: AlertsInputProp) => {
 
   const ErrorAlert = () => {
     return (
-      <div className="flex h-12 w-full items-center justify-between rounded-lg bg-[#9A141D]">
+      <div className="bg-red flex h-12 w-full items-center justify-between rounded-lg">
         <div className="ml-10 mr-5 h-5 w-5">
           <WarningIcon className="fill-white" />
         </div>
@@ -63,7 +63,7 @@ const AlertsComponent = ({ variant, message, isButton }: AlertsInputProp) => {
 
   const NotificationAlert = () => {
     return (
-      <div className="flex h-12 w-full items-center justify-between rounded-lg bg-[#FF6D04]">
+      <div className="bg-orange flex h-12 w-full items-center justify-between rounded-lg">
         <div className="ml-10 mr-5 h-5 w-5">
           <BellIcon className="fill-white" />
         </div>
