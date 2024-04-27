@@ -7,6 +7,7 @@ import { oneLevelUp, useCurrentStep } from "./utils/Utils"
 import { useAppData } from "store/store"
 import { Navigate } from "react-router-dom"
 import {
+  ACCOUNT_SETUP_ROUTE,
   PAGES,
   PAYMENT_INFORMATION_ROUTE,
   PERSONAL_ROUTE_1
@@ -48,7 +49,7 @@ export const ProtectedSignUpForm = ({
 
       // User has already paid for membership
       if (currentUserClaims?.member) {
-        return <Navigate to={"../../profile"} replace />
+        return <Navigate to={oneLevelUp(ACCOUNT_SETUP_ROUTE)} replace />
       }
       break
     case PAGES.Confirm:
