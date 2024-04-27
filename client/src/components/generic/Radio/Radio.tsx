@@ -15,7 +15,7 @@ const Radio = ({ children, ...props }: props) => {
           name="Radio"
           {...props}
           disabled={props.disabled}
-          className=""
+          className="disabled:bg-gray-3 disabled:border-transparent"
         />
         <div className="">{children}</div>
       </label>
