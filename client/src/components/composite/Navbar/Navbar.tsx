@@ -71,8 +71,8 @@ const Navbar = ({
       <div className="flex w-full">
         <Logo />
         <div
-          className={`left-0 md:ml-auto ${isOpen ? "flex" : "hidden"} bg-gray-1 md:overflow-none absolute top-12
-          min-h-screen w-full flex-col items-center justify-center gap-4 self-end overflow-auto md:relative md:top-0
+          className={`left-0 md:ml-auto ${isOpen ? "flex" : "hidden"} bg-gray-1 absolute top-12
+          min-h-screen w-full flex-col items-center justify-center gap-4 self-end md:relative md:top-0
           md:ml-auto md:flex md:min-h-full md:flex-row md:items-end md:justify-end md:gap-8 md:bg-none md:pr-4`}
         >
           <WrappedTab to="/">Home</WrappedTab>
