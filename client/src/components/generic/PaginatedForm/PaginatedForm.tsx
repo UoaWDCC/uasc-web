@@ -35,32 +35,32 @@ const PaginatedForm = ({
   return (
     <>
       <FormContainer>
-        <div className="flex flex-col items-start gap-1 text-left sm:w-full">
+        <div className="flex h-fit min-h-[70vh] w-full flex-col items-start gap-1 text-left">
           <h2 className="text-dark-blue-100 my-9 italic">{title}</h2>
-          {children}
+          <div className="relative w-full">{children}</div>
+          <span className="mt-auto flex justify-between gap-1 pb-4 sm:w-full">
+            <Button
+              disabled={onBack === undefined || backDisabled}
+              variant="progress-inverted"
+              data-testid="back-button"
+              onClick={() => {
+                onBack?.()
+              }}
+            >
+              {backButtonText || "Back"}
+            </Button>
+            <Button
+              variant="progress-default"
+              disabled={onNext === undefined || nextDisabled}
+              data-testid="next-button"
+              onClick={() => {
+                onNext?.()
+              }}
+            >
+              {nextButtonText || "Next"}
+            </Button>
+          </span>
         </div>
-        <span className="mt-8 flex justify-between gap-1 sm:w-full">
-          <Button
-            disabled={onBack === undefined || backDisabled}
-            variant="progress-inverted"
-            data-testid="back-button"
-            onClick={() => {
-              onBack?.()
-            }}
-          >
-            {backButtonText || "Back"}
-          </Button>
-          <Button
-            variant="progress-default"
-            disabled={onNext === undefined || nextDisabled}
-            data-testid="next-button"
-            onClick={() => {
-              onNext?.()
-            }}
-          >
-            {nextButtonText || "Next"}
-          </Button>
-        </span>
       </FormContainer>
     </>
   )
