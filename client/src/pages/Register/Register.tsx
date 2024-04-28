@@ -13,12 +13,26 @@ const Register = () => {
   const [signUpFormData] = useSignUpFormData()
 
   const { email, ...user } = signUpFormData
-  const { mutate, isPending } = useSignUpUserMutation({
+  const { mutate, isPending, error, data } = useSignUpUserMutation({
     email: email || "",
     user
   })
 
-  const pages = PAGINATED_FORM_PAGES(navigateFn!, mutate, isPending)
+  const successfullySignedUp = !!data?.jwtToken
+
+  const alerts = {
+    errorMessage: error?.message,
+    message: data?.error || data?.message,
+    successMessage: successfullySignedUp
+      ? "Account Created! Signing in"
+      : undefined
+  }
+
+  const pages = PAGINATED_FORM_PAGES(
+    navigateFn!,
+    mutate,
+    isPending || successfullySignedUp
+  )
   const pageContent = PAGE_CONTENT
 
   return (
@@ -30,7 +44,11 @@ const Register = () => {
             <Route
               path=":step"
               element={
-                <ProtectedSignUpForm pageContent={pageContent} pages={pages} />
+                <ProtectedSignUpForm
+                  pageContent={pageContent}
+                  pages={pages}
+                  alerts={alerts}
+                />
               }
             />
           </Routes>

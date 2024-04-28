@@ -41,7 +41,7 @@ export const PAGINATED_FORM_PAGES = (
     void,
     unknown
   >,
-  isProcessing: boolean
+  disableSubmit: boolean
 ): PageProps[] => [
   {
     index: PAGES.PersonalFirst,
@@ -63,11 +63,12 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Additional,
     title: "Additional info",
-    nextButtonText: "Confirm",
+    nextButtonText: "Sign Up",
     onBack: () => navigateFn(CONTACT_ROUTE),
     onNext: () => {
       signUpFn(undefined, {
         async onSuccess(data) {
+          console.log(data)
           if (data?.jwtToken) {
             await signInWithCustomToken(auth, data.jwtToken)
           }
@@ -77,7 +78,7 @@ export const PAGINATED_FORM_PAGES = (
         }
       })
     },
-    nextDisabled: isProcessing
+    nextDisabled: disableSubmit
   },
   {
     index: PAGES.PaymentInfo,
