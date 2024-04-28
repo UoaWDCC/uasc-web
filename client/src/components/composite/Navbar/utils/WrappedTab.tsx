@@ -1,15 +1,14 @@
 import Tab from "components/generic/Tab/Tab"
 import { ReactNode } from "react"
 import { NavLink, useLocation } from "react-router-dom"
-const WrappedTab = ({
-  children,
-  to,
-  subroutes
-}: {
+
+interface IWrappedTab {
   children: ReactNode
   to: string
   subroutes?: string[]
-}) => {
+}
+
+export const WrappedTab = ({ children, to, subroutes }: IWrappedTab) => {
   const { pathname } = useLocation()
 
   return (
@@ -23,4 +22,13 @@ const WrappedTab = ({
     </NavLink>
   )
 }
-export default WrappedTab
+
+export const MobileWrappedTab = ({ children, to, subroutes }: IWrappedTab) => {
+  return (
+    <span className="md:hidden">
+      <WrappedTab to={to} subroutes={subroutes}>
+        {children}
+      </WrappedTab>
+    </span>
+  )
+}
