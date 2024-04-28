@@ -92,14 +92,11 @@ const Navbar = ({
         </div>
 
         <div
-          className="ml-auto block h-[20px] w-[24px] cursor-pointer pt-[5px] md:hidden"
+          className="ml-auto block h-[20px] w-[24px] cursor-pointer 
+          fill-black stroke-black pt-[5px] md:hidden"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {isOpen ? (
-            <CrossIcon className="stroke-black" />
-          ) : (
-            <HamburgerIcon className="stroke-black" />
-          )}
+          {isOpen ? <CrossIcon /> : <HamburgerIcon />}
         </div>
       </div>
     </div>

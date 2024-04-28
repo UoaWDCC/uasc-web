@@ -10,7 +10,7 @@ const LoginIndicator = ({
   if (isLoggedIn) {
     return (
       <>
-        <span className="hidden md:block">
+        <span className="hidden md:block md:self-center">
           <ProfileButton signOutHandler={signOutHandler} />
         </span>
 
@@ -31,7 +31,7 @@ const LoginIndicator = ({
     <Button
       variant="inverted-default-sm"
       data-testid="sign-in-button"
-      className="md:self-start"
+      className="md:mb-2 md:self-center"
       onClick={signInHandler}
     >
       Sign In
