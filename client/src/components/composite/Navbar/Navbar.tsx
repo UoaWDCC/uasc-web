@@ -52,8 +52,20 @@ const AboutMenuItemsMobile = () => {
 
 const navStyle = (active: boolean) => (active ? "text-light-blue-100" : "")
 
-const Navbar = (props: INavbarProps) => {
+const Navbar = ({
+  signInHandler,
+  signOutHandler,
+  isLoggedIn
+}: INavbarProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(true)
+  const _signOutHandler = () => {
+    signOutHandler()
+    setIsOpen(false)
+  }
+  const _signInHandler = () => {
+    signInHandler()
+    setIsOpen(false)
+  }
   return (
     <div className="bg-gray-1 navbar-shadow fixed z-[999] flex w-screen px-4 pt-3">
       <div className="flex w-full">
@@ -72,7 +84,11 @@ const Navbar = (props: INavbarProps) => {
             </WrappedMenuTab>
           </span>
           <AboutMenuItemsMobile />
-          <LoginIndicator {...props} />
+          <LoginIndicator
+            isLoggedIn={isLoggedIn}
+            signOutHandler={_signOutHandler}
+            signInHandler={_signInHandler}
+          />
         </div>
 
         <div
