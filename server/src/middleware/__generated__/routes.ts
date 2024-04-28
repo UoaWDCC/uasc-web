@@ -40,6 +40,25 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.membership-or-stripe_id__": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"date_of_birth":{"ref":"FirebaseFirestore.Timestamp","required":true},"does_freestyle":{"dataType":"boolean","required":true},"does_racing":{"dataType":"boolean","required":true},"does_ski":{"dataType":"boolean","required":true},"gender":{"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your pronouns"}}},"emergency_name":{"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter a name"}}},"emergency_phone":{"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please type in your Phone Number"}}},"emergency_relation":{"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter a name"}}},"first_name":{"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},"last_name":{"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},"dietary_requirements":{"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},"faculty":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},"university":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},"student_id":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},"returning":{"dataType":"boolean","required":true},"university_year":{"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your year of study"}}}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Omit_UserAdditionalInfo.membership-or-stripe_id_": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.membership-or-stripe_id__","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserSignupBody": {
+        "dataType": "refObject",
+        "properties": {
+            "email": {"dataType":"string","required":true},
+            "user": {"ref":"Omit_UserAdditionalInfo.membership-or-stripe_id_","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserAdditionalInfo": {
         "dataType": "refObject",
         "properties": {
@@ -55,9 +74,9 @@ const models: TsoaRoute.Models = {
             "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
             "membership": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["admin"]},{"dataType":"enum","enums":["member"]},{"dataType":"enum","enums":["guest"]}],"required":true,"validators":{"isString":{"errorMsg":"Please enter either Admin or Member or Guest"}}},
             "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
-            "faculty": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true,"validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
-            "university": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true,"validators":{"isString":{"errorMsg":"Please enter your university"}}},
-            "student_id": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true,"validators":{"isString":{"errorMsg":"Please enter your student ID"}}},
+            "faculty": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
+            "university": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},
+            "student_id": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},
             "returning": {"dataType":"boolean","required":true},
             "university_year": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your year of study"}}},
             "stripe_id": {"dataType":"string"},
@@ -166,7 +185,7 @@ export function RegisterRoutes(app: Router) {
 
             function UserSignup_signup(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"dataType":"any"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserSignupBody"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

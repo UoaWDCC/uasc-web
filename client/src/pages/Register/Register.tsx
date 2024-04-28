@@ -5,12 +5,22 @@ import {
 import { ProtectedSignUpForm } from "components/composite/SignUpForm/SignUpForm"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom"
-import { SignUpFormContainer } from "store/signupform"
+import { useSignUpUserMutation } from "services/User/UserMutations"
+import { useSignUpFormData } from "store/signupform"
 
 const Register = () => {
   const navigateFn = useNavigate()
-  const pages = PAGINATED_FORM_PAGES(navigateFn!)
+  const [signUpFormData] = useSignUpFormData()
+
+  const { email, ...user } = signUpFormData
+  const { mutate, isPending } = useSignUpUserMutation({
+    email: email || "",
+    user
+  })
+
+  const pages = PAGINATED_FORM_PAGES(navigateFn!, mutate, isPending)
   const pageContent = PAGE_CONTENT
+
   return (
     <>
       <FullPageBackgroundImage>
@@ -20,12 +30,7 @@ const Register = () => {
             <Route
               path=":step"
               element={
-                <SignUpFormContainer>
-                  <ProtectedSignUpForm
-                    pageContent={pageContent}
-                    pages={pages}
-                  />
-                </SignUpFormContainer>
+                <ProtectedSignUpForm pageContent={pageContent} pages={pages} />
               }
             />
           </Routes>

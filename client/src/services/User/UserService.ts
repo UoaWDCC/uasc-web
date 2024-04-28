@@ -1,7 +1,10 @@
-import { components } from "models/__generated__/schema"
 import fetchClient from "../OpenApiFetchClient"
+import { UserAdditionalInfo, ReducedUserAdditionalInfo } from "models/User"
 
-type UserAdditionalInfo = components["schemas"]["UserAdditionalInfo"]
+export type SignUpUserBody = {
+  email: string
+  user: ReducedUserAdditionalInfo
+}
 export type EditUsersBody = {
   uid: string
   updatedInformation: UserAdditionalInfo
@@ -18,6 +21,13 @@ const UserService = {
         users
       }
     })
+  },
+  signUpUser: async function (userData: SignUpUserBody) {
+    // gets data from signup and returns data (all data needed after signing up)
+    const { data } = await fetchClient.POST("/signup", {
+      body: userData
+    })
+    return data
   }
 } as const
 

@@ -2,6 +2,7 @@ import AuthService from "business-layer/services/AuthService"
 import UserDataService from "data-layer/services/UserDataService"
 // import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
 import { UserSignupResponse } from "service-layer/response-models/UserSignupResponse"
+import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
 import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
 
 @Route("signup")
@@ -9,7 +10,9 @@ export class UserSignup extends Controller {
   @Post()
   @SuccessResponse(200, "Signup successful")
   // return a JWT token at the end
-  public async signup(@Body() requestBody: any): Promise<UserSignupResponse> {
+  public async signup(
+    @Body() requestBody: UserSignupBody
+  ): Promise<UserSignupResponse> {
     const userService = new UserDataService()
     const authService = new AuthService()
 
