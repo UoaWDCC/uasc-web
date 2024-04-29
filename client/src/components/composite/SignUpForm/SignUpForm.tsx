@@ -91,7 +91,7 @@ const AlertComponents = ({ alerts }: { alerts?: Alerts }) => {
         )}
 
         {message && (
-          <AlertsComponent variant="notification" message={message} isButton />
+          <AlertsComponent variant="notification" message={message} />
         )}
         {successMessage && (
           <AlertsComponent variant="success" message={successMessage} />
