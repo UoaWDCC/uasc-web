@@ -16,13 +16,11 @@ const ExcitementSlider: React.FC<ExcitementSliderProps> = ({ min, max }) => {
   }
 
   const handleMouseDown = () => {
-      setIsDragging(true) // checks if current value equals the max value and set isMax to true
-    
+    setIsDragging(true) // checks if current value equals the max value and set isMax to true
   }
   const handleMouseUp = () => {
     setIsDragging(false) // checks if current value equals the max value and set isMax to true
-  
-}
+  }
   return (
     <div>
       {isDragging ? (
