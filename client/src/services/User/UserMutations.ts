@@ -19,9 +19,3 @@ export function useSignUpUserMutation(userData: SignUpUserBody) {
     mutationFn: () => UserService.signUpUser(userData)
   })
 }
-
-export function useSignUpUserMutationMin() {
-  return useMutation({
-    mutationKey: [SIGN_UP_USER_MUTATION_KEY]
-  })
-}

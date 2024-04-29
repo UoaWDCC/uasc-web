@@ -448,7 +448,7 @@ describe("Endpoints", () => {
       email: "testadmin@mail.com",
       user: { ...signupUserMock, membership: "admin" }
     })
-    // ensure that response is 200
+    // invalid request
     expect(res.status).toEqual(400)
 >>>>>>> 758bede0 (remove side effects)
   })
