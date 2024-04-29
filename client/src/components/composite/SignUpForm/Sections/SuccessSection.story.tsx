@@ -11,5 +11,7 @@ type Story = StoryObj<typeof meta>
 
 export const SuccessSection1: Story = {
   tags: ["autodocs"],
-  args: {}
+  args: {
+    infoText: "hello this is a text section"
+  }
 }
