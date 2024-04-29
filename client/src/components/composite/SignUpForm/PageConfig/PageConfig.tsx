@@ -6,6 +6,7 @@ import {
 import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
 import ConfirmationSection from "../Sections/ConfirmationSection"
+import SuccessSection from "../Sections/SuccessSection"
 import {
   ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
@@ -73,7 +74,9 @@ export const PAGINATED_FORM_PAGES = (
     title: "Account",
     // goes back to one page earlier in history, otherwise does nothing
     onBack: () => navigateFn(-1)
-  }
+    // after setting up the account, the next button is enabled and shows the success section
+  },
+  { index: PAGES.Success, title: "Success", onBack: () => navigateFn(-1) }
 ]
 
 /**
@@ -94,7 +97,7 @@ export const PAGE_CONTENT = [
     SvgIcon={TestIcon}
   />,
   // TODO: IMPLEMENT ACCOUNT SETUP SECTION HERE
-  <></>
+  <SuccessSection key="Success" infoText="texts for testing" />
 ]
 
 /**
