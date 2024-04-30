@@ -1,8 +1,8 @@
-import { MenuItem, Select, TextField } from "@mui/material"
 import { useSignUpFormData } from "store/signupform"
 import Radio from "components/generic/Radio/Radio"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 // import { Timestamp } from "firebase-admin/firestore"
+import Dropdown from "components/generic/Dropdown/Dropdown"
 
 export const PersonalSectionFirst = () => {
   const [{ first_name, last_name, date_of_birth }, { updateFormData }] =
@@ -22,7 +22,6 @@ export const PersonalSectionFirst = () => {
         <TextInput
           type="text"
           label="Last Name"
-          description="Last name input here"
           id="LastName"
           value={last_name}
           onChange={(e) => updateFormData({ last_name: e.target.value })}
@@ -69,53 +68,92 @@ export const PersonalSectionFirst = () => {
 }
 
 export const PersonalSectionSecond = () => {
+  const [{ student_id, university_year, faculty }, { updateFormData }] =
+    useSignUpFormData()
+
   return (
-    <div>
-      <TextField
-        id="studentId"
-        name="studentId"
-        label="UoA Student ID (Enter 0 if not you're not a UoA Student)"
-        variant="outlined"
+    <div className="flex max-w-sm flex-col gap-5">
+      <TextInput
+        type="text"
+        label="UoA Student ID Number"
+        description="Put NA if not a UoA Student"
+        id="FirstName"
+        value={student_id}
+        onChange={(e) => updateFormData({ student_id: e.target.value })}
         required
-        size="small"
       />
-      <Select
-        id="yearLevel"
-        name="yearLevel"
-        label="What year level are you in?"
-        variant="outlined"
-        required
-        size="small"
+      <Dropdown
+        value={university_year}
+        label="What year are you at uni?"
+        onChange={(e) => updateFormData({ university_year: e.target?.value })}
       >
-        <MenuItem value={0}>Non-Student</MenuItem>
-        <MenuItem value={1}>1st year</MenuItem>
-        <MenuItem value={2}>2nd year</MenuItem>
-        <MenuItem value={3}>3rd year</MenuItem>
-        <MenuItem value={4}>4th year</MenuItem>
-        <MenuItem value={5}>5th year</MenuItem>
-        <MenuItem value={7}>other</MenuItem>
-        <MenuItem value={6}>grad</MenuItem>
-        <MenuItem value={7}>international exchange</MenuItem>
-      </Select>
-      <Select
-        id="faculty"
-        name="faculty"
-        label="What faculty are you in?"
-        variant="outlined"
-        required
-        size="small"
+        <option key="Non-Student" value="Non-Student">
+          Non-Student
+        </option>
+        <option key="1st year" value="1st year">
+          1st Year
+        </option>
+        <option key="2nd Year" value="2nd Year">
+          2nd Year
+        </option>
+        <option key="3rd Year" value="3rd Year">
+          3rd Year
+        </option>
+        <option key="4th Year" value="4th Year">
+          4th Year
+        </option>
+        <option key="5th Year" value="5th Year">
+          5th Year
+        </option>
+        <option key="Other" value="Other">
+          Other
+        </option>
+        <option key="Grad" value="Grad">
+          Grad
+        </option>
+        <option key="International Exchange" value="International Exchange">
+          International Exchange
+        </option>
+      </Dropdown>
+      <Dropdown
+        value={faculty}
+        label="What faculty?"
+        onChange={(e) => updateFormData({ faculty: e.target?.value })}
       >
-        <MenuItem value={0}>Engineering</MenuItem>
-        <MenuItem value={1}>Med/Health Sci</MenuItem>
-        <MenuItem value={2}>Science</MenuItem>
-        <MenuItem value={3}>Commerce</MenuItem>
-        <MenuItem value={4}>Arts</MenuItem>
-        <MenuItem value={5}>Law</MenuItem>
-        <MenuItem value={7}>Education/Social Work</MenuItem>
-        <MenuItem value={6}>Creative Arts & Industries</MenuItem>
-        <MenuItem value={7}>Non-Student</MenuItem>
-        <MenuItem value={7}>Other</MenuItem>
-      </Select>
+        <option key="Engineering" value="Engineering">
+          Engineering
+        </option>
+        <option key="Med/Health Sci" value="Med/Health Sci">
+          Med/Health Sci
+        </option>
+        <option key="Science" value="Science">
+          Science
+        </option>
+        <option key="Commerce" value="Commerce">
+          Commerce
+        </option>
+        <option key="Arts" value="Arts">
+          Arts
+        </option>
+        <option key="Law" value="Law">
+          Law
+        </option>
+        <option key="Education/Social Work" value="Education/Social Work">
+          Education/Social Work
+        </option>
+        <option
+          key="Creative Arts & Industries"
+          value="Creative Arts & Industries"
+        >
+          Creative Arts & Industries
+        </option>
+        <option key="Non-Student" value="Non-Student">
+          Non-Student
+        </option>
+        <option key="Other" value="Other">
+          Other
+        </option>
+      </Dropdown>
     </div>
   )
 }
