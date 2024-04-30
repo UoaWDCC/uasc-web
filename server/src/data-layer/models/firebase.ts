@@ -21,15 +21,7 @@ export interface UserAdditionalInfo {
   /**
    * @isString Please enter a name
    */
-  emergency_name: string
-  /**
-   * @isString Please type in your Phone Number
-   */
-  emergency_phone: string
-  /**
-   * @isString Please enter a name
-   */
-  emergency_relation: string
+  emergency_contact?: string
   /**
    * @isString Please enter your First Name
    */
