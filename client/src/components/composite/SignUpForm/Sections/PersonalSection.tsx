@@ -103,6 +103,9 @@ export const PersonalSectionSecond = () => {
         label="What year are you at uni?"
         onChange={(e) => updateFormData({ university_year: e.target?.value })}
       >
+        <option value="" disabled selected>
+          Select your option
+        </option>
         <option key="Non-Student" value="Non-Student">
           Non-Student
         </option>
@@ -136,6 +139,9 @@ export const PersonalSectionSecond = () => {
         label="What faculty?"
         onChange={(e) => updateFormData({ faculty: e.target?.value })}
       >
+        <option value="" disabled selected>
+          Select your option
+        </option>
         <option key="Engineering" value="Engineering">
           Engineering
         </option>
