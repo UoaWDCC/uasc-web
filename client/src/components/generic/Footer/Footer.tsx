@@ -6,7 +6,7 @@ type props = IFooterProps
 
 export const Footer = ({ title }: props) => {
   return (
-    <div className="h-[56px] w-full border border-black flex items-center justify-center">
+    <div className="flex h-[56px] w-full items-center justify-center border border-black">
       <div>{title}</div>
     </div>
   )
