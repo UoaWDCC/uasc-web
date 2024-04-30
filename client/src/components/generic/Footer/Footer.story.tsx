@@ -11,6 +11,7 @@ type Story = StoryObj<typeof meta>
 export const DefaultFooter: Story = {
   tags: ["autodocs"],
   args: {
-    title: "Footer title testing"
+    title: "Footer title testing",
+    about: "ABOUT"
   }
 }
