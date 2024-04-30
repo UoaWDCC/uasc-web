@@ -121,6 +121,30 @@ export default class StripeService {
     return currentlyActiveSession
   }
 
+  public async createProduct(
+    name: string,
+    metadata: Stripe.MetadataParam,
+    active: boolean,
+    description: string,
+    default_price_data: Stripe.ProductCreateParams.DefaultPriceData
+  ): Promise<Stripe.Response<Stripe.Product>> {
+    let product
+    try {
+      product = await stripe.products.create({
+        name,
+        metadata,
+        active,
+        description,
+        default_price_data
+      })
+    } catch (err) {
+      console.error("Error creating product", err)
+      throw err
+    }
+
+    return product
+  }
+
   public async retrieveCheckoutSessionFromPaymentIntent(
     payment_intent?: string,
     customer?: string,
