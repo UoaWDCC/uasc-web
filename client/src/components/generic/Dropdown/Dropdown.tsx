@@ -3,14 +3,18 @@ import DownArrow from "assets/icons/downarrow.svg"
 
 type DropdownProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
   label?: string
+  description?: string
 }
 
-const Dropdown = ({ label, ...props }: DropdownProps) => {
+const Dropdown = ({ label, description, ...props }: DropdownProps) => {
   return (
     <div
       style={{ position: "relative", display: "inline-block", width: "100%" }}
     >
-      {label && <label>{label}</label>}
+      {label && <label className="text-black">{label}</label>}
+      {description && (
+        <p className="text-dark-blue-60 mb-1 text-xs">{description}</p>
+      )}
       <select
         className="appearance-none rounded border border-gray-300 bg-transparent bg-contain bg-right bg-no-repeat px-4 py-2"
         style={{
