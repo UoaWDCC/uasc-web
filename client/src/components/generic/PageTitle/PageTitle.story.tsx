@@ -11,6 +11,6 @@ type Story = StoryObj<typeof meta>
 export const DefaultPageTitle: Story = {
   tags: ["autodocs"],
   args: {
-    title: "testing page title"
+    title: "Page Title"
   }
 }
