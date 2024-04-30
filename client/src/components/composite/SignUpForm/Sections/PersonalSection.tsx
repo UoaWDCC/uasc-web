@@ -5,7 +5,7 @@ import TextInput from "components/generic/TextInputComponent/TextInput"
 import Dropdown from "components/generic/Dropdown/Dropdown"
 
 export const PersonalSectionFirst = () => {
-  const [{ first_name, last_name, date_of_birth, gender }, { updateFormData }] =
+  const [{ first_name, last_name, gender }, { updateFormData }] =
     useSignUpFormData()
 
   return (
