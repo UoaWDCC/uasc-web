@@ -1,44 +1,69 @@
 import { MenuItem, Select, TextField } from "@mui/material"
 import { useSignUpFormData } from "store/signupform"
+import Radio from "components/generic/Radio/Radio"
+import TextInput from "components/generic/TextInputComponent/TextInput"
+// import { Timestamp } from "firebase-admin/firestore"
 
 export const PersonalSectionFirst = () => {
-  const [{ first_name, last_name }, { updateFormData }] = useSignUpFormData()
+  const [{ first_name, last_name, date_of_birth }, { updateFormData }] =
+    useSignUpFormData()
+
   return (
-    <div>
-      <span className="flex">
-        <TextField
-          value={first_name || ""}
-          onChange={(e) => updateFormData({ first_name: e.target?.value })}
-          name="firstName"
+    <div className="max-w-sm">
+      <span className="mb-3 flex gap-5">
+        <TextInput
+          type="text"
           label="First Name"
-          variant="outlined"
+          id="FirstName"
+          value={first_name}
+          onChange={(e) => updateFormData({ first_name: e.target.value })}
           required
-          size="small"
         />
-        <TextField
-          value={last_name || ""}
-          onChange={(e) => updateFormData({ last_name: e.target?.value })}
-          id="lastName"
-          name="lastName"
+        <TextInput
+          type="text"
           label="Last Name"
-          variant="outlined"
+          description="Last name input here"
+          id="LastName"
+          value={last_name}
+          onChange={(e) => updateFormData({ last_name: e.target.value })}
           required
-          size="small"
         />
       </span>
-
-      <Select
-        id="gender"
-        name="gender"
-        label="Gender"
-        variant="outlined"
+      <TextInput
+        type="date"
+        label="Birthday"
+        id="Birthday"
+        // value={
+        //   date_of_birth &&
+        //   new Timestamp(date_of_birth.seconds, date_of_birth.nanoseconds)
+        //     .toDate()
+        //     .toISOString()
+        // }
+        // onChange={(e) =>
+        //   updateFormData({
+        //     date_of_birth: {
+        //       seconds: Timestamp.fromDate(new Date(e.target.value)).seconds,
+        //       nanoseconds: Timestamp.fromDate(new Date(e.target.value))
+        //         .nanoseconds
+        //     }
+        //   })
+        // }
         required
-        size="small"
-      >
-        <MenuItem value={"Male"}>Male</MenuItem>
-        <MenuItem value={"Female"}>Female</MenuItem>
-        <MenuItem value={"N/A"}>Prefer not to say</MenuItem>
-      </Select>
+      />
+
+      <p className="mb-2 mt-5">Gender</p>
+      <Radio onChange={(e) => updateFormData({ gender: e.target?.value })}>
+        Male
+      </Radio>
+      <Radio onChange={(e) => updateFormData({ gender: e.target?.value })}>
+        Female
+      </Radio>
+      <Radio onChange={(e) => updateFormData({ gender: e.target?.value })}>
+        Other
+      </Radio>
+      <Radio onChange={(e) => updateFormData({ gender: e.target?.value })}>
+        Prefer not to say
+      </Radio>
     </div>
   )
 }
