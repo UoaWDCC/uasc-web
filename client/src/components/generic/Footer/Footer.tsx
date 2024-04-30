@@ -5,5 +5,9 @@ export interface IFooterProps {
 type props = IFooterProps
 
 export const Footer = ({ title }: props) => {
-  return <div>{title}</div>
+  return (
+    <div className="border border-black">
+      <div>{title}</div>{" "}
+    </div>
+  )
 }
