@@ -5,7 +5,7 @@ import TextInput from "components/generic/TextInputComponent/TextInput"
 import Dropdown from "components/generic/Dropdown/Dropdown"
 
 export const PersonalSectionFirst = () => {
-  const [{ first_name, last_name, date_of_birth }, { updateFormData }] =
+  const [{ first_name, last_name, date_of_birth, gender }, { updateFormData }] =
     useSignUpFormData()
 
   return (
@@ -51,16 +51,32 @@ export const PersonalSectionFirst = () => {
       />
 
       <p className="mb-2 mt-5">Gender</p>
-      <Radio onChange={(e) => updateFormData({ gender: e.target?.value })}>
+      <Radio
+        value="Male"
+        checked={gender === "Male"}
+        onChange={(e) => updateFormData({ gender: e.target?.value })}
+      >
         Male
       </Radio>
-      <Radio onChange={(e) => updateFormData({ gender: e.target?.value })}>
+      <Radio
+        value="Female"
+        checked={gender === "Female"}
+        onChange={(e) => updateFormData({ gender: e.target?.value })}
+      >
         Female
       </Radio>
-      <Radio onChange={(e) => updateFormData({ gender: e.target?.value })}>
+      <Radio
+        value="Other"
+        checked={gender === "Other"}
+        onChange={(e) => updateFormData({ gender: e.target?.value })}
+      >
         Other
       </Radio>
-      <Radio onChange={(e) => updateFormData({ gender: e.target?.value })}>
+      <Radio
+        value="Prefer not to say"
+        checked={gender === "Prefer not to say"}
+        onChange={(e) => updateFormData({ gender: e.target?.value })}
+      >
         Prefer not to say
       </Radio>
     </div>
