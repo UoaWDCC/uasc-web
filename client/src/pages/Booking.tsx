@@ -1,5 +1,4 @@
-import React from "react"
-import BookingForm from "components/composite/BookingForm/BookingForm"
+import BookingForm from "components/composite/Bookings/BookingForm"
 import { Typography, Stack } from "@mui/material"
 
 const Booking = () => {
