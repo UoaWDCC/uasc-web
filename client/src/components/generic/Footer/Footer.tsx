@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 
 import Facebook from "assets/icons/facebook.svg?react"
-
+import Twitter from "assets/icons/twitter.svg?react"
 const HorizontalDivider = () => <span className="bg-gray-3 h-[12px] w-[1px]" />
 
 export const Footer = () => {
@@ -11,6 +11,7 @@ export const Footer = () => {
         COPYRIGHT {new Date().getFullYear()} University of Auckland Snowsports
         Club
       </h5>
+      <HorizontalDivider />
       <Link to="/about">
         <h5 className="uppercase">About</h5>
       </Link>
@@ -30,6 +31,11 @@ export const Footer = () => {
       <span className="h-[24px] w-[24px]">
         <a href="https://facebook.com" target="blank">
           <Facebook className="fill-white" />
+        </a>
+      </span>
+      <span>
+        <a href="https://twitter.com" target="blank">
+          <Twitter className="fill-white"/>
         </a>
       </span>
     </div>
