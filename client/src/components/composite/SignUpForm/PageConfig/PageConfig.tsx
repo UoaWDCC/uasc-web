@@ -102,7 +102,7 @@ export const PAGE_CONTENT = [
   />,
   // Account setup section here
   <></>,
-  <SuccessSection key="Success" infoText="You can now login to your account." />
+  <SuccessSection key="Success" />
 ]
 
 /**
