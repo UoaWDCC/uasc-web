@@ -1,4 +1,4 @@
-import UserInformation from "components/composite/Profile/UserInformation/UserInformation"
+import UserInformationSection from "components/composite/Profile/UserInformation/UserInformationSection"
 import { PageTitle } from "components/generic/PageTitle/PageTitle"
 import { useAppData } from "store/store"
 
@@ -9,7 +9,7 @@ export default function Profile() {
     <>
       <PageTitle title="Profile" />
       <div>
-        <UserInformation userData={currentUserData} />
+        <UserInformationSection userData={currentUserData} />
       </div>
     </>
   )
