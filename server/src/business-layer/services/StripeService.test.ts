@@ -25,7 +25,9 @@ jest.mock("stripe", () => {
 
   jest
     .spyOn(stripe.resources.Products.prototype, "update")
-    .mockImplementation((id, params: Stripe.ProductUpdateParams) => Promise.resolve({ ...productMock, id, ...params }))
+    .mockImplementation((id, params: Stripe.ProductUpdateParams) =>
+      Promise.resolve({ ...productMock, id, ...params })
+    )
 
   return stripe
 })
@@ -48,13 +50,16 @@ describe("Stripe service functionality", () => {
 
   it("should update a product", async () => {
     const stripeService = new StripeService()
-    const updatedProduct = await stripeService.updateProduct("prod_NWjs8kKbJWmuuc", {
-      active: false,
-      description: "New description",
-      metadata: { key: "value" },
-      price: "786",
-      name: "GOLD GOLD"
-    })
+    const updatedProduct = await stripeService.updateProduct(
+      "prod_NWjs8kKbJWmuuc",
+      {
+        active: false,
+        description: "New description",
+        metadata: { key: "value" },
+        price: "786",
+        name: "GOLD GOLD"
+      }
+    )
 
     // overriding specific properties that we expect to change
     expect(updatedProduct).toEqual({
