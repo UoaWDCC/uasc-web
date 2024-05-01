@@ -11,8 +11,16 @@ export const Footer = () => {
         COPYRIGHT {new Date().getFullYear()} University of Auckland Snowsports
         Club
       </h5>
-
       <Link to="/about">
+        <h5 className="uppercase">About</h5>
+      </Link>
+      <Link to="/faq">
+        <h5 className="uppercase">About</h5>
+      </Link>
+      <Link to="/contact us">
+        <h5 className="uppercase">About</h5>
+      </Link>
+      <Link to="/policy">
         <h5 className="uppercase">About</h5>
       </Link>
       <HorizontalDivider />
