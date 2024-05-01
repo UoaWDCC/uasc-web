@@ -9,7 +9,8 @@ import {
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
-  RouteNames
+  RouteNames,
+  SUCCESS_ROUTE
 } from "./RouteNames"
 
 export const oneLevelUp = (route: string) => {
@@ -43,6 +44,9 @@ export const useCurrentStep = (): PAGES => {
 
     case ACCOUNT_SETUP_ROUTE:
       return PAGES.AccountSetup
+
+    case SUCCESS_ROUTE:
+      return PAGES.Success
 
     default:
       return PAGES.Unknown
