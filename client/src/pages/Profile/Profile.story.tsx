@@ -4,18 +4,18 @@ import Profile from "./Profile"
 import { MemoryRouter } from "react-router-dom"
 
 const meta: Meta<typeof Profile> = {
-    component: Profile
+  component: Profile
 }
 
 export default meta
 type Story = StoryObj<typeof Profile>
 
 export const DefaultProfilePage: Story = {
-    decorators: [
-        (Story) => (
-            <MemoryRouter initialEntries={[""]}>
-                <Story />
-            </MemoryRouter>
-        )
-    ]
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={[""]}>
+        <Story />
+      </MemoryRouter>
+    )
+  ]
 }

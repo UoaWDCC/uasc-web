@@ -1,8 +1,6 @@
 import { Card, Typography, CardContent, Stack, Box } from "@mui/material"
 
-
 function ProfileCalendarCard() {
-
   return (
     <div>
       <Card
@@ -22,8 +20,7 @@ function ProfileCalendarCard() {
             >
               Calendar
             </Typography>
-            <Box>
-            </Box>
+            <Box></Box>
           </Stack>
         </CardContent>
       </Card>
