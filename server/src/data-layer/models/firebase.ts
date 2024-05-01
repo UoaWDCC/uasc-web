@@ -1,9 +1,6 @@
 import { Timestamp } from "firebase-admin/firestore"
 
 export interface UserAdditionalInfo {
-  /**
-   * @isDateTime Please Enter in the form dd/mm/yyyy
-   */
   date_of_birth: Timestamp
   /**
    * @isbool Please enter true or false
@@ -69,6 +66,10 @@ export interface UserAdditionalInfo {
    * @isString Please enter your year of study
    */
   university_year: string
+  /**
+   * For identification DO NOT RETURN to users in exposed endpoints
+   */
+  stripe_id?: string
 }
 
 export interface BookingSlot {

@@ -1,12 +1,17 @@
 import PaginatedForm, {
   PageProps
 } from "components/generic/PaginatedForm/PaginatedForm"
-import { PAGES, STEPPER_PROPS } from "./PageConfig/PageConfig"
+import { STEPPER_PROPS } from "./PageConfig/PageConfig"
 import Stepper from "components/generic/StepperComponent/StepperComponent"
 import { oneLevelUp, useCurrentStep } from "./utils/Utils"
 import { useAppData } from "store/store"
 import { Navigate } from "react-router-dom"
-import { PAYMENT_ROUTE, PERSONAL_ROUTE_1 } from "./utils/RouteNames"
+import {
+  ACCOUNT_SETUP_ROUTE,
+  PAGES,
+  PAYMENT_INFORMATION_ROUTE,
+  PERSONAL_ROUTE_1
+} from "./utils/RouteNames"
 
 interface ISignUpFormProps {
   currentPage: PAGES
@@ -33,7 +38,7 @@ export const ProtectedSignUpForm = ({
     case PAGES.Contact:
     case PAGES.Additional:
       if (currentUser) {
-        return <Navigate to={oneLevelUp(PAYMENT_ROUTE)} replace />
+        return <Navigate to={oneLevelUp(PAYMENT_INFORMATION_ROUTE)} replace />
       }
       break
     case PAGES.PaymentInfo:
@@ -44,14 +49,16 @@ export const ProtectedSignUpForm = ({
 
       // User has already paid for membership
       if (currentUserClaims?.member) {
-        return <Navigate to={"../../profile"} replace />
+        return <Navigate to={oneLevelUp(ACCOUNT_SETUP_ROUTE)} replace />
       }
       break
     case PAGES.Confirm:
-      // Can't get here unless signed in
+      break
+    case PAGES.AccountSetup:
       if (!currentUser) {
         return <Navigate to={oneLevelUp(PERSONAL_ROUTE_1)} replace />
       }
+      break
   }
   return (
     <SignUpForm
@@ -70,14 +77,12 @@ export const SignUpForm = ({
   const steps = STEPPER_PROPS
 
   return (
-    <div className="relative flex h-full justify-center">
-      <span className="absolute -top-[17px] ml-4 hidden lg:block">
+    <div className="relative flex justify-center">
+      <span className="absolute -top-[17px] z-10 ml-4 hidden lg:block">
         <Stepper steps={steps} currentStep={currentPage} />
       </span>
       <PaginatedForm pages={pages} currentPageIndex={currentPage}>
-        <div className="h-36 min-h-[40vh] lg:min-h-[45vh]">
-          {pageContent[currentPage]}
-        </div>
+        <div className="h-fit w-full">{pageContent[currentPage]}</div>
       </PaginatedForm>
     </div>
   )

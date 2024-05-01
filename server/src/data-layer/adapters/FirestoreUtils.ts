@@ -5,5 +5,10 @@ export const firestoreTimestampToDate = (firestoreDate: Timestamp) => {
 }
 
 export const dateToFirestoreTimeStamp = (date: Date) => {
-  return Timestamp.fromDate(date)
+  let output = Timestamp.fromDate(date)
+  output = {
+    seconds: output.seconds,
+    nanoseconds: output.nanoseconds
+  } as Timestamp
+  return output
 }

@@ -18,7 +18,8 @@ export const memberUserInfoMock: UserAdditionalInfo = {
   university: "uoa",
   student_id: "11299211",
   returning: true,
-  university_year: "2nd"
+  university_year: "2nd",
+  stripe_id: "default"
 }
 
 export const adminUserInfoMock: UserAdditionalInfo = {
@@ -59,4 +60,25 @@ export const guestUserInfoMock: UserAdditionalInfo = {
   student_id: "125366433",
   returning: true,
   university_year: "1st"
+}
+
+export const signupUserMock: UserAdditionalInfo = {
+  date_of_birth: dateToFirestoreTimeStamp(new Date(0)),
+  does_freestyle: true,
+  does_racing: true,
+  does_ski: true,
+  gender: "string",
+  emergency_name: "string",
+  emergency_phone: "string",
+  emergency_relation: "string",
+  first_name: "string",
+  last_name: "string",
+  membership: "guest",
+  dietary_requirements: "string",
+  faculty: "string",
+  university: "string",
+  student_id: "string",
+  returning: true,
+  university_year: "string",
+  stripe_id: "string"
 }
