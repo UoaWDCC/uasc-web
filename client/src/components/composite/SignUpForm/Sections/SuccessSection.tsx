@@ -7,7 +7,7 @@ type props = ISuccessSectionProps
 const SuccessSection = ({ infoText }: props) => {
   return (
     <div>
-      <p>{infoText}</p>
+      <h3 className="text-bold">{infoText}</h3>
     </div>
   )
 }

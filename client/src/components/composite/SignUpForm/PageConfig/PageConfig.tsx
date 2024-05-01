@@ -25,7 +25,7 @@ import {
 import TestIcon from "assets/icons/snowboarder.svg?react"
 
 export const PAGINATED_FORM_PAGES = (
-  navigateFn: (route: RouteNames | number) => void
+  navigateFn: (route: RouteNames | "/profile" | number) => void
 ): PageProps[] => [
   {
     index: PAGES.PersonalFirst,
@@ -76,7 +76,11 @@ export const PAGINATED_FORM_PAGES = (
     onBack: () => navigateFn(-1)
     // after setting up the account, the next button is enabled and shows the success section
   },
-  { index: PAGES.Success, title: "Success", onBack: () => navigateFn(-1) }
+  {
+    index: PAGES.Success,
+    title: "Success",
+    onNext: () => navigateFn("/profile")
+  }
 ]
 
 /**
@@ -96,8 +100,9 @@ export const PAGE_CONTENT = [
     textBottom="In the meantime, please set up your login details."
     SvgIcon={TestIcon}
   />,
-  // TODO: IMPLEMENT ACCOUNT SETUP SECTION HERE
-  <SuccessSection key="Success" infoText="texts for testing" />
+  // Account setup section here
+  <></>,
+  <SuccessSection key="Success" infoText="You can now login to your account." />
 ]
 
 /**
