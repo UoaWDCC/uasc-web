@@ -37,30 +37,31 @@ export const Footer = () => {
       <Link to="/policy">
         <h5 className="uppercase">policy</h5>
       </Link>
+      <div className="flex gap-2">
+        <span>
+          <a href="https://instagram.com" target="blank">
+            <Instagram className="fill-white" />
+          </a>
+        </span>
 
-      <span>
-        <a href="https://instagram.com" target="blank">
-          <Instagram className="fill-white" />
-        </a>
-      </span>
+        <span>
+          <a href="https://twitter.com" target="blank">
+            <Twitter className="fill-white" />
+          </a>
+        </span>
 
-      <span>
-        <a href="https://twitter.com" target="blank">
-          <Twitter className="fill-white" />
-        </a>
-      </span>
+        <span className="h-[24px] w-[24px]">
+          <a href="https://facebook.com" target="blank">
+            <Facebook className="fill-white" />
+          </a>
+        </span>
 
-      <span className="h-[24px] w-[24px]">
-        <a href="https://facebook.com" target="blank">
-          <Facebook className="fill-white" />
-        </a>
-      </span>
-
-      <span>
-        <a href="https://snapchat.com" target="blank">
-          <Snapchat className="fill-white" />
-        </a>
-      </span>
+        <span>
+          <a href="https://snapchat.com" target="blank">
+            <Snapchat className="fill-white" />
+          </a>
+        </span>
+      </div>
     </div>
   )
 }
