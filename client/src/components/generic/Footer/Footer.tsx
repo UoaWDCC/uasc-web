@@ -9,7 +9,7 @@ const HorizontalDivider = () => <span className="bg-gray-3 h-[12px] w-[1px]" />
 
 export const Footer = () => {
   return (
-    <div className="text-gray-3 flex h-[56px] w-full items-center justify-center gap-3 border border-black bg-black">
+    <div className="text-gray-3 flex h-[56px] w-full items-center justify-center gap-3 border border-black bg-black ">
       <h5 className="uppercase">
         COPYRIGHT {new Date().getFullYear()} University of Auckland Snowsports
         Club
@@ -41,7 +41,7 @@ export const Footer = () => {
         </Link>
       </div>
 
-      <div className="hidden gap-2 lg:flex">
+      <div className="hidden gap-3 pl-20 lg:flex">
         <span>
           <a href="https://instagram.com" target="blank">
             <Instagram className="fill-white" />
