@@ -14,29 +14,33 @@ export const Footer = () => {
         COPYRIGHT {new Date().getFullYear()} University of Auckland Snowsports
         Club
       </h5>
-      <HorizontalDivider />
 
-      <Link to="/about">
-        <h5 className="uppercase">About</h5>
-      </Link>
+      <div className="flex gap-3 items-center justify-center">
+        <HorizontalDivider />
 
-      <HorizontalDivider />
+        <Link to="/about">
+          <h5 className="uppercase">About</h5>
+        </Link>
 
-      <Link to="/faq">
-        <h5 className="uppercase">faq</h5>
-      </Link>
+        <HorizontalDivider />
 
-      <HorizontalDivider />
+        <Link to="/faq">
+          <h5 className="uppercase">faq</h5>
+        </Link>
 
-      <Link to="/contact us">
-        <h5 className="uppercase">contact us</h5>
-      </Link>
+        <HorizontalDivider />
 
-      <HorizontalDivider />
+        <Link to="/contact us">
+          <h5 className="uppercase">contact us</h5>
+        </Link>
 
-      <Link to="/policy">
-        <h5 className="uppercase">policy</h5>
-      </Link>
+        <HorizontalDivider />
+
+        <Link to="/policy">
+          <h5 className="uppercase">policy</h5>
+        </Link>
+      </div>
+
       <div className="flex gap-2">
         <span>
           <a href="https://instagram.com" target="blank">
