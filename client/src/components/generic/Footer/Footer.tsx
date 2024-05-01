@@ -15,7 +15,7 @@ export const Footer = () => {
         Club
       </h5>
 
-      <div className="flex gap-3 items-center justify-center">
+      <div className="hidden lg:flex items-center justify-center gap-3">
         <HorizontalDivider />
 
         <Link to="/about">
@@ -41,7 +41,7 @@ export const Footer = () => {
         </Link>
       </div>
 
-      <div className="flex gap-2">
+      <div className="hidden lg:flex gap-2">
         <span>
           <a href="https://instagram.com" target="blank">
             <Instagram className="fill-white" />
