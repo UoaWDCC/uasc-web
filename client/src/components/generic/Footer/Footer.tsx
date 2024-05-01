@@ -1,18 +1,26 @@
-export interface IFooterProps {
-  title: string
-  about: string
-  faq: string
-  contact: string
-  policy: string
-}
+import { Link } from "react-router-dom"
 
-type props = IFooterProps
+import Facebook from "assets/icons/facebook.svg?react"
 
-export const Footer = ({ title, about }: props) => {
+const HorizontalDivider = () => <span className="bg-gray-3 h-[12px] w-[1px]" />
+
+export const Footer = () => {
   return (
-    <div className="flex h-[56px] w-full items-center justify-center border border-black">
-      <div>{title}</div>
-      <a href="#">{about}</a>
+    <div className="text-gray-3 flex h-[56px] w-full items-center justify-center gap-2 border border-black bg-black">
+      <h5 className="uppercase">
+        COPYRIGHT {new Date().getFullYear()} University of Auckland Snowsports
+        Club
+      </h5>
+
+      <Link to="/about">
+        <h5 className="uppercase">About</h5>
+      </Link>
+      <HorizontalDivider />
+      <span className="h-[24px] w-[24px]">
+        <a href="https://facebook.com" target="blank">
+          <Facebook className="fill-white" />
+        </a>
+      </span>
     </div>
   )
 }

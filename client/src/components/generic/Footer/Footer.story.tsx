@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
 import { Footer } from "./Footer"
+import { MemoryRouter } from "react-router-dom"
 
 const meta: Meta<typeof Footer> = {
   component: Footer
@@ -13,5 +14,12 @@ export const DefaultFooter: Story = {
   args: {
     title: "Footer title testing",
     about: "ABOUT"
-  }
+  },
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    )
+  ]
 }
