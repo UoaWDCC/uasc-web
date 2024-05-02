@@ -13,15 +13,16 @@ export class StripeWebhook extends Controller {
   @Post()
   @SuccessResponse(200, "Webhook post received")
   public async receiveWebhook(@Request() request: any): Promise<void> {
-    const stripe = new Stripe(process.env.STRIPE_API_KEY)
+    // const stripe = new Stripe(process.env.STRIPE_API_SECRET) // developement key
+    const stripe = new Stripe(process.env.STRIPE_API_KEY) // production key
     // Ensure security of the endpoint by constructing an event
     let event: Stripe.Event
     try {
       event = stripe.webhooks.constructEvent(
         request.rawBody,
         request.headers["stripe-signature"],
-        process.env.STRIPE_LOCAL
-        // process.env.STRIPE_API_SECRET
+        process.env.STRIPE_WEBHOOK_SECRET
+        // process.env.STRIPE_LOCAL_WEBHOOK // local webhook secret
       )
     } catch (err) {
       console.error(err)
@@ -37,14 +38,12 @@ export class StripeWebhook extends Controller {
         if (event.type === "payment_intent.succeeded") {
           console.debug("[WEBHOOK] received payment_intent.succeeded")
           // Stripe PaymentIntent
-          const { id, customer } = event.data.object
+          const { id } = event.data.object
+          console.log(id)
           // Fetch the checkout session from the PaymentIntent ID
           const {
             data: [data]
-          } = await stripeService.retrieveCheckoutSessionFromPaymentIntent(
-            id,
-            customer.toString()
-          )
+          } = await stripeService.retrieveCheckoutSessionFromPaymentIntent(id)
           const uid = data.client_reference_id
           if (!uid || !(await userService.getUserData(uid)))
             return this.setStatus(400) // bad request, non existent user
@@ -59,7 +58,7 @@ export class StripeWebhook extends Controller {
             })
             // need to add member claim to user
             await authService.setCustomUserClaim(uid, "member")
-            console.debug("[WEBHOOK] added membership")
+            console.debug("[WEBHOOK] added membership to " + uid)
           } catch (e) {
             console.error(e)
             return this.setStatus(500) // unknown server error
