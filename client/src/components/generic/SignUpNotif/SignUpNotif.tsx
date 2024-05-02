@@ -9,7 +9,7 @@ export const SignUpNotif = () => {
         Only paid members can access bookings. Please sign up or wait until your
         membership payment has been proccessed.
       </h4>
-      <Button onClick={() => nav()} />
+      <Button onClick={() => nav()}>GO TO SIGNUP</Button>
     </div>
   )
 }
