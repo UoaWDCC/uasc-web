@@ -8,6 +8,7 @@ import {
   pricingBannerContent,
   pricingNote
 } from "./sections/utils/Pricing"
+import { Footer } from "components/generic/Footer/Footer"
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
         note={pricingNote}
         bannerContent={pricingBannerContent}
       />
+      <Footer />
     </>
   )
 }

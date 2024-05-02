@@ -8,7 +8,7 @@ const HorizontalDivider = () => <span className="bg-gray-3 h-[12px] w-[1px]" />
 
 export const Footer = () => {
   return (
-    <div className="text-gray-3 flex h-[56px] w-full gap-3 border border-black bg-black sm:items-center justify-center lg:text-nowrap lg:pl-[32px]">
+    <div className="text-gray-3 flex h-[56px] w-full justify-center gap-3 border border-black bg-black sm:items-center lg:text-nowrap lg:pl-[32px]">
       <h5 className="flex items-center justify-center text-center uppercase">
         COPYRIGHT {new Date().getFullYear()} University of Auckland Snowsports
         Club
