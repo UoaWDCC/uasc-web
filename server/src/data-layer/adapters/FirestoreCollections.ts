@@ -1,6 +1,10 @@
 // credit https://plainenglish.io/blog/using-firestore-with-typescript-in-the-v9-sdk-cf36851bb099
 import "dotenv/config"
-import { Booking, UserAdditionalInfo } from "data-layer/models/firebase"
+import {
+  Booking,
+  BookingSlot,
+  UserAdditionalInfo
+} from "data-layer/models/firebase"
 import { admin } from "business-layer/security/Firebase"
 
 const converter = <T>() => ({
@@ -24,7 +28,8 @@ const firestore = Object.assign(
 
 const db = {
   users: firestore.collection<UserAdditionalInfo>("users"),
-  bookings: firestore.collection<Booking>("bookings")
+  bookings: firestore.collection<Booking>("bookings"),
+  bookingSlots: firestore.collection<BookingSlot>("bookingSlots")
 } as const
 
 export default db
