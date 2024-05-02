@@ -29,7 +29,7 @@ export const Footer = () => {
 
         <HorizontalDivider />
 
-        <Link to="/contact us">
+        <Link to="/contact">
           <h5 className="uppercase">contact us</h5>
         </Link>
 
