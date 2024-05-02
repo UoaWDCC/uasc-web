@@ -43,7 +43,7 @@ export const Footer = () => {
 
       <div className="ml-auto hidden items-center gap-6 pr-[32px] lg:flex">
         <span>
-          <a href="https://instagram.com" target="blank">
+          <a href="https://www.instagram.com/uasc_nz/" target="blank">
             <Instagram className="fill-white" />
           </a>
         </span>
@@ -55,7 +55,7 @@ export const Footer = () => {
         </span>
 
         <span className="h-[24px] w-[24px]">
-          <a href="https://facebook.com" target="blank">
+          <a href="https://www.facebook.com/UoAsnowsports/" target="blank">
             <Facebook className="fill-white" />
           </a>
         </span>
