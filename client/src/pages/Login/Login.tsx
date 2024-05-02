@@ -4,7 +4,7 @@ import { Outlet, Route, Routes, useNavigate } from "react-router-dom"
 import { useAppData } from "store/store"
 import { loginHandler, resetPassword } from "./utils/Handlers"
 import PasswordResetForm from "components/composite/LoginForm/PasswordResetForm/PasswordResetForm"
-
+import { Footer } from "components/generic/Footer/Footer"
 const Login = () => {
   const [{ currentUser }] = useAppData()
 
@@ -45,6 +45,9 @@ const Login = () => {
         />
       </Routes>
       <Outlet />
+      <span className="absolute bottom-0 w-full">
+        <Footer />
+      </span>
     </FullPageBackgroundImage>
   )
 }
