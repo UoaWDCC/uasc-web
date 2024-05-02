@@ -23,8 +23,9 @@ const Home = () => {
           bannerContent={pricingBannerContent}
         />
       </div>
-
+      <div className="pt-14">
         <Footer />
+      </div>
     </>
   )
 }

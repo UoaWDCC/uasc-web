@@ -19,7 +19,7 @@
     z-index: -1;
     width: 100%;
     overflow: hidden;
-    height: 80%;
+    height: 100%;
     position: absolute;
     opacity: 0.1;
     background: radial-gradient(
