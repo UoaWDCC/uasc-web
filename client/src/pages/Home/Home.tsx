@@ -13,15 +13,18 @@ import { Footer } from "components/generic/Footer/Footer"
 const Home = () => {
   return (
     <>
-      <LandingSection />
-      <AboutSection />
-      <BenefitSection benefits={benefits} />
-      <PricingSection
-        pricings={Pricings}
-        note={pricingNote}
-        bannerContent={pricingBannerContent}
-      />
-      <Footer />
+      <div className="">
+        <LandingSection />
+        <AboutSection />
+        <BenefitSection benefits={benefits} />
+        <PricingSection
+          pricings={Pricings}
+          note={pricingNote}
+          bannerContent={pricingBannerContent}
+        />
+      </div>
+
+        <Footer />
     </>
   )
 }
