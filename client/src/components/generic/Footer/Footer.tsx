@@ -41,7 +41,7 @@ export const Footer = () => {
         </Link>
       </div>
 
-      <div className="ml-auto hidden items-center gap-3 pr-[32px] lg:flex">
+      <div className="ml-auto hidden items-center gap-6 pr-[32px] lg:flex">
         <span>
           <a href="https://instagram.com" target="blank">
             <Instagram className="fill-white" />
