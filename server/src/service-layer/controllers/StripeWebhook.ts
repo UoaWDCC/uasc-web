@@ -37,20 +37,19 @@ export class StripeWebhook extends Controller {
         if (event.type === "payment_intent.succeeded") {
           console.debug("[WEBHOOK] received payment_intent.succeeded")
           // Stripe PaymentIntent
-          const { customer } = event.data.object
+          const { id, customer } = event.data.object
           // Fetch the checkout session from the PaymentIntent ID
-          const stripeSession =
-            await stripeService.retrieveCheckoutSessionFromPaymentIntent(
-              "checkout.session",
-              customer.toString(),
-              "complete"
-            )
-          const uid = stripeSession.data[0].client_reference_id
+          const {
+            data: [data]
+          } = await stripeService.retrieveCheckoutSessionFromPaymentIntent(
+            id,
+            customer.toString()
+          )
+          const uid = data.client_reference_id
           if (!uid || !(await userService.getUserData(uid)))
             return this.setStatus(400) // bad request, non existent user
           if (
-            stripeSession.data[0].metadata[CHECKOUT_TYPE_KEY] !==
-            CheckoutTypeValues.MEMBERSHIP
+            data.metadata[CHECKOUT_TYPE_KEY] !== CheckoutTypeValues.MEMBERSHIP
           )
             return this.setStatus(400) // bad request, not the memberhip we want
           try {
