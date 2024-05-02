@@ -59,6 +59,8 @@ export const ProtectedSignUpForm = ({
         return <Navigate to={oneLevelUp(PERSONAL_ROUTE_1)} replace />
       }
       break
+    case PAGES.Success:
+      break
   }
   return (
     <SignUpForm
