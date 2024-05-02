@@ -1,21 +1,20 @@
 import { Link } from "react-router-dom"
 
 import Facebook from "assets/icons/facebook.svg?react"
-import Twitter from "assets/icons/twitter.svg?react"
+
 import Instagram from "assets/icons/instagram.svg?react"
-import Snapchat from "assets/icons/snapchat.svg?react"
 
 const HorizontalDivider = () => <span className="bg-gray-3 h-[12px] w-[1px]" />
 
 export const Footer = () => {
   return (
-    <div className="text-gray-3 flex h-[56px] w-full gap-3 text-nowrap border border-black bg-black pl-[32px] sm:items-center sm:justify-center">
-      <h5 className="flex items-center justify-center uppercase">
+    <div className="text-gray-3 flex h-[56px] w-full gap-3 border border-black bg-black sm:items-center justify-center lg:text-nowrap lg:pl-[32px]">
+      <h5 className="flex items-center justify-center text-center uppercase">
         COPYRIGHT {new Date().getFullYear()} University of Auckland Snowsports
         Club
       </h5>
 
-      <div className="hidden items-center justify-center gap-3 lg:float-left lg:flex ">
+      <div className="hidden items-center justify-center gap-3 lg:flex">
         <HorizontalDivider />
 
         <Link to="/about">
@@ -48,21 +47,9 @@ export const Footer = () => {
           </a>
         </span>
 
-        <span>
-          <a href="https://twitter.com" target="blank">
-            <Twitter className="fill-white" />
-          </a>
-        </span>
-
         <span className="h-[24px] w-[24px]">
           <a href="https://www.facebook.com/UoAsnowsports/" target="blank">
             <Facebook className="fill-white" />
-          </a>
-        </span>
-
-        <span>
-          <a href="https://snapchat.com" target="blank">
-            <Snapchat className="fill-white" />
           </a>
         </span>
       </div>
