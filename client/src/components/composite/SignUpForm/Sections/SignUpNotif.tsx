@@ -1,3 +1,7 @@
 export const SignUpNotif = () => {
-  return <div></div>
+  return (
+    <div>
+      <h5>Testing Text Section</h5>
+    </div>
+  )
 }
