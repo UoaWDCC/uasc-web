@@ -1,7 +1,12 @@
-import { Navigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Button from "../FigmaButtons/FigmaButton"
 
 export const SignUpNotif = () => {
+  const navigate = useNavigate()
+  function nav() {
+    navigate("/register")
+  }
+
   return (
     <div className="text-dark-blue-100 flex flex-col items-center justify-center gap-2">
       <h2 className="text-center italic">Currently unavailable</h2>
@@ -14,7 +19,4 @@ export const SignUpNotif = () => {
       </Button>
     </div>
   )
-}
-function nav() {
-  ;<Navigate to=""></Navigate>
 }
