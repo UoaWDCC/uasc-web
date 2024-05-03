@@ -39,10 +39,6 @@ export interface UserAdditionalInfo {
    */
   last_name: string
   /**
-   * @isString Please enter either Admin or Member or Guest
-   */
-  membership: "admin" | "member" | "guest"
-  /**
    * @isString Please write your dietary requirements
    */
   dietary_requirements: string

@@ -11,7 +11,6 @@ import AuthService from "./AuthService"
 import BookingDataService from "data-layer/services/BookingDataService"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
-// const stripe = new Stripe(process.env.STRIPE_API_SECRET) // developement
 
 const ONE_MINUTE_S = 60
 
@@ -274,12 +273,8 @@ export default class StripeService {
    * @returns A promise that resolves once the user has been promoted.
    */
   public async handleMembershipPaymentSession(uid: string) {
-    const userService = new UserDataService()
     const authService = new AuthService()
 
-    await userService.editUserData(uid, {
-      membership: "member"
-    })
     await authService.setCustomUserClaim(uid, "member")
   }
 
