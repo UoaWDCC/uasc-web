@@ -15,7 +15,7 @@ export const SignUpNotif = () => {
         membership payment has been proccessed.
       </h4>
       <Button className="" onClick={() => nav()}>
-        SIGNUP
+        SIGN UP
       </Button>
     </div>
   )
