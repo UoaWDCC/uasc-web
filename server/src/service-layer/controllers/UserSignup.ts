@@ -29,10 +29,7 @@ export class UserSignup extends Controller {
 
     try {
       // Create document with user info
-      await userService.createUserData(userRecord.uid, {
-        ...userInfo,
-        membership: "guest" // set membership to guest
-      })
+      await userService.createUserData(userRecord.uid, userInfo)
       // Create a JWT token and return at the end
       const jwtToken = await authService.createCustomToken(
         userRecord.uid,
