@@ -5,7 +5,6 @@ import {
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
-import UserDataService from "data-layer/services/UserDataService"
 import Stripe from "stripe"
 import AuthService from "./AuthService"
 import BookingDataService from "data-layer/services/BookingDataService"
