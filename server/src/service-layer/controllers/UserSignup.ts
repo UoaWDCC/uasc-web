@@ -13,12 +13,11 @@ export class UserSignup extends Controller {
     const userService = new UserDataService()
     const authService = new AuthService()
 
-    // Received userInfo omits membership and stripe_id
+    // Received userInfo omits stripe_id
     const userInfo = requestBody.user
     let userRecord
-    // Seperate try/catch to avoid conflicting emails.
+    // Seperate try/catch to avoid conflicting emails while creating user.
     try {
-      // Create user data in Auth Service
       userRecord = await authService.createUser(requestBody.email)
     } catch (e) {
       this.setStatus(409)
@@ -28,7 +27,6 @@ export class UserSignup extends Controller {
     }
 
     try {
-      // Create document with user info
       await userService.createUserData(userRecord.uid, userInfo)
       // Create a JWT token and return at the end
       const jwtToken = await authService.createCustomToken(
