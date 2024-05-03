@@ -47,9 +47,7 @@ export default class UserDataService {
     > = FirestoreCollections.users
 
     /** Apply filters to the query based on the provided filter properties */
-    if (filters.membership) {
-      users = users.where("membership", "==", filters.membership)
-    } else if (filters.first_name) {
+    if (filters.first_name) {
       users = users.where("first_name", "==", filters.first_name)
     } else if (filters.last_name) {
       users = users.where("last_name", "==", filters.last_name)
