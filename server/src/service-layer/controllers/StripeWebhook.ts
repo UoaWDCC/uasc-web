@@ -52,10 +52,6 @@ export class StripeWebhook extends Controller {
           )
             return this.setStatus(400) // bad request, not the memberhip we want
           try {
-            // need to update firestore
-            await userService.editUserData(uid, {
-              membership: "member" // only update their membership
-            })
             // need to add member claim to user
             await authService.setCustomUserClaim(uid, "member")
             console.debug("[WEBHOOK] added membership to " + uid)

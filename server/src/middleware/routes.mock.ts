@@ -5,7 +5,6 @@ import {
   EMULATOR_HOST,
   EMULATOR_PROJECT_ID
 } from "data-layer/adapters/EmulatorConfig"
-import { UserAdditionalInfo } from "data-layer/models/firebase"
 import UserDataService from "data-layer/services/UserDataService"
 import { initializeApp } from "firebase/app"
 import {
@@ -14,14 +13,9 @@ import {
   signInWithCustomToken
 } from "firebase/auth"
 
-import {
-  memberUserInfoMock,
-  adminUserInfoMock,
-  guestUserInfoMock
-} from "test-config/mocks/User.mock"
+import { userInfoMock } from "test-config/mocks/User.mock"
 
 type claims = typeof AuthServiceClaims.ADMIN | typeof AuthServiceClaims.MEMBER
-type memberships = UserAdditionalInfo["membership"]
 
 const clientFirebase = initializeApp({
   projectId: EMULATOR_PROJECT_ID,
@@ -32,27 +26,13 @@ const clientAuth = getAuth(clientFirebase)
 connectAuthEmulator(clientAuth, `http://${EMULATOR_HOST}:${EMULATOR_AUTH_PORT}`)
 
 const userService = new UserDataService()
-export type userToCreate = {
-  uid: string
-  membership: memberships
-}
 
 export const ADMIN_USER_UID = "admin-user"
 export const MEMBER_USER_UID = "member-user"
 export const GUEST_USER_UID = "guest-user"
 
-export const createUserData = async (uid: string, membership: memberships) => {
-  switch (membership) {
-    case "admin":
-      await userService.createUserData(uid, adminUserInfoMock)
-      break
-    case "member":
-      await userService.createUserData(uid, memberUserInfoMock)
-      break
-    case "guest":
-      await userService.createUserData(uid, guestUserInfoMock)
-      break
-  }
+export const createUserData = async (uid: string) => {
+  await userService.createUserData(uid, userInfoMock)
 }
 
 export const createUserWithClaim = async (uid: string, claim?: claims) => {
