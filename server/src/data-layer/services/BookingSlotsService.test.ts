@@ -113,7 +113,7 @@ describe("BookingSlotsService Tests", () => {
     const data = doc.data()
 
     expect(data).toEqual({
-      bookingSlotData,
+      ...bookingSlotData,
       max_bookings: 10
     })
   })
