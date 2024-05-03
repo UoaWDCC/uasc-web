@@ -6,3 +6,7 @@ updatePassword().then(()=>{
 }).catch((error)=>{
 
 }) */
+
+export const PasswordSetup = () => {
+  return <></>
+}
