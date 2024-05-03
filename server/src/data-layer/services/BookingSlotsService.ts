@@ -3,13 +3,14 @@ import { BookingSlot } from "data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 
 export default class BookingSlotService {
+  static createBookingSlot: any
   // Create
   public async createBookingSlot(bookingSlotData: BookingSlot) {
     return await FirestoreCollections.bookingSlots.add(bookingSlotData)
   }
 
   // Read
-  public async getBookingStripeProductId(productId: string) {
+  public async getBookingSlotsStripeProductId(productId: string) {
     const result = await FirestoreCollections.bookingSlots
       .where("stripe_product_id", "==", productId)
       .get()
