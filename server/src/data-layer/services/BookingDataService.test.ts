@@ -43,8 +43,9 @@ describe("BookingDataService", () => {
       stripe_payment_id: "stripeID1"
     })
 
-    const bookingsBy_BSID =
-      await new BookingDataService().getBookingsByBookingId("booking1") // test for booking_slot_id input
+    const bookingsBy_BSID = await new BookingDataService().getBookingsBySlotId(
+      "booking1"
+    ) // test for booking_slot_id input
 
     expect(bookingsBy_BSID).not.toBe(undefined)
     expect(bookingsBy_BSID.length).toBe(1)
@@ -55,7 +56,7 @@ describe("BookingDataService", () => {
     })
 
     const bookingsBy_SPID =
-      await new BookingDataService().getBookingsByStripePaymentId("stripeID1") // test for stripe_payment_id input
+      await new BookingDataService().getBookingsByStripeSessionId("stripeID1") // test for stripe_payment_id input
 
     expect(bookingsBy_SPID).not.toBe(undefined)
     expect(bookingsBy_SPID.length).toBe(1)

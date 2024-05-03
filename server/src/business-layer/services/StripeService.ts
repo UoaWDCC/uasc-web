@@ -1,10 +1,14 @@
 import {
+  BOOKING_SLOT_KEY,
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues,
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
+import UserDataService from "data-layer/services/UserDataService"
 import Stripe from "stripe"
+import AuthService from "./AuthService"
+import BookingDataService from "data-layer/services/BookingDataService"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 // const stripe = new Stripe(process.env.STRIPE_API_SECRET) // developement
@@ -146,17 +150,24 @@ export default class StripeService {
     return product
   }
 
+  /**
+   * Fetches a checkout session associated with a given payment intent ID.
+   * @param payment_intent The payment intent used to pay for this checkout session.
+   * @returns The checkout session associated with this payment.
+   */
   public async retrieveCheckoutSessionFromPaymentIntent(
-    payment_intent?: string,
-    customer?: string,
-    status?: Stripe.Checkout.Session.Status
-  ) {
-    return await stripe.checkout.sessions.list({
-      limit: 1,
-      payment_intent,
-      customer,
-      status
+    payment_intent: string
+  ): Promise<Stripe.Checkout.Session> {
+    const sessions = await stripe.checkout.sessions.list({
+      payment_intent
     })
+    if (sessions.has_more) {
+      throw new Error(
+        `Fetching checkout session from payment intent yielded more than expected sessions`
+      )
+    }
+
+    return sessions.data[0]
   }
 
   /**
@@ -255,5 +266,44 @@ export default class StripeService {
 
     /** Return the updated product */
     return updatedProduct
+  }
+
+  /**
+   * Promotes a user from guest to member status.
+   * @param uid The user ID to promote to a member.
+   * @returns A promise that resolves once the user has been promoted.
+   */
+  public async handleMembershipPaymentSession(uid: string) {
+    const userService = new UserDataService()
+    const authService = new AuthService()
+
+    await userService.editUserData(uid, {
+      membership: "member"
+    })
+    await authService.setCustomUserClaim(uid, "member")
+  }
+
+  /**
+   * Handles a booking payment session by creating the booking for the user.
+   * @param uid The user ID to award the booking session.
+   * @param session The Stripe session the user bought.
+   */
+  public async handleBookingPaymentSession(
+    uid: string,
+    session: Stripe.Checkout.Session
+  ) {
+    if (!(BOOKING_SLOT_KEY in session.metadata)) {
+      throw new Error(
+        `Booking session '${session.id}' from user '${uid}' did not contain a BOOKING_SLOT_KEY`
+      )
+    }
+    const booking_slot_id = session.metadata[BOOKING_SLOT_KEY]
+
+    const bookingDataService = new BookingDataService()
+    await bookingDataService.createBooking({
+      booking_slot_id,
+      stripe_payment_id: session.id,
+      user_id: uid
+    })
   }
 }

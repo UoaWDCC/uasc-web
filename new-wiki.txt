@@ -1,0 +1,75 @@
+We may need to mock some resources in cases that we do not want to continuously make network requests (such as in the case of stripe).
+
+## Stripe Example
+
+https://stackoverflow.com/a/72482906
+```
+jest.mock('stripe', () => {
+  const stripe = jest.requireActual('stripe');
+  jest.spyOn(stripe.resources.Customers.prototype, 'create')
+    .mockImplementation(() => (
+      Promise.resolve({id: 'stripe-test-id'})
+    ));
+  return stripe;
+})
+```
+
+## Firebase Emulators
+
+We can use the emulator for firebase when doing jest testing, but prefer to play with staging instance if testing manually
+
+use `yarn firebase-test "jest <file name>"` to run a test that requires firestore or firebase auth. Note that file name should be the name not a path
+
+Steps for local testing, WIP to add to Wiki.
+
+# ngrock testing
+1. Start by [installing ngrock](https://ngrok.com/docs/getting-started/) and add the auth token provided in the dashboard. 
+```
+ngrok config add-authtoken <TOKEN>
+```
+2. Load into the dashboard and find the [Cloud Edge -> Edges](https://dashboard.ngrok.com/cloud-edge/edges) tab and create a new Edge, this is to [bypass the ngrock browser warning](https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning/77764864#77764864).
+3. In the routes section, Routes -> Request Headers and add the key: `ngrok-skip-browser-warning` and the value: `true`
+
+**Note:** Due to free ngrock account limitations, you **cannot** save the configuration but the request headers still work. 
+
+4. You can then start the tunel by clicking `Start a Tunnel`
+5. After starting the tunnel, copy the `Copy and paste the following into your terminal.` field and change the port to the server port(you can start the UASC server by running `yarn dev-server`). 
+6. Add the ngrock URL to the [stripe webhook dashboard](https://dashboard.stripe.com/test/webhooks/).
+7. Easier to follow steps as below !
+
+## Stripe webhook testing
+Make sure you have [Stripe CLI installed](https://docs.stripe.com/stripe-cli).
+
+For local testing, ensure that your server `.env` file has a `STRIPE_API_KEY`, which stores the stripe API key for local testing purposes. This is the Standard key secret from the [Stripe developer dashboard](https://dashboard.stripe.com/test/apikeys). Ask for credentials from the relevant person to get access to this.
+
+For receiving test webhook events, you will also need to generate a `STRIPE_WEBHOOK_SECRET`. Do this by:
+1. Logging in to Stripe
+```
+stripe login
+```
+
+and, in three separate terminals,
+
+2. Forward Stripe webhook events to the dev server:
+```
+stripe listen --forward-to localhost:8000/webhook
+```
+which generates a webhook secret. You will need to place this secret under the `STRIPE_WEBHOOK_EVENT` key in the server `.env` file.
+
+3. Start the server in another terminal
+```
+yarn dev-server
+```
+4. Trigger Stripe webhook events in another terminal
+```
+stripe trigger checkout.session.completed --add checkout_session:metadata.type=membership --add checkout_session:client_reference_id=REFERENCE_ID_HERE
+```
+
+You can test with invalid `metadata` and `client_reference_id`, which should result in different HTTP status codes from the server.
+
+### Creating a Firebase test user
+To create a UID to test with, head to https://console.firebase.google.com/ and login with the credentials.
+
+Go into the UASC project. Build->Authentication->Add user. Enter an email and password. Copy the User ID. 
+
+Head over to Firebase Database->Data->Click the `users` collection->Add document->Set the Document ID as the UID and add a field called "membership" set it to "guest".

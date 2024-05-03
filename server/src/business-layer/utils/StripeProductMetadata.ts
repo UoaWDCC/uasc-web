@@ -19,6 +19,11 @@ export enum MembershipTypeValues {
 }
 
 /**
+ * For booking checkouts
+ */
+export const BOOKING_SLOT_KEY = "booking_slot"
+
+/**
  * For customer objects
  */
 export const USER_FIREBASE_ID_KEY = "firebase_user_id"
