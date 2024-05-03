@@ -57,9 +57,7 @@ describe("BookingSlotsService Tests", () => {
     expect(bookingSlotsByStripeProductID).toContainEqual({
       ...bookingSlotData
     })
-    expect(bookingSlotsByStripeProductID).toContainEqual({
-      ...bookingSlotData2
-    })
+    expect(bookingSlotsByStripeProductID).toContainEqual(bookingSlotData2)
   })
 
   it("Should get booking slots based on date", async () => {
@@ -69,9 +67,7 @@ describe("BookingSlotsService Tests", () => {
 
     expect(bookingSlotsByDate).not.toBe(undefined)
     expect(bookingSlotsByDate.length).toBe(1)
-    expect(bookingSlotsByDate[0]).toEqual({
-      ...bookingSlotData
-    })
+    expect(bookingSlotsByDate[0]).toEqual(bookingSlotData)
   })
 
   it("Should get booking slots between date range", async () => {
@@ -85,15 +81,9 @@ describe("BookingSlotsService Tests", () => {
       )
 
     expect(bookingSlotsBetweenDateRange.length).toBe(3)
-    expect(bookingSlotsBetweenDateRange).toContainEqual({
-      ...bookingSlotData
-    })
-    expect(bookingSlotsBetweenDateRange).toContainEqual({
-      ...bookingSlotData2
-    })
-    expect(bookingSlotsBetweenDateRange).toContainEqual({
-      ...bookingSlotData3
-    })
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData)
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData3)
   })
 
   it("Should get booking slots between valid date range", async () => {
@@ -110,12 +100,8 @@ describe("BookingSlotsService Tests", () => {
       )
 
     expect(bookingSlotsBetweenDateRange.length).toBe(2)
-    expect(bookingSlotsBetweenDateRange).toContainEqual({
-      ...bookingSlotData2
-    })
-    expect(bookingSlotsBetweenDateRange).toContainEqual({
-      ...bookingSlotData3
-    })
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData3)
   })
 
   it("Should update booking slot", async () => {
@@ -127,7 +113,7 @@ describe("BookingSlotsService Tests", () => {
     const data = doc.data()
 
     expect(data).toEqual({
-      ...bookingSlotData,
+      bookingSlotData,
       max_bookings: 10
     })
   })
