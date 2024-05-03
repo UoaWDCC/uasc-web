@@ -14,7 +14,7 @@ export const DefaultExitConfirmation = () => {
   return (
     <ExitConfirmation
       title="Exit form"
-      message="Are you sure you want to exit"
+      message="ARE YOU SURE YOU WANT TO EXIT?"
     />
   )
 }
