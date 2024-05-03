@@ -58,10 +58,9 @@ describe("BookingSlotsService Tests", () => {
       bookingSlotData
     )
     await new BookingSlotsService().updateBookingSlot(id, { max_bookings: 10 })
-    const doc = await FirestoreCollections.bookings.doc(id).get()
+    const doc = await FirestoreCollections.bookingSlots.doc(id).get()
     const data = doc.data()
 
-    expect(data).not.toBe(undefined)
     expect(data).toEqual({
       ...bookingSlotData,
       max_bookings: 10
