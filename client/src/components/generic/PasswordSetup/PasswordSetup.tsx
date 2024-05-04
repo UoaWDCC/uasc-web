@@ -44,11 +44,7 @@ export const PasswordSetup = ({
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (
-      isLoading ||
-      !passwordSetUpHandler
-    )
-      return
+    if (isLoading || !passwordSetUpHandler) return
 
     if (formData.firstPassword !== formData.secondPassword) {
       setMessages({
