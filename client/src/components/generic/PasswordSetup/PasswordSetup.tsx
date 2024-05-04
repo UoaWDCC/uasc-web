@@ -78,7 +78,7 @@ export const PasswordSetup = ({
   return (
     <div className="">
       <form onSubmit={(event) => handleSubmit(event)} ref={formRef}>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           <div className="">
             <p>Password</p>
             <TextInput
@@ -101,8 +101,8 @@ export const PasswordSetup = ({
               }
             />
           </div>
-          <p>You can reset your password at any time.</p>
         </div>
+        <p className="pt-[48px]">You can reset your password at any time.</p>
       </form>
       {messages.success && <AlertsComponent message={messages.success} />}
       {messages.error && (
