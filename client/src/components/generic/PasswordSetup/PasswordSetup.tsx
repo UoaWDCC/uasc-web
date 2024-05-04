@@ -34,7 +34,7 @@ type FormState = {
 
 interface IPasswordSetup {
   passwordSetUpHandler?: (firstPassword: string) => Promise<HandlerResponse>
-  formRef?: React.RefObject<HTMLFormElement>,
+  formRef?: React.RefObject<HTMLFormElement>
   successHandler?: () => void
   backHandler?: () => void
 }
@@ -53,7 +53,12 @@ export const PasswordSetup = ({
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (isLoading || !passwordSetUpHandler || event.currentTarget.checkValidity()) return
+    if (
+      isLoading ||
+      !passwordSetUpHandler ||
+      event.currentTarget.checkValidity()
+    )
+      return
 
     if (formData.firstPassword !== formData.secondPassword) {
       setMessages({
@@ -91,7 +96,9 @@ export const PasswordSetup = ({
           <p>Password</p>
           <TextInput
             className="rounded"
-            onChange={e => setFormData({...formData, firstPassword:e.target.value})}
+            onChange={(e) =>
+              setFormData({ ...formData, firstPassword: e.target.value })
+            }
             type="password"
             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
             title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
@@ -99,14 +106,20 @@ export const PasswordSetup = ({
         </div>
         <div>
           <p>Confirm password</p>
-          <TextInput className="rounded" type="password"
-            onChange={e => setFormData({...formData, secondPassword:e.target.value})}
-           />
+          <TextInput
+            className="rounded"
+            type="password"
+            onChange={(e) =>
+              setFormData({ ...formData, secondPassword: e.target.value })
+            }
+          />
         </div>
         <p>You can reset your password at any time.</p>
       </form>
       {messages.success && <AlertsComponent message={messages.success} />}
-      {messages.error && <AlertsComponent variant="error" message={messages.error} />}
+      {messages.error && (
+        <AlertsComponent variant="error" message={messages.error} />
+      )}
     </div>
   )
 }
