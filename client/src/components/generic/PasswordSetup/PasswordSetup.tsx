@@ -76,31 +76,33 @@ export const PasswordSetup = ({
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="">
       <form onSubmit={(event) => handleSubmit(event)} ref={formRef}>
-        <div>
-          <p>Password</p>
-          <TextInput
-            className="rounded"
-            onChange={(e) =>
-              setFormData({ ...formData, firstPassword: e.target.value })
-            }
-            type="password"
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-          />
+        <div className="flex flex-col gap-4">
+          <div className="">
+            <p>Password</p>
+            <TextInput
+              className="w-3/4 rounded"
+              onChange={(e) =>
+                setFormData({ ...formData, firstPassword: e.target.value })
+              }
+              type="password"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+            />
+          </div>
+          <div className="">
+            <p>Confirm password</p>
+            <TextInput
+              className="w-3/4 rounded"
+              type="password"
+              onChange={(e) =>
+                setFormData({ ...formData, secondPassword: e.target.value })
+              }
+            />
+          </div>
+          <p>You can reset your password at any time.</p>
         </div>
-        <div>
-          <p>Confirm password</p>
-          <TextInput
-            className="rounded"
-            type="password"
-            onChange={(e) =>
-              setFormData({ ...formData, secondPassword: e.target.value })
-            }
-          />
-        </div>
-        <p>You can reset your password at any time.</p>
       </form>
       {messages.success && <AlertsComponent message={messages.success} />}
       {messages.error && (
