@@ -103,7 +103,7 @@ export const PAGE_CONTENT = [
     SvgIcon={TestIcon}
   />,
   // Account setup section here
-  <AccountSetupSection key="account"/>,
+  <AccountSetupSection key="account" />,
   <SuccessSection key="Success" />
 ]
 
