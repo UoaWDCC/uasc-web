@@ -1,12 +1,3 @@
-/*
-import { updatePassword } from "firebase/auth"
-
-updatePassword().then(()=>{
-
-}).catch((error)=>{
-
-}) */
-
 import TextInput from "../TextInputComponent/TextInput"
 
 import AlertsComponent from "../AlertsComponent/AlertsComponent"
@@ -55,8 +46,7 @@ export const PasswordSetup = ({
     event.preventDefault()
     if (
       isLoading ||
-      !passwordSetUpHandler ||
-      event.currentTarget.checkValidity()
+      !passwordSetUpHandler
     )
       return
 
