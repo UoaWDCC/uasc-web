@@ -13,8 +13,8 @@ export class StripeWebhook extends Controller {
   @Post()
   @SuccessResponse(200, "Webhook post received")
   public async receiveWebhook(@Request() request: any): Promise<void> {
-    // const stripe = new Stripe(process.env.STRIPE_API_SECRET) // developement key
-    const stripe = new Stripe(process.env.STRIPE_API_KEY) // production key
+    const stripe = new Stripe(process.env.STRIPE_API_KEY)
+
     // Ensure security of the endpoint by constructing an event
     let event: Stripe.Event
     try {
@@ -22,12 +22,12 @@ export class StripeWebhook extends Controller {
         request.rawBody,
         request.headers["stripe-signature"],
         process.env.STRIPE_WEBHOOK_SECRET
-        // process.env.STRIPE_LOCAL_WEBHOOK // local webhook secret
       )
     } catch (err) {
       console.error(err)
       return this.setStatus(401) // unauthorized request
     }
+
     // Create services
     const userService = new UserDataService()
     const authService = new AuthService()
@@ -52,10 +52,6 @@ export class StripeWebhook extends Controller {
           )
             return this.setStatus(400) // bad request, not the memberhip we want
           try {
-            // need to update firestore
-            await userService.editUserData(uid, {
-              membership: "member" // only update their membership
-            })
             // need to add member claim to user
             await authService.setCustomUserClaim(uid, "member")
             console.debug("[WEBHOOK] added membership to " + uid)
