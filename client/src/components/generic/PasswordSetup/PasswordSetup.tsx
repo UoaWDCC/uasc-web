@@ -82,7 +82,7 @@ export const PasswordSetup = ({
           <div className="">
             <p>Password</p>
             <TextInput
-              className="lg:w-3/4 rounded w-full"
+              className="w-full rounded lg:w-3/4"
               onChange={(e) =>
                 setFormData({ ...formData, firstPassword: e.target.value })
               }
@@ -94,7 +94,7 @@ export const PasswordSetup = ({
           <div className="">
             <p>Confirm password</p>
             <TextInput
-              className="lg:w-3/4 rounded w-full"
+              className="w-full rounded lg:w-3/4"
               type="password"
               onChange={(e) =>
                 setFormData({ ...formData, secondPassword: e.target.value })
