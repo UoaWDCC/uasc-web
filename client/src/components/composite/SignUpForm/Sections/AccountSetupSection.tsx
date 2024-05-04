@@ -25,14 +25,14 @@ const AccountSetupSection = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       <PasswordSetup
         formRef={passwordResetFormRef}
         passwordSetUpHandler={handleReset}
       />
       <div>
         <Button
-          className=""
+          className="h-1/2 w-1/2"
           onClick={() => passwordResetFormRef.current?.requestSubmit()}
         >
           Set Password

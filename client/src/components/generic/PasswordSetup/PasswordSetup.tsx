@@ -102,7 +102,7 @@ export const PasswordSetup = ({
             />
           </div>
         </div>
-        <p className="pt-[24px]">You can reset your password at any time.</p>
+        <p className="pt-[24px] pb-[20px]">You can reset your password at any time.</p>
       </form>
       {messages.success && <AlertsComponent message={messages.success} />}
       {messages.error && (
