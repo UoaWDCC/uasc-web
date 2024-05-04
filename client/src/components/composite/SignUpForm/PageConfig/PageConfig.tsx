@@ -7,6 +7,7 @@ import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
 import ConfirmationSection from "../Sections/ConfirmationSection"
 import SuccessSection from "../Sections/SuccessSection"
+
 import {
   ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
@@ -23,6 +24,7 @@ import {
   PaymentSection
 } from "../Sections/PaymentSection"
 import TestIcon from "assets/icons/snowboarder.svg?react"
+import AccountSetupSection from "../Sections/AccountSetupSection"
 
 export const PAGINATED_FORM_PAGES = (
   navigateFn: (route: RouteNames | "/profile" | number) => void
@@ -101,7 +103,7 @@ export const PAGE_CONTENT = [
     SvgIcon={TestIcon}
   />,
   // Account setup section here
-  <></>,
+  <AccountSetupSection key="account"/>,
   <SuccessSection key="Success" />
 ]
 
