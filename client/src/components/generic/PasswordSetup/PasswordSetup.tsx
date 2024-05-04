@@ -82,7 +82,7 @@ export const PasswordSetup = ({
           <div className="">
             <p>Password</p>
             <TextInput
-              className="w-3/4 rounded"
+              className="lg:w-3/4 rounded w-full"
               onChange={(e) =>
                 setFormData({ ...formData, firstPassword: e.target.value })
               }
@@ -94,7 +94,7 @@ export const PasswordSetup = ({
           <div className="">
             <p>Confirm password</p>
             <TextInput
-              className="w-3/4 rounded"
+              className="lg:w-3/4 rounded w-full"
               type="password"
               onChange={(e) =>
                 setFormData({ ...formData, secondPassword: e.target.value })
@@ -102,7 +102,7 @@ export const PasswordSetup = ({
             />
           </div>
         </div>
-        <p className="pt-[48px]">You can reset your password at any time.</p>
+        <p className="pt-[24px]">You can reset your password at any time.</p>
       </form>
       {messages.success && <AlertsComponent message={messages.success} />}
       {messages.error && (
