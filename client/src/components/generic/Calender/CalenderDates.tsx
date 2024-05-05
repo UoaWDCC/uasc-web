@@ -44,6 +44,18 @@ const CalenderDates = ({ children, variant }: props) => {
     case "default":
       return <Default variant="default">{children}</Default>
   }
+  switch (variant) {
+    case "booked":
+      return <Booked variant="booked">{children}</Booked>
+  }
+  switch (variant) {
+    case "selected":
+      return <Selected variant="selected">{children}</Selected>
+  }
+  switch (variant) {
+    case "other-month":
+      return <OtherMonth variant="other-month">{children}</OtherMonth>
+  }
 }
 
 export default CalenderDates

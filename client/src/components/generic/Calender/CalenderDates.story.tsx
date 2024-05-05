@@ -32,6 +32,24 @@ export const Booked: Story = {
   args: {
     title: "Booked / Disabled Calender Date",
     variant: "booked",
-    children: "1" // default available calender date
+    children: "1" // booked / disabled unavailable calender date
+  }
+}
+
+export const Selected: Story = {
+  tags: ["autodocs"],
+  args: {
+    title: "Selected Calender Date",
+    variant: "selected",
+    children: "1" // selected calender date
+  }
+}
+
+export const OtherMonth: Story = {
+  tags: ["autodocs"],
+  args: {
+    title: "Other Month's Calender Date",
+    variant: "other-month",
+    children: "1" // calender dates for other months
   }
 }
