@@ -154,7 +154,7 @@ export interface components {
       uid?: string;
     };
     /** @description From T, pick a set of properties whose keys are in the union K */
-    "Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.membership-or-stripe_id__": {
+    "Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__": {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_freestyle: boolean;
       does_racing: boolean;
@@ -173,10 +173,10 @@ export interface components {
       university_year: string;
     };
     /** @description Construct a type with the properties of T except for those in type K. */
-    "Omit_UserAdditionalInfo.membership-or-stripe_id_": components["schemas"]["Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.membership-or-stripe_id__"];
+    "Omit_UserAdditionalInfo.stripe_id_": components["schemas"]["Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__"];
     UserSignupBody: {
       email: string;
-      user: components["schemas"]["Omit_UserAdditionalInfo.membership-or-stripe_id_"];
+      user: components["schemas"]["Omit_UserAdditionalInfo.stripe_id_"];
     };
     /** @enum {string} */
     MembershipTypeValues: "uoa_returning" | "uoa_new" | "other_returning" | "other_new";
