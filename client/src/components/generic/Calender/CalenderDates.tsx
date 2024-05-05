@@ -9,8 +9,8 @@ type props = IDateProps & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const Default = ({ children }: props) => {
   return (
-    <div className="bg-dark-blue-100 flex h-[38px] max-w-[42px] items-center justify-center rounded">
-      <h4 className="text-white">{children}</h4>
+    <div className="flex h-[38px] max-w-[42px] items-center justify-center rounded bg-white">
+      <h4 className="text-dark-blue-100">{children}</h4>
     </div>
   )
 }
@@ -25,12 +25,11 @@ const Booked = ({ children }: props) => {
 
 const Selected = ({ children }: props) => {
   return (
-    <div className="flex h-[38px] max-w-[42px] items-center justify-center rounded bg-white">
-      <h4 className="text-dark-blue-100">{children}</h4>
+    <div className="bg-dark-blue-100 flex h-[38px] max-w-[42px] items-center justify-center rounded">
+      <h4 className="text-white">{children}</h4>
     </div>
   )
 }
-
 const OtherMonth = ({ children }: props) => {
   return (
     <div className="flex h-[38px] max-w-[42px] items-center justify-center rounded bg-white">
