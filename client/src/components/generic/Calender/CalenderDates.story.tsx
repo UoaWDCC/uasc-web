@@ -7,7 +7,7 @@ const meta: Meta<typeof CalenderDates> = {
   argTypes: {
     variant: {
       control: { type: "radio" },
-      options: ["default", "booked", "selected", "other month"]
+      options: ["default", "booked", "selected", "other-month"]
     },
     children: {
       name: "content"
