@@ -4,9 +4,9 @@ import { useAppData } from "store/store"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
 import {
-  PasswordSetup,
+  PasswordSetupForm,
   HandlerResponse
-} from "components/generic/PasswordSetup/PasswordSetup"
+} from "components/generic/PasswordSetupForm/PasswordSetupForm"
 
 const AccountSetupSection = () => {
   const [{ currentUser }] = useAppData()
@@ -26,7 +26,7 @@ const AccountSetupSection = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <PasswordSetup
+      <PasswordSetupForm
         formRef={passwordResetFormRef}
         passwordSetUpHandler={handleReset}
       />

@@ -23,18 +23,17 @@ type FormState = {
   secondPassword: string
 }
 
-interface IPasswordSetup {
+interface IPasswordSetupForm {
   passwordSetUpHandler?: (firstPassword: string) => Promise<HandlerResponse>
   formRef?: React.RefObject<HTMLFormElement>
   successHandler?: () => void
-  backHandler?: () => void
 }
 
-export const PasswordSetup = ({
+export const PasswordSetupForm = ({
   passwordSetUpHandler,
   formRef,
   successHandler
-}: IPasswordSetup) => {
+}: IPasswordSetupForm) => {
   const [formData, setFormData] = useState<FormState>({
     firstPassword: "",
     secondPassword: ""
@@ -89,6 +88,7 @@ export const PasswordSetup = ({
               type="password"
               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+              data-testid="new-password-input"
             />
           </div>
           <div className="">
@@ -99,6 +99,7 @@ export const PasswordSetup = ({
               onChange={(e) =>
                 setFormData({ ...formData, secondPassword: e.target.value })
               }
+              data-testid="confirm-password-input"
             />
           </div>
         </div>

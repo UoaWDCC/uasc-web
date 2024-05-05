@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { PasswordSetup } from "./PasswordSetup"
+import { PasswordSetupForm } from "./PasswordSetupForm"
 
-const meta: Meta<typeof PasswordSetup> = {
-  component: PasswordSetup
+const meta: Meta<typeof PasswordSetupForm> = {
+  component: PasswordSetupForm
 }
 
 export default meta
