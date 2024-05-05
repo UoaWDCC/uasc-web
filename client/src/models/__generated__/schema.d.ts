@@ -73,8 +73,6 @@ export interface components {
       emergency_relation: string;
       first_name: string;
       last_name: string;
-      /** @enum {string} */
-      membership: "admin" | "member" | "guest";
       dietary_requirements: string;
       faculty?: string;
       university?: string;
@@ -93,7 +91,7 @@ export interface components {
       user: components["schemas"]["UserAdditionalInfo"];
     };
     /** @description From T, pick a set of properties whose keys are in the union K */
-    "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership-or-stripe_id__": {
+    "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_freestyle?: boolean;
       does_racing?: boolean;
@@ -112,9 +110,9 @@ export interface components {
       university_year?: string;
     };
     /** @description Construct a type with the properties of T except for those in type K. */
-    "Omit_Partial_UserAdditionalInfo_.membership-or-stripe_id_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership-or-stripe_id__"];
+    "Omit_Partial_UserAdditionalInfo_.stripe_id_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__"];
     EditSelfRequestBody: {
-      updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.membership-or-stripe_id_"];
+      updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.stripe_id_"];
     };
     /** @description Make all properties in T optional */
     Partial_UserAdditionalInfo_: {
@@ -128,8 +126,6 @@ export interface components {
       emergency_relation?: string;
       first_name?: string;
       last_name?: string;
-      /** @enum {string} */
-      membership?: "admin" | "member" | "guest";
       dietary_requirements?: string;
       faculty?: string;
       university?: string;

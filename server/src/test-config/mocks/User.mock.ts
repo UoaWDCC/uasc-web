@@ -2,7 +2,7 @@ import { dateToFirestoreTimeStamp } from "data-layer/adapters/FirestoreUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
 
-export const memberUserInfoMock: UserAdditionalInfo = {
+export const userInfoMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(10000000000)),
   does_freestyle: true,
   does_racing: true,
@@ -13,7 +13,6 @@ export const memberUserInfoMock: UserAdditionalInfo = {
   emergency_relation: "relation",
   first_name: "first",
   last_name: "second",
-  membership: "member",
   dietary_requirements: "nothing",
   faculty: "engineering",
   university: "uoa",
@@ -22,8 +21,7 @@ export const memberUserInfoMock: UserAdditionalInfo = {
   university_year: "2nd",
   stripe_id: "default"
 }
-
-export const adminUserInfoMock: UserAdditionalInfo = {
+export const userInfoMock2: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(1000000000)),
   does_freestyle: true,
   does_racing: true,
@@ -34,7 +32,6 @@ export const adminUserInfoMock: UserAdditionalInfo = {
   emergency_relation: "relation",
   first_name: "third",
   last_name: "fourth",
-  membership: "admin",
   dietary_requirements: "halal",
   faculty: "science",
   university: "uoa",
@@ -43,27 +40,7 @@ export const adminUserInfoMock: UserAdditionalInfo = {
   university_year: "3rd"
 }
 
-export const guestUserInfoMock: UserAdditionalInfo = {
-  date_of_birth: dateToFirestoreTimeStamp(new Date(1000000000)),
-  does_freestyle: true,
-  does_racing: true,
-  does_ski: false,
-  gender: "non-ternary",
-  emergency_name: "emergency",
-  emergency_phone: "111",
-  emergency_relation: "relation",
-  first_name: "fifth",
-  last_name: "sixth",
-  membership: "guest",
-  dietary_requirements: "nothing",
-  faculty: "science",
-  university: "uoa",
-  student_id: "125366433",
-  returning: true,
-  university_year: "1st"
-}
-
-export const signupUserMock: UserSignupBody["user"] = {
+export const signupUserMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(0)),
   does_freestyle: true,
   does_racing: true,
