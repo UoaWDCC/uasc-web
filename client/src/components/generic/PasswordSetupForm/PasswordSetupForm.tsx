@@ -75,10 +75,10 @@ export const PasswordSetupForm = ({
   }
 
   return (
-    <div className="">
+    <div>
       <form onSubmit={(event) => handleSubmit(event)} ref={formRef}>
         <div className="flex flex-col gap-5">
-          <div className="">
+          <div>
             <p>Password</p>
             <TextInput
               className="w-full rounded lg:w-3/4"

@@ -30,63 +30,63 @@ import AccountSetupSection from "../Sections/AccountSetupSection"
 export const PAGINATED_FORM_PAGES = (
   navigateFn: (route: RouteNames | "/profile" | number) => void
 ): PageProps[] => [
-  {
-    index: PAGES.PersonalFirst,
-    title: "Personal details",
-    onNext: () => navigateFn(PERSONAL_ROUTE_2)
-  },
-  {
-    index: PAGES.PersonalSecond,
-    title: "Personal details",
-    onBack: () => navigateFn(PERSONAL_ROUTE_1),
-    onNext: () => navigateFn(CONTACT_ROUTE)
-  },
-  {
-    index: PAGES.Contact,
-    title: "Contact details",
-    onBack: () => navigateFn(PERSONAL_ROUTE_2),
-    onNext: () => navigateFn(ADDITIONAL_ROUTE)
-  },
-  {
-    index: PAGES.Additional,
-    title: "Additional info",
-    nextButtonText: "Confirm",
-    onBack: () => navigateFn(CONTACT_ROUTE),
-    onNext: () => {
-      throw new Error("not implemented")
+    {
+      index: PAGES.PersonalFirst,
+      title: "Personal details",
+      onNext: () => navigateFn(PERSONAL_ROUTE_2)
+    },
+    {
+      index: PAGES.PersonalSecond,
+      title: "Personal details",
+      onBack: () => navigateFn(PERSONAL_ROUTE_1),
+      onNext: () => navigateFn(CONTACT_ROUTE)
+    },
+    {
+      index: PAGES.Contact,
+      title: "Contact details",
+      onBack: () => navigateFn(PERSONAL_ROUTE_2),
+      onNext: () => navigateFn(ADDITIONAL_ROUTE)
+    },
+    {
+      index: PAGES.Additional,
+      title: "Additional info",
+      nextButtonText: "Confirm",
+      onBack: () => navigateFn(CONTACT_ROUTE),
+      onNext: () => {
+        throw new Error("not implemented")
+      }
+    },
+    {
+      index: PAGES.PaymentInfo,
+      title: "Payment Information",
+      onNext: () => navigateFn(PAYMENT_ROUTE)
+    },
+    {
+      index: PAGES.Payment,
+      title: "Payment",
+      nextButtonText: " ",
+      onBack: () => navigateFn(PAYMENT_INFORMATION_ROUTE)
+    },
+    {
+      index: PAGES.Confirm,
+      title: "Confirm",
+      onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE)
+    },
+    {
+      index: PAGES.AccountSetup,
+      title: "Account",
+      // goes back to one page earlier in history, otherwise does nothing
+      onBack: () => navigateFn(-1),
+      // after setting up the account, the next button is enabled and shows the success section
+      onNext: () => navigateFn(SUCCESS_ROUTE)
+    },
+    {
+      index: PAGES.Success,
+      title: "Success",
+      onBack: () => navigateFn(ACCOUNT_SETUP_ROUTE),
+      onNext: () => navigateFn("/profile")
     }
-  },
-  {
-    index: PAGES.PaymentInfo,
-    title: "Payment Information",
-    onNext: () => navigateFn(PAYMENT_ROUTE)
-  },
-  {
-    index: PAGES.Payment,
-    title: "Payment",
-    nextButtonText: " ",
-    onBack: () => navigateFn(PAYMENT_INFORMATION_ROUTE)
-  },
-  {
-    index: PAGES.Confirm,
-    title: "Confirm",
-    onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE)
-  },
-  {
-    index: PAGES.AccountSetup,
-    title: "Account",
-    // goes back to one page earlier in history, otherwise does nothing
-    onBack: () => navigateFn(-1),
-    // after setting up the account, the next button is enabled and shows the success section
-    onNext: () => navigateFn(SUCCESS_ROUTE)
-  },
-  {
-    index: PAGES.Success,
-    title: "Success",
-    onBack: () => navigateFn(ACCOUNT_SETUP_ROUTE),
-    onNext: () => navigateFn("/profile")
-  }
-]
+  ]
 
 /**
  * Make sure these are in order
@@ -105,7 +105,6 @@ export const PAGE_CONTENT = [
     textBottom="In the meantime, please set up your login details."
     SvgIcon={TestIcon}
   />,
-  // Account setup section here
   <AccountSetupSection key="account" />,
   <SuccessSection key="Success" />
 ]
