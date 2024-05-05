@@ -1,5 +1,6 @@
 import { dateToFirestoreTimeStamp } from "data-layer/adapters/FirestoreUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
 
 export const memberUserInfoMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(10000000000)),
@@ -62,7 +63,7 @@ export const guestUserInfoMock: UserAdditionalInfo = {
   university_year: "1st"
 }
 
-export const signupUserMock: UserAdditionalInfo = {
+export const signupUserMock: UserSignupBody["user"] = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(0)),
   does_freestyle: true,
   does_racing: true,
@@ -73,12 +74,10 @@ export const signupUserMock: UserAdditionalInfo = {
   emergency_relation: "string",
   first_name: "string",
   last_name: "string",
-  membership: "guest",
   dietary_requirements: "string",
   faculty: "string",
   university: "string",
   student_id: "string",
   returning: true,
-  university_year: "string",
-  stripe_id: "string"
+  university_year: "string"
 }
