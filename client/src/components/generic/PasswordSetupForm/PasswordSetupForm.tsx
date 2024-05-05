@@ -88,10 +88,11 @@ export const PasswordSetupForm = ({
               type="password"
               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+              required
               data-testid="new-password-input"
             />
           </div>
-          <div className="">
+          <div>
             <p>Confirm password</p>
             <TextInput
               className="w-full rounded lg:w-3/4"
@@ -100,6 +101,7 @@ export const PasswordSetupForm = ({
                 setFormData({ ...formData, secondPassword: e.target.value })
               }
               data-testid="confirm-password-input"
+              required
             />
           </div>
         </div>
