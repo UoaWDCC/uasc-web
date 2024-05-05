@@ -21,8 +21,17 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   tags: ["autodocs"],
   args: {
-    title: "Calender Dates",
+    title: "Default Calender Date",
     variant: "default",
+    children: "1" // default available calender date
+  }
+}
+
+export const Booked: Story = {
+  tags: ["autodocs"],
+  args: {
+    title: "Booked / Disabled Calender Date",
+    variant: "booked",
     children: "1" // default available calender date
   }
 }
