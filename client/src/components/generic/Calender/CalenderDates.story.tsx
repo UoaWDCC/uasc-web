@@ -3,7 +3,16 @@ import type { Meta, StoryObj } from "@storybook/react"
 import CalenderDates from "./CalenderDates"
 
 const meta: Meta<typeof CalenderDates> = {
-  component: CalenderDates
+  component: CalenderDates,
+  argTypes: {
+    variant: {
+      control: { type: "radio" },
+      options: ["default", "booked", "selected", "other month"]
+    },
+    children: {
+      name: "content"
+    }
+  }
 }
 
 export default meta

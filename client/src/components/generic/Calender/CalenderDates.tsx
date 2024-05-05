@@ -1,4 +1,4 @@
-type dateVariants = "default" | "default-selected" | "booked" | "other-month"
+type dateVariants = "default" | "selected" | "booked" | "other-month"
 
 interface IDateProps {
   children: string
