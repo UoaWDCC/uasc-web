@@ -411,7 +411,6 @@ describe("Endpoints", () => {
       expect(claims).toEqual(undefined)
     })
   })
-<<<<<<< HEAD
   /**
    *
    * `/webhook`
@@ -440,16 +439,5 @@ describe("Endpoints", () => {
       )
       expect(userClaims).toEqual({ member: true })
     })
-=======
-
-  it("should reject requests to set membership", async () => {
-    // console.log({ ...signupUserMock, membership: "admin" })
-    const res = await request.post("/signup").send({
-      email: "testadmin@mail.com",
-      user: { ...signupUserMock, membership: "admin" }
-    })
-    // invalid request
-    expect(res.status).toEqual(400)
->>>>>>> 758bede0 (remove side effects)
   })
 })
