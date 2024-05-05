@@ -8,7 +8,9 @@ interface IDateProps {
 type props = IDateProps & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const CalenderDates = ({ children }: props) => {
-  return <div>{children}</div>
+  return (
+    <div className="bg-dark-blue-100 max-h-[38px] max-w-[42px]">{children}</div>
+  )
 }
 
 export default CalenderDates
