@@ -19,7 +19,7 @@ export const AdditionalSection = () => {
           updateFormData({ does_ski: e.target?.value === "Skier" })
         }
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           Select your option
         </option>
         <option key="Skier" value="Skier">
@@ -39,7 +39,7 @@ export const AdditionalSection = () => {
           updateFormData({ does_racing: e.target?.value === "Yes" })
         }
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           Select your option
         </option>
         <option key="Yes" value="Yes">
