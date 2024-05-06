@@ -52,34 +52,36 @@ export const PersonalSectionFirst = () => {
       />
 
       <p className="mb-2 mt-5">Gender</p>
-      <Radio
-        value="Male"
-        checked={gender === "Male"}
-        onChange={(e) => updateFormData({ gender: e.target?.value })}
-      >
-        Male
-      </Radio>
-      <Radio
-        value="Female"
-        checked={gender === "Female"}
-        onChange={(e) => updateFormData({ gender: e.target?.value })}
-      >
-        Female
-      </Radio>
-      <Radio
-        value="Other"
-        checked={gender === "Other"}
-        onChange={(e) => updateFormData({ gender: e.target?.value })}
-      >
-        Other
-      </Radio>
-      <Radio
-        value="Prefer not to say"
-        checked={gender === "Prefer not to say"}
-        onChange={(e) => updateFormData({ gender: e.target?.value })}
-      >
-        Prefer not to say
-      </Radio>
+      <div className="flex max-w-sm flex-col gap-2">
+        <Radio
+          value="Male"
+          checked={gender === "Male"}
+          onChange={(e) => updateFormData({ gender: e.target?.value })}
+        >
+          Male
+        </Radio>
+        <Radio
+          value="Female"
+          checked={gender === "Female"}
+          onChange={(e) => updateFormData({ gender: e.target?.value })}
+        >
+          Female
+        </Radio>
+        <Radio
+          value="Other"
+          checked={gender === "Other"}
+          onChange={(e) => updateFormData({ gender: e.target?.value })}
+        >
+          Other
+        </Radio>
+        <Radio
+          value="Prefer not to say"
+          checked={gender === "Prefer not to say"}
+          onChange={(e) => updateFormData({ gender: e.target?.value })}
+        >
+          Prefer not to say
+        </Radio>
+      </div>
     </div>
   )
 }
@@ -96,6 +98,7 @@ export const PersonalSectionSecond = () => {
         description="Put NA if not a UoA Student"
         id="FirstName"
         value={student_id}
+        placeholder="e.g. 111222333"
         onChange={(e) => updateFormData({ student_id: e.target.value })}
         required
       />
@@ -105,7 +108,7 @@ export const PersonalSectionSecond = () => {
         onChange={(e) => updateFormData({ university_year: e.target?.value })}
       >
         <option value="" disabled selected>
-          Select your option
+          Select...
         </option>
         <option key="Non-Student" value="Non-Student">
           Non-Student
@@ -141,7 +144,7 @@ export const PersonalSectionSecond = () => {
         onChange={(e) => updateFormData({ faculty: e.target?.value })}
       >
         <option value="" disabled selected>
-          Select your option
+          Select...
         </option>
         <option key="Engineering" value="Engineering">
           Engineering
