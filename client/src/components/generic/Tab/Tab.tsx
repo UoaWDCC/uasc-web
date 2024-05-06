@@ -1,4 +1,4 @@
-import RightArrowIcon from 'assets/icons/rightarrow.svg?react'
+import RightArrowIcon from "assets/icons/rightarrow.svg?react"
 
 interface ITab {
   stretchesOnSmallScreen?: boolean
@@ -12,28 +12,31 @@ const Tab = ({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & ITab) => {
   if (stretchesOnSmallScreen) {
-    return <button
-      {...props}
-      className="text-h3 md:text-h5 disabled:text-light-blue-100 disabled:border-light-blue-100 
-      md:hover:text-light-blue-100 md:border-b-[3px] border-transparent pb-3
-    md:font-bold md:uppercase flex items-center justify-between w-full"
-    >
-      {children}
+    return (
+      <button
+        {...props}
+        className="text-h3 md:text-h5 disabled:text-light-blue-100 disabled:border-light-blue-100 
+      md:hover:text-light-blue-100 flex w-full items-center
+    justify-between border-transparent pb-3 md:border-b-[3px] md:font-bold md:uppercase"
+      >
+        {children}
 
-      <div className="mt-[2px] flex h-8 w-5 md:hidden">
-        <RightArrowIcon className="fill-black" />
-      </div>
-
-    </button>
+        <div className="mt-[2px] flex h-8 w-5 md:hidden">
+          <RightArrowIcon className="fill-black" />
+        </div>
+      </button>
+    )
   }
-  return <button
-    {...props}
-    className="text-h5 disabled:text-light-blue-100 disabled:border-light-blue-100 
+  return (
+    <button
+      {...props}
+      className="text-h5 disabled:text-light-blue-100 disabled:border-light-blue-100 
       hover:text-light-blue-100 border-b-[3px] border-transparent pb-3
     font-bold uppercase"
-  >
-    {children}
-  </button>
+    >
+      {children}
+    </button>
+  )
 }
 
 export default Tab

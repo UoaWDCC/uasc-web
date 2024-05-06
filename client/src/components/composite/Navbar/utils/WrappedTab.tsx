@@ -12,7 +12,11 @@ export const WrappedTab = ({ children, to, subroutes }: IWrappedTab) => {
   const { pathname } = useLocation()
 
   return (
-    <NavLink to={to} state={{ to }} className='w-full md:w-fit px-8 flex md:px-0'>
+    <NavLink
+      to={to}
+      state={{ to }}
+      className="flex w-full px-8 md:w-fit md:px-0"
+    >
       <Tab
         stretchesOnSmallScreen
         aria-label={`link to ${to}`}

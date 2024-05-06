@@ -16,11 +16,16 @@ const LoginIndicator = ({
           <ProfileButton signOutHandler={signOutHandler} />
         </span>
         {/* Mobile View */}
-        <span className="md:hidden w-full">
+        <span className="w-full md:hidden">
           <MobileWrappedTab to="/profile">Profile</MobileWrappedTab>
         </span>
-        <h3 className="text-left w-full pl-8 text md:hidden cursor-pointer 
-          text-light-blue-100" onClick={signOutHandler}>Sign Out</h3>
+        <h3
+          className="text text-light-blue-100 w-full cursor-pointer pl-8 text-left 
+          md:hidden"
+          onClick={signOutHandler}
+        >
+          Sign Out
+        </h3>
       </>
     )
   }
@@ -30,14 +35,19 @@ const LoginIndicator = ({
       <Button
         variant="inverted-default-sm"
         data-testid="sign-in-button"
-        className="md:mb-2 md:self-center hidden md:block"
+        className="hidden md:mb-2 md:block md:self-center"
         onClick={signInHandler}
       >
         Log In
       </Button>
       {/* Mobile View */}
-      <h3 className="text-left w-full pl-8 text md:hidden 
-      cursor-pointer text-light-blue-100" onClick={signInHandler}>Sign In</h3>
+      <h3
+        className="text text-light-blue-100 w-full cursor-pointer pl-8 
+      text-left md:hidden"
+        onClick={signInHandler}
+      >
+        Sign In
+      </h3>
     </>
   )
 }
