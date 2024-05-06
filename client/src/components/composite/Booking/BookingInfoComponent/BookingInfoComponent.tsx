@@ -4,7 +4,7 @@ const Divider = () => (
 
 const BookingInfoComponent = () => {
   return (
-    <div className="flex h-[474px] max-w-[347px] flex-col items-center border border-black">
+    <div className="flex h-[474px] max-w-[347px] flex-col items-center border border-gray-3 rounded">
       <div
         id="top"
         className="text-dark-blue-100 flex flex-col gap-2 pl-8 pr-8 pt-16"
