@@ -1,10 +1,12 @@
-import React from "react"
+import React, { ChangeEventHandler } from "react"
 
 type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   variant?: "success" | "error"
   label?: string
   description?: string
   id?: string
+  value: string | undefined
+  onChange: ChangeEventHandler<HTMLInputElement>
 }
 
 const TextInput = ({
@@ -12,6 +14,8 @@ const TextInput = ({
   label,
   description,
   id,
+  value,
+  onChange,
   ...props
 }: TextInputProps) => {
   const borderColor =
@@ -38,6 +42,8 @@ const TextInput = ({
         style={{ borderColor, borderWidth, paddingLeft }}
         id={id}
         {...props}
+        value={value || ""}
+        onChange={onChange}
       />
     </div>
   )
