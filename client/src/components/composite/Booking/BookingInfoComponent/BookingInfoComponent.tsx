@@ -5,11 +5,11 @@ const Divider = () => (
 const BookingInfoComponent = () => {
   return (
     <div className="flex h-[474px] max-w-[347px] flex-col items-center border border-black">
-      <div
-        id="top"
-        className="text-dark-blue-100 flex flex-col gap-2 pl-8 pt-16"
-      >
-        <h3>$40 per night</h3>
+      <div id="top" className="text-dark-blue-100 flex flex-col gap-2 pl-8 pt-16">
+        <h3 className="flex gap-2">
+          $40<h3>per night</h3>
+        </h3>
+
         <h3>$60 a single Saturday</h3>
         <h3>$60 per non-member guest, per night</h3>
       </div>
