@@ -11,6 +11,8 @@ type Story = StoryObj<typeof meta>
 export const DefaultBookingInfoComponent: Story = {
   tags: ["autodocs"],
   args: {
-    title: "Booking Information Component"
+    price1: "40",
+    price2: "60",
+    price3: "60"
   }
 }
