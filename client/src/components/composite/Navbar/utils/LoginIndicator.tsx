@@ -1,7 +1,7 @@
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { INavbarProps } from "../Navbar"
 import ProfileButton from "./ProfileButton"
-import { MobileWrappedTab } from "./WrappedTab"
+import { WrappedTab } from "./WrappedTab"
 
 const LoginIndicator = ({
   signInHandler,
@@ -17,7 +17,7 @@ const LoginIndicator = ({
         </span>
         {/* Mobile View */}
         <span className="w-full md:hidden">
-          <MobileWrappedTab to="/profile">Profile</MobileWrappedTab>
+          <WrappedTab to="/profile">Profile</WrappedTab>
         </span>
         <h3
           className="text text-light-blue-100 w-full cursor-pointer pl-8 text-left 
