@@ -1,11 +1,11 @@
 import { useSignUpFormData } from "store/signupform"
 import Radio from "components/generic/Radio/Radio"
 import TextInput from "components/generic/TextInputComponent/TextInput"
-// import { Timestamp } from "firebase-admin/firestore"
+import { Timestamp } from "firebase/firestore"
 import Dropdown from "components/generic/Dropdown/Dropdown"
 
 export const PersonalSectionFirst = () => {
-  const [{ first_name, last_name, gender }, { updateFormData }] =
+  const [{ first_name, last_name, date_of_birth, gender }, { updateFormData }] =
     useSignUpFormData()
 
   return (
@@ -32,21 +32,22 @@ export const PersonalSectionFirst = () => {
         type="date"
         label="Birthday"
         id="Birthday"
-        // value={
-        //   date_of_birth &&
-        //   new Timestamp(date_of_birth.seconds, date_of_birth.nanoseconds)
-        //     .toDate()
-        //     .toISOString()
-        // }
-        // onChange={(e) =>
-        //   updateFormData({
-        //     date_of_birth: {
-        //       seconds: Timestamp.fromDate(new Date(e.target.value)).seconds,
-        //       nanoseconds: Timestamp.fromDate(new Date(e.target.value))
-        //         .nanoseconds
-        //     }
-        //   })
-        // }
+        value={
+          date_of_birth &&
+          new Timestamp(date_of_birth.seconds, date_of_birth.nanoseconds)
+            .toDate()
+            .toISOString()
+            .split("T")[0]
+        }
+        onChange={(e) => {
+          updateFormData({
+            date_of_birth: {
+              seconds: Timestamp.fromDate(new Date(e.target.value)).seconds,
+              nanoseconds: Timestamp.fromDate(new Date(e.target.value))
+                .nanoseconds
+            }
+          })
+        }}
         required
       />
 
