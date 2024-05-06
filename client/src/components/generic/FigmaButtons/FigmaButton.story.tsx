@@ -36,6 +36,14 @@ export const defaultButtonInvertedSm: Story = {
   }
 }
 
+export const defaultButtonInvertedSt: Story = {
+  tags: ["autodocs"],
+  args: {
+    variant: "inverted-default-st",
+    children: "Default Button Variant Inverted Standard"
+  }
+}
+
 /** Alternative button variant */
 export const alternativeButton: Story = {
   args: {

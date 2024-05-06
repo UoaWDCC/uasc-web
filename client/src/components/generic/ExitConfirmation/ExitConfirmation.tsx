@@ -14,7 +14,7 @@ const ExitConfirmation = ({ title, message, confirmHandler, declineHandler }: IE
         <h3 className="text-dark-blue-100">{title}</h3>
         <h5 className="text-dark-blue-100 font-bold">{message}</h5>        
         <div className="flex mt-[10px] w-full space-x-[20px]">
-            <Button onClick={confirmHandler}>Yes</Button>
+            <Button variant = "inverted-default-st" onClick={confirmHandler}>Yes</Button>
             <Button onClick={declineHandler}>No</Button>
         </div>
       </div>
