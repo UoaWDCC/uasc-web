@@ -12,8 +12,9 @@ export const WrappedTab = ({ children, to, subroutes }: IWrappedTab) => {
   const { pathname } = useLocation()
 
   return (
-    <NavLink to={to} state={{ to }}>
+    <NavLink to={to} state={{ to }} className='w-full md:w-fit px-8 flex md:px-0'>
       <Tab
+        stretchesOnSmallScreen
         aria-label={`link to ${to}`}
         disabled={pathname === to || subroutes?.includes(pathname)}
       >
@@ -25,10 +26,8 @@ export const WrappedTab = ({ children, to, subroutes }: IWrappedTab) => {
 
 export const MobileWrappedTab = ({ children, to, subroutes }: IWrappedTab) => {
   return (
-    <span className="md:hidden">
-      <WrappedTab to={to} subroutes={subroutes}>
-        {children}
-      </WrappedTab>
-    </span>
+    <WrappedTab to={to} subroutes={subroutes}>
+      {children}
+    </WrappedTab>
   )
 }

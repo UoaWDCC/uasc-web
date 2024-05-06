@@ -20,6 +20,13 @@ const ProfileButton = ({
         <span className="w-min-[150%] absolute right-0 top-[calc(100%+13px)]">
           <MenuList anchor="right">
             <NavLink
+              data-testid="profile-link"
+              className="text-nowrap"
+              to="/profile"
+            >
+              Profile
+            </NavLink>
+            <NavLink
               data-testid="sign-out-link"
               className="text-nowrap"
               to="/login"
