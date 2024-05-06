@@ -22,7 +22,7 @@ const BookingInfoComponent = () => {
         </h3>
       </div>
       <Divider />
-      <div id="bottom" className="pl-4">
+      <div id="bottom" className="pl-8 pr-8 text-dark-blue-100 flex flex-col gap-4">
         <p>
           Once booking has been selected, please complete payment within 20
           minutes to confirm the booking.
