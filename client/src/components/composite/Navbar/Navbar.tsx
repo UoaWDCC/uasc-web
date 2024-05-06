@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom"
 import WrappedMenuTab from "./utils/WrappedMenuTab"
-import { MobileWrappedTab, WrappedTab } from "./utils/WrappedTab"
+import { WrappedTab } from "./utils/WrappedTab"
 import UASCLogo from "assets/logos/UASC-LOGO-White.svg?react"
 import HamburgerIcon from "assets/icons/hamburger.svg?react"
 import LoginIndicator from "./utils/LoginIndicator"
@@ -41,10 +41,10 @@ const AboutMenuItemsFull = () => {
 const AboutMenuItemsMobile = () => {
   return (
     <div className="flex w-full flex-col gap-2 md:hidden">
-      <MobileWrappedTab to="/faq">About</MobileWrappedTab>
-      <MobileWrappedTab to="/faq">FAQ</MobileWrappedTab>
-      <MobileWrappedTab to="/policy">Policy</MobileWrappedTab>
-      <MobileWrappedTab to="/contact">Contact</MobileWrappedTab>
+      <WrappedTab to="/faq">About</WrappedTab>
+      <WrappedTab to="/faq">FAQ</WrappedTab>
+      <WrappedTab to="/policy">Policy</WrappedTab>
+      <WrappedTab to="/contact">Contact</WrappedTab>
     </div>
   )
 }

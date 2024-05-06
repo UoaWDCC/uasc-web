@@ -27,11 +27,3 @@ export const WrappedTab = ({ children, to, subroutes }: IWrappedTab) => {
     </NavLink>
   )
 }
-
-export const MobileWrappedTab = ({ children, to, subroutes }: IWrappedTab) => {
-  return (
-    <WrappedTab to={to} subroutes={subroutes}>
-      {children}
-    </WrappedTab>
-  )
-}
