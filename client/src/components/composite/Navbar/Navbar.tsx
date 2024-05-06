@@ -40,7 +40,7 @@ const AboutMenuItemsFull = () => {
 
 const AboutMenuItemsMobile = () => {
   return (
-    <div className="flex w-full flex-col gap-0 sm:gap-2 md:hidden">
+    <div className="flex w-full flex-col gap-2 md:hidden">
       <MobileWrappedTab to="/faq">About</MobileWrappedTab>
       <MobileWrappedTab to="/faq">FAQ</MobileWrappedTab>
       <MobileWrappedTab to="/policy">Policy</MobileWrappedTab>
@@ -71,7 +71,7 @@ const Navbar = ({
         <Logo />
         <div
           className={`left-0 md:ml-auto ${isOpen ? "flex" : "hidden"} bg-gray-1 absolute top-12 h-fit min-h-screen
-          w-full flex-col items-center justify-start gap-0 self-end pt-4 sm:gap-2 sm:pt-8 md:relative md:top-0 md:ml-auto
+          w-full flex-col items-center justify-start gap-2 self-end pt-8 md:relative md:top-0 md:ml-auto
           md:flex md:min-h-full md:flex-row md:items-end md:justify-end md:gap-8 md:bg-none md:pr-4 md:pt-0`}
         >
           <WrappedTab to="/">Home</WrappedTab>
