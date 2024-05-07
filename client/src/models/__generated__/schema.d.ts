@@ -5,6 +5,9 @@
 
 
 export interface paths {
+  "/signup": {
+    post: operations["Signup"];
+  };
   "/users": {
     get: operations["GetAllUsers"];
   };
@@ -29,12 +32,21 @@ export interface paths {
   "/webhook": {
     post: operations["ReceiveWebhook"];
   };
+  "/payment/membership": {
+    get: operations["GetMembershipPayment"];
+  };
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    UserSignupResponse: {
+      error?: string;
+      message?: string;
+      jwtToken?: string;
+      uid?: string;
+    };
     /**
      * @description A Timestamp represents a point in time independent of any time zone or
      * calendar, represented as seconds and fractions of seconds at nanosecond
@@ -67,14 +79,14 @@ export interface components {
       emergency_relation: string;
       first_name: string;
       last_name: string;
-      /** @enum {string} */
-      membership: "admin" | "member" | "guest";
       dietary_requirements: string;
       faculty?: string;
       university?: string;
       student_id?: string;
       returning: boolean;
       university_year: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
     };
     FirebaseProperties: {
       uid: string;
@@ -85,7 +97,7 @@ export interface components {
       user: components["schemas"]["UserAdditionalInfo"];
     };
     /** @description From T, pick a set of properties whose keys are in the union K */
-    "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership__": {
+    "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_freestyle?: boolean;
       does_racing?: boolean;
@@ -104,9 +116,9 @@ export interface components {
       university_year?: string;
     };
     /** @description Construct a type with the properties of T except for those in type K. */
-    "Omit_Partial_UserAdditionalInfo_.membership_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership__"];
+    "Omit_Partial_UserAdditionalInfo_.stripe_id_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__"];
     EditSelfRequestBody: {
-      updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.membership_"];
+      updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.stripe_id_"];
     };
     /** @description Make all properties in T optional */
     Partial_UserAdditionalInfo_: {
@@ -120,14 +132,14 @@ export interface components {
       emergency_relation?: string;
       first_name?: string;
       last_name?: string;
-      /** @enum {string} */
-      membership?: "admin" | "member" | "guest";
       dietary_requirements?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
       returning?: boolean;
       university_year?: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
     };
     EditUsersRequestBody: {
       users: {
@@ -140,6 +152,14 @@ export interface components {
     };
     DemoteUserRequestBody: {
       uid: string;
+    };
+    /** @enum {string} */
+    MembershipTypeValues: "uoa_returning" | "uoa_new" | "other_returning" | "other_new";
+    MembershipPaymentResponse: {
+      error?: string;
+      message?: string;
+      stripeClientSecret?: string;
+      membershipType?: components["schemas"]["MembershipTypeValues"];
     };
   };
   responses: {
@@ -159,6 +179,21 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  Signup: {
+    requestBody: {
+      content: {
+        "application/json": unknown;
+      };
+    };
+    responses: {
+      /** @description Signup successful */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSignupResponse"];
+        };
+      };
+    };
+  };
   GetAllUsers: {
     responses: {
       /** @description Users found */
@@ -249,6 +284,16 @@ export interface operations {
       /** @description Webhook post received */
       200: {
         content: never;
+      };
+    };
+  };
+  GetMembershipPayment: {
+    responses: {
+      /** @description Session created */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MembershipPaymentResponse"];
+        };
       };
     };
   };

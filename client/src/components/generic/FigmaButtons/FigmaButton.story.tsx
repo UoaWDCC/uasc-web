@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react"
 import Button from "./FigmaButton"
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "Button Variants",
   argTypes: {
     variant: {
       control: { type: "radio" },
@@ -28,6 +27,14 @@ export const defaultButton: Story = {
   }
 }
 
+export const defaultButtonSm: Story = {
+  tags: ["autodocs"],
+  args: {
+    variant: "default-sm",
+    children: "Default Button Variant Small"
+  }
+}
+
 export const defaultButtonInvertedSm: Story = {
   tags: ["autodocs"],
   args: {
@@ -43,6 +50,13 @@ export const defaultButtonInvertedSt: Story = {
     children: "Default Button Variant Inverted Standard"
   }
 }
+
+export const progressButtons = () => (
+  <span className="flex items-center gap-2">
+    <Button variant="progress-inverted">Back</Button>
+    <Button variant="progress-default">Next</Button>
+  </span>
+)
 
 /** Alternative button variant */
 export const alternativeButton: Story = {

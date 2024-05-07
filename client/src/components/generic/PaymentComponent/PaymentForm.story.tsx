@@ -2,8 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 import { PaymentForm } from "./PaymentForm"
 
 const meta: Meta<typeof PaymentForm> = {
-  component: PaymentForm,
-  title: "Payment Form"
+  component: PaymentForm
 }
 
 export default meta
