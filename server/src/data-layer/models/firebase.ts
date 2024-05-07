@@ -39,10 +39,6 @@ export interface UserAdditionalInfo {
    */
   last_name: string
   /**
-   * @isString Please enter either Admin or Member or Guest
-   */
-  membership: "admin" | "member" | "guest"
-  /**
    * @isString Please write your dietary requirements
    */
   dietary_requirements: string
@@ -73,15 +69,10 @@ export interface UserAdditionalInfo {
 }
 
 export interface BookingSlot {
-  product_id: string
-  active: boolean
-  display_price: number
-  name: string
+  stripe_product_id: string
   description: string
-  start_date: Timestamp
-  end_date: Timestamp
+  date: Timestamp
   max_bookings: number
-  remaining_spots: number
 }
 
 export interface Demographic {

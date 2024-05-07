@@ -19,10 +19,7 @@ export interface EditSelfRequestModel {
 }
 
 export interface EditSelfRequestBody {
-  updatedInformation: Omit<
-    Partial<UserAdditionalInfo>,
-    "membership" | "stripe_id"
-  >
+  updatedInformation: Omit<Partial<UserAdditionalInfo>, "stripe_id">
 }
 
 // promote/demote users - ticket 202
