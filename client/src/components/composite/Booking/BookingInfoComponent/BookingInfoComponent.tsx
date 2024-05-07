@@ -14,10 +14,10 @@ const BookingInfoComponent = ({
   priceNonMember
 }: props) => {
   return (
-    <div className="border-gray-3 flex h-fit w-full flex-col rounded border pb-4 lg:items-center lg:justify-center">
+    <div className="border-gray-3 flex h-fit w-full flex-col rounded border pb-8 lg:items-center lg:justify-center">
       <div
         id="top"
-        className="text-dark-blue-100 pr-4.5 flex flex-col gap-2 pl-8 pt-16"
+        className="text-dark-blue-100 pr-4.5 flex flex-col gap-2 pl-8 pt-8"
       >
         <h3 className="flex gap-2">
           ${pricePerNight}
