@@ -12,6 +12,6 @@ export const DefaultTag: Story = {
   tags: ["autodocs"],
   args: {
     title: "Tag",
-    children: "hello"
+    children: ""
   }
 }
