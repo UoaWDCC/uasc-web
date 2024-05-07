@@ -10,10 +10,10 @@ const Divider = () => <span className="bg-dark-blue-100 m-8 h-[1px] w-3/4" />
 
 const BookingInfoComponent = ({ price1, price2, price3 }: props) => {
   return (
-    <div className="border-gray-3 flex h-fit w-full flex-col lg:items-center lg:justify-center rounded border pb-4">
+    <div className="border-gray-3 flex h-fit w-full flex-col rounded border pb-4 lg:items-center lg:justify-center">
       <div
         id="top"
-        className="text-dark-blue-100 flex flex-col gap-2 pt-16 pl-4"
+        className="text-dark-blue-100 flex flex-col gap-2 pl-8 pr-4.5 pt-16"
       >
         <h3 className="flex gap-2">
           ${price1}
@@ -35,7 +35,7 @@ const BookingInfoComponent = ({ price1, price2, price3 }: props) => {
       <Divider />
       <div
         id="bottom"
-        className="text-dark-blue-100 flex flex-col gap-4 pl-4 lg:items-center lg:justify-center"
+        className="text-dark-blue-100 flex flex-col gap-4 pl-8 pr-5 lg:items-center lg:justify-center"
       >
         <p>
           Once booking has been selected, please complete payment within 20
