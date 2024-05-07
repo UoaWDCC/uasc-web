@@ -6,6 +6,8 @@ import {
 import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
 import ConfirmationSection from "../Sections/ConfirmationSection"
+import SuccessSection from "../Sections/SuccessSection"
+
 import {
   ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
@@ -15,6 +17,7 @@ import {
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
+  SUCCESS_ROUTE,
   RouteNames
 } from "../utils/RouteNames"
 import {
@@ -22,9 +25,10 @@ import {
   PaymentSection
 } from "../Sections/PaymentSection"
 import TestIcon from "assets/icons/snowboarder.svg?react"
+import AccountSetupSection from "../Sections/AccountSetupSection"
 
 export const PAGINATED_FORM_PAGES = (
-  navigateFn: (route: RouteNames | number) => void
+  navigateFn: (route: RouteNames | "/profile" | number) => void
 ): PageProps[] => [
   {
     index: PAGES.PersonalFirst,
@@ -72,7 +76,15 @@ export const PAGINATED_FORM_PAGES = (
     index: PAGES.AccountSetup,
     title: "Account",
     // goes back to one page earlier in history, otherwise does nothing
-    onBack: () => navigateFn(-1)
+    onBack: () => navigateFn(-1),
+    // after setting up the account, the next button is enabled and shows the success section
+    onNext: () => navigateFn(SUCCESS_ROUTE)
+  },
+  {
+    index: PAGES.Success,
+    title: "Success",
+    onBack: () => navigateFn(ACCOUNT_SETUP_ROUTE),
+    onNext: () => navigateFn("/profile")
   }
 ]
 
@@ -93,8 +105,8 @@ export const PAGE_CONTENT = [
     textBottom="In the meantime, please set up your login details."
     SvgIcon={TestIcon}
   />,
-  // TODO: IMPLEMENT ACCOUNT SETUP SECTION HERE
-  <></>
+  <AccountSetupSection key="account" />,
+  <SuccessSection key="Success" />
 ]
 
 /**

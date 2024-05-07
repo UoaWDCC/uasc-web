@@ -9,11 +9,14 @@ import {
   MEMBER_USER_UID,
   createUserData,
   createUserWithClaim,
-  deleteUsersFromAuth,
-  userToCreate
+  deleteUsersFromAuth
 } from "./routes.mock"
 
-import { productMock } from "test-config/mocks/Stripe.mock"
+import {
+  checkoutSessionMock,
+  customerMock,
+  productMock
+} from "test-config/mocks/Stripe.mock"
 import { signupUserMock } from "test-config/mocks/User.mock"
 import AuthService from "business-layer/services/AuthService"
 
@@ -41,6 +44,23 @@ jest.mock("stripe", () => {
           sessions: {
             create: () => {
               return { client_secret: "test" }
+            },
+            list: () => {
+              return {
+                data: [checkoutSessionMock]
+              }
+            }
+          }
+        },
+        webhooks: {
+          constructEvent: () => {
+            return {
+              type: "payment_intent.succeeded",
+              data: {
+                object: {
+                  customer: customerMock
+                }
+              }
             }
           }
         }
@@ -49,17 +69,16 @@ jest.mock("stripe", () => {
   }
 })
 
-const usersToCreate: userToCreate[] = [
-  { uid: ADMIN_USER_UID, membership: "admin" },
-  { uid: MEMBER_USER_UID, membership: "member" },
-  { uid: GUEST_USER_UID, membership: "guest" }
+const usersToCreate: string[] = [
+  ADMIN_USER_UID,
+  MEMBER_USER_UID,
+  GUEST_USER_UID
 ]
 
 const createUsers = async () => {
   await Promise.all(
-    usersToCreate.map(async (user) => {
-      const { uid, membership } = user
-      await createUserData(uid, membership)
+    usersToCreate.map(async (uid) => {
+      await createUserData(uid)
     })
   )
 }
@@ -76,15 +95,11 @@ describe("Endpoints", () => {
   })
 
   afterEach(async () => {
-    const uidsToDelete = usersToCreate.map((user) => {
-      const { uid } = user
-      return uid
-    })
-    await deleteUsersFromAuth(uidsToDelete)
+    await deleteUsersFromAuth(usersToCreate)
   })
 
   afterAll(async () => {
-    await _app.close()
+    _app.close()
   })
 
   describe("/Users", () => {
@@ -114,7 +129,7 @@ describe("Endpoints", () => {
         await cleanFirestore()
       })
       it("Should not allow members to fetch their own stripe id", async () => {
-        await createUserData(MEMBER_USER_UID, "member")
+        await createUserData(MEMBER_USER_UID)
         const res = await request
           .get("/users/self")
           .set("Authorization", `Bearer ${memberToken}`)
@@ -148,7 +163,7 @@ describe("Endpoints", () => {
       })
 
       it("should let guests/admins to try create sessions", async () => {
-        createUserData(GUEST_USER_UID, "guest")
+        createUserData(GUEST_USER_UID)
         let res = await request
           .get("/payment/membership")
           .set("Authorization", `Bearer ${guestToken}`)
@@ -237,9 +252,9 @@ describe("Endpoints", () => {
 
   describe("/users/edit-self", () => {
     beforeEach(async () => {
-      await createUserData(ADMIN_USER_UID, "admin")
-      await createUserData(MEMBER_USER_UID, "member")
-      await createUserData(GUEST_USER_UID, "guest")
+      await createUserData(ADMIN_USER_UID)
+      await createUserData(MEMBER_USER_UID)
+      await createUserData(GUEST_USER_UID)
     })
 
     afterEach(async () => {
@@ -256,20 +271,6 @@ describe("Endpoints", () => {
         ADMIN_USER_UID
       )
       expect(updatedUser.gender).toEqual("male")
-    })
-
-    it("should not edit the users role", async () => {
-      const res = await request
-        .patch("/users/edit-self")
-        .set("Authorization", `Bearer ${memberToken}`)
-        .send({ updatedInformation: { membership: "admin" } })
-
-      expect(res.status).toEqual(400) // invalid request
-      const updatedUser = await new UserDataService().getUserData(
-        MEMBER_USER_UID
-      )
-      expect(updatedUser.membership).toEqual("member")
-      expect(updatedUser.membership).not.toEqual("admin")
     })
 
     it("should edit the user information for multiple attributes", async () => {
@@ -305,26 +306,6 @@ describe("Endpoints", () => {
         MEMBER_USER_UID
       )
       expect(updatedUser.stripe_id).not.toEqual("my fake stripe id")
-    })
-
-    it("should not edit users role for multiple attributes", async () => {
-      const res = await request
-        .patch("/users/edit-self")
-        .set("Authorization", `Bearer ${memberToken}`)
-        .send({
-          updatedInformation: {
-            faculty: "arts",
-            gender: "two spirit",
-            membership: "admin"
-          }
-        })
-
-      expect(res.status).toEqual(400) // invalid request
-      const updatedUser = await new UserDataService().getUserData(
-        MEMBER_USER_UID
-      )
-      expect(updatedUser.membership).toEqual("member")
-      expect(updatedUser.membership).not.toEqual("admin")
     })
 
     it("should not be able to put invalid domain into attribute", async () => {
@@ -363,7 +344,6 @@ describe("Endpoints", () => {
       expect(claims).toEqual(undefined)
     })
     it("should return a 409 conflict when an email is already in use", async () => {
-      // console.log({ ...signupUserMock, membership: "admin" })
       const res = await request.post("/signup").send({
         email: "test@mail.com",
         user: signupUserMock
@@ -371,18 +351,34 @@ describe("Endpoints", () => {
       // check for conflict
       expect(res.status).toEqual(409)
     })
-    it("should return no claims jwtToken regardless what membership", async () => {
-      // console.log({ ...signupUserMock, membership: "admin" })
-      const res = await request.post("/signup").send({
-        email: "testadmin@mail.com",
-        user: { ...signupUserMock, membership: "admin" }
-      })
-      // ensure that response is 200
+  })
+  /**
+   *
+   * `/webhook`
+   *
+   */
+  describe("/webhook", () => {
+    beforeAll(async () => {
+      await cleanFirestore()
+      await cleanAuth()
+      await createUsers()
+    })
+    afterAll(async () => {
+      await cleanFirestore()
+      await cleanAuth()
+    })
+    it("should add claim to user upon successful checkout", async () => {
+      const res = await request
+        .post("/webhook")
+        .set("stripe-signature", "test")
+        .send({
+          test: "foo"
+        })
       expect(res.status).toEqual(200)
-      // check if user custom claims exist
-      const { uid } = res.body
-      const claims = await new AuthService().getCustomerUserClaim(uid)
-      expect(claims).toEqual(undefined)
+      const userClaims = await new AuthService().getCustomerUserClaim(
+        GUEST_USER_UID
+      )
+      expect(userClaims).toEqual({ member: true })
     })
   })
 })

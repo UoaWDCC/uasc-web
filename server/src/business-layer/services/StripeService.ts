@@ -121,6 +121,30 @@ export default class StripeService {
     return currentlyActiveSession
   }
 
+  public async createProduct(
+    name: string,
+    metadata: Stripe.MetadataParam,
+    active: boolean,
+    description: string,
+    default_price_data: Stripe.ProductCreateParams.DefaultPriceData
+  ): Promise<Stripe.Response<Stripe.Product>> {
+    let product
+    try {
+      product = await stripe.products.create({
+        name,
+        metadata,
+        active,
+        description,
+        default_price_data
+      })
+    } catch (err) {
+      console.error("Error creating product", err)
+      throw err
+    }
+
+    return product
+  }
+
   public async retrieveCheckoutSessionFromPaymentIntent(
     payment_intent?: string,
     customer?: string,
@@ -169,5 +193,66 @@ export default class StripeService {
       expires_at: dateNowSecs() + expires_after_mins * ONE_MINUTE_S
     })
     return session.client_secret
+  }
+
+  /**
+   * Updates a product with the specified fields.
+   *
+   * @param productId - The ID of the product to update.
+   * @param updateFields - An object containing the fields to update.
+   * @param updateFields.active - (Optional) Whether the product is active or not.
+   * @param updateFields.description - (Optional) The description of the product.
+   * @param updateFields.metadata - (Optional) Additional metadata for the product.
+   * @param updateFields.price - (Optional) The price of the product.
+   * @param updateFields.name - (Optional) The name of the product.
+   *
+   * @returns {Promise<Stripe.Product>} - A promise that resolves to the updated product.
+   */
+  public async updateProduct(
+    productId: string,
+    updateFields: {
+      active?: boolean
+      description?: string
+      metadata?: Record<string, string>
+      price?: string
+      name?: string
+    }
+  ): Promise<Stripe.Product> {
+    /** Create an empty object to store the product update parameters */
+    const productUpdateParams: Stripe.ProductUpdateParams = {}
+
+    /** Check if the 'active' field is provided and assign it to the productUpdateParams object */
+    if (updateFields.active !== undefined) {
+      productUpdateParams.active = updateFields.active
+    }
+
+    /** Check if the 'description' field is provided and assign it to the productUpdateParams object */
+    if (updateFields.description !== undefined) {
+      productUpdateParams.description = updateFields.description
+    }
+
+    /** Check if the 'metadata' field is provided and assign it to the productUpdateParams object */
+    if (updateFields.metadata !== undefined) {
+      productUpdateParams.metadata = updateFields.metadata
+    }
+
+    /** Check if the 'price' field is provided and assign it to the productUpdateParams object */
+    if (updateFields.price !== undefined) {
+      productUpdateParams.default_price = updateFields.price
+    }
+
+    /** Check if the 'name' field is provided and assign it to the productUpdateParams object */
+    if (updateFields.name !== undefined) {
+      productUpdateParams.name = updateFields.name
+    }
+
+    /** Update the product with the specified ID using the productUpdateParams object */
+    const updatedProduct = await stripe.products.update(
+      productId,
+      productUpdateParams
+    )
+
+    /** Return the updated product */
+    return updatedProduct
   }
 }

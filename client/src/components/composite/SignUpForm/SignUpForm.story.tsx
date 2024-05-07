@@ -101,6 +101,17 @@ export const DefaultStory = () => {
               index: 7,
               onBack: () => {
                 setCurrentPage(6)
+              },
+              onNext: () => {
+                setCurrentPage(8)
+              }
+            },
+
+            {
+              title: "Success Story",
+              index: 8,
+              onBack: () => {
+                setCurrentPage(7)
               }
             }
           ]}
