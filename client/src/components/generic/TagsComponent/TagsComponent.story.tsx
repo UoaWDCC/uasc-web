@@ -18,7 +18,7 @@ export const PrimaryTagsComponent: Story = {
 export const InteractiveTagsComponent: Story = {
   tags: ["autodocs"],
   args: {
-    children: "INTERACTIVE",
+    children: "TAG",
     variant: "interactive"
   }
 }

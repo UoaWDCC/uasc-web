@@ -1,3 +1,5 @@
+import CloseSign from "assets/icons/close_sign.svg?react"
+
 type tagVariants = "primary" | "interactive"
 
 interface TagProps {
@@ -17,8 +19,12 @@ const PrimaryTagsComponent = ({ children }: props) => {
 
 const InteractiveTagsComponent = ({ children }: props) => {
   return (
-    <div className="bg-dark-blue-100 flex h-[32px] w-[80px] rounded-full">
-      <h5>{children}</h5>
+    <div className="bg-dark-blue-100 flex h-[32px] w-[80px] items-center justify-center rounded-full">
+      <h5 className="font-bold text-white">{children}</h5>
+
+      <div className="pl-4">
+        <CloseSign className="fill-white" />
+      </div>
     </div>
   )
 }
