@@ -6,7 +6,7 @@ export interface TagProps extends HTMLAttributes<HTMLOrSVGElement> {
 
 const PrimaryTagsComponent = () => {
   return (
-    <div className="h-[32px] w-[80px] rounded border border-black">
+    <div className="bg-light-blue-60 flex h-[32px] w-[80px] items-center justify-center rounded-full border border-black">
       <h5>1 of 12</h5>
     </div>
   )
