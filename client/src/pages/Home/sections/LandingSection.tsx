@@ -23,23 +23,23 @@ const LandingSection = () => (
           />
         </div>
 
-        {/*<div className="ml-auto hidden items-center gap-6 pr-[32px] lg:flex">*/}
+        <div className="ml-auto hidden items-center gap-6 pr-[32px] lg:flex">
           <h3 className="text-dark-blue-100 font-normal tracking-tighter">
             The largest sports club on campus, and <br/> the cheapest membership on Mt Ruapehu!
           </h3>
 
-          {/*<span>*/}
-          {/*  <a href="https://www.instagram.com/uasc_nz/" target="blank">*/}
-          {/*    <Instagram/>*/}
-          {/*  </a>*/}
-          {/*</span>*/}
+          <span>
+            <a href="https://www.instagram.com/uasc_nz/" target="_blank" rel="noreferrer">
+              <img src={Instagram} alt="Instagram Logo" />
+            </a>
+          </span>
 
-          {/*<span className="h-[24px] w-[24px]">*/}
-          {/*  <a href="https://www.facebook.com/UoAsnowsports/" target="blank">*/}
-          {/*    <Facebook/>*/}
-          {/*  </a>*/}
-          {/*</span>*/}
-        {/*</div>*/}
+          <span>
+            <a href="https://www.facebook.com/UoAsnowsports/" target="_blank" rel="noreferrer">
+              <img src={Facebook} alt="Facebook Logo" />
+            </a>
+          </span>
+        </div>
 
 
         <div className="flex flex-row">
