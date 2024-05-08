@@ -20,7 +20,7 @@ const PrimaryTagsComponent = ({ children }: props) => {
 const InteractiveTagsComponent = ({ children }: props) => {
   return (
     <div className="bg-dark-blue-100 flex h-[32px] w-[80px] items-center justify-center rounded-full">
-      <h5 className="font-bold text-white">{children}</h5>
+      <h5 className="pb-[2px] font-bold text-white">{children}</h5>
 
       <div className="pl-4">
         <CloseSign className="fill-white" />
