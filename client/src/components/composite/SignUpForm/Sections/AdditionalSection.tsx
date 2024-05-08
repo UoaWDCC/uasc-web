@@ -20,7 +20,7 @@ export const AdditionalSection = () => {
         }
       >
         <option value="" disabled>
-          Select your option
+          Select...
         </option>
         <option key="Skier" value="Skier">
           Skier
@@ -40,7 +40,7 @@ export const AdditionalSection = () => {
         }
       >
         <option value="" disabled>
-          Select your option
+          Select...
         </option>
         <option key="Yes" value="Yes">
           Yes
