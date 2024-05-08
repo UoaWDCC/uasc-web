@@ -17,7 +17,7 @@ const PrimaryTagsComponent = ({ children }: props) => {
 
 const InteractiveTagsComponent = ({ children }: props) => {
   return (
-    <div>
+    <div className="bg-dark-blue-100 flex h-[32px] w-[80px] rounded-full">
       <h5>{children}</h5>
     </div>
   )
