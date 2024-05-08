@@ -1,21 +1,15 @@
-import React, { ChangeEventHandler } from "react"
+import React from "react"
 
 type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   variant?: "success" | "error"
   label?: string
   description?: string
-  id?: string
-  value: string | undefined
-  onChange: ChangeEventHandler<HTMLInputElement>
 }
 
 const TextInput = ({
   variant,
   label,
   description,
-  id,
-  value,
-  onChange,
   ...props
 }: TextInputProps) => {
   const borderColor =
@@ -30,7 +24,7 @@ const TextInput = ({
   return (
     <div>
       {label && (
-        <label className="text-black" htmlFor={id}>
+        <label className="text-black" htmlFor={{ ...props }.id}>
           {label}
         </label>
       )}
@@ -40,10 +34,7 @@ const TextInput = ({
       <input
         className={`flex-shrink:0 border-radius: 0.25rem h-9 w-full rounded ${variant}`}
         style={{ borderColor, borderWidth, paddingLeft }}
-        id={id}
         {...props}
-        value={value || ""}
-        onChange={onChange}
       />
     </div>
   )
