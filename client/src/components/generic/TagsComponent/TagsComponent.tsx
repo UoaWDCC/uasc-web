@@ -5,7 +5,11 @@ export interface TagProps extends HTMLAttributes<HTMLOrSVGElement> {
 }
 
 const TagsComponent = () => {
-  return <div></div>
+  return (
+    <div>
+      <input type=""></input>
+    </div>
+  )
 }
 
 export default TagsComponent
