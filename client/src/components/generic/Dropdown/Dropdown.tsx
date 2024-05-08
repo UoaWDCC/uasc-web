@@ -16,7 +16,7 @@ const Dropdown = ({ label, description, value, ...props }: DropdownProps) => {
         <p className="text-dark-blue-60 mb-1 text-xs">{description}</p>
       )}
       <select
-        className="rounded border border-gray-300 bg-transparent bg-contain bg-right bg-no-repeat px-4 py-2"
+        className="bg-white rounded border border-gray-300 bg-transparent bg-contain bg-right bg-no-repeat px-4 py-2"
         style={{
           marginRight: "2rem",
           flexShrink: 0,

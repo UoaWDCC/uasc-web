@@ -85,7 +85,7 @@ const AlertComponents = ({ alerts }: { alerts?: Alerts }) => {
   if (alerts !== undefined) {
     const { errorMessage, message, successMessage } = alerts
     return (
-      <span className="relative mb-1">
+      <span className="relative my-2">
         {errorMessage && (
           <AlertsComponent variant="error" message={errorMessage} />
         )}
@@ -117,8 +117,8 @@ export const SignUpForm = ({
       </span>
 
       <PaginatedForm pages={pages} currentPageIndex={currentPage}>
-        <AlertComponents alerts={alerts} />
         <div className="h-fit w-full">{pageContent[currentPage]}</div>
+        <AlertComponents alerts={alerts} />
       </PaginatedForm>
     </div>
   )
