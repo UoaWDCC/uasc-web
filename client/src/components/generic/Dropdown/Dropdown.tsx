@@ -3,10 +3,9 @@ import React from "react"
 type DropdownProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
   label?: string
   description?: string
-  value?: string
 }
 
-const Dropdown = ({ label, description, value, ...props }: DropdownProps) => {
+const Dropdown = ({ label, description, ...props }: DropdownProps) => {
   return (
     <div
       style={{ position: "relative", display: "inline-block", width: "100%" }}
@@ -24,7 +23,8 @@ const Dropdown = ({ label, description, value, ...props }: DropdownProps) => {
           paddingLeft: "18px"
         }}
         {...props}
-        value={value || ""}
+        // explicitly declaring value attribute allows dropdown to show placeholder value by default
+        value={{ ...props }.value || ""}
       />
     </div>
   )
