@@ -1,43 +1,54 @@
-import { MenuItem, Select, TextField } from "@mui/material"
+import { useSignUpFormData } from "store/signupform"
+import Dropdown from "components/generic/Dropdown/Dropdown"
 
 export const AdditionalSection = () => {
+  const [{ does_ski, does_racing }, { updateFormData }] = useSignUpFormData()
+
   return (
-    <div>
-      <Select
-        id="sportType"
-        name="sportType"
-        label="Are you a Skier/Boarder/Both or New to the sport?"
-        variant="outlined"
-        required
-        size="small"
+    <div className="flex max-w-sm flex-col gap-5">
+      <Dropdown
+        value={
+          does_ski !== undefined
+            ? does_ski
+              ? "Skier"
+              : "Snowboarder"
+            : undefined
+        }
+        label="Skier or Snowboarder?"
+        onChange={(e) =>
+          updateFormData({ does_ski: e.target?.value === "Skier" })
+        }
       >
-        <MenuItem value={1}>Skier</MenuItem>
-        <MenuItem value={2}>Snowboarder</MenuItem>
-        <MenuItem value={3}>Both</MenuItem>
-        <MenuItem value={4}>New to both</MenuItem>
-      </Select>
-
-      <Select
-        id="interestedInRacing"
-        name="interestedInRacing"
-        label="Would you be interested in racing?"
-        variant="outlined"
-        required
-        size="small"
+        <option value="" disabled>
+          Select your option
+        </option>
+        <option key="Skier" value="Skier">
+          Skier
+        </option>
+        <option key="Snowboarder" value="Snowboarder">
+          Snowboarder
+        </option>
+      </Dropdown>
+      <Dropdown
+        value={
+          does_racing !== undefined ? (does_racing ? "Yes" : "No") : undefined
+        }
+        label="Would you be keen on Racing in 2024?"
+        description="All skill levels welcome! Multiple ski races held throughout the season"
+        onChange={(e) =>
+          updateFormData({ does_racing: e.target?.value === "Yes" })
+        }
       >
-        <MenuItem value={1}>Yes</MenuItem>
-        <MenuItem value={2}>No</MenuItem>
-        <MenuItem value={3}>Maybe</MenuItem>
-      </Select>
-
-      <TextField
-        id="dietaryRequirements"
-        name="dietaryRequirements"
-        label="Dietary Requirements"
-        variant="outlined"
-        required
-        size="small"
-      />
+        <option value="" disabled>
+          Select your option
+        </option>
+        <option key="Yes" value="Yes">
+          Yes
+        </option>
+        <option key="No" value="No">
+          No
+        </option>
+      </Dropdown>
     </div>
   )
 }
