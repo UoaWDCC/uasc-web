@@ -25,7 +25,7 @@ export const ContactSection = () => {
         label="Emergency contact info"
         description="Name, relationship to you, their mobile number"
         id="EmergencyContactInfo"
-        value={emergency_contact}
+        defaultValue={emergency_contact}
         onChange={(e) => {
           updateFormData({ emergency_contact: e.target.value })
         }}
