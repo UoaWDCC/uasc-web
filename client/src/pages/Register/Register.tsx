@@ -23,13 +23,15 @@ const Register = () => {
   const successfullySignedUp = !!data?.jwtToken
 
   // If user is logged in we don't care abotu the form alerts
-  const formAlerts = currentUser ? undefined : {
-    errorMessage: error?.message || formValidity?.errorMessage,
-    message: data?.error || data?.message,
-    successMessage: successfullySignedUp
-      ? "Account Created! Signing in"
-      : undefined
-  }
+  const formAlerts = currentUser
+    ? undefined
+    : {
+        errorMessage: error?.message || formValidity?.errorMessage,
+        message: data?.error || data?.message,
+        successMessage: successfullySignedUp
+          ? "Account Created! Signing in"
+          : undefined
+      }
 
   const pages = PAGINATED_FORM_PAGES(
     navigateFn!,
