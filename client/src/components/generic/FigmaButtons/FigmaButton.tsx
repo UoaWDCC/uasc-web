@@ -36,14 +36,14 @@ const DefaultButton = ({ children, ...props }: props) => {
 
 const DefaultButtonInverted = ({ children, ...props }: props) => {
   return (
-      <button
-          {...props}
-          className="bg-dark-blue-100 enabled:hover:text-dark-blue-100 border-dark-blue-100
+    <button
+      {...props}
+      className="bg-dark-blue-100 enabled:hover:text-dark-blue-100 border-dark-blue-100
         space-x-4; disabled:bg-dark-blue-60 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
         text-white hover:bg-white enabled:border"
-      >
-        {children}
-      </button>
+    >
+      {children}
+    </button>
   )
 }
 
@@ -65,8 +65,8 @@ const DefaultButtonSmall = ({ children, ...props }: props) => {
 const DefaultButtonInvertedWhite = ({ children, ...props }: props) => {
   return (
     <button
-        {...props}
-        className="bg-dark-blue-100  border-dark-blue-100
+      {...props}
+      className="bg-dark-blue-100  border-dark-blue-100
         space-x-4; disabled:bg-dark-blue-60 text-h5 items-center rounded-md px-11 py-2 uppercase
         text-white enabled:border"
     >
@@ -170,7 +170,11 @@ const Button = ({ iconSide, children, variant, ...props }: props) => {
     case "default":
       return <DefaultButton {...props}>{children}</DefaultButton>
     case "inverted-default":
-      return <DefaultButtonInvertedWhite {...props}>{children}</DefaultButtonInvertedWhite>
+      return (
+        <DefaultButtonInvertedWhite {...props}>
+          {children}
+        </DefaultButtonInvertedWhite>
+      )
     case "alternative":
       return <AlternativeButton {...props}>{children}</AlternativeButton>
     case "secondary":
