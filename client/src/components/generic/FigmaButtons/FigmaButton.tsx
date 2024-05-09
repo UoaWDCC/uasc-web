@@ -3,6 +3,7 @@ import LeftArrowIcon from "assets/icons/leftarrow.svg?react"
 
 type buttonVariants =
   | "default"
+  | "inverted-default"
   | "default-sm"
   | "alternative"
   | "secondary"
@@ -33,6 +34,19 @@ const DefaultButton = ({ children, ...props }: props) => {
   )
 }
 
+const DefaultButtonInverted = ({ children, ...props }: props) => {
+  return (
+      <button
+          {...props}
+          className="bg-dark-blue-100 enabled:hover:text-dark-blue-100 border-dark-blue-100
+        space-x-4; disabled:bg-dark-blue-60 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
+        text-white hover:bg-white enabled:border"
+      >
+        {children}
+      </button>
+  )
+}
+
 const DefaultButtonSmall = ({ children, ...props }: props) => {
   return (
     <button
@@ -48,16 +62,17 @@ const DefaultButtonSmall = ({ children, ...props }: props) => {
   )
 }
 
-const DefaultButtonInverted = ({ children, ...props }: props) => {
+const DefaultButtonInvertedWhite = ({ children, ...props }: props) => {
   return (
     <button
-      {...props}
-      className={
-        "border-dark-blue-100 text-h5 text-dark-blue-100 rounded-md border px-8 py-1 font-bold uppercase " +
-        props.className
-      }
+        {...props}
+        className="bg-dark-blue-100  border-dark-blue-100
+        space-x-4; disabled:bg-dark-blue-60 text-h5 items-center rounded-md px-11 py-2 uppercase
+        text-white enabled:border"
     >
-      {children}
+      <span className="flex items-center gap-1">
+        <span>{children}</span>
+      </span>
     </button>
   )
 }
@@ -154,6 +169,8 @@ const Button = ({ iconSide, children, variant, ...props }: props) => {
   switch (variant) {
     case "default":
       return <DefaultButton {...props}>{children}</DefaultButton>
+    case "inverted-default":
+      return <DefaultButtonInvertedWhite {...props}>{children}</DefaultButtonInvertedWhite>
     case "alternative":
       return <AlternativeButton {...props}>{children}</AlternativeButton>
     case "secondary":
