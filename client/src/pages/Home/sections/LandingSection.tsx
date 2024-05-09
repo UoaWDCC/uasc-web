@@ -13,18 +13,17 @@ const LandingSection = () => (
          items-center justify-center
          overflow-hidden bg-cover bg-top bg-no-repeat"
     >
-      <div className="bg-gray-1 pointer-events-none absolute -z-20 h-screen w-full opacity-90" />
-      <div className="z-10 flex flex-col items-center gap-8 text-center">
-        <div className="flex">
-          yarn add --dev --exact prettier
+      <div className="bg-gray-1 pointer-events-none absolute -z-20 h-screen opacity-90" />
+      <div className="z-10 flex flex-col items-center gap-11 text-center">
+        <div className="flex w-full">
           <img
             src={UASCHeader}
             alt="UASC in big text"
-            className=" pointer-events-none"
+            className=" pointer-events-none w-full"
           />
         </div>
 
-        <div className="ml-auto hidden items-center gap-6 pr-[32px] lg:flex">
+        <div className="ml-auto mr-0 hidden items-center gap-6 lg:flex">
           <h3 className="text-dark-blue-100 font-normal tracking-tighter">
             The largest sports club on campus, and <br /> the cheapest
             membership on Mt Ruapehu!
@@ -32,26 +31,26 @@ const LandingSection = () => (
 
           <span>
             <a
-              href="https://www.instagram.com/uasc_nz/"
+              href="https://www.facebook.com/UoAsnowsports/"
               target="_blank"
               rel="noreferrer"
             >
-              <img src={Instagram} alt="Instagram Logo" />
+              <img src={Facebook} alt="Facebook Logo" className="w-14" />
             </a>
           </span>
 
           <span>
             <a
-              href="https://www.facebook.com/UoAsnowsports/"
-              target="_blank"
-              rel="noreferrer"
+                href="https://www.instagram.com/uasc_nz/"
+                target="_blank"
+                rel="noreferrer"
             >
-              <img src={Facebook} alt="Facebook Logo" />
+              <img src={Instagram} alt="Instagram Logo" className="w-14" />
             </a>
           </span>
         </div>
 
-        <div className="flex flex-row">
+        <div className="flex flex-row gap-4">
           <Link to="/register" className="cursor-pointer">
             <Button>Sign up now!</Button>
           </Link>
