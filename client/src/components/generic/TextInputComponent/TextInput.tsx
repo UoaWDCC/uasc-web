@@ -32,7 +32,7 @@ const TextInput = ({
         <p className="text-dark-blue-60 mb-1 text-xs">{description}</p>
       )}
       <input
-        className={`flex-shrink:0 border-radius: 0.25rem h-9 w-full rounded ${variant}`}
+        className={`flex-shrink:0  border-gray-3 border-radius: 0.25rem h-9 w-full rounded ${variant}`}
         style={{ borderColor, borderWidth, paddingLeft }}
         {...props}
       />

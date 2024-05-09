@@ -5,12 +5,42 @@ import {
 import { ProtectedSignUpForm } from "components/composite/SignUpForm/SignUpForm"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom"
-import { SignUpFormContainer } from "store/signupform"
+import { useSignUpUserMutation } from "services/User/UserMutations"
+import { useSignUpFormData } from "store/SignUpForm"
+import { useAppData } from "store/Store"
 
 const Register = () => {
   const navigateFn = useNavigate()
-  const pages = PAGINATED_FORM_PAGES(navigateFn!)
+  const [signUpFormData, { validateForm }] = useSignUpFormData()
+  const [{ currentUser }] = useAppData()
+  const { email, formValidity, ...user } = signUpFormData
+
+  const { mutate, isPending, error, data } = useSignUpUserMutation({
+    email: email || "",
+    user
+  })
+
+  const successfullySignedUp = !!data?.jwtToken
+
+  // If user is logged in we don't care abotu the form alerts
+  const formAlerts = currentUser
+    ? undefined
+    : {
+        errorMessage: error?.message || formValidity?.errorMessage,
+        message: data?.error || data?.message,
+        successMessage: successfullySignedUp
+          ? "Account Created! Signing in"
+          : undefined
+      }
+
+  const pages = PAGINATED_FORM_PAGES(
+    navigateFn!,
+    mutate,
+    validateForm,
+    isPending || successfullySignedUp
+  )
   const pageContent = PAGE_CONTENT
+
   return (
     <>
       <FullPageBackgroundImage>
@@ -20,12 +50,11 @@ const Register = () => {
             <Route
               path=":step"
               element={
-                <SignUpFormContainer>
-                  <ProtectedSignUpForm
-                    pageContent={pageContent}
-                    pages={pages}
-                  />
-                </SignUpFormContainer>
+                <ProtectedSignUpForm
+                  pageContent={pageContent}
+                  pages={pages}
+                  alerts={formAlerts}
+                />
               }
             />
           </Routes>
