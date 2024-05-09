@@ -332,13 +332,7 @@
 					"gender": {
 						"type": "string"
 					},
-					"emergency_name": {
-						"type": "string"
-					},
-					"emergency_phone": {
-						"type": "string"
-					},
-					"emergency_relation": {
+					"emergency_contact": {
 						"type": "string"
 					},
 					"first_name": {
@@ -372,9 +366,6 @@
 					"does_racing",
 					"does_ski",
 					"gender",
-					"emergency_name",
-					"emergency_phone",
-					"emergency_relation",
 					"first_name",
 					"last_name",
 					"dietary_requirements",

@@ -17,9 +17,7 @@ const initialState: State = {
   does_racing: false,
   does_ski: false,
   gender: "",
-  emergency_name: "",
-  emergency_phone: "",
-  emergency_relation: "",
+  emergency_contact: "",
   first_name: "",
   last_name: "",
   dietary_requirements: "",
@@ -35,7 +33,7 @@ const initialState: State = {
 
 const actions = {
   updateFormData:
-    (newData: Partial<ReducedUserAdditionalInfo>): Action<State> =>
+    (newData: Partial<Omit<State, "formValidity">>): Action<State> =>
     ({ setState }) => {
       setState(newData)
     },

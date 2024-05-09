@@ -2,7 +2,7 @@ import { useSignUpFormData } from "store/SignUpForm"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 
 export const ContactSection = () => {
-  const [{ emergency_contact }, { updateFormData }] = useSignUpFormData()
+  const [{ emergency_contact, email }, { updateFormData }] = useSignUpFormData()
 
   return (
     <div className="flex max-w-sm flex-col gap-5">
@@ -10,6 +10,8 @@ export const ContactSection = () => {
         type="email"
         label="Email"
         id="Email"
+        defaultValue={email}
+        onChange={(e) => updateFormData({ email: e.target.value })}
         placeholder="email@domain.com"
         required
       />
