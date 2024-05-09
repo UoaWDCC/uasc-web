@@ -33,7 +33,7 @@
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
-					"does_freestyle": {
+					"does_snowboarding": {
 						"type": "boolean"
 					},
 					"does_racing": {
@@ -79,7 +79,7 @@
 				},
 				"required": [
 					"date_of_birth",
-					"does_freestyle",
+					"does_snowboarding",
 					"does_racing",
 					"does_ski",
 					"gender",
@@ -135,7 +135,7 @@
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
-					"does_freestyle": {
+					"does_snowboarding": {
 						"type": "boolean"
 					},
 					"does_racing": {
@@ -199,7 +199,7 @@
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
-					"does_freestyle": {
+					"does_snowboarding": {
 						"type": "boolean"
 					},
 					"does_racing": {
@@ -320,7 +320,7 @@
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
-					"does_freestyle": {
+					"does_snowboarding": {
 						"type": "boolean"
 					},
 					"does_racing": {
@@ -362,7 +362,7 @@
 				},
 				"required": [
 					"date_of_birth",
-					"does_freestyle",
+					"does_snowboarding",
 					"does_racing",
 					"does_ski",
 					"gender",

@@ -3,7 +3,7 @@ import { UserAdditionalInfo } from "data-layer/models/firebase"
 
 export const userInfoMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(10000000000)),
-  does_freestyle: true,
+  does_snowboarding: true,
   does_racing: true,
   does_ski: false,
   gender: "non-binary",
@@ -20,7 +20,7 @@ export const userInfoMock: UserAdditionalInfo = {
 }
 export const userInfoMock2: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(1000000000)),
-  does_freestyle: true,
+  does_snowboarding: true,
   does_racing: true,
   does_ski: false,
   gender: "non-ternary",
@@ -37,7 +37,7 @@ export const userInfoMock2: UserAdditionalInfo = {
 
 export const signupUserMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(0)),
-  does_freestyle: true,
+  does_snowboarding: true,
   does_racing: true,
   does_ski: true,
   gender: "string",

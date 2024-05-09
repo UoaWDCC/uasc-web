@@ -14,7 +14,7 @@ const initialState: State = {
     seconds: 0,
     nanoseconds: 0
   },
-  does_freestyle: false,
+  does_snowboarding: false,
   does_racing: false,
   does_ski: false,
   gender: "",

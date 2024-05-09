@@ -64,7 +64,7 @@ export interface components {
     };
     UserAdditionalInfo: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_freestyle: boolean;
+      does_snowboarding: boolean;
       does_racing: boolean;
       does_ski: boolean;
       gender: string;
@@ -91,7 +91,7 @@ export interface components {
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_freestyle?: boolean;
+      does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
       gender?: string;
@@ -113,7 +113,7 @@ export interface components {
     /** @description Make all properties in T optional */
     Partial_UserAdditionalInfo_: {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_freestyle?: boolean;
+      does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
       gender?: string;
@@ -150,7 +150,7 @@ export interface components {
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__": {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_freestyle: boolean;
+      does_snowboarding: boolean;
       does_racing: boolean;
       does_ski: boolean;
       gender: string;

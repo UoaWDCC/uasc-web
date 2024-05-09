@@ -5,7 +5,7 @@ export interface UserAdditionalInfo {
   /**
    * @isbool Please enter true or false
    */
-  does_freestyle: boolean
+  does_snowboarding: boolean
   /**
    * @isbool Please enter true or false
    */
