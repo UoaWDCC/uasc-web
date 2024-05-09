@@ -74,9 +74,7 @@ export interface components {
       does_racing: boolean;
       does_ski: boolean;
       gender: string;
-      emergency_name: string;
-      emergency_phone: string;
-      emergency_relation: string;
+      emergency_contact?: string;
       first_name: string;
       last_name: string;
       dietary_requirements: string;
@@ -103,9 +101,7 @@ export interface components {
       does_racing?: boolean;
       does_ski?: boolean;
       gender?: string;
-      emergency_name?: string;
-      emergency_phone?: string;
-      emergency_relation?: string;
+      emergency_contact?: string;
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
@@ -127,9 +123,7 @@ export interface components {
       does_racing?: boolean;
       does_ski?: boolean;
       gender?: string;
-      emergency_name?: string;
-      emergency_phone?: string;
-      emergency_relation?: string;
+      emergency_contact?: string;
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
