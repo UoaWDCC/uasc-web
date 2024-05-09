@@ -29,9 +29,9 @@ const InteractiveTagsComponent = ({ children }: props) => {
 
   return (
     <div className="bg-dark-blue-100 flex h-[32px] w-[80px] items-center justify-center overflow-hidden whitespace-nowrap rounded-full">
-      <h5 className="pb-[2px] font-bold text-white">{children}</h5>
+      <h5 className="mr-4 pb-[2px] font-bold text-white">{children}</h5>
 
-      <div className="ml-4 cursor-pointer" onClick={handleClose}>
+      <div className="absolute ml-11 cursor-pointer" onClick={handleClose}>
         <CloseSign className="fill-white" />
       </div>
     </div>
