@@ -4,7 +4,7 @@ import PaginatedForm, {
 import { STEPPER_PROPS } from "./PageConfig/PageConfig"
 import Stepper from "components/generic/StepperComponent/StepperComponent"
 import { oneLevelUp, useCurrentStep } from "./utils/Utils"
-import { useAppData } from "store/store"
+import { useAppData } from "store/Store"
 import { Navigate } from "react-router-dom"
 import {
   ACCOUNT_SETUP_ROUTE,

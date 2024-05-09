@@ -1,6 +1,6 @@
 import { createRef } from "react"
 import { updatePassword } from "firebase/auth"
-import { useAppData } from "store/store"
+import { useAppData } from "store/Store"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
 import {

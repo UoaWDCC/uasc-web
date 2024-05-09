@@ -1,4 +1,4 @@
-import { useSignUpFormData } from "store/signupform"
+import { useSignUpFormData } from "store/SignUpForm"
 import Dropdown from "components/generic/Dropdown/Dropdown"
 
 export const AdditionalSection = () => {
