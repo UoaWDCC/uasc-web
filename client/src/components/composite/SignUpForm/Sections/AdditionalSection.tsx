@@ -1,5 +1,6 @@
 import { useSignUpFormData } from "store/SignUpForm"
 import Dropdown from "components/generic/Dropdown/Dropdown"
+import TextInput from "components/generic/TextInputComponent/TextInput"
 
 enum SportOptions {
   SKIER = "Skier",
@@ -49,7 +50,7 @@ const doesSnowboarding = (currentSportOption: SportOptions) => {
 
 
 export const AdditionalSection = () => {
-  const [{ does_ski, does_snowboarding, does_racing }, { updateFormData }] = useSignUpFormData()
+  const [{ does_ski, does_snowboarding, does_racing, dietary_requirements }, { updateFormData }] = useSignUpFormData()
 
   return (
     <div className="flex max-w-sm flex-col gap-5">
@@ -99,6 +100,18 @@ export const AdditionalSection = () => {
           No
         </option>
       </Dropdown>
+
+      <TextInput
+        type="text"
+        label="Dietary Requirements"
+        id="DietaryRequirements"
+        description="Nuts, Dairy etc"
+        defaultValue={dietary_requirements}
+        onChange={(e) => {
+          updateFormData({ dietary_requirements: e.target.value })
+        }}
+        required
+      />
     </div >
   )
 }
