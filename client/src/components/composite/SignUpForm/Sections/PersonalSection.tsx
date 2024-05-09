@@ -15,7 +15,7 @@ export const PersonalSectionFirst = () => {
           type="text"
           label="First Name"
           id="FirstName"
-          value={first_name}
+          defaultValue={first_name}
           onChange={(e) => updateFormData({ first_name: e.target.value })}
           required
         />
@@ -23,7 +23,7 @@ export const PersonalSectionFirst = () => {
           type="text"
           label="Last Name"
           id="LastName"
-          value={last_name}
+          defaultValue={last_name}
           onChange={(e) => updateFormData({ last_name: e.target.value })}
           required
         />
@@ -32,7 +32,7 @@ export const PersonalSectionFirst = () => {
         type="date"
         label="Birthday"
         id="Birthday"
-        value={
+        defaultValue={
           date_of_birth &&
           new Timestamp(date_of_birth.seconds, date_of_birth.nanoseconds)
             .toDate()
@@ -97,7 +97,7 @@ export const PersonalSectionSecond = () => {
         label="UoA Student ID Number"
         description="Put NA if not a UoA Student"
         id="FirstName"
-        value={student_id}
+        defaultValue={student_id}
         placeholder="e.g. 111222333"
         onChange={(e) => updateFormData({ student_id: e.target.value })}
         required
