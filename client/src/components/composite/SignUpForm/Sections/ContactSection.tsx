@@ -1,32 +1,35 @@
-import { TextField } from "@mui/material"
+import { useSignUpFormData } from "store/signupform"
+import TextInput from "components/generic/TextInputComponent/TextInput"
 
 export const ContactSection = () => {
+  const [{ emergency_contact }, { updateFormData }] = useSignUpFormData()
+
   return (
-    <div>
-      <TextField
-        id="email"
-        name="email"
-        label="Email Address"
-        variant="outlined"
+    <div className="flex max-w-sm flex-col gap-5">
+      <TextInput
         type="email"
+        label="Email"
+        id="Email"
+        placeholder="email@domain.com"
         required
-        size="small"
       />
-      <TextField
-        id="phoneNumber"
-        name="phoneNumber"
-        label="Phone Number"
-        variant="outlined"
+      <TextInput
+        type="tel"
+        label="Mobile Number"
+        id="MobileNumber"
+        placeholder="000 000 0000"
         required
-        size="small"
       />
-      <TextField
-        id="emergencyContact"
-        name="emergencyContact"
-        label="Emergency contact details"
-        variant="outlined"
+      <TextInput
+        type="text"
+        label="Emergency contact info"
+        description="Name, relationship to you, their mobile number"
+        id="EmergencyContactInfo"
+        defaultValue={emergency_contact}
+        onChange={(e) => {
+          updateFormData({ emergency_contact: e.target.value })
+        }}
         required
-        size="small"
       />
     </div>
   )
