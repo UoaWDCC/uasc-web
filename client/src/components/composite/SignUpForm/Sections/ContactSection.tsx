@@ -2,7 +2,8 @@ import { useSignUpFormData } from "store/SignUpForm"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 
 export const ContactSection = () => {
-  const [{ emergency_contact, email, confirmEmail }, { updateFormData }] = useSignUpFormData()
+  const [{ emergency_contact, email, confirmEmail }, { updateFormData }] =
+    useSignUpFormData()
 
   return (
     <div className="flex max-w-sm flex-col gap-5">

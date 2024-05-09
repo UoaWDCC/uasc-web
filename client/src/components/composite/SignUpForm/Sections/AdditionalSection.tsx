@@ -12,7 +12,10 @@ enum SportOptions {
 /**
  * @returns the correct dropdown option for the user's sport
  */
-const determineSport = (doesSki: boolean, doesSnowboarding: boolean): SportOptions => {
+const determineSport = (
+  doesSki: boolean,
+  doesSnowboarding: boolean
+): SportOptions => {
   if (doesSki && doesSnowboarding) return SportOptions.BOTH
   if (doesSki) return SportOptions.SKIER
   if (doesSnowboarding) return SportOptions.SNOWBOARDER
@@ -47,17 +50,16 @@ const doesSnowboarding = (currentSportOption: SportOptions) => {
   }
 }
 
-
-
 export const AdditionalSection = () => {
-  const [{ does_ski, does_snowboarding, does_racing, dietary_requirements }, { updateFormData }] = useSignUpFormData()
+  const [
+    { does_ski, does_snowboarding, does_racing, dietary_requirements },
+    { updateFormData }
+  ] = useSignUpFormData()
 
   return (
     <div className="flex max-w-sm flex-col gap-5">
       <Dropdown
-        value={
-          determineSport(does_ski, does_snowboarding)
-        }
+        value={determineSport(does_ski, does_snowboarding)}
         label="Skier or Snowboarder?"
         onChange={(e) =>
           updateFormData({
@@ -75,7 +77,9 @@ export const AdditionalSection = () => {
         <option key={SportOptions.SNOWBOARDER} value={SportOptions.SNOWBOARDER}>
           Snowboarder
         </option>
-        <option key={SportOptions.BOTH} value={SportOptions.BOTH}>Both</option>
+        <option key={SportOptions.BOTH} value={SportOptions.BOTH}>
+          Both
+        </option>
         <option key={SportOptions.NEW} value={SportOptions.NEW}>
           New!
         </option>
@@ -112,6 +116,6 @@ export const AdditionalSection = () => {
         }}
         required
       />
-    </div >
+    </div>
   )
 }
