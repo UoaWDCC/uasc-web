@@ -12,7 +12,7 @@ type props = TagProps
 
 const PrimaryTagsComponent = ({ children }: props) => {
   return (
-    <div className="bg-light-blue-60 flex h-[32px] w-[80px] items-center justify-center rounded-full border border-black">
+    <div className="bg-light-blue-60 flex h-[32px] w-[80px] items-center justify-center rounded-full">
       <h5 className="font-bold">{children}</h5>
     </div>
   )
