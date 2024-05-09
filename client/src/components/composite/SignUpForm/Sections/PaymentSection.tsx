@@ -81,7 +81,7 @@ const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         <>
           {data.message && <p>{data.message}</p>}
           <PaymentForm
-            onComplete={() => { }}
+            onComplete={() => {}}
             clientSecret={data?.stripeClientSecret as string}
           />
         </>
