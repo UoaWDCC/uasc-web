@@ -12,7 +12,7 @@ type props = TagProps
 
 const PrimaryTagsComponent = ({ children }: props) => {
   return (
-    <div className="bg-light-blue-60 flex h-[32px] w-[80px] items-center justify-center rounded-full">
+    <div className="bg-light-blue-60 flex h-[32px] w-[80px] items-center justify-center overflow-hidden whitespace-nowrap rounded-full">
       <h5 className="font-bold">{children}</h5>
     </div>
   )
@@ -28,7 +28,7 @@ const InteractiveTagsComponent = ({ children }: props) => {
   }
 
   return (
-    <div className="bg-dark-blue-100 flex h-[32px] w-[80px] items-center justify-center rounded-full">
+    <div className="bg-dark-blue-100 flex h-[32px] w-[80px] items-center justify-center overflow-hidden whitespace-nowrap rounded-full">
       <h5 className="pb-[2px] font-bold text-white">{children}</h5>
 
       <div className="cursor-pointer pl-4" onClick={handleClose}>
