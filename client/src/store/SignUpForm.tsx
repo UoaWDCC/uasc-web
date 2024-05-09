@@ -3,12 +3,13 @@ import { ReducedUserAdditionalInfo } from "models/User"
 import { createStore, Action, createHook } from "react-sweet-state"
 
 type FormValidity = { errorMessage?: string; success: boolean }
-type State = ReducedUserAdditionalInfo & { email: string } & {
+type State = ReducedUserAdditionalInfo & { email: string, confirmEmail: string } & {
   formValidity: FormValidity
 }
 
 const initialState: State = {
   email: "",
+  confirmEmail: "",
   date_of_birth: {
     seconds: 0,
     nanoseconds: 0
@@ -34,119 +35,123 @@ const initialState: State = {
 const actions = {
   updateFormData:
     (newData: Partial<Omit<State, "formValidity">>): Action<State> =>
-    ({ setState }) => {
-      setState(newData)
-    },
+      ({ setState }) => {
+        setState(newData)
+      },
   resetForm:
     (): Action<State> =>
-    ({ setState }) => {
-      setState(initialState)
-    },
+      ({ setState }) => {
+        setState(initialState)
+      },
   validateForm:
     (pageToValidate: PAGES, nextFn: () => void): Action<State> =>
-    ({ getState, setState }) => {
-      const validateFirstSection = (invalidFields: string[]) => {
-        const { first_name, last_name } = getState()
-        if (first_name.length === 0) invalidFields.push("First Name")
-        if (last_name.length === 0) invalidFields.push("Last Name")
-      }
-
-      const validateContactSection = (invalidFields: string[]) => {
-        const { email } = getState()
-        const validRegex =
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-
-        if (!email.match(validRegex)) {
-          invalidFields.push("Email")
+      ({ getState, setState }) => {
+        const validateFirstSection = (invalidFields: string[]) => {
+          const { first_name, last_name } = getState()
+          if (first_name.length === 0) invalidFields.push("First Name")
+          if (last_name.length === 0) invalidFields.push("Last Name")
         }
-      }
 
-      switch (pageToValidate) {
-        case PAGES.PersonalFirst: {
-          const invalidFields: string[] = []
-          validateFirstSection(invalidFields)
-          if (invalidFields.length > 0) {
+        const validateContactSection = (invalidFields: string[]) => {
+          const { email, confirmEmail } = getState()
+          const validRegex =
+            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+
+          if (!email.match(validRegex)) {
+            invalidFields.push("Email")
+
+          }
+          if (confirmEmail !== email) {
+            invalidFields.push("Confirm Email")
+          }
+        }
+
+        switch (pageToValidate) {
+          case PAGES.PersonalFirst: {
+            const invalidFields: string[] = []
+            validateFirstSection(invalidFields)
+            if (invalidFields.length > 0) {
+              setState({
+                formValidity: {
+                  errorMessage: `Please fill in ${invalidFields.join(" ")}`,
+                  success: false
+                }
+              })
+              break
+            }
+
             setState({
               formValidity: {
-                errorMessage: `Please fill in ${invalidFields.join(" ")}`,
-                success: false
+                errorMessage: undefined,
+                success: true
               }
             })
+            nextFn()
             break
           }
-
-          setState({
-            formValidity: {
-              errorMessage: undefined,
-              success: true
-            }
-          })
-          nextFn()
-          break
-        }
-        case PAGES.PersonalSecond:
-          // No required fields here
-          setState({
-            formValidity: {
-              errorMessage: undefined,
-              success: true
-            }
-          })
-          nextFn()
-          break
-        case PAGES.Contact: {
-          const invalidFields: string[] = []
-          validateContactSection(invalidFields)
-          if (invalidFields.length > 0) {
+          case PAGES.PersonalSecond:
+            // No required fields here
             setState({
               formValidity: {
-                errorMessage: `Please enter a valid ${[invalidFields]}`,
-                success: false
+                errorMessage: undefined,
+                success: true
               }
             })
-
+            nextFn()
             break
-          }
-          setState({
-            formValidity: {
-              errorMessage: undefined,
-              success: true
+          case PAGES.Contact: {
+            const invalidFields: string[] = []
+            validateContactSection(invalidFields)
+            if (invalidFields.length > 0) {
+              setState({
+                formValidity: {
+                  errorMessage: `Please enter a valid ${invalidFields.join(", ")}`,
+                  success: false
+                }
+              })
+
+              break
             }
-          })
-          nextFn()
-          break
-        }
-        case PAGES.Additional: {
-          const invalidFields: string[] = []
-          validateFirstSection(invalidFields)
-          validateContactSection(invalidFields)
-          if (invalidFields.length > 0) {
             setState({
               formValidity: {
-                errorMessage: `Please enter a valid: ${invalidFields.join(", ")}`,
-                success: false
+                errorMessage: undefined,
+                success: true
               }
             })
+            nextFn()
             break
           }
-          setState({
-            formValidity: {
-              errorMessage: undefined,
-              success: true
+          case PAGES.Additional: {
+            const invalidFields: string[] = []
+            validateFirstSection(invalidFields)
+            validateContactSection(invalidFields)
+            if (invalidFields.length > 0) {
+              setState({
+                formValidity: {
+                  errorMessage: `Please enter a valid: ${invalidFields.join(", ")}`,
+                  success: false
+                }
+              })
+              break
             }
-          })
-          nextFn()
-          break
+            setState({
+              formValidity: {
+                errorMessage: undefined,
+                success: true
+              }
+            })
+            nextFn()
+            break
+          }
+          default:
+            setState({
+              formValidity: {
+                errorMessage: undefined,
+                success: true
+              }
+            })
         }
-        default:
-          setState({
-            formValidity: {
-              errorMessage: undefined,
-              success: true
-            }
-          })
       }
-    }
 }
 
 type Actions = typeof actions
