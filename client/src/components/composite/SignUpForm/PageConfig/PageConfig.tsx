@@ -32,11 +32,11 @@ import AccountSetupSection from "../Sections/AccountSetupSection"
 
 type FormSubmissionMutationFunction = UseMutateFunction<
   | {
-      error?: string | undefined
-      message?: string | undefined
-      jwtToken?: string | undefined
-      uid?: string | undefined
-    }
+    error?: string | undefined
+    message?: string | undefined
+    jwtToken?: string | undefined
+    uid?: string | undefined
+  }
   | undefined,
   Error,
   void,
@@ -49,82 +49,82 @@ export const PAGINATED_FORM_PAGES = (
   validateFormFn: (pageToValidate: PAGES, navigateFn: () => void) => void,
   disableSubmit: boolean
 ): PageProps[] => [
-  {
-    index: PAGES.PersonalFirst,
-    title: "Personal details",
-    onNext: () => {
-      validateFormFn(PAGES.PersonalFirst, () => navigateFn(PERSONAL_ROUTE_2))
-    }
-  },
-  {
-    index: PAGES.PersonalSecond,
-    title: "Personal details",
-    onBack: () => navigateFn(PERSONAL_ROUTE_1),
-    onNext: () => {
-      validateFormFn(PAGES.PersonalSecond, () => navigateFn(CONTACT_ROUTE))
-    }
-  },
-  {
-    index: PAGES.Contact,
-    title: "Contact details",
-    onBack: () => navigateFn(PERSONAL_ROUTE_2),
-    onNext: () => {
-      validateFormFn(PAGES.Contact, () => navigateFn(ADDITIONAL_ROUTE))
-    }
-  },
-  {
-    index: PAGES.Additional,
-    title: "Additional info",
-    nextButtonText: "Sign Up",
-    onBack: () => navigateFn(CONTACT_ROUTE),
-    onNext: () => {
-      validateFormFn(PAGES.Additional, () =>
-        signUpFn(undefined, {
-          async onSuccess(data) {
-            console.log(data)
-            if (data?.jwtToken) {
-              await signInWithCustomToken(auth, data.jwtToken)
-            }
-          },
-          onError(error) {
-            console.error("Error signing up " + error)
-          }
-        })
-      )
+    {
+      index: PAGES.PersonalFirst,
+      title: "Personal details",
+      onNext: () => {
+        validateFormFn(PAGES.PersonalFirst, () => navigateFn(PERSONAL_ROUTE_2))
+      }
     },
-    nextDisabled: disableSubmit
-  },
-  {
-    index: PAGES.PaymentInfo,
-    title: "Payment Information",
-    onNext: () => navigateFn(PAYMENT_ROUTE)
-  },
-  {
-    index: PAGES.Payment,
-    title: "Payment",
-    nextButtonText: " ",
-    onBack: () => navigateFn(PAYMENT_INFORMATION_ROUTE)
-  },
-  {
-    index: PAGES.Confirm,
-    title: "Confirm",
-    onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE)
-  },
-  {
-    index: PAGES.AccountSetup,
-    title: "Account",
-    // goes back to one page earlier in history, otherwise does nothing
-    onBack: () => navigateFn(-1),
-    // after setting up the account, the next button is enabled and shows the success section
-    onNext: () => navigateFn(SUCCESS_ROUTE)
-  },
-  {
-    index: PAGES.Success,
-    title: "Success",
-    onBack: () => navigateFn(ACCOUNT_SETUP_ROUTE),
-    onNext: () => navigateFn("/profile")
-  }
-]
+    {
+      index: PAGES.PersonalSecond,
+      title: "Personal details",
+      onBack: () => navigateFn(PERSONAL_ROUTE_1),
+      onNext: () => {
+        validateFormFn(PAGES.PersonalSecond, () => navigateFn(CONTACT_ROUTE))
+      }
+    },
+    {
+      index: PAGES.Contact,
+      title: "Contact details",
+      onBack: () => navigateFn(PERSONAL_ROUTE_2),
+      onNext: () => {
+        validateFormFn(PAGES.Contact, () => navigateFn(ADDITIONAL_ROUTE))
+      }
+    },
+    {
+      index: PAGES.Additional,
+      title: "Additional info",
+      nextButtonText: "Sign Up",
+      onBack: () => navigateFn(CONTACT_ROUTE),
+      onNext: () => {
+        validateFormFn(PAGES.Additional, () =>
+          signUpFn(undefined, {
+            async onSuccess(data) {
+              // console.log(data)
+              if (data?.jwtToken) {
+                await signInWithCustomToken(auth, data.jwtToken)
+              }
+            },
+            onError(error) {
+              console.error("Error signing up " + error)
+            }
+          })
+        )
+      },
+      nextDisabled: disableSubmit
+    },
+    {
+      index: PAGES.PaymentInfo,
+      title: "Payment Information",
+      onNext: () => navigateFn(PAYMENT_ROUTE)
+    },
+    {
+      index: PAGES.Payment,
+      title: "Payment",
+      nextButtonText: " ",
+      onBack: () => navigateFn(PAYMENT_INFORMATION_ROUTE)
+    },
+    {
+      index: PAGES.Confirm,
+      title: "Confirm",
+      onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE)
+    },
+    {
+      index: PAGES.AccountSetup,
+      title: "Account",
+      // goes back to one page earlier in history, otherwise does nothing
+      onBack: () => navigateFn(-1),
+      // after setting up the account, the next button is enabled and shows the success section
+      onNext: () => navigateFn(SUCCESS_ROUTE)
+    },
+    {
+      index: PAGES.Success,
+      title: "Success",
+      onBack: () => navigateFn(ACCOUNT_SETUP_ROUTE),
+      onNext: () => navigateFn("/profile")
+    }
+  ]
 
 /**
  * Make sure these are in order

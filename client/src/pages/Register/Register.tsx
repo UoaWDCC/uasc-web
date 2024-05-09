@@ -7,11 +7,12 @@ import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom"
 import { useSignUpUserMutation } from "services/User/UserMutations"
 import { useSignUpFormData } from "store/SignUpForm"
+import { useAppData } from "store/Store"
 
 const Register = () => {
   const navigateFn = useNavigate()
   const [signUpFormData, { validateForm }] = useSignUpFormData()
-
+  const [{ currentUser }] = useAppData()
   const { email, formValidity, ...user } = signUpFormData
 
   const { mutate, isPending, error, data } = useSignUpUserMutation({
@@ -21,7 +22,8 @@ const Register = () => {
 
   const successfullySignedUp = !!data?.jwtToken
 
-  const alerts = {
+  // If user is logged in we don't care abotu the form alerts
+  const formAlerts = currentUser ? undefined : {
     errorMessage: error?.message || formValidity?.errorMessage,
     message: data?.error || data?.message,
     successMessage: successfullySignedUp
@@ -49,7 +51,7 @@ const Register = () => {
                 <ProtectedSignUpForm
                   pageContent={pageContent}
                   pages={pages}
-                  alerts={alerts}
+                  alerts={formAlerts}
                 />
               }
             />
