@@ -41,9 +41,9 @@ const LandingSection = () => (
 
           <span>
             <a
-                href="https://www.instagram.com/uasc_nz/"
-                target="_blank"
-                rel="noreferrer"
+              href="https://www.instagram.com/uasc_nz/"
+              target="_blank"
+              rel="noreferrer"
             >
               <img src={Instagram} alt="Instagram Logo" className="w-14" />
             </a>
