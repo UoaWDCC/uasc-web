@@ -1,4 +1,4 @@
-import { useSignUpFormData } from "store/signupform"
+import { useSignUpFormData } from "store/SignUpForm"
 import Radio from "components/generic/Radio/Radio"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import { Timestamp } from "firebase/firestore"

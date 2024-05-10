@@ -5,7 +5,7 @@ export interface UserAdditionalInfo {
   /**
    * @isbool Please enter true or false
    */
-  does_freestyle: boolean
+  does_snowboarding: boolean
   /**
    * @isbool Please enter true or false
    */
@@ -37,15 +37,15 @@ export interface UserAdditionalInfo {
   /**
    * @isString Please enter your faculty
    */
-  faculty: string | undefined
+  faculty?: string
   /**
    * @isString Please enter your university
    */
-  university: string | undefined
+  university?: string
   /**
    *@isString Please enter your student ID
    */
-  student_id: string | undefined
+  student_id?: string
   /**
    * @isbool Please enter true or false
    */
