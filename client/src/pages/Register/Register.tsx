@@ -9,14 +9,17 @@ import { useSignUpUserMutation } from "services/User/UserMutations"
 import { useSignUpFormData } from "store/SignUpForm"
 import { useAppData } from "store/Store"
 
+// Will make backend throw invalid email error
+const INVALID_EMAIL_PLACEHOLDER = ""
+
 const Register = () => {
   const navigateFn = useNavigate()
   const [signUpFormData, { validateForm }] = useSignUpFormData()
   const [{ currentUser }] = useAppData()
-  const { email, formValidity, ...user } = signUpFormData
+  const { email, confirmEmail, formValidity, ...user } = signUpFormData
 
   const { mutate, isPending, error, data } = useSignUpUserMutation({
-    email: email || "",
+    email: email === confirmEmail ? email : INVALID_EMAIL_PLACEHOLDER,
     user
   })
 
@@ -26,12 +29,12 @@ const Register = () => {
   const formAlerts = currentUser
     ? undefined
     : {
-        errorMessage: error?.message || formValidity?.errorMessage,
-        message: data?.error || data?.message,
-        successMessage: successfullySignedUp
-          ? "Account Created! Signing in"
-          : undefined
-      }
+      errorMessage: error?.message || formValidity?.errorMessage,
+      message: data?.error || data?.message,
+      successMessage: successfullySignedUp
+        ? "Account Created! Signing in"
+        : undefined
+    }
 
   const pages = PAGINATED_FORM_PAGES(
     navigateFn!,
