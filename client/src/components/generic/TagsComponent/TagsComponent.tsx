@@ -6,8 +6,8 @@ type tagVariants = "primary" | "interactive"
 interface TagProps {
   children: string
   variant: tagVariants
-  handleCloseCustom: () => void
-  onClickCustom: () => void
+  handleCloseCustom?: () => void
+  onClickCustom?: () => void
 }
 
 type props = TagProps
@@ -26,7 +26,7 @@ const PrimaryTagsComponent = ({ children, onClickCustom }: props) => {
 const InteractiveTagsComponent = ({ children, handleCloseCustom }: props) => {
   const [isVisible, setIsVisible] = useState(true)
   const handleClose = () => {
-    handleCloseCustom()
+    handleCloseCustom?.()
     setIsVisible(false)
   }
   if (!isVisible) {
@@ -44,11 +44,16 @@ const InteractiveTagsComponent = ({ children, handleCloseCustom }: props) => {
   )
 }
 
-const TagComponent = ({ children, variant }: props) => {
+const TagComponent = ({
+  children,
+  variant,
+  handleCloseCustom,
+  onClickCustom
+}: props) => {
   switch (variant) {
     case "primary":
       return (
-        <PrimaryTagsComponent variant="primary">
+        <PrimaryTagsComponent onClickCustom={onClickCustom} variant="primary">
           {children}
         </PrimaryTagsComponent>
       )
@@ -56,7 +61,10 @@ const TagComponent = ({ children, variant }: props) => {
   switch (variant) {
     case "interactive":
       return (
-        <InteractiveTagsComponent variant="interactive">
+        <InteractiveTagsComponent
+          handleCloseCustom={handleCloseCustom}
+          variant="interactive"
+        >
           {children}
         </InteractiveTagsComponent>
       )
