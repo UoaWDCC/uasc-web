@@ -1,0 +1,32 @@
+name: "Check builds working"
+
+on: 
+  pull_request:
+  push:
+    branches: 
+      - master
+
+jobs: 
+  check_client_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - run: sudo yarn workspaces focus client
+      - run: sudo yarn workspace client build
+
+  check_server_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Enable corepack
+        run: corepack enable
+      
+      - run: sudo yarn workspaces focus server
+      - run: sudo yarn workspace server build

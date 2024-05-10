@@ -125,10 +125,6 @@ export class UsersController extends Controller {
     if (userClaimRole?.admin) return this.setStatus(403) // admin forbidden
     if (userClaimRole?.member) return this.setStatus(409) // conflict
     try {
-      // update user in UserService
-      await userService.editUserData(requestBody.uid, {
-        membership: "member"
-      })
       // update user claims in AuthService
       await authService.setCustomUserClaim(requestBody.uid, "member")
       this.setStatus(200)
@@ -157,10 +153,6 @@ export class UsersController extends Controller {
     if (userClaimRole?.admin) return this.setStatus(403) // admin forbidden
     if (!userClaimRole?.member) return this.setStatus(409) // conflict
     try {
-      // update user in UserService
-      await userService.editUserData(requestBody.uid, {
-        membership: "guest"
-      })
       // update user claims in AuthService, set to null to delete the claim
       await authService.setCustomUserClaim(requestBody.uid, null)
       this.setStatus(200)

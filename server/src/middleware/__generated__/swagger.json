@@ -7,24 +7,6 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"UserSignupResponse": {
-				"properties": {
-					"error": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"jwtToken": {
-						"type": "string"
-					},
-					"uid": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"FirebaseFirestore.Timestamp": {
 				"description": "A Timestamp represents a point in time independent of any time zone or\ncalendar, represented as seconds and fractions of seconds at nanosecond\nresolution in UTC Epoch time. It is encoded using the Proleptic Gregorian\nCalendar which extends the Gregorian calendar backwards to year one. It is\nencoded assuming all minutes are 60 seconds long, i.e. leap seconds are\n\"smeared\" so that no leap second table is needed for interpretation. Range\nis from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z.",
 				"properties": {
@@ -51,7 +33,7 @@
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
-					"does_freestyle": {
+					"does_snowboarding": {
 						"type": "boolean"
 					},
 					"does_racing": {
@@ -63,13 +45,7 @@
 					"gender": {
 						"type": "string"
 					},
-					"emergency_name": {
-						"type": "string"
-					},
-					"emergency_phone": {
-						"type": "string"
-					},
-					"emergency_relation": {
+					"emergency_contact": {
 						"type": "string"
 					},
 					"first_name": {
@@ -77,14 +53,6 @@
 					},
 					"last_name": {
 						"type": "string"
-					},
-					"membership": {
-						"type": "string",
-						"enum": [
-							"admin",
-							"member",
-							"guest"
-						]
 					},
 					"dietary_requirements": {
 						"type": "string"
@@ -111,16 +79,12 @@
 				},
 				"required": [
 					"date_of_birth",
-					"does_freestyle",
+					"does_snowboarding",
 					"does_racing",
 					"does_ski",
 					"gender",
-					"emergency_name",
-					"emergency_phone",
-					"emergency_relation",
 					"first_name",
 					"last_name",
-					"membership",
 					"dietary_requirements",
 					"returning",
 					"university_year"
@@ -166,12 +130,12 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership-or-stripe_id__": {
+			"Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
 				"properties": {
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
-					"does_freestyle": {
+					"does_snowboarding": {
 						"type": "boolean"
 					},
 					"does_racing": {
@@ -183,13 +147,7 @@
 					"gender": {
 						"type": "string"
 					},
-					"emergency_name": {
-						"type": "string"
-					},
-					"emergency_phone": {
-						"type": "string"
-					},
-					"emergency_relation": {
+					"emergency_contact": {
 						"type": "string"
 					},
 					"first_name": {
@@ -220,14 +178,14 @@
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
 			},
-			"Omit_Partial_UserAdditionalInfo_.membership-or-stripe_id_": {
-				"$ref": "#/components/schemas/Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.membership-or-stripe_id__",
+			"Omit_Partial_UserAdditionalInfo_.stripe_id_": {
+				"$ref": "#/components/schemas/Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__",
 				"description": "Construct a type with the properties of T except for those in type K."
 			},
 			"EditSelfRequestBody": {
 				"properties": {
 					"updatedInformation": {
-						"$ref": "#/components/schemas/Omit_Partial_UserAdditionalInfo_.membership-or-stripe_id_"
+						"$ref": "#/components/schemas/Omit_Partial_UserAdditionalInfo_.stripe_id_"
 					}
 				},
 				"required": [
@@ -241,7 +199,7 @@
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
-					"does_freestyle": {
+					"does_snowboarding": {
 						"type": "boolean"
 					},
 					"does_racing": {
@@ -253,13 +211,7 @@
 					"gender": {
 						"type": "string"
 					},
-					"emergency_name": {
-						"type": "string"
-					},
-					"emergency_phone": {
-						"type": "string"
-					},
-					"emergency_relation": {
+					"emergency_contact": {
 						"type": "string"
 					},
 					"first_name": {
@@ -267,14 +219,6 @@
 					},
 					"last_name": {
 						"type": "string"
-					},
-					"membership": {
-						"type": "string",
-						"enum": [
-							"admin",
-							"member",
-							"guest"
-						]
 					},
 					"dietary_requirements": {
 						"type": "string"
@@ -353,6 +297,104 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UserSignupResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"jwtToken": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__": {
+				"properties": {
+					"date_of_birth": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"does_snowboarding": {
+						"type": "boolean"
+					},
+					"does_racing": {
+						"type": "boolean"
+					},
+					"does_ski": {
+						"type": "boolean"
+					},
+					"gender": {
+						"type": "string"
+					},
+					"emergency_contact": {
+						"type": "string"
+					},
+					"first_name": {
+						"type": "string"
+					},
+					"last_name": {
+						"type": "string"
+					},
+					"dietary_requirements": {
+						"type": "string"
+					},
+					"faculty": {
+						"type": "string"
+					},
+					"university": {
+						"type": "string"
+					},
+					"student_id": {
+						"type": "string"
+					},
+					"returning": {
+						"type": "boolean"
+					},
+					"university_year": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"date_of_birth",
+					"does_snowboarding",
+					"does_racing",
+					"does_ski",
+					"gender",
+					"first_name",
+					"last_name",
+					"dietary_requirements",
+					"returning",
+					"university_year"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_UserAdditionalInfo.stripe_id_": {
+				"$ref": "#/components/schemas/Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"UserSignupBody": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/Omit_UserAdditionalInfo.stripe_id_"
+					}
+				},
+				"required": [
+					"email",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"MembershipTypeValues": {
 				"enum": [
 					"uoa_returning",
@@ -395,33 +437,6 @@
 		"contact": {}
 	},
 	"paths": {
-		"/signup": {
-			"post": {
-				"operationId": "Signup",
-				"responses": {
-					"200": {
-						"description": "Signup successful",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UserSignupResponse"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {}
-						}
-					}
-				}
-			}
-		},
 		"/users": {
 			"get": {
 				"operationId": "GetAllUsers",
@@ -621,6 +636,35 @@
 				},
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/signup": {
+			"post": {
+				"operationId": "Signup",
+				"responses": {
+					"200": {
+						"description": "Signup successful",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserSignupResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserSignupBody"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/payment/membership": {

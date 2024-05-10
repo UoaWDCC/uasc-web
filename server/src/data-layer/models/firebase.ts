@@ -5,7 +5,7 @@ export interface UserAdditionalInfo {
   /**
    * @isbool Please enter true or false
    */
-  does_freestyle: boolean
+  does_snowboarding: boolean
   /**
    * @isbool Please enter true or false
    */
@@ -21,15 +21,7 @@ export interface UserAdditionalInfo {
   /**
    * @isString Please enter a name
    */
-  emergency_name: string
-  /**
-   * @isString Please type in your Phone Number
-   */
-  emergency_phone: string
-  /**
-   * @isString Please enter a name
-   */
-  emergency_relation: string
+  emergency_contact?: string
   /**
    * @isString Please enter your First Name
    */
@@ -39,25 +31,21 @@ export interface UserAdditionalInfo {
    */
   last_name: string
   /**
-   * @isString Please enter either Admin or Member or Guest
-   */
-  membership: "admin" | "member" | "guest"
-  /**
    * @isString Please write your dietary requirements
    */
   dietary_requirements: string
   /**
    * @isString Please enter your faculty
    */
-  faculty: string | undefined
+  faculty?: string
   /**
    * @isString Please enter your university
    */
-  university: string | undefined
+  university?: string
   /**
    *@isString Please enter your student ID
    */
-  student_id: string | undefined
+  student_id?: string
   /**
    * @isbool Please enter true or false
    */
@@ -73,15 +61,10 @@ export interface UserAdditionalInfo {
 }
 
 export interface BookingSlot {
-  product_id: string
-  active: boolean
-  display_price: number
-  name: string
+  stripe_product_id: string
   description: string
-  start_date: Timestamp
-  end_date: Timestamp
+  date: Timestamp
   max_bookings: number
-  remaining_spots: number
 }
 
 export interface Demographic {

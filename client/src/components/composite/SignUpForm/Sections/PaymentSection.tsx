@@ -3,7 +3,7 @@ import PricingCard from "components/generic/PricingCard/PricingCard"
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
-import { useAppData } from "store/store"
+import { useAppData } from "store/Store"
 import { oneLevelUp } from "../utils/Utils"
 import {
   useBankPaymentDetailsQuery,
