@@ -6,21 +6,27 @@ type tagVariants = "primary" | "interactive"
 interface TagProps {
   children: string
   variant: tagVariants
+  handleCloseCustom: () => void
+  onClickCustom: () => void
 }
 
 type props = TagProps
 
-const PrimaryTagsComponent = ({ children }: props) => {
+const PrimaryTagsComponent = ({ children, onClickCustom }: props) => {
   return (
-    <div className="bg-light-blue-60 flex h-[32px] w-[80px] items-center justify-center overflow-hidden whitespace-nowrap rounded-full">
+    <div
+      onClick={onClickCustom}
+      className="bg-light-blue-60 flex h-[32px] w-[80px] items-center justify-center overflow-hidden whitespace-nowrap rounded-full"
+    >
       <h5 className="font-bold">{children}</h5>
     </div>
   )
 }
 
-const InteractiveTagsComponent = ({ children }: props) => {
+const InteractiveTagsComponent = ({ children, handleCloseCustom }: props) => {
   const [isVisible, setIsVisible] = useState(true)
   const handleClose = () => {
+    handleCloseCustom()
     setIsVisible(false)
   }
   if (!isVisible) {
