@@ -421,6 +421,18 @@
 				},
 				"type": "object",
 				"additionalProperties": false
+			},
+			"PaymentRequestModel": {
+				"properties": {
+					"membershipType": {
+						"$ref": "#/components/schemas/MembershipTypeValues"
+					}
+				},
+				"required": [
+					"membershipType"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -668,7 +680,7 @@
 			}
 		},
 		"/payment/membership": {
-			"get": {
+			"post": {
 				"operationId": "GetMembershipPayment",
 				"responses": {
 					"200": {
@@ -687,7 +699,17 @@
 						"jwt": []
 					}
 				],
-				"parameters": []
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PaymentRequestModel"
+							}
+						}
+					}
+				}
 			}
 		}
 	},
