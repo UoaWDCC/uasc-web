@@ -29,12 +29,12 @@ const Register = () => {
   const formAlerts = currentUser
     ? undefined
     : {
-      errorMessage: error?.message || formValidity?.errorMessage,
-      message: data?.error || data?.message,
-      successMessage: successfullySignedUp
-        ? "Account Created! Signing in"
-        : undefined
-    }
+        errorMessage: error?.message || formValidity?.errorMessage,
+        message: data?.error || data?.message,
+        successMessage: successfullySignedUp
+          ? "Account Created! Signing in"
+          : undefined
+      }
 
   const pages = PAGINATED_FORM_PAGES(
     navigateFn!,
