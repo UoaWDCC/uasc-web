@@ -12,8 +12,8 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
   })
 
   return (
-    <div>
-      <table className="">
+    <div className="border border-black">
+      <table className="h-[500px] w-full">
         <thead>
           <tr>
             {dataKeys.map((key) => (
