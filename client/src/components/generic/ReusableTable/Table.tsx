@@ -13,7 +13,9 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
 
   return (
     <div className="h-[500px] w-full border border-black">
-      <div className="border-dark-blue-100 h-[32px] w-full border"></div>
+      <div className="border-dark-blue-100 h-[32px] w-full border uppercase">
+        name email status membership type date joined
+      </div>
       <div className="flex pl-4 pr-4">
         <table className="">
           <tbody>
