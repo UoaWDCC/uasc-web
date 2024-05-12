@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import AboutSection from "./AboutSection"
-import Kayn from "assets/images/Kayn_0.jpg"
 import ImageLeft from "assets/images/hut.png"
 import ImageRight from "assets/images/MountainBackgroundImage.png"
 
@@ -29,15 +28,5 @@ export const RightAboutSection: Story = {
     children:
       "The UASC lodge is a 32-bed haven for students and alike to gather up on the mountain throughout the winter season. It’s ridiculously close to the main chairlift at the base of Whakapapa, just a few minutes walk and you’re in line to get up the mountain. We hold events with organised transport every few weekends to make sure there’s an opportunity for everyone to get down there at some point.",
     imageSrc: ImageRight
-  }
-}
-export const KaynAboutSection: Story = {
-  tags: ["autodocs"],
-  args: {
-    variant: "left",
-    title: "Kayn",
-    children:
-      "A peerless practitioner of lethal shadow magic, Shieda Kayn battles to achieve his true destiny — to one day lead the Order of Shadow into a new era of Ionian supremacy.",
-    imageSrc: Kayn
   }
 }
