@@ -24,9 +24,9 @@ export const DefaultAboutSection: Story = {
   tags: ["autodocs"],
   args: {
     variant: "left",
-    title: "Kayn",
+    title: "Founded in 1996",
     children:
-      "A peerless practitioner of lethal shadow magic, Shieda Kayn battles to achieve his true destiny — to one day lead the Order of Shadow into a new era of Ionian supremacy.",
+      "Back in 1966 a few of our founding members built the club lodge on Mt. Ruapehu. The lodge is geared up to sleep 32 and host raging parties all winter, and even with all the student antics we’ve been able to keep the place in good knick.",
     imageSrc: RandomImage2
   }
 }
