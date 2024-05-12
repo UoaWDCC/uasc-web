@@ -13,8 +13,9 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
 
   return (
     <div className="h-[500px] w-full border border-black">
-      <table className="">
-        <div className="pl-4 pr-4">
+      <div className="border-dark-blue-100 h-[32px] w-full border"></div>
+      <div className="flex pl-4 pr-4">
+        <table className="">
           <tbody>
             {data.map((obj, index) => (
               <tr key={index}>
@@ -26,8 +27,8 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
               </tr>
             ))}
           </tbody>
-        </div>
-      </table>
+        </table>
+      </div>
     </div>
   )
 }
