@@ -178,7 +178,7 @@ export interface components {
       stripeClientSecret?: string;
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
-    PaymentRequestModel: {
+    UserPaymentRequestModel: {
       membershipType: components["schemas"]["MembershipTypeValues"];
     };
   };
@@ -310,7 +310,7 @@ export interface operations {
   GetMembershipPayment: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["PaymentRequestModel"];
+        "application/json": components["schemas"]["UserPaymentRequestModel"];
       };
     };
     responses: {

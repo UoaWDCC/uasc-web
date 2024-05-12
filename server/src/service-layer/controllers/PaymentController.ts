@@ -8,7 +8,7 @@ import {
 } from "business-layer/utils/StripeProductMetadata"
 import UserDataService from "data-layer/services/UserDataService"
 import {
-  PaymentRequestModel,
+  UserPaymentRequestModel,
   SelfRequestModel
 } from "service-layer/request-models/UserRequests"
 import { MembershipPaymentResponse } from "service-layer/response-models/PaymentResponse"
@@ -29,7 +29,7 @@ export class PaymentController extends Controller {
   @Post("membership")
   public async getMembershipPayment(
     @Request() request: SelfRequestModel,
-    @Body() requestBody: PaymentRequestModel
+    @Body() requestBody: UserPaymentRequestModel
   ): Promise<MembershipPaymentResponse> {
     try {
       const { uid, email, customClaims } = request.user

@@ -422,7 +422,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"PaymentRequestModel": {
+			"UserPaymentRequestModel": {
 				"properties": {
 					"membershipType": {
 						"$ref": "#/components/schemas/MembershipTypeValues"
@@ -705,7 +705,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/PaymentRequestModel"
+								"$ref": "#/components/schemas/UserPaymentRequestModel"
 							}
 						}
 					}
