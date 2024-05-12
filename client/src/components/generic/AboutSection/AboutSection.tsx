@@ -1,19 +1,19 @@
-type imageSideVariants = "left" | "right"
+type ImageSideVariants = "left" | "right"
 
 interface IAboutProps {
   title: string
   children: string
-  variant: imageSideVariants
-  image: any
+  variant: ImageSideVariants
+  imageSrc: string
 }
 
-type props = IAboutProps
+type Props = IAboutProps
 
-const AboutSection = ({ title, children, image }: props) => {
+const AboutSection = ({ title, children, imageSrc }: Props) => {
   return (
-    <div>
-      <div className="h-[500px] w-3/4 border border-black">{image}</div>
-      <div className="h-[278px] w-[530px] border border-black pl-[650px]">
+    <div className="relative w-full border border-black">
+      <div className="w-3/4 border border-black absolute left-0"><img src={imageSrc}/></div>
+      <div className="h-[278px] w-[530px] border border-black pl-[650px] absolute right-[0px]">
         {title}
         <p>{children}</p>
       </div>

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import AboutSection from "./AboutSection"
+import RandomImage from "assets/images/AboutBackgroundImage.png"
 
 const meta: Meta<typeof AboutSection> = {
   component: AboutSection
@@ -10,5 +11,5 @@ type Story = StoryObj<typeof meta>
 
 export const DefaultAboutSection: Story = {
   tags: ["autodocs"],
-  args: { variant: "left" }
+  args: { variant: "left", imageSrc: RandomImage }
 }
