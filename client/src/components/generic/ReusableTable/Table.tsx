@@ -12,28 +12,21 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
   })
 
   return (
-    <div className="border border-black">
-      <table className="h-[500px] w-full">
-        <thead>
-          <tr>
-            {dataKeys.map((key) => (
-              <th className="pr-4" key={key}>
-                {key}
-              </th>
+    <div className="h-[500px] w-full border border-black">
+      <table className="">
+        <div className="pl-4 pr-4">
+          <tbody>
+            {data.map((obj, index) => (
+              <tr key={index}>
+                {dataKeys.map((key) => (
+                  <td className="pr-3" key={key}>
+                    {obj[key] || ""}
+                  </td>
+                ))}
+              </tr>
             ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((obj, index) => (
-            <tr key={index}>
-              {dataKeys.map((key) => (
-                <td className="" key={key}>
-                  {obj[key] || ""}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
+          </tbody>
+        </div>
       </table>
     </div>
   )
