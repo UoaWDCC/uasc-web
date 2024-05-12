@@ -35,6 +35,9 @@ export interface paths {
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
+  "/bookings/available_dates": {
+    post: operations["GetAvailableDates"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -181,6 +184,24 @@ export interface components {
     UserPaymentRequestModel: {
       membershipType: components["schemas"]["MembershipTypeValues"];
     };
+    AvailableDates: {
+      /** Format: double */
+      availableSpaces: number;
+      /** Format: double */
+      maxBookings: number;
+      date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      description: string;
+      stripeProductId: string;
+    };
+    AvailableDatesResponse: {
+      error?: string;
+      message?: string;
+      data: components["schemas"]["AvailableDates"][];
+    };
+    AvailableDatesRequestModel: {
+      startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
   };
   responses: {
   };
@@ -318,6 +339,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["MembershipPaymentResponse"];
+        };
+      };
+    };
+  };
+  GetAvailableDates: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AvailableDatesRequestModel"];
+      };
+    };
+    responses: {
+      /** @description Availabilities found */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AvailableDatesResponse"];
         };
       };
     };

@@ -44,7 +44,7 @@ describe("BookingDataService", () => {
     })
 
     const bookingsBy_BSID =
-      await new BookingDataService().getBookingsByBookingId("booking1") // test for booking_slot_id input
+      await new BookingDataService().getBookingsByBookingSlotId("booking1") // test for booking_slot_id input
 
     expect(bookingsBy_BSID).not.toBe(undefined)
     expect(bookingsBy_BSID.length).toBe(1)

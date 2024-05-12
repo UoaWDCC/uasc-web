@@ -1,5 +1,6 @@
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import { Timestamp } from "firebase-admin/firestore"
 import { UserRecord } from "firebase-admin/lib/auth/user-record"
 
 export interface EditUsersRequestBody {
@@ -35,4 +36,9 @@ export interface PromoteUserRequestBody {
 
 export interface DemoteUserRequestBody {
   uid: string
+}
+
+export interface AvailableDatesRequestModel {
+  startDate?: Timestamp
+  endDate?: Timestamp
 }

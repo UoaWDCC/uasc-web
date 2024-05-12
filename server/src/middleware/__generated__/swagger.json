@@ -433,6 +433,68 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"AvailableDates": {
+				"properties": {
+					"availableSpaces": {
+						"type": "number",
+						"format": "double"
+					},
+					"maxBookings": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"description": {
+						"type": "string"
+					},
+					"stripeProductId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"availableSpaces",
+					"maxBookings",
+					"date",
+					"description",
+					"stripeProductId"
+				],
+				"type": "object"
+			},
+			"AvailableDatesResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/AvailableDates"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AvailableDatesRequestModel": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -706,6 +768,42 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserPaymentRequestModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/bookings/available_dates": {
+			"post": {
+				"operationId": "GetAvailableDates",
+				"responses": {
+					"200": {
+						"description": "Availabilities found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AvailableDatesResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"member",
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AvailableDatesRequestModel"
 							}
 						}
 					}

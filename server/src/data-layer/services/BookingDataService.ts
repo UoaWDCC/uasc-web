@@ -16,7 +16,7 @@ export default class BookingDataService {
     return userIdsArray
   }
 
-  public async getBookingsByBookingId(
+  public async getBookingsByBookingSlotId(
     bookingSlotID: string
   ): Promise<Booking[]> {
     const result = await FirestoreCollections.bookings
