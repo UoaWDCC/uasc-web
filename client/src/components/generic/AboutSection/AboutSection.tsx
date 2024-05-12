@@ -15,8 +15,8 @@ const AboutSection = ({ title, children, imageSrc }: Props) => {
       <div className="absolute left-0 w-3/4 border border-black">
         <img src={imageSrc} />
       </div>
-      <div className="absolute right-[150px] top-[100px] h-[188px] w-1/3 border border-black">
-        {title}
+      <div className="absolute right-[150px] top-[350px] h-[188px] w-1/3 border border-black bg-white">
+        <h3>{title}</h3>
         <p>{children}</p>
       </div>
     </div>
