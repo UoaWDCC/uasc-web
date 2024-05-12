@@ -33,7 +33,7 @@ export interface paths {
     post: operations["Signup"];
   };
   "/payment/membership": {
-    get: operations["GetMembershipPayment"];
+    post: operations["GetMembershipPayment"];
   };
 }
 
@@ -178,6 +178,9 @@ export interface components {
       stripeClientSecret?: string;
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
+    UserPaymentRequestModel: {
+      membershipType: components["schemas"]["MembershipTypeValues"];
+    };
   };
   responses: {
   };
@@ -305,6 +308,11 @@ export interface operations {
     };
   };
   GetMembershipPayment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserPaymentRequestModel"];
+      };
+    };
     responses: {
       /** @description Session created */
       200: {
