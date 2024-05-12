@@ -15,7 +15,7 @@ export const DefaultAboutSection: Story = {
     variant: "left",
     title: "Kayn",
     children:
-      "A peerless practitioner of lethal shadow magic, Shieda Kayn battles to achieve his true destiny—to one day lead the Order of Shadow into a new era of Ionian supremacy.",
+      "A peerless practitioner of lethal shadow magic, Shieda Kayn battles to achieve his true destiny — to one day lead the Order of Shadow into a new era of Ionian supremacy.",
     imageSrc: RandomImage
   }
 }
