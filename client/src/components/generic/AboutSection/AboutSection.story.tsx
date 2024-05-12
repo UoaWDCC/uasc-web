@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import AboutSection from "./AboutSection"
-import RandomImage from "assets/images/AboutBackgroundImage.png"
+import RandomImage from "assets/images/Kayn_0.jpg"
 
 const meta: Meta<typeof AboutSection> = {
   component: AboutSection
