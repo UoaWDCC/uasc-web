@@ -31,14 +31,19 @@ export class PaymentController extends Controller {
   @Get("checkout_status")
   public async getCheckoutSessionDetails(@Query() sessionId: string) {
     const stripeService = new StripeService()
-    const session = await stripeService.getCheckoutSessionById(sessionId)
-    const { status, customer_email, amount_total, metadata } = session
+    try {
+      const session = await stripeService.getCheckoutSessionById(sessionId)
+      const { status, customer_email, amount_total, metadata } = session
 
-    return {
-      status,
-      customer_email,
-      pricePaid: amount_total,
-      metadata
+      return {
+        status,
+        customer_email,
+        pricePaid: amount_total,
+        metadata
+      }
+    } catch (e) {
+      this.setStatus(500)
+      return null
     }
   }
 
