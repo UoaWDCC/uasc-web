@@ -15,15 +15,33 @@ import { MembershipPaymentResponse } from "service-layer/response-models/Payment
 import {
   Controller,
   Post,
+  Get,
   Route,
   Request,
   Security,
+  Query,
   SuccessResponse,
   Body
 } from "tsoa"
 
 @Route("payment")
 export class PaymentController extends Controller {
+  @SuccessResponse("200", "Session Fetched")
+  @Security("jwt")
+  @Get("checkout_status")
+  public async getCheckoutSessionDetails(@Query() sessionId: string) {
+    const stripeService = new StripeService()
+    const session = await stripeService.getCheckoutSessionById(sessionId)
+    const { status, customer_email, amount_total, metadata } = session
+
+    return {
+      status,
+      customer_email,
+      pricePaid: amount_total,
+      metadata
+    }
+  }
+
   @SuccessResponse("200", "Session created")
   @Security("jwt")
   @Post("membership")
