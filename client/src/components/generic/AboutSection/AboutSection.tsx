@@ -29,7 +29,7 @@ const AboutSection = ({ title, children, imageSrc, variant }: Props) => {
       <div className="relative left-[20%] w-[71%]">
         <img src={imageSrc} className="rounded-tl-lg" />
         <div className=" border-dark-blue-100 absolute top-[100%] flex w-full flex-col overflow-hidden rounded-b-lg border bg-white sm:rounded-b-lg md:left-[-25%] md:top-[60%] md:h-[45%] md:w-[74%] md:rounded-b-none md:rounded-t-lg lg:left-[-19%] lg:top-[60%] lg:h-[45%] lg:w-[50%] lg:gap-4 lg:rounded-b-none lg:rounded-t-lg">
-          <h2 className="lg:text-h2 md:text-p text-dark-blue-100 ml-2 mr-2 mt-1 font-bold italic md:ml-2 md:mr-2 md:mt-1 md:font-bold lg:ml-8 lg:mr-8 lg:mt-4">
+          <h2 className="lg:text-h2 text-dark-blue-100 ml-2 mr-2 mt-1 font-bold italic md:ml-2 md:mr-2 md:mt-1 md:font-bold lg:ml-8 lg:mr-8 lg:mt-4">
             {title}
           </h2>
           <p className=" text-dark-blue-100 lg:text-p ml-2 mr-2 mt-1 md:ml-2 md:mr-2 md:mt-1 lg:mb-8 lg:ml-8 lg:mr-8">
