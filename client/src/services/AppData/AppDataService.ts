@@ -15,23 +15,23 @@ const AppDataService = {
       extraInfo?: string
     }[] = [
       {
-        title: "UoA New",
-        type: "uoa_new",
+        title: "UoA Student",
+        type: "uoa_student",
         priceString: "$75"
       },
       {
-        title: "UoA Returning",
-        type: "uoa_returning",
+        title: "Returning Member",
+        type: "returning_member",
         priceString: "$65"
       },
       {
-        title: "Other returning",
-        type: "other_returning",
+        title: "New Non Student",
+        type: "new_non_student",
         priceString: "$75"
       },
       {
-        title: "New non-student",
-        type: "other_new",
+        title: "Non Uoa Student New",
+        type: "non_uoa_student",
         priceString: "$95"
       }
     ]

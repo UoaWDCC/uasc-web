@@ -4,6 +4,7 @@ interface IPricingCardDefault {
   priceString: string
   extraInfo?: string
   selected?: boolean
+  onClick?: () => void
 }
 
 interface IPricingCardHome extends Omit<IPricingCardDefault, "selected"> {
@@ -19,11 +20,13 @@ const PricingCardDefault = ({
   title,
   priceString,
   extraInfo,
-  selected = false
+  selected = false,
+  onClick
 }: IPricingCardDefault) => {
   return (
     <div
-      className={`${selected ? "bg-dark-blue-100" : "border-dark-blue-100 border bg-transparent"} mb-6 flex  justify-center rounded-md p-8`}
+      onClick={onClick}
+      className={`${selected ? "bg-dark-blue-100" : "border-dark-blue-100 border bg-transparent"} mb-6 flex  justify-center rounded-md p-8 ${onClick && "cursor-pointer"}`}
     >
       <div className="flex-col">
         <h3
@@ -74,12 +77,14 @@ const PricingCard = ({
   discountedPriceString,
   extraInfo,
   variant = "default",
-  selected = false
+  selected = false,
+  onClick
 }: IPricingCard) => {
   switch (variant) {
     case "default":
       return (
         <PricingCardDefault
+          onClick={onClick}
           selected={selected}
           title={title}
           priceString={priceString}

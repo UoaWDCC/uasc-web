@@ -152,7 +152,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MembershipTypeValues": {
         "dataType": "refEnum",
-        "enums": ["uoa_returning","uoa_new","other_returning","other_new"],
+        "enums": ["uoa_student","non_uoa_student","returning_member","new_non_student"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MembershipPaymentResponse": {
@@ -169,7 +169,7 @@ const models: TsoaRoute.Models = {
     "UserPaymentRequestModel": {
         "dataType": "refObject",
         "properties": {
-            "membershipType": {"ref":"MembershipTypeValues","required":true},
+            "membershipType": {"ref":"MembershipTypeValues"},
         },
         "additionalProperties": false,
     },
