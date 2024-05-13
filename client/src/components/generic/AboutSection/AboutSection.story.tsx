@@ -11,7 +11,6 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const LeftAboutSection: Story = {
-  tags: ["autodocs"],
   args: {
     variant: "left",
     title: "Founded in 1996",
@@ -21,7 +20,6 @@ export const LeftAboutSection: Story = {
   }
 }
 export const RightAboutSection: Story = {
-  tags: ["autodocs"],
   args: {
     variant: "right",
     title: "Our Purpose: Skiing and Snowboarding",
