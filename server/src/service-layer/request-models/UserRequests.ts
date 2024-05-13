@@ -1,3 +1,4 @@
+import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 import { UserRecord } from "firebase-admin/lib/auth/user-record"
 
@@ -12,6 +13,11 @@ export interface CreateUserRequestBody {
 
 export interface SelfRequestModel {
   user?: UserRecord
+}
+
+// ticket 341 client select membership type
+export interface UserPaymentRequestModel {
+  membershipType: MembershipTypeValues
 }
 
 export interface EditSelfRequestModel {

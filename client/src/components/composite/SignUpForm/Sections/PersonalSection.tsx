@@ -1,96 +1,185 @@
-import { MenuItem, Select, TextField } from "@mui/material"
-import { useSignUpFormData } from "store/signupform"
+import { useSignUpFormData } from "store/SignUpForm"
+import Radio from "components/generic/Radio/Radio"
+import TextInput from "components/generic/TextInputComponent/TextInput"
+import { Timestamp } from "firebase/firestore"
+import Dropdown from "components/generic/Dropdown/Dropdown"
 
 export const PersonalSectionFirst = () => {
-  const [{ first_name, last_name }, { updateFormData }] = useSignUpFormData()
+  const [{ first_name, last_name, date_of_birth, gender }, { updateFormData }] =
+    useSignUpFormData()
+
   return (
-    <div>
-      <span className="flex">
-        <TextField
-          value={first_name || ""}
-          onChange={(e) => updateFormData({ first_name: e.target?.value })}
-          name="firstName"
+    <div className="max-w-sm">
+      <span className="mb-3 flex gap-5">
+        <TextInput
+          type="text"
           label="First Name"
-          variant="outlined"
+          id="FirstName"
+          defaultValue={first_name}
+          onChange={(e) => updateFormData({ first_name: e.target.value })}
           required
-          size="small"
         />
-        <TextField
-          value={last_name || ""}
-          onChange={(e) => updateFormData({ last_name: e.target?.value })}
-          id="lastName"
-          name="lastName"
+        <TextInput
+          type="text"
           label="Last Name"
-          variant="outlined"
+          id="LastName"
+          defaultValue={last_name}
+          onChange={(e) => updateFormData({ last_name: e.target.value })}
           required
-          size="small"
         />
       </span>
-
-      <Select
-        id="gender"
-        name="gender"
-        label="Gender"
-        variant="outlined"
+      <TextInput
+        type="date"
+        label="Birthday"
+        id="Birthday"
+        defaultValue={
+          date_of_birth &&
+          new Timestamp(date_of_birth.seconds, date_of_birth.nanoseconds)
+            .toDate()
+            .toISOString()
+            .split("T")[0]
+        }
+        onChange={(e) => {
+          updateFormData({
+            date_of_birth: {
+              seconds: Timestamp.fromDate(new Date(e.target.value)).seconds,
+              nanoseconds: Timestamp.fromDate(new Date(e.target.value))
+                .nanoseconds
+            }
+          })
+        }}
         required
-        size="small"
-      >
-        <MenuItem value={"Male"}>Male</MenuItem>
-        <MenuItem value={"Female"}>Female</MenuItem>
-        <MenuItem value={"N/A"}>Prefer not to say</MenuItem>
-      </Select>
+      />
+
+      <p className="mb-2 mt-5">Gender</p>
+      <div className="flex max-w-sm flex-col gap-2">
+        <Radio
+          value="Male"
+          checked={gender === "Male"}
+          onChange={(e) => updateFormData({ gender: e.target?.value })}
+        >
+          Male
+        </Radio>
+        <Radio
+          value="Female"
+          checked={gender === "Female"}
+          onChange={(e) => updateFormData({ gender: e.target?.value })}
+        >
+          Female
+        </Radio>
+        <Radio
+          value="Other"
+          checked={gender === "Other"}
+          onChange={(e) => updateFormData({ gender: e.target?.value })}
+        >
+          Other
+        </Radio>
+        <Radio
+          value="Prefer not to say"
+          checked={gender === "Prefer not to say"}
+          onChange={(e) => updateFormData({ gender: e.target?.value })}
+        >
+          Prefer not to say
+        </Radio>
+      </div>
     </div>
   )
 }
 
 export const PersonalSectionSecond = () => {
+  const [{ student_id, university_year, faculty }, { updateFormData }] =
+    useSignUpFormData()
+
   return (
-    <div>
-      <TextField
-        id="studentId"
-        name="studentId"
-        label="UoA Student ID (Enter 0 if not you're not a UoA Student)"
-        variant="outlined"
+    <div className="flex max-w-sm flex-col gap-5">
+      <TextInput
+        type="text"
+        label="UoA Student ID Number"
+        description="Put NA if not a UoA Student"
+        id="FirstName"
+        defaultValue={student_id}
+        placeholder="e.g. 111222333"
+        onChange={(e) => updateFormData({ student_id: e.target.value })}
         required
-        size="small"
       />
-      <Select
-        id="yearLevel"
-        name="yearLevel"
-        label="What year level are you in?"
-        variant="outlined"
-        required
-        size="small"
+      <Dropdown
+        value={university_year}
+        label="What year are you at uni?"
+        onChange={(e) => updateFormData({ university_year: e.target?.value })}
       >
-        <MenuItem value={0}>Non-Student</MenuItem>
-        <MenuItem value={1}>1st year</MenuItem>
-        <MenuItem value={2}>2nd year</MenuItem>
-        <MenuItem value={3}>3rd year</MenuItem>
-        <MenuItem value={4}>4th year</MenuItem>
-        <MenuItem value={5}>5th year</MenuItem>
-        <MenuItem value={7}>other</MenuItem>
-        <MenuItem value={6}>grad</MenuItem>
-        <MenuItem value={7}>international exchange</MenuItem>
-      </Select>
-      <Select
-        id="faculty"
-        name="faculty"
-        label="What faculty are you in?"
-        variant="outlined"
-        required
-        size="small"
+        <option value="" disabled>
+          Select...
+        </option>
+        <option key="Non-Student" value="Non-Student">
+          Non-Student
+        </option>
+        <option key="1st year" value="1st year">
+          1st Year
+        </option>
+        <option key="2nd Year" value="2nd Year">
+          2nd Year
+        </option>
+        <option key="3rd Year" value="3rd Year">
+          3rd Year
+        </option>
+        <option key="4th Year" value="4th Year">
+          4th Year
+        </option>
+        <option key="5th Year" value="5th Year">
+          5th Year
+        </option>
+        <option key="Other" value="Other">
+          Other
+        </option>
+        <option key="Grad" value="Grad">
+          Grad
+        </option>
+        <option key="International Exchange" value="International Exchange">
+          International Exchange
+        </option>
+      </Dropdown>
+      <Dropdown
+        value={faculty}
+        label="What faculty?"
+        onChange={(e) => updateFormData({ faculty: e.target?.value })}
       >
-        <MenuItem value={0}>Engineering</MenuItem>
-        <MenuItem value={1}>Med/Health Sci</MenuItem>
-        <MenuItem value={2}>Science</MenuItem>
-        <MenuItem value={3}>Commerce</MenuItem>
-        <MenuItem value={4}>Arts</MenuItem>
-        <MenuItem value={5}>Law</MenuItem>
-        <MenuItem value={7}>Education/Social Work</MenuItem>
-        <MenuItem value={6}>Creative Arts & Industries</MenuItem>
-        <MenuItem value={7}>Non-Student</MenuItem>
-        <MenuItem value={7}>Other</MenuItem>
-      </Select>
+        <option value="" disabled>
+          Select...
+        </option>
+        <option key="Engineering" value="Engineering">
+          Engineering
+        </option>
+        <option key="Med/Health Sci" value="Med/Health Sci">
+          Med/Health Sci
+        </option>
+        <option key="Science" value="Science">
+          Science
+        </option>
+        <option key="Commerce" value="Commerce">
+          Commerce
+        </option>
+        <option key="Arts" value="Arts">
+          Arts
+        </option>
+        <option key="Law" value="Law">
+          Law
+        </option>
+        <option key="Education/Social Work" value="Education/Social Work">
+          Education/Social Work
+        </option>
+        <option
+          key="Creative Arts & Industries"
+          value="Creative Arts & Industries"
+        >
+          Creative Arts & Industries
+        </option>
+        <option key="Non-Student" value="Non-Student">
+          Non-Student
+        </option>
+        <option key="Other" value="Other">
+          Other
+        </option>
+      </Dropdown>
     </div>
   )
 }
