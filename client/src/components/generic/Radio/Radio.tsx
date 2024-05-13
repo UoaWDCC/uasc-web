@@ -1,6 +1,6 @@
 interface IRadioProps {
   children: string
-  disabled: boolean
+  disabled?: boolean
 }
 
 type props = IRadioProps & React.InputHTMLAttributes<HTMLInputElement>

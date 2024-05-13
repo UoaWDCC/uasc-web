@@ -37,7 +37,7 @@ const PaginatedForm = ({
       <FormContainer>
         <div className="flex h-fit min-h-[70vh] w-full flex-col items-start gap-1 text-left">
           <h2 className="text-dark-blue-100 my-9 italic">{title}</h2>
-          <div className="relative w-full">{children}</div>
+          <div className="relative flex w-full flex-col">{children}</div>
           <span className="mt-auto flex justify-between gap-1 pb-4 sm:w-full">
             <Button
               disabled={onBack === undefined || backDisabled}

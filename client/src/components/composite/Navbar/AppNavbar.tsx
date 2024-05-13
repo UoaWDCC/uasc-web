@@ -1,4 +1,4 @@
-import { useAppData } from "store/store"
+import { useAppData } from "store/Store"
 import Navbar from "./Navbar"
 import { auth } from "firebase"
 import { useNavigate } from "react-router-dom"
