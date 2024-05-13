@@ -407,4 +407,13 @@ describe("Endpoints", () => {
       expect(userClaims).toEqual({ member: true })
     })
   })
+  /**
+   *
+   * `/bookings`
+   *
+   */
+  describe("/bookings", () => {
+    beforeEach(async () => {})
+    it("should return all available dates between input dates", async () => {})
+  })
 })
