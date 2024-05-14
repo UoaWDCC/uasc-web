@@ -18,7 +18,8 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const [{ currentUser }] = useAppData()
   const { data: prices } = useMembershipPricesQuery()
   const { data } = useBankPaymentDetailsQuery()
-  const { data: userMembershipDetails } = useMembershipClientSecretQuery()
+  const { data: userMembershipDetails } =
+    useMembershipClientSecretQuery("uoa_new")
 
   /**
    * Use data fetched to find the correct price
@@ -73,7 +74,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
 
 const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const navigate = useNavigate()
-  const { data, error } = useMembershipClientSecretQuery()
+  const { data, error } = useMembershipClientSecretQuery("uoa_new")
   return (
     <>
       {error && <p>{error.message}</p>}
@@ -132,7 +133,7 @@ export const PaymentSection = () => {
 }
 
 export const PaymentInformationSection = () => {
-  const { data } = useMembershipClientSecretQuery()
+  const { data } = useMembershipClientSecretQuery("uoa_new")
   const { data: prices } = useMembershipPricesQuery()
   return (
     <>
