@@ -29,6 +29,10 @@ export default class StripeService {
     return products.data
   }
 
+  public async getCheckoutSessionById(sessionId: string) {
+    return await stripe.checkout.sessions.retrieve(sessionId)
+  }
+
   public async getProductById(id: string) {
     return await stripe.products.retrieve(id)
   }

@@ -7,6 +7,7 @@ import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
 import ConfirmationSection from "../Sections/ConfirmationSection"
 import SuccessSection from "../Sections/SuccessSection"
+
 import {
   ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
@@ -16,6 +17,7 @@ import {
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
+  SUCCESS_ROUTE,
   RouteNames
 } from "../utils/RouteNames"
 import {
@@ -23,35 +25,74 @@ import {
   PaymentSection
 } from "../Sections/PaymentSection"
 import TestIcon from "assets/icons/snowboarder.svg?react"
+import { UseMutateFunction } from "@tanstack/react-query"
+import { signInWithCustomToken } from "firebase/auth"
+import { auth } from "firebase"
+import AccountSetupSection from "../Sections/AccountSetupSection"
+
+type FormSubmissionMutationFunction = UseMutateFunction<
+  | {
+      error?: string | undefined
+      message?: string | undefined
+      jwtToken?: string | undefined
+      uid?: string | undefined
+    }
+  | undefined,
+  Error,
+  void,
+  unknown
+>
 
 export const PAGINATED_FORM_PAGES = (
-  navigateFn: (route: RouteNames | "/profile" | number) => void
+  navigateFn: (route: RouteNames | "/profile" | number) => void,
+  signUpFn: FormSubmissionMutationFunction,
+  validateFormFn: (pageToValidate: PAGES, navigateFn: () => void) => void,
+  disableSubmit: boolean
 ): PageProps[] => [
   {
     index: PAGES.PersonalFirst,
     title: "Personal details",
-    onNext: () => navigateFn(PERSONAL_ROUTE_2)
+    onNext: () => {
+      validateFormFn(PAGES.PersonalFirst, () => navigateFn(PERSONAL_ROUTE_2))
+    }
   },
   {
     index: PAGES.PersonalSecond,
     title: "Personal details",
     onBack: () => navigateFn(PERSONAL_ROUTE_1),
-    onNext: () => navigateFn(CONTACT_ROUTE)
+    onNext: () => {
+      validateFormFn(PAGES.PersonalSecond, () => navigateFn(CONTACT_ROUTE))
+    }
   },
   {
     index: PAGES.Contact,
     title: "Contact details",
     onBack: () => navigateFn(PERSONAL_ROUTE_2),
-    onNext: () => navigateFn(ADDITIONAL_ROUTE)
+    onNext: () => {
+      validateFormFn(PAGES.Contact, () => navigateFn(ADDITIONAL_ROUTE))
+    }
   },
   {
     index: PAGES.Additional,
     title: "Additional info",
-    nextButtonText: "Confirm",
+    nextButtonText: "Sign Up",
     onBack: () => navigateFn(CONTACT_ROUTE),
     onNext: () => {
-      throw new Error("not implemented")
-    }
+      validateFormFn(PAGES.Additional, () =>
+        signUpFn(undefined, {
+          async onSuccess(data) {
+            // console.log(data)
+            if (data?.jwtToken) {
+              await signInWithCustomToken(auth, data.jwtToken)
+            }
+          },
+          onError(error) {
+            console.error("Error signing up " + error)
+          }
+        })
+      )
+    },
+    nextDisabled: disableSubmit
   },
   {
     index: PAGES.PaymentInfo,
@@ -73,12 +114,14 @@ export const PAGINATED_FORM_PAGES = (
     index: PAGES.AccountSetup,
     title: "Account",
     // goes back to one page earlier in history, otherwise does nothing
-    onBack: () => navigateFn(-1)
+    onBack: () => navigateFn(-1),
     // after setting up the account, the next button is enabled and shows the success section
+    onNext: () => navigateFn(SUCCESS_ROUTE)
   },
   {
     index: PAGES.Success,
     title: "Success",
+    onBack: () => navigateFn(ACCOUNT_SETUP_ROUTE),
     onNext: () => navigateFn("/profile")
   }
 ]
@@ -100,8 +143,7 @@ export const PAGE_CONTENT = [
     textBottom="In the meantime, please set up your login details."
     SvgIcon={TestIcon}
   />,
-  // Account setup section here
-  <></>,
+  <AccountSetupSection key="account" />,
   <SuccessSection key="Success" />
 ]
 
