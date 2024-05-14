@@ -32,6 +32,9 @@ export interface paths {
   "/signup": {
     post: operations["Signup"];
   };
+  "/payment/checkout_status": {
+    get: operations["GetCheckoutSessionDetails"];
+  };
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
@@ -171,6 +174,12 @@ export interface components {
       user: components["schemas"]["Omit_UserAdditionalInfo.stripe_id_"];
     };
     /** @enum {string} */
+    "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";
+    /** @description Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format. */
+    "stripe.Stripe.Metadata": {
+      [key: string]: string;
+    };
+    /** @enum {string} */
     MembershipTypeValues: "uoa_returning" | "uoa_new" | "other_returning" | "other_new";
     MembershipPaymentResponse: {
       error?: string;
@@ -303,6 +312,27 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["UserSignupResponse"];
+        };
+      };
+    };
+  };
+  GetCheckoutSessionDetails: {
+    parameters: {
+      query: {
+        sessionId: string;
+      };
+    };
+    responses: {
+      /** @description Session Fetched */
+      200: {
+        content: {
+          "application/json": {
+            metadata: components["schemas"]["stripe.Stripe.Metadata"];
+            /** Format: double */
+            pricePaid: number;
+            customer_email: string;
+            status: components["schemas"]["stripe.Stripe.Checkout.Session.Status"];
+          };
         };
       };
     };
