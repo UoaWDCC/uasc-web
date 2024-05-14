@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react"
 import "../src/index.css"
+import "../src/components/generic/Calendar/Calendar.css"
 
 const preview: Preview = {
   parameters: {
