@@ -10,6 +10,9 @@ const PaymentService = {
         membershipType
       }
     })
+    if (!data) {
+      throw new Error("An error occured")
+    }
     return data
   }
 } as const

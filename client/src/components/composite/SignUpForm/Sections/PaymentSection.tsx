@@ -22,9 +22,8 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
 
   const [{ membershipType }] = useMembershipPaymentDetails()
 
-  const { data: userMembershipDetails } = useMembershipClientSecretQuery(
-    membershipType
-  )
+  const { data: userMembershipDetails } =
+    useMembershipClientSecretQuery(membershipType)
 
   /**
    * Use data fetched to find the correct price
@@ -90,23 +89,23 @@ const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         <>
           {data.message && <p>{data.message}</p>}
           <PaymentForm
-            onComplete={() => { }}
+            onComplete={() => {}}
             clientSecret={data?.stripeClientSecret as string}
           />
         </>
-      ) : (
-        <div className="flex flex-col">
-          {/* TODO: add skeleton or fallback */}
-          {isLoading && <h5>Loading</h5>}
-          {isError && <h5>Error</h5>}
-          {isError && membershipType !== undefined && (
-            <h5>
-              You may have not selected a membership type. Click "Back" to
-              double check.
-            </h5>
-          )}
-        </div>
-      )}
+      ) : null}
+      <div className="flex flex-col">
+        {/* TODO: add skeleton or fallback */}
+        {isLoading && <h5>Loading</h5>}
+        {isError && <h5>Error</h5>}
+        {isError && membershipType === undefined && (
+          <h5>
+            You may have not selected a membership type. Click "Back" to double
+            check.
+          </h5>
+        )}
+      </div>
+
       <h5
         className="text-dark-blue-100 mb-2 cursor-pointer font-bold uppercase"
         onClick={() => wantsBankTransfer(true)}

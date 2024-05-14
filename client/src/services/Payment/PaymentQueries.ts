@@ -9,6 +9,7 @@ export function useMembershipClientSecretQuery(
     queryKey: ["membershipClientSecret", membershipType],
     queryFn: () =>
       PaymentService.getMembershipPaymentClientSecret(membershipType),
+    retry: 2,
     staleTime: 30000 // 30 Sec
   })
 }
