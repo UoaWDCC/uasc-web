@@ -23,7 +23,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const [{ membershipType }] = useMembershipPaymentDetails()
 
   const { data: userMembershipDetails } = useMembershipClientSecretQuery(
-    membershipType!
+    membershipType
   )
 
   /**
@@ -90,7 +90,7 @@ const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         <>
           {data.message && <p>{data.message}</p>}
           <PaymentForm
-            onComplete={() => {}}
+            onComplete={() => { }}
             clientSecret={data?.stripeClientSecret as string}
           />
         </>
