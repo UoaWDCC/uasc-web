@@ -180,7 +180,7 @@ export interface components {
       [key: string]: string;
     };
     /** @enum {string} */
-    MembershipTypeValues: "uoa_returning" | "uoa_new" | "other_returning" | "other_new";
+    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipPaymentResponse: {
       error?: string;
       message?: string;
