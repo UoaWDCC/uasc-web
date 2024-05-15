@@ -41,6 +41,21 @@ const actions = {
     (): Action<State> =>
     ({ setState }) => {
       setState({ ...defaultUserState })
+    },
+  refreshUserToken:
+    (): Action<State> =>
+    async ({ setState, getState }) => {
+      const { currentUser } = getState()
+      if (currentUser) {
+        try {
+          /** Refresh the ID token for the current user */
+          await currentUser.getIdToken(true)
+        } catch (error) {
+          /** If an error occurs while refreshing the token, reset the user state and log the error */
+          setState({ ...defaultUserState })
+          console.error("Error refreshing ID token:", error)
+        }
+      }
     }
 }
 
