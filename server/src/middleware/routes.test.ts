@@ -19,6 +19,7 @@ import {
 } from "test-config/mocks/Stripe.mock"
 import { signupUserMock } from "test-config/mocks/User.mock"
 import AuthService from "business-layer/services/AuthService"
+import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 
 const request = supertest(_app)
 
@@ -155,9 +156,11 @@ describe("Endpoints", () => {
     describe("/membership", () => {
       it("should not let members to try create sessions", async () => {
         const res = await request
-          .get("/payment/membership")
+          .post("/payment/membership")
           .set("Authorization", `Bearer ${memberToken}`)
-          .send({})
+          .send({
+            membershipType: MembershipTypeValues.UoaNew
+          })
 
         expect(res.status).toEqual(409)
       })
@@ -165,18 +168,22 @@ describe("Endpoints", () => {
       it("should let guests/admins to try create sessions", async () => {
         createUserData(GUEST_USER_UID)
         let res = await request
-          .get("/payment/membership")
+          .post("/payment/membership")
           .set("Authorization", `Bearer ${guestToken}`)
-          .send({})
+          .send({
+            membershipType: MembershipTypeValues.UoaNew
+          })
         expect(res.status).toEqual(200)
 
         /**
          * Note admins should be able to create sessions for testing purposes, it is assumed that admin users will not try pay
          */
         res = await request
-          .get("/payment/membership")
+          .post("/payment/membership")
           .set("Authorization", `Bearer ${adminToken}`)
-          .send({})
+          .send({
+            membershipType: MembershipTypeValues.UoaReturning
+          })
         expect(res.status).toEqual(200)
       })
     })
