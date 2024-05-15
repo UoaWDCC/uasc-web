@@ -5,11 +5,30 @@ import ProfileInformationPanel from "./ProfileInformationPanel"
 const meta: Meta<typeof ProfileInformationPanel> = {
   component: ProfileInformationPanel
 }
-
 export default meta
 type Story = StoryObj<typeof ProfileInformationPanel>
 
-const firstStoryElements = [
+interface TestElements {
+  subtitle: string
+  description: string
+}
+
+const ChildMapper = (children: Array<TestElements>) => {
+  return children.map((child) => (
+    <>
+      <div>
+        <p className="pb-1 text-base font-normal leading-tight text-stone-300">
+          {child.subtitle}
+        </p>
+        <p className="text-black/opacity-20 pb-1 text-base font-normal leading-tight">
+          {child.description}
+        </p>
+      </div>
+    </>
+  ))
+}
+
+const firstStoryElements: Array<TestElements> = [
   {
     subtitle: "Dietary requirements",
     description: "Allergic to nuts"
@@ -19,36 +38,6 @@ const firstStoryElements = [
     description: "Both"
   }
 ]
-
-export const littleElementsWithEdit: Story = {
-  decorators: [
-    () => {
-      return (
-        <>
-          <ProfileInformationPanel
-            title="Additional details"
-            onEdit={() => {
-              alert("button clicked")
-            }}
-          >
-            {firstStoryElements.map((x) => (
-              <>
-                <div>
-                  <p className="text-base font-normal leading-tight text-stone-300">
-                    {x.subtitle}
-                  </p>
-                  <p className="text-black/opacity-20 text-base font-normal leading-tight">
-                    {x.description}
-                  </p>
-                </div>
-              </>
-            ))}
-          </ProfileInformationPanel>
-        </>
-      )
-    }
-  ]
-}
 
 const secondStoryElements = [
   {
@@ -80,6 +69,7 @@ const secondStoryElements = [
     description: "Jason, Father, 021 432, 4321"
   }
 ]
+
 const thirdStoryElements = [
   {
     subtitle: "Membership type",
@@ -90,49 +80,36 @@ const thirdStoryElements = [
     description: "9/12/24"
   }
 ]
+
+export const littleElementsWithEdit = () => {
+  return (
+    <>
+      <ProfileInformationPanel
+        title="Additional details"
+        onEdit={() => {
+          alert("Additional details button clicked")
+        }}
+      >
+        {ChildMapper(firstStoryElements)}
+      </ProfileInformationPanel>
+    </>
+  )
+}
+
 export const ManyElementsWithEdit: Story = {
   args: {
     title: "Personal Details",
     onEdit: () => {
-      alert("lol")
+      alert("Personal details edit button")
     },
-    children: [
-      <>
-        {secondStoryElements.map((x) => (
-          <>
-            <div>
-              <p className="text-base font-normal leading-tight text-stone-300">
-                {x.subtitle}
-              </p>
-              <p className="text-black/opacity-20 text-base font-normal leading-tight">
-                {x.description}
-              </p>
-            </div>
-          </>
-        ))}
-      </>
-    ]
+    children: ChildMapper(secondStoryElements)
   }
 }
 
-export const elementsWithoutEdit = {
-  args: {
-    title: "Membership",
-    children: [
-      <>
-        {thirdStoryElements.map((x) => (
-          <>
-            <div>
-              <p className="text-base font-normal leading-tight text-stone-300">
-                {x.subtitle}
-              </p>
-              <p className="text-black/opacity-20 text-base font-normal leading-tight">
-                {x.description}
-              </p>
-            </div>
-          </>
-        ))}
-      </>
-    ]
-  }
+export const elementsWithoutEdit = () => {
+  return (
+    <ProfileInformationPanel title="Membership">
+      {ChildMapper(thirdStoryElements)}
+    </ProfileInformationPanel>
+  )
 }
