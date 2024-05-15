@@ -13,7 +13,11 @@ export default function Profile() {
         <div>
           <UserInformationSection userData={currentUserData} />
         </div>
-        <ProfileInformationPanel title="w" />
+        <ProfileInformationPanel title="w"></ProfileInformationPanel>
+        <div className="flex">
+          <ProfileInformationPanel title="t" />
+          <ProfileInformationPanel title="t" />
+        </div>
       </div>
     </FullPageBackgroundImage>
   )
