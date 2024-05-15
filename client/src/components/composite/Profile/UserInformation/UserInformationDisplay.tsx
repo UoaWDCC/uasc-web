@@ -6,12 +6,17 @@ interface IUserInformationDisplay {
   editHandler?: () => void
 }
 
-const UserInformationDisplay = ({ userData, editHandler }: IUserInformationDisplay) => {
+const UserInformationDisplay = ({
+  userData,
+  editHandler
+}: IUserInformationDisplay) => {
   if (userData) {
     const { date_of_birth, ...displayableFields } = userData
     return (
       <>
-        <Button variant="default-sm" onClick={editHandler}>Edit</Button>
+        <Button variant="default-sm" onClick={editHandler}>
+          Edit
+        </Button>
         <div>
           {/* TODO: Properly style and name fields */}
           {Object.keys(displayableFields).map((key) => {
