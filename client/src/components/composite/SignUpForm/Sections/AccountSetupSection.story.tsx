@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { ConfirmSection } from "./ConfirmSection"
-const meta: Meta<typeof ConfirmSection> = {
-  component: ConfirmSection
+import AccountSetupSection from "./AccountSetupSection"
+
+const meta: Meta<typeof AccountSetupSection> = {
+  component: AccountSetupSection
 }
 
 export default meta
