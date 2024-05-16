@@ -63,14 +63,17 @@ const PricingCardHome = ({
    items-center justify-center overflow-hidden rounded-md border px-7 py-5 md:flex-col lg:flex-col"
   >
     <h3 className="mr-[40%] md:mr-0 lg:mr-0">{title}</h3>
-
-    <Divider />
-
-    <div className="mt-6">
-      <span className=" text-lg line-through">{priceString}</span>
-      <h1 className="-mt-3 italic">{discountedPriceString}</h1>
+    <div className="hidden">
+      <Divider />
     </div>
-    <h5 className="text-orange mt-3 uppercase">{extraInfo}</h5>
+
+    <div className="flex">
+      <div className="mt-6">
+        <span className=" text-lg line-through">{priceString}</span>
+        <h1 className="-mt-3 italic">{discountedPriceString}</h1>
+      </div>
+      <h5 className="text-orange mt-3 uppercase">{extraInfo}</h5>
+    </div>
   </div>
 )
 
