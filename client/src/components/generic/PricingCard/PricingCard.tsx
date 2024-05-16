@@ -69,14 +69,14 @@ const PricingCardHome = ({
 
     <div className="flex gap-[10%] md:flex-col lg:flex-col ">
       <div className="">
-        <span className="text-lg line-through">
-          <p className="pl-[125%]">{priceString}</p>
-        </span>
-        <h1 className="-mt-3 italic ">{discountedPriceString}</h1>
+        <h1 className="-mt-[15%] italic ">{discountedPriceString}</h1>
       </div>
-      <h5 className="text-orange mt-3 pl-[5%] pt-[40%] uppercase">
-        {extraInfo}
-      </h5>
+      <div>
+        <p className=" text-lg line-through">{priceString}</p>
+        <h5 className="text-orange text-nowrap pb-[]  uppercase">
+          {extraInfo}
+        </h5>
+      </div>
     </div>
   </div>
 )
