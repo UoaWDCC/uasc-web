@@ -11,6 +11,10 @@ interface IPricingCardHome extends Omit<IPricingCardDefault, "selected"> {
   discountedPriceString: string
 }
 
+const Divider = () => (
+  <span className="bg-dark-blue-100 h-[50px] w-[1px]" />
+)
+
 // Public interface
 export interface IPricingCard extends IPricingCardHome, IPricingCardDefault {
   variant?: "default" | "home"
@@ -59,6 +63,10 @@ const PricingCardHome = ({
    items-center justify-center overflow-hidden rounded-md border px-7 py-5 md:flex-col lg:flex-col"
   >
     <h3 className="mr-[40%] md:mr-0 lg:mr-0">{title}</h3>
+    <div className="">
+      <Divider />
+    </div>
+
     <div className="mt-6">
       <span className=" text-lg line-through">{priceString}</span>
       <h1 className="-mt-3 italic">{discountedPriceString}</h1>
