@@ -67,7 +67,7 @@ const PricingCardHome = ({
       <Divider />
     </div>
 
-    <div className="flex">
+    <div className="flex md:flex-col lg:flex-col">
       <div className="mt-6">
         <span className=" text-lg line-through">{priceString}</span>
         <h1 className="-mt-3 italic">{discountedPriceString}</h1>
