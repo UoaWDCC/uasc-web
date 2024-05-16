@@ -77,7 +77,7 @@ const PricingCardHome = ({
         <p className="text-3xl line-through md:text-lg lg:text-lg">
           {priceString}
         </p>
-        <h5 className=" text-orange text-nowrap pb-[] text-base font-bold uppercase md:font-normal lg:font-normal">
+        <h5 className=" text-orange md:text-md lg:text-md text-nowrap font-bold uppercase md:font-normal lg:font-normal">
           {extraInfo}
         </h5>
       </div>
