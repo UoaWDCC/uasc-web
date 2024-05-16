@@ -60,20 +60,22 @@ const PricingCardHome = ({
 }: IPricingCardHome) => (
   <div
     className="border-light-blue-100 text-light-blue-100 bg-gray-1 relative flex 
-   items-center justify-center overflow-hidden rounded-md border px-7 py-5 md:flex-col lg:flex-col"
+   items-center justify-center gap-3 overflow-hidden rounded-md border px-7 py-5 md:flex-col lg:flex-col"
   >
     <h3 className="mr-[30%] md:mr-0 lg:mr-0">{title}</h3>
     <div className="hidden">
       <Divider />
     </div>
 
-    <div className="flex gap-[10%] md:flex-col lg:flex-col ">
+    <div className="flex gap-2 md:flex-col lg:flex-col ">
       <div className="">
-        <h1 className="-mt-[15%] italic ">{discountedPriceString}</h1>
+        <h1 className="-mt-[5%] text-6xl italic md:text-5xl lg:text-5xl">
+          {discountedPriceString}
+        </h1>
       </div>
-      <div>
-        <p className=" text-3xl line-through">{priceString}</p>
-        <h5 className="text-orange text-nowrap pb-[] text-base font-bold  uppercase">
+      <div className="pl-[5%]">
+        <p className="text-3xl line-through">{priceString}</p>
+        <h5 className="text-orange text-nowrap pb-[] text-base font-bold uppercase">
           {extraInfo}
         </h5>
       </div>
