@@ -67,15 +67,17 @@ const PricingCardHome = ({
       <Divider />
     </div>
 
-    <div className="flex gap-2 md:flex-col lg:flex-col ">
+    <div className="flex gap-2 pr-[75px] align-top md:flex-col lg:flex-col">
       <div className="">
         <h1 className="-mt-[5%] text-6xl italic md:text-5xl lg:text-5xl">
           {discountedPriceString}
         </h1>
       </div>
       <div className="pl-[5%]">
-        <p className="text-3xl line-through">{priceString}</p>
-        <h5 className="text-orange text-nowrap pb-[] text-base font-bold uppercase">
+        <p className="text-3xl line-through md:text-lg lg:text-lg">
+          {priceString}
+        </p>
+        <h5 className=" text-orange text-nowrap pb-[] text-base font-bold uppercase md:font-normal lg:font-normal">
           {extraInfo}
         </h5>
       </div>
