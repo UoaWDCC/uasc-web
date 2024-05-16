@@ -59,20 +59,24 @@ const PricingCardHome = ({
   discountedPriceString
 }: IPricingCardHome) => (
   <div
-    className="border-light-blue-100 text-light-blue-100 bg-gray-1 flex 
+    className="border-light-blue-100 text-light-blue-100 bg-gray-1 relative flex 
    items-center justify-center overflow-hidden rounded-md border px-7 py-5 md:flex-col lg:flex-col"
   >
-    <h3 className="mr-[40%] md:mr-0 lg:mr-0">{title}</h3>
+    <h3 className="mr-[30%] md:mr-0 lg:mr-0">{title}</h3>
     <div className="hidden">
       <Divider />
     </div>
 
-    <div className="flex md:flex-col lg:flex-col">
-      <div className="mt-6">
-        <span className=" text-lg line-through">{priceString}</span>
-        <h1 className="-mt-3 italic">{discountedPriceString}</h1>
+    <div className="flex gap-[10%] md:flex-col lg:flex-col ">
+      <div className="">
+        <span className="text-lg line-through">
+          <p className="pl-[125%]">{priceString}</p>
+        </span>
+        <h1 className="-mt-3 italic ">{discountedPriceString}</h1>
       </div>
-      <h5 className="text-orange mt-3 uppercase">{extraInfo}</h5>
+      <h5 className="text-orange mt-3 pl-[5%] pt-[40%] uppercase">
+        {extraInfo}
+      </h5>
     </div>
   </div>
 )
