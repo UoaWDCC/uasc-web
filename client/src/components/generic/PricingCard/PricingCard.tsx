@@ -43,7 +43,7 @@ const PricingCardDefault = ({
         >
           {priceString}
         </h1>
-        <small className="text-orange -ml-[18%] mt-[20%] text-nowrap md:ml-0 md:mt-0 lg:ml-0 lg:mt-0 overflow-hidden">
+        <small className="text-orange -ml-[18%] mt-[20%] overflow-hidden text-nowrap md:ml-0 md:mt-0 lg:ml-0 lg:mt-0">
           {extraInfo}
         </small>
         {selected && (
