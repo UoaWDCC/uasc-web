@@ -34,7 +34,7 @@ const PricingCardDefault = ({
     >
       <div className="flex items-center justify-center md:flex-col lg:flex-col">
         <h3
-          className={`${selected ? "text-white" : "text-dark-blue-100"} flex-col`}
+          className={`${selected ? "text-white" : "text-dark-blue-100"} mr-[30%] flex-col text-nowrap md:mr-0 lg:mr-0`}
         >
           {title}
         </h3>
@@ -43,9 +43,14 @@ const PricingCardDefault = ({
         >
           {priceString}
         </h1>
-        <small className="text-orange">{extraInfo}</small>
+        <small className="text-orange -ml-[18%] mt-[20%] text-nowrap md:ml-0 md:mt-0 lg:ml-0 lg:mt-0">
+          {extraInfo}
+        </small>
         {selected && (
-          <img src={tick} className="ml-auto mr-auto mt-6 h-6 w-6" />
+          <img
+            src={tick}
+            className="ml-auto mr-auto w-12 md:mt-6 md:h-6 md:w-6 lg:mt-6 lg:h-6 lg:w-6"
+          />
         )}
       </div>
     </div>
