@@ -12,7 +12,7 @@ interface IPricingCardHome extends Omit<IPricingCardDefault, "selected"> {
 }
 
 const Divider = () => (
-  <span className="bg-light-blue-100 h-[75px] w-[2px] rounded-full" />
+  <span className="bg-light-blue-100 h-[25px] w-[2px] rounded-full" />
 )
 
 // Public interface
@@ -68,16 +68,18 @@ const PricingCardHome = ({
    items-center justify-center gap-3 overflow-hidden rounded-md border px-7 py-5 md:flex-col lg:flex-col"
   >
     <h3 className="mr-[30%] md:mr-0 lg:mr-0">{title}</h3>
-    <div className="hidden">
-      <Divider />
+    <div className="md:hidden lg:hidden">
+      {" "}
+      <Divider></Divider>
     </div>
 
-    <div className="flex gap-2 pr-[75px] align-top md:flex-col lg:flex-col">
+    <div className="flex gap-2 align-top md:flex-col md:pr-[75px] lg:flex-col lg:pr-[75px] ">
       <div className="">
         <h1 className="-mt-[5%] text-6xl italic md:text-5xl lg:text-5xl">
           {discountedPriceString}
         </h1>
       </div>
+
       <div className="pl-[5%]">
         <p className="text-3xl line-through md:text-lg lg:text-lg">
           {priceString}
