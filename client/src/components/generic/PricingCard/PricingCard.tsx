@@ -32,7 +32,7 @@ const PricingCardDefault = ({
       onClick={onClick}
       className={`${selected ? "bg-dark-blue-100" : "border-dark-blue-100 border bg-transparent"} mb-6 flex  justify-center rounded-md p-8 ${onClick && "cursor-pointer"}`}
     >
-      <div className="flex-col">
+      <div className="flex items-center justify-center md:flex-col lg:flex-col">
         <h3
           className={`${selected ? "text-white" : "text-dark-blue-100"} flex-col`}
         >
