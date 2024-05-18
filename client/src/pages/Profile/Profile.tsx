@@ -3,21 +3,39 @@ import { useAppData } from "store/Store"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 
+const Field = ({
+  subtitle,
+  description
+}: {
+  subtitle: string
+  description?: string
+}) => {
+  return (
+    <>
+      <div>
+        <p className="pb-1 text-base font-normal leading-tight text-stone-300">
+          {subtitle}
+        </p>
+        <p className="text-black/opacity-20 pb-1 text-base font-normal leading-tight">
+          {description}
+        </p>
+      </div>
+    </>
+  )
+}
 export default function Profile() {
   const [{ currentUserData }] = useAppData()
-
+  const { first_name, last_name } = currentUserData
   return (
     <FullPageBackgroundImage>
-      <div>
-        <h2>Ray Zhao</h2>
-        <div>
-          <UserInformationSection userData={currentUserData} />
-        </div>
-        <ProfileInformationPanel title="w"></ProfileInformationPanel>
-        <div className="flex">
-          <ProfileInformationPanel title="t" />
-          <ProfileInformationPanel title="t" />
-        </div>
+      <h1>{`${first_name} ${last_name}`}</h1>
+      <div className="grid w-full grid-cols-2 gap-1">
+        <ProfileInformationPanel title="w" onEdit={() => {}}>
+          <Field subtitle="Name" description={`${first_name} ${last_name}`} />
+          <Field subtitle="Name" description="value" />
+        </ProfileInformationPanel>
+        <ProfileInformationPanel title="t" />
+        <ProfileInformationPanel title="t" />
       </div>
     </FullPageBackgroundImage>
   )
