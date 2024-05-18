@@ -155,17 +155,15 @@
   color: var(--grey-40);
 }
 
-.react-calendar__tile--hasActive {
-  background: #76baff;
-}
-
 .react-calendar__tile--active {
   background-color: var(--dark-blue-100);
   color: white;
 }
 
 .react-calendar__tile--active:enabled:hover,
-.react-calendar__tile--active:enabled:focus {
+.react-calendar__tile--active:enabled:focus,
+.react-calendar__tile--range {
+  color: white;
   background-color: var(--dark-blue-100);
 }
 
