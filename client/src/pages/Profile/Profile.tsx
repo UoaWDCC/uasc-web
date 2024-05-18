@@ -1,4 +1,3 @@
-import UserInformationSection from "components/composite/Profile/UserInformation/UserInformationSection"
 import { useAppData } from "store/Store"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
