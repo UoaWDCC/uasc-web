@@ -31,13 +31,15 @@ export default function Profile() {
   return (
     <FullPageBackgroundImage>
       <h1>{`${first_name} ${last_name}`}</h1>
-      <ProfileInformationPanel title="w" onEdit={() => {}}>
-        <Field subtitle="Name" description={`${first_name} ${last_name}`} />
-        <Field subtitle="Name" description="value" />
-      </ProfileInformationPanel>
-      <div className="grid w-full grid-cols-2 gap-1">
-        <ProfileInformationPanel title="Membership" />
-        <ProfileInformationPanel title="Additional Details" />
+      <div className="grid w-full gap-4">
+        <ProfileInformationPanel title="w" onEdit={() => {}}>
+          <Field subtitle="Name" description={`${first_name} ${last_name}`} />
+          <Field subtitle="Name" description="value" />
+        </ProfileInformationPanel>
+        <div className="grid w-full grid-cols-2 gap-4">
+          <ProfileInformationPanel title="Membership" />
+          <ProfileInformationPanel title="Additional Details" />
+        </div>
       </div>
     </FullPageBackgroundImage>
   )
