@@ -24,7 +24,7 @@ const Field = ({
 }
 export default function Profile() {
   const [{ currentUserData }] = useAppData()
-  const { first_name, last_name } = currentUserData
+  const { first_name, last_name } = currentUserData || {}
   return (
     <FullPageBackgroundImage>
       <h1>{`${first_name} ${last_name}`}</h1>
