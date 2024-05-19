@@ -1,4 +1,6 @@
 import { useAppData } from "store/Store"
+import { currentUser } from "store/Store"
+
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 
@@ -36,6 +38,8 @@ const Field = ({
 }
 export default function Profile() {
   const [{ currentUserData }] = useAppData()
+  const [{ currentUser }] = useAppData()
+
   return (
     <FullPageBackgroundImage>
       <div className="grid-cols grid w-full ">
@@ -67,7 +71,7 @@ export default function Profile() {
               />
             </div>
             <div className="grid grid-cols-3 gap-[105%] text-nowrap">
-              <Field subtitle="Email" description="email@domain.com" />
+              <Field subtitle="Email" description={`${currentUser?.email}`} />
               <Field subtitle="Phone number" description="021 123 1234" />
               <Field
                 subtitle="Emergency contact info"
@@ -76,8 +80,26 @@ export default function Profile() {
             </div>
           </ProfileInformationPanel>
           <div className="grid w-full grid-cols-2 gap-4">
-            <ProfileInformationPanel title="Membership" />
-            <ProfileInformationPanel title="Additional details" />
+            <ProfileInformationPanel title="Membership">
+              <Field
+                subtitle="Membership type"
+                description={"UoA Student"} // value not yet set
+              />
+              <Field
+                subtitle="Valid til"
+                description="9/12/24" // value not yet set
+              />
+            </ProfileInformationPanel>
+            <ProfileInformationPanel title="Additional details">
+              <Field
+                subtitle="Dietary requirements"
+                description={`${currentUserData?.dietary_requirements}`} // value not yet set
+              />
+              <Field
+                subtitle="Skiier/Snowboarder"
+                description={`${currentUserData?.does_ski}`} // value not yet set
+              />
+            </ProfileInformationPanel>
             <ProfileInformationPanel title="Current bookings">
               <div className="border border-black p-4">Calender Component</div>
             </ProfileInformationPanel>
