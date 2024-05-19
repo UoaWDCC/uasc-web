@@ -5,11 +5,11 @@ import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/
 const ExitButton = () => {
   return (
     <div
-      className="border-red space-x-4; disabled:bg-gray-2  text-red hover:bg-red
-    flex flex-col items-center rounded-md border bg-transparent px-8 py-2 font-sans font-bold uppercase
-   enabled:border enabled:hover:text-white"
+      className="border-red space-x-4; disabled:bg-gray-3 text-red hover:bg-red
+    flex flex-col items-center rounded-md border bg-white px-8 py-2 font-sans font-bold 
+   hover:text-white enabled:border"
     >
-      <button className="">delete profile</button>
+      <button className="uppercase">delete profile</button>
     </div>
   )
 }
