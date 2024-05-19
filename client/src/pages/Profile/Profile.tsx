@@ -79,7 +79,7 @@ export default function Profile() {
             </div>
           </ProfileInformationPanel>
           <div className="grid w-full grid-cols-2 gap-4">
-            <ProfileInformationPanel title="Membership">
+            <ProfileInformationPanel title="Membership" onEdit={() => {}}>
               <Field
                 subtitle="Membership type"
                 description={"UoA Student"} // value not yet set
@@ -89,7 +89,7 @@ export default function Profile() {
                 description="9/12/24" // value not yet set
               />
             </ProfileInformationPanel>
-            <ProfileInformationPanel title="Additional details">
+            <ProfileInformationPanel title="Additional details" onEdit={() => {}}>
               <Field
                 subtitle="Dietary requirements"
                 description={`${currentUserData?.dietary_requirements}`}
