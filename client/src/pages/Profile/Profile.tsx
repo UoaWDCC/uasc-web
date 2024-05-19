@@ -92,7 +92,7 @@ export default function Profile() {
                 </div>
               </div>
             </ProfileInformationPanel>
-            <div className="grid w-full lg:grid-cols-2 md:grid-cols-2 gap-4">
+            <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
               <ProfileInformationPanel title="Membership" onEdit={() => {}}>
                 <Field
                   subtitle="Membership type"
