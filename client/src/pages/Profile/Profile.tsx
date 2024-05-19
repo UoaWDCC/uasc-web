@@ -33,21 +33,20 @@ const Field = ({
 }
 export default function Profile() {
   const [{ currentUserData }] = useAppData()
-  const { first_name, last_name } = currentUserData || {
-    first_name: "Ray",
-    last_name: "Zhao"
-  }
   return (
     <FullPageBackgroundImage>
-      <div className="col-span-2 grid w-full">
+      <div className="grid-cols grid w-full">
         <div className="flex">
-          <h2 className="text-dark-blue-100 left-0 top-0 italic">{`${first_name} ${last_name}`}</h2>
+          <h2 className="text-dark-blue-100 left-0 top-0 italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
           <ExitButton />
         </div>
 
         <div className="grid w-full gap-4">
           <ProfileInformationPanel title="Personal Details" onEdit={() => {}}>
-            <Field subtitle="Name" description={`${first_name} ${last_name}`} />
+            <Field
+              subtitle="Name"
+              description={`${currentUserData?.first_name} ${currentUserData?.last_name}`}
+            />
             <Field subtitle="Name" description="value" />
           </ProfileInformationPanel>
           <div className="grid w-full grid-cols-2 gap-4">
