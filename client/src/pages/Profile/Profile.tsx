@@ -5,7 +5,7 @@ import ProfileInformationPanel from "components/generic/ProfileInformationPanel/
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 import { Footer } from "components/generic/Footer/Footer"
 
-const DeleteButton = () => {
+const SignOutButton = () => {
   const navigate = useNavigate()
   const handleOnclick = () => {
     navigate("/login")
@@ -54,7 +54,7 @@ export default function Profile() {
           <div className="grid grid-cols-5 gap-3 pb-4">
             <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid pl-4 italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
             <div className="ml-[200px] flex items-center justify-center text-nowrap">
-              <DeleteButton />
+              <SignOutButton />
             </div>
           </div>
 
