@@ -47,6 +47,12 @@ export default function Profile() {
   const [{ currentUserData }] = useAppData()
   const [{ currentUser }] = useAppData()
 
+  function toDateTime(secs?: number) {
+    const t = new Date(1970, 0, 1) // Epoch
+    t.setSeconds(secs)
+    return t
+  }
+
   return (
     <FullPageBackgroundImage>
       <div className="pb-[15%]">
@@ -76,7 +82,7 @@ export default function Profile() {
                   />
                   <Field
                     subtitle="Date of birth"
-                    description={`${currentUserData?.date_of_birth}`}
+                    description={`${toDateTime(currentUserData?.date_of_birth.seconds)}`}
                   />
                 </div>
                 <div className="grid grid-cols-4 text-nowrap">
