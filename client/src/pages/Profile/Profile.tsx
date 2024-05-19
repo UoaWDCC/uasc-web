@@ -103,7 +103,9 @@ export default function Profile() {
               />
             </ProfileInformationPanel>
             <ProfileInformationPanel title="Current bookings">
-              <div className="border border-black p-4">Calender Component</div>
+              <div className="border border-black p-4">
+                Calender component waiting to be implemented
+              </div>
             </ProfileInformationPanel>
           </div>
         </div>
