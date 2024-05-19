@@ -1,5 +1,4 @@
 import { useAppData } from "store/Store"
-import { currentUser } from "store/Store"
 
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
