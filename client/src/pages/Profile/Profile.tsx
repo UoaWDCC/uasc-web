@@ -48,11 +48,32 @@ export default function Profile() {
 
         <div className="grid w-full gap-4">
           <ProfileInformationPanel title="Personal details" onEdit={() => {}}>
-            <Field
-              subtitle="Name"
-              description={`${currentUserData?.first_name} ${currentUserData?.last_name}`}
-            />
-            <Field subtitle="Name" description="value" />
+            <div className="grid grid-cols-4 gap-80">
+              <Field
+                subtitle="Name"
+                description={`${currentUserData?.first_name} ${currentUserData?.last_name}`}
+              />
+              <Field
+                subtitle="Gender"
+                description={`${currentUserData?.gender}`}
+              />
+              <Field
+                subtitle="Student ID"
+                description={`${currentUserData?.student_id}`}
+              />
+              <Field
+                subtitle="Date of birth"
+                description={`${currentUserData?.date_of_birth}`}
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-[105%] text-nowrap">
+              <Field subtitle="Email" description="email@domain.com" />
+              <Field subtitle="Phone number" description="021 123 1234" />
+              <Field
+                subtitle="Emergency contact info"
+                description={`${currentUserData?.emergency_contact}`}
+              />
+            </div>
           </ProfileInformationPanel>
           <div className="grid w-full grid-cols-2 gap-4">
             <ProfileInformationPanel title="Membership" />
