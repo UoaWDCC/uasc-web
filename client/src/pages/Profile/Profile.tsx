@@ -93,11 +93,11 @@ export default function Profile() {
             <ProfileInformationPanel title="Additional details">
               <Field
                 subtitle="Dietary requirements"
-                description={`${currentUserData?.dietary_requirements}`} // value not yet set
+                description={`${currentUserData?.dietary_requirements}`}
               />
               <Field
                 subtitle="Skiier/Snowboarder"
-                description={`${currentUserData?.does_ski}`} // value not yet set
+                description={`${currentUserData?.does_ski}`}
               />
             </ProfileInformationPanel>
             <ProfileInformationPanel title="Current bookings">
