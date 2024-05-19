@@ -57,8 +57,10 @@ export default function Profile() {
           <div className="grid w-full grid-cols-2 gap-4">
             <ProfileInformationPanel title="Membership" />
             <ProfileInformationPanel title="Additional Details" />
+            <ProfileInformationPanel title="Calender" />
           </div>
         </div>
+        
       </div>
     </FullPageBackgroundImage>
   )
