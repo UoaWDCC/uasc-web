@@ -49,8 +49,9 @@ export default function Profile() {
 
   function toDateTime(secs?: number) {
     const t = new Date(1970, 0, 1) // Epoch
-    t.setSeconds(secs)
-    return t
+    t.setSeconds(secs!)
+    const f = t.toDateString().split(" ").slice(0, 4).join(" ")
+    return f
   }
 
   return (
