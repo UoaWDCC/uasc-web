@@ -1,6 +1,15 @@
 import { useAppData } from "store/Store"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
+import Button from "components/generic/FigmaButtons/FigmaButton"
+
+const ExitButton = () => {
+  return (
+    <div className="uppercase">
+      <Button>exit</Button>
+    </div>
+  )
+}
 
 const Field = ({
   subtitle,
@@ -30,15 +39,21 @@ export default function Profile() {
   }
   return (
     <FullPageBackgroundImage>
-      <h2 className="pr-[77.5%] pb-5 text-dark-blue-100 italic">{`${first_name} ${last_name}`}</h2>
-      <div className="grid w-full gap-4">
-        <ProfileInformationPanel title="Personal Details" onEdit={() => {}}>
-          <Field subtitle="Name" description={`${first_name} ${last_name}`} />
-          <Field subtitle="Name" description="value" />
-        </ProfileInformationPanel>
-        <div className="grid w-full grid-cols-2 gap-4">
-          <ProfileInformationPanel title="Membership" />
-          <ProfileInformationPanel title="Additional Details" />
+      <div className="col-span-2 grid w-full">
+        <div className="flex">
+          <h2 className="text-dark-blue-100 left-0 top-0 italic">{`${first_name} ${last_name}`}</h2>
+          <ExitButton />
+        </div>
+
+        <div className="grid w-full gap-4">
+          <ProfileInformationPanel title="Personal Details" onEdit={() => {}}>
+            <Field subtitle="Name" description={`${first_name} ${last_name}`} />
+            <Field subtitle="Name" description="value" />
+          </ProfileInformationPanel>
+          <div className="grid w-full grid-cols-2 gap-4">
+            <ProfileInformationPanel title="Membership" />
+            <ProfileInformationPanel title="Additional Details" />
+          </div>
         </div>
       </div>
     </FullPageBackgroundImage>
