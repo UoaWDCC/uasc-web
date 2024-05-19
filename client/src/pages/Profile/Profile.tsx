@@ -6,7 +6,7 @@ import Button from "components/generic/FigmaButtons/FigmaButton"
 const ExitButton = () => {
   return (
     <div className="uppercase">
-      <Button>exit</Button>
+      <Button>delete profile</Button>
     </div>
   )
 }
@@ -35,10 +35,12 @@ export default function Profile() {
   const [{ currentUserData }] = useAppData()
   return (
     <FullPageBackgroundImage>
-      <div className="grid-cols grid w-full">
-        <div className="flex">
-          <h2 className="text-dark-blue-100 left-0 top-0 italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
-          <ExitButton />
+      <div className="grid-cols grid w-full ">
+        <div className="grid grid-cols-5 gap-3">
+          <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
+          <div className="flex items-center justify-center">
+            <ExitButton />
+          </div>
         </div>
 
         <div className="grid w-full gap-4">
