@@ -42,9 +42,9 @@ export default function Profile() {
   return (
     <FullPageBackgroundImage>
       <div className="grid-cols grid w-full ">
-        <div className="grid grid-cols-5 gap-3">
+        <div className="grid grid-cols-5 gap-3 pb-4">
           <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center pl-24">
             <ExitButton />
           </div>
         </div>
