@@ -30,9 +30,9 @@ export default function Profile() {
   }
   return (
     <FullPageBackgroundImage>
-      <h1>{`${first_name} ${last_name}`}</h1>
+      <h2 className="pr-[77.5%] pb-5 text-dark-blue-100 italic">{`${first_name} ${last_name}`}</h2>
       <div className="grid w-full gap-4">
-        <ProfileInformationPanel title="w" onEdit={() => {}}>
+        <ProfileInformationPanel title="Personal Details" onEdit={() => {}}>
           <Field subtitle="Name" description={`${first_name} ${last_name}`} />
           <Field subtitle="Name" description="value" />
         </ProfileInformationPanel>
