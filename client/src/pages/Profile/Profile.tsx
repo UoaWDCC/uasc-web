@@ -89,7 +89,10 @@ export default function Profile() {
                 description="9/12/24" // value not yet set
               />
             </ProfileInformationPanel>
-            <ProfileInformationPanel title="Additional details" onEdit={() => {}}>
+            <ProfileInformationPanel
+              title="Additional details"
+              onEdit={() => {}}
+            >
               <Field
                 subtitle="Dietary requirements"
                 description={`${currentUserData?.dietary_requirements}`}
