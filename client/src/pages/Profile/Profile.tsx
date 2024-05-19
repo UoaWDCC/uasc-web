@@ -60,7 +60,6 @@ export default function Profile() {
             <ProfileInformationPanel title="Calender" />
           </div>
         </div>
-        
       </div>
     </FullPageBackgroundImage>
   )
