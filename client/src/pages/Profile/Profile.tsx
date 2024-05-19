@@ -1,12 +1,15 @@
 import { useAppData } from "store/Store"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
-import Button from "components/generic/FigmaButtons/FigmaButton"
 
 const ExitButton = () => {
   return (
-    <div className="uppercase">
-      <Button>delete profile</Button>
+    <div
+      className="border-red space-x-4; disabled:bg-gray-2  text-red hover:bg-red
+    flex flex-col items-center rounded-md border bg-transparent px-8 py-2 font-sans font-bold uppercase
+   enabled:border enabled:hover:text-white"
+    >
+      <button className="">delete profile</button>
     </div>
   )
 }
