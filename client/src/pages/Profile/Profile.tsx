@@ -1,17 +1,24 @@
 import { useAppData } from "store/Store"
+import { useNavigate } from "react-router-dom"
 
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 import { Footer } from "components/generic/Footer/Footer"
 
 const DeleteButton = () => {
+  const navigate = useNavigate()
+  const handleOnclick = () => {
+    navigate("/login")
+  }
   return (
     <div
       className="border-red space-x-4; disabled:bg-gray-3 text-red hover:bg-red
     flex flex-col items-center rounded-md border bg-white px-8 py-2 font-sans font-bold 
    hover:text-white enabled:border"
     >
-      <button className="uppercase">sign out</button>
+      <button className="uppercase" onClick={handleOnclick}>
+        sign out
+      </button>
     </div>
   )
 }
