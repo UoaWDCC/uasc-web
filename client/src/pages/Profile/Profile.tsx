@@ -2,6 +2,7 @@ import { useAppData } from "store/Store"
 
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
+import { Footer } from "components/generic/Footer/Footer"
 
 const ExitButton = () => {
   return (
@@ -109,6 +110,9 @@ export default function Profile() {
             </ProfileInformationPanel>
           </div>
         </div>
+      </div>
+      <div className="absolute bottom-0 w-full">
+        <Footer />
       </div>
     </FullPageBackgroundImage>
   )
