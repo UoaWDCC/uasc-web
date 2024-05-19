@@ -47,7 +47,7 @@ export default function Profile() {
         </div>
 
         <div className="grid w-full gap-4">
-          <ProfileInformationPanel title="Personal Details" onEdit={() => {}}>
+          <ProfileInformationPanel title="Personal details" onEdit={() => {}}>
             <Field
               subtitle="Name"
               description={`${currentUserData?.first_name} ${currentUserData?.last_name}`}
@@ -56,8 +56,10 @@ export default function Profile() {
           </ProfileInformationPanel>
           <div className="grid w-full grid-cols-2 gap-4">
             <ProfileInformationPanel title="Membership" />
-            <ProfileInformationPanel title="Additional Details" />
-            <ProfileInformationPanel title="Calender" />
+            <ProfileInformationPanel title="Additional details" />
+            <ProfileInformationPanel title="Current bookings">
+              <div className="border border-black p-4">Calender Component</div>
+            </ProfileInformationPanel>
           </div>
         </div>
       </div>
