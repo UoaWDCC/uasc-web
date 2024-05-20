@@ -3,12 +3,8 @@ import { useNavigate } from "react-router-dom"
 
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
+import 
 
-const Background = () => {
-  return (
-    <div className="bg-mountain-background-image bg-gray-1 bg-opacity-70"></div>
-  )
-}
 
 const SignOutButton = () => {
   const navigate = useNavigate()
