@@ -28,14 +28,14 @@ export const DefaultStory = () => {
         <SignUpForm
           pages={[
             {
-              title: "name",
+              title: "Personal details",
               index: 0,
               onNext: () => {
                 setCurrentPage(1)
               }
             },
             {
-              title: "first",
+              title: "Personal details",
               index: 1,
               onNext: () => {
                 setCurrentPage(2)
@@ -45,7 +45,7 @@ export const DefaultStory = () => {
               }
             },
             {
-              title: "second",
+              title: "Contact details",
               index: 2,
               onNext: () => {
                 setCurrentPage(3)
@@ -55,7 +55,7 @@ export const DefaultStory = () => {
               }
             },
             {
-              title: "fourth",
+              title: "Additional info",
               index: 3,
 
               onNext: () => {

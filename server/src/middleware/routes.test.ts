@@ -19,6 +19,7 @@ import {
 } from "test-config/mocks/Stripe.mock"
 import { signupUserMock } from "test-config/mocks/User.mock"
 import AuthService from "business-layer/services/AuthService"
+import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 
 const request = supertest(_app)
 
@@ -155,9 +156,11 @@ describe("Endpoints", () => {
     describe("/membership", () => {
       it("should not let members to try create sessions", async () => {
         const res = await request
-          .get("/payment/membership")
+          .post("/payment/membership")
           .set("Authorization", `Bearer ${memberToken}`)
-          .send({})
+          .send({
+            membershipType: MembershipTypeValues.UoaStudent
+          })
 
         expect(res.status).toEqual(409)
       })
@@ -165,18 +168,22 @@ describe("Endpoints", () => {
       it("should let guests/admins to try create sessions", async () => {
         createUserData(GUEST_USER_UID)
         let res = await request
-          .get("/payment/membership")
+          .post("/payment/membership")
           .set("Authorization", `Bearer ${guestToken}`)
-          .send({})
+          .send({
+            membershipType: MembershipTypeValues.NewNonStudent
+          })
         expect(res.status).toEqual(200)
 
         /**
          * Note admins should be able to create sessions for testing purposes, it is assumed that admin users will not try pay
          */
         res = await request
-          .get("/payment/membership")
+          .post("/payment/membership")
           .set("Authorization", `Bearer ${adminToken}`)
-          .send({})
+          .send({
+            membershipType: MembershipTypeValues.UoaStudent
+          })
         expect(res.status).toEqual(200)
       })
     })
@@ -327,7 +334,7 @@ describe("Endpoints", () => {
    *
    */
   describe("/signup", () => {
-    afterAll(async () => {
+    afterEach(async () => {
       await cleanFirestore()
       await cleanAuth()
     })
@@ -344,12 +351,31 @@ describe("Endpoints", () => {
       expect(claims).toEqual(undefined)
     })
     it("should return a 409 conflict when an email is already in use", async () => {
-      const res = await request.post("/signup").send({
+      let res = await request.post("/signup").send({
+        email: "test@mail.com",
+        user: signupUserMock
+      })
+      expect(res.status).toEqual(200)
+
+      res = await request.post("/signup").send({
         email: "test@mail.com",
         user: signupUserMock
       })
       // check for conflict
       expect(res.status).toEqual(409)
+    })
+    it("should return no claims jwtToken", async () => {
+      // console.log({ ...signupUserMock, membership: "admin" })
+      const res = await request.post("/signup").send({
+        email: "testadmin@mail.com",
+        user: signupUserMock
+      })
+      // ensure that response is 200
+      expect(res.status).toEqual(200)
+      // check if user custom claims exist
+      const { uid } = res.body
+      const claims = await new AuthService().getCustomerUserClaim(uid)
+      expect(claims).toEqual(undefined)
     })
   })
   /**

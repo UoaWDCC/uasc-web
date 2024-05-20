@@ -1,10 +1,11 @@
 import LoginForm from "components/composite/LoginForm/LoginForm"
 import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom"
-import { useAppData } from "store/store"
+import { useAppData } from "store/Store"
 import { loginHandler, resetPassword } from "./utils/Handlers"
 import PasswordResetForm from "components/composite/LoginForm/PasswordResetForm/PasswordResetForm"
 import { Footer } from "components/generic/Footer/Footer"
+
 const Login = () => {
   const [{ currentUser }] = useAppData()
 
