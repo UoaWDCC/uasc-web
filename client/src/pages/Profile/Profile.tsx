@@ -132,7 +132,7 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <div className="bottom-0 w-full">
+      <div className="absolute bottom-0 w-full">
         <Footer />
       </div>
     </ResponsiveBackgroundImage>
