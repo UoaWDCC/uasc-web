@@ -2,7 +2,6 @@ import { useAppData } from "store/Store"
 import { useNavigate } from "react-router-dom"
 
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
-import FullPageBackgroundImage from "components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 import { Footer } from "components/generic/Footer/Footer"
 
 const SignOutButton = () => {
