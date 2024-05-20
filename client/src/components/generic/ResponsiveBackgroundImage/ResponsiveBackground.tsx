@@ -5,19 +5,13 @@ interface IResponsiveBackgroundImage {
  * to find/change the bg you need to check the
  * `backgroundImage` property in `tailwind.config.ts`
  */
-const ResponsiveBackgroundImage = ({
-  children
-}: IResponsiveBackgroundImage) => (
-  <div
-    className="bg-mountain-background-image 
-           relative z-0 -mt-14 flex h-screen
-            min-h-screen flex-col items-center
-           justify-center overflow-hidden
-           bg-cover bg-center "
-  >
-    <div className="bg-gray-1 pointer-events-none absolute -z-30 h-screen w-full opacity-70" />
-    {children}
-  </div>
-)
+const ResponsiveBackgroundImage = ({ children }: IResponsiveBackgroundImage) => (
+    <div className="relative bg-mountain-background-image min-h-screen bg-cover overflow-hidden">
+      <div className="absolute inset-0 bg-gray-1 opacity-70 pointer-events-none" />
+      <div className="absolute inset-0 overflow-auto flex items-center justify-center">
+        {children}
+      </div>
+    </div>
+  );
 
 export default ResponsiveBackgroundImage
