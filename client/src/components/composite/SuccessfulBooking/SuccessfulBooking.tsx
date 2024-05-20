@@ -8,7 +8,7 @@ type SuccessfulBookingProps = {
 const SuccessfulBooking = ({ startDate, endDate }: SuccessfulBookingProps) => {
   return (
     <FullPageBookLodgeImage>
-      <div className="text-dark-blue-100 mb-auto mr-auto mt-10 px-2 py-6 align-text-top italic md:ml-32 md:px-20 md:py-20">
+      <div className="text-dark-blue-100 mb-auto mr-auto mt-32 px-2 py-6 align-text-top italic md:ml-32 md:px-20 md:py-20">
         <h2>Book the Lodge</h2>
       </div>
       <div className="border-gray-3 xs:mb-80 xxs:mb-20 static mx-auto h-auto w-11/12 rounded-md border-2 bg-white py-5 md:w-6/12">
