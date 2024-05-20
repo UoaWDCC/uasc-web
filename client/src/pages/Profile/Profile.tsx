@@ -55,86 +55,91 @@ export default function Profile() {
   }
 
   return (
-    <ResponsiveBackgroundImage>
-      <div className="pb-[15%]">
-        <div className="grid-cols grid w-full ">
-          <div className="grid grid-cols-5 gap-3 pb-4">
-            <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid pl-4 italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
-            <div className="ml-[-40px] flex items-center justify-center text-nowrap md:ml-[200px] lg:ml-[200px]">
-              <SignOutButton />
-            </div>
-          </div>
-
-          <div className="grid w-full gap-4">
-            <ProfileInformationPanel title="Personal details" onEdit={() => {}}>
-              <div className="flex w-full flex-col gap-4">
-                <div className="grid grid-cols-4">
-                  <Field
-                    subtitle="Name"
-                    description={`${currentUserData?.first_name} ${currentUserData?.last_name}`}
-                  />
-                  <Field
-                    subtitle="Gender"
-                    description={`${currentUserData?.gender}`}
-                  />
-                  <Field
-                    subtitle="Student ID"
-                    description={`${currentUserData?.student_id}`}
-                  />
-                  <Field
-                    subtitle="Date of birth"
-                    description={`${toDateTime(currentUserData?.date_of_birth.seconds)}`}
-                  />
-                </div>
-                <div className="grid grid-cols-4 text-nowrap">
-                  <Field
-                    subtitle="Email"
-                    description={`${currentUser?.email}`}
-                  />
-                  <Field subtitle="Phone number" description="021 123 1234" />
-                  <Field
-                    subtitle="Emergency contact info"
-                    description={`${currentUserData?.emergency_contact}`}
-                  />
-                </div>
+    <div className="relative min-h-screen">
+      <ResponsiveBackgroundImage>
+        <div className="pb-[15%]">
+          <div className="grid-cols grid w-full ">
+            <div className="grid grid-cols-5 gap-3 pb-4">
+              <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid pl-4 italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
+              <div className="ml-[-40px] flex items-center justify-center text-nowrap md:ml-[200px] lg:ml-[200px]">
+                <SignOutButton />
               </div>
-            </ProfileInformationPanel>
-            <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
-              <ProfileInformationPanel title="Membership" onEdit={() => {}}>
-                <Field
-                  subtitle="Membership type"
-                  description={"UoA Student"} // value not yet set
-                />
-                <Field
-                  subtitle="Valid til"
-                  description="9/12/24" // value not yet set
-                />
-              </ProfileInformationPanel>
+            </div>
+
+            <div className="grid w-full gap-4">
               <ProfileInformationPanel
-                title="Additional details"
+                title="Personal details"
                 onEdit={() => {}}
               >
-                <Field
-                  subtitle="Dietary requirements"
-                  description={`${currentUserData?.dietary_requirements}`}
-                />
-                <Field
-                  subtitle="Skiier/Snowboarder"
-                  description={`${currentUserData?.does_ski}`}
-                />
-              </ProfileInformationPanel>
-              <ProfileInformationPanel title="Current bookings">
-                <div className="border border-black p-4">
-                  Calender component waiting to be implemented
+                <div className="flex w-full flex-col gap-4">
+                  <div className="grid grid-cols-4">
+                    <Field
+                      subtitle="Name"
+                      description={`${currentUserData?.first_name} ${currentUserData?.last_name}`}
+                    />
+                    <Field
+                      subtitle="Gender"
+                      description={`${currentUserData?.gender}`}
+                    />
+                    <Field
+                      subtitle="Student ID"
+                      description={`${currentUserData?.student_id}`}
+                    />
+                    <Field
+                      subtitle="Date of birth"
+                      description={`${toDateTime(currentUserData?.date_of_birth.seconds)}`}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 text-nowrap">
+                    <Field
+                      subtitle="Email"
+                      description={`${currentUser?.email}`}
+                    />
+                    <Field subtitle="Phone number" description="021 123 1234" />
+                    <Field
+                      subtitle="Emergency contact info"
+                      description={`${currentUserData?.emergency_contact}`}
+                    />
+                  </div>
                 </div>
               </ProfileInformationPanel>
+              <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
+                <ProfileInformationPanel title="Membership" onEdit={() => {}}>
+                  <Field
+                    subtitle="Membership type"
+                    description={"UoA Student"} // value not yet set
+                  />
+                  <Field
+                    subtitle="Valid til"
+                    description="9/12/24" // value not yet set
+                  />
+                </ProfileInformationPanel>
+                <ProfileInformationPanel
+                  title="Additional details"
+                  onEdit={() => {}}
+                >
+                  <Field
+                    subtitle="Dietary requirements"
+                    description={`${currentUserData?.dietary_requirements}`}
+                  />
+                  <Field
+                    subtitle="Skiier/Snowboarder"
+                    description={`${currentUserData?.does_ski}`}
+                  />
+                </ProfileInformationPanel>
+                <ProfileInformationPanel title="Current bookings">
+                  <div className="border border-black p-4">
+                    Calender component waiting to be implemented
+                  </div>
+                </ProfileInformationPanel>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </ResponsiveBackgroundImage>
       <div className="absolute bottom-0 w-full">
         <Footer />
       </div>
-    </ResponsiveBackgroundImage>
+    </div>
   )
 }
