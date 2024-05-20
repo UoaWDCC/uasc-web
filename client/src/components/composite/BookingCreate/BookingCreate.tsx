@@ -7,8 +7,8 @@ import { useState } from "react"
 import { Range } from "react-calendar/dist/cjs/shared/types"
 
 type DateRange = {
-  startDate?: Date
-  endDate?: Date
+  startDate: Date
+  endDate: Date
 }
 
 const formatDateForInput = (date?: Date) => {
@@ -16,7 +16,10 @@ const formatDateForInput = (date?: Date) => {
 }
 
 const CreateBookingPage = () => {
-  const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({})
+  const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
+    startDate: new Date(),
+    endDate: new Date()
+  })
   return (
     <div
       className="bg-home-ski-image relative z-10 flex min-h-[90vh] w-full
@@ -60,7 +63,7 @@ const CreateBookingPage = () => {
               onChange={(e) =>
                 setSelectedDateRange({
                   ...selectedDateRange,
-                  startDate: e.target.valueAsDate || undefined
+                  startDate: e.target.valueAsDate || new Date()
                 })
               }
             />
@@ -74,7 +77,7 @@ const CreateBookingPage = () => {
               onChange={(e) =>
                 setSelectedDateRange({
                   ...selectedDateRange,
-                  endDate: e.target.valueAsDate || undefined
+                  endDate: e.target.valueAsDate || new Date()
                 })
               }
             />
