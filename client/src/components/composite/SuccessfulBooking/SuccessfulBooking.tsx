@@ -1,8 +1,8 @@
 import FullPageBookLodgeImage from "components/generic/FullPageBookLodgeImage/FullPageBookLodgeImage"
 
 type SuccessfulBookingProps = {
-  startDate: string | null
-  endDate: string | null
+  startDate?: string
+  endDate?: string
 }
 
 const SuccessfulBooking = ({ startDate, endDate }: SuccessfulBookingProps) => {
