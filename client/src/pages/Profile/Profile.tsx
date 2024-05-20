@@ -48,9 +48,9 @@ export default function Profile() {
   const [{ currentUser }] = useAppData()
 
   function toDateTime(secs?: number) {
-    const t = new Date(1970, 0, 1) // Epoch
+    const t = new Date() // Epoch
     t.setSeconds(secs!)
-    const f = t.toDateString().split(" ").slice(0, 4).join(" ")
+    const f = t.toDateString()
     return f
   }
 
