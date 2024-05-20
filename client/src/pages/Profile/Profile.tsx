@@ -55,7 +55,7 @@ export default function Profile() {
   }
 
   return (
-    <FullPageBackgroundImage>
+    <div className="bg-mountain-background-image">
       <div className="pb-[15%]">
         <div className="grid-cols grid w-full ">
           <div className="grid grid-cols-5 gap-3 pb-4">
@@ -132,9 +132,9 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 w-full">
+      <div className="bottom-0 w-full">
         <Footer />
       </div>
-    </FullPageBackgroundImage>
+    </div>
   )
 }
