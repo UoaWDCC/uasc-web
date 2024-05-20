@@ -5,9 +5,6 @@
 
 
 export interface paths {
-  "/signup": {
-    post: operations["Signup"];
-  };
   "/users": {
     get: operations["GetAllUsers"];
   };
@@ -32,8 +29,14 @@ export interface paths {
   "/webhook": {
     post: operations["ReceiveWebhook"];
   };
+  "/signup": {
+    post: operations["Signup"];
+  };
+  "/payment/checkout_status": {
+    get: operations["GetCheckoutSessionDetails"];
+  };
   "/payment/membership": {
-    get: operations["GetMembershipPayment"];
+    post: operations["GetMembershipPayment"];
   };
 }
 
@@ -41,12 +44,6 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    UserSignupResponse: {
-      error?: string;
-      message?: string;
-      jwtToken?: string;
-      uid?: string;
-    };
     /**
      * @description A Timestamp represents a point in time independent of any time zone or
      * calendar, represented as seconds and fractions of seconds at nanosecond
@@ -70,13 +67,11 @@ export interface components {
     };
     UserAdditionalInfo: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_freestyle: boolean;
+      does_snowboarding: boolean;
       does_racing: boolean;
       does_ski: boolean;
       gender: string;
-      emergency_name: string;
-      emergency_phone: string;
-      emergency_relation: string;
+      emergency_contact?: string;
       first_name: string;
       last_name: string;
       dietary_requirements: string;
@@ -99,13 +94,11 @@ export interface components {
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_freestyle?: boolean;
+      does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
       gender?: string;
-      emergency_name?: string;
-      emergency_phone?: string;
-      emergency_relation?: string;
+      emergency_contact?: string;
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
@@ -123,13 +116,11 @@ export interface components {
     /** @description Make all properties in T optional */
     Partial_UserAdditionalInfo_: {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_freestyle?: boolean;
+      does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
       gender?: string;
-      emergency_name?: string;
-      emergency_phone?: string;
-      emergency_relation?: string;
+      emergency_contact?: string;
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
@@ -153,12 +144,50 @@ export interface components {
     DemoteUserRequestBody: {
       uid: string;
     };
+    UserSignupResponse: {
+      error?: string;
+      message?: string;
+      jwtToken?: string;
+      uid?: string;
+    };
+    /** @description From T, pick a set of properties whose keys are in the union K */
+    "Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__": {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding: boolean;
+      does_racing: boolean;
+      does_ski: boolean;
+      gender: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning: boolean;
+      university_year: string;
+    };
+    /** @description Construct a type with the properties of T except for those in type K. */
+    "Omit_UserAdditionalInfo.stripe_id_": components["schemas"]["Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__"];
+    UserSignupBody: {
+      email: string;
+      user: components["schemas"]["Omit_UserAdditionalInfo.stripe_id_"];
+    };
     /** @enum {string} */
-    MembershipTypeValues: "uoa_returning" | "uoa_new" | "other_returning" | "other_new";
+    "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";
+    /** @description Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format. */
+    "stripe.Stripe.Metadata": {
+      [key: string]: string;
+    };
+    /** @enum {string} */
+    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipPaymentResponse: {
       error?: string;
       message?: string;
       stripeClientSecret?: string;
+      membershipType?: components["schemas"]["MembershipTypeValues"];
+    };
+    UserPaymentRequestModel: {
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
   };
@@ -179,21 +208,6 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  Signup: {
-    requestBody: {
-      content: {
-        "application/json": unknown;
-      };
-    };
-    responses: {
-      /** @description Signup successful */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserSignupResponse"];
-        };
-      };
-    };
-  };
   GetAllUsers: {
     responses: {
       /** @description Users found */
@@ -287,7 +301,48 @@ export interface operations {
       };
     };
   };
+  Signup: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserSignupBody"];
+      };
+    };
+    responses: {
+      /** @description Signup successful */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSignupResponse"];
+        };
+      };
+    };
+  };
+  GetCheckoutSessionDetails: {
+    parameters: {
+      query: {
+        sessionId: string;
+      };
+    };
+    responses: {
+      /** @description Session Fetched */
+      200: {
+        content: {
+          "application/json": {
+            metadata: components["schemas"]["stripe.Stripe.Metadata"];
+            /** Format: double */
+            pricePaid: number;
+            customer_email: string;
+            status: components["schemas"]["stripe.Stripe.Checkout.Session.Status"];
+          };
+        };
+      };
+    };
+  };
   GetMembershipPayment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserPaymentRequestModel"];
+      };
+    };
     responses: {
       /** @description Session created */
       200: {
