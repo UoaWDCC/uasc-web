@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
 
+const Background = () => {
+  return (
+    <div className="bg-mountain-background-image bg-gray-1 bg-opacity-70"></div>
+  )
+}
+
 const SignOutButton = () => {
   const navigate = useNavigate()
   const handleOnclick = () => {
@@ -54,7 +60,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="bg-mountain-background-image">
+    <Background>
       <div className="pb-[15%]">
         <div className="grid-cols grid w-full ">
           <div className="grid grid-cols-5 gap-3 pb-4">
@@ -134,6 +140,6 @@ export default function Profile() {
       <div className="bottom-0 w-full">
         <Footer />
       </div>
-    </div>
+    </Background>
   )
 }
