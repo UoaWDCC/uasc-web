@@ -61,7 +61,7 @@ export default function Profile() {
           <div className="grid-cols grid w-full ">
             <div className="grid grid-cols-5 gap-3 pb-4">
               <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid pl-4 italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
-              <div className="ml-[-40px] flex items-center justify-center text-nowrap md:ml-[200px] lg:ml-[200px]">
+              <div className="col-span-1 ml-[-40px] flex items-center justify-end text-nowrap">
                 <SignOutButton />
               </div>
             </div>
