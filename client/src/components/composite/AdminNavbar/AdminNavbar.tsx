@@ -9,7 +9,6 @@ const AdminNavbar = () => {
         </Link>
 
         <Link to="/">
-          {" "}
           <h5>bookings</h5>
         </Link>
 
