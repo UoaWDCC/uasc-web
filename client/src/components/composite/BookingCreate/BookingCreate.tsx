@@ -4,7 +4,6 @@ import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useState } from "react"
-import { Range } from "react-calendar/dist/cjs/shared/types"
 
 type DateRange = {
   startDate: Date
@@ -47,7 +46,7 @@ const CreateBookingPage = () => {
                 : undefined
             }
             onChange={(e) => {
-              const range = e as Range<Date>
+              const range = e as [Date, Date]
               setSelectedDateRange({
                 startDate: range[0],
                 endDate: range[1]
