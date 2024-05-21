@@ -10,7 +10,7 @@ const Booking = () => {
         className="bg-book-lodge-image relative z-10 flex min-h-[90vh] w-full
       flex-col items-center bg-cover bg-top bg-no-repeat py-8"
       >
-        <div className="flex w-full max-w-[800px] flex-col items-center gap-8">
+        <div className="flex w-full max-w-[850px] flex-col items-center gap-8">
           <h2 className="text-dark-blue-100 self-start italic">
             Book the lodge
           </h2>
