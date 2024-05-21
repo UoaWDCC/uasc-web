@@ -1,4 +1,4 @@
-// import { Link } from "react-router-dom"
+// import {Link} from "react-router-dom"
 
 const AdminNavbar = () => {
   return (
@@ -6,7 +6,7 @@ const AdminNavbar = () => {
       <div className="flex items-center justify-items-start gap-6 pl-[10%] uppercase">
         <h5>Members</h5>
         <h5>bookings</h5>
-        <h5>paymentss</h5>
+        <h5>payments</h5>
       </div>
     </div>
   )
