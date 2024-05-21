@@ -8,5 +8,8 @@ const meta: Meta<typeof AdminNavbar> = {
 export default meta
 type Story = StoryObj<typeof meta>
 export const DefaultAdminNavbar: Story = {
-  tags: ["autodocs"]
+  tags: ["autodocs"],
+  args: {
+    title: "Admin Navbar"
+  }
 }

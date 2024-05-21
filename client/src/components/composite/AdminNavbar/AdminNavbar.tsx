@@ -1,11 +1,7 @@
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
 
 const AdminNavbar = () => {
-  return (
-    <div>
-      <Link to="/booking"></Link>
-    </div>
-  )
+  return <div></div>
 }
 
 export default AdminNavbar
