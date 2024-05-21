@@ -15,7 +15,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <BrowserRouter>
             <AppNavbar />
-            <div className="pt-14">
+            <div className="pt-[51px]">
               <AllRoutes />
             </div>
           </BrowserRouter>

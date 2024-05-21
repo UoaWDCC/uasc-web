@@ -4,6 +4,8 @@ import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useState } from "react"
+import { useAppData } from "store/Store"
+import { SignUpNotif } from "components/generic/SignUpNotif/SignUpNotif"
 
 type DateRange = {
   startDate: Date
@@ -14,28 +16,23 @@ const formatDateForInput = (date?: Date) => {
   return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
 }
 
-const CreateBookingPage = () => {
+// TODO: Pass available dates into here as props, and onCreate handler
+export const CreateBookingPage = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
     endDate: new Date()
   })
   return (
-    <div
-      className="bg-home-ski-image relative z-10 flex min-h-[90vh] w-full
-      justify-center bg-cover bg-top bg-no-repeat"
-    >
-      <div className="bg-gray-1 pointer-events-none absolute -z-20 min-h-[90vh] w-full opacity-90" />
+    <>
       <div
         className=" grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center
-                      gap-2 md:grid-cols-2"
+                      gap-2 md:grid-cols-2 md:gap-5"
       >
-        <span className="max-w-full sm:max-w-[350px] ">
-          <BookingInfoComponent
-            pricePerNight="49"
-            priceSaturday="69"
-            priceNonMember="23"
-          />
-        </span>
+        <BookingInfoComponent
+          pricePerNight="49"
+          priceSaturday="69"
+          priceNonMember="23"
+        />
 
         <div className="flex flex-col items-center gap-2">
           <Calendar
@@ -84,8 +81,14 @@ const CreateBookingPage = () => {
           <Button variant="default">Proceed to Payment</Button>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
-export default CreateBookingPage
+export const ProtectedCreateBookingPage = () => {
+  const [{ currentUser, currentUserClaims }] = useAppData()
+  if (!currentUserClaims?.member) {
+    return <SignUpNotif signedIn={!!currentUser} />
+  }
+  return <CreateBookingPage />
+}
