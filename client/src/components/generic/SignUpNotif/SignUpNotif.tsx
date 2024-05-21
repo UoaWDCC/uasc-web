@@ -25,7 +25,7 @@ export const SignUpNotif = ({ signedIn }: ISignUpNotif) => {
         membership payment has been proccessed.
       </h4>
       <span className="flex w-full max-w-80 gap-2">
-        {signedIn && <Button onClick={() => goToLogin()}>Log in</Button>}
+        {!signedIn && <Button onClick={() => goToLogin()}>Log in</Button>}
         <Button onClick={() => goToRegister()}>
           {signedIn ? "Pay for membership" : "Sign up"}
         </Button>

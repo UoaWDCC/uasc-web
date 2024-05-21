@@ -17,7 +17,7 @@ const formatDateForInput = (date?: Date) => {
 }
 
 // TODO: Pass available dates into here as props, and onCreate handler
-export const CreateBookingPage = () => {
+export const CreateBookingSection = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
     endDate: new Date()
@@ -85,10 +85,10 @@ export const CreateBookingPage = () => {
   )
 }
 
-export const ProtectedCreateBookingPage = () => {
+export const ProtectedCreateBookingSection = () => {
   const [{ currentUser, currentUserClaims }] = useAppData()
   if (!currentUserClaims?.member) {
     return <SignUpNotif signedIn={!!currentUser} />
   }
-  return <CreateBookingPage />
+  return <CreateBookingSection />
 }
