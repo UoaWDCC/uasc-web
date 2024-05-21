@@ -25,8 +25,8 @@ export const CreateBookingSection = () => {
   return (
     <>
       <div
-        className=" grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center
-                      gap-2 md:grid-cols-2 md:gap-5"
+        className="grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center gap-2 px-1
+                      sm:px-0 md:grid-cols-2"
       >
         <BookingInfoComponent
           pricePerNight="49"
@@ -34,7 +34,7 @@ export const CreateBookingSection = () => {
           priceNonMember="23"
         />
 
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex max-w-[381px] flex-col items-center gap-2">
           <Calendar
             selectRange
             value={
