@@ -21,10 +21,10 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
           <p className="font-bold">date joined</p>
         </div>
 
-        <table className="grid w-full grid-cols-5 border border-black">
-          <tbody className="">
+        <table className="grid w-full grid-cols-5 border border-black pl-4">
+          <tbody className="grid gap-5">
             {data.map((obj, index) => (
-              <tr key={index} className="border-red border ">
+              <tr key={index} className="border-red border">
                 {dataKeys.map((key) => (
                   <td className="" key={key}>
                     {obj[key] || ""}
