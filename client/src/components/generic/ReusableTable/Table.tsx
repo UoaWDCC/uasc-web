@@ -13,7 +13,7 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
 
   return (
     <div>
-      <div className="border-dark-blue-100 h-[32px] border uppercase grid grid-cols-7">
+      <div className="border-dark-blue-100 grid h-[32px] grid-cols-7 border uppercase">
         name email status membership type date joined
       </div>
       <div className="grid h-[500px] w-full grid-cols-3 border border-black">
