@@ -16,6 +16,26 @@ const formatDateForInput = (date?: Date) => {
   return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
 }
 
+// WARNING: Exported for testing purposes only
+export const handleDateRangeInputChange = (
+  startDate: Date,
+  endDate: Date,
+  setDateFunction: React.Dispatch<React.SetStateAction<any>>
+) => {
+  if (endDate < startDate) {
+    // Swap the dates if the end date is before the start date
+    setDateFunction({
+      startDate: endDate,
+      endDate: startDate
+    })
+  } else {
+    setDateFunction({
+      startDate,
+      endDate
+    })
+  }
+}
+
 // TODO: Pass available dates into here as props, and onCreate handler
 export const CreateBookingSection = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
@@ -25,21 +45,6 @@ export const CreateBookingSection = () => {
 
   const { startDate: currentStartDate, endDate: currentEndDate } =
     selectedDateRange
-
-  const handleDateRangeInputChange = (startDate: Date, endDate: Date) => {
-    if (endDate < startDate) {
-      // Swap the dates if the end date is before the start date
-      setSelectedDateRange({
-        startDate: endDate,
-        endDate: startDate
-      })
-    } else {
-      setSelectedDateRange({
-        startDate,
-        endDate
-      })
-    }
-  }
 
   return (
     <>
@@ -75,10 +80,12 @@ export const CreateBookingSection = () => {
               label="From"
               type="date"
               value={formatDateForInput(selectedDateRange.startDate)}
+              data-testid="start-date-picker"
               onChange={(e) =>
                 handleDateRangeInputChange(
                   e.target.valueAsDate || new Date(),
-                  currentEndDate
+                  currentEndDate,
+                  setSelectedDateRange
                 )
               }
             />
@@ -88,11 +95,13 @@ export const CreateBookingSection = () => {
             <TextInput
               label="To"
               type="date"
+              data-testid="end-date-picker"
               value={formatDateForInput(selectedDateRange.endDate)}
               onChange={(e) =>
                 handleDateRangeInputChange(
                   currentStartDate,
-                  e.target.valueAsDate || new Date()
+                  e.target.valueAsDate || new Date(),
+                  setSelectedDateRange
                 )
               }
             />
