@@ -35,6 +35,7 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
           ))}
         </tbody>
       </table>
+      <div className="border-gray-2 h-11 border"></div>
     </div>
   )
 }
