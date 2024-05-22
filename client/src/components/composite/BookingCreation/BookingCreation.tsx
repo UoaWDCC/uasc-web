@@ -22,6 +22,25 @@ export const CreateBookingSection = () => {
     startDate: new Date(),
     endDate: new Date()
   })
+
+  const { startDate: currentStartDate, endDate: currentEndDate } =
+    selectedDateRange
+
+  const handleDateRangeInputChange = (startDate: Date, endDate: Date) => {
+    if (endDate < startDate) {
+      // Swap the dates if the end date is before the start date
+      setSelectedDateRange({
+        startDate: endDate,
+        endDate: startDate
+      })
+    } else {
+      setSelectedDateRange({
+        startDate,
+        endDate
+      })
+    }
+  }
+
   return (
     <>
       <div
@@ -38,8 +57,8 @@ export const CreateBookingSection = () => {
           <Calendar
             selectRange
             value={
-              selectedDateRange.startDate && selectedDateRange.endDate
-                ? [selectedDateRange.startDate, selectedDateRange.endDate]
+              currentStartDate && currentEndDate
+                ? [currentStartDate, currentEndDate]
                 : undefined
             }
             onChange={(e) => {
@@ -57,10 +76,10 @@ export const CreateBookingSection = () => {
               type="date"
               value={formatDateForInput(selectedDateRange.startDate)}
               onChange={(e) =>
-                setSelectedDateRange({
-                  ...selectedDateRange,
-                  startDate: e.target.valueAsDate || new Date()
-                })
+                handleDateRangeInputChange(
+                  e.target.valueAsDate || new Date(),
+                  currentEndDate
+                )
               }
             />
             <span className="mt-5 w-8">
@@ -71,10 +90,10 @@ export const CreateBookingSection = () => {
               type="date"
               value={formatDateForInput(selectedDateRange.endDate)}
               onChange={(e) =>
-                setSelectedDateRange({
-                  ...selectedDateRange,
-                  endDate: e.target.valueAsDate || new Date()
-                })
+                handleDateRangeInputChange(
+                  currentStartDate,
+                  e.target.valueAsDate || new Date()
+                )
               }
             />
           </span>
