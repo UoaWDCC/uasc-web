@@ -17,14 +17,14 @@ export const FullTable: Story = {
         Name: "John Doe",
         Email: "john.doe@example.com",
         Status: "Member",
-        "Membership type": "UOA student",
+        "Membership type": "UOA Student",
         "Date Joined": "12-7-22"
       },
       {
         Name: "Ray Zhao",
-        Email: "john.doe@example.com",
-        Status: "Member",
-        "Membership type": "UOA student",
+        Email: "ray.zhao@example.com",
+        Status: "Superior Controller",
+        "Membership type": "UOA Student",
         "Date Joined": "12-7-22"
       }
     ]
