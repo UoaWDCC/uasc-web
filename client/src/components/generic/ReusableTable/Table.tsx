@@ -12,7 +12,7 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
   })
 
   return (
-    <div className="w-full h-screen border border-gray-3 rounded-md">
+    <div className="border-gray-3 h-screen w-full rounded-md border">
       <div>
         <div className="border-dark-blue-100 text-gray-3 grid h-[32px] w-full grid-cols-5 border pl-4 uppercase">
           <p className="font-bold">name</p>
