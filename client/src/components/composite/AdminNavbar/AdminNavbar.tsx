@@ -8,7 +8,7 @@ const AdminNavbar = () => {
           <h5>Members</h5>
         </Link>
 
-        <Link to="/booking">
+        <Link to="/bookings">
           <h5>bookings</h5>
         </Link>
 
