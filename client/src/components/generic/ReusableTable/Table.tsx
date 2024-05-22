@@ -13,29 +13,26 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
 
   return (
     <div>
-      <div className="border-dark-blue-100 text-gray-3 grid h-[32px]  w-full grid-cols-5 border pl-4 uppercase">
+      <div className="border-dark-blue-100 text-gray-3 grid h-[32px] w-full grid-cols-5 border pl-4 uppercase">
         <p className="font-bold">name</p>
         <p className="font-bold">email</p> <p className="font-bold">status</p>{" "}
         <p className="font-bold">membership type</p>
         <p className="font-bold">date joined</p>
       </div>
-      <div className="grid h-[500px] w-full grid-cols-7 border border-black">
-        <div className="flex pl-4 pr-4">
-          <table className="">
-            <tbody>
-              {data.map((obj, index) => (
-                <tr key={index}>
-                  {dataKeys.map((key) => (
-                    <td className="pr-3" key={key}>
-                      {obj[key] || ""}
-                    </td>
-                  ))}
-                </tr>
+
+      <table className="grid grid-cols-5 border border-black">
+        <tbody className="">
+          {data.map((obj, index) => (
+            <tr key={index} className="border-red border">
+              {dataKeys.map((key) => (
+                <td className="grid-cols-1" key={key}>
+                  {obj[key] || ""}
+                </td>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
