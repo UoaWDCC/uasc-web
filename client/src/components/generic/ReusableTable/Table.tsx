@@ -23,11 +23,11 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="pt-4">
           {data.map((obj, index) => (
             <tr key={index}>
               {dataKeys.map((key) => (
-                <td className="pl-4" key={key}>
+                <td className="pb-4 pl-4" key={key}>
                   {obj[key] || ""}
                 </td>
               ))}
