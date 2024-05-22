@@ -26,6 +26,13 @@ export const FullTable: Story = {
         Status: "Superior Controller",
         "Membership type": "UOA Student",
         "Date Joined": "12-7-22"
+      },
+      {
+        Name: "Johnathan Doeshin",
+        Email: "jondoe@gmail.com",
+        Status: "Member",
+        "Membership type": "UOA Student",
+        "Date Joined": "12-7-22"
       }
     ]
   }
