@@ -12,27 +12,29 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
   })
 
   return (
-    <div>
-      <div className="border-dark-blue-100 text-gray-3 grid h-[32px] w-full grid-cols-5 border pl-4 uppercase">
-        <p className="font-bold">name</p>
-        <p className="font-bold">email</p> <p className="font-bold">status</p>{" "}
-        <p className="font-bold">membership type</p>
-        <p className="font-bold">date joined</p>
-      </div>
+    <div className="w-full h-screen border border-gray-3 rounded-md">
+      <div>
+        <div className="border-dark-blue-100 text-gray-3 grid h-[32px] w-full grid-cols-5 border pl-4 uppercase">
+          <p className="font-bold">name</p>
+          <p className="font-bold">email</p> <p className="font-bold">status</p>{" "}
+          <p className="font-bold">membership type</p>
+          <p className="font-bold">date joined</p>
+        </div>
 
-      <table className="grid grid-cols-5 border border-black">
-        <tbody className="">
-          {data.map((obj, index) => (
-            <tr key={index} className="border-red border">
-              {dataKeys.map((key) => (
-                <td className="grid-cols-1" key={key}>
-                  {obj[key] || ""}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <table className="grid w-full grid-cols-5 border border-black">
+          <tbody className="">
+            {data.map((obj, index) => (
+              <tr key={index} className="border-red border ">
+                {dataKeys.map((key) => (
+                  <td className="" key={key}>
+                    {obj[key] || ""}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
