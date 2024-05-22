@@ -14,16 +14,16 @@ export const FullTable: Story = {
   args: {
     data: [
       {
-        "Name": "John Doe",
-        "Email": "john.doe@example.com",
-        "Status": "Member",
+        Name: "John Doe",
+        Email: "john.doe@example.com",
+        Status: "Member",
         "Membership type": "UOA student",
         "Date Joined": "12-7-22"
       },
       {
-        "Name": "Ray Zhao",
-        "Email": "john.doe@example.com",
-        "Status": "Member",
+        Name: "Ray Zhao",
+        Email: "john.doe@example.com",
+        Status: "Member",
         "Membership type": "UOA student",
         "Date Joined": "12-7-22"
       }
