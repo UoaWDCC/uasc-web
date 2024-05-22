@@ -12,11 +12,13 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
   })
 
   return (
-    <table className="w-full border border-black">
+    <table className="h-full w-full border border-black">
       <thead>
         <tr>
           {dataKeys.map((key) => (
-            <th key={key} className="uppercase">{key}</th>
+            <th key={key} className="text-gray-2 text-left uppercase">
+              {key}
+            </th>
           ))}
         </tr>
       </thead>

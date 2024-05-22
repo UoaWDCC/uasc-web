@@ -14,22 +14,18 @@ export const FullTable: Story = {
   args: {
     data: [
       {
-        id: 1,
-        firstName: "John",
-        lastName: "Doe",
-        email: "john.doe@example.com",
-        age: 30,
-        gender: "Male",
-        role: "Admin"
+        "Name": "John Doe",
+        "Email": "john.doe@example.com",
+        "Status": "Member",
+        "Membership type": "UOA student",
+        "Date Joined": "12-7-22"
       },
       {
-        id: 2,
-        firstName: "Jane",
-        lastName: "Smith",
-        email: "jane.smith@example.com",
-        age: 25,
-        gender: "Female",
-        role: "User"
+        "Name": "Ray Zhao",
+        "Email": "john.doe@example.com",
+        "Status": "Member",
+        "Membership type": "UOA student",
+        "Date Joined": "12-7-22"
       }
     ]
   }
