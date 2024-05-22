@@ -13,13 +13,10 @@ const Table = <T extends Record<string, any>>({ data }: Props<T>) => {
 
   return (
     <div>
-      <div className="border-dark-blue-100 text-gray-3 grid h-[32px] w-full grid-cols-8 border uppercase">
-        <div className="font-bold">
-          <p>name</p>
-          <p>email</p> <p>status</p> <p>membership</p>
-          <p>type</p>
-          <p>date joined</p>
-        </div>
+      <div className="border-dark-blue-100 text-gray-3 grid h-[32px] w-full grid-cols-8 border pl-4 uppercase">
+        <p>name</p>
+        <p>email</p> <p>status</p> <p>membership type</p>
+        <p>date joined</p>
       </div>
       <div className="grid h-[500px] w-full grid-cols-3 border border-black">
         <div className="flex pl-4 pr-4">
