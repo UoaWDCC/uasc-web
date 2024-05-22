@@ -10,6 +10,7 @@ import {
   useMembershipPricesQuery
 } from "services/AppData/AppDataQueries"
 import { ACCOUNT_SETUP_ROUTE } from "../utils/RouteNames"
+import { useMembershipPaymentDetails } from "store/MembershipPayment"
 
 type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 
@@ -18,7 +19,11 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const [{ currentUser }] = useAppData()
   const { data: prices } = useMembershipPricesQuery()
   const { data } = useBankPaymentDetailsQuery()
-  const { data: userMembershipDetails } = useMembershipClientSecretQuery()
+
+  const [{ membershipType }] = useMembershipPaymentDetails()
+
+  const { data: userMembershipDetails } =
+    useMembershipClientSecretQuery(membershipType)
 
   /**
    * Use data fetched to find the correct price
@@ -73,10 +78,13 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
 
 const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const navigate = useNavigate()
-  const { data, error } = useMembershipClientSecretQuery()
+  const [{ membershipType }] = useMembershipPaymentDetails()
+
+  const { data, isLoading, isError } =
+    useMembershipClientSecretQuery(membershipType)
+
   return (
     <>
-      {error && <p>{error.message}</p>}
       {data ? (
         <>
           {data.message && <p>{data.message}</p>}
@@ -85,12 +93,19 @@ const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
             clientSecret={data?.stripeClientSecret as string}
           />
         </>
-      ) : (
-        <>
-          {/* TODO: add skeleton or fallback */}
-          Loading
-        </>
-      )}
+      ) : null}
+      <div className="flex flex-col">
+        {/* TODO: add skeleton or fallback */}
+        {isLoading && <h5>Loading</h5>}
+        {isError && <h5>Error</h5>}
+        {isError && membershipType === undefined && (
+          <h5>
+            You may have not selected a membership type. Click "Back" to double
+            check.
+          </h5>
+        )}
+      </div>
+
       <h5
         className="text-dark-blue-100 mb-2 cursor-pointer font-bold uppercase"
         onClick={() => wantsBankTransfer(true)}
@@ -132,29 +147,77 @@ export const PaymentSection = () => {
 }
 
 export const PaymentInformationSection = () => {
-  const { data } = useMembershipClientSecretQuery()
   const { data: prices } = useMembershipPricesQuery()
+  const [{ membershipType }, { setMembershipType }] =
+    useMembershipPaymentDetails()
+
+  const { data: userMembershipDetails } =
+    useMembershipClientSecretQuery(undefined)
+
+  const existingMembershipType = userMembershipDetails?.membershipType
+
+  if (existingMembershipType) {
+    setMembershipType(existingMembershipType)
+  }
+
   return (
     <>
-      <div className="flex h-fit flex-col gap-2 md:-ml-16 md:flex-row">
-        {prices ? (
-          prices.map((price) => {
-            return (
-              <PricingCard
-                key={price.type}
-                title={price.title}
-                priceString={price.priceString}
-                selected={data && price.type === data.membershipType}
-                extraInfo={price.extraInfo}
-                discountedPriceString=""
-              />
-            )
-          })
+      <div className="flex flex-col">
+        <div className="flex h-fit flex-col gap-2 md:-ml-16 md:flex-row">
+          {prices ? (
+            prices.map((price) => {
+              if (existingMembershipType) {
+                return (
+                  <>
+                    {price.type === existingMembershipType && (
+                      <span
+                        key={price.type}
+                        className="w-full justify-self-center md:ml-16"
+                      >
+                        <PricingCard
+                          title={price.title}
+                          priceString={price.priceString}
+                          selected={price.type === membershipType}
+                          extraInfo={price.extraInfo}
+                          discountedPriceString=""
+                        />
+                      </span>
+                    )}
+                  </>
+                )
+              }
+              return (
+                <>
+                  <PricingCard
+                    key={price.type}
+                    title={price.title}
+                    priceString={price.priceString}
+                    selected={price.type === membershipType}
+                    extraInfo={price.extraInfo}
+                    discountedPriceString=""
+                    onClick={() => setMembershipType(price.type)}
+                  />
+                </>
+              )
+            })
+          ) : (
+            <>
+              {/* TODO: add skeleton or fallback */}
+              <h5>Loading</h5>
+            </>
+          )}
+        </div>
+        {existingMembershipType ? (
+          <h5>
+            We are using the previously started membership type. You will get
+            the chance to reselect 30 mins after you first started the checkout
+            session
+          </h5>
         ) : (
-          <>
-            {/* TODO: add skeleton or fallback */}
-            Loading
-          </>
+          <h5 className="font-bold uppercase">
+            Please confirm your membership type before hitting Next, you will
+            only be able to select a new one after 30 minutes
+          </h5>
         )}
       </div>
     </>
