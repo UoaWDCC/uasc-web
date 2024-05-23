@@ -12,10 +12,10 @@ export enum CheckoutTypeValues {
  */
 export const MEMBERSHIP_TYPE_KEY = "membership_type"
 export enum MembershipTypeValues {
-  UoaReturning = "uoa_returning",
-  UoaNew = "uoa_new",
-  OtherReturning = "other_returning",
-  OtherNew = "other_new"
+  UoaStudent = "uoa_student",
+  NonUoaStudent = "non_uoa_student",
+  ReturningMember = "returning_member",
+  NewNonStudent = "new_non_student"
 }
 
 /**

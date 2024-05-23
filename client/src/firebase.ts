@@ -5,6 +5,7 @@ import { ParsedToken, getAuth } from "firebase/auth"
 import { UserClaims } from "models/User"
 import fetchClient, { setToken } from "services/OpenApiFetchClient"
 import { StoreInstance } from "store/Store"
+import { MembershipPaymentStore } from "store/MembershipPayment"
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -25,6 +26,8 @@ if (import.meta.env.VITE_NODE_ENV !== "production") {
 }
 
 auth.onIdTokenChanged(async (user) => {
+  MembershipPaymentStore.actions.resetMembershipType()
+
   if (user === null) {
     // suggests a log out
     StoreInstance.actions.resetCurrentUserState()
@@ -53,7 +56,6 @@ auth.onIdTokenChanged(async (user) => {
       `Failed to fetch user data during auth token change: ${error}`
     )
   }
-
   StoreInstance.actions.setCurrentUser(user, userData, claims as UserClaims)
 })
 

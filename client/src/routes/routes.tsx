@@ -7,7 +7,7 @@ import Contact from "pages/Contact"
 import Events from "pages/Events"
 import Home from "pages/Home/Home"
 import Login from "pages/Login/Login"
-import Profile from "pages/Profile"
+import Profile from "pages/Profile/Profile"
 import Register from "pages/Register/Register"
 import Thanks from "pages/Thanks"
 import { Route, Routes } from "react-router-dom"
@@ -22,7 +22,7 @@ export const AllRoutes = () => (
       <Route path="register/*" element={<Register />} />
       <Route path="login/*" element={<Login />} />
       <Route path="checkout" element={<Checkout />} />
-      <Route path="booking" element={<Booking />} />
+      <Route path="bookings/*" element={<Booking />} />
       <Route path="profile" element={<Profile />} />
       <Route path="admin" element={<Admin />}>
         <Route path="bookings" element={<AdminBookingDetails />} />

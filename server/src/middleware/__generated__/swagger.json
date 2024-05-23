@@ -413,10 +413,10 @@
 			},
 			"MembershipTypeValues": {
 				"enum": [
-					"uoa_returning",
-					"uoa_new",
-					"other_returning",
-					"other_new"
+					"uoa_student",
+					"non_uoa_student",
+					"returning_member",
+					"new_non_student"
 				],
 				"type": "string"
 			},
@@ -444,9 +444,6 @@
 						"$ref": "#/components/schemas/MembershipTypeValues"
 					}
 				},
-				"required": [
-					"membershipType"
-				],
 				"type": "object",
 				"additionalProperties": false
 			}

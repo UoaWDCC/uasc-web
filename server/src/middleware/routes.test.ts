@@ -159,7 +159,7 @@ describe("Endpoints", () => {
           .post("/payment/membership")
           .set("Authorization", `Bearer ${memberToken}`)
           .send({
-            membershipType: MembershipTypeValues.UoaNew
+            membershipType: MembershipTypeValues.UoaStudent
           })
 
         expect(res.status).toEqual(409)
@@ -171,7 +171,7 @@ describe("Endpoints", () => {
           .post("/payment/membership")
           .set("Authorization", `Bearer ${guestToken}`)
           .send({
-            membershipType: MembershipTypeValues.UoaNew
+            membershipType: MembershipTypeValues.NewNonStudent
           })
         expect(res.status).toEqual(200)
 
@@ -182,7 +182,7 @@ describe("Endpoints", () => {
           .post("/payment/membership")
           .set("Authorization", `Bearer ${adminToken}`)
           .send({
-            membershipType: MembershipTypeValues.UoaReturning
+            membershipType: MembershipTypeValues.UoaStudent
           })
         expect(res.status).toEqual(200)
       })
