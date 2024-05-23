@@ -1,13 +1,4 @@
 /**
- * To be used when creating checkout sessions
- */
-export const CHECKOUT_TYPE_KEY = "checkout_type"
-export enum CheckoutTypeValues {
-  MEMBERSHIP = "membership",
-  BOOKING = "booking"
-}
-
-/**
  * For membership products
  */
 export const MEMBERSHIP_TYPE_KEY = "membership_type"
@@ -17,11 +8,6 @@ export enum MembershipTypeValues {
   ReturningMember = "returning_member",
   NewNonStudent = "new_non_student"
 }
-
-/**
- * For booking checkouts
- */
-export const BOOKING_SLOT_KEY = "booking_slot"
 
 /**
  * For customer objects

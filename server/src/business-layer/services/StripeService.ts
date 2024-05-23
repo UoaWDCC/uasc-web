@@ -1,13 +1,17 @@
 import {
-  BOOKING_SLOT_KEY,
-  CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues,
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import Stripe from "stripe"
 import AuthService from "./AuthService"
 import BookingDataService from "data-layer/services/BookingDataService"
+import {
+  CheckoutTypeValues,
+  CHECKOUT_TYPE_KEY,
+  BOOKING_SLOTS_KEY
+} from "business-layer/utils/StripeSessionMetadata"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
+import { Timestamp } from "firebase-admin/firestore"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -290,18 +294,34 @@ export default class StripeService {
     uid: string,
     session: Stripe.Checkout.Session
   ) {
-    if (!(BOOKING_SLOT_KEY in session.metadata)) {
+    if (!(BOOKING_SLOTS_KEY in session.metadata)) {
       throw new Error(
         `Booking session '${session.id}' from user '${uid}' did not contain a BOOKING_SLOT_KEY`
       )
     }
-    const booking_slot_id = session.metadata[BOOKING_SLOT_KEY]
+    const bookingSlotsJson = session.metadata[BOOKING_SLOTS_KEY]
+    const bookingSlots = JSON.parse(bookingSlotsJson) as Array<string>
 
     const bookingDataService = new BookingDataService()
-    await bookingDataService.createBooking({
-      booking_slot_id,
-      stripe_payment_id: session.id,
-      user_id: uid
-    })
+    const bookingSlotService = new BookingSlotService()
+
+    await Promise.all(
+      bookingSlots.map(async (slotDateStr) => {
+        const bookingSlotDate = Math.floor(
+          new Date(slotDateStr).getTime() / 1000
+        )
+
+        const bookingSlotId = (
+          await bookingSlotService.getBookingSlotByDate(
+            new Timestamp(bookingSlotDate, 0)
+          )
+        )[0].id
+        await bookingDataService.createBooking({
+          booking_slot_id: bookingSlotId,
+          stripe_payment_id: session.id,
+          user_id: uid
+        })
+      })
+    )
   }
 }
