@@ -62,11 +62,6 @@ export interface UserAdditionalInfo {
 
 export interface BookingSlot {
   /**
-   * The Stripe [product ID](https://docs.stripe.com/api/products) that must get purchased to pay for this booking.
-   * @example "prod_NWjs8kKbJWmuuc"
-   */
-  stripe_product_id: string
-  /**
    * An optional description for this date
    * @example Beginners Weekend
    */
