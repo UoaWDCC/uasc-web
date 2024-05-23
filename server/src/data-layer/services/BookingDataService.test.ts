@@ -59,8 +59,7 @@ describe("BookingDataService", () => {
       await new BookingDataService().getBookingsByStripeSessionId("stripeID1") // test for stripe_payment_id input
 
     expect(bookingsBy_SPID).not.toBe(undefined)
-    expect(bookingsBy_SPID.length).toBe(1)
-    expect(bookingsBy_SPID[0]).toEqual({
+    expect(bookingsBy_SPID).toEqual({
       user_id: "Person1",
       booking_slot_id: "booking1",
       stripe_payment_id: "stripeID1"

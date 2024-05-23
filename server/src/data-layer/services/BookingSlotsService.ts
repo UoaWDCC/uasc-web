@@ -8,15 +8,6 @@ export default class BookingSlotService {
     return await FirestoreCollections.bookingSlots.add(bookingSlotData)
   }
 
-  // Read
-  public async getBookingSlotsStripeProductId(productId: string) {
-    const result = await FirestoreCollections.bookingSlots
-      .where("stripe_product_id", "==", productId)
-      .get()
-    const stripeProductIdArray = result.docs.map((docs) => docs.data())
-    return stripeProductIdArray
-  }
-
   public async getBookingSlotByDate(date: Timestamp): Promise<
     Array<
       BookingSlot & {
