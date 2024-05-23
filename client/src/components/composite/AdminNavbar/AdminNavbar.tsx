@@ -7,7 +7,12 @@ const AdminNavbar = () => {
     <div className="flex h-[46px] w-full overflow-hidden border border-black">
       <div className="flex items-center justify-items-start gap-6 pl-[10%] uppercase">
         <Link to="/members">
-          <h5>Members</h5>
+          <h5
+            className={clicked ? "text-light-blue-100" : "text-black"}
+            onClick={() => setClicked(!clicked)}
+          >
+            Members
+          </h5>
         </Link>
 
         <Link to="/bookings">
@@ -21,7 +26,6 @@ const AdminNavbar = () => {
         <div
           className={`ml-auto block h-[20px] w-[24px] cursor-pointer md:hidden
           ${clicked ? "stroke-light-blue-100" : "stroke-black"} " pt-[5px]`}
-          onClick={() => setClicked(!clicked)}
         ></div>
       </div>
     </div>
