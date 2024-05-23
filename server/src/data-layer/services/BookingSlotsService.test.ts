@@ -11,21 +11,18 @@ const timestamp4 = Timestamp.fromDate(new Date(2024, 4, 11))
 
 const bookingSlotData: BookingSlot = {
   date: timestamp,
-  stripe_product_id: "product_id_value1",
   description: "booking_slot_description",
   max_bookings: 0
 }
 
 const bookingSlotData2: BookingSlot = {
   date: timestamp2,
-  stripe_product_id: "product_id_value1",
   description: "booking_slot_description2",
   max_bookings: 20
 }
 
 const bookingSlotData3: BookingSlot = {
   date: timestamp3,
-  stripe_product_id: "product_id_value3",
   description: "booking_slot_description3",
   max_bookings: 10
 }
