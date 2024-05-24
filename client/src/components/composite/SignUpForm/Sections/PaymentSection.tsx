@@ -28,9 +28,9 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
     <>
       {/* TODO: update instructions to highlight correct procedure */}
 
-      <p>1. Transfer payment amount to bank number:</p>
+      <h4>1. Transfer payment amount to bank number:</h4>
       <p>06-0103-0176295-00</p>
-      <p>
+      <h4>
         2. Send a screenshot of the transfer to mentioning your name and email.
         <a
           className="text-light-blue-100 font-bold"
@@ -40,7 +40,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         </a>{" "}
         mentioning your name and email{" "}
         <strong>{currentUser?.email || ""}</strong>
-      </p>
+      </h4>
 
       <p>
         Note you will not be able to make any bookings until your payment has
