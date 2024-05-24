@@ -35,17 +35,22 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         </div>
       </div>
 
-      <h4>
-        2. Send a screenshot of the transfer to{" "}
-        <a
-          className="text-light-blue-100 font-semibold"
-          href={`mailto: ${data?.email}`}
-        >
-          {data?.email}
-        </a>{" "}
-        mentioning your name and email.{" "}
-        <strong>{currentUser?.email || ""}</strong>
-      </h4>
+      <div>
+        <div className="flex gap-1">
+          <h4>
+            2. Send a screenshot of the transfer to
+            <strong>{currentUser?.email || ""}</strong>
+          </h4>
+          <a
+            className="text-light-blue-100 text-h4 font-semibold"
+            href={`mailto: ${data?.email}`}
+          >
+            {data?.email}
+          </a>{" "}
+        </div>
+        <h4> mentioning your name and email. </h4>
+      </div>
+
       <div className="flex w-[80%] flex-col gap-4 pt-4">
         <p className="text-gray-3">
           Note you will not be able to make any bookings until your payment has
