@@ -52,11 +52,13 @@ export const CreateBookingSection = () => {
         className="grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center gap-2 px-1
                       sm:px-0 md:grid-cols-2"
       >
-        <BookingInfoComponent
-          pricePerNight="49"
-          priceSaturday="69"
-          priceNonMember="23"
-        />
+        <div className="h-full max-h-[475px] self-start">
+          <BookingInfoComponent
+            pricePerNight="49"
+            priceSaturday="69"
+            priceNonMember="23"
+          />
+        </div>
 
         <div className="flex max-w-[381px] flex-col items-center gap-2">
           <Calendar
@@ -89,7 +91,7 @@ export const CreateBookingSection = () => {
                 )
               }
             />
-            <span className="mt-5 w-8">
+            <span className="mt-5 w-6">
               <LongRightArrow />
             </span>
             <TextInput
