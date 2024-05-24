@@ -35,13 +35,11 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   return (
     <>
       {/* TODO: update instructions to highlight correct procedure */}
+
+      <p>1. Transfer payment amount to bank number:</p>
+      <p>06-0103-0176295-00</p>
       <p>
-        <p>1. Transfer payment amount to bank number:</p>
-        <p>06-0103-0176295-00</p>
-        1. Transfer <strong>{requiredPrice?.priceString}</strong> (price for{" "}
-        {requiredPrice?.title}) to the bank account{" "}
-        <strong>{data?.bankAccount}</strong>, and send a screenshot of the
-        transfer to{" "}
+        2. Send a screenshot of the transfer to mentioning your name and email.
         <a
           className="text-light-blue-100 font-bold"
           href={`mailto: ${data?.email}`}
