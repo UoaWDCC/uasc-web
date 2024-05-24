@@ -1,7 +1,15 @@
 import { WrappedTab } from "../Navbar/utils/WrappedTab"
-
+import { useNavigate } from "react-router-dom"
 const Exit = () => {
-  return <h5 className="text-red uppercase">exit</h5>
+  const navigate = useNavigate()
+  const handleOnclick = () => {
+    navigate("/login")
+  }
+  return (
+    <h5 className="text-red uppercase" onClick={handleOnclick}>
+      exit
+    </h5>
+  )
 }
 
 const AdminNavbar = () => {
