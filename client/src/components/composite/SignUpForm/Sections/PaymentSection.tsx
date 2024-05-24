@@ -17,20 +17,12 @@ type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const navigate = useNavigate()
   const [{ currentUser }] = useAppData()
-  const { data: prices } = useMembershipPricesQuery()
+
   const { data } = useBankPaymentDetailsQuery()
-
-  const [{ membershipType }] = useMembershipPaymentDetails()
-
-  const { data: userMembershipDetails } =
-    useMembershipClientSecretQuery(membershipType)
 
   /**
    * Use data fetched to find the correct price
    */
-  const requiredPrice = prices?.find(
-    (price) => price.type === userMembershipDetails?.membershipType
-  )
 
   return (
     <>
