@@ -57,7 +57,6 @@ export default function Profile() {
   return (
     <div className="relative min-h-screen">
       <ResponsiveBackgroundImage>
-        
         <div className="pb-[15%]">
           <div className="grid-cols grid w-full ">
             <div className="grid grid-cols-5 gap-3 pb-4">
