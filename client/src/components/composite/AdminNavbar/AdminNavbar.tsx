@@ -6,9 +6,9 @@ const Exit = () => {
     navigate("/login")
   }
   return (
-    <h5 className="text-red uppercase" onClick={handleOnclick}>
-      exit
-    </h5>
+    <button onClick={handleOnclick}>
+      <h5 className="text-red uppercase">exit</h5>
+    </button>
   )
 }
 
