@@ -35,20 +35,21 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         </div>
       </div>
 
-      <div>
-        <div className="flex gap-1">
+      <div className="flex flex-col">
+        <div className="flex gap-4">
+          <h4>2.</h4>
           <h4>
-            2. Send a screenshot of the transfer to
-            <strong>{currentUser?.email || ""}</strong>
+            Send a screenshot of the transfer to
+            <strong>{currentUser?.email || ""}</strong>{" "}
+            <a
+              className="text-light-blue-100 font-semibold"
+              href={`mailto: ${data?.email}`}
+            >
+              {data?.email}
+            </a>{" "}
           </h4>
-          <a
-            className="text-light-blue-100 text-h4 font-semibold"
-            href={`mailto: ${data?.email}`}
-          >
-            {data?.email}
-          </a>{" "}
         </div>
-        <h4> mentioning your name and email. </h4>
+        <h4 className="pl-7"> mentioning your name and email. </h4>
       </div>
 
       <div className="flex w-[80%] flex-col gap-4 pt-4">
