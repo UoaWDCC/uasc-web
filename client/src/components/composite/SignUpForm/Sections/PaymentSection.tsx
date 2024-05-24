@@ -28,8 +28,8 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
     <>
       {/* TODO: update instructions to highlight correct procedure */}
 
-      <h4>1. Transfer payment amount to bank number:</h4>
-      <h4 className="text-dark-blue-100 pl-5">06-0103-0176295-00</h4>
+      <h4 className="">1. Transfer payment amount to bank number:</h4>
+      <h4 className="text-dark-blue-100 pl-5 ">06-0103-0176295-00</h4>
       <h4>
         2. Send a screenshot of the transfer to{" "}
         <a
@@ -41,15 +41,17 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         mentioning your name and email.{" "}
         <strong>{currentUser?.email || ""}</strong>
       </h4>
+      <div className="flex w-[80%] flex-col gap-4 pt-4">
+        <p className="text-gray-3">
+          Note you will not be able to make any bookings until your payment has
+          been confirmed by UASC.
+        </p>
+        <p className="text-gray-3">
+          You will still have access to your account, and are able to set your
+          login details as well as edit your personal information
+        </p>
+      </div>
 
-      <p className="text-gray-3">
-        Note you will not be able to make any bookings until your payment has
-        been confirmed by UASC.
-      </p>
-      <p className="text-gray-3">
-        You will still have access to your account, and are able to set your
-        login details as well as edit your personal information
-      </p>
       <h4 className="font-bold">Click on an action</h4>
       <h5
         className="text-dark-blue-100  cursor-pointer font-bold uppercase"
