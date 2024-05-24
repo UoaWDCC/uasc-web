@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
-import AdminNavbar from "components/composite/AdminNavbar/AdminNavbar"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
@@ -58,7 +57,7 @@ export default function Profile() {
   return (
     <div className="relative min-h-screen">
       <ResponsiveBackgroundImage>
-        <AdminNavbar/>
+        
         <div className="pb-[15%]">
           <div className="grid-cols grid w-full ">
             <div className="grid grid-cols-5 gap-3 pb-4">
