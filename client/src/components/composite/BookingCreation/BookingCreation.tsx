@@ -36,7 +36,7 @@ export const handleDateRangeInputChange = (
   }
 }
 
-// TODO: Pass available dates into here as props, and onCreate handler
+// TODO: Pass available dates into here as props, and onBookingCreated handler
 export const CreateBookingSection = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
@@ -54,9 +54,9 @@ export const CreateBookingSection = () => {
       >
         <div className="h-full max-h-[475px] self-start">
           <BookingInfoComponent
-            pricePerNight="49"
-            priceSaturday="69"
-            priceNonMember="23"
+            pricePerNight="40"
+            priceSaturday="60"
+            priceNonMember="60"
           />
         </div>
 
