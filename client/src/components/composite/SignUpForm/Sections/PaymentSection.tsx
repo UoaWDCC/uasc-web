@@ -42,11 +42,11 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         <strong>{currentUser?.email || ""}</strong>
       </h4>
 
-      <p>
+      <p className="text-gray-3">
         Note you will not be able to make any bookings until your payment has
         been confirmed by UASC.
       </p>
-      <p>
+      <p className="text-gray-3">
         You will still have access to your account, and are able to set your
         login details as well as edit your personal information
       </p>
