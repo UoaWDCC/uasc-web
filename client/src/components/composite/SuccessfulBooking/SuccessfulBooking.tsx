@@ -1,4 +1,4 @@
-import FullPageBookLodgeImage from "components/generic/FullPageBookLodgeImage/FullPageBookLodgeImage"
+import { Link } from "react-router-dom"
 
 type SuccessfulBookingProps = {
   startDate?: string
@@ -7,11 +7,8 @@ type SuccessfulBookingProps = {
 
 const SuccessfulBooking = ({ startDate, endDate }: SuccessfulBookingProps) => {
   return (
-    <FullPageBookLodgeImage>
-      <div className="text-dark-blue-100 mb-auto mr-auto mt-32 px-2 py-6 align-text-top italic md:ml-32 md:px-20 md:py-20">
-        <h2>Book the Lodge</h2>
-      </div>
-      <div className="border-gray-3 xs:mb-80 xxs:mb-20 static mx-auto h-auto w-11/12 rounded-md border-2 bg-white py-5 md:w-6/12">
+    <>
+      <div className="border-gray-3 h-auto w-full rounded-md border-2 bg-white py-5">
         <h3 className="text-dark-blue-100 xxs:mb-5 mb-10 mt-5 text-center font-bold">
           Your lodge booking has been confirmed!
         </h3>
@@ -26,11 +23,11 @@ const SuccessfulBooking = ({ startDate, endDate }: SuccessfulBookingProps) => {
         </h4>
         <div className="mb-2 flex justify-center">
           <button className="text-dark-blue-100 border-dark-blue-100 hover:bg-dark-blue-100 rounded-md border bg-white p-2 text-sm font-bold hover:scale-105 hover:text-white">
-            <a href="/bookings">Back to Bookings</a>
+            <Link to="/bookings">Back to Bookings</Link>
           </button>
         </div>
       </div>
-    </FullPageBookLodgeImage>
+    </>
   )
 }
 
