@@ -32,32 +32,22 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   return (
     <>
       {/* TODO: update instructions to highlight correct procedure */}
-      <div className="flex gap-4">
-        <ol className="text-h4">1.</ol>
-        <div>
-          <h4 className="">
-            Transfer payment amount {" "} {requiredPrice?.title} to bank
-            number:{" "}
-          </h4>
-          <h4 className="text-dark-blue-100 font-semibold">{data?.bankAccount}</h4>
-        </div>
-      </div>
-
-      <div className="flex flex-col">
-        <div className="flex gap-4">
-          <ol>2.</ol>
-          <h4>
-            Send a screenshot of the transfer to
-            <strong>{currentUser?.email || ""}</strong>{" "}
-            <a
-              className="text-light-blue-100 font-semibold"
-              href={`mailto: ${data?.email}`}
-            >
-              {data?.email}
-            </a>{" "}
-          </h4>
-        </div>
-        <h4 className="pl-7"> mentioning your name and email. </h4>
+      <div className="">
+        <ol className="text-h4">
+          1. Transfer payment amount {requiredPrice?.title} to bank number:{" "}
+          {data?.bankAccount}
+        </ol>
+        <ol>
+          2. Send a screenshot of the transfer to
+          <strong>{currentUser?.email || ""}</strong>{" "}
+          <a
+            className="text-light-blue-100 font-semibold"
+            href={`mailto: ${data?.email}`}
+          >
+            {data?.email}
+          </a>{" "}
+          mentioning your name and email.
+        </ol>
       </div>
 
       <div className="flex w-[80%] flex-col gap-4 pt-4">
