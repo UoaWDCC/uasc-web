@@ -17,6 +17,7 @@ describe("DateUtils Unit test", () => {
       )
       expect(result).toHaveLength(1)
       expect(result[0].getUTCMonth()).toEqual(9)
+      expect(result[0]).toEqual(new Date("10/07/2020"))
     })
     it("should format dates properly", () => {
       const result = datesToDateRange(
