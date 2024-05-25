@@ -11,7 +11,6 @@ import {
 } from "services/AppData/AppDataQueries"
 import { ACCOUNT_SETUP_ROUTE } from "../utils/RouteNames"
 import { useMembershipPaymentDetails } from "store/MembershipPayment"
-
 type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
@@ -29,6 +28,22 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
    * Use data fetched to find the correct price
    */
 
+  const CopyButton = (text: string) => {
+    const handleOnclick = () => {
+      navigator.clipboard.writeText(text)
+    }
+    return (
+      <button
+        onClick={handleOnclick}
+        className="border-dark-blue-100 space-x-4;
+    text-dark-blue-100 hover:bg-dark-blue-100 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
+   enabled:border enabled:hover:text-white"
+      >
+        copy
+      </button>
+    )
+  }
+
   return (
     <>
       {/* TODO: update instructions to highlight correct procedure */}
@@ -37,7 +52,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
           <li className="">
             Transfer payment amount {requiredPrice?.title} to bank number:{" "}
             <h4 className="text-dark-blue-100 font-semibold">
-              {data?.bankAccount}
+              {data?.bankAccount} <CopyButton text={data?.bankAccount} />
             </h4>
           </li>
           <li>
