@@ -415,10 +415,12 @@ describe("Endpoints", () => {
    */
 
   describe("admin/bookings/make-date-available", () => {
-    beforeAll(async () => {
-      createUsers()
+    let bookingSlotService: BookingSlotService
+    beforeEach(async () => {
+      bookingSlotService = new BookingSlotService()
+      await createUsers()
     })
-    afterAll(async () => {
+    afterEach(async () => {
       await cleanFirestore()
     })
 
@@ -436,13 +438,71 @@ describe("Endpoints", () => {
       expect(res.status).toEqual(201)
       expect(res.body.bookingSlotIds).toHaveLength(6)
 
-      const dates =
-        await new BookingSlotService().getBookingSlotsBetweenDateRange(
-          startDate,
-          endDate
-        )
+      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        endDate
+      )
 
       expect(dates).toHaveLength(6)
+    })
+
+    it("Should not do anything if the start/end dates are the wrong way around", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
+      const endDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+      const res = await request
+        .post("/admin/bookings/make-date-available")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.bookingSlotIds).toHaveLength(0)
+
+      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        endDate
+      )
+
+      expect(dates).toHaveLength(0)
+    })
+
+    it("Should update 'inactive' slots specified within the date range", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+
+      let dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        startDate
+      )
+
+      expect(dates).toHaveLength(0)
+
+      bookingSlotService.createBookingSlot({
+        date: startDate,
+        description: "my test",
+        max_bookings: -99
+      })
+      const res = await request
+        .post("/admin/bookings/make-date-available")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate: startDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.bookingSlotIds).toHaveLength(1)
+
+      dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        startDate
+      )
+
+      expect(dates).toHaveLength(1)
+      expect(dates[0].max_bookings).toBeGreaterThan(0)
+      expect(dates[0].description).toEqual("my test")
+      expect(dates[0].date).toEqual(startDate)
     })
   })
 })
