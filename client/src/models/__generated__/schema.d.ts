@@ -23,7 +23,7 @@ export interface paths {
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
-  "/admin/bookings/make-available": {
+  "/admin/bookings/make-date-available": {
     /** @description Booking Operations */
     post: operations["MakeDateAvailable"];
   };
@@ -165,7 +165,6 @@ export interface components {
       message?: string;
     };
     MakeDatesAvailableRequestBody: {
-      bookingSlotId: string;
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
@@ -316,7 +315,10 @@ export interface operations {
       201: {
         content: {
           "application/json": {
-            bookingSlotIds?: string[];
+            updatedBookingSlots?: {
+                bookingSlotId: string;
+                date: components["schemas"]["FirebaseFirestore.Timestamp"];
+              }[];
           } & components["schemas"]["CommonResponse"];
         };
       };

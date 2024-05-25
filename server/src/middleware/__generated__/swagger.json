@@ -678,9 +678,21 @@
 									"allOf": [
 										{
 											"properties": {
-												"bookingSlotIds": {
+												"updatedBookingSlots": {
 													"items": {
-														"type": "string"
+														"properties": {
+															"bookingSlotId": {
+																"type": "string"
+															},
+															"date": {
+																"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+															}
+														},
+														"required": [
+															"bookingSlotId",
+															"date"
+														],
+														"type": "object"
 													},
 													"type": "array"
 												}

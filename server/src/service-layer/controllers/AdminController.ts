@@ -10,6 +10,7 @@ import {
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
+import { Timestamp } from "firebase-admin/firestore"
 import { MakeDatesAvailableRequestBody } from "service-layer/request-models/AdminRequests"
 import {
   CreateUserRequestBody,
@@ -41,7 +42,11 @@ export class AdminController extends Controller {
   @Post("/bookings/make-date-available")
   public async makeDateAvailable(
     @Body() requestBody: MakeDatesAvailableRequestBody
-  ): Promise<{ bookingSlotIds?: string[] } & CommonResponse> {
+  ): Promise<
+    {
+      updatedBookingSlots?: { date: Timestamp; bookingSlotId: string }[]
+    } & CommonResponse
+  > {
     const { startDate, endDate } = requestBody
     const bookingSlotService = new BookingSlotService()
 
@@ -61,7 +66,7 @@ export class AdminController extends Controller {
             date: dateTimestamp,
             max_bookings: DEFAULT_BOOKING_MAX_SLOTS
           })
-          return bookingSlot.id
+          return { bookingSlotId: bookingSlot.id, date: dateTimestamp }
         }
 
         // Was unavailable
@@ -71,7 +76,7 @@ export class AdminController extends Controller {
           })
         }
 
-        return bookingSlotForDate.id
+        return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
           `Something went wrong when trying to make the date ${date.toString()} available`
@@ -83,7 +88,7 @@ export class AdminController extends Controller {
     try {
       const bookingSlotIds = await Promise.all(datesToUpdatePromises)
       this.setStatus(201)
-      return { bookingSlotIds }
+      return { updatedBookingSlots: bookingSlotIds }
     } catch (e) {
       this.setStatus(500)
       console.error(`An error occurred when making dates available: ${e}`)

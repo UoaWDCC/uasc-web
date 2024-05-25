@@ -436,7 +436,9 @@ describe("Endpoints", () => {
         })
 
       expect(res.status).toEqual(201)
-      expect(res.body.bookingSlotIds).toHaveLength(6)
+      expect(res.body.updatedBookingSlots).toHaveLength(6)
+      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
+      expect(res.body.updatedBookingSlots[5].date).toEqual(endDate)
 
       const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
         startDate,
@@ -458,7 +460,7 @@ describe("Endpoints", () => {
         })
 
       expect(res.status).toEqual(201)
-      expect(res.body.bookingSlotIds).toHaveLength(0)
+      expect(res.body.updatedBookingSlots).toHaveLength(0)
 
       const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
         startDate,
@@ -492,7 +494,8 @@ describe("Endpoints", () => {
         })
 
       expect(res.status).toEqual(201)
-      expect(res.body.bookingSlotIds).toHaveLength(1)
+      expect(res.body.updatedBookingSlots).toHaveLength(1)
+      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
 
       dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
         startDate,
