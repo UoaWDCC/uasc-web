@@ -8,6 +8,7 @@ export type EditUsersBody = {
 const AdminService = {
   getUsers: async function () {
     const { data } = await fetchClient.GET("/users", {})
+    if (!data) throw new Error("Failed to fetch all users")
     return data
   },
   editUsers: async function (users: EditUsersBody) {
