@@ -28,9 +28,13 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
    * Use data fetched to find the correct price
    */
 
-  const CopyButton = (text: any) => {
-    const handleOnclick = () => {
-      navigator.clipboard.writeText(text)
+  const CopyButton = ({ text }: { text?: string }) => {
+    const handleOnclick = async () => {
+      try {
+        await navigator.clipboard.writeText(text!)
+      } catch (error) {
+        console.error(error.message)
+      }
     }
     return (
       <button
