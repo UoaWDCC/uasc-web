@@ -28,16 +28,14 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
    * Use data fetched to find the correct price
    */
 
-  const CopyButton = (text: string) => {
+  const CopyButton = (text: any) => {
     const handleOnclick = () => {
       navigator.clipboard.writeText(text)
     }
     return (
       <button
         onClick={handleOnclick}
-        className="border-dark-blue-100 space-x-4;
-    text-dark-blue-100 hover:bg-dark-blue-100 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
-   enabled:border enabled:hover:text-white"
+        className="border-dark-blue-100 text-h5 text-dark-blue-100 rounded-md border px-8 py-1 font-bold uppercase "
       >
         copy
       </button>
@@ -51,8 +49,11 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         <ol className="flex list-outside list-decimal flex-col gap-4">
           <li className="">
             Transfer payment amount {requiredPrice?.title} to bank number:{" "}
-            <h4 className="text-dark-blue-100 font-semibold">
-              {data?.bankAccount} <CopyButton text={data?.bankAccount} />
+            <h4 className="text-dark-blue-100 flex items-center font-semibold">
+              {data?.bankAccount}{" "}
+              <div className="pl-4">
+                <CopyButton text={data?.bankAccount} />
+              </div>
             </h4>
           </li>
           <li>
