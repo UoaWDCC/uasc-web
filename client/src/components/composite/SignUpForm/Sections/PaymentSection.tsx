@@ -46,7 +46,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
     <>
       {/* TODO: update instructions to highlight correct procedure */}
       <div className="text-h4">
-        <ol className="pl-4 flex list-outside list-decimal flex-col gap-4">
+        <ol className="flex list-outside list-decimal flex-col gap-4 pl-4">
           <li className="">
             Transfer payment amount {requiredPrice?.title} to bank number:{" "}
             <h4 className="text-dark-blue-100 flex items-center font-semibold">
