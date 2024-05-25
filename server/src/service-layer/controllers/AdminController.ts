@@ -16,9 +16,11 @@ import {
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import { CommonResponse } from "service-layer/response-models/CommonResponse"
+import { UserResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
+  Get,
   Patch,
   Post,
   Put,
@@ -34,7 +36,7 @@ export class AdminController extends Controller {
    * Booking Operations
    */
   @SuccessResponse("201", "Slot made available")
-  @Post("bookings/make-available")
+  @Post("/bookings/make-available")
   public async makeDateAvailable(
     @Body() requestBody: MakeDatesAvailableRequestBody
   ): Promise<{ bookingSlotIds?: string[] } & CommonResponse> {
@@ -90,8 +92,17 @@ export class AdminController extends Controller {
    *  User Operations
    */
 
+  @SuccessResponse("200", "Users found")
+  @Security("jwt", ["admin"])
+  @Get("/users")
+  public async getAllUsers(): Promise<UserResponse[]> {
+    const data = await new UserDataService().getAllUserData()
+    this.setStatus(200)
+    return data
+  }
+
   @SuccessResponse("200", "Created")
-  @Put("users/create")
+  @Put("/users/create")
   public async createUser(
     @Body() requestBody: CreateUserRequestBody
   ): Promise<void> {
@@ -105,7 +116,7 @@ export class AdminController extends Controller {
   }
 
   @SuccessResponse("200", "Edited")
-  @Patch("users/bulk-edit")
+  @Patch("/users/bulk-edit")
   public async editUsers(
     @Body() requestBody: EditUsersRequestBody
   ): Promise<void> {
@@ -121,7 +132,7 @@ export class AdminController extends Controller {
 
   // ticket 202 - endpoint to demote/promote users
   @SuccessResponse("200", "Promoted user")
-  @Put("users/promote")
+  @Put("/users/promote")
   // set user membership to "member"
   public async promoteUser(
     @Body() requestBody: PromoteUserRequestBody
@@ -149,7 +160,7 @@ export class AdminController extends Controller {
   }
 
   @SuccessResponse("200", "Demoted user")
-  @Put("users/demote")
+  @Put("/users/demote")
   // set user membership type to `undefined`
   public async demoteUser(
     @Body() requestBody: DemoteUserRequestBody

@@ -346,12 +346,10 @@
 						"type": "string"
 					},
 					"startDate": {
-						"type": "string",
-						"description": "MUST be in format DD/MM/YYYY"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
 					"endDate": {
-						"type": "string",
-						"description": "MUST be in format DD/MM/YYYY"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					}
 				},
 				"required": [
@@ -496,34 +494,6 @@
 		"contact": {}
 	},
 	"paths": {
-		"/users": {
-			"get": {
-				"operationId": "GetAllUsers",
-				"responses": {
-					"200": {
-						"description": "Users found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/UserResponse"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"security": [
-					{
-						"jwt": [
-							"admin"
-						]
-					}
-				],
-				"parameters": []
-			}
-		},
 		"/users/self": {
 			"get": {
 				"operationId": "GetSelf",
@@ -751,6 +721,35 @@
 				}
 			}
 		},
+		"/admin/users": {
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Users found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserResponse"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "User Operations",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/admin/users/create": {
 			"put": {
 				"operationId": "CreateUser",
@@ -759,7 +758,6 @@
 						"description": "Created"
 					}
 				},
-				"description": "User Operations",
 				"security": [
 					{
 						"jwt": [

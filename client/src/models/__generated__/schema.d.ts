@@ -5,9 +5,6 @@
 
 
 export interface paths {
-  "/users": {
-    get: operations["GetAllUsers"];
-  };
   "/users/self": {
     get: operations["GetSelf"];
   };
@@ -30,8 +27,11 @@ export interface paths {
     /** @description Booking Operations */
     post: operations["MakeDateAvailable"];
   };
-  "/admin/users/create": {
+  "/admin/users": {
     /** @description User Operations */
+    get: operations["GetAllUsers"];
+  };
+  "/admin/users/create": {
     put: operations["CreateUser"];
   };
   "/admin/users/bulk-edit": {
@@ -166,10 +166,8 @@ export interface components {
     };
     MakeDatesAvailableRequestBody: {
       bookingSlotId: string;
-      /** @description MUST be in format DD/MM/YYYY */
-      startDate: string;
-      /** @description MUST be in format DD/MM/YYYY */
-      endDate: string;
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     CreateUserRequestBody: {
       uid: string;
@@ -224,16 +222,6 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  GetAllUsers: {
-    responses: {
-      /** @description Users found */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserResponse"][];
-        };
-      };
-    };
-  };
   GetSelf: {
     responses: {
       /** @description Fetched self data */
@@ -335,6 +323,16 @@ export interface operations {
     };
   };
   /** @description User Operations */
+  GetAllUsers: {
+    responses: {
+      /** @description Users found */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserResponse"][];
+        };
+      };
+    };
+  };
   CreateUser: {
     requestBody: {
       content: {

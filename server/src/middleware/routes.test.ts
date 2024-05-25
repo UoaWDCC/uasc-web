@@ -103,24 +103,24 @@ describe("Endpoints", () => {
     _app.close()
   })
 
-  describe("/Users", () => {
+  describe("admin/users", () => {
     it("Should get users for admin", (done) => {
       request
-        .get("/users")
+        .get("/admin/users")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
         .expect(200, done)
     })
     it("Should not allow members to get users", (done) => {
       request
-        .get("/users")
+        .get("/admin/users")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
         .expect(401, done)
     })
     it("Should not allow guests to get users", (done) => {
       request
-        .get("/users")
+        .get("/admin/users")
         .set("Authorization", `Bearer ${guestToken}`)
         .send({})
         .expect(401, done)
@@ -189,7 +189,7 @@ describe("Endpoints", () => {
     })
   })
 
-  describe("/users/promote and /users/demote", () => {
+  describe("/admin/users/promote and /admin/users/demote", () => {
     beforeEach(async () => {
       await createUsers()
     })
@@ -199,14 +199,14 @@ describe("Endpoints", () => {
     })
     it("Should allow admins to promote regular users", (done) => {
       request
-        .put("/users/promote")
+        .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
         .expect(200, done)
     })
     it("Should allow admins to demote regular users", (done) => {
       request
-        .put("/users/demote")
+        .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
         .expect(200, done)
@@ -214,13 +214,13 @@ describe("Endpoints", () => {
     it("Should not allow admins to demote/promote admins", async () => {
       let res
       res = await request
-        .put("/users/promote")
+        .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
       expect(res.status).toEqual(403) // forbidden
 
       res = await request
-        .put("/users/demote")
+        .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
       expect(res.status).toEqual(403) // forbidden
@@ -229,13 +229,13 @@ describe("Endpoints", () => {
     it("Should not allow guests/members to use demote/promote", async () => {
       let res
       res = await request
-        .put("/users/promote")
+        .put("/admin/users/promote")
         .set("Authorization", `Bearer ${guestToken}`)
         .send({ uid: GUEST_USER_UID })
       expect(res.status).toEqual(401) // unauthorised
 
       res = await request
-        .put("/users/demote")
+        .put("/admin/users/demote")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ uid: MEMBER_USER_UID })
       expect(res.status).toEqual(401) // unauthorised
@@ -244,20 +244,20 @@ describe("Endpoints", () => {
     it("Should check for conflicts, e.g. already member/guest", async () => {
       let res
       res = await request
-        .put("/users/promote")
+        .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
       expect(res.status).toEqual(409) // conflict
 
       res = await request
-        .put("/users/demote")
+        .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
       expect(res.status).toEqual(409) // conflict
     })
   })
 
-  describe("/users/edit-self", () => {
+  describe("users/edit-self", () => {
     beforeEach(async () => {
       await createUserData(ADMIN_USER_UID)
       await createUserData(MEMBER_USER_UID)

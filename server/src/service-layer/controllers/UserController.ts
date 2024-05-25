@@ -18,15 +18,6 @@ import {
 
 @Route("users")
 export class UsersController extends Controller {
-  @SuccessResponse("200", "Users found")
-  @Security("jwt", ["admin"])
-  @Get()
-  public async getAllUsers(): Promise<UserResponse[]> {
-    const data = await new UserDataService().getAllUserData()
-    this.setStatus(200)
-    return data
-  }
-
   @SuccessResponse("200", "Fetched self data")
   @Security("jwt")
   @Get("self")
