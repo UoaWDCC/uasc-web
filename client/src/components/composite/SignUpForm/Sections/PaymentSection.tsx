@@ -17,9 +17,14 @@ type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const navigate = useNavigate()
   const [{ currentUser }] = useAppData()
-
+  const { data: prices } = useMembershipPricesQuery()
+  const [{ membershipType }] = useMembershipPaymentDetails()
+  const { data: userMembershipDetails } =
+    useMembershipClientSecretQuery(membershipType)
   const { data } = useBankPaymentDetailsQuery()
-
+  const requiredPrice = prices?.find(
+    (price) => price.type === userMembershipDetails?.membershipType
+  )
   /**
    * Use data fetched to find the correct price
    */
@@ -28,16 +33,19 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
     <>
       {/* TODO: update instructions to highlight correct procedure */}
       <div className="flex gap-4">
-        <h4>1.</h4>
+        <ol className="text-h4">1.</ol>
         <div>
-          <h4 className="">Transfer payment amount to bank number:</h4>
-          <h4 className="text-dark-blue-100 ">06-0103-0176295-00</h4>
+          <h4 className="">
+            Transfer payment amount {" "} {requiredPrice?.title} to bank
+            number:{" "}
+          </h4>
+          <h4 className="text-dark-blue-100 font-semibold">{data?.bankAccount}</h4>
         </div>
       </div>
 
       <div className="flex flex-col">
         <div className="flex gap-4">
-          <h4>2.</h4>
+          <ol>2.</ol>
           <h4>
             Send a screenshot of the transfer to
             <strong>{currentUser?.email || ""}</strong>{" "}
