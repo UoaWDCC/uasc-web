@@ -3,8 +3,18 @@ import LeftArrow from "assets/icons/leftarrow.svg?react"
 import { useState } from "react"
 
 interface Props<T> {
+  /**
+   * List of objects that have the same type. Optional props are ok
+   */
   data: T[]
+  /**
+   * Max items to display on a page. Defaults to 15
+   */
   showPerPage?: number
+  /**
+   * Pass in a callback for when the last page of the table is reached (i.e go to the next offset if paginating)
+   */
+  onLastPageCallback?: () => void
 }
 
 interface ITableFooterPaginator {
