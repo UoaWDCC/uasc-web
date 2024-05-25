@@ -21,10 +21,10 @@ export const dateToFirestoreTimeStamp = (date: Date) => {
  */
 export const datesToDateRange = (startDate: Date, endDate: Date, steps = 1) => {
   const dateArray = []
-  const currentDate = startDate
+  const currentDate = new Date(startDate)
 
   while (currentDate <= new Date(endDate)) {
-    dateArray.push(currentDate)
+    dateArray.push(new Date(currentDate))
     // Use UTC date to prevent problems with time zones and DST
     currentDate.setUTCDate(currentDate.getUTCDate() + steps)
   }

@@ -20,6 +20,8 @@ import {
 import { signupUserMock } from "test-config/mocks/User.mock"
 import AuthService from "business-layer/services/AuthService"
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
+import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 
 const request = supertest(_app)
 
@@ -405,6 +407,42 @@ describe("Endpoints", () => {
         GUEST_USER_UID
       )
       expect(userClaims).toEqual({ member: true })
+    })
+  })
+
+  /**
+   * Booking endpoints
+   */
+
+  describe("admin/bookings/make-date-available", () => {
+    beforeAll(async () => {
+      createUsers()
+    })
+    afterAll(async () => {
+      await cleanFirestore()
+    })
+
+    it("Should create booking slots specified within the date range", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+      const endDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
+      const res = await request
+        .post("/admin/bookings/make-date-available")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.bookingSlotIds).toHaveLength(6)
+
+      const dates =
+        await new BookingSlotService().getBookingSlotsBetweenDateRange(
+          startDate,
+          endDate
+        )
+
+      expect(dates).toHaveLength(6)
     })
   })
 })

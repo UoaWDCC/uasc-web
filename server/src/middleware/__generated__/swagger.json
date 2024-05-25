@@ -342,9 +342,6 @@
 			},
 			"MakeDatesAvailableRequestBody": {
 				"properties": {
-					"bookingSlotId": {
-						"type": "string"
-					},
 					"startDate": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					},
@@ -353,7 +350,6 @@
 					}
 				},
 				"required": [
-					"bookingSlotId",
 					"startDate",
 					"endDate"
 				],
@@ -670,7 +666,7 @@
 				}
 			}
 		},
-		"/admin/bookings/make-available": {
+		"/admin/bookings/make-date-available": {
 			"post": {
 				"operationId": "MakeDateAvailable",
 				"responses": {

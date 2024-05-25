@@ -162,7 +162,6 @@ const models: TsoaRoute.Models = {
     "MakeDatesAvailableRequestBody": {
         "dataType": "refObject",
         "properties": {
-            "bookingSlotId": {"dataType":"string","required":true},
             "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
         },
@@ -403,7 +402,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/admin/bookings/make-available',
+        app.post('/admin/bookings/make-date-available',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateAvailable)),

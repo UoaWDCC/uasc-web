@@ -3,11 +3,13 @@ import {
   DEFAULT_BOOKING_MAX_SLOTS,
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
-import { datesToDateRange } from "data-layer/adapters/DateUtils"
+import {
+  dateToFirestoreTimeStamp,
+  datesToDateRange
+} from "data-layer/adapters/DateUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
-import { Timestamp } from "firebase-admin/firestore"
 import { MakeDatesAvailableRequestBody } from "service-layer/request-models/AdminRequests"
 import {
   CreateUserRequestBody,
@@ -36,7 +38,7 @@ export class AdminController extends Controller {
    * Booking Operations
    */
   @SuccessResponse("201", "Slot made available")
-  @Post("/bookings/make-available")
+  @Post("/bookings/make-date-available")
   public async makeDateAvailable(
     @Body() requestBody: MakeDatesAvailableRequestBody
   ): Promise<{ bookingSlotIds?: string[] } & CommonResponse> {
@@ -50,7 +52,7 @@ export class AdminController extends Controller {
 
     const datesToUpdatePromises = dates.map(async (date) => {
       try {
-        const dateTimestamp = Timestamp.fromDate(date)
+        const dateTimestamp = dateToFirestoreTimeStamp(date)
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)
 
