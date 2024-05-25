@@ -86,6 +86,7 @@ export class AdminController extends Controller {
       return { bookingSlotIds }
     } catch (e) {
       this.setStatus(500)
+      console.error(`An error occurred when making dates available: ${e}`)
       return { error: "Something went wrong when making dates available" }
     }
   }
