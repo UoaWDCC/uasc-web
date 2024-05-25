@@ -32,10 +32,12 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   return (
     <>
       {/* TODO: update instructions to highlight correct procedure */}
-      <div className="">
-        <ol className="text-h4">
+      <div className="text-h4">
+        <ol className="">
           1. Transfer payment amount {requiredPrice?.title} to bank number:{" "}
-          {data?.bankAccount}
+          <h4 className="text-dark-blue-100 font-semibold">
+            {data?.bankAccount}
+          </h4>
         </ol>
         <ol>
           2. Send a screenshot of the transfer to
