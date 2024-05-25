@@ -26,7 +26,7 @@ const createIdToken = async (uid: string, makeUserAdmin: boolean) => {
     if (makeUserAdmin) {
       await admin.auth().setCustomUserClaims(uid, { admin: true })
     } else {
-      await admin.auth().setCustomUserClaims(uid, { admin: undefined })
+      await admin.auth().setCustomUserClaims(uid, { admin: false })
     }
 
     const customToken = await admin.auth().createCustomToken(uid)
