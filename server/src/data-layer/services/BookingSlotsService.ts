@@ -2,24 +2,22 @@ import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { BookingSlot } from "data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 
-type BookingSlotWithId = Array<
-  BookingSlot & {
-    /**
-     * The ID of the document for which this document contains data.
-     */
-    id: string
-  }
->
-
 export default class BookingSlotService {
   // Create
   public async createBookingSlot(bookingSlotData: BookingSlot) {
     return await FirestoreCollections.bookingSlots.add(bookingSlotData)
   }
 
-  public async getBookingSlotByDate(
-    date: Timestamp
-  ): Promise<BookingSlotWithId> {
+  public async getBookingSlotByDate(date: Timestamp): Promise<
+    Array<
+      BookingSlot & {
+        /**
+         * The ID of the document for which this document contains data.
+         */
+        id: string
+      }
+    >
+  > {
     const result = await FirestoreCollections.bookingSlots
       .where("date", "==", date)
       .get()
@@ -32,7 +30,16 @@ export default class BookingSlotService {
   public async getBookingSlotsBetweenDateRange(
     startDate: Timestamp,
     endDate: Timestamp
-  ): Promise<BookingSlotWithId> {
+  ): Promise<
+    Array<
+      BookingSlot & {
+        /**
+         * The ID of the document for which this document contains data.
+         */
+        id: string
+      }
+    >
+  > {
     const result = await FirestoreCollections.bookingSlots
       .where("date", ">=", startDate)
       .where("date", "<=", endDate)
