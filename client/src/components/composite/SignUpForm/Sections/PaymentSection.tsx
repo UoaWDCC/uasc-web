@@ -35,7 +35,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
     return (
       <button
         onClick={handleOnclick}
-        className="border-dark-blue-100 text-h5 text-dark-blue-100 rounded-md border px-8 py-1 font-bold uppercase "
+        className="border-dark-blue-100 text-h5 text-dark-blue-100 hover:bg-dark-blue-100 rounded-md border px-8 py-1 font-bold uppercase hover:text-white"
       >
         copy
       </button>
