@@ -259,7 +259,7 @@ describe("Endpoints", () => {
     })
   })
 
-  describe("users/edit-self", () => {
+  describe("/users/edit-self", () => {
     beforeEach(async () => {
       await createUserData(ADMIN_USER_UID)
       await createUserData(MEMBER_USER_UID)
