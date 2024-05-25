@@ -13,30 +13,18 @@ export const dateToFirestoreTimeStamp = (date: Date) => {
   return output
 }
 
-export const ddMmYyyyToMmDdYyyy = (dateString: string) => {
-  const d = dateString.split("/")
-  if (d.length < 3) {
-    throw new Error("Invalid Date format")
-  }
-  return d[2] + "/" + d[1] + "/" + d[0]
-}
-
 /**
  *
  * @param startDate MUST be in the string format "MM/DD/YYYY"
  * @param endDate MUST be in the string format "MM/DD/YYYY"
  * @returns an array of all dates in the range (NOTE that months in JS start from 0)
  */
-export const datesToDateRange = (
-  startDate: string,
-  endDate: string,
-  steps = 1
-) => {
+export const datesToDateRange = (startDate: Date, endDate: Date, steps = 1) => {
   const dateArray = []
-  const currentDate = new Date(startDate)
+  const currentDate = startDate
 
   while (currentDate <= new Date(endDate)) {
-    dateArray.push(new Date(currentDate))
+    dateArray.push(currentDate)
     // Use UTC date to prevent problems with time zones and DST
     currentDate.setUTCDate(currentDate.getUTCDate() + steps)
   }

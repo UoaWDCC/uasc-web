@@ -1,11 +1,7 @@
+import { Timestamp } from "firebase-admin/firestore"
+
 export interface MakeDatesAvailableRequestBody {
   bookingSlotId: string
-  /**
-   * MUST be in format DD/MM/YYYY
-   */
-  startDate: string
-  /**
-   * MUST be in format DD/MM/YYYY
-   */
-  endDate: string
+  startDate: Timestamp
+  endDate: Timestamp
 }

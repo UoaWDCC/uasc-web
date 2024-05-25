@@ -3,10 +3,7 @@ import {
   DEFAULT_BOOKING_MAX_SLOTS,
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
-import {
-  datesToDateRange,
-  ddMmYyyyToMmDdYyyy
-} from "data-layer/adapters/DateUtils"
+import { datesToDateRange } from "data-layer/adapters/DateUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
@@ -45,8 +42,8 @@ export class AdminController extends Controller {
     const bookingSlotService = new BookingSlotService()
 
     const dates = datesToDateRange(
-      ddMmYyyyToMmDdYyyy(startDate),
-      ddMmYyyyToMmDdYyyy(endDate)
+      new Date(startDate.seconds * 1000),
+      new Date(endDate.seconds * 1000)
     )
 
     const datesToUpdatePromises = dates.map(async (date) => {
