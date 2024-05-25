@@ -26,7 +26,12 @@ export interface paths {
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
+  "/admin/bookings/make-available": {
+    /** @description Booking Operations */
+    post: operations["MakeDateAvailable"];
+  };
   "/admin/users/create": {
+    /** @description User Operations */
     put: operations["CreateUser"];
   };
   "/admin/users/bulk-edit": {
@@ -154,6 +159,17 @@ export interface components {
     };
     UserPaymentRequestModel: {
       membershipType?: components["schemas"]["MembershipTypeValues"];
+    };
+    CommonResponse: {
+      error?: string;
+      message?: string;
+    };
+    MakeDatesAvailableRequestBody: {
+      bookingSlotId: string;
+      /** @description MUST be in format DD/MM/YYYY */
+      startDate: string;
+      /** @description MUST be in format DD/MM/YYYY */
+      endDate: string;
     };
     CreateUserRequestBody: {
       uid: string;
@@ -300,6 +316,25 @@ export interface operations {
       };
     };
   };
+  /** @description Booking Operations */
+  MakeDateAvailable: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MakeDatesAvailableRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Slot made available */
+      201: {
+        content: {
+          "application/json": {
+            bookingSlotIds?: string[];
+          } & components["schemas"]["CommonResponse"];
+        };
+      };
+    };
+  };
+  /** @description User Operations */
   CreateUser: {
     requestBody: {
       content: {

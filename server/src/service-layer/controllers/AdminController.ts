@@ -1,16 +1,29 @@
 import AuthService from "business-layer/services/AuthService"
+import {
+  DEFAULT_BOOKING_MAX_SLOTS,
+  EMPTY_BOOKING_SLOTS
+} from "business-layer/utils/BookingConstants"
+import {
+  datesToDateRange,
+  ddMmYyyyToMmDdYyyy
+} from "data-layer/adapters/DateUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
+import { Timestamp } from "firebase-admin/firestore"
+import { MakeDatesAvailableRequestBody } from "service-layer/request-models/AdminRequests"
 import {
   CreateUserRequestBody,
   DemoteUserRequestBody,
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
+import { CommonResponse } from "service-layer/response-models/CommonResponse"
 import {
   Body,
   Controller,
   Patch,
+  Post,
   Put,
   Route,
   Security,
@@ -20,6 +33,66 @@ import {
 @Route("admin")
 @Security("jwt", ["admin"])
 export class AdminController extends Controller {
+  /**
+   * Booking Operations
+   */
+  @SuccessResponse("201", "Slot made available")
+  @Post("bookings/make-available")
+  public async makeDateAvailable(
+    @Body() requestBody: MakeDatesAvailableRequestBody
+  ): Promise<{ bookingSlotIds?: string[] } & CommonResponse> {
+    const { startDate, endDate } = requestBody
+    const bookingSlotService = new BookingSlotService()
+
+    const dates = datesToDateRange(
+      ddMmYyyyToMmDdYyyy(startDate),
+      ddMmYyyyToMmDdYyyy(endDate)
+    )
+
+    const datesToUpdatePromises = dates.map(async (date) => {
+      try {
+        const dateTimestamp = Timestamp.fromDate(date)
+        const [bookingSlotForDate] =
+          await bookingSlotService.getBookingSlotByDate(dateTimestamp)
+
+        if (!bookingSlotForDate) {
+          const bookingSlot = await bookingSlotService.createBookingSlot({
+            date: dateTimestamp,
+            max_bookings: DEFAULT_BOOKING_MAX_SLOTS
+          })
+          return bookingSlot.id
+        }
+
+        // Was unavailable
+        if (bookingSlotForDate.max_bookings <= EMPTY_BOOKING_SLOTS) {
+          await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
+            max_bookings: DEFAULT_BOOKING_MAX_SLOTS
+          })
+        }
+
+        return bookingSlotForDate.id
+      } catch (e) {
+        console.error(
+          `Something went wrong when trying to make the date ${date.toString()} available`
+        )
+        return undefined
+      }
+    })
+
+    try {
+      const bookingSlotIds = await Promise.all(datesToUpdatePromises)
+      this.setStatus(201)
+      return { bookingSlotIds }
+    } catch (e) {
+      this.setStatus(500)
+      return { error: "Something went wrong when making dates available" }
+    }
+  }
+
+  /**
+   *  User Operations
+   */
+
   @SuccessResponse("200", "Created")
   @Put("users/create")
   public async createUser(

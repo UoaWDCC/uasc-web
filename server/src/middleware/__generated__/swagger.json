@@ -328,6 +328,40 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"CommonResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MakeDatesAvailableRequestBody": {
+				"properties": {
+					"bookingSlotId": {
+						"type": "string"
+					},
+					"startDate": {
+						"type": "string",
+						"description": "MUST be in format DD/MM/YYYY"
+					},
+					"endDate": {
+						"type": "string",
+						"description": "MUST be in format DD/MM/YYYY"
+					}
+				},
+				"required": [
+					"bookingSlotId",
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CreateUserRequestBody": {
 				"properties": {
 					"uid": {
@@ -666,6 +700,57 @@
 				}
 			}
 		},
+		"/admin/bookings/make-available": {
+			"post": {
+				"operationId": "MakeDateAvailable",
+				"responses": {
+					"201": {
+						"description": "Slot made available",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"properties": {
+												"bookingSlotIds": {
+													"items": {
+														"type": "string"
+													},
+													"type": "array"
+												}
+											},
+											"type": "object"
+										},
+										{
+											"$ref": "#/components/schemas/CommonResponse"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Booking Operations",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MakeDatesAvailableRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/admin/users/create": {
 			"put": {
 				"operationId": "CreateUser",
@@ -674,6 +759,7 @@
 						"description": "Created"
 					}
 				},
+				"description": "User Operations",
 				"security": [
 					{
 						"jwt": [
