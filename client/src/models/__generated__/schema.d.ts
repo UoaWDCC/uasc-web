@@ -11,20 +11,8 @@ export interface paths {
   "/users/self": {
     get: operations["GetSelf"];
   };
-  "/users/create": {
-    put: operations["CreateUser"];
-  };
   "/users/edit-self": {
     patch: operations["EditSelf"];
-  };
-  "/users/bulk-edit": {
-    patch: operations["EditUsers"];
-  };
-  "/users/promote": {
-    put: operations["PromoteUser"];
-  };
-  "/users/demote": {
-    put: operations["DemoteUser"];
   };
   "/webhook": {
     post: operations["ReceiveWebhook"];
@@ -37,6 +25,18 @@ export interface paths {
   };
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
+  };
+  "/admin/users/create": {
+    put: operations["CreateUser"];
+  };
+  "/admin/users/bulk-edit": {
+    patch: operations["EditUsers"];
+  };
+  "/admin/users/promote": {
+    put: operations["PromoteUser"];
+  };
+  "/admin/users/demote": {
+    put: operations["DemoteUser"];
   };
 }
 
@@ -87,10 +87,6 @@ export interface components {
       uid: string;
     };
     UserResponse: components["schemas"]["UserAdditionalInfo"] & components["schemas"]["FirebaseProperties"];
-    CreateUserRequestBody: {
-      uid: string;
-      user: components["schemas"]["UserAdditionalInfo"];
-    };
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -112,37 +108,6 @@ export interface components {
     "Omit_Partial_UserAdditionalInfo_.stripe_id_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__"];
     EditSelfRequestBody: {
       updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.stripe_id_"];
-    };
-    /** @description Make all properties in T optional */
-    Partial_UserAdditionalInfo_: {
-      date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding?: boolean;
-      does_racing?: boolean;
-      does_ski?: boolean;
-      gender?: string;
-      emergency_contact?: string;
-      first_name?: string;
-      last_name?: string;
-      dietary_requirements?: string;
-      faculty?: string;
-      university?: string;
-      student_id?: string;
-      returning?: boolean;
-      university_year?: string;
-      /** @description For identification DO NOT RETURN to users in exposed endpoints */
-      stripe_id?: string;
-    };
-    EditUsersRequestBody: {
-      users: {
-          updatedInformation: components["schemas"]["Partial_UserAdditionalInfo_"];
-          uid: string;
-        }[];
-    };
-    PromoteUserRequestBody: {
-      uid: string;
-    };
-    DemoteUserRequestBody: {
-      uid: string;
     };
     UserSignupResponse: {
       error?: string;
@@ -190,6 +155,41 @@ export interface components {
     UserPaymentRequestModel: {
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
+    CreateUserRequestBody: {
+      uid: string;
+      user: components["schemas"]["UserAdditionalInfo"];
+    };
+    /** @description Make all properties in T optional */
+    Partial_UserAdditionalInfo_: {
+      date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      gender?: string;
+      emergency_contact?: string;
+      first_name?: string;
+      last_name?: string;
+      dietary_requirements?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning?: boolean;
+      university_year?: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+    };
+    EditUsersRequestBody: {
+      users: {
+          updatedInformation: components["schemas"]["Partial_UserAdditionalInfo_"];
+          uid: string;
+        }[];
+    };
+    PromoteUserRequestBody: {
+      uid: string;
+    };
+    DemoteUserRequestBody: {
+      uid: string;
+    };
   };
   responses: {
   };
@@ -228,19 +228,6 @@ export interface operations {
       };
     };
   };
-  CreateUser: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateUserRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      200: {
-        content: never;
-      };
-    };
-  };
   EditSelf: {
     requestBody: {
       content: {
@@ -249,45 +236,6 @@ export interface operations {
     };
     responses: {
       /** @description Successful edit */
-      200: {
-        content: never;
-      };
-    };
-  };
-  EditUsers: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["EditUsersRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Edited */
-      200: {
-        content: never;
-      };
-    };
-  };
-  PromoteUser: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PromoteUserRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Promoted user */
-      200: {
-        content: never;
-      };
-    };
-  };
-  DemoteUser: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DemoteUserRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Demoted user */
       200: {
         content: never;
       };
@@ -349,6 +297,58 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["MembershipPaymentResponse"];
         };
+      };
+    };
+  };
+  CreateUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      200: {
+        content: never;
+      };
+    };
+  };
+  EditUsers: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditUsersRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Edited */
+      200: {
+        content: never;
+      };
+    };
+  };
+  PromoteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PromoteUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Promoted user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  DemoteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DemoteUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Demoted user */
+      200: {
+        content: never;
       };
     };
   };
