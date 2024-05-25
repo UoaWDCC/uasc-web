@@ -6,19 +6,25 @@ import { WrappedTab } from "./WrappedTab"
 const LoginIndicator = ({
   signInHandler,
   signOutHandler,
-  isLoggedIn
+  isLoggedIn,
+  isAdmin
 }: INavbarProps) => {
   if (isLoggedIn) {
     return (
       <>
         {/* Desktop View */}
         <span className="hidden md:block md:self-center">
-          <ProfileButton signOutHandler={signOutHandler} />
+          <ProfileButton isAdmin={isAdmin} signOutHandler={signOutHandler} />
         </span>
         {/* Mobile View */}
         <span className="w-full md:hidden">
           <WrappedTab to="/profile">Profile</WrappedTab>
         </span>
+        {isAdmin && (
+          <span className="w-full md:hidden">
+            <WrappedTab to="/admin">Admin</WrappedTab>
+          </span>
+        )}
         <h3
           className="text text-light-blue-100 w-full cursor-pointer pl-8 text-left 
           md:hidden"

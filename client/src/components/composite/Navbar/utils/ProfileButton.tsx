@@ -5,8 +5,9 @@ import { INavbarProps } from "../Navbar"
 import { useState } from "react"
 
 const ProfileButton = ({
-  signOutHandler
-}: Pick<INavbarProps, "signOutHandler">) => {
+  signOutHandler,
+  isAdmin
+}: Pick<INavbarProps, "signOutHandler" | "isAdmin">) => {
   const [isOpened, setIsOpened] = useState<boolean>(false)
   return (
     <div className="relative mb-2 h-4 w-4 cursor-pointer self-center">
@@ -19,6 +20,15 @@ const ProfileButton = ({
       {isOpened && (
         <span className="w-min-[150%] absolute right-0 top-[calc(100%+13px)]">
           <MenuList anchor="right">
+            {isAdmin && (
+              <NavLink
+                data-testid="admin-link"
+                className="text-nowrap"
+                to="/admin"
+              >
+                Admin
+              </NavLink>
+            )}
             <NavLink
               data-testid="profile-link"
               className="text-nowrap"
