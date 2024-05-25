@@ -25,7 +25,7 @@ export const ddMmYyyyToMmDdYyyy = (dateString: string) => {
  *
  * @param startDate MUST be in the string format "MM/DD/YYYY"
  * @param endDate MUST be in the string format "MM/DD/YYYY"
- * @returns an array of all dates in the range
+ * @returns an array of all dates in the range (NOTE that months in JS start from 0)
  */
 export const datesToDateRange = (
   startDate: string,
