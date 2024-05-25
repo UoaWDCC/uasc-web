@@ -15,8 +15,8 @@ export const dateToFirestoreTimeStamp = (date: Date) => {
 
 /**
  *
- * @param startDate MUST be in the string format "MM/DD/YYYY"
- * @param endDate MUST be in the string format "MM/DD/YYYY"
+ * @param startDate Date object
+ * @param endDate Date object
  * @returns an array of all dates in the range (NOTE that months in JS start from 0)
  */
 export const datesToDateRange = (startDate: Date, endDate: Date, steps = 1) => {
