@@ -12,11 +12,11 @@ export type EditUsersBody = {
 
 const UserService = {
   getUsers: async function () {
-    const { data } = await fetchClient.GET("/users", {})
+    const { data } = await fetchClient.GET("/admin/users", {})
     return data
   },
   editUsers: async function (users: EditUsersBody) {
-    await fetchClient.PATCH("/users/bulk-edit", {
+    await fetchClient.PATCH("/admin/users/bulk-edit", {
       body: {
         users
       }
