@@ -3,7 +3,6 @@ import PricingCard from "components/generic/PricingCard/PricingCard"
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
-import { useAppData } from "store/Store"
 import { oneLevelUp } from "../utils/Utils"
 import {
   useBankPaymentDetailsQuery,
@@ -15,7 +14,6 @@ type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const navigate = useNavigate()
-  const [{ currentUser }] = useAppData()
   const { data: prices } = useMembershipPricesQuery()
   const [{ membershipType }] = useMembershipPaymentDetails()
   const { data: userMembershipDetails } =
@@ -62,7 +60,6 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
           </li>
           <li>
             Send a screenshot of the transfer to
-            <strong>{currentUser?.email || ""}</strong>{" "}
             <a
               className="text-light-blue-100 font-semibold"
               href={`mailto: ${data?.email}`}
