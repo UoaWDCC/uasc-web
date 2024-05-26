@@ -6,7 +6,7 @@ interface IBookingInfoProps {
 
 type props = IBookingInfoProps
 
-const Divider = () => <span className="bg-dark-blue-100 m-8 h-[1px] w-3/4" />
+const Divider = () => <span className="bg-dark-blue-100 my-8 h-[1px] w-full" />
 
 const BookingInfoComponent = ({
   pricePerNight,
@@ -14,11 +14,8 @@ const BookingInfoComponent = ({
   priceNonMember
 }: props) => {
   return (
-    <div className="border-gray-3 flex h-fit w-full flex-col rounded border pb-8 lg:items-center lg:justify-center">
-      <div
-        id="top"
-        className="text-dark-blue-100 pr-4.5 flex flex-col gap-2 pl-8 pt-8"
-      >
+    <div className="border-gray-3 flex h-full w-full flex-col justify-center rounded border bg-white px-8 py-8 pb-8">
+      <div id="top" className="text-dark-blue-100 flex flex-col gap-2">
         <h3 className="flex gap-2">
           ${pricePerNight}
           <h3 className="font-normal">per night</h3>
@@ -39,7 +36,7 @@ const BookingInfoComponent = ({
       <Divider />
       <div
         id="bottom"
-        className="text-dark-blue-100 flex flex-col gap-4 pl-8 pr-5 lg:items-center lg:justify-center"
+        className="text-dark-blue-100 flex flex-col gap-4 lg:justify-center"
       >
         <p>
           Once booking has been selected, please complete payment within 20

@@ -1,8 +1,7 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { Typography, Stack } from "@mui/material"
 import Requests from "components/composite/AdminRequests/AdminRequests"
 import RequestDetails from "components/composite/RequestDetails/RequestDetails"
-import AdminBookings from "components/composite/AdminBookings/AdminBookings"
 
 const Admin = () => {
   const [selectedUser, setSelectedUser] = useState(null)
@@ -38,9 +37,7 @@ const Admin = () => {
               booking_id={selectedUser}
               setSelectedUser={setSelectedUser}
             />
-          ) : (
-            <AdminBookings />
-          )}
+          ) : null}
         </Stack>
       </Stack>
     </div>

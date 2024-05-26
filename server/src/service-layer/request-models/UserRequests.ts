@@ -18,7 +18,7 @@ export interface SelfRequestModel {
 
 // ticket 341 client select membership type
 export interface UserPaymentRequestModel {
-  membershipType: MembershipTypeValues
+  membershipType?: MembershipTypeValues
 }
 
 export interface EditSelfRequestModel {

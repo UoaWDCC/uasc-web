@@ -395,12 +395,28 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"stripe.Stripe.Checkout.Session.Status": {
+				"type": "string",
+				"enum": [
+					"complete",
+					"expired",
+					"open"
+				]
+			},
+			"stripe.Stripe.Metadata": {
+				"description": "Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+				"properties": {},
+				"type": "object",
+				"additionalProperties": {
+					"type": "string"
+				}
+			},
 			"MembershipTypeValues": {
 				"enum": [
-					"uoa_returning",
-					"uoa_new",
-					"other_returning",
-					"other_new"
+					"uoa_student",
+					"non_uoa_student",
+					"returning_member",
+					"new_non_student"
 				],
 				"type": "string"
 			},
@@ -428,9 +444,6 @@
 						"$ref": "#/components/schemas/MembershipTypeValues"
 					}
 				},
-				"required": [
-					"membershipType"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -739,6 +752,59 @@
 						}
 					}
 				}
+			}
+		},
+		"/payment/checkout_status": {
+			"get": {
+				"operationId": "GetCheckoutSessionDetails",
+				"responses": {
+					"200": {
+						"description": "Session Fetched",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"metadata": {
+											"$ref": "#/components/schemas/stripe.Stripe.Metadata"
+										},
+										"pricePaid": {
+											"type": "number",
+											"format": "double"
+										},
+										"customer_email": {
+											"type": "string"
+										},
+										"status": {
+											"$ref": "#/components/schemas/stripe.Stripe.Checkout.Session.Status"
+										}
+									},
+									"required": [
+										"metadata",
+										"pricePaid",
+										"customer_email",
+										"status"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "sessionId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/payment/membership": {
