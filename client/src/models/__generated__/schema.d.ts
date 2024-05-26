@@ -38,7 +38,7 @@ export interface paths {
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
-  "/bookings/available_dates": {
+  "/bookings/available-dates": {
     post: operations["GetAvailableDates"];
   };
 }
@@ -200,12 +200,11 @@ export interface components {
       maxBookings: number;
       date: components["schemas"]["FirebaseFirestore.Timestamp"];
       description: string;
-      stripeProductId: string;
     };
     AvailableDatesResponse: {
       error?: string;
       message?: string;
-      data: components["schemas"]["AvailableDates"][];
+      data?: components["schemas"]["AvailableDates"][];
     };
     AvailableDatesRequestModel: {
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
