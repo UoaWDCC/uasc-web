@@ -65,7 +65,7 @@ const PricingCardHome = ({
 }: IPricingCardHome) => (
   <div
     className="border-light-blue-100 text-light-blue-100 bg-gray-1 relative flex 
-   items-center justify-center gap-3 overflow-hidden rounded-md border px-7 py-5 md:flex-col lg:flex-col"
+   items-center justify-center gap-3 rounded-md border px-7 py-5 md:flex-col lg:flex-col"
   >
     <h3 className="mr-[30%] md:mr-0 lg:mr-0">{title} </h3>
     <div className="pr-[3.5%] md:hidden lg:hidden">
