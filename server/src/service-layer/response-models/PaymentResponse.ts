@@ -3,7 +3,6 @@ import { CommonResponse } from "./CommonResponse"
 import { Timestamp } from "firebase-admin/firestore"
 
 type AvailableDates = {
-  stripeProductId: string
   description: string
   date: Timestamp
   maxBookings: number

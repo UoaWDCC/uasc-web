@@ -21,6 +21,9 @@ import { signupUserMock } from "test-config/mocks/User.mock"
 import AuthService from "business-layer/services/AuthService"
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 
+import BookingSlotService from "data-layer/services/BookingSlotsService"
+import BookingDataService from "data-layer/services/BookingDataService"
+
 const request = supertest(_app)
 
 /**
@@ -413,7 +416,16 @@ describe("Endpoints", () => {
    *
    */
   describe("/bookings", () => {
-    beforeEach(async () => {})
-    it("should return all available dates between input dates", async () => {})
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+    it("should return all available dates between input dates", async () => {
+      const bookingDataService = new BookingDataService()
+      const bookingSlotService = new BookingSlotService()
+
+      const {} = bookingSlotService.createBookingSlot({
+        stripe_product_id: "69"
+      })
+    })
   })
 })

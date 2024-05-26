@@ -14,6 +14,16 @@ export class BookingController extends Controller {
     @Body() requestBody: AvailableDatesRequestModel
   ): Promise<AvailableDatesResponse> {
     try {
+      /**
+       *
+       *  Booking slot - describe for ONE DAY how many spots are available
+       *
+       *  Booking data - each one of these entries/documents represents a booking for a USER for ONE DAY
+       *  Booking data - each one has a reference to a booking slot.
+       *
+       *  So if there are 20 'booking data' documents - that means 20 bookings are reserved for a day
+       *
+       */
       // Use this to check for the bookings on each of the dates between the start and end from the body
       const bookingSlotService = new BookingSlotService()
       // Use this to check for bookings matching booking slot ids
