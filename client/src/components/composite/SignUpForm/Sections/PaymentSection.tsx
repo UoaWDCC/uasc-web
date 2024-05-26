@@ -59,7 +59,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
             </h4>
           </li>
           <li>
-            Send a screenshot of the transfer to
+            Send a screenshot of the transfer to{" "}
             <a
               className="text-light-blue-100 font-semibold"
               href={`mailto: ${data?.email}`}
