@@ -67,22 +67,20 @@ const PricingCardHome = ({
     className="border-light-blue-100 text-light-blue-100 bg-gray-1 relative flex 
    items-center justify-center gap-3 rounded-md border px-7 py-5 md:flex-col lg:flex-col"
   >
-    <h4 className=" md:text-h3 lg:text-h3 md:mr-[14%] lg:mr-[14%]">{title} </h4>
-    <div className="pr-[3.5%] md:hidden lg:hidden">
+    <h3 className="ml-12 font-bold  md:mr-20 lg:mr-20">{title} </h3>
+    <div className="pl-4 md:hidden lg:hidden">
       <Divider />
     </div>
     <div className="flex gap-2 align-top md:flex-col md:pr-[75px] lg:flex-col lg:pr-[75px] ">
       <div className="">
-        <h1 className="-mt-[5%] text-6xl italic md:text-5xl lg:text-5xl">
-          {discountedPriceString}
-        </h1>
+        <h1 className="-mt-[5%] text-6xl italic">{discountedPriceString}</h1>
       </div>
 
       <div className="pl-[5%]">
         <p className="text-3xl line-through md:text-lg lg:text-lg">
           {priceString}
         </p>
-        <h5 className="text-orange md:text-md lg:text-md text-nowrap pr-8 font-bold uppercase md:font-normal lg:font-normal">
+        <h5 className="text-orange md:text-md lg:text-md mr-4 text-nowrap pr-12 font-bold uppercase md:mr-0 md:font-normal lg:mr-0 lg:font-normal">
           {extraInfo}
         </h5>
       </div>
