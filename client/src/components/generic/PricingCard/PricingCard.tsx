@@ -11,6 +11,10 @@ interface IPricingCardHome extends Omit<IPricingCardDefault, "selected"> {
   discountedPriceString: string
 }
 
+const Divider = () => (
+  <div className="bg-light-blue-100 h-[50px] w-[2px] rounded-full" />
+)
+
 // Public interface
 export interface IPricingCard extends IPricingCardHome, IPricingCardDefault {
   variant?: "default" | "home"
@@ -28,9 +32,9 @@ const PricingCardDefault = ({
       onClick={onClick}
       className={`${selected ? "bg-dark-blue-100" : "border-dark-blue-100 border bg-transparent"} mb-6 flex  justify-center rounded-md p-8 ${onClick && "cursor-pointer"}`}
     >
-      <div className="flex-col">
+      <div className="flex items-center justify-center md:flex-col lg:flex-col">
         <h3
-          className={`${selected ? "text-white" : "text-dark-blue-100"} flex-col`}
+          className={`${selected ? "text-white" : "text-dark-blue-100"} mr-[30%] flex-col text-nowrap md:mr-0 lg:mr-0`}
         >
           {title}
         </h3>
@@ -39,9 +43,14 @@ const PricingCardDefault = ({
         >
           {priceString}
         </h1>
-        <small className="text-orange">{extraInfo}</small>
+        <small className="text-orange -ml-[18%] mt-[20%] text-nowrap md:ml-0 md:mt-0 lg:ml-0 lg:mt-0">
+          {extraInfo}
+        </small>
         {selected && (
-          <img src={tick} className="ml-auto mr-auto mt-6 h-6 w-6" />
+          <img
+            src={tick}
+            className="ml-auto mr-auto w-12 md:mt-6 md:h-6 md:w-6 lg:mt-6 lg:h-6 lg:w-6"
+          />
         )}
       </div>
     </div>
@@ -55,15 +64,27 @@ const PricingCardHome = ({
   discountedPriceString
 }: IPricingCardHome) => (
   <div
-    className="border-light-blue-100 text-light-blue-100 bg-gray-1 flex 
-   flex-col rounded-md border px-7 py-5"
+    className="border-light-blue-100 text-light-blue-100 bg-gray-1 relative flex 
+   items-center justify-center gap-3 rounded-md border px-7 py-5 md:flex-col lg:flex-col"
   >
-    <h3>{title}</h3>
-    <div className="mt-6">
-      <span className=" text-lg line-through">{priceString}</span>
-      <h1 className="-mt-3 italic">{discountedPriceString}</h1>
+    <h3 className="ml-12 font-bold  md:mr-20 lg:mr-20">{title} </h3>
+    <div className="pl-4 md:hidden lg:hidden">
+      <Divider />
     </div>
-    <h5 className="text-orange mt-3 uppercase">{extraInfo}</h5>
+    <div className="flex gap-2 align-top md:flex-col md:pr-[75px] lg:flex-col lg:pr-[75px] ">
+      <div className="">
+        <h1 className="-mt-[5%] text-6xl italic">{discountedPriceString}</h1>
+      </div>
+
+      <div className="pl-[5%]">
+        <p className="text-3xl line-through md:text-lg lg:text-lg">
+          {priceString}
+        </p>
+        <h5 className="text-orange md:text-md lg:text-md mr-4 text-nowrap pr-12 font-bold uppercase md:mr-0 md:font-normal lg:mr-0 lg:font-normal">
+          {extraInfo}
+        </h5>
+      </div>
+    </div>
   </div>
 )
 
