@@ -190,7 +190,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AvailableDates": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"availableSpaces":{"dataType":"double","required":true},"maxBookings":{"dataType":"double","required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true},"description":{"dataType":"string","required":true},"stripeProductId":{"dataType":"string","required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"availableSpaces":{"dataType":"double","required":true},"maxBookings":{"dataType":"double","required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true},"description":{"dataType":"string","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AvailableDatesResponse": {
@@ -198,7 +198,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "error": {"dataType":"string"},
             "message": {"dataType":"string"},
-            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"AvailableDates"},"required":true},
+            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"AvailableDates"}},
         },
         "additionalProperties": false,
     },
@@ -562,8 +562,8 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/bookings/available_dates',
-            authenticateMiddleware([{"jwt":["member","admin"]}]),
+        app.post('/bookings/available-dates',
+            authenticateMiddleware([{"jwt":["member"]}]),
             ...(fetchMiddlewares<RequestHandler>(BookingController)),
             ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAvailableDates)),
 

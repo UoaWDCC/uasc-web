@@ -462,17 +462,13 @@
 					},
 					"description": {
 						"type": "string"
-					},
-					"stripeProductId": {
-						"type": "string"
 					}
 				},
 				"required": [
 					"availableSpaces",
 					"maxBookings",
 					"date",
-					"description",
-					"stripeProductId"
+					"description"
 				],
 				"type": "object"
 			},
@@ -491,9 +487,6 @@
 						"type": "array"
 					}
 				},
-				"required": [
-					"data"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -840,7 +833,7 @@
 				}
 			}
 		},
-		"/bookings/available_dates": {
+		"/bookings/available-dates": {
 			"post": {
 				"operationId": "GetAvailableDates",
 				"responses": {
@@ -858,8 +851,7 @@
 				"security": [
 					{
 						"jwt": [
-							"member",
-							"admin"
+							"member"
 						]
 					}
 				],

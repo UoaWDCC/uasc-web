@@ -20,6 +20,9 @@ import {
 import { signupUserMock } from "test-config/mocks/User.mock"
 import AuthService from "business-layer/services/AuthService"
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
+import { dateToFirestoreTimeStamp } from "data-layer/adapters/FirestoreUtils"
+
+import { Timestamp } from "firebase-admin/firestore"
 
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import BookingDataService from "data-layer/services/BookingDataService"
@@ -416,6 +419,11 @@ describe("Endpoints", () => {
    *
    */
   describe("/bookings", () => {
+    beforeEach(async () => {
+      await createUserData(ADMIN_USER_UID)
+      await createUserData(MEMBER_USER_UID)
+      await createUserData(GUEST_USER_UID)
+    })
     afterEach(async () => {
       await cleanFirestore()
     })
@@ -423,9 +431,179 @@ describe("Endpoints", () => {
       const bookingDataService = new BookingDataService()
       const bookingSlotService = new BookingSlotService()
 
-      const {} = bookingSlotService.createBookingSlot({
-        stripe_product_id: "69"
+      const { id } = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("10/09/2009")),
+        max_bookings: 69
       })
+
+      for (let i = 0; i < 5; ++i) {
+        await bookingDataService.createBooking({
+          user_id: "Eddie Wang",
+          booking_slot_id: id,
+          stripe_payment_id: ""
+        })
+      }
+
+      const res = await request
+        .post("/bookings/available-dates")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          startDate: dateToFirestoreTimeStamp(new Date("10/09/2009")),
+          endDate: dateToFirestoreTimeStamp(new Date("11/09/2009"))
+        })
+
+      expect(res.status).toEqual(200)
+
+      expect(res.body.data[0].availableSpaces).toEqual(64)
+    })
+
+    it("should return all available dates between now and 1 year in the future", async () => {
+      const bookingDataService = new BookingDataService()
+      const bookingSlotService = new BookingSlotService()
+
+      const { id } = await bookingSlotService.createBookingSlot({
+        date: Timestamp.fromMillis(Date.now() + 6969),
+        max_bookings: 69
+      })
+
+      for (let i = 0; i < 10; ++i) {
+        await bookingDataService.createBooking({
+          user_id: "Eddie Wang",
+          booking_slot_id: id,
+          stripe_payment_id: ""
+        })
+      }
+
+      const res = await request
+        .post("/bookings/available-dates")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data[0].availableSpaces).toEqual(59)
+    })
+
+    it("should return all available dates for multiple booking slots", async () => {
+      const bookingDataService = new BookingDataService()
+      const bookingSlotService = new BookingSlotService()
+
+      const { id: id1 } = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("10/09/2009")),
+        max_bookings: 60
+      })
+
+      const { id: id2 } = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("10/09/2015")),
+        max_bookings: 69,
+        description: "slot 1"
+      })
+
+      const { id: id3 } = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("10/21/2015")),
+        max_bookings: 50,
+        description: "slot 2"
+      })
+
+      for (let i = 0; i < 10; ++i) {
+        await bookingDataService.createBooking({
+          user_id: "Eddie Wang",
+          booking_slot_id: id1,
+          stripe_payment_id: ""
+        })
+
+        await bookingDataService.createBooking({
+          user_id: "Benson Cho",
+          booking_slot_id: id2,
+          stripe_payment_id: ""
+        })
+
+        await bookingDataService.createBooking({
+          user_id: "Albert Sun",
+          booking_slot_id: id3,
+          stripe_payment_id: ""
+        })
+      }
+
+      const res = await request
+        .post("/bookings/available-dates")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          startDate: dateToFirestoreTimeStamp(new Date("10/09/2015")),
+          endDate: dateToFirestoreTimeStamp(new Date("10/21/2015"))
+        })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toHaveLength(2)
+
+      expect(
+        res.body.data.find(
+          (item: any) =>
+            item.availableSpaces === 59 && item.description === "slot 1"
+        )
+      ).toBeDefined()
+      expect(
+        res.body.data.find(
+          (item: any) =>
+            item.availableSpaces === 40 && item.description === "slot 2"
+        )
+      ).toBeDefined()
+    })
+
+    it("should return an unauthorized error", async () => {
+      const bookingDataService = new BookingDataService()
+      const bookingSlotService = new BookingSlotService()
+
+      const { id: id1 } = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("10/09/2009")),
+        max_bookings: 60
+      })
+
+      for (let i = 0; i < 10; ++i) {
+        await bookingDataService.createBooking({
+          user_id: "Eddie Wang",
+          booking_slot_id: id1,
+          stripe_payment_id: ""
+        })
+      }
+
+      const res = await request
+        .post("/bookings/available-dates")
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send({
+          startDate: dateToFirestoreTimeStamp(new Date("10/09/2015")),
+          endDate: dateToFirestoreTimeStamp(new Date("10/21/2015"))
+        })
+
+      expect(res.status).toEqual(401)
+    })
+
+    it("should not return negative availabilties", async () => {
+      const bookingDataService = new BookingDataService()
+      const bookingSlotService = new BookingSlotService()
+
+      const { id: id1 } = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("10/09/2009")),
+        max_bookings: 1
+      })
+
+      for (let i = 0; i < 5; ++i) {
+        await bookingDataService.createBooking({
+          user_id: "Eddie Wang",
+          booking_slot_id: id1,
+          stripe_payment_id: ""
+        })
+      }
+
+      const res = await request
+        .post("/bookings/available-dates")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          startDate: dateToFirestoreTimeStamp(new Date("10/09/2009")),
+          endDate: dateToFirestoreTimeStamp(new Date("10/21/2009"))
+        })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data[0].availableSpaces).toEqual(0)
     })
   })
 })

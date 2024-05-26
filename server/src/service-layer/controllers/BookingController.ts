@@ -8,8 +8,8 @@ import { Controller, Post, Route, Security, SuccessResponse, Body } from "tsoa"
 @Route("bookings")
 export class BookingController extends Controller {
   @SuccessResponse("200", "Availabilities found")
-  @Security("jwt", ["member", "admin"])
-  @Post("available_dates")
+  @Security("jwt", ["member"])
+  @Post("available-dates")
   public async getAvailableDates(
     @Body() requestBody: AvailableDatesRequestModel
   ): Promise<AvailableDatesResponse> {
@@ -21,7 +21,8 @@ export class BookingController extends Controller {
        *  Booking data - each one of these entries/documents represents a booking for a USER for ONE DAY
        *  Booking data - each one has a reference to a booking slot.
        *
-       *  So if there are 20 'booking data' documents - that means 20 bookings are reserved for a day
+       *  So if there are 20 'booking data' documents referring to a booking slot
+       *  - that means 20 bookings are reserved for a day
        *
        */
       // Use this to check for the bookings on each of the dates between the start and end from the body
@@ -34,11 +35,11 @@ export class BookingController extends Controller {
       _endDate.setFullYear(_endDate.getFullYear() + 1)
       let endDate = Timestamp.fromDate(_endDate) as Timestamp
 
-      if (!requestBody.startDate) {
+      if (requestBody.startDate) {
         startDate = requestBody.startDate
       }
 
-      if (!requestBody.endDate) {
+      if (requestBody.endDate) {
         endDate = requestBody.endDate
       }
 
@@ -48,12 +49,12 @@ export class BookingController extends Controller {
           startDate,
           endDate
         )
+      console.log("found bookingslots: ", bookingSlots)
+
       const bookingSlotsToQuery = bookingSlots.map((bookingSlot) => {
-        const { stripe_product_id, description, date, max_bookings, id } =
-          bookingSlot
+        const { description, date, max_bookings, id } = bookingSlot
         return {
           id,
-          stripeProductId: stripe_product_id,
           description,
           date,
           maxBookings: max_bookings,
@@ -61,23 +62,27 @@ export class BookingController extends Controller {
         }
       })
 
-      const responseData: AvailableDatesResponse["data"] = []
-
       // Find the amount of bookings matching each of the booking slots
       const queryPromises = bookingSlotsToQuery.map(async (toQuery) => {
-        const matchingBookings =
-          await bookingDataService.getBookingsByBookingSlotId(toQuery.id)
-        responseData.push({
+        const matchingBookings = await bookingDataService.getBookingsBySlotId(
+          toQuery.id
+        )
+        const availableSpaces = toQuery.maxBookings - matchingBookings.length
+
+        return {
           ...toQuery,
-          availableSpaces: toQuery.maxBookings - matchingBookings.length
-        })
+          availableSpaces: availableSpaces < 0 ? 0 : availableSpaces
+        }
       })
 
-      await Promise.all(queryPromises)
+      const responseData = await Promise.all(queryPromises)
 
       // Query stripe for the amount of active checkout sessions for each of the slots - IGNORE FOR NOW
-
+      this.setStatus(200)
       return { data: responseData }
-    } catch (e) {}
+    } catch (e) {
+      this.setStatus(500)
+      return { error: "Something went wrong" }
+    }
   }
 }

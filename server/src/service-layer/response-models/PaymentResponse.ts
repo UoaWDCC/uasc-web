@@ -15,5 +15,5 @@ export interface MembershipPaymentResponse extends CommonResponse {
 }
 
 export interface AvailableDatesResponse extends CommonResponse {
-  data: AvailableDates[]
+  data?: AvailableDates[]
 }
