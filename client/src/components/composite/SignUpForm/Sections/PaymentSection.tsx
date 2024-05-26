@@ -3,7 +3,6 @@ import PricingCard from "components/generic/PricingCard/PricingCard"
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
-import { useAppData } from "store/Store"
 import { oneLevelUp } from "../utils/Utils"
 import {
   useBankPaymentDetailsQuery,
@@ -11,54 +10,78 @@ import {
 } from "services/AppData/AppDataQueries"
 import { ACCOUNT_SETUP_ROUTE } from "../utils/RouteNames"
 import { useMembershipPaymentDetails } from "store/MembershipPayment"
-
 type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
   const navigate = useNavigate()
-  const [{ currentUser }] = useAppData()
   const { data: prices } = useMembershipPricesQuery()
-  const { data } = useBankPaymentDetailsQuery()
-
   const [{ membershipType }] = useMembershipPaymentDetails()
-
   const { data: userMembershipDetails } =
     useMembershipClientSecretQuery(membershipType)
-
-  /**
-   * Use data fetched to find the correct price
-   */
+  const { data } = useBankPaymentDetailsQuery()
   const requiredPrice = prices?.find(
     (price) => price.type === userMembershipDetails?.membershipType
   )
+  /**
+   * Use data fetched to find the correct price
+   */
+
+  const CopyButton = ({ text }: { text?: string }) => {
+    const handleOnclick = async () => {
+      try {
+        await navigator.clipboard.writeText(text!)
+      } catch (error) {
+        console.error(error.message)
+      }
+    }
+    return (
+      <button
+        onClick={handleOnclick}
+        className="border-dark-blue-100 text-h5 text-dark-blue-100 hover:bg-dark-blue-100 rounded-md border px-8 py-1 font-bold uppercase hover:text-white"
+      >
+        copy
+      </button>
+    )
+  }
 
   return (
     <>
-      <h4 className="font-bold">How to pay through bank</h4>
       {/* TODO: update instructions to highlight correct procedure */}
-      <p>
-        Transfer <strong>{requiredPrice?.priceString}</strong> (price for{" "}
-        {requiredPrice?.title}) to the bank account{" "}
-        <strong>{data?.bankAccount}</strong>, and send a screenshot of the
-        transfer to{" "}
-        <a
-          className="text-light-blue-100 font-bold"
-          href={`mailto: ${data?.email}`}
-        >
-          {data?.email}
-        </a>{" "}
-        mentioning your name and email{" "}
-        <strong>{currentUser?.email || ""}</strong>
-      </p>
+      <div className="text-h4">
+        <ol className="flex list-outside list-decimal flex-col gap-4 pl-4">
+          <li className="">
+            Transfer payment amount {requiredPrice?.title} to bank number:{" "}
+            <h4 className="text-dark-blue-100 flex items-center font-semibold">
+              {data?.bankAccount}{" "}
+              <div className="pl-4">
+                <CopyButton text={data?.bankAccount} />
+              </div>
+            </h4>
+          </li>
+          <li>
+            Send a screenshot of the transfer to{" "}
+            <a
+              className="text-light-blue-100 font-semibold"
+              href={`mailto: ${data?.email}`}
+            >
+              {data?.email}
+            </a>{" "}
+            mentioning your name and email.
+          </li>
+        </ol>
+      </div>
 
-      <p>
-        Note you will not be able to make any bookings until your payment has
-        been confirmed by UASC.
-      </p>
-      <p>
-        You will still have access to your account, and are able to set your
-        login details as well as edit your personal information
-      </p>
+      <div className="flex w-[80%] flex-col gap-4 pt-4">
+        <p className="text-gray-3">
+          Note you will not be able to make any bookings until your payment has
+          been confirmed by UASC.
+        </p>
+        <p className="text-gray-3">
+          You will still have access to your account, and are able to set your
+          login details as well as edit your personal information
+        </p>
+      </div>
+
       <h4 className="font-bold">Click on an action</h4>
       <h5
         className="text-dark-blue-100  cursor-pointer font-bold uppercase"

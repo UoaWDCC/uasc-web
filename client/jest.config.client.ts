@@ -8,6 +8,7 @@ module.exports = {
   testMatch: ["**/*.test.ts", "**/*.test.tsx"],
   setupFilesAfterEnv: ["<rootDir>/test-setup.ts"],
   moduleNameMapper: {
-    "\\.svg": "<rootDir>/__mocks__/svg.ts"
+    "\\.svg": "<rootDir>/__mocks__/svg.ts",
+    "\\.(css|less)$": "<rootDir>/__mocks__/css.ts"
   }
 }
