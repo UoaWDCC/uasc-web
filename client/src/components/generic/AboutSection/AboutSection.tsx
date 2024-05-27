@@ -41,8 +41,8 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
     )
   } else {
     return (
-      <div className="relative left-[20%] w-[71%]">
-        <img src={imageSrc} className="rounded-tl-lg lg:h-[80%] lg:w-[80%]" />
+      <div className="relative left-[20%]">
+        <img src={imageSrc} className="rounded-tl-lg lg:w-[900px]" />
         <div className=" border-dark-blue-100 absolute top-[100%] flex w-full flex-col overflow-hidden rounded-b-lg border bg-white sm:rounded-b-lg md:left-[-25%] md:top-[60%] md:h-[60%] md:w-[74%] md:rounded-t-lg lg:left-[-19%] lg:top-[60%] lg:h-[45%] lg:w-[50%] lg:gap-4  lg:rounded-t-lg">
           <TextStyler
             title={title}
