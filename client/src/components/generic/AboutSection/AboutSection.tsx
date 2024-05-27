@@ -27,7 +27,7 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
       <div className="relative left-0 w-[71%]">
         <img
           src={imageSrc}
-          className="rounded-tr-lg lg:h-[50%] lg:w-[50%]"
+          className="rounded-tr-lg lg:h-[80%] lg:w-[80%]"
         ></img>
         <div className=" border-dark-blue-100 absolute top-[100%] flex w-full flex-col overflow-hidden rounded-b-lg border bg-white md:left-[72%] md:top-[70%] md:h-[60%] md:w-[50%]  md:rounded-t-lg lg:left-[35%] lg:top-[70%] lg:h-[56%] lg:w-[35%] lg:gap-4  lg:rounded-t-lg">
           <TextStyler
@@ -42,7 +42,7 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
   } else {
     return (
       <div className="relative left-[20%] w-[71%]">
-        <img src={imageSrc} className="rounded-tl-lg lg:h-[50%] lg:w-[50%]" />
+        <img src={imageSrc} className="rounded-tl-lg lg:h-[80%] lg:w-[80%]" />
         <div className=" border-dark-blue-100 absolute top-[100%] flex w-full flex-col overflow-hidden rounded-b-lg border bg-white sm:rounded-b-lg md:left-[-25%] md:top-[60%] md:h-[60%] md:w-[74%] md:rounded-t-lg lg:left-[-19%] lg:top-[60%] lg:h-[45%] lg:w-[50%] lg:gap-4  lg:rounded-t-lg">
           <TextStyler
             title={title}
