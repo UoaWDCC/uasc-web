@@ -3,7 +3,7 @@ import ImageLeft from "assets/images/hut.png"
 import ImageRight from "assets/images/MountainBackgroundImage.png"
 const About = () => {
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col ">
       <h1 className=""> About us page</h1>
       <div>
         <AboutSection
