@@ -2,8 +2,8 @@ import AboutSection from "components/generic/AboutSection/AboutSection"
 import ImageLeft from "assets/images/hut.png"
 const About = () => {
   return (
-    <div>
-      <h1> About us page</h1>
+    <div className="flex w-full flex-col items-center">
+      <h1 className="pr-[50%]"> About us page</h1>
       <AboutSection
         title="Founded in 1966"
         variant="left"
