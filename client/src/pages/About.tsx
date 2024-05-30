@@ -4,7 +4,9 @@ import ImageRight from "assets/images/MountainBackgroundImage.png"
 const About = () => {
   return (
     <div className="flex w-full flex-col pt-[5%]">
-      <h2 className="text-dark-blue-100 pl-[15%] italic">About us</h2>
+      <h2 className="text-dark-blue-100 italic md:lg:pl-[15%] lg:pl-[15%]">
+        About us
+      </h2>
       <div>
         <AboutSection
           title="Founded in 1966"
@@ -14,7 +16,7 @@ const About = () => {
         ></AboutSection>
       </div>
 
-      <div className="pl-[42%] pt-[10%]">
+      <div className="pt-[10%] lg:pl-[42%]">
         <AboutSection
           title="Our Purpose: Skiing and Snowboarding"
           variant="right"
