@@ -27,9 +27,9 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
       <div className="relative left-0 w-[71%]">
         <img
           src={imageSrc}
-          className="w-[65%] rounded-tr-lg lg:h-[500px] lg:w-[900px]"
+          className="w-[65%] rounded-tr-lg md:w-[85%] lg:h-[500px] lg:w-full"
         ></img>
-        <div className=" border-dark-blue-100 absolute top-[100%] flex w-[65%] flex-col overflow-hidden rounded-b-lg border bg-white md:left-[42%] md:top-[70%] md:h-[60%] md:w-[50%]  md:rounded-t-lg lg:left-[35%] lg:top-[70%] lg:h-[56%] lg:w-[35%] lg:gap-4  lg:rounded-t-lg">
+        <div className=" border-dark-blue-100 absolute top-[100%] flex w-[65%] flex-col overflow-hidden rounded-b-lg border bg-white md:left-[42%] md:top-[70%] md:h-[60%] md:w-[50%]  md:rounded-t-lg lg:left-[45%] lg:top-[70%] lg:h-[56%] lg:w-[35%] lg:gap-4  lg:rounded-t-lg">
           <TextStyler
             title={title}
             text={text}
@@ -44,7 +44,7 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
       <div className="relative left-[20%]">
         <img
           src={imageSrc}
-          className="w-[65%] rounded-tl-lg lg:h-[500px] lg:w-[900px]"
+          className="w-[65%] rounded-tl-lg md:w-[85%] lg:w-full"
         />
         <div className=" border-dark-blue-100 absolute top-[100%] flex w-[65%] flex-col overflow-hidden rounded-b-lg border bg-white sm:rounded-b-lg md:left-[-15%] md:top-[60%] md:h-[60%] md:w-[60%] md:rounded-t-lg lg:left-[-10%] lg:top-[60%] lg:h-[55%] lg:w-[40%] lg:gap-4 lg:rounded-t-lg">
           <TextStyler
