@@ -3,11 +3,9 @@ import ImageLeft from "assets/images/hut.png"
 import ImageRight from "assets/images/MountainBackgroundImage.png"
 const About = () => {
   return (
-    <div className="flex w-full flex-col pt-[5%]">
-      <h2 className="text-dark-blue-100 italic md:lg:pl-[15%] lg:pl-[15%]">
-        About us
-      </h2>
-      <div>
+    <div className="flex w-full flex-col">
+      <h2 className="text-dark-blue-100 italic">About us</h2>
+      <div className="">
         <AboutSection
           title="Founded in 1966"
           variant="left"
@@ -16,7 +14,7 @@ const About = () => {
         ></AboutSection>
       </div>
 
-      <div className="pt-[10%] lg:pl-[42%]">
+      <div className="pt-[50%] lg:pl-[42%] lg:pt-[10%]">
         <AboutSection
           title="Our Purpose: Skiing and Snowboarding"
           variant="right"
