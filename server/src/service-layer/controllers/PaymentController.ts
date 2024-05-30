@@ -11,7 +11,10 @@ import {
   UserPaymentRequestModel,
   SelfRequestModel
 } from "service-layer/request-models/UserRequests"
-import { MembershipPaymentResponse } from "service-layer/response-models/PaymentResponse"
+import {
+  MembershipPaymentResponse,
+  MembershipStripeProductResponse
+} from "service-layer/response-models/PaymentResponse"
 import {
   Controller,
   Post,
@@ -26,8 +29,31 @@ import {
 
 @Route("payment")
 export class PaymentController extends Controller {
-  // TODO: Create an endpoint here (similar to the other ones in this class) 
+  // TODO: Create an endpoint here (similar to the other ones in this class)
   // After you have created the required logic in the StripeService
+  @Security("jwt")
+  @Get("membership_prices")
+  public async getMembershipPrices(): Promise<MembershipStripeProductResponse> {
+    const stripeService = new StripeService()
+    try {
+      const membershipProducts =
+        await stripeService.getActiveMembershipProducts()
+      // Maps the products to the required response type MembershipStripeProductResponse in PaymentResponse
+      membershipProducts.map((product) => {
+        return {
+          productId: product.id,
+          name: product.name as MembershipTypeValues,
+          description: product.description,
+          discount: product.metadata.discount === "true",
+          displayPrice: product.default_price,
+          originalPrice: product.metadata.original_price
+        }
+      })
+    } catch (e) {
+      console.log("Error fetching active Stripe products")
+      return null
+    }
+  }
 
   @SuccessResponse("200", "Session Fetched")
   @Security("jwt")

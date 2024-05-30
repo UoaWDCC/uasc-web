@@ -1,8 +1,8 @@
 import {
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues,
-  MEMBERSHIP_TYPE_KEY,
-  MembershipTypeValues,
+  MEMBERSHIP_PRODUCT_TYPE_KEY,
+  ProductTypeValues,
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
@@ -20,9 +20,6 @@ const dateNowSecs = () => {
 }
 
 export default class StripeService {
-
-    
-
   public async getAllProducts(limit?: number, startingAfter?: string) {
     const products = await stripe.products.list({
       limit,
@@ -270,11 +267,13 @@ export default class StripeService {
         // Fetch all active products from Stripe
         const products = await stripe.products.list({
             active: true,
+            expand: ['default_price']
         });
 
         // Filter products with the required metadata
+        // Use enum and key checking for if it is a "booking" or "membership"
         const membershipProducts = products.data.filter(product => 
-            product.metadata[MEMBERSHIP_TYPE_KEY] === MembershipTypeValues.NewNonStudent &&
+            product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] === ProductTypeValues.MEMBERSHIP &&
             product.metadata.discount === "true"
         );
 
