@@ -26,6 +26,9 @@ import {
 
 @Route("payment")
 export class PaymentController extends Controller {
+  // TODO: Create an endpoint here (similar to the other ones in this class) 
+  // After you have created the required logic in the StripeService
+
   @SuccessResponse("200", "Session Fetched")
   @Security("jwt")
   @Get("checkout_status")

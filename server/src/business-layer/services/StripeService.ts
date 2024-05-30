@@ -1,6 +1,8 @@
 import {
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues,
+  MEMBERSHIP_TYPE_KEY,
+  MembershipTypeValues,
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
@@ -18,6 +20,9 @@ const dateNowSecs = () => {
 }
 
 export default class StripeService {
+
+    
+
   public async getAllProducts(limit?: number, startingAfter?: string) {
     const products = await stripe.products.list({
       limit,
@@ -259,4 +264,25 @@ export default class StripeService {
     /** Return the updated product */
     return updatedProduct
   }
+  
+  public async getActiveMembershipProducts() {
+    try {
+        // Fetch all active products from Stripe
+        const products = await stripe.products.list({
+            active: true,
+        });
+
+        // Filter products with the required metadata
+        const membershipProducts = products.data.filter(product => 
+            product.metadata[MEMBERSHIP_TYPE_KEY] === MembershipTypeValues.NewNonStudent &&
+            product.metadata.discount === "true"
+        );
+
+        return membershipProducts;
+    } catch (error) {
+        console.error('Error fetching Stripe products:', error);
+        throw error;
+    }
+    
+}
 }
