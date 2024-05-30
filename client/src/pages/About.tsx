@@ -14,7 +14,7 @@ const About = () => {
         ></AboutSection>
       </div>
 
-      <div className="pt-[50%] lg:pl-[42%] lg:pt-[10%]">
+      <div className="pt-[50%] md:pt-[10%] lg:pl-[42%] lg:pt-[10%]">
         <AboutSection
           title="Our Purpose: Skiing and Snowboarding"
           variant="right"
