@@ -1,8 +1,8 @@
 // import UASCHeader from "assets/logos/2024logo.png"
 import UASCHeader from "assets/icons/uascLOGO.svg"
 import Button from "components/generic/FigmaButtons/FigmaButton"
-import Facebook from "assets/logos/facebookBlue.png"
-import Instagram from "assets/logos/instagramBlue.png"
+import Facebook from "assets/icons/FacebookBlue.svg"
+import Instagram from "assets/icons/InstagramBlue.svg"
 import { Link } from "react-router-dom"
 
 const LandingSection = () => (
