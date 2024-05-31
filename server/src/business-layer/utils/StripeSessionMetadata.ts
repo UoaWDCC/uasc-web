@@ -10,8 +10,8 @@ export enum CheckoutTypeValues {
 /**
  * For booking checkouts, stored in a Stripe session.
  *
- * The value at this metadata key will be a JSON serialized array, storing date strings.
+ * The value at this metadata key will be a JSON serialized array, storing booking slot document IDs.
  *
- * @example '["2024-04-23","2024-04-24","2024-04-26"]'
+ * @example '["ef40TsK5emACG5K08j2n", "Zx0hVyCax6YhTl9PRcTq"]'
  */
 export const BOOKING_SLOTS_KEY = "booking_slot"

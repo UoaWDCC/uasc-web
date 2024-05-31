@@ -11,7 +11,6 @@ import {
   BOOKING_SLOTS_KEY
 } from "business-layer/utils/StripeSessionMetadata"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { Timestamp } from "firebase-admin/firestore"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -300,22 +299,16 @@ export default class StripeService {
       )
     }
     const bookingSlotsJson = session.metadata[BOOKING_SLOTS_KEY]
-    const bookingSlots = JSON.parse(bookingSlotsJson) as Array<string>
+    const bookingSlotIds = JSON.parse(bookingSlotsJson) as Array<string>
 
     const bookingDataService = new BookingDataService()
     const bookingSlotService = new BookingSlotService()
 
     await Promise.all(
-      bookingSlots.map(async (slotDateStr) => {
-        const bookingSlotDate = Math.floor(
-          new Date(slotDateStr).getTime() / 1000
-        )
-
+      bookingSlotIds.map(async (bookingSlotShortId) => {
         const bookingSlotId = (
-          await bookingSlotService.getBookingSlotByDate(
-            new Timestamp(bookingSlotDate, 0)
-          )
-        )[0].id
+          await bookingSlotService.getBookingSlotById(bookingSlotShortId)
+        ).id
         await bookingDataService.createBooking({
           booking_slot_id: bookingSlotId,
           stripe_payment_id: session.id,
