@@ -1,4 +1,5 @@
-import UASCHeader from "assets/logos/2024logo.png"
+// import UASCHeader from "assets/logos/2024logo.png"
+import UASCHeader from "assets/icons/uascLOGO.svg"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import Facebook from "assets/logos/facebookBlue.png"
 import Instagram from "assets/logos/instagramBlue.png"
