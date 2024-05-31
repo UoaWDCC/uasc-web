@@ -26,8 +26,8 @@ const DefaultButton = ({ children, ...props }: props) => {
     <button
       {...props}
       className="bg-dark-blue-100 enabled:hover:text-dark-blue-100 border-dark-blue-100
-        space-x-4; disabled:bg-dark-blue-60 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
-        text-white hover:bg-white enabled:border"
+        space-x-4; disabled:bg-dark-blue-60 flex w-full flex-col items-center rounded-md px-8 py-2 font-sans font-bold
+        uppercase text-white hover:bg-white enabled:border"
     >
       {children}
     </button>
