@@ -1,5 +1,7 @@
 import Table from "components/generic/ReusableTable/Table"
-import { useUsersQuery } from "services/Admin/AdminQueries"
+import AdminSearchBar from "./AdminSearchBar"
+import Button from "components/generic/FigmaButtons/FigmaButton"
+import { useState } from "react"
 
 export type MemberColumnFormat = {
   Name?: string
@@ -28,25 +30,29 @@ const defaultData = {
 }
 
 export const AdminMemberView = ({ data }: IAdminMemberView) => {
+  const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
+  const dataFilter = (oldData: MemberColumnFormat[]) =>
+    currentSearchQuery.length > 2
+      ? oldData.filter(
+          (item) =>
+            item.Email?.toLowerCase().includes(currentSearchQuery) ||
+            item.Name?.toLowerCase().includes(currentSearchQuery)
+        )
+      : oldData
+  const onSeachQueryChangedHandler = (newQuery: string) => {
+    console.log(newQuery)
+    setCurrentSearchQuery(newQuery)
+  }
   return (
     <>
-      <Table data={data || [defaultData]} />
+      <span className="mb-4 mt-6 flex w-full justify-between">
+        <span className="flex gap-5">
+          <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
+          <Button variant="inverted-default-sm">Filter</Button>
+        </span>
+        <Button variant="default-sm">Add New Member</Button>
+      </span>
+      <Table data={(data && dataFilter(data)) || [defaultData]} />
     </>
   )
-}
-
-export const WrappedAdminMemberView = () => {
-  const { data } = useUsersQuery()
-  const transformedDataList = data?.map((data) => {
-    const transformedData: MemberColumnFormat = {}
-    transformedData.Name = `${data.first_name} ${data.last_name}`
-    // TODO: Email
-    transformedData.Email = "test@gmail.com (FAKE)"
-    // TODO: Date Joined
-    transformedData["Date Joined"] = "today (FAKE)"
-    // TODO: Membership Status
-    transformedData.Status = "Member (FAKE)"
-    return transformedData
-  })
-  return <AdminMemberView data={transformedDataList} />
 }
