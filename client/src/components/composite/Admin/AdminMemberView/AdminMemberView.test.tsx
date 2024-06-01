@@ -19,6 +19,7 @@ describe("AdminMemberView", () => {
     fireEvent.change(input, { target: { value: "John" } })
 
     await waitFor(async () => {
+      expect(await queryByText("John")).toBeVisible()
       expect(await queryByText("Dog")).toBeNull()
       expect(await queryByText("cat")).toBeNull()
       expect(await queryByText("fish")).toBeNull()
