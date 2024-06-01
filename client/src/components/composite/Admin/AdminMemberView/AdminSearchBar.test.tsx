@@ -15,4 +15,18 @@ describe("AdminSearchBar", () => {
       expect(mockOnQueryChanged).toHaveBeenCalledWith("hello")
     })
   })
+
+  it("calls onQueryChanged with a lower case value", async () => {
+    const mockOnQueryChanged = jest.fn()
+    const { getByTestId } = render(
+      <AdminSearchBar onQueryChanged={mockOnQueryChanged} />
+    )
+
+    const input = getByTestId("search-input")
+    fireEvent.change(input, { target: { value: "HeLlO???" } })
+
+    await waitFor(() => {
+      expect(mockOnQueryChanged).toHaveBeenCalledWith("hello???")
+    })
+  })
 })

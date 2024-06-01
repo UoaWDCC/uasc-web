@@ -14,7 +14,7 @@ interface IAdminMemberView {
   /**
    * Note that the order of the keys in the first element of the array is the order it'll be displayed in the table.
    *
-   * @example {Name: "Jon", Phone: "111"} will display `Name` before `Phone`
+   * @example // {Name: "Jon", Phone: "111"} will display `Name` before `Phone`
    */
   data?: MemberColumnFormat[]
 }
@@ -40,7 +40,6 @@ export const AdminMemberView = ({ data }: IAdminMemberView) => {
         )
       : oldData
   const onSeachQueryChangedHandler = (newQuery: string) => {
-    console.log(newQuery)
     setCurrentSearchQuery(newQuery)
   }
   return (

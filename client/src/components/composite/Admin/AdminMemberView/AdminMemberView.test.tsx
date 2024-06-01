@@ -16,6 +16,7 @@ describe("AdminMemberView", () => {
     )
 
     const input = getByTestId("search-input")
+
     fireEvent.change(input, { target: { value: "John" } })
 
     await waitFor(async () => {
