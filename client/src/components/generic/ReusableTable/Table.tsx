@@ -1,19 +1,14 @@
-import RightArrow from "assets/icons/rightarrow.svg?react"
-import LeftArrow from "assets/icons/leftarrow.svg?react"
 import { useState } from "react"
+import {
+  TABLE_ROW_IDENTIFIER_KEY,
+  TableRowObjectWithIdentifier,
+  TableRowOperation,
+  TableRowOperationStyle
+} from "./TableUtils"
+import TableFooterPaginator from "./TableFooterPaginator"
+import ThreeDotsVertical from "assets/icons/three-dots-vertical.svg?react"
 
-/**
- * Exported for testing purposes
- */
-export const TABLE_ROW_IDENTIFIER_KEY = "uid" as const
-type ObjectWithIdentifier = {
-  /**
-   * Needs to be **unique** so that a callback can be attached to each row
-   */
-  [TABLE_ROW_IDENTIFIER_KEY]: string
-}
-
-interface Props<T extends ObjectWithIdentifier> {
+interface ITable<T extends TableRowObjectWithIdentifier> {
   /**
    * List of objects that have the same type. Optional props are ok
    */
@@ -26,56 +21,63 @@ interface Props<T extends ObjectWithIdentifier> {
    * Pass in a callback for when the last page of the table is reached (i.e go to the next offset if paginating)
    */
   onLastPageCallback?: () => void
+  /**
+   * decides if clicking on the row options will give multiple options or a single one
+   */
+  operationType: TableRowOperationStyle
+
+  /**
+   * @example {operationName: "Delete User", (identifier: string) => {deleteUserWithUid(identifier)}}
+   */
+  rowOperations?: TableRowOperation[]
 }
 
-interface ITableFooterPaginator {
-  maxPages: number
-  currentPage: number
-  onNext?: () => void
-  onBack?: () => void
-}
+const OperationButton = ({
+  operationType,
+  uid,
+  rowOperations
+}: Pick<
+  ITable<TableRowObjectWithIdentifier>,
+  "operationType" | "rowOperations"
+> &
+  TableRowObjectWithIdentifier) => {
+  if (!rowOperations) return null
 
-const TableFooterPaginator = ({
-  maxPages,
-  currentPage,
-  onNext,
-  onBack
-}: ITableFooterPaginator) => (
-  <>
-    <span className="flex items-center gap-2">
-      <span
-        className="fill-gray-4 flex h-[10px] w-[10px] cursor-pointer"
-        onClick={onBack}
-      >
-        <LeftArrow />
-      </span>
-      <h5 className="select-none font-bold text-black">PAGE</h5>
-      <input
-        value={currentPage}
-        className="border-gray-3 text-h5 h-5 w-6 rounded-md px-0 pl-[4px] text-black"
-      />
-      <h5 className="text-h5 select-none font-bold text-black">
-        OF {maxPages}
-      </h5>
-      <span
-        className="fill-gray-4 flex h-[10px] w-[10px] cursor-pointer"
-        onClick={onNext}
-      >
-        <RightArrow />
-      </span>
-    </span>
-  </>
-)
+  switch (operationType) {
+    case "multiple-operations":
+      return (
+        <div className="flex h-full items-center px-2">
+          <div className="h-[15px] w-[15px] cursor-pointer">
+            <ThreeDotsVertical className="fill-black" />
+          </div>
+        </div>
+      )
+
+    case "single-operation":
+      return (
+        <div className="flex h-full items-center px-2">
+          <h5 onClick={() => rowOperations && rowOperations[0]?.handler(uid)}>
+            X
+          </h5>
+        </div>
+      )
+
+    case "none":
+      return null
+  }
+}
 
 const Table = <T extends Record<string, any>>({
   data,
-  showPerPage = 15
-}: Props<T & ObjectWithIdentifier>) => {
+  showPerPage = 15,
+  operationType = "none",
+  rowOperations
+}: ITable<T & TableRowObjectWithIdentifier>) => {
   // Needs to be zero-indexed
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0)
 
   // Integer division w/o remainder
-  const totalPages = Math.floor(data.length / showPerPage)
+  const totalPages = Math.ceil(data.length / showPerPage)
 
   const onNext = () => {
     if (currentPageIndex === totalPages - 1) return
@@ -127,6 +129,11 @@ const Table = <T extends Record<string, any>>({
                   {obj[key] || ""}
                 </td>
               ))}
+              <OperationButton
+                operationType={operationType}
+                rowOperations={rowOperations}
+                uid={obj[TABLE_ROW_IDENTIFIER_KEY]}
+              />
             </tr>
           ))}
         </tbody>

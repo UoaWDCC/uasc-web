@@ -1,5 +1,6 @@
 import { render, waitFor } from "@testing-library/react"
-import Table, { TABLE_ROW_IDENTIFIER_KEY } from "./Table"
+import Table from "./Table"
+import { TABLE_ROW_IDENTIFIER_KEY } from "./TableUtils"
 
 describe("Table", () => {
   it("Should not render the identifier", async () => {

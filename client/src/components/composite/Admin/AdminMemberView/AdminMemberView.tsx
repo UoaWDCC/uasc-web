@@ -1,8 +1,7 @@
-import Table, {
-  TABLE_ROW_IDENTIFIER_KEY
-} from "components/generic/ReusableTable/Table"
 import AdminSearchBar from "./AdminSearchBar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
+import Table from "components/generic/ReusableTable/Table"
+import { TABLE_ROW_IDENTIFIER_KEY } from "components/generic/ReusableTable/TableUtils"
 import { useState } from "react"
 
 export type MemberColumnFormat = {
