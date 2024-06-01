@@ -24,7 +24,7 @@ interface ITable<T extends TableRowObjectWithIdentifier> {
   /**
    * decides if clicking on the row options will give multiple options or a single one
    */
-  operationType: TableRowOperationStyle
+  operationType?: TableRowOperationStyle
 
   /**
    * @example {operationName: "Delete User", (identifier: string) => {deleteUserWithUid(identifier)}}
@@ -41,7 +41,7 @@ const OperationButton = ({
   "operationType" | "rowOperations"
 > &
   TableRowObjectWithIdentifier) => {
-  if (!rowOperations) return null
+  if (!rowOperations || !operationType) return null
 
   switch (operationType) {
     case "multiple-operations":
