@@ -47,7 +47,9 @@ export default class BookingSlotService {
       .where("date", ">=", startDate)
       .where("date", "<=", endDate)
       .get()
-    const bookingSlotArray = result.docs.map((docs) => docs.data())
+    const bookingSlotArray = result.docs.map((docs) => {
+      return { ...docs.data(), id: docs.id }
+    })
     return bookingSlotArray
   }
 
