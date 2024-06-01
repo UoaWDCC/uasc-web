@@ -1,9 +1,15 @@
-import Table from "components/generic/ReusableTable/Table"
+import Table, {
+  TABLE_ROW_IDENTIFIER_KEY
+} from "components/generic/ReusableTable/Table"
 import AdminSearchBar from "./AdminSearchBar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useState } from "react"
 
 export type MemberColumnFormat = {
+  /**
+   * The user id, used for adding handlers for each individual table row.
+   */
+  uid: string
   Name?: string
   Email?: string
   Status?: string
@@ -23,6 +29,7 @@ interface IAdminMemberView {
  * Used to display columns if there is no data
  */
 const defaultData = {
+  [TABLE_ROW_IDENTIFIER_KEY]: "",
   Name: "",
   Status: "",
   Email: "",

@@ -6,11 +6,11 @@ describe("AdminMemberView", () => {
     const { getByTestId, queryByText } = render(
       <AdminMemberView
         data={[
-          { Name: "John", Email: "key@mail.com" },
-          { Name: "Dog", Email: "key@mail.com" },
-          { Name: "cat", Email: "key1@mail.com" },
-          { Name: "fish", Email: "key2@mail.com" },
-          { Name: "sausage", Email: "key3@mail.com" }
+          { uid: "", Name: "John", Email: "key@mail.com" },
+          { uid: "", Name: "Dog", Email: "key@mail.com" },
+          { uid: "", Name: "cat", Email: "key1@mail.com" },
+          { uid: "", Name: "fish", Email: "key2@mail.com" },
+          { uid: "", Name: "sausage", Email: "key3@mail.com" }
         ]}
       />
     )

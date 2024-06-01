@@ -12,7 +12,8 @@ const WrappedAdminMemberView = () => {
 
   const { data } = useUsersQuery()
   const transformedDataList = data?.map((data) => {
-    const transformedData: MemberColumnFormat = {}
+    const transformedData: MemberColumnFormat = { uid: "" }
+    transformedData.uid = data.uid
     transformedData.Name = `${data.first_name} ${data.last_name}`
     // TODO: Email
     transformedData.Email = "test@gmail.com (FAKE)"

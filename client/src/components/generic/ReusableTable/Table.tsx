@@ -2,7 +2,18 @@ import RightArrow from "assets/icons/rightarrow.svg?react"
 import LeftArrow from "assets/icons/leftarrow.svg?react"
 import { useState } from "react"
 
-interface Props<T> {
+/**
+ * Exported for testing purposes
+ */
+export const TABLE_ROW_IDENTIFIER_KEY = "uid" as const
+type ObjectWithIdentifier = {
+  /**
+   * Needs to be **unique** so that a callback can be attached to each row
+   */
+  [TABLE_ROW_IDENTIFIER_KEY]: string
+}
+
+interface Props<T extends ObjectWithIdentifier> {
   /**
    * List of objects that have the same type. Optional props are ok
    */
@@ -59,7 +70,7 @@ const TableFooterPaginator = ({
 const Table = <T extends Record<string, any>>({
   data,
   showPerPage = 15
-}: Props<T>) => {
+}: Props<T & ObjectWithIdentifier>) => {
   // Needs to be zero-indexed
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0)
 
@@ -89,7 +100,7 @@ const Table = <T extends Record<string, any>>({
 
   currentDataSlice.forEach((obj) => {
     Object.keys(obj).forEach(
-      (key) => !dataKeys.includes(key) && dataKeys.push(key)
+      (key) => !dataKeys.includes(key) && key !== "uid" && dataKeys.push(key)
     )
   })
 
