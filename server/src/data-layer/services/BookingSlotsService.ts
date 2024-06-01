@@ -8,6 +8,18 @@ export default class BookingSlotService {
     return await FirestoreCollections.bookingSlots.add(bookingSlotData)
   }
 
+  /**
+   * Fetches a full booking slot ID, given the document ID.
+   * @param id The id of the booking slot ID to retrieve.
+   */
+  public async getBookingSlotById(
+    id: string
+  ): Promise<BookingSlot & { id: string }> {
+    const result = await FirestoreCollections.bookingSlots.doc(id).get()
+
+    return { ...result.data(), id: result.id }
+  }
+
   public async getBookingSlotByDate(date: Timestamp): Promise<
     Array<
       BookingSlot & {
