@@ -28,7 +28,7 @@ const About = () => {
         ></AboutSection>
       </div>
 
-      <div className="pt-[25%] md:pt-[10%] lg:pl-[42%] lg:pt-[10%]">
+      <div className="pt-[32.5%] md:pt-[10%] lg:pl-[42%] lg:pt-[10%]">
         <AboutSection
           title="Wake up to views like this every morning"
           variant="left"
