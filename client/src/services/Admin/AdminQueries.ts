@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
-import UserService from "./UserService"
+import AdminService from "./AdminService"
 
 export function useUsersQuery() {
   return useQuery({
     queryKey: ["allUsers"],
-    queryFn: () => UserService.getUsers()
+    queryFn: () => AdminService.getUsers(),
+    retry: 3
   })
 }
