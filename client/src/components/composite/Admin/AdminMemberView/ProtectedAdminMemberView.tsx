@@ -15,6 +15,10 @@ const WrappedAdminMemberView = () => {
     return <Navigate to="/" />
   }
 
+  /**
+   * Note that the followind queries/mutations should be scoped to only admins only,
+   * earlier return is only for UX purposes
+   */
   const { data } = useUsersQuery()
 
   const transformedDataList = data?.map((data) => {
