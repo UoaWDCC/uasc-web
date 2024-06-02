@@ -74,7 +74,13 @@ const WrappedAdminMemberView = () => {
     },
     {
       name: "delete",
-
+      handler: () => {
+        // TODO
+        throw new Error("Not Implemented")
+      }
+    },
+    {
+      name: "edit",
       handler: () => {
         // TODO
         throw new Error("Not Implemented")
