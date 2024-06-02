@@ -43,7 +43,10 @@ interface ITable<
   rowOperations?: TableRowOperations<S>
 }
 
-const OperationButton = <
+/**
+ * @deprecated exported for testing purposes only, do not use
+ */
+export const OperationButton = <
   T extends TableRowObjectWithIdentifier,
   S extends TableRowOperationStyle
 >({
@@ -65,6 +68,7 @@ const OperationButton = <
         >
           <div className="h-[15px] w-[15px] cursor-pointer">
             <ThreeDotsVertical
+              data-testid="multiple-operation-button"
               className="fill-black"
               onClick={() => setIsOpen(!isOpen)}
             />
@@ -74,8 +78,9 @@ const OperationButton = <
               className="navbar-shadow border-1 gray-4 absolute bottom-4 right-full
                flex w-52 flex-col items-start gap-2 border bg-white px-3 py-2"
             >
-              {rowOperations.map((operation) => (
+              {rowOperations.map((operation, index) => (
                 <p
+                  data-testid={`multiple-operation-item-${index}`}
                   className="hover:text-light-blue-100 cursor-pointer select-none"
                   key={operation.name}
                   onClick={() => operation.handler(uid)}
@@ -92,7 +97,10 @@ const OperationButton = <
     case "single-operation":
       return (
         <div className="flex h-full items-center px-2">
-          <h5 onClick={() => rowOperations && rowOperations[0]?.handler(uid)}>
+          <h5
+            data-testid="single-operation-button"
+            onClick={() => rowOperations && rowOperations[0]?.handler(uid)}
+          >
             X
           </h5>
         </div>
