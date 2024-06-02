@@ -57,7 +57,7 @@ const OperationButton = <
     case "multiple-operations": {
       const menuRef = useRef<HTMLDivElement>(null)
       useClickOutside(menuRef, () => setIsOpen(false))
-      const [isOpen, setIsOpen] = useState<boolean>(true)
+      const [isOpen, setIsOpen] = useState<boolean>(false)
       return (
         <div
           ref={menuRef}
@@ -71,8 +71,8 @@ const OperationButton = <
           </div>
           {isOpen && (
             <div
-              className="navbar-shadow border-1 gray-4 absolute bottom-4
-               right-full flex w-fit flex-col items-start border bg-white px-3 py-2"
+              className="navbar-shadow border-1 gray-4 absolute bottom-4 right-full
+               flex w-52 flex-col items-start gap-2 border bg-white px-3 py-2"
             >
               {rowOperations.map((operation) => (
                 <p
@@ -165,7 +165,7 @@ const Table = <
   })
 
   return (
-    <div className="border-gray-3 h-full w-full overflow-hidden rounded-t-sm border bg-white">
+    <div className="border-gray-3 h-full w-full  overflow-y-visible rounded-t-sm border bg-white">
       <table className="h-full w-full">
         <thead className="border-b-gray-3 border-b">
           <tr>

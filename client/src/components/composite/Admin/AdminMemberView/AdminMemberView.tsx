@@ -1,7 +1,10 @@
 import AdminSearchBar from "./AdminSearchBar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import Table from "components/generic/ReusableTable/Table"
-import { TABLE_ROW_IDENTIFIER_KEY } from "components/generic/ReusableTable/TableUtils"
+import {
+  TABLE_ROW_IDENTIFIER_KEY,
+  TableRowOperation
+} from "components/generic/ReusableTable/TableUtils"
 import { useState } from "react"
 
 export type MemberColumnFormat = {
@@ -22,6 +25,20 @@ interface IAdminMemberView {
    * @example // {Name: "Jon", Phone: "111"} will display `Name` before `Phone`
    */
   data?: MemberColumnFormat[]
+
+  /**
+   *
+   * Note that the admin member view will *always* have the multiple operations menu
+   *
+   * @example
+   * ```tsx
+   * [
+   * {name: "delete user", handler: (uid:string) => {delete(uid)}}
+   * // add more if needed
+   * ]
+   * ```
+   */
+  rowOperations?: TableRowOperation[]
 }
 
 /**
@@ -35,7 +52,7 @@ const defaultData = {
   "Date Joined": ""
 }
 
-export const AdminMemberView = ({ data }: IAdminMemberView) => {
+export const AdminMemberView = ({ data, rowOperations }: IAdminMemberView) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
   const dataFilter = (oldData: MemberColumnFormat[]) =>
     currentSearchQuery.length > 2
@@ -59,6 +76,8 @@ export const AdminMemberView = ({ data }: IAdminMemberView) => {
       </span>
       <Table<MemberColumnFormat, "multiple-operations">
         data={(data && dataFilter(data)) || [defaultData]}
+        operationType="multiple-operations"
+        rowOperations={rowOperations}
       />
     </>
   )

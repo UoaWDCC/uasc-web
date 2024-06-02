@@ -17,6 +17,20 @@ const AdminService = {
         users
       }
     })
+  },
+  demoteUser: async function (uid: string) {
+    await fetchClient.PUT("/users/demote", {
+      body: {
+        uid
+      }
+    })
+  },
+  promoteUser: async function (uid: string) {
+    await fetchClient.PUT("/users/promote", {
+      body: {
+        uid
+      }
+    })
   }
 } as const
 

@@ -13,6 +13,14 @@ export const debounce = (fn: (...args: any[]) => void, timeout: number) => {
 /**
  * This Hook can be used for detecting clicks outside the Opened Menu
  * https://stackoverflow.com/a/63359693
+ *
+ * @example
+ * ```tsx
+ * myRef = useRef<HTMLDivElement>(null)
+ * useClickOutside(myRef, () => {closeSomething()})
+ * // ...
+ * return <div ref={myRef}></div>
+ * ```
  */
 export const useClickOutside = (
   ref: RefObject<HTMLDivElement>,

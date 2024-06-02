@@ -2,6 +2,11 @@ import { Navigate } from "react-router-dom"
 import { useUsersQuery } from "services/Admin/AdminQueries"
 import { useAppData } from "store/Store"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
+import {
+  useDemoteUserMutation,
+  usePromoteUserMutation
+} from "services/Admin/AdminMutations"
+import { TableRowOperation } from "components/generic/ReusableTable/TableUtils"
 
 const WrappedAdminMemberView = () => {
   const [{ currentUserClaims }] = useAppData()
@@ -11,6 +16,7 @@ const WrappedAdminMemberView = () => {
   }
 
   const { data } = useUsersQuery()
+
   const transformedDataList = data?.map((data) => {
     const transformedData: MemberColumnFormat = { uid: "" }
     transformedData.uid = data.uid
@@ -23,7 +29,36 @@ const WrappedAdminMemberView = () => {
     transformedData.Status = "Member (FAKE)"
     return transformedData
   })
-  return <AdminMemberView data={transformedDataList} />
+
+  const { mutateAsync: promoteUser } = usePromoteUserMutation()
+  const { mutateAsync: demoteUser } = useDemoteUserMutation()
+
+  const rowOperations: TableRowOperation[] = [
+    {
+      name: "promote",
+      handler: async (uid: string) => {
+        await promoteUser(uid)
+      }
+    },
+    {
+      name: "demote",
+      handler: async (uid: string) => {
+        await demoteUser(uid)
+      }
+    },
+    {
+      name: "delete",
+
+      handler: () => {
+        // TODO
+        throw new Error("Not Implemented")
+      }
+    }
+  ]
+
+  return (
+    <AdminMemberView rowOperations={rowOperations} data={transformedDataList} />
+  )
 }
 
 export default WrappedAdminMemberView
