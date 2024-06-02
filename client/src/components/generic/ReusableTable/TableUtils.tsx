@@ -18,6 +18,6 @@ export type TableRowOperation = {
   /**
    * The name of the operation
    */
-  operationName: string
+  name?: string
   handler: (identifier: string) => void
 }

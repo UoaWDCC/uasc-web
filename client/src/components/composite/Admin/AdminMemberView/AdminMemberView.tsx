@@ -57,7 +57,9 @@ export const AdminMemberView = ({ data }: IAdminMemberView) => {
         </span>
         <Button variant="default-sm">Add New Member</Button>
       </span>
-      <Table data={(data && dataFilter(data)) || [defaultData]} />
+      <Table<MemberColumnFormat, "multiple-operations">
+        data={(data && dataFilter(data)) || [defaultData]}
+      />
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowObjectWithIdentifier,
@@ -7,8 +7,19 @@ import {
 } from "./TableUtils"
 import TableFooterPaginator from "./TableFooterPaginator"
 import ThreeDotsVertical from "assets/icons/three-dots-vertical.svg?react"
+import { useClickOutside } from "components/utils/Utils"
 
-interface ITable<T extends TableRowObjectWithIdentifier> {
+type TableRowOperations<T extends TableRowOperationStyle> =
+  T extends "multiple-operations"
+    ? TableRowOperation[]
+    : T extends "single-operation"
+      ? [TableRowOperation]
+      : undefined
+
+interface ITable<
+  T extends TableRowObjectWithIdentifier,
+  S extends TableRowOperationStyle
+> {
   /**
    * List of objects that have the same type. Optional props are ok
    */
@@ -27,31 +38,56 @@ interface ITable<T extends TableRowObjectWithIdentifier> {
   operationType?: TableRowOperationStyle
 
   /**
-   * @example {operationName: "Delete User", (identifier: string) => {deleteUserWithUid(identifier)}}
+   * @example // {operationName: "Delete User", (identifier: string) => {deleteUserWithUid(identifier)}}
    */
-  rowOperations?: TableRowOperation[]
+  rowOperations?: TableRowOperations<S>
 }
 
-const OperationButton = ({
+const OperationButton = <
+  T extends TableRowObjectWithIdentifier,
+  S extends TableRowOperationStyle
+>({
   operationType,
   uid,
   rowOperations
-}: Pick<
-  ITable<TableRowObjectWithIdentifier>,
-  "operationType" | "rowOperations"
-> &
-  TableRowObjectWithIdentifier) => {
+}: Pick<ITable<T, S>, "operationType" | "rowOperations"> & T) => {
   if (!rowOperations || !operationType) return null
 
   switch (operationType) {
-    case "multiple-operations":
+    case "multiple-operations": {
+      const menuRef = useRef<HTMLDivElement>(null)
+      useClickOutside(menuRef, () => setIsOpen(false))
+      const [isOpen, setIsOpen] = useState<boolean>(true)
       return (
-        <div className="flex h-full items-center px-2">
+        <div
+          ref={menuRef}
+          className="relative flex h-full items-center overflow-visible px-2"
+        >
           <div className="h-[15px] w-[15px] cursor-pointer">
-            <ThreeDotsVertical className="fill-black" />
+            <ThreeDotsVertical
+              className="fill-black"
+              onClick={() => setIsOpen(!isOpen)}
+            />
           </div>
+          {isOpen && (
+            <div
+              className="navbar-shadow border-1 gray-4 absolute bottom-4
+               right-full flex w-fit flex-col items-start border bg-white px-3 py-2"
+            >
+              {rowOperations.map((operation) => (
+                <p
+                  className="hover:text-light-blue-100 cursor-pointer select-none"
+                  key={operation.name}
+                  onClick={() => operation.handler(uid)}
+                >
+                  {operation.name}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       )
+    }
 
     case "single-operation":
       return (
@@ -67,12 +103,34 @@ const OperationButton = ({
   }
 }
 
-const Table = <T extends Record<string, any>>({
+/**
+ *
+ * To use multiple operations (will display a meny with the options provided)
+ * @example  ```tsx
+ *          <Table<UserTypeWithUid, "multiple-operations">
+ *              data={data}
+ *              operationType="multiple-operations"
+ *              rowOperations={[{handler: (id) => {console.log(id)}}, {handler: (id) => {console.(id)}}]} />
+ *           ```
+ *
+ *
+ * To use one operation (will display a single button)
+ * @example  ```tsx
+ *          <Table<UserTypeWithUid, "single-operation">
+ *              data={data}
+ *              operationType="single-operation"
+ *              rowOperations={[{handler: (id) => {console.(id)}}]} />
+ *           ```
+ */
+const Table = <
+  T extends Record<string, any>,
+  S extends TableRowOperationStyle
+>({
   data,
   showPerPage = 15,
   operationType = "none",
   rowOperations
-}: ITable<T & TableRowObjectWithIdentifier>) => {
+}: ITable<T & TableRowObjectWithIdentifier, S>) => {
   // Needs to be zero-indexed
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0)
 

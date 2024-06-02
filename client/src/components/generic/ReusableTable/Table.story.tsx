@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
 import Table from "./Table"
+import { useState } from "react"
 
 const meta: Meta<typeof Table> = {
   component: Table
@@ -14,6 +15,7 @@ export const FullTable: Story = {
   args: {
     data: [
       {
+        uid: "",
         Name: "John Doe",
         Email: "john.doe@example.com",
         Status: "Member",
@@ -21,6 +23,7 @@ export const FullTable: Story = {
         "Date Joined": "12-7-22"
       },
       {
+        uid: "",
         Name: "Ray Zhao",
         Email: "ray.zhao@example.com",
         Status: "Superior Controller",
@@ -28,6 +31,7 @@ export const FullTable: Story = {
         "Date Joined": "12-7-22"
       },
       {
+        uid: "",
         Name: "Johnathan Doeshin",
         Email: "jondoe@gmail.com",
         Status: "Member",
@@ -43,6 +47,7 @@ export const MissingValues: Story = {
   args: {
     data: [
       {
+        uid: "",
         id: 1,
         firstName: "John",
         lastName: "Doe",
@@ -51,6 +56,7 @@ export const MissingValues: Story = {
         role: "Admin"
       },
       {
+        uid: "",
         id: 2,
         firstName: "Jane",
         email: "jane.smith@example.com",
@@ -59,4 +65,92 @@ export const MissingValues: Story = {
       }
     ]
   }
+}
+
+export const SingleOperation = () => {
+  const data = [
+    {
+      uid: "1",
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      age: 30,
+      role: "Admin"
+    },
+    {
+      uid: "2",
+      id: 2,
+      firstName: "Jane",
+      email: "jane.smith@example.com",
+      gender: "Female",
+      role: "User"
+    }
+  ]
+  const [message, setMessage] = useState("")
+  return (
+    <>
+      <p>Last Clicked id: {message}</p>
+      <Table<(typeof data)[0], "single-operation">
+        data={data}
+        operationType="single-operation"
+        rowOperations={[
+          {
+            handler: (id: string) => {
+              setMessage(id)
+            }
+          }
+        ]}
+      />
+    </>
+  )
+}
+
+export const MultipleOperations = () => {
+  const data = [
+    {
+      uid: "1",
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      age: 30,
+      role: "Admin"
+    },
+    {
+      uid: "2",
+      id: 2,
+      firstName: "Jane",
+      email: "jane.smith@example.com",
+      gender: "Female",
+      role: "User"
+    }
+  ]
+  const [promoteMessage, setPromoteMessage] = useState("")
+  const [deleteMessage, setDeleteMessage] = useState("")
+  return (
+    <>
+      <p>Last promoted id: {promoteMessage}</p>
+      <p>Last deleted id: {deleteMessage}</p>
+      <Table<(typeof data)[0], "multiple-operations">
+        data={data}
+        operationType="multiple-operations"
+        rowOperations={[
+          {
+            handler: (id: string) => {
+              setPromoteMessage(id)
+            },
+            name: "promote"
+          },
+
+          {
+            handler: (id: string) => {
+              setDeleteMessage(id)
+            },
+            name: "delete"
+          }
+        ]}
+      />
+    </>
+  )
 }
