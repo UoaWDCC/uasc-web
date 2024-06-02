@@ -7,6 +7,7 @@ const meta: Meta<typeof AdminMemberView> = {
 }
 
 const mockData = {
+  uid: "",
   Name: "john doe",
   Status: "member",
   Email: "test@gmail.com",
