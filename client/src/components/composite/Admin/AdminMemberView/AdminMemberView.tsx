@@ -52,10 +52,12 @@ const defaultData = {
   "Date Joined": ""
 }
 
+const ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH = 2 as const
+
 export const AdminMemberView = ({ data, rowOperations }: IAdminMemberView) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
   const dataFilter = (oldData: MemberColumnFormat[]) =>
-    currentSearchQuery.length > 2
+    currentSearchQuery.length > ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH
       ? oldData.filter(
           (item) =>
             item.Email?.toLowerCase().includes(currentSearchQuery) ||
