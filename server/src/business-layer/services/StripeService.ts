@@ -261,27 +261,27 @@ export default class StripeService {
     /** Return the updated product */
     return updatedProduct
   }
-  
+
   public async getActiveMembershipProducts() {
     try {
-        // Fetch all active products from Stripe
-        const products = await stripe.products.list({
-            active: true,
-            expand: ['default_price']
-        });
+      // Fetch all active products from Stripe
+      const products = await stripe.products.list({
+        active: true,
+        expand: ["default_price"]
+      })
 
-        // Filter products with the required metadata
-        // Use enum and key checking for if it is a "booking" or "membership"
-        const membershipProducts = products.data.filter(product => 
-            product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] === ProductTypeValues.MEMBERSHIP &&
-            product.metadata.discount === "true"
-        );
+      // Filter products with the required metadata
+      // Use enum and key checking for if it is a "booking" or "membership"
+      const membershipProducts = products.data.filter(
+        (product) =>
+          product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] ===
+            ProductTypeValues.MEMBERSHIP && product.metadata.discount === "true"
+      )
 
-        return membershipProducts;
+      return membershipProducts
     } catch (error) {
-        console.error('Error fetching Stripe products:', error);
-        throw error;
+      console.error("Error fetching Stripe products:", error)
+      throw error
     }
-    
-}
+  }
 }

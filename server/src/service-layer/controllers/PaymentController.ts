@@ -29,8 +29,6 @@ import {
 
 @Route("payment")
 export class PaymentController extends Controller {
-  // TODO: Create an endpoint here (similar to the other ones in this class)
-  // After you have created the required logic in the StripeService
   @Security("jwt")
   @Get("membership_prices")
   public async getMembershipPrices(): Promise<MembershipStripeProductResponse> {
@@ -48,6 +46,7 @@ export class PaymentController extends Controller {
           displayPrice: product.default_price,
           originalPrice: product.metadata.original_price
         }
+        console.log("Membership products fetched")
       })
     } catch (e) {
       console.log("Error fetching active Stripe products")

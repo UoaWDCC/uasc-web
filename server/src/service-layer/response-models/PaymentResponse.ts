@@ -6,10 +6,10 @@ export interface MembershipPaymentResponse extends CommonResponse {
   membershipType?: MembershipTypeValues
 }
 
-// Make a data shape matching to the ticket
-export interface MembershipPricesResponse {
+// Make a data shape matching to the expected response from Stripe API
+export interface MembershipStripeProductResponse {
   productId: string
-  name: MembershipTypeValues 
+  name: MembershipTypeValues
   description?: string
   discount: boolean
   displayPrice: string
