@@ -37,17 +37,39 @@ const WrappedAdminMemberView = () => {
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
 
+  const getNameFromUid = (uid: string) => {
+    const matchingUser = data?.find((user) => user.uid === uid)
+    if (matchingUser) {
+      return `${matchingUser.first_name} ${matchingUser.last_name}`
+    }
+    return "Unknown"
+  }
+
   const rowOperations: TableRowOperation[] = [
     {
       name: "promote",
-      handler: async (uid: string) => {
-        await promoteUser(uid)
+      handler: (uid: string) => {
+        promoteUser(uid, {
+          onSuccess: () =>
+            alert(`Successfully added membership for ${getNameFromUid(uid)}`),
+          onError: () =>
+            alert(
+              `Could not add membership for ${getNameFromUid(uid)}, they may already have membership`
+            )
+        })
       }
     },
     {
       name: "demote",
-      handler: async (uid: string) => {
-        await demoteUser(uid)
+      handler: (uid: string) => {
+        demoteUser(uid, {
+          onSuccess: () =>
+            alert(`Successfully removed membership for ${getNameFromUid(uid)}`),
+          onError: () =>
+            alert(
+              `Could not remove membership for ${getNameFromUid(uid)}, they may already not have membership`
+            )
+        })
       }
     },
     {

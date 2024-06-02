@@ -19,18 +19,20 @@ const AdminService = {
     })
   },
   demoteUser: async function (uid: string) {
-    await fetchClient.PUT("/users/demote", {
+    const { response } = await fetchClient.PUT("/users/demote", {
       body: {
         uid
       }
     })
+    if (!response.ok) throw new Error(`Failed to demote ${uid}`)
   },
   promoteUser: async function (uid: string) {
-    await fetchClient.PUT("/users/promote", {
+    const { response } = await fetchClient.PUT("/users/promote", {
       body: {
         uid
       }
     })
+    if (!response.ok) throw new Error(`Failed to promote ${uid}`)
   }
 } as const
 
