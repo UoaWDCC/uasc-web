@@ -23,6 +23,8 @@ import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata
 
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
+import BookingDataService from "data-layer/services/BookingDataService"
+import { Timestamp } from "firebase-admin/firestore"
 
 const request = supertest(_app)
 
