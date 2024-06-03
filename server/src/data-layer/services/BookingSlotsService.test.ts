@@ -64,18 +64,14 @@ describe("BookingSlotsService Tests", () => {
         timestamp
       )
 
-    const _bookingSlotsBetweenDateRange = bookingSlotsBetweenDateRange.map(
-      (slot) => {
-        const { ...data } = slot
-        delete data.id
-        return data
-      }
-    )
+    bookingSlotsBetweenDateRange.forEach((slot) => {
+      delete slot.id
+    })
 
-    expect(_bookingSlotsBetweenDateRange.length).toBe(3)
-    expect(_bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData)
-    expect(_bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)
-    expect(_bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData3)
+    expect(bookingSlotsBetweenDateRange.length).toBe(3)
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData)
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData3)
   })
 
   it("Should get booking slots between valid date range", async () => {
@@ -91,17 +87,13 @@ describe("BookingSlotsService Tests", () => {
         timestamp3
       )
 
-    const _bookingSlotsBetweenDateRange = bookingSlotsBetweenDateRange.map(
-      (slot) => {
-        const { ...data } = slot
-        delete data.id
-        return data
-      }
-    )
+    bookingSlotsBetweenDateRange.forEach((slot) => {
+      delete slot.id
+    })
 
     expect(bookingSlotsBetweenDateRange.length).toBe(2)
-    expect(_bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)
-    expect(_bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData3)
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)
+    expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData3)
   })
 
   it("Should update booking slot", async () => {
