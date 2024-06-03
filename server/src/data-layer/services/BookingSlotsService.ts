@@ -8,32 +8,45 @@ export default class BookingSlotService {
     return await FirestoreCollections.bookingSlots.add(bookingSlotData)
   }
 
-  // Read
-  public async getBookingSlotsStripeProductId(productId: string) {
-    const result = await FirestoreCollections.bookingSlots
-      .where("stripe_product_id", "==", productId)
-      .get()
-    const stripeProductIdArray = result.docs.map((docs) => docs.data())
-    return stripeProductIdArray
-  }
-
-  public async getBookingSlotByDate(date: Timestamp) {
+  public async getBookingSlotByDate(date: Timestamp): Promise<
+    Array<
+      BookingSlot & {
+        /**
+         * The ID of the document for which this document contains data.
+         */
+        id: string
+      }
+    >
+  > {
     const result = await FirestoreCollections.bookingSlots
       .where("date", "==", date)
       .get()
-    const bookingSlotArray = result.docs.map((docs) => docs.data())
+    const bookingSlotArray = result.docs.map((docs) => {
+      return { ...docs.data(), id: docs.id }
+    })
     return bookingSlotArray
   }
 
   public async getBookingSlotsBetweenDateRange(
     startDate: Timestamp,
     endDate: Timestamp
-  ) {
+  ): Promise<
+    Array<
+      BookingSlot & {
+        /**
+         * The ID of the document for which this document contains data.
+         */
+        id: string
+      }
+    >
+  > {
     const result = await FirestoreCollections.bookingSlots
       .where("date", ">=", startDate)
       .where("date", "<=", endDate)
       .get()
-    const bookingSlotArray = result.docs.map((docs) => docs.data())
+    const bookingSlotArray = result.docs.map((docs) => {
+      return { ...docs.data(), id: docs.id }
+    })
     return bookingSlotArray
   }
 

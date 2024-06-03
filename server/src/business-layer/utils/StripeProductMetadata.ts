@@ -19,6 +19,16 @@ export enum MembershipTypeValues {
 }
 
 /**
+ * For lodge bookings
+ */
+export const BOOKING_SLOTS_KEY = "booking_slots"
+export const LODGE_BOOKING_TYPE_KEY = "lodge_booking_type"
+export enum LodgeBookingTypeValues {
+  Weekend = "weekend",
+  Weekday = "weekday"
+}
+
+/**
  * For customer objects
  */
 export const USER_FIREBASE_ID_KEY = "firebase_user_id"

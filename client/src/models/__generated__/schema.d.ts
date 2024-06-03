@@ -38,6 +38,9 @@ export interface paths {
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
+  "/payment/booking": {
+    post: operations["GetBookingPayment"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -187,8 +190,17 @@ export interface components {
       stripeClientSecret?: string;
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
-    UserPaymentRequestModel: {
+    UserMembershipRequestModel: {
       membershipType: components["schemas"]["MembershipTypeValues"];
+    };
+    BookingPaymentResponse: {
+      error?: string;
+      message?: string;
+      stripeClientSecret?: string;
+    };
+    UserBookingRequestingModel: {
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
   };
   responses: {
@@ -340,7 +352,7 @@ export interface operations {
   GetMembershipPayment: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UserPaymentRequestModel"];
+        "application/json": components["schemas"]["UserMembershipRequestModel"];
       };
     };
     responses: {
@@ -348,6 +360,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["MembershipPaymentResponse"];
+        };
+      };
+    };
+  };
+  GetBookingPayment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserBookingRequestingModel"];
+      };
+    };
+    responses: {
+      /** @description Created booking checkout session */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BookingPaymentResponse"];
         };
       };
     };

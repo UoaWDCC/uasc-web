@@ -4,6 +4,9 @@ import {
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
+import { UserAdditionalInfo } from "data-layer/models/firebase"
+import UserDataService from "data-layer/services/UserDataService"
+import { UserRecord } from "firebase-admin/auth"
 import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
@@ -39,6 +42,35 @@ export default class StripeService {
       query: `metadata['${key}']:'${value}'`
     })
     return result.data
+  }
+
+  /**
+   * Creates a new Stripe customer if it doesn't exist and sets the Stripe customer id to the user info after creation.
+   * @param user, user data extracted from JWT
+   */
+  public async createCustomerIfNotExist(
+    user: UserRecord,
+    userData: UserAdditionalInfo,
+    userDataService: UserDataService
+  ) {
+    if (userData.stripe_id) {
+      // pre-existing user
+      return {
+        newUser: false,
+        stripeCustomerId: userData.stripe_id
+      }
+    } else {
+      // need to create a new user
+      const { first_name, last_name } = userData
+      const { uid, email } = user
+      const displayName = `${first_name} ${last_name} ${email}`
+      const { id } = await this.createNewUser(displayName, email, uid)
+      await userDataService.editUserData(uid, { stripe_id: id })
+      return {
+        newUser: true,
+        stripeCustomerId: id
+      }
+    }
   }
 
   /**
@@ -123,6 +155,33 @@ export default class StripeService {
     )
     // Might be undefined
     return currentlyActiveSession
+  }
+
+  /**
+   * Used to return recent active payment sessions in the case of one session only payments (i.e memberships or bookings)
+   * I.e to reduce available slots due to pending payments
+   * @param sessionType defined as the enum CheckoutTypeValues, only exists for `membership` and `booking` right now
+   * @param createdMinutesAgo how long ago to check for checkout sessions
+   *
+   * Will return undefined if no sessions found
+   */
+  public async getRecentActiveSessions(
+    sessionType: CheckoutTypeValues,
+    createdMinutesAgo?: number
+  ): Promise<Stripe.Checkout.Session[]> {
+    const { data } = await stripe.checkout.sessions.list({
+      created: {
+        gte: createdMinutesAgo
+          ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
+          : undefined
+      }
+    })
+    const recentActiveSessions = data.filter(
+      (session) =>
+        session.metadata[CHECKOUT_TYPE_KEY] === sessionType &&
+        session.status === "open"
+    )
+    return recentActiveSessions
   }
 
   public async createProduct(

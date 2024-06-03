@@ -5,3 +5,7 @@ export interface MembershipPaymentResponse extends CommonResponse {
   stripeClientSecret?: string
   membershipType?: MembershipTypeValues
 }
+
+export interface BookingPaymentResponse extends CommonResponse {
+  stripeClientSecret?: string
+}

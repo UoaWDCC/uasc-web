@@ -4,14 +4,28 @@ import {
   MembershipTypeValues,
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues,
-  MEMBERSHIP_TYPE_KEY
+  MEMBERSHIP_TYPE_KEY,
+  LODGE_BOOKING_TYPE_KEY,
+  LodgeBookingTypeValues,
+  BOOKING_SLOTS_KEY
 } from "business-layer/utils/StripeProductMetadata"
-import UserDataService from "data-layer/services/UserDataService"
 import {
-  UserPaymentRequestModel,
-  SelfRequestModel
+  datesToDateRange,
+  firestoreTimestampToDate
+} from "data-layer/adapters/DateUtils"
+import BookingDataService from "data-layer/services/BookingDataService"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
+import UserDataService from "data-layer/services/UserDataService"
+import { Timestamp } from "firebase-admin/firestore"
+import {
+  UserMembershipRequestModel,
+  SelfRequestModel,
+  UserBookingRequestingModel
 } from "service-layer/request-models/UserRequests"
-import { MembershipPaymentResponse } from "service-layer/response-models/PaymentResponse"
+import {
+  BookingPaymentResponse,
+  MembershipPaymentResponse
+} from "service-layer/response-models/PaymentResponse"
 import {
   Controller,
   Post,
@@ -52,10 +66,10 @@ export class PaymentController extends Controller {
   @Post("membership")
   public async getMembershipPayment(
     @Request() request: SelfRequestModel,
-    @Body() requestBody: UserPaymentRequestModel
+    @Body() requestBody: UserMembershipRequestModel
   ): Promise<MembershipPaymentResponse> {
     try {
-      const { uid, email, customClaims } = request.user
+      const { uid, customClaims } = request.user
       if (customClaims && customClaims[AuthServiceClaims.MEMBER]) {
         // Can't pay for membership if already member
         this.setStatus(409)
@@ -70,19 +84,13 @@ export class PaymentController extends Controller {
       /**
        * Generate customer id if required
        */
-      let stripeCustomerId: string
-      if (!userData.stripe_id) {
-        const { first_name, last_name } = userData // Assume user doesn't troll
-        const displayName = `${first_name} ${last_name} ${email}`
-        const { id } = await stripeService.createNewUser(
-          displayName,
-          email,
-          uid
+      const { newUser, stripeCustomerId } =
+        await stripeService.createCustomerIfNotExist(
+          request.user,
+          userData,
+          userDataService
         )
-        stripeCustomerId = id
-        await userDataService.editUserData(uid, { stripe_id: stripeCustomerId })
-      } else {
-        stripeCustomerId = userData.stripe_id
+      if (!newUser) {
         /**
          * See if user already has active session
          */
@@ -98,7 +106,7 @@ export class PaymentController extends Controller {
             membershipType: metadata[
               MEMBERSHIP_TYPE_KEY
             ] as MembershipTypeValues,
-            message: "existing session found"
+            message: "Existing membership checkout session found"
           }
         }
         /**
@@ -113,7 +121,7 @@ export class PaymentController extends Controller {
         ) {
           this.setStatus(409)
           return {
-            message: "Payment is still being processed"
+            message: "Membership payment is still being processed"
           }
         }
       }
@@ -166,6 +174,184 @@ export class PaymentController extends Controller {
       console.error(error)
       this.setStatus(500)
       return { error: "Something went wrong" }
+    }
+  }
+
+  @SuccessResponse("200", "Created booking checkout session")
+  @Security("jwt")
+  @Post("booking")
+  public async getBookingPayment(
+    @Request() request: SelfRequestModel,
+    @Body() requestBody: UserBookingRequestingModel
+  ): Promise<BookingPaymentResponse> {
+    const { uid, customClaims } = request.user
+    const { startDate, endDate } = requestBody
+    if (!customClaims || !customClaims[AuthServiceClaims.MEMBER]) {
+      this.setStatus(403)
+      return {
+        message: "Need a membership to create bookings"
+      }
+    }
+    // Need to validate the booking date through a startDate and endDate range.
+    const earliestDate = new Date()
+    earliestDate.setUTCHours(0, 0, 0, 0)
+    const latestDate = new Date(earliestDate)
+    latestDate.setFullYear(earliestDate.getFullYear() + 1)
+    // The request start and end dates
+    if (
+      endDate.seconds < startDate.seconds ||
+      startDate.seconds * 1000 < earliestDate.getTime() ||
+      endDate.seconds * 1000 > latestDate.getTime()
+    ) {
+      this.setStatus(401)
+      return {
+        error:
+          "Invalid date, booking start date and end date must be in the range of today up to a year later. "
+      }
+    }
+    // Calculate number of days of booking, returns a 0 indexed number
+    function getNumberOfDays(startDate: Timestamp, endDate: Timestamp): number {
+      const MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24
+      const numberOfDays =
+        (startDate.seconds * 1000 - endDate.seconds * 1000) / MILLIS_IN_A_DAY
+      return numberOfDays + 1
+    }
+    // Calculate number of days of booking
+    const numberOfDays = getNumberOfDays(startDate, endDate)
+    // Validate number of dates to avoid kiddies from forging bookings
+    if (numberOfDays > 10) {
+      this.setStatus(401)
+      return {
+        error: "Invalid date range, booking must be a maximum of 10 days. "
+      }
+    }
+    // Create new Stripe checkout session
+    const stripeService = new StripeService()
+    const userDataService = new UserDataService()
+
+    const userData = await userDataService.getUserData(uid)
+    const { newUser, stripeCustomerId } =
+      await stripeService.createCustomerIfNotExist(
+        request.user,
+        userData,
+        userDataService
+      )
+    // If not a new Stripe customer, we want to check for pre-existing bookings
+    if (!newUser) {
+      const activeSession = await stripeService.getActiveSessionForUser(
+        stripeCustomerId,
+        CheckoutTypeValues.BOOKING
+      )
+      if (activeSession) {
+        return {
+          stripeClientSecret: activeSession.client_secret,
+          message: "Existing booking checkout session found"
+        }
+      }
+    }
+
+    const recentActiveSessions = await stripeService.getRecentActiveSessions(
+      CheckoutTypeValues.BOOKING,
+      30
+    )
+
+    const bookingSlotService = new BookingSlotService()
+    const bookingDataService = new BookingDataService()
+
+    const bookingSlots =
+      await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        endDate
+      )
+    // Create a date range list to validate against
+    const daysList = datesToDateRange(
+      firestoreTimestampToDate(startDate),
+      firestoreTimestampToDate(endDate)
+    )
+
+    if (bookingSlots.length !== daysList.length) {
+      this.setStatus(401)
+      return {
+        error: "No booking slot available for one or more dates."
+      }
+    }
+    // iterate through the active stripe sessions and check metadata, reduce the bookingSlots available
+    for (const session of recentActiveSessions) {
+      const bookingSlotMetadata = session.metadata.booking_slots
+      if (bookingSlotMetadata) {
+        for (const bookingSlotId of bookingSlotMetadata) {
+          const bookingSlot = bookingSlots.find(
+            (slot) => slot.id === bookingSlotId
+          )
+          if (bookingSlot) {
+            bookingSlot.max_bookings -= 1
+          }
+        }
+      }
+    }
+    try {
+      Promise.all(
+        daysList.map(async (dateToValidate: Date, index: number) => {
+          // booking slot id and max booking slots
+          const { id, max_bookings } = bookingSlots[index]
+          if (max_bookings < 1) {
+            this.setStatus(401)
+            return {
+              error: "No booking slot available for one or more dates."
+            }
+          }
+          const bookings = await bookingDataService.getBookingsBySlotId(id)
+          if (bookings.some((booking) => booking.user_id === uid)) {
+            this.setStatus(409)
+            return {
+              error: "User already has a booking for this date"
+            }
+          }
+          return dateToValidate
+        })
+      )
+    } catch (e) {
+      this.setStatus(501)
+      return {
+        error: "Something went wrong"
+      }
+    }
+    // get requiredBookingType
+    let requiredBookingType: LodgeBookingTypeValues
+    if (numberOfDays === 1 && [6, 7].includes(daysList[0].getUTCDay())) {
+      requiredBookingType = LodgeBookingTypeValues.Weekend
+    } else {
+      requiredBookingType = LodgeBookingTypeValues.Weekday
+    }
+
+    // implement pricing logic
+    const requiredBookingProducts = await stripeService.getProductByMetadata(
+      LODGE_BOOKING_TYPE_KEY,
+      requiredBookingType
+    )
+    const requiredBookingProduct = requiredBookingProducts.find(
+      (product) => product.active
+    )
+    const { default_price } = requiredBookingProduct
+    const clientSecret = await stripeService.createCheckoutSession(
+      uid,
+      `${process.env.FRONTEND_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
+      [
+        {
+          price: default_price as string,
+          quantity: 1
+        }
+      ],
+      {
+        [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.BOOKING,
+        [LODGE_BOOKING_TYPE_KEY]: requiredBookingType,
+        [BOOKING_SLOTS_KEY]: bookingSlots.map((slot) => slot.id).join(", ")
+      },
+      stripeCustomerId
+    )
+    this.setStatus(200)
+    return {
+      stripeClientSecret: clientSecret
     }
   }
 }
