@@ -1,13 +1,15 @@
 import StripeService from "business-layer/services/StripeService"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 import {
-  MembershipTypeValues,
+  BOOKING_SLOTS_KEY,
   CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues,
+  CheckoutTypeValues
+} from "business-layer/utils/StripeSessionMetadata"
+import {
+  MembershipTypeValues,
   MEMBERSHIP_TYPE_KEY,
   LODGE_BOOKING_TYPE_KEY,
-  LodgeBookingTypeValues,
-  BOOKING_SLOTS_KEY
+  LodgeBookingTypeValues
 } from "business-layer/utils/StripeProductMetadata"
 import {
   datesToDateRange,

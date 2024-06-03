@@ -17,3 +17,7 @@ export interface MembershipPaymentResponse extends CommonResponse {
 export interface BookingPaymentResponse extends CommonResponse {
   stripeClientSecret?: string
 }
+
+export interface AvailableDatesResponse extends CommonResponse {
+  data?: AvailableDates[]
+}

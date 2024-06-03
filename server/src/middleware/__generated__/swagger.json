@@ -444,6 +444,40 @@
 						"$ref": "#/components/schemas/MembershipTypeValues"
 					}
 				},
+				"required": [
+					"membershipType"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingPaymentResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stripeClientSecret": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserBookingRequestingModel": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -499,37 +533,6 @@
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					}
 				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"BookingPaymentResponse": {
-				"properties": {
-					"error": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"stripeClientSecret": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"UserBookingRequestingModel": {
-				"properties": {
-					"startDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-					},
-					"endDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-					}
-				},
-				"required": [
-					"startDate",
-					"endDate"
-				],
 				"type": "object",
 				"additionalProperties": false
 			}
