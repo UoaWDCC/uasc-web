@@ -20,12 +20,11 @@ import {
 import { signupUserMock } from "test-config/mocks/User.mock"
 import AuthService from "business-layer/services/AuthService"
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
-import { dateToFirestoreTimeStamp } from "data-layer/adapters/FirestoreUtils"
-
-import { Timestamp } from "firebase-admin/firestore"
 
 import BookingSlotService from "data-layer/services/BookingSlotsService"
+import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
+import { Timestamp } from "firebase-admin/firestore"
 
 const request = supertest(_app)
 
@@ -109,24 +108,24 @@ describe("Endpoints", () => {
     _app.close()
   })
 
-  describe("/Users", () => {
+  describe("admin/users", () => {
     it("Should get users for admin", (done) => {
       request
-        .get("/users")
+        .get("/admin/users")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
         .expect(200, done)
     })
     it("Should not allow members to get users", (done) => {
       request
-        .get("/users")
+        .get("/admin/users")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
         .expect(401, done)
     })
     it("Should not allow guests to get users", (done) => {
       request
-        .get("/users")
+        .get("/admin/users")
         .set("Authorization", `Bearer ${guestToken}`)
         .send({})
         .expect(401, done)
@@ -195,7 +194,7 @@ describe("Endpoints", () => {
     })
   })
 
-  describe("/users/promote and /users/demote", () => {
+  describe("/admin/users/promote and /admin/users/demote", () => {
     beforeEach(async () => {
       await createUsers()
     })
@@ -205,14 +204,14 @@ describe("Endpoints", () => {
     })
     it("Should allow admins to promote regular users", (done) => {
       request
-        .put("/users/promote")
+        .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
         .expect(200, done)
     })
     it("Should allow admins to demote regular users", (done) => {
       request
-        .put("/users/demote")
+        .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
         .expect(200, done)
@@ -220,13 +219,13 @@ describe("Endpoints", () => {
     it("Should not allow admins to demote/promote admins", async () => {
       let res
       res = await request
-        .put("/users/promote")
+        .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
       expect(res.status).toEqual(403) // forbidden
 
       res = await request
-        .put("/users/demote")
+        .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
       expect(res.status).toEqual(403) // forbidden
@@ -235,13 +234,13 @@ describe("Endpoints", () => {
     it("Should not allow guests/members to use demote/promote", async () => {
       let res
       res = await request
-        .put("/users/promote")
+        .put("/admin/users/promote")
         .set("Authorization", `Bearer ${guestToken}`)
         .send({ uid: GUEST_USER_UID })
       expect(res.status).toEqual(401) // unauthorised
 
       res = await request
-        .put("/users/demote")
+        .put("/admin/users/demote")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ uid: MEMBER_USER_UID })
       expect(res.status).toEqual(401) // unauthorised
@@ -250,13 +249,13 @@ describe("Endpoints", () => {
     it("Should check for conflicts, e.g. already member/guest", async () => {
       let res
       res = await request
-        .put("/users/promote")
+        .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
       expect(res.status).toEqual(409) // conflict
 
       res = await request
-        .put("/users/demote")
+        .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
       expect(res.status).toEqual(409) // conflict
@@ -604,6 +603,105 @@ describe("Endpoints", () => {
 
       expect(res.status).toEqual(200)
       expect(res.body.data[0].availableSpaces).toEqual(0)
+    })
+  })
+
+  /**
+   * Booking endpoints
+   */
+
+  describe("admin/bookings/make-date-available", () => {
+    let bookingSlotService: BookingSlotService
+    beforeEach(async () => {
+      bookingSlotService = new BookingSlotService()
+      await createUsers()
+    })
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+
+    it("Should create booking slots specified within the date range", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+      const endDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
+      const res = await request
+        .post("/admin/bookings/make-date-available")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.updatedBookingSlots).toHaveLength(6)
+      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
+      expect(res.body.updatedBookingSlots[5].date).toEqual(endDate)
+
+      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        endDate
+      )
+
+      expect(dates).toHaveLength(6)
+    })
+
+    it("Should not do anything if the start/end dates are the wrong way around", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
+      const endDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+      const res = await request
+        .post("/admin/bookings/make-date-available")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.updatedBookingSlots).toHaveLength(0)
+
+      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        endDate
+      )
+
+      expect(dates).toHaveLength(0)
+    })
+
+    it("Should update 'inactive' slots specified within the date range", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+
+      let dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        startDate
+      )
+
+      expect(dates).toHaveLength(0)
+
+      bookingSlotService.createBookingSlot({
+        date: startDate,
+        description: "my test",
+        max_bookings: -99
+      })
+      const res = await request
+        .post("/admin/bookings/make-date-available")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate: startDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.updatedBookingSlots).toHaveLength(1)
+      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
+
+      dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        startDate
+      )
+
+      expect(dates).toHaveLength(1)
+      expect(dates[0].max_bookings).toBeGreaterThan(0)
+      expect(dates[0].description).toEqual("my test")
+      expect(dates[0].date).toEqual(startDate)
     })
   })
 })

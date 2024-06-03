@@ -7,19 +7,19 @@ export type EditUsersBody = {
 }[]
 const AdminService = {
   getUsers: async function () {
-    const { data } = await fetchClient.GET("/users", {})
+    const { data } = await fetchClient.GET("/admin/users", {})
     if (!data) throw new Error("Failed to fetch all users")
     return data
   },
   editUsers: async function (users: EditUsersBody) {
-    await fetchClient.PATCH("/users/bulk-edit", {
+    await fetchClient.PATCH("/admin/users/bulk-edit", {
       body: {
         users
       }
     })
   },
   demoteUser: async function (uid: string) {
-    const { response } = await fetchClient.PUT("/users/demote", {
+    const { response } = await fetchClient.PUT("/admin/users/demote", {
       body: {
         uid
       }
@@ -27,7 +27,7 @@ const AdminService = {
     if (!response.ok) throw new Error(`Failed to demote ${uid}`)
   },
   promoteUser: async function (uid: string) {
-    const { response } = await fetchClient.PUT("/users/promote", {
+    const { response } = await fetchClient.PUT("/admin/users/promote", {
       body: {
         uid
       }

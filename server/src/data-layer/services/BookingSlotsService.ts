@@ -42,7 +42,16 @@ export default class BookingSlotService {
   public async getBookingSlotsBetweenDateRange(
     startDate: Timestamp,
     endDate: Timestamp
-  ) {
+  ): Promise<
+    Array<
+      BookingSlot & {
+        /**
+         * The ID of the document for which this document contains data.
+         */
+        id: string
+      }
+    >
+  > {
     const result = await FirestoreCollections.bookingSlots
       .where("date", ">=", startDate)
       .where("date", "<=", endDate)
