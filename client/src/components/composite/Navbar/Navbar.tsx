@@ -10,6 +10,7 @@ export interface INavbarProps {
   signInHandler: () => void
   signOutHandler: () => void
   isLoggedIn: boolean
+  isAdmin?: boolean
 }
 
 const Logo = () => {
@@ -54,7 +55,8 @@ const navStyle = (active: boolean) => (active ? "text-light-blue-100" : "")
 const Navbar = ({
   signInHandler,
   signOutHandler,
-  isLoggedIn
+  isLoggedIn,
+  isAdmin
 }: INavbarProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const _signOutHandler = () => {
@@ -84,6 +86,7 @@ const Navbar = ({
           </span>
           <AboutMenuItemsMobile />
           <LoginIndicator
+            isAdmin={isAdmin}
             isLoggedIn={isLoggedIn}
             signOutHandler={_signOutHandler}
             signInHandler={_signInHandler}

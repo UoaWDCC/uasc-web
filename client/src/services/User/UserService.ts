@@ -1,27 +1,12 @@
 import fetchClient from "../OpenApiFetchClient"
-import { UserAdditionalInfo, ReducedUserAdditionalInfo } from "models/User"
+import { ReducedUserAdditionalInfo } from "models/User"
 
 export type SignUpUserBody = {
   email: string
   user: ReducedUserAdditionalInfo
 }
-export type EditUsersBody = {
-  uid: string
-  updatedInformation: UserAdditionalInfo
-}[]
 
 const UserService = {
-  getUsers: async function () {
-    const { data } = await fetchClient.GET("/admin/users", {})
-    return data
-  },
-  editUsers: async function (users: EditUsersBody) {
-    await fetchClient.PATCH("/admin/users/bulk-edit", {
-      body: {
-        users
-      }
-    })
-  },
   signUpUser: async function (userData: SignUpUserBody) {
     // gets data from signup and returns data (all data needed after signing up)
     const { data, error } = await fetchClient.POST("/signup", {

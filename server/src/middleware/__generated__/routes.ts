@@ -11,6 +11,8 @@ import { UserSignup } from './../../service-layer/controllers/SignupController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PaymentController } from './../../service-layer/controllers/PaymentController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { BookingController } from './../../service-layer/controllers/BookingController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AdminController } from './../../service-layer/controllers/AdminController';
 import { expressAuthentication } from './../../business-layer/security/Authentication';
 // @ts-ignore - no great way to install types from subpackage
@@ -146,6 +148,30 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "membershipType": {"ref":"MembershipTypeValues"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AvailableDates": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"availableSpaces":{"dataType":"double","required":true},"maxBookings":{"dataType":"double","required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true},"description":{"dataType":"string","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AvailableDatesResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"AvailableDates"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AvailableDatesRequestModel": {
+        "dataType": "refObject",
+        "properties": {
+            "startDate": {"ref":"FirebaseFirestore.Timestamp"},
+            "endDate": {"ref":"FirebaseFirestore.Timestamp"},
         },
         "additionalProperties": false,
     },
@@ -391,6 +417,37 @@ export function RegisterRoutes(app: Router) {
 
               templateService.apiHandler({
                 methodName: 'getMembershipPayment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/bookings/available-dates',
+            authenticateMiddleware([{"jwt":["member"]}]),
+            ...(fetchMiddlewares<RequestHandler>(BookingController)),
+            ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAvailableDates)),
+
+            function BookingController_getAvailableDates(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"AvailableDatesRequestModel"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new BookingController();
+
+              templateService.apiHandler({
+                methodName: 'getAvailableDates',
                 controller,
                 response,
                 next,
