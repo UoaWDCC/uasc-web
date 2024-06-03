@@ -20,7 +20,7 @@ import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
 import { Timestamp } from "firebase-admin/firestore"
 import {
-  UserMembershipRequestModel,
+  UserPaymentRequestModel,
   SelfRequestModel,
   UserBookingRequestingModel
 } from "service-layer/request-models/UserRequests"
@@ -68,7 +68,7 @@ export class PaymentController extends Controller {
   @Post("membership")
   public async getMembershipPayment(
     @Request() request: SelfRequestModel,
-    @Body() requestBody: UserMembershipRequestModel
+    @Body() requestBody: UserPaymentRequestModel
   ): Promise<MembershipPaymentResponse> {
     try {
       const { uid, customClaims } = request.user
@@ -353,7 +353,7 @@ export class PaymentController extends Controller {
       {
         [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.BOOKING,
         [LODGE_BOOKING_TYPE_KEY]: requiredBookingType,
-        [BOOKING_SLOTS_KEY]: bookingSlots.map((slot) => slot.id).join(", ")
+        [BOOKING_SLOTS_KEY]: JSON.stringify(bookingSlots.map((slot) => slot.id))
       },
       stripeCustomerId
     )

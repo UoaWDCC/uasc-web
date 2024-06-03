@@ -193,7 +193,7 @@ export interface components {
       stripeClientSecret?: string;
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
-    UserMembershipRequestModel: {
+    UserPaymentRequestModel: {
       membershipType: components["schemas"]["MembershipTypeValues"];
     };
     BookingPaymentResponse: {
@@ -372,7 +372,7 @@ export interface operations {
   GetMembershipPayment: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UserMembershipRequestModel"];
+        "application/json": components["schemas"]["UserPaymentRequestModel"];
       };
     };
     responses: {

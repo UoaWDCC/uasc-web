@@ -28,8 +28,8 @@ const firestore = Object.assign(
 
 const db = {
   users: firestore.collection<UserAdditionalInfo>("users"),
-  bookingSlots: firestore.collection<BookingSlot>("booking_slots"),
-  bookings: firestore.collection<Booking>("bookings")
+  bookings: firestore.collection<Booking>("bookings"),
+  bookingSlots: firestore.collection<BookingSlot>("booking_slots")
 } as const
 
 export default db

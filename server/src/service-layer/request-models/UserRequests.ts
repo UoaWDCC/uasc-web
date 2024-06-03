@@ -17,7 +17,7 @@ export interface SelfRequestModel {
 }
 
 // ticket 341 client select membership type
-export interface UserMembershipRequestModel {
+export interface UserPaymentRequestModel {
   membershipType: MembershipTypeValues
 }
 // ticket 129 - Booking checkout session
