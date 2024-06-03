@@ -42,3 +42,8 @@ export interface PromoteUserRequestBody {
 export interface DemoteUserRequestBody {
   uid: string
 }
+
+export interface AvailableDatesRequestModel {
+  startDate?: Timestamp
+  endDate?: Timestamp
+}

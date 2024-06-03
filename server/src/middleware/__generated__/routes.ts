@@ -10,6 +10,8 @@ import { StripeWebhook } from './../../service-layer/controllers/StripeWebhook';
 import { UserSignup } from './../../service-layer/controllers/SignupController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PaymentController } from './../../service-layer/controllers/PaymentController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { BookingController } from './../../service-layer/controllers/BookingController';
 import { expressAuthentication } from './../../business-layer/security/Authentication';
 // @ts-ignore - no great way to install types from subpackage
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
@@ -164,7 +166,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MembershipTypeValues": {
         "dataType": "refEnum",
-        "enums": ["uoa_returning","uoa_new","other_returning","other_new"],
+        "enums": ["uoa_student","non_uoa_student","returning_member","new_non_student"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MembershipPaymentResponse": {
@@ -181,7 +183,31 @@ const models: TsoaRoute.Models = {
     "UserMembershipRequestModel": {
         "dataType": "refObject",
         "properties": {
-            "membershipType": {"ref":"MembershipTypeValues","required":true},
+            "membershipType": {"ref":"MembershipTypeValues"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AvailableDates": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"availableSpaces":{"dataType":"double","required":true},"maxBookings":{"dataType":"double","required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true},"description":{"dataType":"string","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AvailableDatesResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"AvailableDates"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AvailableDatesRequestModel": {
+        "dataType": "refObject",
+        "properties": {
+            "startDate": {"ref":"FirebaseFirestore.Timestamp"},
+            "endDate": {"ref":"FirebaseFirestore.Timestamp"},
         },
         "additionalProperties": false,
     },

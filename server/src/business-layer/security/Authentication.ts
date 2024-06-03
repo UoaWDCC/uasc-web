@@ -32,7 +32,10 @@ export function expressAuthentication(
                     "No Scope"
                   )
                 }
-                if (!(scope in user.customClaims)) {
+                if (
+                  !(scope in user.customClaims) ||
+                  !user.customClaims[scope]
+                ) {
                   throw new FireBaseError(
                     "Authentication Error",
                     401,

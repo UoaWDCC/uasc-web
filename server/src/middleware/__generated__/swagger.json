@@ -413,10 +413,10 @@
 			},
 			"MembershipTypeValues": {
 				"enum": [
-					"uoa_returning",
-					"uoa_new",
-					"other_returning",
-					"other_new"
+					"uoa_student",
+					"non_uoa_student",
+					"returning_member",
+					"new_non_student"
 				],
 				"type": "string"
 			},
@@ -444,9 +444,61 @@
 						"$ref": "#/components/schemas/MembershipTypeValues"
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AvailableDates": {
+				"properties": {
+					"availableSpaces": {
+						"type": "number",
+						"format": "double"
+					},
+					"maxBookings": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
 				"required": [
-					"membershipType"
+					"availableSpaces",
+					"maxBookings",
+					"date",
+					"description"
 				],
+				"type": "object"
+			},
+			"AvailableDatesResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/AvailableDates"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AvailableDatesRequestModel": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -839,6 +891,41 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserBookingRequestingModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/bookings/available-dates": {
+			"post": {
+				"operationId": "GetAvailableDates",
+				"responses": {
+					"200": {
+						"description": "Availabilities found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AvailableDatesResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"member"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AvailableDatesRequestModel"
 							}
 						}
 					}

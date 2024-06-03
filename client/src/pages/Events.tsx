@@ -1,4 +1,3 @@
-import React from "react"
 import Event from "components/composite/Event/Event"
 
 const Events = () => {

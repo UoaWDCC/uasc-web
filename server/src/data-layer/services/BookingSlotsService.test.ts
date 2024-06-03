@@ -64,6 +64,10 @@ describe("BookingSlotsService Tests", () => {
         timestamp
       )
 
+    bookingSlotsBetweenDateRange.forEach((slot) => {
+      delete slot.id
+    })
+
     expect(bookingSlotsBetweenDateRange.length).toBe(3)
     expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData)
     expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)
@@ -82,6 +86,10 @@ describe("BookingSlotsService Tests", () => {
         timestamp2,
         timestamp3
       )
+
+    bookingSlotsBetweenDateRange.forEach((slot) => {
+      delete slot.id
+    })
 
     expect(bookingSlotsBetweenDateRange.length).toBe(2)
     expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)

@@ -130,7 +130,13 @@ export class PaymentController extends Controller {
        * Check what price user is going to pay based on the details they filled in
        */
       const requiredMembership = requestBody.membershipType
-
+      if (!requiredMembership) {
+        this.setStatus(404)
+        return {
+          error:
+            "No existing session could be found, and no new session could be created because membership type was not provided"
+        }
+      }
       /**
        * Get required product and generate client secret
        */

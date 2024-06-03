@@ -1,7 +1,7 @@
 import {
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues
-} from "business-layer/utils/StripeProductMetadata"
+} from "business-layer/utils/StripeSessionMetadata"
 import * as Stripe from "stripe"
 
 export const customerMock: Stripe.Stripe.Customer = {

@@ -1,15 +1,12 @@
-import AdminBookingDetails from "components/composite/AdminBookingDetails/AdminBookingDetails"
 import About from "pages/About"
-import Admin from "pages/Admin"
+import Admin from "pages/Admin/Admin"
 import Booking from "pages/Booking"
-import Checkout from "pages/Checkout"
 import Contact from "pages/Contact"
 import Events from "pages/Events"
 import Home from "pages/Home/Home"
 import Login from "pages/Login/Login"
-import Profile from "pages/Profile"
+import Profile from "pages/Profile/Profile"
 import Register from "pages/Register/Register"
-import Thanks from "pages/Thanks"
 import { Route, Routes } from "react-router-dom"
 
 export const AllRoutes = () => (
@@ -21,13 +18,9 @@ export const AllRoutes = () => (
       <Route path="contact" element={<Contact />} />
       <Route path="register/*" element={<Register />} />
       <Route path="login/*" element={<Login />} />
-      <Route path="checkout" element={<Checkout />} />
-      <Route path="booking" element={<Booking />} />
+      <Route path="bookings/*" element={<Booking />} />
       <Route path="profile" element={<Profile />} />
-      <Route path="admin" element={<Admin />}>
-        <Route path="bookings" element={<AdminBookingDetails />} />
-      </Route>
-      <Route path="thanks" element={<Thanks />} />
+      <Route path="admin/*" element={<Admin />} />
     </Route>
   </Routes>
 )
