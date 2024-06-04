@@ -5,10 +5,14 @@ import {
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import Stripe from "stripe"
+import AuthService from "./AuthService"
+import BookingDataService from "data-layer/services/BookingDataService"
 import {
   CheckoutTypeValues,
-  CHECKOUT_TYPE_KEY
+  CHECKOUT_TYPE_KEY,
+  BOOKING_SLOTS_KEY
 } from "business-layer/utils/StripeSessionMetadata"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -290,5 +294,50 @@ export default class StripeService {
       console.error("Error fetching Stripe products:", error)
       throw error
     }
+  }
+
+  /**
+   * Promotes a user from guest to member status.
+   * @param uid The user ID to promote to a member.
+   * @returns A promise that resolves once the user has been promoted.
+   */
+  public async handleMembershipPaymentSession(uid: string) {
+    const authService = new AuthService()
+
+    await authService.setCustomUserClaim(uid, "member")
+  }
+
+  /**
+   * Handles a booking payment session by creating the booking for the user.
+   * @param uid The user ID to award the booking session.
+   * @param session The Stripe session the user bought.
+   */
+  public async handleBookingPaymentSession(
+    uid: string,
+    session: Stripe.Checkout.Session
+  ) {
+    if (!(BOOKING_SLOTS_KEY in session.metadata)) {
+      throw new Error(
+        `Booking session '${session.id}' from user '${uid}' did not contain a BOOKING_SLOT_KEY`
+      )
+    }
+    const bookingSlotsJson = session.metadata[BOOKING_SLOTS_KEY]
+    const bookingSlotIds = JSON.parse(bookingSlotsJson) as Array<string>
+
+    const bookingDataService = new BookingDataService()
+    const bookingSlotService = new BookingSlotService()
+
+    await Promise.all(
+      bookingSlotIds.map(async (bookingSlotShortId) => {
+        const bookingSlotId = (
+          await bookingSlotService.getBookingSlotById(bookingSlotShortId)
+        ).id
+        await bookingDataService.createBooking({
+          booking_slot_id: bookingSlotId,
+          stripe_payment_id: session.id,
+          user_id: uid
+        })
+      })
+    )
   }
 }
