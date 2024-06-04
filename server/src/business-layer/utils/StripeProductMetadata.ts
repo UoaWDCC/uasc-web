@@ -9,10 +9,6 @@ export enum MembershipTypeValues {
   NewNonStudent = "new_non_student"
 }
 
-// TODO: Make key and values enum to check the product type (membership or booking)
-// TODO: add these to the relevant products in stripe
-// This repeats CHECKOUT_TYPE_KEY and CheckoutTypeValues
-
 /**
  * For stripe product
  */

@@ -18,12 +18,12 @@ export interface MembershipPaymentResponse extends CommonResponse {
 export interface MembershipStripeProductResponse extends CommonResponse {
   data?: {
     productId: string
-    name: MembershipTypeValues
+    name: string
     description?: string
     discount: boolean
     displayPrice: string
     originalPrice?: string
-  }
+  }[]
 }
 
 export interface AvailableDatesResponse extends CommonResponse {

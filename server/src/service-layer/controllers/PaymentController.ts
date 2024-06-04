@@ -47,10 +47,22 @@ export class PaymentController extends Controller {
         ] as MembershipTypeValues
 
         switch (membershipType) {
-          case MembershipTypeValues.UoaStudent:
-          case MembershipTypeValues.NonUoaStudent:
-          case MembershipTypeValues.ReturningMember:
-          case MembershipTypeValues.NewNonStudent:
+          case MembershipTypeValues.UoaStudent: {
+            product.name = "UoA Student"
+            break
+          }
+          case MembershipTypeValues.NonUoaStudent: {
+            product.name = "Non-UoA Student"
+            break
+          }
+          case MembershipTypeValues.ReturningMember: {
+            product.name = "Returning Member"
+            break
+          }
+          case MembershipTypeValues.NewNonStudent: {
+            product.name = "New Non-Student"
+            break
+          }
         }
 
         return {
@@ -66,10 +78,10 @@ export class PaymentController extends Controller {
           originalPrice: product.metadata.original_price
         }
       })
-      return productsValues as MembershipStripeProductResponse
+      return { data: productsValues }
     } catch (error) {
       console.error(error)
-      this.setStatus(404)
+      this.setStatus(500)
       return { error: "Error fetching active Stripe products" }
     }
   }

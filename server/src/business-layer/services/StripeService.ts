@@ -271,13 +271,18 @@ export default class StripeService {
       productUpdateParams
     )
 
-    /** Return the updated product */
+    /** Return the updated product
+     *
+     * @returns
+     */
     return updatedProduct
   }
 
+  /** Fetch all active products from Stripe
+   * @returns membershipProducts - An array of active membership products from Stripe
+   */
   public async getActiveMembershipProducts() {
     try {
-      // Fetch all active products from Stripe
       const products = await stripe.products.list({
         active: true
       })
@@ -285,8 +290,7 @@ export default class StripeService {
       const membershipProducts = products.data.filter(
         (product) =>
           product.metadata[MEMBERSHIP_TYPE_KEY] ===
-            MembershipTypeValues.NewNonStudent &&
-          product.metadata.discount === "true"
+          MembershipTypeValues.NonUoaStudent
       )
 
       return membershipProducts
