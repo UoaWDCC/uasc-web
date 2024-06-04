@@ -26,7 +26,6 @@ const dateNowSecs = () => {
 }
 
 export default class StripeService {
-
   public async getAllProducts(limit?: number, startingAfter?: string) {
     const products = await stripe.products.list({
       limit,
@@ -275,27 +274,28 @@ export default class StripeService {
     /** Return the updated product */
     return updatedProduct
   }
-  
+
   public async getActiveMembershipProducts() {
     try {
-        // Fetch all active products from Stripe
-        const products = await stripe.products.list({
-            active: true,
-        });
+      // Fetch all active products from Stripe
+      const products = await stripe.products.list({
+        active: true
+      })
 
-        // Filter products with the required metadata
-        const membershipProducts = products.data.filter(product => 
-            product.metadata[MEMBERSHIP_TYPE_KEY] === MembershipTypeValues.NewNonStudent &&
-            product.metadata.discount === "true"
-        );
+      // Filter products with the required metadata
+      const membershipProducts = products.data.filter(
+        (product) =>
+          product.metadata[MEMBERSHIP_TYPE_KEY] ===
+            MembershipTypeValues.NewNonStudent &&
+          product.metadata.discount === "true"
+      )
 
-        return membershipProducts;
+      return membershipProducts
     } catch (error) {
-        console.error('Error fetching Stripe products:', error);
-        throw error;
+      console.error("Error fetching Stripe products:", error)
+      throw error
     }
-    
-}
+  }
 
   /**
    * Promotes a user from guest to member status.
