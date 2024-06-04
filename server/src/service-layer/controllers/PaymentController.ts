@@ -11,10 +11,7 @@ import {
   UserPaymentRequestModel,
   SelfRequestModel
 } from "service-layer/request-models/UserRequests"
-import {
-  MembershipPaymentResponse,
-  MembershipStripeProductResponse
-} from "service-layer/response-models/PaymentResponse"
+import { MembershipPaymentResponse } from "service-layer/response-models/PaymentResponse"
 import Stripe from "stripe"
 import {
   Controller,
