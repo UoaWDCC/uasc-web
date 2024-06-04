@@ -22,8 +22,8 @@ const AdminNavbar = () => {
         <WrappedTab mobileCompatiability={false} to="/admin/bookings">
           bookings
         </WrappedTab>
-        <WrappedTab mobileCompatiability={false} to="/admin/payments">
-          payments
+        <WrappedTab mobileCompatiability={false} to="/admin/availability">
+          availability
         </WrappedTab>
       </div>
       <div className="right-0 md:absolute md:pr-28">
