@@ -32,6 +32,9 @@ export interface paths {
   "/signup": {
     post: operations["Signup"];
   };
+  "/payment/membership_prices": {
+    get: operations["GetMembershipPrices"];
+  };
   "/payment/checkout_status": {
     get: operations["GetCheckoutSessionDetails"];
   };
@@ -174,13 +177,21 @@ export interface components {
       user: components["schemas"]["Omit_UserAdditionalInfo.stripe_id_"];
     };
     /** @enum {string} */
+    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
+    MembershipStripeProductResponse: {
+      productId: string;
+      name: components["schemas"]["MembershipTypeValues"];
+      description?: string;
+      discount: boolean;
+      displayPrice: string;
+      originalPrice?: string;
+    };
+    /** @enum {string} */
     "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";
     /** @description Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format. */
     "stripe.Stripe.Metadata": {
       [key: string]: string;
     };
-    /** @enum {string} */
-    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipPaymentResponse: {
       error?: string;
       message?: string;
@@ -312,6 +323,16 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["UserSignupResponse"];
+        };
+      };
+    };
+  };
+  GetMembershipPrices: {
+    responses: {
+      /** @description Ok */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MembershipStripeProductResponse"];
         };
       };
     };

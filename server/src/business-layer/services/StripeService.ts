@@ -275,7 +275,7 @@ export default class StripeService {
       const membershipProducts = products.data.filter(
         (product) =>
           product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] ===
-            ProductTypeValues.MEMBERSHIP && product.metadata.discount === "true"
+          ProductTypeValues.MEMBERSHIP
       )
 
       return membershipProducts
