@@ -1,6 +1,5 @@
-import AdminBookingDetails from "components/composite/AdminBookingDetails/AdminBookingDetails"
 import About from "pages/About"
-import Admin from "pages/Admin"
+import Admin from "pages/Admin/Admin"
 import Booking from "pages/Booking"
 import Contact from "pages/Contact"
 import Events from "pages/Events"
@@ -21,9 +20,7 @@ export const AllRoutes = () => (
       <Route path="login/*" element={<Login />} />
       <Route path="bookings/*" element={<Booking />} />
       <Route path="profile" element={<Profile />} />
-      <Route path="admin" element={<Admin />}>
-        <Route path="bookings" element={<AdminBookingDetails />} />
-      </Route>
+      <Route path="admin/*" element={<Admin />} />
     </Route>
   </Routes>
 )
