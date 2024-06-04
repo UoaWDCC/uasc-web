@@ -52,25 +52,21 @@ export default class AuthService {
 
   /**
    * Sets a customers claim as target role in the Firebase Authentication Service.
-   * @param uid
-   * @param role
+   * @param uid The Firestore user ID
+   * @param role The claim to add, or if `null`, will delete all existing claims.
    */
   public async setCustomUserClaim(
     uid: string,
-    role:
-      | typeof AuthServiceClaims.MEMBER
-      | typeof AuthServiceClaims.ADMIN
-      | null
+    role: (typeof AuthServiceClaims)[keyof typeof AuthServiceClaims] | null
   ) {
-    let userRecord: UserRecord
     try {
-      userRecord = await auth.getUser(uid)
+      const userRecord = await auth.getUser(uid)
       auth.setCustomUserClaims(
         userRecord.uid,
         role === null ? null : { [role]: true }
       )
     } catch (err) {
-      console.error("Error setting custom claim on user", err)
+      console.error(`Error setting custom claim '${role}' on user '${uid}'`)
       throw err
     }
   }

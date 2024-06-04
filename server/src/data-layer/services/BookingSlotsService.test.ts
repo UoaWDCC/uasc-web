@@ -11,21 +11,18 @@ const timestamp4 = Timestamp.fromDate(new Date(2024, 4, 11))
 
 const bookingSlotData: BookingSlot = {
   date: timestamp,
-  stripe_product_id: "product_id_value1",
   description: "booking_slot_description",
   max_bookings: 0
 }
 
 const bookingSlotData2: BookingSlot = {
   date: timestamp2,
-  stripe_product_id: "product_id_value1",
   description: "booking_slot_description2",
   max_bookings: 20
 }
 
 const bookingSlotData3: BookingSlot = {
   date: timestamp3,
-  stripe_product_id: "product_id_value3",
   description: "booking_slot_description3",
   max_bookings: 10
 }
@@ -45,29 +42,16 @@ describe("BookingSlotsService Tests", () => {
     expect(data).toEqual({ ...bookingSlotData })
   })
 
-  it("Should get booking slots based on stripe product id", async () => {
-    await new BookingSlotsService().createBookingSlot(bookingSlotData)
-    await new BookingSlotsService().createBookingSlot(bookingSlotData2)
-    const bookingSlotsByStripeProductID =
-      await new BookingSlotsService().getBookingSlotsStripeProductId(
-        "product_id_value1"
-      )
-
-    expect(bookingSlotsByStripeProductID.length).toBe(2)
-    expect(bookingSlotsByStripeProductID).toContainEqual({
-      ...bookingSlotData
-    })
-    expect(bookingSlotsByStripeProductID).toContainEqual(bookingSlotData2)
-  })
-
   it("Should get booking slots based on date", async () => {
-    await new BookingSlotsService().createBookingSlot(bookingSlotData)
+    const slot = await new BookingSlotsService().createBookingSlot(
+      bookingSlotData
+    )
     const bookingSlotsByDate =
       await new BookingSlotsService().getBookingSlotByDate(timestamp)
 
     expect(bookingSlotsByDate).not.toBe(undefined)
-    expect(bookingSlotsByDate.length).toBe(1)
-    expect(bookingSlotsByDate[0]).toEqual(bookingSlotData)
+    expect(bookingSlotsByDate.length).toEqual(1)
+    expect(bookingSlotsByDate[0]).toEqual({ ...bookingSlotData, id: slot.id })
   })
 
   it("Should get booking slots between date range", async () => {
@@ -79,6 +63,10 @@ describe("BookingSlotsService Tests", () => {
         timestamp2,
         timestamp
       )
+
+    bookingSlotsBetweenDateRange.forEach((slot) => {
+      delete slot.id
+    })
 
     expect(bookingSlotsBetweenDateRange.length).toBe(3)
     expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData)
@@ -98,6 +86,10 @@ describe("BookingSlotsService Tests", () => {
         timestamp2,
         timestamp3
       )
+
+    bookingSlotsBetweenDateRange.forEach((slot) => {
+      delete slot.id
+    })
 
     expect(bookingSlotsBetweenDateRange.length).toBe(2)
     expect(bookingSlotsBetweenDateRange).toContainEqual(bookingSlotData2)
