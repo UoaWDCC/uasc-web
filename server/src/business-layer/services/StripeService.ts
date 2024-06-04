@@ -7,9 +7,8 @@ import {
 import Stripe from "stripe"
 import {
   CheckoutTypeValues,
-  CHECKOUT_TYPE_KEY,
+  CHECKOUT_TYPE_KEY
 } from "business-layer/utils/StripeSessionMetadata"
-
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
