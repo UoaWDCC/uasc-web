@@ -276,42 +276,47 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"MembershipTypeValues": {
-				"enum": [
-					"uoa_student",
-					"non_uoa_student",
-					"returning_member",
-					"new_non_student"
-				],
-				"type": "string"
-			},
 			"MembershipStripeProductResponse": {
 				"properties": {
-					"productId": {
+					"error": {
 						"type": "string"
 					},
-					"name": {
-						"$ref": "#/components/schemas/MembershipTypeValues"
-					},
-					"description": {
+					"message": {
 						"type": "string"
 					},
-					"discount": {
-						"type": "boolean"
-					},
-					"displayPrice": {
-						"type": "string"
-					},
-					"originalPrice": {
-						"type": "string"
+					"data": {
+						"items": {
+							"properties": {
+								"originalPrice": {
+									"type": "string"
+								},
+								"displayPrice": {
+									"type": "string"
+								},
+								"discount": {
+									"type": "boolean"
+								},
+								"description": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"productId": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"displayPrice",
+								"discount",
+								"name",
+								"productId"
+							],
+							"type": "object"
+						},
+						"type": "array"
 					}
 				},
-				"required": [
-					"productId",
-					"name",
-					"discount",
-					"displayPrice"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -330,6 +335,15 @@
 				"additionalProperties": {
 					"type": "string"
 				}
+			},
+			"MembershipTypeValues": {
+				"enum": [
+					"uoa_student",
+					"non_uoa_student",
+					"returning_member",
+					"new_non_student"
+				],
+				"type": "string"
 			},
 			"MembershipPaymentResponse": {
 				"properties": {

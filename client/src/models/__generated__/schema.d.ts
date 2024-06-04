@@ -152,12 +152,16 @@ export interface components {
     /** @enum {string} */
     MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipStripeProductResponse: {
-      productId: string;
-      name: components["schemas"]["MembershipTypeValues"];
-      description?: string;
-      discount: boolean;
-      displayPrice: string;
-      originalPrice?: string;
+      error?: string;
+      message?: string;
+      data?: {
+        originalPrice?: string;
+        displayPrice: string;
+        discount: boolean;
+        description?: string;
+        name: components["schemas"]["MembershipTypeValues"];
+        productId: string;
+      };
     };
     /** @enum {string} */
     "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";

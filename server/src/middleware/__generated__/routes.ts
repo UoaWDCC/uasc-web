@@ -116,20 +116,12 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "MembershipTypeValues": {
-        "dataType": "refEnum",
-        "enums": ["uoa_student","non_uoa_student","returning_member","new_non_student"],
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MembershipStripeProductResponse": {
         "dataType": "refObject",
         "properties": {
-            "productId": {"dataType":"string","required":true},
-            "name": {"ref":"MembershipTypeValues","required":true},
-            "description": {"dataType":"string"},
-            "discount": {"dataType":"boolean","required":true},
-            "displayPrice": {"dataType":"string","required":true},
-            "originalPrice": {"dataType":"string"},
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"originalPrice":{"dataType":"string"},"displayPrice":{"dataType":"string","required":true},"discount":{"dataType":"boolean","required":true},"description":{"dataType":"string"},"name":{"dataType":"string","required":true},"productId":{"dataType":"string","required":true}}}},
         },
         "additionalProperties": false,
     },
@@ -144,6 +136,11 @@ const models: TsoaRoute.Models = {
         "properties": {
         },
         "additionalProperties": {"dataType":"string"},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MembershipTypeValues": {
+        "dataType": "refEnum",
+        "enums": ["uoa_student","non_uoa_student","returning_member","new_non_student"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MembershipPaymentResponse": {
