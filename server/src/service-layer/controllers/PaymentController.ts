@@ -11,7 +11,10 @@ import {
   UserPaymentRequestModel,
   SelfRequestModel
 } from "service-layer/request-models/UserRequests"
-import { MembershipPaymentResponse } from "service-layer/response-models/PaymentResponse"
+import {
+  MembershipPaymentResponse,
+  MembershipStripeProductResponse
+} from "service-layer/response-models/PaymentResponse"
 import Stripe from "stripe"
 import {
   Controller,
@@ -28,16 +31,15 @@ import {
 @Route("payment")
 export class PaymentController extends Controller {
   @Get("membership_prices")
-  public async getMembershipPrices() {
-    // :  Promise<MembershipStripeProductResponse> {
+  public async getMembershipPrices(): Promise<MembershipStripeProductResponse> {
     const stripeService = new StripeService()
     try {
-      console.log("Membership products fetched") // remove later
       const membershipProducts =
         await stripeService.getActiveMembershipProducts()
       // Maps the products to the required response type MembershipStripeProductResponse in PaymentResponse
 
-      const result = membershipProducts.map((product) => {
+      const productsValues = membershipProducts.map((product) => {
+        // Checks the membership type of the product
         const membershipType = product.metadata[
           MEMBERSHIP_TYPE_KEY
         ] as MembershipTypeValues
@@ -51,18 +53,22 @@ export class PaymentController extends Controller {
 
         return {
           productId: product.id,
-          name: product.name as MembershipTypeValues,
+          name: product.name,
           description: product.description,
           discount: product.metadata.discount === "true",
-          displayPrice: (product.default_price as Stripe.Price)
-            .unit_amount_decimal,
+          displayPrice: (
+            Number(
+              (product.default_price as Stripe.Price).unit_amount_decimal
+            ) / 100
+          ).toString(),
           originalPrice: product.metadata.original_price
         }
       })
-      console.log("Fetched membership prices", result)
-    } catch (e) {
+      return productsValues as MembershipStripeProductResponse
+    } catch (error) {
+      console.error(error)
       this.setStatus(404)
-      console.log("Error fetching active Stripe products") // fix this
+      return { error: "Error fetching active Stripe products" }
     }
   }
 
