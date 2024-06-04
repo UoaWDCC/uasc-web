@@ -114,22 +114,6 @@
 					}
 				]
 			},
-			"CreateUserRequestBody": {
-				"properties": {
-					"uid": {
-						"type": "string"
-					},
-					"user": {
-						"$ref": "#/components/schemas/UserAdditionalInfo"
-					}
-				},
-				"required": [
-					"uid",
-					"user"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
 				"properties": {
 					"date_of_birth": {
@@ -190,109 +174,6 @@
 				},
 				"required": [
 					"updatedInformation"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Partial_UserAdditionalInfo_": {
-				"properties": {
-					"date_of_birth": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-					},
-					"does_snowboarding": {
-						"type": "boolean"
-					},
-					"does_racing": {
-						"type": "boolean"
-					},
-					"does_ski": {
-						"type": "boolean"
-					},
-					"gender": {
-						"type": "string"
-					},
-					"emergency_contact": {
-						"type": "string"
-					},
-					"first_name": {
-						"type": "string"
-					},
-					"last_name": {
-						"type": "string"
-					},
-					"dietary_requirements": {
-						"type": "string"
-					},
-					"faculty": {
-						"type": "string"
-					},
-					"university": {
-						"type": "string"
-					},
-					"student_id": {
-						"type": "string"
-					},
-					"returning": {
-						"type": "boolean"
-					},
-					"university_year": {
-						"type": "string"
-					},
-					"stripe_id": {
-						"type": "string",
-						"description": "For identification DO NOT RETURN to users in exposed endpoints"
-					}
-				},
-				"type": "object",
-				"description": "Make all properties in T optional"
-			},
-			"EditUsersRequestBody": {
-				"properties": {
-					"users": {
-						"items": {
-							"properties": {
-								"updatedInformation": {
-									"$ref": "#/components/schemas/Partial_UserAdditionalInfo_"
-								},
-								"uid": {
-									"type": "string"
-								}
-							},
-							"required": [
-								"updatedInformation",
-								"uid"
-							],
-							"type": "object"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"users"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"PromoteUserRequestBody": {
-				"properties": {
-					"uid": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"uid"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"DemoteUserRequestBody": {
-				"properties": {
-					"uid": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"uid"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -476,6 +357,208 @@
 				},
 				"type": "object",
 				"additionalProperties": false
+			},
+			"AvailableDates": {
+				"properties": {
+					"availableSpaces": {
+						"type": "number",
+						"format": "double"
+					},
+					"maxBookings": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"availableSpaces",
+					"maxBookings",
+					"date",
+					"description"
+				],
+				"type": "object"
+			},
+			"AvailableDatesResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/AvailableDates"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AvailableDatesRequestModel": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CommonResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MakeDatesAvailableRequestBody": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserAdditionalInfo"
+					}
+				},
+				"required": [
+					"uid",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_UserAdditionalInfo_": {
+				"properties": {
+					"date_of_birth": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"does_snowboarding": {
+						"type": "boolean"
+					},
+					"does_racing": {
+						"type": "boolean"
+					},
+					"does_ski": {
+						"type": "boolean"
+					},
+					"gender": {
+						"type": "string"
+					},
+					"emergency_contact": {
+						"type": "string"
+					},
+					"first_name": {
+						"type": "string"
+					},
+					"last_name": {
+						"type": "string"
+					},
+					"dietary_requirements": {
+						"type": "string"
+					},
+					"faculty": {
+						"type": "string"
+					},
+					"university": {
+						"type": "string"
+					},
+					"student_id": {
+						"type": "string"
+					},
+					"returning": {
+						"type": "boolean"
+					},
+					"university_year": {
+						"type": "string"
+					},
+					"stripe_id": {
+						"type": "string",
+						"description": "For identification DO NOT RETURN to users in exposed endpoints"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"EditUsersRequestBody": {
+				"properties": {
+					"users": {
+						"items": {
+							"properties": {
+								"updatedInformation": {
+									"$ref": "#/components/schemas/Partial_UserAdditionalInfo_"
+								},
+								"uid": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"updatedInformation",
+								"uid"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"users"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PromoteUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DemoteUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -492,34 +575,6 @@
 		"contact": {}
 	},
 	"paths": {
-		"/users": {
-			"get": {
-				"operationId": "GetAllUsers",
-				"responses": {
-					"200": {
-						"description": "Users found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/UserResponse"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"security": [
-					{
-						"jwt": [
-							"admin"
-						]
-					}
-				],
-				"parameters": []
-			}
-		},
 		"/users/self": {
 			"get": {
 				"operationId": "GetSelf",
@@ -543,34 +598,6 @@
 				"parameters": []
 			}
 		},
-		"/users/create": {
-			"put": {
-				"operationId": "CreateUser",
-				"responses": {
-					"200": {
-						"description": "Created"
-					}
-				},
-				"security": [
-					{
-						"jwt": [
-							"admin"
-						]
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/CreateUserRequestBody"
-							}
-						}
-					}
-				}
-			}
-		},
 		"/users/edit-self": {
 			"patch": {
 				"operationId": "EditSelf",
@@ -591,90 +618,6 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/EditSelfRequestBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/users/bulk-edit": {
-			"patch": {
-				"operationId": "EditUsers",
-				"responses": {
-					"200": {
-						"description": "Edited"
-					}
-				},
-				"security": [
-					{
-						"jwt": [
-							"admin"
-						]
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/EditUsersRequestBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/users/promote": {
-			"put": {
-				"operationId": "PromoteUser",
-				"responses": {
-					"200": {
-						"description": "Promoted user"
-					}
-				},
-				"security": [
-					{
-						"jwt": [
-							"admin"
-						]
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PromoteUserRequestBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/users/demote": {
-			"put": {
-				"operationId": "DemoteUser",
-				"responses": {
-					"200": {
-						"description": "Demoted user"
-					}
-				},
-				"security": [
-					{
-						"jwt": [
-							"admin"
-						]
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/DemoteUserRequestBody"
 							}
 						}
 					}
@@ -821,6 +764,245 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserPaymentRequestModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/bookings/available-dates": {
+			"post": {
+				"operationId": "GetAvailableDates",
+				"responses": {
+					"200": {
+						"description": "Availabilities found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AvailableDatesResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"member"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AvailableDatesRequestModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/bookings/make-date-available": {
+			"post": {
+				"operationId": "MakeDateAvailable",
+				"responses": {
+					"201": {
+						"description": "Slot made available",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"properties": {
+												"updatedBookingSlots": {
+													"items": {
+														"properties": {
+															"bookingSlotId": {
+																"type": "string"
+															},
+															"date": {
+																"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+															}
+														},
+														"required": [
+															"bookingSlotId",
+															"date"
+														],
+														"type": "object"
+													},
+													"type": "array"
+												}
+											},
+											"type": "object"
+										},
+										{
+											"$ref": "#/components/schemas/CommonResponse"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Booking Operations",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MakeDatesAvailableRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/users": {
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Users found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserResponse"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "User Operations",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/admin/users/create": {
+			"put": {
+				"operationId": "CreateUser",
+				"responses": {
+					"200": {
+						"description": "Created"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/users/bulk-edit": {
+			"patch": {
+				"operationId": "EditUsers",
+				"responses": {
+					"200": {
+						"description": "Edited"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/EditUsersRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/users/promote": {
+			"put": {
+				"operationId": "PromoteUser",
+				"responses": {
+					"200": {
+						"description": "Promoted user"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PromoteUserRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/users/demote": {
+			"put": {
+				"operationId": "DemoteUser",
+				"responses": {
+					"200": {
+						"description": "Demoted user"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DemoteUserRequestBody"
 							}
 						}
 					}

@@ -2,10 +2,12 @@ import StripeService from "business-layer/services/StripeService"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 import {
   MembershipTypeValues,
-  CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues,
   MEMBERSHIP_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
+import {
+  CHECKOUT_TYPE_KEY,
+  CheckoutTypeValues
+} from "business-layer/utils/StripeSessionMetadata"
 import UserDataService from "data-layer/services/UserDataService"
 import {
   UserPaymentRequestModel,

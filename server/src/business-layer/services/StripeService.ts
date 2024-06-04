@@ -1,12 +1,15 @@
 import {
-  CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues,
-  MEMBERSHIP_PRODUCT_TYPE_KEY,
-  ProductTypeValues,
+  MEMBERSHIP_TYPE_KEY,
+  MembershipTypeValues,
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import Stripe from "stripe"
+import {
+  CheckoutTypeValues,
+  CHECKOUT_TYPE_KEY,
+} from "business-layer/utils/StripeSessionMetadata"
+
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -151,17 +154,24 @@ export default class StripeService {
     return product
   }
 
+  /**
+   * Fetches a checkout session associated with a given payment intent ID.
+   * @param payment_intent The payment intent used to pay for this checkout session.
+   * @returns The checkout session associated with this payment.
+   */
   public async retrieveCheckoutSessionFromPaymentIntent(
-    payment_intent?: string,
-    customer?: string,
-    status?: Stripe.Checkout.Session.Status
-  ) {
-    return await stripe.checkout.sessions.list({
-      limit: 1,
-      payment_intent,
-      customer,
-      status
+    payment_intent: string
+  ): Promise<Stripe.Checkout.Session> {
+    const sessions = await stripe.checkout.sessions.list({
+      payment_intent
     })
+    if (sessions.has_more) {
+      throw new Error(
+        `Fetching checkout session from payment intent yielded more than expected sessions`
+      )
+    }
+
+    return sessions.data[0]
   }
 
   /**
@@ -266,16 +276,14 @@ export default class StripeService {
     try {
       // Fetch all active products from Stripe
       const products = await stripe.products.list({
-        active: true,
-        expand: ["data.default_price"]
+        active: true
       })
-
       // Filter products with the required metadata
-      // Use enum and key checking for if it is a "booking" or "membership"
       const membershipProducts = products.data.filter(
         (product) =>
-          product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] ===
-          ProductTypeValues.MEMBERSHIP
+          product.metadata[MEMBERSHIP_TYPE_KEY] ===
+            MembershipTypeValues.NewNonStudent &&
+          product.metadata.discount === "true"
       )
 
       return membershipProducts
