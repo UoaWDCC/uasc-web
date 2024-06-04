@@ -267,7 +267,7 @@ export default class StripeService {
       // Fetch all active products from Stripe
       const products = await stripe.products.list({
         active: true,
-        expand: ["default_price"]
+        expand: ["data.default_price"]
       })
 
       // Filter products with the required metadata

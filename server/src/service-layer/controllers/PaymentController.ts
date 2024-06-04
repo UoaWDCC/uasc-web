@@ -29,11 +29,11 @@ import {
 
 @Route("payment")
 export class PaymentController extends Controller {
-  @Security("jwt")
   @Get("membership_prices")
   public async getMembershipPrices(): Promise<MembershipStripeProductResponse> {
     const stripeService = new StripeService()
     try {
+      console.log("Membership products fetched") // remove later
       const membershipProducts =
         await stripeService.getActiveMembershipProducts()
       // Maps the products to the required response type MembershipStripeProductResponse in PaymentResponse
@@ -46,12 +46,12 @@ export class PaymentController extends Controller {
           displayPrice: product.default_price,
           originalPrice: product.metadata.original_price
         }
-        console.log("Membership products fetched")
       })
     } catch (e) {
-      console.log("Error fetching active Stripe products")
-      return null
+      this.setStatus(404)
+      console.log("Error fetching active Stripe products") // fix this
     }
+    return null
   }
 
   @SuccessResponse("200", "Session Fetched")
