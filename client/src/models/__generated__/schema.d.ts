@@ -26,9 +26,12 @@ export interface paths {
   "/bookings/available-dates": {
     post: operations["GetAvailableDates"];
   };
-  "/admin/bookings/make-date-available": {
+  "/admin/bookings/make-dates-available": {
     /** @description Booking Operations */
     post: operations["MakeDateAvailable"];
+  };
+  "/admin/bookings/make-dates-unavailable": {
+    post: operations["MakeDateUnavailable"];
   };
   "/admin/users": {
     /** @description User Operations */
@@ -180,9 +183,13 @@ export interface components {
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
-    CommonResponse: {
+    BookingSlotUpdateResponse: {
       error?: string;
       message?: string;
+      updatedBookingSlots?: {
+          bookingSlotId: string;
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
     };
     MakeDatesAvailableRequestBody: {
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -349,12 +356,22 @@ export interface operations {
       /** @description Slot made available */
       201: {
         content: {
-          "application/json": {
-            updatedBookingSlots?: {
-                bookingSlotId: string;
-                date: components["schemas"]["FirebaseFirestore.Timestamp"];
-              }[];
-          } & components["schemas"]["CommonResponse"];
+          "application/json": components["schemas"]["BookingSlotUpdateResponse"];
+        };
+      };
+    };
+  };
+  MakeDateUnavailable: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MakeDatesAvailableRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Slot made unavailable */
+      201: {
+        content: {
+          "application/json": components["schemas"]["BookingSlotUpdateResponse"];
         };
       };
     };
