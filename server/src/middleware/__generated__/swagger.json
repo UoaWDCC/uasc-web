@@ -276,6 +276,59 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MembershipTypeValues": {
+				"enum": [
+					"uoa_student",
+					"non_uoa_student",
+					"returning_member",
+					"new_non_student"
+				],
+				"type": "string"
+			},
+			"MembershipStripeProductResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"properties": {
+								"originalPrice": {
+									"type": "string"
+								},
+								"displayPrice": {
+									"type": "string"
+								},
+								"discount": {
+									"type": "boolean"
+								},
+								"description": {
+									"type": "string"
+								},
+								"name": {
+									"$ref": "#/components/schemas/MembershipTypeValues"
+								},
+								"productId": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"displayPrice",
+								"discount",
+								"name",
+								"productId"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"stripe.Stripe.Checkout.Session.Status": {
 				"type": "string",
 				"enum": [
@@ -291,15 +344,6 @@
 				"additionalProperties": {
 					"type": "string"
 				}
-			},
-			"MembershipTypeValues": {
-				"enum": [
-					"uoa_student",
-					"non_uoa_student",
-					"returning_member",
-					"new_non_student"
-				],
-				"type": "string"
 			},
 			"MembershipPaymentResponse": {
 				"properties": {
@@ -651,6 +695,25 @@
 						}
 					}
 				}
+			}
+		},
+		"/payment/membership_prices": {
+			"get": {
+				"operationId": "GetMembershipPrices",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MembershipStripeProductResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/payment/checkout_status": {

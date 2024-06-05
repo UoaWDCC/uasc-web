@@ -14,6 +14,18 @@ export interface MembershipPaymentResponse extends CommonResponse {
   membershipType?: MembershipTypeValues
 }
 
+// Make a data shape matching to the expected response from Stripe API
+export interface MembershipStripeProductResponse extends CommonResponse {
+  data?: {
+    productId: string
+    name: MembershipTypeValues
+    description?: string
+    discount: boolean
+    displayPrice: string
+    originalPrice?: string
+  }[]
+}
+
 export interface AvailableDatesResponse extends CommonResponse {
   data?: AvailableDates[]
 }
