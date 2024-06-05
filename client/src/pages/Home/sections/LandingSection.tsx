@@ -59,7 +59,7 @@ const LandingSection = () => (
         </div>
       </div>
 
-      <h5 className="text-dark-blue-100 absolute bottom-3 uppercase sm:bottom-9">
+      <h5 className="text-dark-blue-100 bottom-3 my-8 uppercase sm:bottom-9">
         <a href="#about">Find out more</a>
       </h5>
     </div>
