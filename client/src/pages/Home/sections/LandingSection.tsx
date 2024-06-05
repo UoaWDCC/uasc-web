@@ -1,4 +1,3 @@
-// import UASCHeader from "assets/logos/2024logo.png"
 import UASCHeader from "assets/icons/uascLOGO.svg"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import Facebook from "assets/icons/FacebookBlue.svg"
@@ -8,8 +7,7 @@ import { Link } from "react-router-dom"
 const LandingSection = () => (
   <section>
     <div
-      className="bg-home-ski-image relative
-         mt-14 flex
+      className="bg-home-ski-image relative flex
          min-h-screen flex-col
          items-center justify-center
          overflow-hidden bg-cover bg-top bg-no-repeat"
