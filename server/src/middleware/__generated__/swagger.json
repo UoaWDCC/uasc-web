@@ -427,13 +427,31 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"CommonResponse": {
+			"BookingSlotUpdateResponse": {
 				"properties": {
 					"error": {
 						"type": "string"
 					},
 					"message": {
 						"type": "string"
+					},
+					"updatedBookingSlots": {
+						"items": {
+							"properties": {
+								"bookingSlotId": {
+									"type": "string"
+								},
+								"date": {
+									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+								}
+							},
+							"required": [
+								"bookingSlotId",
+								"date"
+							],
+							"type": "object"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -819,7 +837,7 @@
 				}
 			}
 		},
-		"/admin/bookings/make-date-available": {
+		"/admin/bookings/make-dates-available": {
 			"post": {
 				"operationId": "MakeDateAvailable",
 				"responses": {
@@ -828,40 +846,48 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"allOf": [
-										{
-											"properties": {
-												"updatedBookingSlots": {
-													"items": {
-														"properties": {
-															"bookingSlotId": {
-																"type": "string"
-															},
-															"date": {
-																"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-															}
-														},
-														"required": [
-															"bookingSlotId",
-															"date"
-														],
-														"type": "object"
-													},
-													"type": "array"
-												}
-											},
-											"type": "object"
-										},
-										{
-											"$ref": "#/components/schemas/CommonResponse"
-										}
-									]
+									"$ref": "#/components/schemas/BookingSlotUpdateResponse"
 								}
 							}
 						}
 					}
 				},
 				"description": "Booking Operations",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MakeDatesAvailableRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/bookings/make-dates-unavailable": {
+			"post": {
+				"operationId": "MakeDateUnavailable",
+				"responses": {
+					"201": {
+						"description": "Slot made unavailable",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingSlotUpdateResponse"
+								}
+							}
+						}
+					}
+				},
 				"security": [
 					{
 						"jwt": [
