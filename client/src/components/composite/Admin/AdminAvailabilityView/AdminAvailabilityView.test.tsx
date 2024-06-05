@@ -3,6 +3,7 @@ import {
   CondensedBookingInfoColumn,
   formatBookingSlotsForAvailabilityView
 } from "./AdminAvailabilityView"
+import { MS_IN_SECOND } from "utils/Constants"
 
 describe("tableData", () => {
   it("should return the correct data when startDate and endDate are provided", () => {
@@ -25,7 +26,7 @@ describe("tableData", () => {
     const expected: CondensedBookingInfoColumn[] = [
       {
         uid: "1",
-        Date: new Date(1500 * 1000).toDateString(),
+        Date: new Date(1500 * MS_IN_SECOND).toDateString(),
         "Max Bookings": "10",
         "Available Spaces": "5"
       }

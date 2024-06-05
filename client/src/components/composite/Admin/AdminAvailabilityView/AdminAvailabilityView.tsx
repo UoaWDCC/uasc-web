@@ -7,8 +7,10 @@ import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import { DEFAULT_BOOKING_AVAILABILITY } from "services/Admin/AdminService"
+import { MS_IN_SECOND } from "utils/Constants"
 
 const MAX_AVAILIBILITY_DEVIATION = 10 as const
+const DAYS_IN_WEEK = 7 as const
 
 interface IAdminAvailabilityView {
   slots?: BookingAvailability[]
@@ -65,7 +67,7 @@ export const formatBookingSlotsForAvailabilityView = (
     .map((slot) => {
       return {
         uid: slot.id,
-        Date: new Date(slot.date.seconds * 1000).toDateString(),
+        Date: new Date(slot.date.seconds * MS_IN_SECOND).toDateString(),
         "Max Bookings": slot.maxBookings.toString(),
         "Available Spaces": slot.availableSpaces.toString()
       }
@@ -77,7 +79,7 @@ const formatDateRangeForDialog = (
   endDate?: Timestamp
 ) => {
   if (startDate && endDate)
-    return `${new Date(startDate.seconds * 1000).toDateString()} to ${new Date(endDate.seconds * 1000).toDateString()}`
+    return `${new Date(startDate.seconds * MS_IN_SECOND).toDateString()} to ${new Date(endDate.seconds * MS_IN_SECOND).toDateString()}`
 
   return ""
 }
@@ -122,8 +124,8 @@ const AdminAvailabilityView = ({
             value={
               dateRangeDefined
                 ? [
-                    new Date(startDate.seconds * 1000),
-                    new Date(endDate.seconds * 1000)
+                    new Date(startDate.seconds * MS_IN_SECOND),
+                    new Date(endDate.seconds * MS_IN_SECOND)
                   ]
                 : undefined
             }
@@ -131,7 +133,7 @@ const AdminAvailabilityView = ({
               // Find slots that are "available"
               slots.some(
                 (slot) =>
-                  new Date(slot.date.seconds * 1000).toDateString() ===
+                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
                     date.toDateString() && slot.maxBookings > 0
               ) ? (
                 // Apply style if it is
@@ -214,7 +216,7 @@ const AdminAvailabilityView = ({
         <h3 className="text-dark-blue-100 text-center md:text-left">
           Selected Bookings
         </h3>
-        <Table showPerPage={7} data={tableData} />
+        <Table showPerPage={DAYS_IN_WEEK} data={tableData} />
       </div>
     </div>
   )
