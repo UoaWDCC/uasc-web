@@ -201,6 +201,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "slots": {"dataType":"double","validators":{"maximum":{"errorMsg":"You have exceeded the maximum slots for bookings","value":42}}},
         },
         "additionalProperties": false,
     },

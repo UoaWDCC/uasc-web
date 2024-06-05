@@ -460,10 +460,17 @@
 			"MakeDatesAvailableRequestBody": {
 				"properties": {
 					"startDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
 					},
 					"endDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+					},
+					"slots": {
+						"type": "number",
+						"format": "double",
+						"maximum": 42
 					}
 				},
 				"required": [

@@ -207,8 +207,12 @@ export interface components {
         }[];
     };
     MakeDatesAvailableRequestBody: {
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** Format: double */
+      slots?: number;
     };
     CreateUserRequestBody: {
       uid: string;

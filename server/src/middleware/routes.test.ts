@@ -644,6 +644,45 @@ describe("Endpoints", () => {
       expect(dates).toHaveLength(6)
     })
 
+    it("Should create booking slots specified within the date range, using the specified slots", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+      const endDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
+      let res = await request
+        .post("/admin/bookings/make-dates-available")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate,
+          slots: 69
+        })
+
+      expect(res.status).toEqual(400) // exceed maximum
+
+      const CUSTOM_SLOTS = 11 as const
+      res = await request
+        .post("/admin/bookings/make-dates-available")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate,
+          slots: CUSTOM_SLOTS
+        })
+      expect(res.body.updatedBookingSlots).toHaveLength(6)
+      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
+      expect(res.body.updatedBookingSlots[5].date).toEqual(endDate)
+
+      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        endDate
+      )
+
+      expect(dates).toHaveLength(6)
+
+      dates.forEach((date) => {
+        expect(date.max_bookings).toEqual(CUSTOM_SLOTS)
+      })
+    })
+
     it("Should not do anything if the start/end dates are the wrong way around", async () => {
       const startDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
       const endDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
