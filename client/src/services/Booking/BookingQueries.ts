@@ -11,7 +11,7 @@ let TODAY = new Date()
 TODAY = new Date(TODAY.toDateString())
 
 /**
- * Need to remove time data from this (k)
+ * Need to remove time data from this
  */
 let NEXT_YEAR_FROM_TODAY = new Date(
   new Date().setFullYear(new Date().getFullYear() + 1)

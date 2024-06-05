@@ -7,6 +7,9 @@ import {
 import { useContext } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
 
+/**
+ * This must be wrapped in a `DateSelectionProvider`
+ */
 export const WrappedAdminAvailabilityView = () => {
   const { data } = useAvailableBookingsQuery()
 

@@ -7,14 +7,33 @@ import Table from "components/generic/ReusableTable/Table"
 
 interface IAdminAvailabilityView {
   slots?: BookingAvailability[]
+  /**
+   * The mutation function for making the selected date(s) available
+   */
   handleMakeAvailable: () => void
+  /**
+   * The mutation function for making the selected date(s) unavailable
+   */
   handleMakeUnavailable: () => void
 }
 
 type CondensedBookingInfoColumn = {
+  /**
+   * Will not be displayed on the table, however important if you want to
+   * implement operations on the rows
+   */
   uid: string
+  /**
+   * Any formatted date string is fine
+   */
   Date: string
+  /**
+   * Generally should be a number converted to string
+   */
   "Max Bookings": string
+  /**
+   * Generally should be a number converted to string
+   */
   "Available Spaces": string
 }
 const CONDENSED_BOOKING_INFO_DEFAULT_DATA = {
@@ -24,6 +43,10 @@ const CONDENSED_BOOKING_INFO_DEFAULT_DATA = {
   "Available Spaces": ""
 }
 
+/**
+ * Slots must be in the format described by @type CondensedBookingInfoColumn
+ * This must be wrapped in a `DateSelectionProvider`
+ */
 const AdminAvailabilityView = ({
   slots = [],
   handleMakeAvailable,
