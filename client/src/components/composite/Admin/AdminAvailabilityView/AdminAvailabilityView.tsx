@@ -47,17 +47,16 @@ const AdminAvailabilityView = ({
             return {
               uid: slot.id,
               Date: new Date(slot.date.seconds * 1000).toDateString(),
-              "Max Bookings": slot.maxBookings.toString() || "Unavailable",
-              "Available Spaces":
-                slot.availableSpaces.toString() || "Unavailable"
+              "Max Bookings": slot.maxBookings.toString(),
+              "Available Spaces": slot.availableSpaces.toString()
             }
           })
       : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center gap-2
-     bg-white p-8 md:flex-row md:items-start"
+      className="mt-4 flex h-full w-full flex-col items-center
+     gap-2 bg-white p-8 md:flex-row md:items-start"
     >
       <div className="flex flex-col gap-2">
         <span className="w-[380px]">
@@ -99,7 +98,10 @@ const AdminAvailabilityView = ({
 
         {isUpdating && <h5>Updating...</h5>}
       </div>
-      <Table showPerPage={7} data={tableData} />
+      <div className="w-full">
+        <h3 className="text-center md:text-left">Selected Bookings</h3>
+        <Table showPerPage={7} data={tableData} />
+      </div>
     </div>
   )
 }
