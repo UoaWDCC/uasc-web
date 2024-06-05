@@ -610,7 +610,7 @@ describe("Endpoints", () => {
    * Booking endpoints
    */
 
-  describe("admin/bookings/make-date-available", () => {
+  describe("admin/bookings/make-dates-available", () => {
     let bookingSlotService: BookingSlotService
     beforeEach(async () => {
       bookingSlotService = new BookingSlotService()
@@ -624,7 +624,7 @@ describe("Endpoints", () => {
       const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
       const endDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
       const res = await request
-        .post("/admin/bookings/make-date-available")
+        .post("/admin/bookings/make-dates-available")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           startDate,
@@ -648,7 +648,7 @@ describe("Endpoints", () => {
       const startDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
       const endDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
       const res = await request
-        .post("/admin/bookings/make-date-available")
+        .post("/admin/bookings/make-dates-available")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           startDate,
@@ -682,7 +682,7 @@ describe("Endpoints", () => {
         max_bookings: -99
       })
       const res = await request
-        .post("/admin/bookings/make-date-available")
+        .post("/admin/bookings/make-dates-available")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           startDate,
@@ -702,6 +702,147 @@ describe("Endpoints", () => {
       expect(dates[0].max_bookings).toBeGreaterThan(0)
       expect(dates[0].description).toEqual("my test")
       expect(dates[0].date).toEqual(startDate)
+    })
+  })
+
+  describe("admin/bookings/make-dates-unavailable", () => {
+    let bookingSlotService: BookingSlotService
+    beforeEach(async () => {
+      bookingSlotService = new BookingSlotService()
+      await createUsers()
+    })
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+
+    it("Should NOT create booking slots specified within the date range", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+      const endDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
+      const res = await request
+        .post("/admin/bookings/make-dates-unavailable")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.updatedBookingSlots).toHaveLength(0)
+
+      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        endDate
+      )
+
+      expect(dates).toHaveLength(0)
+    })
+
+    it("Should not do anything if the start/end dates are the wrong way around", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
+      const endDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+      const res = await request
+        .post("/admin/bookings/make-dates-unavailable")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.updatedBookingSlots).toHaveLength(0)
+
+      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        endDate
+      )
+
+      expect(dates).toHaveLength(0)
+    })
+
+    it("Should update 'active' slots specified within the date range", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+
+      let dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        startDate
+      )
+
+      expect(dates).toHaveLength(0)
+
+      bookingSlotService.createBookingSlot({
+        date: startDate,
+        description: "my test",
+        max_bookings: 9999
+      })
+
+      const res = await request
+        .post("/admin/bookings/make-dates-unavailable")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate: startDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.updatedBookingSlots).toHaveLength(1)
+      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
+
+      dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        startDate
+      )
+
+      expect(dates).toHaveLength(1)
+      expect(dates[0].max_bookings).toBeLessThanOrEqual(0)
+      expect(dates[0].description).toEqual("my test")
+      expect(dates[0].date).toEqual(startDate)
+    })
+
+    it("Should work with a 'gap' in between the dates", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
+      const leapDate = dateToFirestoreTimeStamp(new Date("10/11/2001"))
+
+      bookingSlotService.createBookingSlot({
+        date: startDate,
+        description: "my test",
+        max_bookings: 9999
+      })
+
+      bookingSlotService.createBookingSlot({
+        date: leapDate,
+        description: "skipped a date",
+        max_bookings: 9999
+      })
+
+      let dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        leapDate
+      )
+
+      const res = await request
+        .post("/admin/bookings/make-dates-unavailable")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate: leapDate
+        })
+
+      expect(res.status).toEqual(201)
+      expect(res.body.updatedBookingSlots).toHaveLength(2)
+
+      dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
+        startDate,
+        leapDate
+      )
+
+      expect(dates).toHaveLength(2)
+      expect(dates[0].max_bookings).toBeLessThanOrEqual(0)
+      expect(dates[0].description).toEqual("my test")
+      expect(dates[0].date).toEqual(startDate)
+
+      expect(dates[1].max_bookings).toBeLessThanOrEqual(0)
+      expect(dates[1].description).toEqual("skipped a date")
+      expect(dates[1].date).toEqual(leapDate)
     })
   })
 })
