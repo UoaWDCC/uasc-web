@@ -10,7 +10,6 @@ import {
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
-import { Timestamp } from "firebase-admin/firestore"
 import { MakeDatesAvailableRequestBody } from "service-layer/request-models/AdminRequests"
 import {
   CreateUserRequestBody,
@@ -18,7 +17,7 @@ import {
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
-import { CommonResponse } from "service-layer/response-models/CommonResponse"
+import { BookingSlotUpdateResponse } from "service-layer/response-models/BookingResponse"
 import { UserResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
@@ -39,14 +38,10 @@ export class AdminController extends Controller {
    * Booking Operations
    */
   @SuccessResponse("201", "Slot made available")
-  @Post("/bookings/make-date-available")
+  @Post("/bookings/make-dates-available")
   public async makeDateAvailable(
     @Body() requestBody: MakeDatesAvailableRequestBody
-  ): Promise<
-    {
-      updatedBookingSlots?: { date: Timestamp; bookingSlotId: string }[]
-    } & CommonResponse
-  > {
+  ): Promise<BookingSlotUpdateResponse> {
     const { startDate, endDate } = requestBody
     const bookingSlotService = new BookingSlotService()
 
@@ -93,6 +88,59 @@ export class AdminController extends Controller {
       this.setStatus(500)
       console.error(`An error occurred when making dates available: ${e}`)
       return { error: "Something went wrong when making dates available" }
+    }
+  }
+
+  @SuccessResponse("201", "Slot made unavailable")
+  @Post("/bookings/make-dates-unavailable")
+  public async makeDateUnavailable(
+    @Body() requestBody: MakeDatesAvailableRequestBody
+  ): Promise<BookingSlotUpdateResponse> {
+    const { startDate, endDate } = requestBody
+    const bookingSlotService = new BookingSlotService()
+
+    const dates = datesToDateRange(
+      new Date(startDate.seconds * 1000),
+      new Date(endDate.seconds * 1000)
+    )
+
+    const datesToUpdatePromises = dates.map(async (date) => {
+      try {
+        const dateTimestamp = dateToFirestoreTimeStamp(date)
+        const [bookingSlotForDate] =
+          await bookingSlotService.getBookingSlotByDate(dateTimestamp)
+
+        if (!bookingSlotForDate) {
+          // don't care if it doesn't exist
+          return undefined
+        }
+
+        // Was available
+        if (bookingSlotForDate.max_bookings > EMPTY_BOOKING_SLOTS) {
+          await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
+            max_bookings: EMPTY_BOOKING_SLOTS
+          })
+        }
+
+        return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
+      } catch (e) {
+        console.error(
+          `Something went wrong when trying to make the date ${date.toString()} available`
+        )
+        return undefined
+      }
+    })
+
+    try {
+      const bookingSlotIds = await Promise.all(datesToUpdatePromises)
+      this.setStatus(201)
+      return {
+        updatedBookingSlots: bookingSlotIds.filter((id) => !!id) // No way to "skip" with map
+      }
+    } catch (e) {
+      this.setStatus(500)
+      console.error(`An error occurred when making dates unavailable: ${e}`)
+      return { error: "Something went wrong when making dates unavailable" }
     }
   }
 
