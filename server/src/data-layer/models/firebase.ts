@@ -5,7 +5,7 @@ export interface UserAdditionalInfo {
   /**
    * @isbool Please enter true or false
    */
-  does_freestyle: boolean
+  does_snowboarding: boolean
   /**
    * @isbool Please enter true or false
    */
@@ -21,15 +21,7 @@ export interface UserAdditionalInfo {
   /**
    * @isString Please enter a name
    */
-  emergency_name: string
-  /**
-   * @isString Please type in your Phone Number
-   */
-  emergency_phone: string
-  /**
-   * @isString Please enter a name
-   */
-  emergency_relation: string
+  emergency_contact?: string
   /**
    * @isString Please enter your First Name
    */
@@ -39,25 +31,21 @@ export interface UserAdditionalInfo {
    */
   last_name: string
   /**
-   * @isString Please enter either Admin or Member or Guest
-   */
-  membership: "admin" | "member" | "guest"
-  /**
    * @isString Please write your dietary requirements
    */
   dietary_requirements: string
   /**
    * @isString Please enter your faculty
    */
-  faculty: string | undefined
+  faculty?: string
   /**
    * @isString Please enter your university
    */
-  university: string | undefined
+  university?: string
   /**
    *@isString Please enter your student ID
    */
-  student_id: string | undefined
+  student_id?: string
   /**
    * @isbool Please enter true or false
    */
@@ -73,15 +61,21 @@ export interface UserAdditionalInfo {
 }
 
 export interface BookingSlot {
-  product_id: string
-  active: boolean
-  display_price: number
-  name: string
-  description: string
-  start_date: Timestamp
-  end_date: Timestamp
+  /**
+   * An optional description for this date
+   * @example Beginners Weekend
+   */
+  description?: string
+  /**
+   * The {@link Timestamp} this booking slot refers to.
+   * @example 23 July 2024 at 00:00:00
+   */
+  date: Timestamp
+  /**
+   * The maximum number of bookings that can exist on this date
+   * @example 30
+   */
   max_bookings: number
-  remaining_spots: number
 }
 
 export interface Demographic {
@@ -118,8 +112,20 @@ export interface DateChange extends UserRequest {
 }
 
 export interface Booking {
-  user_id: string // Reference to user ID
-  booking_slot_id: string // Reference
+  /**
+   * The reference to the {@link UserAdditionalInfo} collection ID for the user who made this booking.
+   * @example /users/lVsOjAp06AfD6atT8bnrVEpcdcg2
+   */
+  user_id: string
+  /**
+   * The reference to the {@link BookingSlot} collection ID that the user is booked under.
+   * @exmaple /booking_slot/sddsdsdsds
+   */
+  booking_slot_id: string
+  /**
+   * The Stripe payment ID the user made when paying for this booking.
+   * @example 'cs_test_a11YYufWQzNY63zpQ6QSNRQhkUpVph4WRmzW0zWJO2znZKdVujZ0N0S22u'
+   */
   stripe_payment_id: string
 }
 

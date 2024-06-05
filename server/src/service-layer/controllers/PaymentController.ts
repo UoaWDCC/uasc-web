@@ -1,35 +1,125 @@
-import PricingService from "business-layer/services/PricingService"
 import StripeService from "business-layer/services/StripeService"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 import {
   MembershipTypeValues,
-  CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues,
   MEMBERSHIP_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
+import {
+  CHECKOUT_TYPE_KEY,
+  CheckoutTypeValues
+} from "business-layer/utils/StripeSessionMetadata"
 import UserDataService from "data-layer/services/UserDataService"
-import { SelfRequestModel } from "service-layer/request-models/UserRequests"
-import { MembershipPaymentResponse } from "service-layer/response-models/PaymentResponse"
+import {
+  UserPaymentRequestModel,
+  SelfRequestModel
+} from "service-layer/request-models/UserRequests"
+import {
+  MembershipPaymentResponse,
+  MembershipStripeProductResponse
+} from "service-layer/response-models/PaymentResponse"
+import Stripe from "stripe"
 import {
   Controller,
+  Post,
   Get,
   Route,
   Request,
   Security,
-  SuccessResponse
+  Query,
+  SuccessResponse,
+  Body
 } from "tsoa"
 
 @Route("payment")
 export class PaymentController extends Controller {
+  @Get("membership_prices")
+  public async getMembershipPrices(): Promise<MembershipStripeProductResponse> {
+    const stripeService = new StripeService()
+    try {
+      const membershipProducts =
+        await stripeService.getActiveMembershipProducts()
+      // Maps the products to the required response type MembershipStripeProductResponse in PaymentResponse
+
+      const productsValues = membershipProducts.map((product) => {
+        // Checks the membership type of the product
+        const membershipType = product.metadata[
+          MEMBERSHIP_TYPE_KEY
+        ] as MembershipTypeValues
+
+        let name: MembershipTypeValues
+
+        switch (membershipType) {
+          case MembershipTypeValues.UoaStudent: {
+            name = MembershipTypeValues.UoaStudent
+            break
+          }
+          case MembershipTypeValues.NonUoaStudent: {
+            name = MembershipTypeValues.NonUoaStudent
+            break
+          }
+          case MembershipTypeValues.ReturningMember: {
+            name = MembershipTypeValues.ReturningMember
+            break
+          }
+          case MembershipTypeValues.NewNonStudent: {
+            name = MembershipTypeValues.NewNonStudent
+            break
+          }
+        }
+
+        return {
+          productId: product.id,
+          name,
+          description: product.description,
+          discount: product.metadata.discount === "true",
+          displayPrice: (
+            Number(
+              (product.default_price as Stripe.Price).unit_amount_decimal
+            ) / 100
+          ).toString(),
+          originalPrice: product.metadata.original_price
+        }
+      })
+
+      return { data: productsValues }
+    } catch (error) {
+      console.error(error)
+      this.setStatus(500)
+      return { error: "Error fetching active Stripe products" }
+    }
+  }
+
+  @SuccessResponse("200", "Session Fetched")
+  @Security("jwt")
+  @Get("checkout_status")
+  public async getCheckoutSessionDetails(@Query() sessionId: string) {
+    const stripeService = new StripeService()
+    try {
+      const session = await stripeService.getCheckoutSessionById(sessionId)
+      const { status, customer_email, amount_total, metadata } = session
+
+      return {
+        status,
+        customer_email,
+        pricePaid: amount_total,
+        metadata
+      }
+    } catch (e) {
+      this.setStatus(500)
+      return null
+    }
+  }
+
   @SuccessResponse("200", "Session created")
   @Security("jwt")
-  @Get("membership")
+  @Post("membership")
   public async getMembershipPayment(
-    @Request() request: SelfRequestModel
+    @Request() request: SelfRequestModel,
+    @Body() requestBody: UserPaymentRequestModel
   ): Promise<MembershipPaymentResponse> {
     try {
       const { uid, email, customClaims } = request.user
-      if (customClaims[AuthServiceClaims.MEMBER]) {
+      if (customClaims && customClaims[AuthServiceClaims.MEMBER]) {
         // Can't pay for membership if already member
         this.setStatus(409)
         return { error: "Already a member" }
@@ -94,10 +184,14 @@ export class PaymentController extends Controller {
       /**
        * Check what price user is going to pay based on the details they filled in
        */
-      const requiredMembership = new PricingService().getMembershipType(
-        userData
-      )
-
+      const requiredMembership = requestBody.membershipType
+      if (!requiredMembership) {
+        this.setStatus(404)
+        return {
+          error:
+            "No existing session could be found, and no new session could be created because membership type was not provided"
+        }
+      }
       /**
        * Get required product and generate client secret
        */

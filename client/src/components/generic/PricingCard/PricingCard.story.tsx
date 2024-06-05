@@ -77,6 +77,7 @@ export const SideBySidePricingCards: Story = {
     (Story) => (
       <div className="flex gap-3">
         <PricingCard
+          discountedPriceString=""
           variant="default"
           title={"Selected Card"}
           priceString="$100"

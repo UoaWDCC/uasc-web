@@ -1,4 +1,8 @@
 import { SvgImport } from "components/utils/types"
+import { useEffect } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { oneLevelUp } from "../utils/Utils"
+import { PERSONAL_ROUTE_1 } from "../utils/RouteNames"
 type confirmationVariants = "default"
 
 export interface ISectionProps {
@@ -11,12 +15,20 @@ export interface ISectionProps {
 
 type props = ISectionProps
 
-export const confirmationSection = ({
+const ConfirmationSection = ({
   SvgIcon,
   subHeader,
   textTop,
   textBottom
 }: props) => {
+  const [searchParams] = useSearchParams()
+  const sessionId = searchParams.get("session_id")
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (!sessionId) {
+      navigate(oneLevelUp(PERSONAL_ROUTE_1))
+    }
+  }, [])
   return (
     <div className="">
       <div className="flex flex-row items-center justify-center">
@@ -41,4 +53,4 @@ export const confirmationSection = ({
   )
 }
 
-export default confirmationSection
+export default ConfirmationSection

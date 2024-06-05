@@ -1,12 +1,11 @@
-import { UseMutationOptions, useMutation } from "@tanstack/react-query"
-import UserService, { EditUsersBody } from "./UserService"
+import { useMutation } from "@tanstack/react-query"
+import UserService, { SignUpUserBody } from "./UserService"
 
-export function useEditUserMutation(
-  users: EditUsersBody,
-  options: UseMutationOptions
-) {
+const SIGN_UP_USER_MUTATION_KEY = "signUpUser" as const
+
+export function useSignUpUserMutation(userData: SignUpUserBody) {
   return useMutation({
-    ...options,
-    mutationFn: () => UserService.editUsers(users)
+    mutationKey: [SIGN_UP_USER_MUTATION_KEY],
+    mutationFn: () => UserService.signUpUser(userData)
   })
 }

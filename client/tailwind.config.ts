@@ -7,10 +7,11 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        "home-ski-image": "url('$assets/images/homeski.png')",
+        "home-ski-image": "url('$assets/images/homeLandingBackground.png')",
         "home-about-image": "url('$assets/images/AboutBackgroundImage.png')",
         "mountain-background-image":
-          "url('$assets/images/MountainBackgroundImage.png')"
+          "url('$assets/images/MountainBackgroundImage.png')",
+        "book-lodge-image": "url('$assets/images/BookLodgeBackgroundImage.png')"
       },
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans]
@@ -87,6 +88,15 @@ export default {
             fontWeight: "400"
           }
         ]
+      },
+      screens: {
+        xxs: [{ min: "320px" }],
+        xs: [{ min: "414px" }],
+        sm: [{ min: "640px" }],
+        md: [{ min: "768px" }],
+        lg: [{ min: "1024px" }],
+        xl: [{ min: "1280px" }],
+        "2xl": [{ min: "1536px" }]
       }
     }
   },
