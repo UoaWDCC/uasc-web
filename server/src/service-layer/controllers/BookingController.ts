@@ -1,12 +1,55 @@
 import { AvailableDatesRequestModel } from "service-layer/request-models/UserRequests"
 import { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
 import { Timestamp } from "firebase-admin/firestore"
+
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { Controller, Post, Route, Security, SuccessResponse, Body } from "tsoa"
+import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
+import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
+import {
+  Controller,
+  Get,
+  Post,
+  Route,
+  Security,
+  SuccessResponse,
+  Body,
+  Request
+} from "tsoa"
 
 @Route("bookings")
 export class BookingController extends Controller {
+  @SuccessResponse("200", "Found bookings")
+  @Security("jwt", ["member"])
+  @Get()
+  public async getAllBookings(
+    @Request() requestBody: AllUserBookingsRequestBody
+  ): Promise<AllUserBookingSlotsResponse> {
+    try {
+      const bookingDates: AllUserBookingSlotsResponse = { dates: [] }
+      if (requestBody.uid) {
+        const bookingDataService = new BookingDataService()
+        const bookingSlotService = new BookingSlotService()
+
+        const allBookingsData = await bookingDataService.getBookingsByUserId(
+          requestBody.uid
+        )
+        allBookingsData.map(async (booking) => {
+          const bookingSlot = await bookingSlotService.getBookingSlotById(
+            booking.booking_slot_id
+          )
+          if (bookingSlot) {
+            bookingDates.dates.push(bookingSlot.date)
+          }
+        })
+      }
+      return bookingDates
+    } catch (e) {
+      this.setStatus(500)
+      return { error: "Something went wrong" }
+    }
+  }
+
   @SuccessResponse("200", "Availabilities found")
   @Security("jwt", ["member"])
   @Post("available-dates")
