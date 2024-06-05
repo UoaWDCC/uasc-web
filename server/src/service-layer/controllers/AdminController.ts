@@ -65,11 +65,9 @@ export class AdminController extends Controller {
         }
 
         // Was unavailable
-        if (bookingSlotForDate.max_bookings <= EMPTY_BOOKING_SLOTS) {
-          await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
-            max_bookings: slots || DEFAULT_BOOKING_MAX_SLOTS
-          })
-        }
+        await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
+          max_bookings: slots || DEFAULT_BOOKING_MAX_SLOTS
+        })
 
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
