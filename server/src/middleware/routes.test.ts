@@ -25,6 +25,7 @@ import BookingSlotService from "data-layer/services/BookingSlotsService"
 import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import { Timestamp } from "firebase-admin/firestore"
+import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
 
 const request = supertest(_app)
 
@@ -642,6 +643,10 @@ describe("Endpoints", () => {
       )
 
       expect(dates).toHaveLength(6)
+
+      dates.forEach((date) => {
+        expect(date.max_bookings).toEqual(DEFAULT_BOOKING_MAX_SLOTS)
+      })
     })
 
     it("Should create booking slots specified within the date range, using the specified slots", async () => {
