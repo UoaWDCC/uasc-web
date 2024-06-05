@@ -7,8 +7,6 @@ export type EditUsersBody = {
   updatedInformation: UserAdditionalInfo
 }[]
 
-export const DEFAULT_BOOKING_AVAILABILITY = 32 as const
-
 const AdminService = {
   getUsers: async function () {
     const { data } = await fetchClient.GET("/admin/users", {})

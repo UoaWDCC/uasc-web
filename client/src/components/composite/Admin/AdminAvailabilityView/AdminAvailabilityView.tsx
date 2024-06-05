@@ -6,8 +6,7 @@ import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
-import { DEFAULT_BOOKING_AVAILABILITY } from "services/Admin/AdminService"
-import { MS_IN_SECOND } from "utils/Constants"
+import { DEFAULT_BOOKING_AVAILABILITY, MS_IN_SECOND } from "utils/Constants"
 
 const DAYS_IN_WEEK = 7 as const
 

@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore"
 import { createContext, useState } from "react"
-import { DEFAULT_BOOKING_AVAILABILITY } from "services/Admin/AdminService"
+import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
 
 interface IDateSelectionContext {
   /**
