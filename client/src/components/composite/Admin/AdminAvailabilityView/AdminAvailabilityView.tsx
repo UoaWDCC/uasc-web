@@ -3,11 +3,25 @@ import Button from "components/generic/FigmaButtons/FigmaButton"
 import { BookingAvailability } from "models/Booking"
 import { useContext } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
+import Table from "components/generic/ReusableTable/Table"
 
 interface IAdminAvailabilityView {
   slots?: BookingAvailability[]
   handleMakeAvailable: () => void
   handleMakeUnavailable: () => void
+}
+
+type CondensedBookingInfoColumn = {
+  uid: string
+  Date: string
+  "Max Bookings": string
+  "Available Spaces": string
+}
+const CONDENSED_BOOKING_INFO_DEFAULT_DATA = {
+  uid: "",
+  Date: "",
+  "Max Bookings": "",
+  "Available Spaces": ""
 }
 
 const AdminAvailabilityView = ({
@@ -20,10 +34,30 @@ const AdminAvailabilityView = ({
     selectedDates: { startDate, endDate },
     isUpdating
   } = useContext(DateSelectionContext)
+
+  const tableData: CondensedBookingInfoColumn[] =
+    startDate && endDate
+      ? slots
+          .filter(
+            (slot) =>
+              slot.date.seconds >= startDate.seconds &&
+              slot.date.seconds <= endDate.seconds
+          )
+          .map((slot) => {
+            return {
+              uid: slot.id,
+              Date: new Date(slot.date.seconds * 1000).toDateString(),
+              "Max Bookings": slot.maxBookings.toString() || "Unavailable",
+              "Available Spaces":
+                slot.availableSpaces.toString() || "Unavailable"
+            }
+          })
+      : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
+
   return (
-    <div className="flex h-full w-full gap-2 bg-white p-8">
+    <div className="flex h-full w-full flex-col items-center gap-2 bg-white p-8">
       <div className="flex flex-col gap-2">
-        <span className="max-w-[380px]">
+        <span className="w-[380px]">
           <Calendar
             minDate={new Date(new Date().toDateString())}
             selectRange
@@ -62,6 +96,7 @@ const AdminAvailabilityView = ({
 
         {isUpdating && <h5>Updating...</h5>}
       </div>
+      <Table showPerPage={7} data={tableData} />
     </div>
   )
 }

@@ -173,6 +173,7 @@ export interface components {
       maxBookings: number;
       date: components["schemas"]["FirebaseFirestore.Timestamp"];
       description: string;
+      id: string;
     };
     AvailableDatesResponse: {
       error?: string;

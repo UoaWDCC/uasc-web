@@ -3,6 +3,7 @@ import { CommonResponse } from "./CommonResponse"
 import { Timestamp } from "firebase-admin/firestore"
 
 type AvailableDates = {
+  id: string
   description: string
   date: Timestamp
   maxBookings: number
