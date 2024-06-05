@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore"
 import { createContext, useState } from "react"
+import { DEFAULT_BOOKING_AVAILABILITY } from "services/Admin/AdminService"
 
 interface IDateSelectionContext {
   /**
@@ -15,7 +16,7 @@ interface IDateSelectionContext {
   /**
    * The number of slots to set the max availability to for the selected range
    */
-  slotQty?: number
+  slotQty: number
   /**
    * Setter function for slotQty
    */
@@ -24,7 +25,8 @@ interface IDateSelectionContext {
 
 export const DateSelectionContext = createContext<IDateSelectionContext>({
   selectedDates: {},
-  isUpdating: false
+  isUpdating: false,
+  slotQty: DEFAULT_BOOKING_AVAILABILITY
 })
 
 export const DateSelectionProvider = ({
@@ -37,7 +39,7 @@ export const DateSelectionProvider = ({
     endDate?: Timestamp
   }>({})
 
-  const [slotQty, setSlotQty] = useState<number | undefined>(undefined)
+  const [slotQty, setSlotQty] = useState<number>(DEFAULT_BOOKING_AVAILABILITY)
 
   const [isUpdating, setIsUpdating] = useState<boolean>(false)
 
