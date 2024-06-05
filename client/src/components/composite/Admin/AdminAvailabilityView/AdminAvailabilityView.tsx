@@ -17,12 +17,12 @@ const AdminAvailabilityView = ({
 }: IAdminAvailabilityView) => {
   const {
     handleSelectedDateChange,
-    selectedDates: { startDate, endDate }
+    selectedDates: { startDate, endDate },
+    isUpdating
   } = useContext(DateSelectionContext)
   return (
-    <div className="flex h-full w-full flex-col bg-white p-8">
-      <h3>Change</h3>
-      <div className="flex">
+    <div className="flex h-full w-full gap-2 bg-white p-8">
+      <div className="flex flex-col gap-2">
         <span className="max-w-[380px]">
           <Calendar
             minDate={new Date(new Date().toDateString())}
@@ -50,7 +50,8 @@ const AdminAvailabilityView = ({
             }}
           />
         </span>
-        <span className="flex flex-col gap-1">
+
+        <span className="flex gap-1">
           <Button variant="default-sm" onClick={handleMakeAvailable}>
             Set Available
           </Button>
@@ -58,6 +59,8 @@ const AdminAvailabilityView = ({
             Set Unavailable
           </Button>
         </span>
+
+        {isUpdating && <h5>Updating...</h5>}
       </div>
     </div>
   )
