@@ -20,9 +20,11 @@ NEXT_YEAR_FROM_TODAY = new Date(NEXT_YEAR_FROM_TODAY.toDateString())
 
 export function useAvailableBookingsQuery(
   startDate: Timestamp = Timestamp.fromDate(TODAY),
-  endDate: Timestamp = Timestamp.fromDate(NEXT_YEAR_FROM_TODAY)
+  endDate: Timestamp = Timestamp.fromDate(NEXT_YEAR_FROM_TODAY),
+  staleTime: number = 15000 // 15 seconds
 ) {
   return useQuery({
+    staleTime,
     queryKey: [BOOKING_AVAILABLITY_KEY, startDate, endDate],
     queryFn: () => BookingService.getBookingAvailability(startDate, endDate)
   })
