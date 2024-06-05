@@ -46,28 +46,30 @@ export class PaymentController extends Controller {
           MEMBERSHIP_TYPE_KEY
         ] as MembershipTypeValues
 
+        let name: MembershipTypeValues
+
         switch (membershipType) {
           case MembershipTypeValues.UoaStudent: {
-            product.name = "UoA Student"
+            name = MembershipTypeValues.UoaStudent
             break
           }
           case MembershipTypeValues.NonUoaStudent: {
-            product.name = "Non-UoA Student"
+            name = MembershipTypeValues.NonUoaStudent
             break
           }
           case MembershipTypeValues.ReturningMember: {
-            product.name = "Returning Member"
+            name = MembershipTypeValues.ReturningMember
             break
           }
           case MembershipTypeValues.NewNonStudent: {
-            product.name = "New Non-Student"
+            name = MembershipTypeValues.NewNonStudent
             break
           }
         }
 
         return {
           productId: product.id,
-          name: product.name,
+          name,
           description: product.description,
           discount: product.metadata.discount === "true",
           displayPrice: (
@@ -78,6 +80,7 @@ export class PaymentController extends Controller {
           originalPrice: product.metadata.original_price
         }
       })
+
       return { data: productsValues }
     } catch (error) {
       console.error(error)

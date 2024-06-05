@@ -276,6 +276,15 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MembershipTypeValues": {
+				"enum": [
+					"uoa_student",
+					"non_uoa_student",
+					"returning_member",
+					"new_non_student"
+				],
+				"type": "string"
+			},
 			"MembershipStripeProductResponse": {
 				"properties": {
 					"error": {
@@ -300,7 +309,7 @@
 									"type": "string"
 								},
 								"name": {
-									"type": "string"
+									"$ref": "#/components/schemas/MembershipTypeValues"
 								},
 								"productId": {
 									"type": "string"
@@ -335,15 +344,6 @@
 				"additionalProperties": {
 					"type": "string"
 				}
-			},
-			"MembershipTypeValues": {
-				"enum": [
-					"uoa_student",
-					"non_uoa_student",
-					"returning_member",
-					"new_non_student"
-				],
-				"type": "string"
 			},
 			"MembershipPaymentResponse": {
 				"properties": {

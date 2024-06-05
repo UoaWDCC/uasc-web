@@ -18,7 +18,7 @@ export interface MembershipPaymentResponse extends CommonResponse {
 export interface MembershipStripeProductResponse extends CommonResponse {
   data?: {
     productId: string
-    name: string
+    name: MembershipTypeValues
     description?: string
     discount: boolean
     displayPrice: string

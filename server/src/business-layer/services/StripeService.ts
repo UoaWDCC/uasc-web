@@ -1,6 +1,6 @@
 import {
-  MEMBERSHIP_TYPE_KEY,
-  MembershipTypeValues,
+  MEMBERSHIP_PRODUCT_TYPE_KEY,
+  ProductTypeValues,
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
@@ -284,15 +284,15 @@ export default class StripeService {
   public async getActiveMembershipProducts() {
     try {
       const products = await stripe.products.list({
-        active: true
+        active: true,
+        expand: ["data.default_price"]
       })
       // Filter products with the required metadata
       const membershipProducts = products.data.filter(
         (product) =>
-          product.metadata[MEMBERSHIP_TYPE_KEY] ===
-          MembershipTypeValues.NonUoaStudent
+          product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] ===
+          ProductTypeValues.MEMBERSHIP
       )
-
       return membershipProducts
     } catch (error) {
       console.error("Error fetching Stripe products:", error)

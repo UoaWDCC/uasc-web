@@ -149,19 +149,17 @@ export interface components {
       email: string;
       user: components["schemas"]["Omit_UserAdditionalInfo.stripe_id_"];
     };
-    /** @enum {string} */
-    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipStripeProductResponse: {
       error?: string;
       message?: string;
       data?: {
-        originalPrice?: string;
-        displayPrice: string;
-        discount: boolean;
-        description?: string;
-        name: components["schemas"]["MembershipTypeValues"];
-        productId: string;
-      };
+          originalPrice?: string;
+          displayPrice: string;
+          discount: boolean;
+          description?: string;
+          name: string;
+          productId: string;
+        }[];
     };
     /** @enum {string} */
     "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";
@@ -169,6 +167,8 @@ export interface components {
     "stripe.Stripe.Metadata": {
       [key: string]: string;
     };
+    /** @enum {string} */
+    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipPaymentResponse: {
       error?: string;
       message?: string;
