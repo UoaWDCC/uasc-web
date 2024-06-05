@@ -95,11 +95,13 @@ const AdminAvailabilityView = ({
                 : undefined
             }
             tileContent={({ date }) =>
+              // Find slots that are "available"
               slots.some(
                 (slot) =>
                   new Date(slot.date.seconds * 1000).toDateString() ===
                     date.toDateString() && slot.maxBookings > 0
               ) ? (
+                // Apply style if it is
                 <p>Open</p>
               ) : null
             }
