@@ -167,7 +167,7 @@ const AdminAvailabilityView = ({
                 setAvailabilityQuantity(DEFAULT_BOOKING_AVAILABILITY)
               }}
             >
-              Reset Back
+              Reset to {DEFAULT_BOOKING_AVAILABILITY}
             </h5>
           </>
         )}
