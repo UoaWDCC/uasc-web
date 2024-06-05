@@ -352,7 +352,6 @@
 					"availableSpaces",
 					"maxBookings",
 					"date",
-					"description",
 					"id"
 				],
 				"type": "object"

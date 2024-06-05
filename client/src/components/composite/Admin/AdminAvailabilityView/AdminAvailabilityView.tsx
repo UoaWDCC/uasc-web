@@ -4,6 +4,7 @@ import { BookingAvailability } from "models/Booking"
 import { useContext } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "components/generic/ReusableTable/Table"
+import { Timestamp } from "firebase/firestore"
 
 interface IAdminAvailabilityView {
   slots?: BookingAvailability[]
@@ -17,7 +18,7 @@ interface IAdminAvailabilityView {
   handleMakeUnavailable: () => void
 }
 
-type CondensedBookingInfoColumn = {
+export type CondensedBookingInfoColumn = {
   /**
    * Will not be displayed on the table, however important if you want to
    * implement operations on the rows
@@ -44,6 +45,30 @@ const CONDENSED_BOOKING_INFO_DEFAULT_DATA = {
 }
 
 /**
+ * @deprecated **ONLY** should be imported for tests
+ */
+export const formatBookingSlotsForAvailabilityView = (
+  startDate: Timestamp,
+  endDate: Timestamp,
+  slots: BookingAvailability[]
+) => {
+  return slots
+    .filter(
+      (slot) =>
+        slot.date.seconds >= startDate.seconds &&
+        slot.date.seconds <= endDate.seconds
+    )
+    .map((slot) => {
+      return {
+        uid: slot.id,
+        Date: new Date(slot.date.seconds * 1000).toDateString(),
+        "Max Bookings": slot.maxBookings.toString(),
+        "Available Spaces": slot.availableSpaces.toString()
+      }
+    })
+}
+
+/**
  * Slots must be in the format described by @type CondensedBookingInfoColumn
  * This must be wrapped in a `DateSelectionProvider`
  */
@@ -60,20 +85,7 @@ const AdminAvailabilityView = ({
 
   const tableData: CondensedBookingInfoColumn[] =
     startDate && endDate
-      ? slots
-          .filter(
-            (slot) =>
-              slot.date.seconds >= startDate.seconds &&
-              slot.date.seconds <= endDate.seconds
-          )
-          .map((slot) => {
-            return {
-              uid: slot.id,
-              Date: new Date(slot.date.seconds * 1000).toDateString(),
-              "Max Bookings": slot.maxBookings.toString(),
-              "Available Spaces": slot.availableSpaces.toString()
-            }
-          })
+      ? formatBookingSlotsForAvailabilityView(startDate, endDate, slots)
       : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
 
   return (

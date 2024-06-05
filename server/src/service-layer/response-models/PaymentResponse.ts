@@ -4,7 +4,7 @@ import { Timestamp } from "firebase-admin/firestore"
 
 type AvailableDates = {
   id: string
-  description: string
+  description?: string
   date: Timestamp
   maxBookings: number
   availableSpaces: number
