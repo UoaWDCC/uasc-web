@@ -42,7 +42,7 @@ export class AdminController extends Controller {
   public async makeDateAvailable(
     @Body() requestBody: MakeDatesAvailableRequestBody
   ): Promise<BookingSlotUpdateResponse> {
-    const { startDate, endDate } = requestBody
+    const { startDate, endDate, slots } = requestBody
     const bookingSlotService = new BookingSlotService()
 
     const dates = datesToDateRange(
@@ -59,17 +59,15 @@ export class AdminController extends Controller {
         if (!bookingSlotForDate) {
           const bookingSlot = await bookingSlotService.createBookingSlot({
             date: dateTimestamp,
-            max_bookings: DEFAULT_BOOKING_MAX_SLOTS
+            max_bookings: slots || DEFAULT_BOOKING_MAX_SLOTS
           })
           return { bookingSlotId: bookingSlot.id, date: dateTimestamp }
         }
 
         // Was unavailable
-        if (bookingSlotForDate.max_bookings <= EMPTY_BOOKING_SLOTS) {
-          await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
-            max_bookings: DEFAULT_BOOKING_MAX_SLOTS
-          })
-        }
+        await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
+          max_bookings: slots || DEFAULT_BOOKING_MAX_SLOTS
+        })
 
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
@@ -94,7 +92,7 @@ export class AdminController extends Controller {
   @SuccessResponse("201", "Slot made unavailable")
   @Post("/bookings/make-dates-unavailable")
   public async makeDateUnavailable(
-    @Body() requestBody: MakeDatesAvailableRequestBody
+    @Body() requestBody: Omit<MakeDatesAvailableRequestBody, "slots">
   ): Promise<BookingSlotUpdateResponse> {
     const { startDate, endDate } = requestBody
     const bookingSlotService = new BookingSlotService()
