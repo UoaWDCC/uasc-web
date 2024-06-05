@@ -40,14 +40,16 @@ const AdminService = {
   },
   makeDatesAvailable: async function (
     startDate: Timestamp,
-    endDate: Timestamp
+    endDate: Timestamp,
+    slots?: number
   ) {
     const { response, data } = await fetchClient.POST(
       "/admin/bookings/make-dates-available",
       {
         body: {
           startDate,
-          endDate
+          endDate,
+          slots
         }
       }
     )

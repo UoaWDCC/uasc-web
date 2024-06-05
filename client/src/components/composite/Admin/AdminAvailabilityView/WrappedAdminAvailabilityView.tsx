@@ -13,17 +13,19 @@ import { DateSelectionContext } from "./DateSelectionContext"
 export const WrappedAdminAvailabilityView = () => {
   const { data } = useAvailableBookingsQuery()
 
-  const { selectedDates, setIsUpdating } = useContext(DateSelectionContext)
+  const {
+    selectedDates: { startDate, endDate },
+    setIsUpdating,
+    slotQty: slots
+  } = useContext(DateSelectionContext)
   const { mutateAsync: makeAvailableMutation } = useMakeDatesAvailableMutation(
-    selectedDates.startDate,
-    selectedDates.endDate
+    startDate,
+    endDate,
+    slots
   )
 
   const { mutateAsync: makeUnavailableMutation } =
-    useMakeDatesUnavailableMutation(
-      selectedDates.startDate,
-      selectedDates.endDate
-    )
+    useMakeDatesUnavailableMutation(startDate, endDate)
 
   return (
     <>

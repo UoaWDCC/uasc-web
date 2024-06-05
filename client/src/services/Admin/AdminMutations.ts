@@ -20,13 +20,14 @@ export function useDemoteUserMutation() {
 
 export function useMakeDatesAvailableMutation(
   startDate?: Timestamp,
-  endDate?: Timestamp
+  endDate?: Timestamp,
+  slots?: number
 ) {
   return useMutation({
     mutationKey: ["make-dates-available"],
     mutationFn: () => {
       if (!startDate || !endDate) return new Promise(() => {})
-      return AdminService.makeDatesAvailable(startDate, endDate)
+      return AdminService.makeDatesAvailable(startDate, endDate, slots)
     },
     retry: false,
     onSuccess: () => {

@@ -1,7 +1,7 @@
 import Calendar from "components/generic/Calendar/Calendar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { BookingAvailability } from "models/Booking"
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
@@ -9,7 +9,6 @@ import TextInput from "components/generic/TextInputComponent/TextInput"
 import { DEFAULT_BOOKING_AVAILABILITY } from "services/Admin/AdminService"
 import { MS_IN_SECOND } from "utils/Constants"
 
-const MAX_AVAILIBILITY_DEVIATION = 10 as const
 const DAYS_IN_WEEK = 7 as const
 
 interface IAdminAvailabilityView {
@@ -96,12 +95,10 @@ const AdminAvailabilityView = ({
   const {
     handleSelectedDateChange,
     selectedDates: { startDate, endDate },
-    isUpdating
+    isUpdating,
+    slotQty,
+    setSlotQty
   } = useContext(DateSelectionContext)
-
-  const [availibilityQuantity, setAvailabilityQuantity] = useState<number>(
-    DEFAULT_BOOKING_AVAILABILITY
-  )
 
   const dateRangeDefined = startDate && endDate
 
@@ -149,15 +146,15 @@ const AdminAvailabilityView = ({
 
         <TextInput
           label="Slots to make available"
-          value={availibilityQuantity}
+          value={slotQty || DEFAULT_BOOKING_AVAILABILITY}
           onChange={(e) => {
-            setAvailabilityQuantity(e.target.valueAsNumber)
+            setSlotQty?.(e.target.valueAsNumber)
           }}
-          max={DEFAULT_BOOKING_AVAILABILITY + MAX_AVAILIBILITY_DEVIATION}
+          max={DEFAULT_BOOKING_AVAILABILITY}
           min={0}
           type="number"
         />
-        {availibilityQuantity !== DEFAULT_BOOKING_AVAILABILITY && (
+        {slotQty !== DEFAULT_BOOKING_AVAILABILITY && (
           <>
             <h5 className="text-red">
               Warning: you are not using the default value of{" "}
@@ -166,7 +163,7 @@ const AdminAvailabilityView = ({
             <h5
               className="text-dark-blue-100 cursor-pointer font-bold"
               onClick={() => {
-                setAvailabilityQuantity(DEFAULT_BOOKING_AVAILABILITY)
+                setSlotQty?.(DEFAULT_BOOKING_AVAILABILITY)
               }}
             >
               Reset to {DEFAULT_BOOKING_AVAILABILITY}
@@ -183,7 +180,7 @@ const AdminAvailabilityView = ({
               }
               if (
                 confirm(
-                  `Are you sure you want to make the dates ${formattedDateRanges} available?`
+                  `Are you sure you want to make the dates ${formattedDateRanges} available, with ${slotQty} for each date?`
                 )
               )
                 handleMakeAvailable()

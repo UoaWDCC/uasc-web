@@ -2,6 +2,9 @@ import { Timestamp } from "firebase/firestore"
 import { createContext, useState } from "react"
 
 interface IDateSelectionContext {
+  /**
+   * Should **both** be defined for meaningful usage (shows a valid range has been selected)
+   */
   selectedDates: {
     startDate?: Timestamp
     endDate?: Timestamp
@@ -9,6 +12,14 @@ interface IDateSelectionContext {
   isUpdating: boolean
   handleSelectedDateChange?: (startDate?: Date, endDate?: Date) => void
   setIsUpdating?: (isUpdating: boolean) => void
+  /**
+   * The number of slots to set the max availability to for the selected range
+   */
+  slotQty?: number
+  /**
+   * Setter function for slotQty
+   */
+  setSlotQty?: (newSlots: number) => void
 }
 
 export const DateSelectionContext = createContext<IDateSelectionContext>({
@@ -25,6 +36,8 @@ export const DateSelectionProvider = ({
     startDate?: Timestamp
     endDate?: Timestamp
   }>({})
+
+  const [slotQty, setSlotQty] = useState<number | undefined>(undefined)
 
   const [isUpdating, setIsUpdating] = useState<boolean>(false)
 
@@ -45,7 +58,9 @@ export const DateSelectionProvider = ({
         selectedDates,
         handleSelectedDateChange: handleDateChange,
         isUpdating,
-        setIsUpdating
+        setIsUpdating,
+        slotQty,
+        setSlotQty
       }}
     >
       {children}
