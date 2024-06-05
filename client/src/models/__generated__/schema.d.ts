@@ -149,6 +149,8 @@ export interface components {
       email: string;
       user: components["schemas"]["Omit_UserAdditionalInfo.stripe_id_"];
     };
+    /** @enum {string} */
+    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipStripeProductResponse: {
       error?: string;
       message?: string;
@@ -157,7 +159,7 @@ export interface components {
           displayPrice: string;
           discount: boolean;
           description?: string;
-          name: string;
+          name: components["schemas"]["MembershipTypeValues"];
           productId: string;
         }[];
     };
@@ -167,8 +169,6 @@ export interface components {
     "stripe.Stripe.Metadata": {
       [key: string]: string;
     };
-    /** @enum {string} */
-    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipPaymentResponse: {
       error?: string;
       message?: string;
