@@ -33,3 +33,19 @@ export function useMakeDatesAvailableMutation(
     }
   })
 }
+
+export function useMakeDatesUnavailableMutation(
+  startDate?: Timestamp,
+  endDate?: Timestamp
+) {
+  return useMutation({
+    mutationKey: ["make-dates-unavailable"],
+    mutationFn: () => {
+      if (!startDate || !endDate) return new Promise(() => {})
+      return AdminService.makeDatesUnavailable(startDate, endDate)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [BOOKING_AVAILABLITY_KEY] })
+    }
+  })
+}

@@ -7,11 +7,13 @@ import { DateSelectionContext } from "./DateSelectionContext"
 interface IAdminAvailabilityView {
   slots?: BookingAvailability[]
   handleMakeAvailable: () => void
+  handleMakeUnavailable: () => void
 }
 
 const AdminAvailabilityView = ({
   slots = [],
-  handleMakeAvailable
+  handleMakeAvailable,
+  handleMakeUnavailable
 }: IAdminAvailabilityView) => {
   const {
     handleSelectedDateChange,
@@ -23,6 +25,7 @@ const AdminAvailabilityView = ({
       <div className="flex">
         <span className="max-w-[380px]">
           <Calendar
+            minDate={new Date(new Date().toDateString())}
             selectRange
             value={
               startDate && endDate
@@ -36,7 +39,7 @@ const AdminAvailabilityView = ({
               slots.some(
                 (slot) =>
                   new Date(slot.date.seconds * 1000).toDateString() ===
-                  date.toDateString()
+                    date.toDateString() && slot.maxBookings > 0
               ) ? (
                 <p>Open</p>
               ) : null
@@ -51,7 +54,9 @@ const AdminAvailabilityView = ({
           <Button variant="default-sm" onClick={handleMakeAvailable}>
             Set Available
           </Button>
-          <Button variant="inverted-default-sm">Set Unavailable</Button>
+          <Button variant="inverted-default-sm" onClick={handleMakeUnavailable}>
+            Set Unavailable
+          </Button>
         </span>
       </div>
     </div>

@@ -40,7 +40,28 @@ const AdminService = {
     endDate: Timestamp
   ) {
     const { response, data } = await fetchClient.POST(
-      "/admin/bookings/make-date-available",
+      "/admin/bookings/make-dates-available",
+      {
+        body: {
+          startDate,
+          endDate
+        }
+      }
+    )
+
+    if (!response.ok)
+      throw new Error(
+        `Failed to make dates ${startDate.toString()} to ${endDate.toString()} available`
+      )
+    return data
+  },
+
+  makeDatesUnavailable: async function (
+    startDate: Timestamp,
+    endDate: Timestamp
+  ) {
+    const { response, data } = await fetchClient.POST(
+      "/admin/bookings/make-dates-unavailable",
       {
         body: {
           startDate,
