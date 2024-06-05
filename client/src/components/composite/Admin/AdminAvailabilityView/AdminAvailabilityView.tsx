@@ -99,7 +99,9 @@ const AdminAvailabilityView = ({
         {isUpdating && <h5>Updating...</h5>}
       </div>
       <div className="w-full">
-        <h3 className="text-center md:text-left">Selected Bookings</h3>
+        <h3 className="text-dark-blue-100 text-center md:text-left">
+          Selected Bookings
+        </h3>
         <Table showPerPage={7} data={tableData} />
       </div>
     </div>

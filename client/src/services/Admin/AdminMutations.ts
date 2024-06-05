@@ -28,6 +28,7 @@ export function useMakeDatesAvailableMutation(
       if (!startDate || !endDate) return new Promise(() => {})
       return AdminService.makeDatesAvailable(startDate, endDate)
     },
+    retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [BOOKING_AVAILABLITY_KEY] })
     }
@@ -40,6 +41,7 @@ export function useMakeDatesUnavailableMutation(
 ) {
   return useMutation({
     mutationKey: ["make-dates-unavailable"],
+    retry: false,
     mutationFn: () => {
       if (!startDate || !endDate) return new Promise(() => {})
       return AdminService.makeDatesUnavailable(startDate, endDate)
