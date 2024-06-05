@@ -1,10 +1,14 @@
 import Calendar from "components/generic/Calendar/Calendar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { BookingAvailability } from "models/Booking"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
+import TextInput from "components/generic/TextInputComponent/TextInput"
+import { DEFAULT_BOOKING_AVAILABILITY } from "services/Admin/AdminService"
+
+const MAX_AVAILIBILITY_DEVIATION = 10 as const
 
 interface IAdminAvailabilityView {
   slots?: BookingAvailability[]
@@ -68,6 +72,16 @@ export const formatBookingSlotsForAvailabilityView = (
     })
 }
 
+const formatDateRangeForDialog = (
+  startDate?: Timestamp,
+  endDate?: Timestamp
+) => {
+  if (startDate && endDate)
+    return `${new Date(startDate.seconds * 1000).toDateString()} to ${new Date(endDate.seconds * 1000).toDateString()}`
+
+  return ""
+}
+
 /**
  * Slots must be in the format described by @type CondensedBookingInfoColumn
  * This must be wrapped in a `DateSelectionProvider`
@@ -83,10 +97,17 @@ const AdminAvailabilityView = ({
     isUpdating
   } = useContext(DateSelectionContext)
 
-  const tableData: CondensedBookingInfoColumn[] =
-    startDate && endDate
-      ? formatBookingSlotsForAvailabilityView(startDate, endDate, slots)
-      : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
+  const [availibilityQuantity, setAvailabilityQuantity] = useState<number>(
+    DEFAULT_BOOKING_AVAILABILITY
+  )
+
+  const dateRangeDefined = startDate && endDate
+
+  const tableData: CondensedBookingInfoColumn[] = dateRangeDefined
+    ? formatBookingSlotsForAvailabilityView(startDate, endDate, slots)
+    : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
+
+  const formattedDateRanges = formatDateRangeForDialog(startDate, endDate)
 
   return (
     <div
@@ -99,7 +120,7 @@ const AdminAvailabilityView = ({
             minDate={new Date(new Date().toDateString())}
             selectRange
             value={
-              startDate && endDate
+              dateRangeDefined
                 ? [
                     new Date(startDate.seconds * 1000),
                     new Date(endDate.seconds * 1000)
@@ -124,11 +145,65 @@ const AdminAvailabilityView = ({
           />
         </span>
 
+        <TextInput
+          label="Slots to make available"
+          value={availibilityQuantity}
+          onChange={(e) => {
+            setAvailabilityQuantity(e.target.valueAsNumber)
+          }}
+          max={DEFAULT_BOOKING_AVAILABILITY + MAX_AVAILIBILITY_DEVIATION}
+          min={0}
+          type="number"
+        />
+        {availibilityQuantity !== DEFAULT_BOOKING_AVAILABILITY && (
+          <>
+            <h5 className="text-red">
+              Warning: you are not using the default value of{" "}
+              {DEFAULT_BOOKING_AVAILABILITY} spots
+            </h5>
+            <h5
+              className="text-dark-blue-100 cursor-pointer font-bold"
+              onClick={() => {
+                setAvailabilityQuantity(DEFAULT_BOOKING_AVAILABILITY)
+              }}
+            >
+              Reset Back
+            </h5>
+          </>
+        )}
         <span className="flex gap-1">
-          <Button variant="default-sm" onClick={handleMakeAvailable}>
+          <Button
+            variant="default-sm"
+            onClick={() => {
+              if (!dateRangeDefined) {
+                alert("Please select a date range")
+                return
+              }
+              if (
+                confirm(
+                  `Are you sure you want to make the dates ${formattedDateRanges} available?`
+                )
+              )
+                handleMakeAvailable()
+            }}
+          >
             Set Available
           </Button>
-          <Button variant="inverted-default-sm" onClick={handleMakeUnavailable}>
+          <Button
+            variant="inverted-default-sm"
+            onClick={() => {
+              if (!dateRangeDefined) {
+                alert("Please select a date range")
+                return
+              }
+              if (
+                confirm(
+                  `Are you sure you want to make the dates ${formattedDateRanges} unavailable?`
+                )
+              )
+                handleMakeUnavailable()
+            }}
+          >
             Set Unavailable
           </Button>
         </span>
