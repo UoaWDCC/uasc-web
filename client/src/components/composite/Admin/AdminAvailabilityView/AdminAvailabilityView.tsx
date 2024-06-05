@@ -55,7 +55,10 @@ const AdminAvailabilityView = ({
       : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
 
   return (
-    <div className="flex h-full w-full flex-col items-center gap-2 bg-white p-8">
+    <div
+      className="flex h-full w-full flex-col items-center gap-2
+     bg-white p-8 md:flex-row md:items-start"
+    >
       <div className="flex flex-col gap-2">
         <span className="w-[380px]">
           <Calendar
