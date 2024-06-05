@@ -6,11 +6,14 @@ interface IDateSelectionContext {
     startDate?: Timestamp
     endDate?: Timestamp
   }
+  isUpdating: boolean
   handleSelectedDateChange?: (startDate?: Date, endDate?: Date) => void
+  setIsUpdating?: (isUpdating: boolean) => void
 }
 
 export const DateSelectionContext = createContext<IDateSelectionContext>({
-  selectedDates: {}
+  selectedDates: {},
+  isUpdating: false
 })
 
 export const DateSelectionProvider = ({
@@ -22,6 +25,8 @@ export const DateSelectionProvider = ({
     startDate?: Timestamp
     endDate?: Timestamp
   }>({})
+
+  const [isUpdating, setIsUpdating] = useState<boolean>(false)
 
   const handleDateChange = (newStartDate?: Date, newEndDate?: Date) => {
     setSelectedDates({
@@ -36,7 +41,12 @@ export const DateSelectionProvider = ({
 
   return (
     <DateSelectionContext.Provider
-      value={{ selectedDates, handleSelectedDateChange: handleDateChange }}
+      value={{
+        selectedDates,
+        handleSelectedDateChange: handleDateChange,
+        isUpdating,
+        setIsUpdating
+      }}
     >
       {children}
     </DateSelectionContext.Provider>
