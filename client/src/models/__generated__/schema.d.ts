@@ -17,6 +17,9 @@ export interface paths {
   "/signup": {
     post: operations["Signup"];
   };
+  "/payment/membership_prices": {
+    get: operations["GetMembershipPrices"];
+  };
   "/payment/checkout_status": {
     get: operations["GetCheckoutSessionDetails"];
   };
@@ -150,13 +153,25 @@ export interface components {
       user: components["schemas"]["Omit_UserAdditionalInfo.stripe_id_"];
     };
     /** @enum {string} */
+    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
+    MembershipStripeProductResponse: {
+      error?: string;
+      message?: string;
+      data?: {
+          originalPrice?: string;
+          displayPrice: string;
+          discount: boolean;
+          description?: string;
+          name: components["schemas"]["MembershipTypeValues"];
+          productId: string;
+        }[];
+    };
+    /** @enum {string} */
     "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";
     /** @description Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format. */
     "stripe.Stripe.Metadata": {
       [key: string]: string;
     };
-    /** @enum {string} */
-    MembershipTypeValues: "uoa_student" | "non_uoa_student" | "returning_member" | "new_non_student";
     MembershipPaymentResponse: {
       error?: string;
       message?: string;
@@ -193,9 +208,22 @@ export interface components {
         }[];
     };
     MakeDatesAvailableRequestBody: {
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** Format: double */
+      slots?: number;
+    };
+    /** @description From T, pick a set of properties whose keys are in the union K */
+    "Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__": {
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
+    /** @description Construct a type with the properties of T except for those in type K. */
+    "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
     CreateUserRequestBody: {
       uid: string;
       user: components["schemas"]["UserAdditionalInfo"];
@@ -295,6 +323,16 @@ export interface operations {
       };
     };
   };
+  GetMembershipPrices: {
+    responses: {
+      /** @description Ok */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MembershipStripeProductResponse"];
+        };
+      };
+    };
+  };
   GetCheckoutSessionDetails: {
     parameters: {
       query: {
@@ -365,7 +403,7 @@ export interface operations {
   MakeDateUnavailable: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["MakeDatesAvailableRequestBody"];
+        "application/json": components["schemas"]["Omit_MakeDatesAvailableRequestBody.slots_"];
       };
     };
     responses: {
