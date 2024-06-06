@@ -23,6 +23,9 @@ export interface paths {
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
+  "/bookings": {
+    get: operations["GetAllBookings"];
+  };
   "/bookings/available-dates": {
     post: operations["GetAvailableDates"];
   };
@@ -165,6 +168,11 @@ export interface components {
     };
     UserPaymentRequestModel: {
       membershipType?: components["schemas"]["MembershipTypeValues"];
+    };
+    AllUserBookingSlotsResponse: {
+      error?: string;
+      message?: string;
+      dates?: components["schemas"]["FirebaseFirestore.Timestamp"][];
     };
     AvailableDates: {
       /** Format: double */
@@ -326,6 +334,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["MembershipPaymentResponse"];
+        };
+      };
+    };
+  };
+  GetAllBookings: {
+    parameters: {
+      query: {
+        uid: string;
+      };
+    };
+    responses: {
+      /** @description Found bookings */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AllUserBookingSlotsResponse"];
         };
       };
     };
