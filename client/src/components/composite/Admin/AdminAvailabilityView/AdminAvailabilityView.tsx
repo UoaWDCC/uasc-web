@@ -8,6 +8,9 @@ import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import { DEFAULT_BOOKING_AVAILABILITY, MS_IN_SECOND } from "utils/Constants"
 
+/**
+ * Reasonable amount of items to display on table
+ */
 const DAYS_IN_WEEK = 7 as const
 
 interface IAdminAvailabilityView {
@@ -41,6 +44,7 @@ export type CondensedBookingInfoColumn = {
    */
   "Available Spaces": string
 }
+
 const CONDENSED_BOOKING_INFO_DEFAULT_DATA = {
   uid: "",
   Date: "",
@@ -137,6 +141,9 @@ const AdminAvailabilityView = ({
               ) : null
             }
             onChange={(value) => {
+              /**
+               * Format: [`startDate`, `endDate`]
+               */
               const range = value as [Date, Date]
               handleSelectedDateChange?.(range[0], range[1])
             }}
