@@ -6,5 +6,5 @@ export interface BookingSlotUpdateResponse extends CommonResponse {
 }
 
 export interface AllUserBookingSlotsResponse extends CommonResponse {
-  dates?: Timestamp[]
+  dates?: string[]
 }

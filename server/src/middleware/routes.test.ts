@@ -609,7 +609,7 @@ describe("Endpoints", () => {
       const res = await request
         .get("/bookings")
         .set("Authorization", `Bearer ${memberToken}`)
-        .send({ uid: MEMBER_USER_UID })
+        .query({ uid: MEMBER_USER_UID })
 
       expect(res.status).toBe(200)
       expect(res.body.dates).toEqual([])
@@ -619,34 +619,35 @@ describe("Endpoints", () => {
       const bookingDataService = new BookingDataService()
       const bookingSlotService = new BookingSlotService()
 
-      const bookingSlot1 = (
-        await bookingSlotService.createBookingSlot({
+      const { id: bookingSlotId1 } = await bookingSlotService.createBookingSlot(
+        {
           date: Timestamp.fromDate(new Date("2024-06-06")),
           max_bookings: 9
-        })
-      ).id
-      const bookingSlot2 = (
-        await bookingSlotService.createBookingSlot({
-          date: Timestamp.fromDate(new Date("2023-06-10")),
+        }
+      )
+
+      const { id: bookingSlotId2 } = await bookingSlotService.createBookingSlot(
+        {
+          date: Timestamp.fromDate(new Date("2024-06-10")),
           max_bookings: 9
-        })
-      ).id
+        }
+      )
 
       await bookingDataService.createBooking({
         user_id: MEMBER_USER_UID,
-        booking_slot_id: bookingSlot1,
+        booking_slot_id: bookingSlotId1,
         stripe_payment_id: ""
       })
       await bookingDataService.createBooking({
         user_id: MEMBER_USER_UID,
-        booking_slot_id: bookingSlot2,
+        booking_slot_id: bookingSlotId2,
         stripe_payment_id: ""
       })
 
       const res = await request
         .get("/bookings")
         .set("Authorization", `Bearer ${memberToken}`)
-        .send({ uid: MEMBER_USER_UID })
+        .query({ uid: MEMBER_USER_UID })
 
       expect(res.status).toBe(200)
       expect(res.body.dates).toContainEqual(
@@ -665,23 +666,23 @@ describe("Endpoints", () => {
       const bookingDataService = new BookingDataService()
       const bookingSlotService = new BookingSlotService()
 
-      const bookingSlot1 = (
-        await bookingSlotService.createBookingSlot({
+      const { id: bookingSlotId1 } = await bookingSlotService.createBookingSlot(
+        {
           date: Timestamp.fromDate(new Date("2002-06-06")),
           max_bookings: 9
-        })
-      ).id
+        }
+      )
 
       await bookingDataService.createBooking({
         user_id: MEMBER_USER_UID,
-        booking_slot_id: bookingSlot1,
+        booking_slot_id: bookingSlotId1,
         stripe_payment_id: ""
       })
 
       const res = await request
         .get("/bookings")
         .set("Authorization", `Bearer ${guestToken}`)
-        .send({ uid: MEMBER_USER_UID })
+        .query({ uid: MEMBER_USER_UID })
 
       expect(res.status).toEqual(401)
     })

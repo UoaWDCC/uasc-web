@@ -4,7 +4,7 @@ import { Timestamp } from "firebase-admin/firestore"
 
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
+// import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
 import {
   Controller,
@@ -14,8 +14,9 @@ import {
   Security,
   SuccessResponse,
   Body,
-  Request
+  Query
 } from "tsoa"
+import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
 @Route("bookings")
 export class BookingController extends Controller {
@@ -23,27 +24,30 @@ export class BookingController extends Controller {
   @Security("jwt", ["member"])
   @Get()
   public async getAllBookings(
-    @Request() requestBody: AllUserBookingsRequestBody
+    @Query() uid: string
   ): Promise<AllUserBookingSlotsResponse> {
     try {
       const bookingDates: AllUserBookingSlotsResponse = { dates: [] }
-      if (requestBody.uid) {
+      if (uid) {
         const bookingDataService = new BookingDataService()
         const bookingSlotService = new BookingSlotService()
 
-        const allBookingsData = await bookingDataService.getBookingsByUserId(
-          requestBody.uid
-        )
+        const allBookingsData =
+          await bookingDataService.getBookingsByUserId(uid)
+
         allBookingsData.map(async (booking) => {
           const bookingSlot = await bookingSlotService.getBookingSlotById(
             booking.booking_slot_id
           )
           if (bookingSlot) {
-            bookingDates.dates.push(bookingSlot.date)
+            bookingDates.dates.push(
+              firestoreTimestampToDate(bookingSlot.date)
+                .toISOString()
+                .split("T")[0]
+            )
           }
         })
       }
-      this.setStatus(200)
       return bookingDates
     } catch (e) {
       this.setStatus(500)
