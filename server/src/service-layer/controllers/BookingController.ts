@@ -43,10 +43,11 @@ export class BookingController extends Controller {
           }
         })
       }
+      this.setStatus(200)
       return bookingDates
     } catch (e) {
       this.setStatus(500)
-      return { error: "Something went wrong" }
+      return { error: "Failed to get bookings." }
     }
   }
 
