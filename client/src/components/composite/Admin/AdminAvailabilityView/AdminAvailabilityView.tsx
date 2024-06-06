@@ -150,8 +150,8 @@ const AdminAvailabilityView = ({
           />
         </span>
 
+        <h5 className="uppercase">Slots to make available</h5>
         <TextInput
-          label="Slots to make available"
           value={slotQty || DEFAULT_BOOKING_AVAILABILITY}
           onChange={(e) => {
             setSlotQty?.(e.target.valueAsNumber)
