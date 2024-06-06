@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowObjectWithIdentifier,
@@ -165,6 +165,12 @@ const Table = <
     currentFirstElement,
     currentFirstElement + showPerPage - 1
   )
+
+  useEffect(() => {
+    if (currentDataSlice.length === 0) {
+      setCurrentPageIndex(0)
+    }
+  }, [currentDataSlice.length])
 
   currentDataSlice.forEach((obj) => {
     Object.keys(obj).forEach(

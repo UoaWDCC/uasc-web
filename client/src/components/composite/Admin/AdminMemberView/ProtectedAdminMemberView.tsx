@@ -1,6 +1,4 @@
-import { Navigate } from "react-router-dom"
 import { useUsersQuery } from "services/Admin/AdminQueries"
-import { useAppData } from "store/Store"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
 import {
   useDemoteUserMutation,
@@ -9,15 +7,8 @@ import {
 import { TableRowOperation } from "components/generic/ReusableTable/TableUtils"
 
 const WrappedAdminMemberView = () => {
-  const [{ currentUserClaims }] = useAppData()
-
-  if (!currentUserClaims?.admin) {
-    return <Navigate to="/" />
-  }
-
   /**
    * Note that the followind queries/mutations should be scoped to only admins only,
-   * earlier return is only for UX purposes
    */
   const { data } = useUsersQuery()
 

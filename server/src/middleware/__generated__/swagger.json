@@ -387,13 +387,16 @@
 					},
 					"description": {
 						"type": "string"
+					},
+					"id": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"availableSpaces",
 					"maxBookings",
 					"date",
-					"description"
+					"id"
 				],
 				"type": "object"
 			},
