@@ -15,7 +15,7 @@ const TableFooterPaginator = ({
   onBack
 }: ITableFooterPaginator) => (
   <>
-    <span className="flex items-center gap-2">
+    <span className="mx-2 flex items-center gap-2">
       <span
         className="fill-gray-4 flex h-[10px] w-[10px] cursor-pointer"
         onClick={onBack}
