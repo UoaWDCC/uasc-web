@@ -171,9 +171,7 @@ export class AdminController extends Controller {
       if (cursor) {
         snapshot = await userDataService.getUserDocumentSnapshot(cursor)
       }
-      /**
-       * tsoa doesn't allow us to directly type the
-       */
+
       const { users: rawUserData, nextCursor: lastUid } =
         await userDataService.getAllUserData(toFetch, snapshot)
 
@@ -210,7 +208,7 @@ export class AdminController extends Controller {
         }
       })
 
-      // If there is explicitly no more users we return an `undefined` next offset
+      // If there is explicitly no more users we return an `undefined` next cursor
       let nextCursor
       if (combinedUserData.length === USERS_TO_FETCH) {
         nextCursor = lastUid
