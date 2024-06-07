@@ -35,7 +35,7 @@ export class BookingController extends Controller {
         const allBookingsData =
           await bookingDataService.getBookingsByUserId(uid)
 
-        allBookingsData.map(async (booking) => {
+        const bookingPromises = allBookingsData.map(async (booking) => {
           const bookingSlot = await bookingSlotService.getBookingSlotById(
             booking.booking_slot_id
           )
@@ -47,6 +47,7 @@ export class BookingController extends Controller {
             )
           }
         })
+        await Promise.all(bookingPromises)
       }
       return bookingDates
     } catch (e) {
