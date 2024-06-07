@@ -8,7 +8,13 @@ type UidArray = {
 
 export default class AuthService {
   /**
+   * Fetches up to **100** users based on an array of uid identifiers
    *
+   * @throws **Passing more than 100 will result in a FirebaseAuthError**
+   *
+   * @param uids an array of objects containing the key `uid`,
+   * which has the value of the firebase user uid
+   * @example // [{uid:"uid1", uid:"uid2"}]
    */
   public async bulkRetrieveUsersByUids(uids: UidArray) {
     try {
