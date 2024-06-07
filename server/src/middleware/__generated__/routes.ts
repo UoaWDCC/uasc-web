@@ -157,7 +157,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "error": {"dataType":"string"},
             "message": {"dataType":"string"},
-            "dates": {"dataType":"array","array":{"dataType":"refObject","ref":"FirebaseFirestore.Timestamp"}},
+            "dates": {"dataType":"array","array":{"dataType":"string"}},
         },
         "additionalProperties": false,
     },

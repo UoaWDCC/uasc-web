@@ -338,7 +338,7 @@
 					},
 					"dates": {
 						"items": {
-							"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+							"type": "string"
 						},
 						"type": "array"
 					}
