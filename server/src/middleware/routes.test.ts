@@ -605,6 +605,82 @@ describe("Endpoints", () => {
       expect(res.status).toEqual(200)
       expect(res.body.data[0].availableSpaces).toEqual(0)
     })
+
+    it("should return an empty array for a user with no bookings", async () => {
+      const res = await request
+        .get("/bookings")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+
+      expect(res.status).toBe(200)
+      expect(res.body.dates).toEqual([])
+    })
+
+    it("should return all booking dates for a user with bookings", async () => {
+      const bookingDataService = new BookingDataService()
+      const bookingSlotService = new BookingSlotService()
+
+      const { id: bookingSlotId1 } = await bookingSlotService.createBookingSlot(
+        {
+          date: Timestamp.fromDate(new Date("2024-06-06")),
+          max_bookings: 9
+        }
+      )
+
+      const { id: bookingSlotId2 } = await bookingSlotService.createBookingSlot(
+        {
+          date: Timestamp.fromDate(new Date("2024-06-10")),
+          max_bookings: 9
+        }
+      )
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: bookingSlotId1,
+        stripe_payment_id: ""
+      })
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: bookingSlotId2,
+        stripe_payment_id: ""
+      })
+
+      const res = await request
+        .get("/bookings")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+
+      expect(res.status).toBe(200)
+      expect(res.body.dates).toContainEqual("2024-06-06")
+      expect(res.body.dates).toContainEqual("2024-06-10")
+      expect(res.body.dates).not.toContainEqual("2023-12-16")
+      expect(res.body.dates.length).toBe(2)
+    })
+
+    it("should return 401 for unauthorized users", async () => {
+      const bookingDataService = new BookingDataService()
+      const bookingSlotService = new BookingSlotService()
+
+      const { id: bookingSlotId1 } = await bookingSlotService.createBookingSlot(
+        {
+          date: Timestamp.fromDate(new Date("2002-06-06")),
+          max_bookings: 9
+        }
+      )
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: bookingSlotId1,
+        stripe_payment_id: ""
+      })
+
+      const res = await request
+        .get("/bookings")
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send({})
+
+      expect(res.status).toEqual(401)
+    })
   })
 
   /**

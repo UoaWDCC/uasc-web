@@ -372,6 +372,24 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"AllUserBookingSlotsResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"dates": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AvailableDates": {
 				"properties": {
 					"availableSpaces": {
@@ -833,6 +851,31 @@
 						}
 					}
 				}
+			}
+		},
+		"/bookings": {
+			"get": {
+				"operationId": "GetAllBookings",
+				"responses": {
+					"200": {
+						"description": "Found bookings",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AllUserBookingSlotsResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"member"
+						]
+					}
+				],
+				"parameters": []
 			}
 		},
 		"/bookings/available-dates": {
