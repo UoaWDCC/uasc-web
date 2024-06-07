@@ -84,9 +84,8 @@ const WrappedAdminMemberView = () => {
   return (
     <AdminMemberView
       fetchNextPage={() => {
-        !isFetchingNextPage && fetchNextPage()
+        !isFetchingNextPage && hasNextPage && fetchNextPage()
       }}
-      hasNextPage={hasNextPage}
       rowOperations={rowOperations}
       data={transformedDataList}
     />

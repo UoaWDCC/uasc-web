@@ -44,11 +44,6 @@ interface IAdminMemberView {
    * used to fetch the data once the last page of the table has been reached
    */
   fetchNextPage?: () => void
-
-  /**
-   * If there is more pages to fetch
-   */
-  hasNextPage?: boolean
 }
 
 /**
@@ -67,13 +62,14 @@ const ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH = 2 as const
 export const AdminMemberView = ({
   data,
   rowOperations,
-  fetchNextPage,
-  hasNextPage
+  fetchNextPage
 }: IAdminMemberView) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
   const [isLastPage, setIsLastPage] = useState<boolean>(false)
-  const dataFilter = (oldData: MemberColumnFormat[]) =>
+  const isValidSearchQuery =
     currentSearchQuery.length > ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH
+  const dataFilter = (oldData: MemberColumnFormat[]) =>
+    isValidSearchQuery
       ? oldData.filter(
           (item) =>
             item.Email?.toLowerCase().includes(currentSearchQuery) ||
@@ -82,10 +78,10 @@ export const AdminMemberView = ({
       : oldData
 
   useEffect(() => {
-    if (isLastPage && hasNextPage) {
+    if (isLastPage || isValidSearchQuery) {
       fetchNextPage?.()
     }
-  }, [isLastPage, hasNextPage])
+  }, [isLastPage, fetchNextPage, isValidSearchQuery])
 
   const onSeachQueryChangedHandler = (newQuery: string) => {
     setCurrentSearchQuery(newQuery)
