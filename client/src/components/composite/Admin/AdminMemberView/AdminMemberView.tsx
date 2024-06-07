@@ -5,7 +5,7 @@ import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
 } from "components/generic/ReusableTable/TableUtils"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export type MemberColumnFormat = {
   /**
@@ -39,6 +39,16 @@ interface IAdminMemberView {
    * ```
    */
   rowOperations?: TableRowOperation[]
+
+  /**
+   * used to fetch the data once the last page of the table has been reached
+   */
+  fetchNextPage?: () => void
+
+  /**
+   * If there is more pages to fetch
+   */
+  hasNextPage?: boolean
 }
 
 /**
@@ -54,8 +64,14 @@ const defaultData = {
 
 const ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH = 2 as const
 
-export const AdminMemberView = ({ data, rowOperations }: IAdminMemberView) => {
+export const AdminMemberView = ({
+  data,
+  rowOperations,
+  fetchNextPage,
+  hasNextPage
+}: IAdminMemberView) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
+  const [isLastPage, setIsLastPage] = useState<boolean>(false)
   const dataFilter = (oldData: MemberColumnFormat[]) =>
     currentSearchQuery.length > ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH
       ? oldData.filter(
@@ -64,6 +80,13 @@ export const AdminMemberView = ({ data, rowOperations }: IAdminMemberView) => {
             item.Name?.toLowerCase().includes(currentSearchQuery)
         )
       : oldData
+
+  useEffect(() => {
+    if (isLastPage && hasNextPage) {
+      fetchNextPage?.()
+    }
+  }, [isLastPage, hasNextPage])
+
   const onSeachQueryChangedHandler = (newQuery: string) => {
     setCurrentSearchQuery(newQuery)
   }
@@ -80,6 +103,11 @@ export const AdminMemberView = ({ data, rowOperations }: IAdminMemberView) => {
         data={(data && dataFilter(data)) || [defaultData]}
         operationType="multiple-operations"
         rowOperations={rowOperations}
+        // Make sure that this is smaller than the amount we fetch in the `AdminService` for better UX
+        showPerPage={15}
+        onPageChange={(last) => {
+          setIsLastPage(last)
+        }}
       />
     </>
   )

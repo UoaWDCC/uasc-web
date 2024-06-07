@@ -31,7 +31,7 @@ interface ITable<
   /**
    * Pass in a callback for when the last page of the table is reached (i.e go to the next offset if paginating)
    */
-  onLastPageCallback?: () => void
+  onPageChange?: (isLastPage: boolean) => void
   /**
    * decides if clicking on the row options will give multiple options or a single one
    */
@@ -137,15 +137,17 @@ const Table = <
   data,
   showPerPage = 15,
   operationType = "none",
-  rowOperations
+  rowOperations,
+  onPageChange
 }: ITable<T & TableRowObjectWithIdentifier, S>) => {
   // Needs to be zero-indexed
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0)
 
-  // Integer division w/o remainder
+  // Integer division w/o remainder (is 0 indexed)
   const totalPages = Math.ceil(data.length / showPerPage)
 
   const onNext = () => {
+    onPageChange?.(currentPageIndex === totalPages - 1)
     if (currentPageIndex === totalPages - 1) return
     setCurrentPageIndex((currentPage) => currentPage + 1)
   }
@@ -156,15 +158,13 @@ const Table = <
   }
 
   // calculating offset
-  const currentFirstElement = currentPageIndex * showPerPage
+  const currentFirstIndex = currentPageIndex * showPerPage
 
   const dataKeys: string[] = []
 
-  // ensures all data keys (columns) are used, regardless of whether some objects are missing keys
-  const currentDataSlice = data.slice(
-    currentFirstElement,
-    currentFirstElement + showPerPage - 1
-  )
+  const currentLastIndex = currentFirstIndex + showPerPage
+
+  const currentDataSlice = data.slice(currentFirstIndex, currentLastIndex)
 
   useEffect(() => {
     if (currentDataSlice.length === 0) {
@@ -172,6 +172,11 @@ const Table = <
     }
   }, [currentDataSlice.length])
 
+  useEffect(() => {
+    onPageChange?.(currentPageIndex === totalPages - 1)
+  }, [currentPageIndex])
+
+  // ensures all data keys (columns) are used, regardless of whether some objects are missing keys
   currentDataSlice.forEach((obj) => {
     Object.keys(obj).forEach(
       (key) => !dataKeys.includes(key) && key !== "uid" && dataKeys.push(key)

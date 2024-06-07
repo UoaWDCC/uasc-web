@@ -190,26 +190,22 @@ export class AdminController extends Controller {
           (item) => item.uid === userInfo.uid
         )
 
-        const {
-          customClaims,
-          email,
-          metadata: { creationTime }
-        } = { ...matchingUserRecord } // to avoid undefined destructuring error
+        const { customClaims, email, metadata } = { ...matchingUserRecord } // to avoid undefined destructuring error
 
-        let membership: UserAccountTypes
+        let membership: UserAccountTypes = UserAccountTypes.GUEST
 
-        if (customClaims[AuthServiceClaims.ADMIN]) {
-          membership = UserAccountTypes.ADMIN
-        } else if (customClaims[AuthServiceClaims.MEMBER]) {
-          membership = UserAccountTypes.MEMBER
-        } else {
-          membership = UserAccountTypes.GUEST
+        if (customClaims) {
+          if (customClaims[AuthServiceClaims.ADMIN]) {
+            membership = UserAccountTypes.ADMIN
+          } else if (customClaims[AuthServiceClaims.MEMBER]) {
+            membership = UserAccountTypes.MEMBER
+          }
         }
 
         return {
           email,
           membership,
-          dateJoined: creationTime,
+          dateJoined: metadata ? metadata.creationTime : undefined,
           ...userInfo
         }
       })

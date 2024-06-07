@@ -218,13 +218,18 @@ const models: TsoaRoute.Models = {
         "enums": ["admin","member","guest"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CombinedUserData": {
+        "dataType": "refAlias",
+        "type": {"dataType":"intersection","subSchemas":[{"ref":"UserAdditionalInfo"},{"dataType":"nestedObjectLiteral","nestedProperties":{"membership":{"ref":"UserAccountTypes","required":true},"email":{"dataType":"string","required":true},"dateJoined":{"dataType":"string"},"uid":{"dataType":"string","required":true}}}],"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AllUsersResponse": {
         "dataType": "refObject",
         "properties": {
             "error": {"dataType":"string"},
             "message": {"dataType":"string"},
             "nextCursor": {"dataType":"string"},
-            "data": {"dataType":"intersection","subSchemas":[{"dataType":"array","array":{"dataType":"refObject","ref":"UserAdditionalInfo"}},{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"membership":{"ref":"UserAccountTypes","required":true},"email":{"dataType":"string","required":true},"dateJoined":{"dataType":"string","required":true},"uid":{"dataType":"string","required":true}}}}]},
+            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"CombinedUserData"}},
         },
         "additionalProperties": false,
     },

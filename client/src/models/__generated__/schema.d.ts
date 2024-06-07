@@ -230,6 +230,16 @@ export interface components {
     };
     /** @enum {string} */
     UserAccountTypes: "admin" | "member" | "guest";
+    CombinedUserData: components["schemas"]["UserAdditionalInfo"] & {
+      /** @description What type of account the user has */
+      membership: components["schemas"]["UserAccountTypes"];
+      /** @description The email the user uses to log in */
+      email: string;
+      /** @description Formatted UTC date string of when the account was created */
+      dateJoined?: string;
+      /** @description Firebase identifier of the user *data* based on the firestore document */
+      uid: string;
+    };
     AllUsersResponse: {
       error?: string;
       message?: string;
@@ -238,16 +248,7 @@ export interface components {
        * based pagination
        */
       nextCursor?: string;
-      data?: components["schemas"]["UserAdditionalInfo"][] & {
-          /** @description What type of account the user has */
-          membership: components["schemas"]["UserAccountTypes"];
-          /** @description The email the user uses to log in */
-          email: string;
-          /** @description Formatted UTC date string of when the account was created */
-          dateJoined: string;
-          /** @description Firebase identifier of the user *data* based on the firestore document */
-          uid: string;
-        }[];
+      data?: components["schemas"]["CombinedUserData"][];
     };
     CreateUserRequestBody: {
       uid: string;

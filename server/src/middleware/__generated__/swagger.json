@@ -510,6 +510,39 @@
 				],
 				"type": "string"
 			},
+			"CombinedUserData": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/UserAdditionalInfo"
+					},
+					{
+						"properties": {
+							"membership": {
+								"$ref": "#/components/schemas/UserAccountTypes",
+								"description": "What type of account the user has"
+							},
+							"email": {
+								"type": "string",
+								"description": "The email the user uses to log in"
+							},
+							"dateJoined": {
+								"type": "string",
+								"description": "Formatted UTC date string of when the account was created"
+							},
+							"uid": {
+								"type": "string",
+								"description": "Firebase identifier of the user *data* based on the firestore document"
+							}
+						},
+						"required": [
+							"membership",
+							"email",
+							"uid"
+						],
+						"type": "object"
+					}
+				]
+			},
 			"AllUsersResponse": {
 				"properties": {
 					"error": {
@@ -523,44 +556,10 @@
 						"description": "Needed for firestore operations which do not support offset\r\nbased pagination"
 					},
 					"data": {
-						"allOf": [
-							{
-								"items": {
-									"$ref": "#/components/schemas/UserAdditionalInfo"
-								},
-								"type": "array"
-							},
-							{
-								"items": {
-									"properties": {
-										"membership": {
-											"$ref": "#/components/schemas/UserAccountTypes",
-											"description": "What type of account the user has"
-										},
-										"email": {
-											"type": "string",
-											"description": "The email the user uses to log in"
-										},
-										"dateJoined": {
-											"type": "string",
-											"description": "Formatted UTC date string of when the account was created"
-										},
-										"uid": {
-											"type": "string",
-											"description": "Firebase identifier of the user *data* based on the firestore document"
-										}
-									},
-									"required": [
-										"membership",
-										"email",
-										"dateJoined",
-										"uid"
-									],
-									"type": "object"
-								},
-								"type": "array"
-							}
-						]
+						"items": {
+							"$ref": "#/components/schemas/CombinedUserData"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
