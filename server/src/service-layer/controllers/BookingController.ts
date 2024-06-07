@@ -6,6 +6,7 @@ import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 // import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
+import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import {
   Controller,
   Get,
@@ -14,7 +15,7 @@ import {
   Security,
   SuccessResponse,
   Body,
-  Query
+  Request
 } from "tsoa"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
@@ -24,16 +25,17 @@ export class BookingController extends Controller {
   @Security("jwt", ["member"])
   @Get()
   public async getAllBookings(
-    @Query() uid: string
+    @Request() request: AllUserBookingsRequestBody
   ): Promise<AllUserBookingSlotsResponse> {
     try {
       const bookingDates: AllUserBookingSlotsResponse = { dates: [] }
-      if (uid) {
+      if (request.user.uid) {
         const bookingDataService = new BookingDataService()
         const bookingSlotService = new BookingSlotService()
 
-        const allBookingsData =
-          await bookingDataService.getBookingsByUserId(uid)
+        const allBookingsData = await bookingDataService.getBookingsByUserId(
+          request.user.uid
+        )
 
         const bookingPromises = allBookingsData.map(async (booking) => {
           const bookingSlot = await bookingSlotService.getBookingSlotById(

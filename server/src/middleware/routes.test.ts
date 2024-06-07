@@ -609,7 +609,7 @@ describe("Endpoints", () => {
       const res = await request
         .get("/bookings")
         .set("Authorization", `Bearer ${memberToken}`)
-        .query({ uid: MEMBER_USER_UID })
+        .send({})
 
       expect(res.status).toBe(200)
       expect(res.body.dates).toEqual([])
@@ -647,7 +647,7 @@ describe("Endpoints", () => {
       const res = await request
         .get("/bookings")
         .set("Authorization", `Bearer ${memberToken}`)
-        .query({ uid: MEMBER_USER_UID })
+        .send({})
 
       expect(res.status).toBe(200)
       expect(res.body.dates).toContainEqual("2024-06-06")
@@ -676,7 +676,7 @@ describe("Endpoints", () => {
       const res = await request
         .get("/bookings")
         .set("Authorization", `Bearer ${guestToken}`)
-        .query({ uid: MEMBER_USER_UID })
+        .send({})
 
       expect(res.status).toEqual(401)
     })
