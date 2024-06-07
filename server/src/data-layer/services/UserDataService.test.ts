@@ -61,7 +61,7 @@ describe("UserService integration tests", () => {
     await userService.createUserData(TEST_UID_1, userInfoMock)
     await userService.createUserData("testUser2", userInfoMock)
 
-    const users = await userService.getAllUserData()
+    const { users } = await userService.getAllUserData()
 
     expect(users.length).toEqual(2)
   })
