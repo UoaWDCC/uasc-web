@@ -25,8 +25,11 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
   if (variant === "left") {
     return (
       <div className="w-full">
-        <img src={imageSrc} className="w-full rounded-tr-lg"></img>
-        <div className=" border-dark-blue-100 flex w-full flex-col rounded-b-lg border bg-white lg:rounded-t-lg">
+        <img
+          src={imageSrc}
+          className="w-full rounded-tr-lg md:relative md:w-[70%]"
+        ></img>
+        <div className=" border-dark-blue-100 flex w-full flex-col rounded-b-lg border bg-white md:absolute md:top-[5%] md:ml-[30%] md:w-[50%] md:rounded-lg lg:rounded-t-lg">
           <TextStyler title={title} text={text} />
         </div>
       </div>
@@ -34,8 +37,8 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
   } else {
     return (
       <div className="w-full">
-        <img src={imageSrc} className="w-full rounded-tr-lg "></img>
-        <div className=" border-dark-blue-100 flex w-full flex-col rounded-b-lg border bg-white lg:rounded-t-lg">
+        <img src={imageSrc} className="w-full rounded-tr-lg md:w-[50%]"></img>
+        <div className=" border-dark-blue-100 flex w-full flex-col rounded-b-lg border bg-white lg:rounded-t-lg ">
           <TextStyler title={title} text={text} />
         </div>
       </div>
