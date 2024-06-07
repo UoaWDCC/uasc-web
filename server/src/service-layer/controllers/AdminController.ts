@@ -156,13 +156,13 @@ export class AdminController extends Controller {
   @Get("/users")
   public async getAllUsers(
     @Query() cursor?: string,
-    /**
-     * @isNumber Please enter a number
-     * @maximum 100 Maximum slots exceeded
-     * @minimum 0 must be positive
-     */
     @Query() toFetch?: number
   ): Promise<AllUsersResponse> {
+    // validation
+    if (toFetch > 100 || toFetch < 0) {
+      this.setStatus(400)
+      return { error: "Invalid fetch amount" }
+    }
     const USERS_TO_FETCH = toFetch || 100
     try {
       const userDataService = new UserDataService()

@@ -138,6 +138,25 @@ describe("Endpoints", () => {
       )
     })
 
+    it("should reject invalid fetch quantities", async () => {
+      await createUsers()
+      let response = await request
+        .get("/admin/users")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .query({ toFetch: 101 })
+        .send({})
+
+      expect(response.status).toEqual(400)
+
+      response = await request
+        .get(`/admin/users`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .query({ toFetch: -1 })
+        .send({})
+      // we should fetch everything after the one we just got
+      expect(response.status).toEqual(400)
+    })
+
     it("should fetch merged data for users, after the offset", async () => {
       await createUsers()
       // Will fetch indexes 1,2
@@ -153,8 +172,9 @@ describe("Endpoints", () => {
       const nextCursor = response.body.nextCursor
 
       response = await request
-        .get(`/admin/users?toFetch=3&cursor=${nextCursor}`)
+        .get(`/admin/users`)
         .set("Authorization", `Bearer ${adminToken}`)
+        .query({ toFetch: 3, cursor: nextCursor })
         .send({})
       // we should fetch everything after the one we just got
       expect(response.body.data).toHaveLength(2)
