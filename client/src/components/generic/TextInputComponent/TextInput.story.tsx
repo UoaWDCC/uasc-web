@@ -20,9 +20,10 @@ export const TextInput: Story = {
 export const ErrorTextInput: Story = {
   tags: ["autodocs"],
   args: {
-    type: "text",
+    type: "email",
     placeholder: "Error",
-    variant: "error"
+    variant: "error",
+    value: "bruh"
   }
 }
 
