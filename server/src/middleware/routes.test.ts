@@ -650,15 +650,9 @@ describe("Endpoints", () => {
         .query({ uid: MEMBER_USER_UID })
 
       expect(res.status).toBe(200)
-      expect(res.body.dates).toContainEqual(
-        Timestamp.fromDate(new Date("2023-06-06"))
-      )
-      expect(res.body.dates).toContainEqual(
-        Timestamp.fromDate(new Date("2023-06-10"))
-      )
-      expect(res.body.dates).not.toContainEqual(
-        Timestamp.fromDate(new Date("2023-12-16"))
-      )
+      expect(res.body.dates).toContainEqual("2024-06-06")
+      expect(res.body.dates).toContainEqual("2024-06-10")
+      expect(res.body.dates).not.toContainEqual("2023-12-16")
       expect(res.body.dates.length).toBe(2)
     })
 
