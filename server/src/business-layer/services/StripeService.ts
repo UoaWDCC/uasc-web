@@ -1,4 +1,6 @@
 import {
+  MEMBERSHIP_PRODUCT_TYPE_KEY,
+  ProductTypeValues,
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
@@ -269,8 +271,33 @@ export default class StripeService {
       productUpdateParams
     )
 
-    /** Return the updated product */
+    /** Return the updated product
+     *
+     * @returns
+     */
     return updatedProduct
+  }
+
+  /** Fetch all active products from Stripe
+   * @returns membershipProducts - An array of active membership products from Stripe
+   */
+  public async getActiveMembershipProducts() {
+    try {
+      const products = await stripe.products.list({
+        active: true,
+        expand: ["data.default_price"]
+      })
+      // Filter products with the required metadata
+      const membershipProducts = products.data.filter(
+        (product) =>
+          product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] ===
+          ProductTypeValues.MEMBERSHIP
+      )
+      return membershipProducts
+    } catch (error) {
+      console.error("Error fetching Stripe products:", error)
+      throw error
+    }
   }
 
   /**

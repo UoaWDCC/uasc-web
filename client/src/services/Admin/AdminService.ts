@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore"
 import { UserAdditionalInfo } from "models/User"
 import fetchClient from "services/OpenApiFetchClient"
 
@@ -5,6 +6,7 @@ export type EditUsersBody = {
   uid: string
   updatedInformation: UserAdditionalInfo
 }[]
+
 const AdminService = {
   getUsers: async function () {
     const { data } = await fetchClient.GET("/admin/users", {})
@@ -33,6 +35,49 @@ const AdminService = {
       }
     })
     if (!response.ok) throw new Error(`Failed to promote ${uid}`)
+  },
+  makeDatesAvailable: async function (
+    startDate: Timestamp,
+    endDate: Timestamp,
+    slots?: number
+  ) {
+    const { response, data } = await fetchClient.POST(
+      "/admin/bookings/make-dates-available",
+      {
+        body: {
+          startDate,
+          endDate,
+          slots
+        }
+      }
+    )
+
+    if (!response.ok)
+      throw new Error(
+        `Failed to make dates ${startDate.toString()} to ${endDate.toString()} available`
+      )
+    return data
+  },
+
+  makeDatesUnavailable: async function (
+    startDate: Timestamp,
+    endDate: Timestamp
+  ) {
+    const { response, data } = await fetchClient.POST(
+      "/admin/bookings/make-dates-unavailable",
+      {
+        body: {
+          startDate,
+          endDate
+        }
+      }
+    )
+
+    if (!response.ok)
+      throw new Error(
+        `Failed to make dates ${startDate.toString()} to ${endDate.toString()} available`
+      )
+    return data
   }
 } as const
 
