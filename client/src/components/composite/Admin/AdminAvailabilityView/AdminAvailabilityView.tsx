@@ -117,7 +117,7 @@ const AdminAvailabilityView = ({
      gap-2 bg-white p-8 md:flex-row md:items-start"
     >
       <div className="flex flex-col gap-2">
-        <span className="w-[380px]">
+        <span className="max-w-[380px] sm:w-[380px]">
           <Calendar
             minDate={new Date(new Date().toDateString())}
             selectRange
@@ -152,7 +152,7 @@ const AdminAvailabilityView = ({
 
         <h5 className="uppercase">Slots to make available</h5>
         <TextInput
-          value={slotQty || DEFAULT_BOOKING_AVAILABILITY}
+          value={slotQty}
           onChange={(e) => {
             setSlotQty?.(e.target.valueAsNumber)
           }}
