@@ -246,6 +246,8 @@ export interface components {
       /**
        * @description Needed for firestore operations which do not support offset
        * based pagination
+       *
+       * **Will be undefined in case of last page**
        */
       nextCursor?: string;
       data?: components["schemas"]["CombinedUserData"][];
