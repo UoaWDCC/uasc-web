@@ -172,7 +172,7 @@ export interface components {
     AllUserBookingSlotsResponse: {
       error?: string;
       message?: string;
-      dates?: components["schemas"]["FirebaseFirestore.Timestamp"][];
+      dates?: string[];
     };
     AvailableDates: {
       /** Format: double */
