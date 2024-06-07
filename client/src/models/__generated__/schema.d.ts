@@ -339,11 +339,6 @@ export interface operations {
     };
   };
   GetAllBookings: {
-    parameters: {
-      query: {
-        uid: string;
-      };
-    };
     responses: {
       /** @description Found bookings */
       200: {

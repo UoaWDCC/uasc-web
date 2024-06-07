@@ -779,16 +779,7 @@
 						]
 					}
 				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "uid",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
+				"parameters": []
 			}
 		},
 		"/bookings/available-dates": {
