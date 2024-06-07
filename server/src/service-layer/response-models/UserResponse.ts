@@ -1,9 +1,11 @@
 import { UserAdditionalInfo } from "data-layer/models/firebase"
-import { CommonResponse } from "./CommonResponse"
+import { CommonResponse, CursorPaginatedResponse } from "./CommonResponse"
 import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 
-export interface AllUsersResponse extends CommonResponse {
-  data: UserAdditionalInfo[] &
+export interface AllUsersResponse
+  extends CommonResponse,
+    CursorPaginatedResponse {
+  data?: UserAdditionalInfo[] &
     {
       /**
        * Firebase identifier of the user *data* based on the firestore document

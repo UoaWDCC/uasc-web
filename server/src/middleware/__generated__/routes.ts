@@ -223,7 +223,8 @@ const models: TsoaRoute.Models = {
         "properties": {
             "error": {"dataType":"string"},
             "message": {"dataType":"string"},
-            "data": {"dataType":"intersection","subSchemas":[{"dataType":"array","array":{"dataType":"refObject","ref":"UserAdditionalInfo"}},{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"membership":{"ref":"UserAccountTypes","required":true},"email":{"dataType":"string","required":true},"dateJoined":{"dataType":"string","required":true},"uid":{"dataType":"string","required":true}}}}],"required":true},
+            "nextCursor": {"dataType":"string"},
+            "data": {"dataType":"intersection","subSchemas":[{"dataType":"array","array":{"dataType":"refObject","ref":"UserAdditionalInfo"}},{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"membership":{"ref":"UserAccountTypes","required":true},"email":{"dataType":"string","required":true},"dateJoined":{"dataType":"string","required":true},"uid":{"dataType":"string","required":true}}}}]},
         },
         "additionalProperties": false,
     },
@@ -622,6 +623,8 @@ export function RegisterRoutes(app: Router) {
 
             function AdminController_getAllUsers(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    cursor: {"in":"query","name":"cursor","dataType":"string"},
+                    toFetch: {"in":"query","name":"toFetch","dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

@@ -30,6 +30,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Route,
   Security,
   SuccessResponse
@@ -153,56 +154,80 @@ export class AdminController extends Controller {
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
   @Get("/users")
-  public async getAllUsers(): Promise<AllUsersResponse> {
-    const rawUserData = await new UserDataService().getAllUserData()
-
+  public async getAllUsers(
+    @Query() cursor?: string,
     /**
-     * We want consistent ordering every time
+     * @isNumber Please enter a number
+     * @maximum 100 Maximum slots exceeded
+     * @minimum 0 must be positive
      */
-    rawUserData.sort()
+    @Query() toFetch?: number
+  ): Promise<AllUsersResponse> {
+    const USERS_TO_FETCH = toFetch || 100
+    try {
+      const userDataService = new UserDataService()
 
-    // TODO: paginate this - note that slice is *exclusive* of second index
-    const shrunkUserData = rawUserData.slice(0, 100)
+      let snapshot
+      if (cursor) {
+        snapshot = await userDataService.getUserDocumentSnapshot(cursor)
+      }
+      /**
+       * tsoa doesn't allow us to directly type the
+       */
+      const { users: rawUserData, nextCursor: lastUid } =
+        await userDataService.getAllUserData(toFetch, snapshot)
 
-    const uidsToQuery = shrunkUserData.map((data) => {
-      return { uid: data.uid }
-    })
+      const uidsToQuery = rawUserData.map((data) => {
+        return { uid: data.uid }
+      })
 
-    const userAuthData = await new AuthService().bulkRetrieveUsersByUids(
-      uidsToQuery
-    )
-
-    const combinedUserData = rawUserData.map((userInfo) => {
-      const matchingUserRecord = userAuthData.find(
-        (item) => item.uid === userInfo.uid
+      const userAuthData = await new AuthService().bulkRetrieveUsersByUids(
+        uidsToQuery
       )
 
-      const {
-        customClaims,
-        email,
-        metadata: { creationTime }
-      } = { ...matchingUserRecord } // to avoid undefined destructuring error
+      const combinedUserData = rawUserData.map((userInfo) => {
+        const matchingUserRecord = userAuthData.find(
+          (item) => item.uid === userInfo.uid
+        )
 
-      let membership: UserAccountTypes
+        const {
+          customClaims,
+          email,
+          metadata: { creationTime }
+        } = { ...matchingUserRecord } // to avoid undefined destructuring error
 
-      if (customClaims[AuthServiceClaims.ADMIN]) {
-        membership = UserAccountTypes.ADMIN
-      } else if (customClaims[AuthServiceClaims.MEMBER]) {
-        membership = UserAccountTypes.MEMBER
-      } else {
-        membership = UserAccountTypes.GUEST
+        let membership: UserAccountTypes
+
+        if (customClaims[AuthServiceClaims.ADMIN]) {
+          membership = UserAccountTypes.ADMIN
+        } else if (customClaims[AuthServiceClaims.MEMBER]) {
+          membership = UserAccountTypes.MEMBER
+        } else {
+          membership = UserAccountTypes.GUEST
+        }
+
+        return {
+          email,
+          membership,
+          dateJoined: creationTime,
+          ...userInfo
+        }
+      })
+
+      // If there is explicitly no more users we return an `undefined` next offset
+      let nextCursor
+      if (combinedUserData.length === USERS_TO_FETCH) {
+        nextCursor = lastUid
       }
 
-      return {
-        email,
-        membership,
-        dateJoined: creationTime,
-        ...userInfo
-      }
-    })
+      this.setStatus(200)
 
-    this.setStatus(200)
-    return { data: combinedUserData }
+      return { data: combinedUserData, nextCursor }
+    } catch (e) {
+      console.error("Failed to fetch all users", e)
+      this.setStatus(500)
+      return { error: "Something went wrong when fetching all users" }
+    }
   }
 
   @SuccessResponse("200", "Created")

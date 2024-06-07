@@ -518,6 +518,10 @@
 					"message": {
 						"type": "string"
 					},
+					"nextCursor": {
+						"type": "string",
+						"description": "Needed for firestore operations which do not support offset\r\nbased pagination"
+					},
 					"data": {
 						"allOf": [
 							{
@@ -530,16 +534,20 @@
 								"items": {
 									"properties": {
 										"membership": {
-											"$ref": "#/components/schemas/UserAccountTypes"
+											"$ref": "#/components/schemas/UserAccountTypes",
+											"description": "What type of account the user has"
 										},
 										"email": {
-											"type": "string"
+											"type": "string",
+											"description": "The email the user uses to log in"
 										},
 										"dateJoined": {
-											"type": "string"
+											"type": "string",
+											"description": "Formatted UTC date string of when the account was created"
 										},
 										"uid": {
-											"type": "string"
+											"type": "string",
+											"description": "Firebase identifier of the user *data* based on the firestore document"
 										}
 									},
 									"required": [
@@ -555,9 +563,6 @@
 						]
 					}
 				},
-				"required": [
-					"data"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -1107,7 +1112,25 @@
 						]
 					}
 				],
-				"parameters": []
+				"parameters": [
+					{
+						"in": "query",
+						"name": "cursor",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "toFetch",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/admin/users/create": {

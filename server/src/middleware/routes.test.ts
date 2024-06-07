@@ -111,6 +111,10 @@ describe("Endpoints", () => {
   })
 
   describe("admin/users", () => {
+    afterEach(async () => {
+      await cleanFirestore()
+      await cleanAuth()
+    })
     it("Should get users for admin", (done) => {
       request
         .get("/admin/users")
@@ -133,6 +137,29 @@ describe("Endpoints", () => {
         )
       )
     })
+
+    it("should fetch merged data for users, after the offset", async () => {
+      await createUsers()
+      // Will fetch indexes 1,2
+      let response = await request
+        .get("/admin/users?toFetch=1")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+
+      expect(response.status).toEqual(200)
+      expect(response.body.data).toHaveLength(1)
+      expect(typeof response.body.nextCursor).toBe("string")
+
+      const nextCursor = response.body.nextCursor
+
+      response = await request
+        .get(`/admin/users?toFetch=3&cursor=${nextCursor}`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+      // we should fetch everything after the one we just got
+      expect(response.body.data).toHaveLength(2)
+    })
+
     it("Should not allow members to get users", (done) => {
       request
         .get("/admin/users")
