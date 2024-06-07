@@ -11,9 +11,9 @@ export const SignUpNotif = ({ signedIn }: ISignUpNotif) => {
     navigate("/register")
   }
 
-  // function goToLogin() {
-  // navigate("/login")
-  // }
+  function goToLogin() {
+    navigate("/login")
+  }
 
   return (
     <div
@@ -26,7 +26,9 @@ export const SignUpNotif = ({ signedIn }: ISignUpNotif) => {
         membership payment has been proccessed.
       </h4>
       <span className="flex w-full max-w-80 gap-2">
-        <Button onClick={() => goToRegister()}>Join Now</Button>
+        <Button onClick={() => (signedIn ? goToRegister() : goToLogin)}>
+          Join Now
+        </Button>
       </span>
     </div>
   )
