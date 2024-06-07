@@ -26,6 +26,7 @@ import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
+import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 
 const request = supertest(_app)
 
@@ -116,6 +117,21 @@ describe("Endpoints", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
         .expect(200, done)
+    })
+    it("should fetch merged data for users", async () => {
+      await createUsers()
+      const response = await request
+        .get("/admin/users")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+
+      expect(response.status).toEqual(200)
+      expect(response.body.data).toHaveLength(3)
+      expect(
+        response.body.data.some(
+          (item: any) => item.membership === UserAccountTypes.ADMIN
+        )
+      )
     })
     it("Should not allow members to get users", (done) => {
       request

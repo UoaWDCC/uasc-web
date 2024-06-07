@@ -2,7 +2,24 @@ import { UserRecord } from "firebase-admin/auth"
 import { auth } from "business-layer/security/Firebase"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 
+type UidArray = {
+  uid: string
+}[]
+
 export default class AuthService {
+  /**
+   *
+   */
+  public async bulkRetrieveUsersByUids(uids: UidArray) {
+    try {
+      const { users } = await auth.getUsers(uids)
+      return users
+    } catch (e) {
+      console.error(`Failed to bulk retrieve the uids from Auth`, e)
+      return undefined
+    }
+  }
+
   /**
    * Deletes a user account from the Firebase Authentication Service.
    * @param uid

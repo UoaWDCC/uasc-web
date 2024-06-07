@@ -1,4 +1,13 @@
-import { FirebaseProperties } from "data-layer/models/common"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import { CommonResponse } from "./CommonResponse"
+import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 
-export type UserResponse = UserAdditionalInfo & FirebaseProperties
+export interface AllUsersResponse extends CommonResponse {
+  data: UserAdditionalInfo[] &
+    {
+      uid: string
+      dateJoined: string
+      email: string
+      membership: UserAccountTypes
+    }[]
+}

@@ -4,7 +4,6 @@ import {
   SelfRequestModel,
   EditSelfRequestModel
 } from "service-layer/request-models/UserRequests"
-import { UserResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
@@ -21,9 +20,7 @@ export class UsersController extends Controller {
   @SuccessResponse("200", "Fetched self data")
   @Security("jwt")
   @Get("self")
-  public async getSelf(
-    @Request() request: SelfRequestModel
-  ): Promise<UserResponse> {
+  public async getSelf(@Request() request: SelfRequestModel) {
     const data = await new UserDataService().getUserData(request.user.uid)
 
     // Don't want users editing this

@@ -82,28 +82,6 @@ export interface components {
        */
       nanoseconds: number;
     };
-    UserAdditionalInfo: {
-      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
-      gender: string;
-      emergency_contact?: string;
-      first_name: string;
-      last_name: string;
-      dietary_requirements: string;
-      faculty?: string;
-      university?: string;
-      student_id?: string;
-      returning: boolean;
-      university_year: string;
-      /** @description For identification DO NOT RETURN to users in exposed endpoints */
-      stripe_id?: string;
-    };
-    FirebaseProperties: {
-      uid: string;
-    };
-    UserResponse: components["schemas"]["UserAdditionalInfo"] & components["schemas"]["FirebaseProperties"];
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -232,6 +210,36 @@ export interface components {
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
+    UserAdditionalInfo: {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding: boolean;
+      does_racing: boolean;
+      does_ski: boolean;
+      gender: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning: boolean;
+      university_year: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+    };
+    /** @enum {string} */
+    UserAccountTypes: "admin" | "member" | "guest";
+    AllUsersResponse: {
+      error?: string;
+      message?: string;
+      data: components["schemas"]["UserAdditionalInfo"][] & {
+          membership: components["schemas"]["UserAccountTypes"];
+          email: string;
+          dateJoined: string;
+          uid: string;
+        }[];
+    };
     CreateUserRequestBody: {
       uid: string;
       user: components["schemas"]["UserAdditionalInfo"];
@@ -290,7 +298,24 @@ export interface operations {
       /** @description Fetched self data */
       200: {
         content: {
-          "application/json": components["schemas"]["UserResponse"];
+          "application/json": {
+            stripe_id?: string;
+            university_year: string;
+            returning: boolean;
+            student_id?: string;
+            university?: string;
+            faculty?: string;
+            dietary_requirements: string;
+            last_name: string;
+            first_name: string;
+            emergency_contact?: string;
+            gender: string;
+            does_ski: boolean;
+            does_racing: boolean;
+            does_snowboarding: boolean;
+            date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+            uid: string;
+          };
         };
       };
     };
@@ -439,7 +464,7 @@ export interface operations {
       /** @description Users found */
       200: {
         content: {
-          "application/json": components["schemas"]["UserResponse"][];
+          "application/json": components["schemas"]["AllUsersResponse"];
         };
       };
     };

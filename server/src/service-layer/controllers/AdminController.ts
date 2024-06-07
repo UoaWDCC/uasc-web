@@ -1,5 +1,9 @@
 import AuthService from "business-layer/services/AuthService"
 import {
+  AuthServiceClaims,
+  UserAccountTypes
+} from "business-layer/utils/AuthServiceClaims"
+import {
   DEFAULT_BOOKING_MAX_SLOTS,
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
@@ -18,7 +22,7 @@ import {
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import { BookingSlotUpdateResponse } from "service-layer/response-models/BookingResponse"
-import { UserResponse } from "service-layer/response-models/UserResponse"
+import { AllUsersResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
@@ -149,10 +153,56 @@ export class AdminController extends Controller {
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
   @Get("/users")
-  public async getAllUsers(): Promise<UserResponse[]> {
-    const data = await new UserDataService().getAllUserData()
+  public async getAllUsers(): Promise<AllUsersResponse> {
+    const rawUserData = await new UserDataService().getAllUserData()
+
+    /**
+     * We want consistent ordering every time
+     */
+    rawUserData.sort()
+
+    // TODO: paginate this - note that slice is *exclusive* of second index
+    const shrunkUserData = rawUserData.slice(0, 100)
+
+    const uidsToQuery = shrunkUserData.map((data) => {
+      return { uid: data.uid }
+    })
+
+    const userAuthData = await new AuthService().bulkRetrieveUsersByUids(
+      uidsToQuery
+    )
+
+    const combinedUserData = rawUserData.map((userInfo) => {
+      const matchingUserRecord = userAuthData.find(
+        (item) => item.uid === userInfo.uid
+      )
+
+      const {
+        customClaims,
+        email,
+        metadata: { creationTime }
+      } = { ...matchingUserRecord } // to avoid undefined destructuring error
+
+      let membership: UserAccountTypes
+
+      if (customClaims[AuthServiceClaims.ADMIN]) {
+        membership = UserAccountTypes.ADMIN
+      } else if (customClaims[AuthServiceClaims.MEMBER]) {
+        membership = UserAccountTypes.MEMBER
+      } else {
+        membership = UserAccountTypes.GUEST
+      }
+
+      return {
+        email,
+        membership,
+        dateJoined: creationTime,
+        ...userInfo
+      }
+    })
+
     this.setStatus(200)
-    return data
+    return { data: combinedUserData }
   }
 
   @SuccessResponse("200", "Created")

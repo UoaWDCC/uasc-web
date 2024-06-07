@@ -33,41 +33,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserAdditionalInfo": {
-        "dataType": "refObject",
-        "properties": {
-            "date_of_birth": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "does_snowboarding": {"dataType":"boolean","required":true},
-            "does_racing": {"dataType":"boolean","required":true},
-            "does_ski": {"dataType":"boolean","required":true},
-            "gender": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your pronouns"}}},
-            "emergency_contact": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter a name"}}},
-            "first_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},
-            "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
-            "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
-            "faculty": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
-            "university": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},
-            "student_id": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},
-            "returning": {"dataType":"boolean","required":true},
-            "university_year": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your year of study"}}},
-            "stripe_id": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "FirebaseProperties": {
-        "dataType": "refObject",
-        "properties": {
-            "uid": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserResponse": {
-        "dataType": "refAlias",
-        "type": {"dataType":"intersection","subSchemas":[{"ref":"UserAdditionalInfo"},{"ref":"FirebaseProperties"}],"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"date_of_birth":{"ref":"FirebaseFirestore.Timestamp"},"does_snowboarding":{"dataType":"boolean"},"does_racing":{"dataType":"boolean"},"does_ski":{"dataType":"boolean"},"gender":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your pronouns"}}},"emergency_contact":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter a name"}}},"first_name":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your First Name"}}},"last_name":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},"dietary_requirements":{"dataType":"string","validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},"faculty":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},"university":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},"student_id":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},"returning":{"dataType":"boolean"},"university_year":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your year of study"}}}},"validators":{}},
@@ -224,6 +189,43 @@ const models: TsoaRoute.Models = {
     "Omit_MakeDatesAvailableRequestBody.slots_": {
         "dataType": "refAlias",
         "type": {"ref":"Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserAdditionalInfo": {
+        "dataType": "refObject",
+        "properties": {
+            "date_of_birth": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "does_snowboarding": {"dataType":"boolean","required":true},
+            "does_racing": {"dataType":"boolean","required":true},
+            "does_ski": {"dataType":"boolean","required":true},
+            "gender": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your pronouns"}}},
+            "emergency_contact": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter a name"}}},
+            "first_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},
+            "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
+            "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
+            "faculty": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
+            "university": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},
+            "student_id": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},
+            "returning": {"dataType":"boolean","required":true},
+            "university_year": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your year of study"}}},
+            "stripe_id": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserAccountTypes": {
+        "dataType": "refEnum",
+        "enums": ["admin","member","guest"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AllUsersResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "data": {"dataType":"intersection","subSchemas":[{"dataType":"array","array":{"dataType":"refObject","ref":"UserAdditionalInfo"}},{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"membership":{"ref":"UserAccountTypes","required":true},"email":{"dataType":"string","required":true},"dateJoined":{"dataType":"string","required":true},"uid":{"dataType":"string","required":true}}}}],"required":true},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateUserRequestBody": {
