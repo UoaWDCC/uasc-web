@@ -79,6 +79,7 @@ export class UsersController extends Controller {
           return { error: "Cannot delete another admin." }
         }
 
+        this.setStatus(200)
         await authService.deleteUser(userUid)
         await userDataService.deleteUserData(userUid)
       }
