@@ -11,6 +11,9 @@ export interface paths {
   "/users/edit-self": {
     patch: operations["EditSelf"];
   };
+  "/users/delete-user": {
+    delete: operations["DeleteUser"];
+  };
   "/webhook": {
     post: operations["ReceiveWebhook"];
   };
@@ -125,6 +128,13 @@ export interface components {
     "Omit_Partial_UserAdditionalInfo_.stripe_id_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__"];
     EditSelfRequestBody: {
       updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.stripe_id_"];
+    };
+    CommonResponse: {
+      error?: string;
+      message?: string;
+    };
+    DeleteUserRequestBody: {
+      uid: string;
     };
     UserSignupResponse: {
       error?: string;
@@ -305,6 +315,21 @@ export interface operations {
       /** @description Successful edit */
       200: {
         content: never;
+      };
+    };
+  };
+  DeleteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Deleted user */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
       };
     };
   };
