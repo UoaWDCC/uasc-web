@@ -178,6 +178,30 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"CommonResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteUserRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UserSignupResponse": {
 				"properties": {
 					"error": {
@@ -701,6 +725,46 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/EditSelfRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/delete-user": {
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Deleted user",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/CommonResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteUserRequestBody"
 							}
 						}
 					}
