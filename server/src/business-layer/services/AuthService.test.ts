@@ -1,8 +1,13 @@
 import { auth } from "business-layer/security/Firebase"
 import AuthService from "./AuthService"
 import { UserRecord } from "firebase-admin/auth"
+import { cleanAuth } from "test-config/TestUtils"
 
 describe("AuthService Integration Tests", () => {
+  afterEach(async () => {
+    await cleanAuth()
+  })
+
   it("deletes a user", async () => {
     await auth.createUser({ uid: "test" })
     new AuthService().deleteUser("test")
@@ -69,5 +74,31 @@ describe("AuthService Integration Tests", () => {
     )
 
     expect(typeof token).toBe("string")
+  })
+
+  it("can bulk fetch under 100 users", async () => {
+    const authService: AuthService = new AuthService()
+    const uidsToQuery = []
+    for (let i = 0; i < 5; ++i) {
+      const { uid } = await new AuthService().createUser(`test${i}@gmail.com`)
+      uidsToQuery.push({ uid })
+    }
+
+    const result = await authService.bulkRetrieveUsersByUids(uidsToQuery)
+
+    expect(result.length).toEqual(5)
+  })
+
+  it("doesn't error out/return invalid uids", async () => {
+    const authService: AuthService = new AuthService()
+    const uidsToQuery = [{ uid: "inVALID" }, { uid: "invalid" }]
+    for (let i = 0; i < 5; ++i) {
+      const { uid } = await new AuthService().createUser(`test${i}@gmail.com`)
+      uidsToQuery.push({ uid })
+    }
+
+    const result = await authService.bulkRetrieveUsersByUids(uidsToQuery)
+
+    expect(result.length).toEqual(5)
   })
 })

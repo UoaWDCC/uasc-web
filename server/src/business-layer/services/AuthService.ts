@@ -2,7 +2,30 @@ import { UserRecord } from "firebase-admin/auth"
 import { auth } from "business-layer/security/Firebase"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 
+type UidArray = {
+  uid: string
+}[]
+
 export default class AuthService {
+  /**
+   * Fetches up to **100** users based on an array of uid identifiers
+   *
+   * @throws **Passing more than 100 will result in a FirebaseAuthError**
+   *
+   * @param uids an array of objects containing the key `uid`,
+   * which has the value of the firebase user uid
+   * @example // [{uid:"uid1", uid:"uid2"}]
+   */
+  public async bulkRetrieveUsersByUids(uids: UidArray) {
+    try {
+      const { users } = await auth.getUsers(uids)
+      return users
+    } catch (e) {
+      console.error(`Failed to bulk retrieve the uids from Auth`, e)
+      return undefined
+    }
+  }
+
   /**
    * Deletes a user account from the Firebase Authentication Service.
    * @param uid
