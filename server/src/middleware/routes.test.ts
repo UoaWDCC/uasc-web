@@ -26,6 +26,7 @@ import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
+import * as admin from "firebase-admin"
 
 const request = supertest(_app)
 
@@ -357,6 +358,21 @@ describe("Endpoints", () => {
         MEMBER_USER_UID
       )
       expect(deletedUser).toEqual(undefined)
+
+      // check that user is actually deleted from auth
+      try {
+        await admin.auth().getUser(MEMBER_USER_UID)
+        fail("User should be deleted from auth")
+      } catch (err) {
+        if (err && typeof err === "object" && "errorInfo" in err) {
+          expect(err.errorInfo).toEqual({
+            code: "auth/user-not-found",
+            message:
+              "There is no user record corresponding to the provided identifier."
+          })
+        }
+      }
+
       const unaffectedUser = await new UserDataService().getUserData(
         GUEST_USER_UID
       )
@@ -374,6 +390,9 @@ describe("Endpoints", () => {
         ADMIN_USER_UID
       )
       expect(deletedUser).not.toEqual(undefined)
+
+      const adminUser = await admin.auth().getUser(ADMIN_USER_UID)
+      expect(adminUser).not.toEqual(undefined)
     })
 
     it("should return 401 for unauthorized users", async () => {
