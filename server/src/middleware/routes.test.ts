@@ -26,8 +26,8 @@ import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
-import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 import * as admin from "firebase-admin"
+import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 
 const request = supertest(_app)
 
