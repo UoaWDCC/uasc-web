@@ -334,6 +334,57 @@ describe("Endpoints", () => {
       expect(updatedUser.does_ski).not.toEqual("invalid")
     })
   })
+
+  describe("/users/delete-user", () => {
+    beforeEach(async () => {
+      await createUserData(ADMIN_USER_UID)
+      await createUserData(MEMBER_USER_UID)
+      await createUserData(GUEST_USER_UID)
+    })
+
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+
+    it("should delete the user", async () => {
+      const res = await request
+        .delete("/users/delete-user")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ uid: MEMBER_USER_UID })
+
+      expect(res.status).toEqual(200)
+      const deletedUser = await new UserDataService().getUserData(
+        MEMBER_USER_UID
+      )
+      expect(deletedUser).toEqual(undefined)
+      const unaffectedUser = await new UserDataService().getUserData(
+        GUEST_USER_UID
+      )
+      expect(unaffectedUser).not.toEqual(undefined)
+    })
+
+    it("should not delete an admin user", async () => {
+      const res = await request
+        .delete("/users/delete-user")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ uid: ADMIN_USER_UID })
+
+      expect(res.status).toEqual(403) // forbidden request
+      const deletedUser = await new UserDataService().getUserData(
+        ADMIN_USER_UID
+      )
+      expect(deletedUser).not.toEqual(undefined)
+    })
+
+    it("should return 401 for unauthorized users", async () => {
+      const res = await request
+        .delete("/users/delete-user")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({ uid: MEMBER_USER_UID })
+
+      expect(res.status).toEqual(401)
+    })
+  })
   /**
    *
    * `/signup`
