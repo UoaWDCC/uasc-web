@@ -20,6 +20,8 @@ const Calendar = ({ ...props }: CalendarProps) => {
         value={date}
         className="react-calendar"
         minDate={today}
+        minDetail="year"
+        maxDetail="month"
         {...props}
       />
     </div>
