@@ -5,8 +5,6 @@ import ProfileInformationPanel from "components/generic/ProfileInformationPanel/
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
 
-import { UserAdditionalInfo } from "models/User"
-
 const SignOutButton = () => {
   const navigate = useNavigate()
   const handleOnclick = () => {
@@ -25,18 +23,15 @@ const SignOutButton = () => {
   )
 }
 
-const determineUserSkiSnowboardStatus = (
-  currentUserData?: UserAdditionalInfo
-) => {
-  if (!currentUserData) {
-    return "None"
-  }
-
-  if (currentUserData.does_ski && currentUserData.does_snowboarding) {
+const determineUserSkiSnowboardStatus = (status: {
+  Ski?: boolean | undefined
+  Snowboard?: boolean | undefined
+}) => {
+  if (status.Ski && status.Snowboard) {
     return "Both"
-  } else if (currentUserData.does_ski) {
+  } else if (status.Ski) {
     return "Skiier"
-  } else if (currentUserData.does_snowboarding) {
+  } else if (status.Snowboard) {
     return "Snowboarder"
   } else {
     return "New"
@@ -144,9 +139,10 @@ export default function Profile() {
                   />
                   <Field
                     subtitle="Skiier/Snowboarder"
-                    description={determineUserSkiSnowboardStatus(
-                      currentUserData
-                    )}
+                    description={determineUserSkiSnowboardStatus({
+                      Ski: currentUserData?.does_ski,
+                      Snowboard: currentUserData?.does_snowboarding
+                    })}
                   />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel title="Current bookings">
