@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore"
 import { UserAdditionalInfo } from "models/User"
 import fetchClient from "services/OpenApiFetchClient"
+import { MEMBER_TABLE_MAX_DATA } from "utils/Constants"
 
 export type EditUsersBody = {
   uid: string
@@ -8,8 +9,21 @@ export type EditUsersBody = {
 }[]
 
 const AdminService = {
-  getUsers: async function () {
-    const { data } = await fetchClient.GET("/admin/users", {})
+  getUsers: async function ({
+    limit = MEMBER_TABLE_MAX_DATA,
+    pageParam
+  }: {
+    pageParam?: string
+    limit?: number
+  }) {
+    const { data } = await fetchClient.GET("/admin/users", {
+      params: {
+        query: {
+          cursor: pageParam,
+          toFetch: limit
+        }
+      }
+    })
     if (!data) throw new Error("Failed to fetch all users")
     return data
   },
