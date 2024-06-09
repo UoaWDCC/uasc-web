@@ -6,6 +6,9 @@ import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useState } from "react"
 import { useAppData } from "store/Store"
 import { SignUpNotif } from "components/generic/SignUpNotif/SignUpNotif"
+import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
+import { BookingAvailability } from "models/Booking"
+import { MS_IN_SECOND } from "utils/Constants"
 
 type DateRange = {
   startDate: Date
@@ -36,8 +39,14 @@ export const handleDateRangeInputChange = (
   }
 }
 
-// TODO: Pass available dates into here as props, and onBookingCreated handler
-export const CreateBookingSection = () => {
+interface ICreateBookingSection {
+  bookingSlots?: BookingAvailability[]
+}
+
+// TODO: Pass available dates into here as props, // TODO: and onBookingCreated handler
+export const CreateBookingSection = ({
+  bookingSlots = []
+}: ICreateBookingSection) => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
     endDate: new Date()
@@ -62,12 +71,27 @@ export const CreateBookingSection = () => {
 
         <div className="flex max-w-[381px] flex-col items-center gap-2">
           <Calendar
+            minDate={new Date()}
+            minDetail="year"
+            maxDetail="month"
             selectRange
             value={
               currentStartDate && currentEndDate
                 ? [currentStartDate, currentEndDate]
                 : undefined
             }
+            tileContent={({ date }) => {
+              const slot = bookingSlots.find(
+                (slot) =>
+                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
+                    date.toDateString() && slot.availableSpaces > 0
+              )
+              return slot ? (
+                <p>
+                  {slot?.availableSpaces}/{slot.maxBookings}
+                </p>
+              ) : null
+            }}
             onChange={(e) => {
               const range = e as [Date, Date]
               setSelectedDateRange({
@@ -117,8 +141,9 @@ export const CreateBookingSection = () => {
 
 export const ProtectedCreateBookingSection = () => {
   const [{ currentUser, currentUserClaims }] = useAppData()
+  const { data } = useAvailableBookingsQuery()
   if (!currentUserClaims?.member) {
     return <SignUpNotif signedIn={!!currentUser} />
   }
-  return <CreateBookingSection />
+  return <CreateBookingSection bookingSlots={data} />
 }
