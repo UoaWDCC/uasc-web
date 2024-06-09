@@ -87,7 +87,7 @@ export const CreateBookingSection = ({
                     date.toDateString() && slot.availableSpaces > 0
               )
               return slot ? (
-                <p>
+                <p className="text-xs">
                   {slot?.availableSpaces}/{slot.maxBookings}
                 </p>
               ) : null
