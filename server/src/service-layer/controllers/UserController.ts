@@ -1,9 +1,12 @@
 import UserDataService from "data-layer/services/UserDataService"
+import AuthService from "business-layer/services/AuthService"
 import {
   EditSelfRequestBody,
   SelfRequestModel,
-  EditSelfRequestModel
+  EditSelfRequestModel,
+  DeleteUserRequestBody
 } from "service-layer/request-models/UserRequests"
+import { CommonResponse } from "service-layer/response-models/CommonResponse"
 import {
   Body,
   Controller,
@@ -12,7 +15,8 @@ import {
   Security,
   SuccessResponse,
   Request,
-  Patch
+  Patch,
+  Delete
 } from "tsoa"
 
 @Route("users")
@@ -51,6 +55,34 @@ export class UsersController extends Controller {
     } catch (error) {
       console.error(error)
       this.setStatus(401)
+    }
+  }
+
+  @SuccessResponse("200", "Deleted user")
+  @Security("jwt", ["admin"])
+  @Delete("delete-user")
+  public async deleteUser(
+    @Body() requestBody: DeleteUserRequestBody
+  ): Promise<CommonResponse | void> {
+    try {
+      const userUid = requestBody.uid
+      if (userUid) {
+        const authService = new AuthService()
+        const userDataService = new UserDataService()
+
+        const userClaims = await authService.getCustomerUserClaim(userUid)
+        if (userClaims.admin) {
+          this.setStatus(403) // forbidden request
+          return { error: "Cannot delete another admin." }
+        }
+
+        this.setStatus(200)
+        await authService.deleteUser(userUid)
+        await userDataService.deleteUserData(userUid)
+      }
+    } catch (err) {
+      this.setStatus(500)
+      return { error: "Failed to delete user." }
     }
   }
 }

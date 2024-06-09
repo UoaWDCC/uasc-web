@@ -26,6 +26,7 @@ import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
+import * as admin from "firebase-admin"
 import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 
 const request = supertest(_app)
@@ -395,6 +396,75 @@ describe("Endpoints", () => {
         MEMBER_USER_UID
       )
       expect(updatedUser.does_ski).not.toEqual("invalid")
+    })
+  })
+
+  describe("/users/delete-user", () => {
+    beforeEach(async () => {
+      await createUserData(ADMIN_USER_UID)
+      await createUserData(MEMBER_USER_UID)
+      await createUserData(GUEST_USER_UID)
+    })
+
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+
+    it("should delete the user", async () => {
+      const res = await request
+        .delete("/users/delete-user")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ uid: MEMBER_USER_UID })
+
+      expect(res.status).toEqual(200)
+      const deletedUser = await new UserDataService().getUserData(
+        MEMBER_USER_UID
+      )
+      expect(deletedUser).toEqual(undefined)
+
+      // check that user is actually deleted from auth
+      try {
+        await admin.auth().getUser(MEMBER_USER_UID)
+        fail("User should be deleted from auth")
+      } catch (err) {
+        if (err && typeof err === "object" && "errorInfo" in err) {
+          expect(err.errorInfo).toEqual({
+            code: "auth/user-not-found",
+            message:
+              "There is no user record corresponding to the provided identifier."
+          })
+        }
+      }
+
+      const unaffectedUser = await new UserDataService().getUserData(
+        GUEST_USER_UID
+      )
+      expect(unaffectedUser).not.toEqual(undefined)
+    })
+
+    it("should not delete an admin user", async () => {
+      const res = await request
+        .delete("/users/delete-user")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ uid: ADMIN_USER_UID })
+
+      expect(res.status).toEqual(403) // forbidden request
+      const deletedUser = await new UserDataService().getUserData(
+        ADMIN_USER_UID
+      )
+      expect(deletedUser).not.toEqual(undefined)
+
+      const adminUser = await admin.auth().getUser(ADMIN_USER_UID)
+      expect(adminUser).not.toEqual(undefined)
+    })
+
+    it("should return 401 for unauthorized users", async () => {
+      const res = await request
+        .delete("/users/delete-user")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({ uid: MEMBER_USER_UID })
+
+      expect(res.status).toEqual(401)
     })
   })
   /**
