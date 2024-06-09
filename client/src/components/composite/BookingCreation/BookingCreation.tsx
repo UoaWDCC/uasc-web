@@ -55,6 +55,33 @@ export const CreateBookingSection = ({
   const { startDate: currentStartDate, endDate: currentEndDate } =
     selectedDateRange
 
+  const disabledDates = bookingSlots.filter((slot) => slot.availableSpaces <= 0)
+
+  const checkValidRange = (startDate: Date, endDate: Date) => {
+    const dateArray = []
+    const currentDate = new Date(startDate)
+
+    while (currentDate <= new Date(endDate)) {
+      dateArray.push(new Date(currentDate))
+      // Use UTC date to prevent problems with time zones and DST
+      currentDate.setUTCDate(currentDate.getUTCDate() + 1)
+    }
+    if (
+      dateArray.some((date) =>
+        disabledDates.some(
+          (disabledDate) =>
+            new Date(
+              disabledDate.date.seconds * MS_IN_SECOND
+            ).toDateString() === date.toDateString()
+        )
+      )
+    ) {
+      alert("Invalid date range, some dates are unavailable")
+      return false
+    }
+    return true
+  }
+
   return (
     <>
       <div
@@ -75,6 +102,7 @@ export const CreateBookingSection = ({
             minDetail="year"
             maxDetail="month"
             maxDate={NEXT_YEAR_FROM_TODAY}
+            
             selectRange
             value={
               currentStartDate && currentEndDate
@@ -82,10 +110,10 @@ export const CreateBookingSection = ({
                 : undefined
             }
             tileDisabled={({ date }) =>
-              bookingSlots.some(
+              disabledDates.some(
                 (slot) =>
                   new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
-                    date.toDateString() && slot.availableSpaces <= 0
+                  date.toDateString()
               )
             }
             tileContent={({ date }) => {
@@ -115,13 +143,15 @@ export const CreateBookingSection = ({
               type="date"
               value={formatDateForInput(selectedDateRange.startDate)}
               data-testid="start-date-picker"
-              onChange={(e) =>
+              onChange={(e) =>{
+                const newStartDate = e.target.valueAsDate || new Date()
+                if(checkValidRange(newStartDate, currentEndDate))
                 handleDateRangeInputChange(
-                  e.target.valueAsDate || new Date(),
-                  currentEndDate,
+                  currentStartDate,
+                  newStartDate,
                   setSelectedDateRange
                 )
-              }
+              }}
             />
             <span className="mt-5 w-6">
               <LongRightArrow />
@@ -131,13 +161,15 @@ export const CreateBookingSection = ({
               type="date"
               data-testid="end-date-picker"
               value={formatDateForInput(selectedDateRange.endDate)}
-              onChange={(e) =>
-                handleDateRangeInputChange(
-                  currentStartDate,
-                  e.target.valueAsDate || new Date(),
-                  setSelectedDateRange
-                )
-              }
+              onChange={(e) => {
+                const newEndDate = e.target.valueAsDate || new Date()
+                if (checkValidRange(currentStartDate, newEndDate))
+                  handleDateRangeInputChange(
+                    currentStartDate,
+                    newEndDate,
+                    setSelectedDateRange
+                  )
+              }}
             />
           </span>
           <Button variant="default">Proceed to Payment</Button>
