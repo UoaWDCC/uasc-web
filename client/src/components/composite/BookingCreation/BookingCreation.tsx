@@ -4,9 +4,7 @@ import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useState } from "react"
-import { useAppData } from "store/Store"
-import { SignUpNotif } from "components/generic/SignUpNotif/SignUpNotif"
-import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
+
 import { BookingAvailability } from "models/Booking"
 import { MS_IN_SECOND, NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 
@@ -186,13 +184,4 @@ export const CreateBookingSection = ({
       </div>
     </>
   )
-}
-
-export const ProtectedCreateBookingSection = () => {
-  const [{ currentUser, currentUserClaims }] = useAppData()
-  const { data } = useAvailableBookingsQuery()
-  if (!currentUserClaims?.member) {
-    return <SignUpNotif signedIn={!!currentUser} />
-  }
-  return <CreateBookingSection bookingSlots={data} />
 }
