@@ -57,14 +57,14 @@ export const CreateBookingSection = ({
 
   const disabledDates = bookingSlots.filter((slot) => slot.availableSpaces <= 0)
 
-/**
- * Function to be called to confirm the date range selected by the user.
- * 
- * Will notify user if an unavailable date was included in the new date range
- * 
- * @param startDate the first date of the range
- * @param endDate the last date of the range
- */
+  /**
+   * Function to be called to confirm the date range selected by the user.
+   *
+   * Will notify user if an unavailable date was included in the new date range
+   *
+   * @param startDate the first date of the range
+   * @param endDate the last date of the range
+   */
   const checkValidRange = (startDate: Date, endDate: Date) => {
     const dateArray = []
     const currentDate = new Date(startDate)
