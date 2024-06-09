@@ -1,22 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import { Timestamp } from "firebase/firestore"
 import BookingService from "./BookingService"
+import { TODAY, NEXT_YEAR_FROM_TODAY } from "utils/Constants"
 
 export const BOOKING_AVAILABLITY_KEY = "booking-availablity" as const
-
-/**
- * Need to remove time data from this
- */
-let TODAY = new Date()
-TODAY = new Date(TODAY.toDateString())
-
-/**
- * Need to remove time data from this
- */
-let NEXT_YEAR_FROM_TODAY = new Date(
-  new Date().setFullYear(new Date().getFullYear() + 1)
-)
-NEXT_YEAR_FROM_TODAY = new Date(NEXT_YEAR_FROM_TODAY.toDateString())
 
 export function useAvailableBookingsQuery(
   startDate: Timestamp = Timestamp.fromDate(TODAY),
