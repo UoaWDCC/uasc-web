@@ -115,6 +115,11 @@ export const CreateBookingSection = ({
                 : undefined
             }
             tileDisabled={({ date }) =>
+              !bookingSlots.some(
+                (slot) =>
+                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
+                  date.toDateString()
+              ) ||
               disabledDates.some(
                 (slot) =>
                   new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
