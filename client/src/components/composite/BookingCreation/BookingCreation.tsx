@@ -8,7 +8,7 @@ import { useAppData } from "store/Store"
 import { SignUpNotif } from "components/generic/SignUpNotif/SignUpNotif"
 import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
 import { BookingAvailability } from "models/Booking"
-import { MS_IN_SECOND } from "utils/Constants"
+import { MS_IN_SECOND, NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 
 type DateRange = {
   startDate: Date
@@ -71,9 +71,10 @@ export const CreateBookingSection = ({
 
         <div className="flex max-w-[381px] flex-col items-center gap-2">
           <Calendar
-            minDate={new Date()}
+            minDate={TODAY}
             minDetail="year"
             maxDetail="month"
+            maxDate={NEXT_YEAR_FROM_TODAY}
             selectRange
             value={
               currentStartDate && currentEndDate
