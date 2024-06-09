@@ -129,10 +129,12 @@ export const CreateBookingSection = ({
             }}
             onChange={(e) => {
               const range = e as [Date, Date]
-              setSelectedDateRange({
-                startDate: range[0],
-                endDate: range[1]
-              })
+              if (checkValidRange(range[0], range[1])) {
+                setSelectedDateRange({
+                  startDate: range[0],
+                  endDate: range[1]
+                })
+              }
             }}
             returnValue="range"
           />
@@ -146,8 +148,8 @@ export const CreateBookingSection = ({
                 const newStartDate = e.target.valueAsDate || new Date()
                 if (checkValidRange(newStartDate, currentEndDate))
                   handleDateRangeInputChange(
-                    currentStartDate,
                     newStartDate,
+                    currentEndDate,
                     setSelectedDateRange
                   )
               }}
