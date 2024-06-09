@@ -81,11 +81,18 @@ export const CreateBookingSection = ({
                 ? [currentStartDate, currentEndDate]
                 : undefined
             }
+            tileDisabled={({ date }) =>
+              bookingSlots.some(
+                (slot) =>
+                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
+                    date.toDateString() && slot.availableSpaces <= 0
+              )
+            }
             tileContent={({ date }) => {
               const slot = bookingSlots.find(
                 (slot) =>
                   new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
-                    date.toDateString() && slot.availableSpaces > 0
+                    date.toDateString() && slot.maxBookings > 0
               )
               return slot ? (
                 <p className="text-xs">
