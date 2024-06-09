@@ -102,7 +102,6 @@ export const CreateBookingSection = ({
             minDetail="year"
             maxDetail="month"
             maxDate={NEXT_YEAR_FROM_TODAY}
-            
             selectRange
             value={
               currentStartDate && currentEndDate
@@ -143,14 +142,14 @@ export const CreateBookingSection = ({
               type="date"
               value={formatDateForInput(selectedDateRange.startDate)}
               data-testid="start-date-picker"
-              onChange={(e) =>{
+              onChange={(e) => {
                 const newStartDate = e.target.valueAsDate || new Date()
-                if(checkValidRange(newStartDate, currentEndDate))
-                handleDateRangeInputChange(
-                  currentStartDate,
-                  newStartDate,
-                  setSelectedDateRange
-                )
+                if (checkValidRange(newStartDate, currentEndDate))
+                  handleDateRangeInputChange(
+                    currentStartDate,
+                    newStartDate,
+                    setSelectedDateRange
+                  )
               }}
             />
             <span className="mt-5 w-6">
