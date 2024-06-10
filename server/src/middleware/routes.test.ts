@@ -706,7 +706,6 @@ describe("Endpoints", () => {
   })
 
   describe("fetchUsersByBookingDateRange", () => {
-
     beforeEach(async () => {
       await createUsers()
     })
