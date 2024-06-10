@@ -1,9 +1,16 @@
-import { AvailableDatesRequestModel } from "service-layer/request-models/UserRequests"
+import {
+  AvailableDatesRequestModel,
+  BookingsByDateRangeRequestModel
+} from "service-layer/request-models/UserRequests"
 import { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
 import { Timestamp } from "firebase-admin/firestore"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import { Controller, Post, Route, Security, SuccessResponse, Body } from "tsoa"
+import { UserResponse } from "../response-models/UserResponse"
+import { UsersByDateRangeResponse } from "../response-models/CommonResponse"
+import UserDataService from "../../data-layer/services/UserDataService"
+import * as console from "console"
 
 @Route("bookings")
 export class BookingController extends Controller {
@@ -49,7 +56,7 @@ export class BookingController extends Controller {
           startDate,
           endDate
         )
-      console.log("found bookingslots: ", bookingSlots)
+      // console.log("found bookingslots: ", bookingSlots)
 
       const bookingSlotsToQuery = bookingSlots.map((bookingSlot) => {
         const { description, date, max_bookings, id } = bookingSlot
@@ -78,6 +85,50 @@ export class BookingController extends Controller {
       const responseData = await Promise.all(queryPromises)
 
       // Query stripe for the amount of active checkout sessions for each of the slots - IGNORE FOR NOW
+      this.setStatus(200)
+      return { data: responseData }
+    } catch (e) {
+      this.setStatus(500)
+      return { error: "Something went wrong" }
+    }
+  }
+
+  @SuccessResponse("200", "Users found")
+  @Security("jwt", ["admin"])
+  @Post("fetch-users")
+  public async fetchUsersByBookingDateRange(
+    @Body() requestBody: BookingsByDateRangeRequestModel
+  ): Promise<UsersByDateRangeResponse> {
+    try {
+      const { startDate, endDate } = requestBody
+
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+      const userService = new UserDataService()
+
+      // Query to get all booking slots within date range
+      const bookingSlots =
+        await bookingSlotService.getBookingSlotsBetweenDateRange(
+          startDate,
+          endDate
+        )
+
+      const responseData: Array<{ date: Timestamp; users: UserResponse[] }> = []
+
+      for (const slot of bookingSlots) {
+        const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
+        const userIds = bookings.map((booking) => booking.user_id)
+
+        const users = await userService.getUsersByIds(userIds)
+        console.log(userIds)
+        // console.log(bookings)
+        // console.log(users)
+        responseData.push({
+          date: slot.date,
+          users
+        })
+      }
+
       this.setStatus(200)
       return { data: responseData }
     } catch (e) {

@@ -1,5 +1,6 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import * as console from "console"
 
 export default class UserDataService {
   // Create
@@ -77,5 +78,28 @@ export default class UserDataService {
   // Delete
   public async deleteUserData(uid: string) {
     await FirestoreCollections.users.doc(uid).delete()
+  }
+
+  public async getUsersByIds(userIds: string[]) {
+    // const users = await FirestoreCollections.users
+    //   .where("id", "in", userIds)
+    //   .get()
+    console.log(userIds)
+    // return users.docs.map((doc) => ({ uid: doc.id, ...doc.data(), id: doc.id }))
+    // return users.docs.map((doc) => ({ ...doc.data(), uid: doc.id }))
+
+    if (userIds.length === 0) {
+      return [];
+    }
+
+    const userDocs = await Promise.all(
+      userIds.map(id => FirestoreCollections.users.doc(id).get())
+    );
+
+    const users = userDocs
+      .filter(doc => doc.exists)
+      .map(doc => ({ ...doc.data(), uid: doc.id }));
+    console.log(users)
+    return users;
   }
 }

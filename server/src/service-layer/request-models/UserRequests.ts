@@ -42,3 +42,8 @@ export interface AvailableDatesRequestModel {
   startDate?: Timestamp
   endDate?: Timestamp
 }
+
+export interface BookingsByDateRangeRequestModel {
+  startDate: Timestamp
+  endDate: Timestamp
+}

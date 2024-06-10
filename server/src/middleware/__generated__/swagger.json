@@ -383,6 +383,52 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UsersByDateRangeResponse": {
+				"properties": {
+					"data": {
+						"items": {
+							"properties": {
+								"users": {
+									"items": {
+										"$ref": "#/components/schemas/UserResponse"
+									},
+									"type": "array"
+								},
+								"date": {
+									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+								}
+							},
+							"required": [
+								"users",
+								"date"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"error": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingsByDateRangeRequestModel": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CommonResponse": {
 				"properties": {
 					"error": {
@@ -750,6 +796,41 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/AvailableDatesRequestModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/bookings/fetch-users": {
+			"post": {
+				"operationId": "FetchUsersByBookingDateRange",
+				"responses": {
+					"200": {
+						"description": "Users found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UsersByDateRangeResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BookingsByDateRangeRequestModel"
 							}
 						}
 					}

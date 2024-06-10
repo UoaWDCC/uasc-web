@@ -26,6 +26,9 @@ export interface paths {
   "/bookings/available-dates": {
     post: operations["GetAvailableDates"];
   };
+  "/bookings/fetch-users": {
+    post: operations["FetchUsersByBookingDateRange"];
+  };
   "/admin/bookings/make-date-available": {
     /** @description Booking Operations */
     post: operations["MakeDateAvailable"];
@@ -179,6 +182,17 @@ export interface components {
     AvailableDatesRequestModel: {
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
+    UsersByDateRangeResponse: {
+      data?: {
+          users: components["schemas"]["UserResponse"][];
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
+      error?: string;
+    };
+    BookingsByDateRangeRequestModel: {
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     CommonResponse: {
       error?: string;
@@ -334,6 +348,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["AvailableDatesResponse"];
+        };
+      };
+    };
+  };
+  FetchUsersByBookingDateRange: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BookingsByDateRangeRequestModel"];
+      };
+    };
+    responses: {
+      /** @description Users found */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UsersByDateRangeResponse"];
         };
       };
     };
