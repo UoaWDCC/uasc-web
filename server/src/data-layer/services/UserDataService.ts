@@ -89,17 +89,17 @@ export default class UserDataService {
     // return users.docs.map((doc) => ({ ...doc.data(), uid: doc.id }))
 
     if (userIds.length === 0) {
-      return [];
+      return []
     }
 
     const userDocs = await Promise.all(
-      userIds.map(id => FirestoreCollections.users.doc(id).get())
-    );
+      userIds.map((id) => FirestoreCollections.users.doc(id).get())
+    )
 
     const users = userDocs
-      .filter(doc => doc.exists)
-      .map(doc => ({ ...doc.data(), uid: doc.id }));
+      .filter((doc) => doc.exists)
+      .map((doc) => ({ ...doc.data(), uid: doc.id }))
     console.log(users)
-    return users;
+    return users
   }
 }

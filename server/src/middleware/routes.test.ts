@@ -706,8 +706,6 @@ describe("Endpoints", () => {
   })
 
   describe("fetchUsersByBookingDateRange", () => {
-
-
     afterEach(async () => {
       await cleanFirestore()
     })
@@ -753,7 +751,7 @@ describe("Endpoints", () => {
           endDate
         })
 
-      console.log(res.body);
+      console.log(res.body)
 
       expect(res.status).toEqual(200)
       expect(res.body.users).toHaveLength(2)
