@@ -120,7 +120,7 @@ export class BookingController extends Controller {
         const userIds = bookings.map((booking) => booking.user_id)
 
         const users = await userService.getUsersByIds(userIds)
-        console.log(userIds)
+        // console.log(userIds)
         // console.log(bookings)
         // console.log(users)
         responseData.push({
@@ -128,7 +128,7 @@ export class BookingController extends Controller {
           users
         })
       }
-
+      console.log(responseData)
       this.setStatus(200)
       return { data: responseData }
     } catch (e) {
