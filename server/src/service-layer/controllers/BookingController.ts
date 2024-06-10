@@ -93,6 +93,9 @@ export class BookingController extends Controller {
     }
   }
 
+  /**
+   * This method fetches users based on a booking date range.
+   */
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
   @Post("fetch-users")
@@ -102,6 +105,7 @@ export class BookingController extends Controller {
     try {
       const { startDate, endDate } = requestBody
 
+      /** Creating instances of the required services */
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
       const userService = new UserDataService()
@@ -113,26 +117,36 @@ export class BookingController extends Controller {
           endDate
         )
 
+      /** The response data array */
       const responseData: Array<{ date: Timestamp; users: UserResponse[] }> = []
 
+      /** Iterating through each booking slot */
       for (const slot of bookingSlots) {
+        /** Getting the bookings for the current slot */
         const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
+
+        /** Extracting the user IDs from the bookings */
         const userIds = bookings.map((booking) => booking.user_id)
 
+        /** Fetching the users based on the user IDs */
         const users = await userService.getUsersByIds(userIds)
-        // console.log(userIds)
-        // console.log(bookings)
-        // console.log(users)
+
+        /** Adding the date and users to the response data array */
         responseData.push({
           date: slot.date,
           users
         })
       }
+
       console.log(responseData)
+
       this.setStatus(200)
+
+      /** Returning the response data */
       return { data: responseData }
     } catch (e) {
       this.setStatus(500)
+
       return { error: "Something went wrong" }
     }
   }

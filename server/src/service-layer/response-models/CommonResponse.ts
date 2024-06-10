@@ -6,6 +6,9 @@ export interface CommonResponse {
   message?: string
 }
 
+/**
+ * Represents the response structure for fetching users by date range.
+ */
 export interface UsersByDateRangeResponse {
   data?: Array<{ date: Timestamp; users: UserResponse[] }>
   error?: string

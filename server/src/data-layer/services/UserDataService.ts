@@ -80,14 +80,10 @@ export default class UserDataService {
     await FirestoreCollections.users.doc(uid).delete()
   }
 
+  /**
+   * Retrieves user documents from Firestore based on the provided user IDs.
+   */
   public async getUsersByIds(userIds: string[]) {
-    // const users = await FirestoreCollections.users
-    //   .where("id", "in", userIds)
-    //   .get()
-    // console.log(userIds)
-    // return users.docs.map((doc) => ({ uid: doc.id, ...doc.data(), id: doc.id }))
-    // return users.docs.map((doc) => ({ ...doc.data(), uid: doc.id }))
-
     if (userIds.length === 0) {
       return []
     }
@@ -99,7 +95,6 @@ export default class UserDataService {
     const users = userDocs
       .filter((doc) => doc.exists)
       .map((doc) => ({ ...doc.data(), uid: doc.id }))
-    // console.log(users)
     return users
   }
 }
