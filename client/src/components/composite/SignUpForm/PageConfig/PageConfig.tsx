@@ -47,7 +47,8 @@ export const PAGINATED_FORM_PAGES = (
   navigateFn: (route: RouteNames | "/profile" | number) => void,
   signUpFn: FormSubmissionMutationFunction,
   validateFormFn: (pageToValidate: PAGES, navigateFn: () => void) => void,
-  disableSubmit: boolean
+  disableSubmit: boolean,
+  isSignedIn: boolean = false
 ): PageProps[] => [
   {
     index: PAGES.PersonalFirst,
@@ -108,7 +109,9 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Confirm,
     title: "Confirm",
-    onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE)
+    onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE),
+    nextDisabled: !isSignedIn,
+    backDisabled: !isSignedIn
   },
   {
     index: PAGES.AccountSetup,
