@@ -11,6 +11,11 @@ export const debounce = (fn: (...args: any[]) => void, timeout: number) => {
   }
 }
 
+/**
+ * @param timestamp any object that contains the `seconds` and `nanosecond` properties,
+ * like the timestamp from `firebase`
+ * @returns a date object representative of the timestamp
+ */
 export const timestampToDate = (timestamp: {
   seconds: number
   nanoseconds: number
