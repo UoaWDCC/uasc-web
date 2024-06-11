@@ -1,4 +1,4 @@
-import { dateToFirestoreTimeStamp } from "data-layer/adapters/FirestoreUtils"
+import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 
 export const userInfoMock: UserAdditionalInfo = {

@@ -26,8 +26,10 @@ import {
 } from "service-layer/request-models/UserRequests"
 import {
   BookingPaymentResponse,
-  MembershipPaymentResponse
+  MembershipPaymentResponse,
+  MembershipStripeProductResponse
 } from "service-layer/response-models/PaymentResponse"
+import Stripe from "stripe"
 import {
   Controller,
   Post,
@@ -42,6 +44,63 @@ import {
 
 @Route("payment")
 export class PaymentController extends Controller {
+  @Get("membership_prices")
+  public async getMembershipPrices(): Promise<MembershipStripeProductResponse> {
+    const stripeService = new StripeService()
+    try {
+      const membershipProducts =
+        await stripeService.getActiveMembershipProducts()
+      // Maps the products to the required response type MembershipStripeProductResponse in PaymentResponse
+
+      const productsValues = membershipProducts.map((product) => {
+        // Checks the membership type of the product
+        const membershipType = product.metadata[
+          MEMBERSHIP_TYPE_KEY
+        ] as MembershipTypeValues
+
+        let name: MembershipTypeValues
+
+        switch (membershipType) {
+          case MembershipTypeValues.UoaStudent: {
+            name = MembershipTypeValues.UoaStudent
+            break
+          }
+          case MembershipTypeValues.NonUoaStudent: {
+            name = MembershipTypeValues.NonUoaStudent
+            break
+          }
+          case MembershipTypeValues.ReturningMember: {
+            name = MembershipTypeValues.ReturningMember
+            break
+          }
+          case MembershipTypeValues.NewNonStudent: {
+            name = MembershipTypeValues.NewNonStudent
+            break
+          }
+        }
+
+        return {
+          productId: product.id,
+          name,
+          description: product.description,
+          discount: product.metadata.discount === "true",
+          displayPrice: (
+            Number(
+              (product.default_price as Stripe.Price).unit_amount_decimal
+            ) / 100
+          ).toString(),
+          originalPrice: product.metadata.original_price
+        }
+      })
+
+      return { data: productsValues }
+    } catch (error) {
+      console.error(error)
+      this.setStatus(500)
+      return { error: "Error fetching active Stripe products" }
+    }
+  }
+
   @SuccessResponse("200", "Session Fetched")
   @Security("jwt")
   @Get("checkout_status")

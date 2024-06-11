@@ -23,6 +23,21 @@ const SignOutButton = () => {
   )
 }
 
+const determineUserSkiSnowboardStatus = (status: {
+  Ski?: boolean | undefined
+  Snowboard?: boolean | undefined
+}) => {
+  if (status.Ski && status.Snowboard) {
+    return "Both"
+  } else if (status.Ski) {
+    return "Skiier"
+  } else if (status.Snowboard) {
+    return "Snowboarder"
+  } else {
+    return "New"
+  }
+}
+
 const Field = ({
   subtitle,
   description
@@ -124,7 +139,10 @@ export default function Profile() {
                   />
                   <Field
                     subtitle="Skiier/Snowboarder"
-                    description={`${currentUserData?.does_ski}`}
+                    description={determineUserSkiSnowboardStatus({
+                      Ski: currentUserData?.does_ski,
+                      Snowboard: currentUserData?.does_snowboarding
+                    })}
                   />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel title="Current bookings">

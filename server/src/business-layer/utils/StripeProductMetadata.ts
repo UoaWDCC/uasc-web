@@ -18,6 +18,15 @@ export enum LodgeBookingTypeValues {
   Normal = "weekday"
 }
 
+/*
+ * For stripe product
+ */
+export const MEMBERSHIP_PRODUCT_TYPE_KEY = "product_type"
+export enum ProductTypeValues {
+  MEMBERSHIP = "membership",
+  BOOKING = "booking"
+}
+
 /**
  * For customer objects
  */

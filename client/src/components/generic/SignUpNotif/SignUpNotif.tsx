@@ -27,7 +27,7 @@ export const SignUpNotif = ({ signedIn }: ISignUpNotif) => {
       <span className="flex w-full max-w-80 gap-2">
         {!signedIn && <Button onClick={() => goToLogin()}>Log in</Button>}
         <Button onClick={() => goToRegister()}>
-          {signedIn ? "Pay for membership" : "Sign up"}
+          {signedIn ? "Join Now" : "Sign up"}
         </Button>
       </span>
     </div>
