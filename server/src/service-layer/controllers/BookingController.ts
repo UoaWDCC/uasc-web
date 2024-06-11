@@ -4,9 +4,23 @@ import {
 } from "service-layer/request-models/UserRequests"
 import { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
 import { Timestamp } from "firebase-admin/firestore"
+
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { Controller, Post, Route, Security, SuccessResponse, Body } from "tsoa"
+// import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
+import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
+import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
+import {
+  Controller,
+  Get,
+  Post,
+  Route,
+  Security,
+  SuccessResponse,
+  Body,
+  Request
+} from "tsoa"
+import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 import { UserResponse } from "../response-models/UserResponse"
 import { UsersByDateRangeResponse } from "../response-models/CommonResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
@@ -14,6 +28,43 @@ import * as console from "console"
 
 @Route("bookings")
 export class BookingController extends Controller {
+  @SuccessResponse("200", "Found bookings")
+  @Security("jwt", ["member"])
+  @Get()
+  public async getAllBookings(
+    @Request() request: AllUserBookingsRequestBody
+  ): Promise<AllUserBookingSlotsResponse> {
+    try {
+      const bookingDates: AllUserBookingSlotsResponse = { dates: [] }
+      if (request.user.uid) {
+        const bookingDataService = new BookingDataService()
+        const bookingSlotService = new BookingSlotService()
+
+        const allBookingsData = await bookingDataService.getBookingsByUserId(
+          request.user.uid
+        )
+
+        const bookingPromises = allBookingsData.map(async (booking) => {
+          const bookingSlot = await bookingSlotService.getBookingSlotById(
+            booking.booking_slot_id
+          )
+          if (bookingSlot) {
+            bookingDates.dates.push(
+              firestoreTimestampToDate(bookingSlot.date)
+                .toISOString()
+                .split("T")[0]
+            )
+          }
+        })
+        await Promise.all(bookingPromises)
+      }
+      return bookingDates
+    } catch (e) {
+      this.setStatus(500)
+      return { error: "Failed to get bookings." }
+    }
+  }
+
   @SuccessResponse("200", "Availabilities found")
   @Security("jwt", ["member"])
   @Post("available-dates")
@@ -56,7 +107,7 @@ export class BookingController extends Controller {
           startDate,
           endDate
         )
-      // console.log("found bookingslots: ", bookingSlots)
+      console.log("found bookingslots: ", bookingSlots)
 
       const bookingSlotsToQuery = bookingSlots.map((bookingSlot) => {
         const { description, date, max_bookings, id } = bookingSlot

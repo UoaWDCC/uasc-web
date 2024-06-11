@@ -33,41 +33,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserAdditionalInfo": {
-        "dataType": "refObject",
-        "properties": {
-            "date_of_birth": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "does_snowboarding": {"dataType":"boolean","required":true},
-            "does_racing": {"dataType":"boolean","required":true},
-            "does_ski": {"dataType":"boolean","required":true},
-            "gender": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your pronouns"}}},
-            "emergency_contact": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter a name"}}},
-            "first_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},
-            "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
-            "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
-            "faculty": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
-            "university": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},
-            "student_id": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},
-            "returning": {"dataType":"boolean","required":true},
-            "university_year": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your year of study"}}},
-            "stripe_id": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "FirebaseProperties": {
-        "dataType": "refObject",
-        "properties": {
-            "uid": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserResponse": {
-        "dataType": "refAlias",
-        "type": {"dataType":"intersection","subSchemas":[{"ref":"UserAdditionalInfo"},{"ref":"FirebaseProperties"}],"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"date_of_birth":{"ref":"FirebaseFirestore.Timestamp"},"does_snowboarding":{"dataType":"boolean"},"does_racing":{"dataType":"boolean"},"does_ski":{"dataType":"boolean"},"gender":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your pronouns"}}},"emergency_contact":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter a name"}}},"first_name":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your First Name"}}},"last_name":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},"dietary_requirements":{"dataType":"string","validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},"faculty":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},"university":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},"student_id":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},"returning":{"dataType":"boolean"},"university_year":{"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your year of study"}}}},"validators":{}},
@@ -82,6 +47,23 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "updatedInformation": {"ref":"Omit_Partial_UserAdditionalInfo_.stripe_id_","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CommonResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "DeleteUserRequestBody": {
+        "dataType": "refObject",
+        "properties": {
+            "uid": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -116,6 +98,21 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MembershipTypeValues": {
+        "dataType": "refEnum",
+        "enums": ["uoa_student","non_uoa_student","returning_member","new_non_student"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MembershipStripeProductResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"originalPrice":{"dataType":"string"},"displayPrice":{"dataType":"string","required":true},"discount":{"dataType":"boolean","required":true},"description":{"dataType":"string"},"name":{"ref":"MembershipTypeValues","required":true},"productId":{"dataType":"string","required":true}}}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "stripe.Stripe.Checkout.Session.Status": {
         "dataType": "refAlias",
         "type": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["complete"]},{"dataType":"enum","enums":["expired"]},{"dataType":"enum","enums":["open"]}],"validators":{}},
@@ -126,11 +123,6 @@ const models: TsoaRoute.Models = {
         "properties": {
         },
         "additionalProperties": {"dataType":"string"},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "MembershipTypeValues": {
-        "dataType": "refEnum",
-        "enums": ["uoa_student","non_uoa_student","returning_member","new_non_student"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MembershipPaymentResponse": {
@@ -152,9 +144,19 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AllUserBookingSlotsResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "dates": {"dataType":"array","array":{"dataType":"string"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AvailableDates": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"availableSpaces":{"dataType":"double","required":true},"maxBookings":{"dataType":"double","required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true},"description":{"dataType":"string","required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"availableSpaces":{"dataType":"double","required":true},"maxBookings":{"dataType":"double","required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true},"description":{"dataType":"string"},"id":{"dataType":"string","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AvailableDatesResponse": {
@@ -194,11 +196,12 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CommonResponse": {
+    "BookingSlotUpdateResponse": {
         "dataType": "refObject",
         "properties": {
             "error": {"dataType":"string"},
             "message": {"dataType":"string"},
+            "updatedBookingSlots": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"bookingSlotId":{"dataType":"string","required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
         },
         "additionalProperties": false,
     },
@@ -208,6 +211,60 @@ const models: TsoaRoute.Models = {
         "properties": {
             "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "slots": {"dataType":"double","validators":{"maximum":{"errorMsg":"You have exceeded the maximum slots for bookings","value":32},"minimum":{"errorMsg":"must be positive","value":0}}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"startDate":{"ref":"FirebaseFirestore.Timestamp","required":true},"endDate":{"ref":"FirebaseFirestore.Timestamp","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Omit_MakeDatesAvailableRequestBody.slots_": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserAdditionalInfo": {
+        "dataType": "refObject",
+        "properties": {
+            "date_of_birth": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "does_snowboarding": {"dataType":"boolean","required":true},
+            "does_racing": {"dataType":"boolean","required":true},
+            "does_ski": {"dataType":"boolean","required":true},
+            "gender": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your pronouns"}}},
+            "emergency_contact": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter a name"}}},
+            "first_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},
+            "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
+            "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
+            "faculty": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
+            "university": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},
+            "student_id": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},
+            "returning": {"dataType":"boolean","required":true},
+            "university_year": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your year of study"}}},
+            "stripe_id": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserAccountTypes": {
+        "dataType": "refEnum",
+        "enums": ["admin","member","guest"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CombinedUserData": {
+        "dataType": "refAlias",
+        "type": {"dataType":"intersection","subSchemas":[{"ref":"UserAdditionalInfo"},{"dataType":"nestedObjectLiteral","nestedProperties":{"membership":{"ref":"UserAccountTypes","required":true},"email":{"dataType":"string","required":true},"dateJoined":{"dataType":"string"},"uid":{"dataType":"string","required":true}}}],"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AllUsersResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "nextCursor": {"dataType":"string"},
+            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"CombinedUserData"}},
         },
         "additionalProperties": false,
     },
@@ -323,6 +380,37 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/users/delete-user',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(UsersController)),
+            ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.deleteUser)),
+
+            function UsersController_deleteUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DeleteUserRequestBody"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new UsersController();
+
+              templateService.apiHandler({
+                methodName: 'deleteUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/webhook',
             ...(fetchMiddlewares<RequestHandler>(StripeWebhook)),
             ...(fetchMiddlewares<RequestHandler>(StripeWebhook.prototype.receiveWebhook)),
@@ -383,6 +471,35 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/payment/membership_prices',
+            ...(fetchMiddlewares<RequestHandler>(PaymentController)),
+            ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getMembershipPrices)),
+
+            function PaymentController_getMembershipPrices(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PaymentController();
+
+              templateService.apiHandler({
+                methodName: 'getMembershipPrices',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/payment/checkout_status',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PaymentController)),
@@ -435,6 +552,37 @@ export function RegisterRoutes(app: Router) {
 
               templateService.apiHandler({
                 methodName: 'getMembershipPayment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/bookings',
+            authenticateMiddleware([{"jwt":["member"]}]),
+            ...(fetchMiddlewares<RequestHandler>(BookingController)),
+            ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAllBookings)),
+
+            function BookingController_getAllBookings(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new BookingController();
+
+              templateService.apiHandler({
+                methodName: 'getAllBookings',
                 controller,
                 response,
                 next,
@@ -508,7 +656,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/admin/bookings/make-date-available',
+        app.post('/admin/bookings/make-dates-available',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateAvailable)),
@@ -539,6 +687,37 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/bookings/make-dates-unavailable',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateUnavailable)),
+
+            function AdminController_makeDateUnavailable(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Omit_MakeDatesAvailableRequestBody.slots_"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new AdminController();
+
+              templateService.apiHandler({
+                methodName: 'makeDateUnavailable',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 201,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/admin/users',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
@@ -546,6 +725,8 @@ export function RegisterRoutes(app: Router) {
 
             function AdminController_getAllUsers(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    cursor: {"in":"query","name":"cursor","dataType":"string"},
+                    toFetch: {"in":"query","name":"toFetch","dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

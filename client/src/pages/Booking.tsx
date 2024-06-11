@@ -1,9 +1,12 @@
-import { ProtectedCreateBookingSection } from "components/composite/BookingCreation/BookingCreation"
+import { ProtectedCreateBookingSection } from "components/composite/BookingCreation/ProtectedCreateBookingSection"
 import { Route, Routes } from "react-router-dom"
 import BookingSuccess from "./BookingSuccess"
 import { Footer } from "components/generic/Footer/Footer"
+import { useForceRefreshToken } from "hooks/useRefreshedToken"
 
 const Booking = () => {
+  useForceRefreshToken()
+
   return (
     <>
       <div

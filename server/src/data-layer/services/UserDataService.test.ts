@@ -58,13 +58,37 @@ describe("UserService integration tests", () => {
     expect(user).toEqual(undefined)
   })
 
+  it("should be able to get a doc snapshot", async () => {
+    await userService.createUserData(TEST_UID_1, userInfoMock)
+    const snapshot = await userService.getUserDocumentSnapshot(TEST_UID_1)
+    expect(snapshot.id).toEqual(TEST_UID_1)
+  })
+
   it("should get all users", async () => {
     await userService.createUserData(TEST_UID_1, userInfoMock)
     await userService.createUserData("testUser2", userInfoMock)
 
-    const users = await userService.getAllUserData()
+    const { users } = await userService.getAllUserData()
 
     expect(users.length).toEqual(2)
+  })
+
+  it("should be able to paginate through users", async () => {
+    await userService.createUserData(TEST_UID_1, userInfoMock)
+    await userService.createUserData("testUser2", userInfoMock)
+
+    const { users } = await userService.getAllUserData(1)
+
+    expect(users).toHaveLength(1)
+
+    const { users: paginatedUsers } = await userService.getAllUserData(
+      undefined,
+      await userService.getUserDocumentSnapshot(users[0].uid)
+    )
+
+    expect(paginatedUsers).toHaveLength(1)
+    // Check exclusive
+    expect(paginatedUsers[0].uid).not.toEqual(users[0].uid)
   })
 
   it("should filter users by first name", async () => {

@@ -24,7 +24,7 @@ admin.initializeApp({
 const createIdToken = async (uid: string, makeUserAdmin: boolean) => {
   try {
     if (makeUserAdmin) {
-      await admin.auth().setCustomUserClaims(uid, { admin: true })
+      await admin.auth().setCustomUserClaims(uid, { member: true, admin: true })
     } else {
       await admin.auth().setCustomUserClaims(uid, { admin: false })
     }

@@ -14,13 +14,33 @@ export default class UserDataService {
     await FirestoreCollections.users.doc(uid).set(additionalInfo)
   }
 
-  // Read
-  public async getAllUserData() {
-    const res = await FirestoreCollections.users.get()
+  /**
+   * @param [limit] how many users to fetch at once
+   * @param [startAfter] the cursor to start searching for users at
+   * @returns list of users, sorted by first name *and* the next cursor
+   */
+  public async getAllUserData(
+    limit: number = 100,
+    startAfter?: FirebaseFirestore.DocumentSnapshot<
+      UserAdditionalInfo,
+      FirebaseFirestore.DocumentData
+    >
+  ) {
+    // is ordered by id by default
+    const res = await FirestoreCollections.users
+      .orderBy("first_name")
+      .startAfter(startAfter || 0)
+      .limit(limit)
+      .get()
+
     const users = res.docs.map((user) => {
       return { ...user.data(), uid: user.id }
     })
-    return users
+    return { users, nextCursor: res.docs[res.docs.length - 1]?.id || undefined }
+  }
+
+  public async getUserDocumentSnapshot(uid: string) {
+    return await FirestoreCollections.users.doc(uid).get()
   }
 
   public async getUserData(uid: string) {

@@ -1,10 +1,12 @@
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import AdminService from "./AdminService"
 
 export function useUsersQuery() {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["allUsers"],
-    queryFn: () => AdminService.getUsers(),
-    retry: 3
+    queryFn: AdminService.getUsers,
+    retry: 1,
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage.nextCursor
   })
 }

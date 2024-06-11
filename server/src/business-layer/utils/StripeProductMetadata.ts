@@ -10,6 +10,15 @@ export enum MembershipTypeValues {
 }
 
 /**
+ * For stripe product
+ */
+export const MEMBERSHIP_PRODUCT_TYPE_KEY = "product_type"
+export enum ProductTypeValues {
+  MEMBERSHIP = "membership",
+  BOOKING = "booking"
+}
+
+/**
  * For customer objects
  */
 export const USER_FIREBASE_ID_KEY = "firebase_user_id"

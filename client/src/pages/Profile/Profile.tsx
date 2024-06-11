@@ -4,12 +4,16 @@ import { useNavigate } from "react-router-dom"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
+import { useForceRefreshToken } from "hooks/useRefreshedToken"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
   const handleOnclick = () => {
     navigate("/login")
   }
+
+  useForceRefreshToken()
+
   return (
     <div
       className="border-red space-x-4; disabled:bg-gray-3 text-red hover:bg-red
@@ -21,6 +25,21 @@ const SignOutButton = () => {
       </button>
     </div>
   )
+}
+
+const determineUserSkiSnowboardStatus = (status: {
+  Ski?: boolean | undefined
+  Snowboard?: boolean | undefined
+}) => {
+  if (status.Ski && status.Snowboard) {
+    return "Both"
+  } else if (status.Ski) {
+    return "Skiier"
+  } else if (status.Snowboard) {
+    return "Snowboarder"
+  } else {
+    return "New"
+  }
 }
 
 const Field = ({
@@ -124,7 +143,10 @@ export default function Profile() {
                   />
                   <Field
                     subtitle="Skiier/Snowboarder"
-                    description={`${currentUserData?.does_ski}`}
+                    description={determineUserSkiSnowboardStatus({
+                      Ski: currentUserData?.does_ski,
+                      Snowboard: currentUserData?.does_snowboarding
+                    })}
                   />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel title="Current bookings">

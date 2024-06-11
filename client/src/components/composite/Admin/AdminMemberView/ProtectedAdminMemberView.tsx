@@ -1,6 +1,4 @@
-import { Navigate } from "react-router-dom"
 import { useUsersQuery } from "services/Admin/AdminQueries"
-import { useAppData } from "store/Store"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
 import {
   useDemoteUserMutation,
@@ -9,38 +7,33 @@ import {
 import { TableRowOperation } from "components/generic/ReusableTable/TableUtils"
 
 const WrappedAdminMemberView = () => {
-  const [{ currentUserClaims }] = useAppData()
-
-  if (!currentUserClaims?.admin) {
-    return <Navigate to="/" />
-  }
-
   /**
    * Note that the followind queries/mutations should be scoped to only admins only,
-   * earlier return is only for UX purposes
    */
-  const { data } = useUsersQuery()
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useUsersQuery()
 
-  const transformedDataList = data?.map((data) => {
-    const transformedData: MemberColumnFormat = { uid: "" }
-    transformedData.uid = data.uid
-    transformedData.Name = `${data.first_name} ${data.last_name}`
-    // TODO: Email
-    transformedData.Email = "test@gmail.com (FAKE)"
-    // TODO: Date Joined
-    transformedData["Date Joined"] = "today (FAKE)"
-    // TODO: Membership Status
-    transformedData.Status = "Member (FAKE)"
-    return transformedData
-  })
+  // Need flatmap because of inner map
+  const transformedDataList = data?.pages.flatMap(
+    (page) =>
+      page.data?.map((data) => {
+        const transformedData: MemberColumnFormat = { uid: "" }
+        transformedData.uid = data.uid
+        transformedData.Name = `${data.first_name} ${data.last_name}`
+        transformedData.Email = data.email
+        transformedData["Date Joined"] = data.dateJoined
+        transformedData.Status = data.membership
+        return transformedData
+      }) || [] // avoid undefined values in list
+  )
 
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
 
   const getNameFromUid = (uid: string) => {
-    const matchingUser = data?.find((user) => user.uid === uid)
+    const matchingUser = transformedDataList?.find((user) => user?.uid === uid)
     if (matchingUser) {
-      return `${matchingUser.first_name} ${matchingUser.last_name}`
+      return `${matchingUser.Name}`
     }
     return "Unknown"
   }
@@ -89,7 +82,13 @@ const WrappedAdminMemberView = () => {
   ]
 
   return (
-    <AdminMemberView rowOperations={rowOperations} data={transformedDataList} />
+    <AdminMemberView
+      fetchNextPage={() => {
+        !isFetchingNextPage && hasNextPage && fetchNextPage()
+      }}
+      rowOperations={rowOperations}
+      data={transformedDataList}
+    />
   )
 }
 

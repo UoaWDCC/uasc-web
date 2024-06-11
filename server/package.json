@@ -35,10 +35,11 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "start": "concurrently \"yarn nodemon -e ts,js --exec \" \"yarn tsoa spec-and-routes && yarn workspace client generate-types\"",
+    "start": "concurrently \"yarn nodemon -e ts,js --exec \" \"yarn tsoa spec-and-routes && yarn normalise-newlines && yarn workspace client generate-types\"",
     "nodemon": "nodemon",
     "build": "tsc -p ./tsconfig.prod.json && tsc-alias",
     "serve": "node --es-module-specifier-resolution=node dist/index.js",
-    "token": "ts-node ./tooling/login-prod.ts"
+    "token": "ts-node ./tooling/login-prod.ts",
+    "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json"
   }
 }
