@@ -14,7 +14,7 @@ const NoMatch = () => {
 
       <h2>Error 404</h2>
       <h4>Sorry! Page not found</h4>
-      <div className="pt-16">
+      <div className="pt-[2.5%]">
         <Button iconSide="left" variant="progress-default" onClick={handleBack}>
           Back
         </Button>
