@@ -1124,7 +1124,7 @@ describe("Endpoints", () => {
     })
   })
 
-  describe("fetchUsersByBookingDateRange", () => {
+  describe("/bookings/fetch-users", () => {
     beforeEach(async () => {
       await createUsers()
     })
