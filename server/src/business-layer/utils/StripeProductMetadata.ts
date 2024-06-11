@@ -14,8 +14,8 @@ export enum MembershipTypeValues {
  */
 export const LODGE_BOOKING_TYPE_KEY = "lodge_booking_type"
 export enum LodgeBookingTypeValues {
-  Weekend = "weekend",
-  Weekday = "weekday"
+  SingleFridayOrSaturday = "weekend",
+  Normal = "weekday"
 }
 
 /**

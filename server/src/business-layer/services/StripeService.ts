@@ -53,6 +53,9 @@ export default class StripeService {
   /**
    * Creates a new Stripe customer if it doesn't exist and sets the Stripe customer id to the user info after creation.
    * @param user, user data extracted from JWT
+   *
+   * @returns `newUser` as true if they already have a stripe id alongside their `stripe_id`,
+   * false otherwise with the newly created `stripe_id`
    */
   public async createCustomerIfNotExist(
     user: UserRecord,

@@ -324,12 +324,18 @@ export class PaymentController extends Controller {
         error: "Something went wrong"
       }
     }
+
+    const FRIDAY = 5
+    const SATURDAY = 6
     // get requiredBookingType
     let requiredBookingType: LodgeBookingTypeValues
-    if (numberOfDays === 1 && [6, 7].includes(daysList[0].getUTCDay())) {
-      requiredBookingType = LodgeBookingTypeValues.Weekend
+    if (
+      numberOfDays === 1 &&
+      [FRIDAY, SATURDAY].includes(daysList[0].getUTCDay())
+    ) {
+      requiredBookingType = LodgeBookingTypeValues.SingleFridayOrSaturday
     } else {
-      requiredBookingType = LodgeBookingTypeValues.Weekday
+      requiredBookingType = LodgeBookingTypeValues.Normal
     }
 
     // implement pricing logic
