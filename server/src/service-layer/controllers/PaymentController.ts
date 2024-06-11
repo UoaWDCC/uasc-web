@@ -262,8 +262,8 @@ export class PaymentController extends Controller {
     }
 
     // The request start and end dates
-    if (BookingUtils.validateStartAndEndDates(startDate, endDate)) {
-      this.setStatus(401)
+    if (BookingUtils.hasInvalidStartAndEndDates(startDate, endDate)) {
+      this.setStatus(400)
       return {
         error:
           "Invalid date, booking start date and end date must be in the range of today up to a year later. "
@@ -348,19 +348,14 @@ export class PaymentController extends Controller {
       CheckoutTypeValues.BOOKING,
       30
     )
-    const currentlyInCheckoutSlotIds = openSessions.flatMap((session) => {
-      return JSON.parse(session.metadata[BOOKING_SLOTS_KEY])
-    }) as Array<string>
 
-    const slotOccurences: Record<string, number> = {}
-    currentlyInCheckoutSlotIds.map((slotId) => {
-      if (!slotOccurences[slotId]) {
-        slotOccurences[slotId] = 1
-      } else {
-        ++slotOccurences[slotId]
-      }
-      return undefined
-    })
+    const currentlyInCheckoutSlotIds = openSessions.flatMap((session) =>
+      JSON.parse(session.metadata[BOOKING_SLOTS_KEY])
+    ) as Array<string>
+
+    const slotOccurences = BookingUtils.getSlotOccurences(
+      currentlyInCheckoutSlotIds
+    )
 
     const outOfStockBecauseSessionActive = baseAvailabilities.some(
       (availability) =>
