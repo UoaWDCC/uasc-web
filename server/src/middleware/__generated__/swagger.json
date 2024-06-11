@@ -307,6 +307,40 @@
 						"$ref": "#/components/schemas/MembershipTypeValues"
 					}
 				},
+				"required": [
+					"membershipType"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingPaymentResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stripeClientSecret": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserBookingRequestingModel": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -577,7 +611,7 @@
 					},
 					"nextCursor": {
 						"type": "string",
-						"description": "Needed for firestore operations which do not support offset\nbased pagination\n\n**Will be undefined in case of last page**"
+						"description": "Needed for firestore operations which do not support offset\r\nbased pagination\r\n\r\n**Will be undefined in case of last page**"
 					},
 					"data": {
 						"items": {
@@ -1015,6 +1049,39 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserPaymentRequestModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/payment/booking": {
+			"post": {
+				"operationId": "GetBookingPayment",
+				"responses": {
+					"200": {
+						"description": "Created booking checkout session",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingPaymentResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserBookingRequestingModel"
 							}
 						}
 					}
