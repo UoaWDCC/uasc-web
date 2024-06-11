@@ -387,7 +387,7 @@ export class PaymentController extends Controller {
 
     const clientSecret = await stripeService.createCheckoutSession(
       uid,
-      `${process.env.FRONTEND_URL}/return?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0]}&endDate=${datesInBooking[totalDays - 1]}`,
+      `${process.env.FRONTEND_URL}/booking/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0]}&endDate=${datesInBooking[totalDays - 1]}`,
       [
         {
           price: default_price as string,
