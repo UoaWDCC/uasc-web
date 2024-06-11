@@ -245,21 +245,14 @@ export class PaymentController extends Controller {
   }
 
   @SuccessResponse("200", "Created booking checkout session")
-  @Security("jwt")
+  @Security("jwt", ["member"])
   @Post("booking")
   public async getBookingPayment(
     @Request() request: SelfRequestModel,
     @Body() requestBody: UserBookingRequestingModel
   ): Promise<BookingPaymentResponse> {
-    const { uid, customClaims } = request.user
+    const { uid } = request.user
     const { startDate, endDate } = requestBody
-
-    if (!customClaims || !customClaims[AuthServiceClaims.MEMBER]) {
-      this.setStatus(403)
-      return {
-        message: "Need a membership to create bookings"
-      }
-    }
 
     // The request start and end dates
     if (BookingUtils.hasInvalidStartAndEndDates(startDate, endDate)) {
