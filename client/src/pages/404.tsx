@@ -3,7 +3,7 @@
 import Wind from "assets/logos/Wind.png"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
-const InvalidPage = () => {
+const NoMatch = () => {
   const handleBack = () => {
     window.history.go(-1)
   }
@@ -23,4 +23,4 @@ const InvalidPage = () => {
   )
 }
 
-export default InvalidPage
+export default NoMatch

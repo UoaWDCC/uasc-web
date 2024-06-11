@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import InvalidPage from "./404"
-const meta: Meta<typeof InvalidPage> = {
-  component: InvalidPage
+import NoMatch from "./404"
+const meta: Meta<typeof NoMatch> = {
+  component: NoMatch
 }
 
 export default meta
