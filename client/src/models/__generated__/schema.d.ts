@@ -11,6 +11,9 @@ export interface paths {
   "/users/edit-self": {
     patch: operations["EditSelf"];
   };
+  "/users/delete-user": {
+    delete: operations["DeleteUser"];
+  };
   "/webhook": {
     post: operations["ReceiveWebhook"];
   };
@@ -25,6 +28,9 @@ export interface paths {
   };
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
+  };
+  "/bookings": {
+    get: operations["GetAllBookings"];
   };
   "/bookings/available-dates": {
     post: operations["GetAvailableDates"];
@@ -79,28 +85,6 @@ export interface components {
        */
       nanoseconds: number;
     };
-    UserAdditionalInfo: {
-      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
-      gender: string;
-      emergency_contact?: string;
-      first_name: string;
-      last_name: string;
-      dietary_requirements: string;
-      faculty?: string;
-      university?: string;
-      student_id?: string;
-      returning: boolean;
-      university_year: string;
-      /** @description For identification DO NOT RETURN to users in exposed endpoints */
-      stripe_id?: string;
-    };
-    FirebaseProperties: {
-      uid: string;
-    };
-    UserResponse: components["schemas"]["UserAdditionalInfo"] & components["schemas"]["FirebaseProperties"];
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__": {
       date_of_birth?: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -122,6 +106,13 @@ export interface components {
     "Omit_Partial_UserAdditionalInfo_.stripe_id_": components["schemas"]["Pick_Partial_UserAdditionalInfo_.Exclude_keyofPartial_UserAdditionalInfo_.stripe_id__"];
     EditSelfRequestBody: {
       updatedInformation: components["schemas"]["Omit_Partial_UserAdditionalInfo_.stripe_id_"];
+    };
+    CommonResponse: {
+      error?: string;
+      message?: string;
+    };
+    DeleteUserRequestBody: {
+      uid: string;
     };
     UserSignupResponse: {
       error?: string;
@@ -181,13 +172,19 @@ export interface components {
     UserPaymentRequestModel: {
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
+    AllUserBookingSlotsResponse: {
+      error?: string;
+      message?: string;
+      dates?: string[];
+    };
     AvailableDates: {
       /** Format: double */
       availableSpaces: number;
       /** Format: double */
       maxBookings: number;
       date: components["schemas"]["FirebaseFirestore.Timestamp"];
-      description: string;
+      description?: string;
+      id: string;
     };
     AvailableDatesResponse: {
       error?: string;
@@ -207,8 +204,63 @@ export interface components {
         }[];
     };
     MakeDatesAvailableRequestBody: {
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** Format: double */
+      slots?: number;
+    };
+    /** @description From T, pick a set of properties whose keys are in the union K */
+    "Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__": {
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
+    /** @description Construct a type with the properties of T except for those in type K. */
+    "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
+    UserAdditionalInfo: {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding: boolean;
+      does_racing: boolean;
+      does_ski: boolean;
+      gender: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning: boolean;
+      university_year: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+    };
+    /** @enum {string} */
+    UserAccountTypes: "admin" | "member" | "guest";
+    CombinedUserData: components["schemas"]["UserAdditionalInfo"] & {
+      /** @description What type of account the user has */
+      membership: components["schemas"]["UserAccountTypes"];
+      /** @description The email the user uses to log in */
+      email: string;
+      /** @description Formatted UTC date string of when the account was created */
+      dateJoined?: string;
+      /** @description Firebase identifier of the user *data* based on the firestore document */
+      uid: string;
+    };
+    AllUsersResponse: {
+      error?: string;
+      message?: string;
+      /**
+       * @description Needed for firestore operations which do not support offset
+       * based pagination
+       *
+       * **Will be undefined in case of last page**
+       */
+      nextCursor?: string;
+      data?: components["schemas"]["CombinedUserData"][];
     };
     CreateUserRequestBody: {
       uid: string;
@@ -268,7 +320,24 @@ export interface operations {
       /** @description Fetched self data */
       200: {
         content: {
-          "application/json": components["schemas"]["UserResponse"];
+          "application/json": {
+            stripe_id?: string;
+            university_year: string;
+            returning: boolean;
+            student_id?: string;
+            university?: string;
+            faculty?: string;
+            dietary_requirements: string;
+            last_name: string;
+            first_name: string;
+            emergency_contact?: string;
+            gender: string;
+            does_ski: boolean;
+            does_racing: boolean;
+            does_snowboarding: boolean;
+            date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+            uid: string;
+          };
         };
       };
     };
@@ -283,6 +352,21 @@ export interface operations {
       /** @description Successful edit */
       200: {
         content: never;
+      };
+    };
+  };
+  DeleteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteUserRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Deleted user */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
       };
     };
   };
@@ -355,6 +439,16 @@ export interface operations {
       };
     };
   };
+  GetAllBookings: {
+    responses: {
+      /** @description Found bookings */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AllUserBookingSlotsResponse"];
+        };
+      };
+    };
+  };
   GetAvailableDates: {
     requestBody: {
       content: {
@@ -389,7 +483,7 @@ export interface operations {
   MakeDateUnavailable: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["MakeDatesAvailableRequestBody"];
+        "application/json": components["schemas"]["Omit_MakeDatesAvailableRequestBody.slots_"];
       };
     };
     responses: {
@@ -403,11 +497,17 @@ export interface operations {
   };
   /** @description User Operations */
   GetAllUsers: {
+    parameters: {
+      query?: {
+        cursor?: string;
+        toFetch?: number;
+      };
+    };
     responses: {
       /** @description Users found */
       200: {
         content: {
-          "application/json": components["schemas"]["UserResponse"][];
+          "application/json": components["schemas"]["AllUsersResponse"];
         };
       };
     };

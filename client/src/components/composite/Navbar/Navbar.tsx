@@ -1,10 +1,10 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useLocation } from "react-router-dom"
 import WrappedMenuTab from "./utils/WrappedMenuTab"
 import { WrappedTab } from "./utils/WrappedTab"
 import UASCLogo from "assets/logos/UASC-LOGO-White.svg?react"
 import HamburgerIcon from "assets/icons/hamburger.svg?react"
 import LoginIndicator from "./utils/LoginIndicator"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export interface INavbarProps {
   signInHandler: () => void
@@ -58,7 +58,16 @@ const Navbar = ({
   isLoggedIn,
   isAdmin
 }: INavbarProps) => {
+  const location = useLocation()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  useEffect(() => {
+    /**
+     * "Close navbar on route change"
+     */
+    setIsOpen(false)
+  }, [location])
+
   const _signOutHandler = () => {
     signOutHandler()
     setIsOpen(false)

@@ -12,15 +12,6 @@ const TextInput = ({
   description,
   ...props
 }: TextInputProps) => {
-  const borderColor =
-    variant === "success"
-      ? "var(--Other-Green, #109D27)"
-      : variant === "error"
-        ? "var(--Other-Red, #9A141D)"
-        : "var(--Greys-100, #242424)"
-  const paddingLeft = "20px"
-  const borderWidth = variant ? "2px" : "1px"
-
   return (
     <div>
       {label && (
@@ -32,8 +23,7 @@ const TextInput = ({
         <p className="text-dark-blue-60 mb-1 text-xs">{description}</p>
       )}
       <input
-        className={`flex-shrink:0  border-gray-3 border-radius: 0.25rem h-9 w-full rounded ${variant}`}
-        style={{ borderColor, borderWidth, paddingLeft }}
+        className={`flex-shrink:0 border-radius: 0.25rem h-9 w-full rounded pl-5 ${variant} ${variant ? "border-2" : "border"} invalid:border-red focus:border-black ${variant === "success" ? "border-green" : "border-gray-3"}`}
         {...props}
       />
     </div>

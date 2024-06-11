@@ -1,5 +1,9 @@
 import AuthService from "business-layer/services/AuthService"
 import {
+  AuthServiceClaims,
+  UserAccountTypes
+} from "business-layer/utils/AuthServiceClaims"
+import {
   DEFAULT_BOOKING_MAX_SLOTS,
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
@@ -18,7 +22,7 @@ import {
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import { BookingSlotUpdateResponse } from "service-layer/response-models/BookingResponse"
-import { UserResponse } from "service-layer/response-models/UserResponse"
+import { AllUsersResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
@@ -26,6 +30,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Route,
   Security,
   SuccessResponse
@@ -42,7 +47,7 @@ export class AdminController extends Controller {
   public async makeDateAvailable(
     @Body() requestBody: MakeDatesAvailableRequestBody
   ): Promise<BookingSlotUpdateResponse> {
-    const { startDate, endDate } = requestBody
+    const { startDate, endDate, slots } = requestBody
     const bookingSlotService = new BookingSlotService()
 
     const dates = datesToDateRange(
@@ -59,17 +64,15 @@ export class AdminController extends Controller {
         if (!bookingSlotForDate) {
           const bookingSlot = await bookingSlotService.createBookingSlot({
             date: dateTimestamp,
-            max_bookings: DEFAULT_BOOKING_MAX_SLOTS
+            max_bookings: slots || DEFAULT_BOOKING_MAX_SLOTS
           })
           return { bookingSlotId: bookingSlot.id, date: dateTimestamp }
         }
 
         // Was unavailable
-        if (bookingSlotForDate.max_bookings <= EMPTY_BOOKING_SLOTS) {
-          await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
-            max_bookings: DEFAULT_BOOKING_MAX_SLOTS
-          })
-        }
+        await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
+          max_bookings: slots || DEFAULT_BOOKING_MAX_SLOTS
+        })
 
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
@@ -94,7 +97,7 @@ export class AdminController extends Controller {
   @SuccessResponse("201", "Slot made unavailable")
   @Post("/bookings/make-dates-unavailable")
   public async makeDateUnavailable(
-    @Body() requestBody: MakeDatesAvailableRequestBody
+    @Body() requestBody: Omit<MakeDatesAvailableRequestBody, "slots">
   ): Promise<BookingSlotUpdateResponse> {
     const { startDate, endDate } = requestBody
     const bookingSlotService = new BookingSlotService()
@@ -151,10 +154,74 @@ export class AdminController extends Controller {
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
   @Get("/users")
-  public async getAllUsers(): Promise<UserResponse[]> {
-    const data = await new UserDataService().getAllUserData()
-    this.setStatus(200)
-    return data
+  public async getAllUsers(
+    @Query() cursor?: string,
+    @Query() toFetch?: number
+  ): Promise<AllUsersResponse> {
+    // validation
+    if (toFetch > 100 || toFetch < 0) {
+      this.setStatus(400)
+      return { error: "Invalid fetch amount" }
+    }
+    const USERS_TO_FETCH = toFetch || 100
+    try {
+      const userDataService = new UserDataService()
+
+      let snapshot
+      if (cursor) {
+        snapshot = await userDataService.getUserDocumentSnapshot(cursor)
+      }
+
+      const { users: rawUserData, nextCursor: lastUid } =
+        await userDataService.getAllUserData(toFetch, snapshot)
+
+      const uidsToQuery = rawUserData.map((data) => {
+        return { uid: data.uid }
+      })
+
+      const userAuthData = await new AuthService().bulkRetrieveUsersByUids(
+        uidsToQuery
+      )
+
+      const combinedUserData = rawUserData.map((userInfo) => {
+        const matchingUserRecord = userAuthData.find(
+          (item) => item.uid === userInfo.uid
+        )
+
+        const { customClaims, email, metadata } = { ...matchingUserRecord } // to avoid undefined destructuring error
+
+        let membership: UserAccountTypes = UserAccountTypes.GUEST
+
+        if (customClaims) {
+          if (customClaims[AuthServiceClaims.ADMIN]) {
+            membership = UserAccountTypes.ADMIN
+          } else if (customClaims[AuthServiceClaims.MEMBER]) {
+            membership = UserAccountTypes.MEMBER
+          }
+        }
+
+        return {
+          email,
+          membership,
+          dateJoined: metadata ? metadata.creationTime : undefined,
+          ...userInfo
+        }
+      })
+
+      // If there is explicitly no more users we return an `undefined` next cursor
+      let nextCursor
+      if (combinedUserData.length === USERS_TO_FETCH) {
+        nextCursor = lastUid
+      }
+
+      this.setStatus(200)
+
+      return { data: combinedUserData, nextCursor }
+    } catch (e) {
+      console.error("Failed to fetch all users", e)
+      this.setStatus(500)
+      return { error: "Something went wrong when fetching all users" }
+    }
   }
 
   @SuccessResponse("200", "Created")
