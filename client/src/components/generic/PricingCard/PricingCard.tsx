@@ -66,13 +66,13 @@ const PricingCardHome = ({
 }: IPricingCardHome) => (
   <div
     className="border-light-blue-100 text-light-blue-100 bg-gray-1 relative flex 
-   items-center justify-center gap-3 rounded-md border px-7 py-5 md:flex-col md:items-start lg:flex-col"
+    items-center justify-center gap-3 rounded-md border px-7 py-5 md:flex-col md:items-start lg:flex-col"
   >
     <h3 className="font-bold">{title} </h3>
     <div className="md:hidden lg:hidden">
       <Divider />
     </div>
-    <div className="flex gap-2 align-top md:flex-col lg:flex-col  ">
+    <div className="flex gap-2 md:flex-col">
       <div className="">
         <h1 className="-mt-[5%] text-6xl italic">{discountedPriceString}</h1>
       </div>
@@ -80,7 +80,10 @@ const PricingCardHome = ({
       <p className="text-3xl line-through md:text-lg lg:text-lg">
         {priceString}
       </p>
-      <h5 className="text-orange md:text-md lg:text-md mr-4 text-nowrap font-bold uppercase md:mr-0 md:font-normal lg:mr-0 lg:font-normal">
+      <h5
+        className="text-orange md:text-md lg:text-md mr-4 mt-auto text-nowrap
+       font-bold uppercase md:mr-0 md:font-normal lg:mr-0 lg:font-normal"
+      >
         {extraInfo}
       </h5>
     </div>
