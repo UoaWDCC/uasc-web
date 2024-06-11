@@ -281,131 +281,141 @@ export class PaymentController extends Controller {
     // Create new Stripe checkout session
     const stripeService = new StripeService()
     const userDataService = new UserDataService()
-
-    const userData = await userDataService.getUserData(uid)
-    const { newUser, stripeCustomerId } =
-      await stripeService.createCustomerIfNotExist(
-        request.user,
-        userData,
-        userDataService
-      )
-    // If not a new Stripe customer, we want to check for pre-existing bookings
-    if (!newUser) {
-      const activeSession = await stripeService.getActiveSessionForUser(
-        stripeCustomerId,
-        CheckoutTypeValues.BOOKING
-      )
-      if (activeSession) {
-        this.setStatus(204)
-        return {
-          stripeClientSecret: activeSession.client_secret,
-          message: "Existing booking checkout session found"
-        }
-      }
-    }
-
-    const bookingSlotService = new BookingSlotService()
-    const bookingDataService = new BookingDataService()
-
-    const bookingSlots =
-      await bookingSlotService.getBookingSlotsBetweenDateRange(
-        dateToFirestoreTimeStamp(
-          new Date(new Date(startDate.seconds * 1000).toDateString())
-        ),
-        dateToFirestoreTimeStamp(
-          new Date(new Date(endDate.seconds * 1000).toDateString())
+    try {
+      const userData = await userDataService.getUserData(uid)
+      const { newUser, stripeCustomerId } =
+        await stripeService.createCustomerIfNotExist(
+          request.user,
+          userData,
+          userDataService
         )
+      // If not a new Stripe customer, we want to check for pre-existing bookings
+      if (!newUser) {
+        const activeSession = await stripeService.getActiveSessionForUser(
+          stripeCustomerId,
+          CheckoutTypeValues.BOOKING
+        )
+        if (activeSession) {
+          this.setStatus(200)
+          return {
+            stripeClientSecret: activeSession.client_secret,
+            message: "Existing booking checkout session found"
+          }
+        }
+      }
+
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      const bookingSlots =
+        await bookingSlotService.getBookingSlotsBetweenDateRange(
+          dateToFirestoreTimeStamp(
+            new Date(new Date(startDate.seconds * 1000).toDateString())
+          ),
+          dateToFirestoreTimeStamp(
+            new Date(new Date(endDate.seconds * 1000).toDateString())
+          )
+        )
+
+      if (bookingSlots.length !== totalDays) {
+        this.setStatus(409)
+        return {
+          error: "No booking slot available for one or more dates."
+        }
+      }
+
+      const baseAvailabilities =
+        await bookingDataService.getAvailabilityForUser(
+          uid,
+          datesInBooking,
+          bookingSlots
+        )
+      if (baseAvailabilities.some((slot) => !slot)) {
+        this.setStatus(409)
+        return {
+          error: "User has already booked a slot or there is no availability"
+        }
+      }
+
+      // Lets check for open sessions here:
+      const openSessions = await stripeService.getRecentActiveSessions(
+        CheckoutTypeValues.BOOKING,
+        30
       )
 
-    if (bookingSlots.length !== totalDays) {
-      this.setStatus(409)
-      return {
-        error: "No booking slot available for one or more dates."
-      }
-    }
+      const currentlyInCheckoutSlotIds = openSessions.flatMap((session) =>
+        JSON.parse(session.metadata[BOOKING_SLOTS_KEY])
+      ) as Array<string>
 
-    const baseAvailabilities = await bookingDataService.getAvailabilityForUser(
-      uid,
-      datesInBooking,
-      bookingSlots
-    )
-    if (baseAvailabilities.some((slot) => !slot)) {
-      this.setStatus(409)
-      return {
-        error: "User has already booked a slot or there is no availability"
-      }
-    }
+      const slotOccurences = BookingUtils.getSlotOccurences(
+        currentlyInCheckoutSlotIds
+      )
 
-    // Lets check for open sessions here:
-    const openSessions = await stripeService.getRecentActiveSessions(
-      CheckoutTypeValues.BOOKING,
-      30
-    )
+      const outOfStockBecauseSessionActive = baseAvailabilities.some(
+        (availability) =>
+          availability.baseAvailability - slotOccurences[availability.id] <= 0
+      )
 
-    const currentlyInCheckoutSlotIds = openSessions.flatMap((session) =>
-      JSON.parse(session.metadata[BOOKING_SLOTS_KEY])
-    ) as Array<string>
-
-    const slotOccurences = BookingUtils.getSlotOccurences(
-      currentlyInCheckoutSlotIds
-    )
-
-    const outOfStockBecauseSessionActive = baseAvailabilities.some(
-      (availability) =>
-        availability.baseAvailability - slotOccurences[availability.id] <= 0
-    )
-
-    if (outOfStockBecauseSessionActive) {
-      this.setStatus(409)
-      return {
-        error:
-          "Someone may currently have this item in cart, please try again later"
-      }
-    }
-
-    // implement pricing logic
-
-    const FRIDAY = 5
-    const SATURDAY = 6
-    // get requiredBookingType
-    let requiredBookingType: LodgePricingTypeValues
-    if (
-      totalDays === 1 &&
-      [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
-    ) {
-      requiredBookingType = LodgePricingTypeValues.SingleFridayOrSaturday
-    } else {
-      requiredBookingType = LodgePricingTypeValues.Normal
-    }
-
-    const requiredBookingProducts = await stripeService.getProductByMetadata(
-      LODGE_PRICING_TYPE_KEY,
-      requiredBookingType
-    )
-    const requiredBookingProduct = requiredBookingProducts.find(
-      (product) => product.active
-    )
-    const { default_price } = requiredBookingProduct
-
-    const clientSecret = await stripeService.createCheckoutSession(
-      uid,
-      `${process.env.FRONTEND_URL}/booking/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0]}&endDate=${datesInBooking[totalDays - 1]}`,
-      [
-        {
-          price: default_price as string,
-          quantity: totalDays
+      if (outOfStockBecauseSessionActive) {
+        this.setStatus(409)
+        return {
+          error:
+            "Someone may currently have this item in cart, please try again later"
         }
-      ],
-      {
-        [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.BOOKING,
-        [LODGE_PRICING_TYPE_KEY]: requiredBookingType,
-        [BOOKING_SLOTS_KEY]: JSON.stringify(bookingSlots.map((slot) => slot.id))
-      },
-      stripeCustomerId
-    )
-    this.setStatus(200)
-    return {
-      stripeClientSecret: clientSecret
+      }
+
+      // implement pricing logic
+
+      const FRIDAY = 5
+      const SATURDAY = 6
+      // get requiredBookingType
+      let requiredBookingType: LodgePricingTypeValues
+      if (
+        totalDays === 1 &&
+        [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
+      ) {
+        requiredBookingType = LodgePricingTypeValues.SingleFridayOrSaturday
+      } else {
+        requiredBookingType = LodgePricingTypeValues.Normal
+      }
+
+      const requiredBookingProducts = await stripeService.getProductByMetadata(
+        LODGE_PRICING_TYPE_KEY,
+        requiredBookingType
+      )
+      const requiredBookingProduct = requiredBookingProducts.find(
+        (product) => product.active
+      )
+      const { default_price } = requiredBookingProduct
+
+      const clientSecret = await stripeService.createCheckoutSession(
+        uid,
+        `${process.env.FRONTEND_URL}/booking/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0]}&endDate=${datesInBooking[totalDays - 1]}`,
+        [
+          {
+            price: default_price as string,
+            quantity: totalDays
+          }
+        ],
+        {
+          [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.BOOKING,
+          [LODGE_PRICING_TYPE_KEY]: requiredBookingType,
+          [BOOKING_SLOTS_KEY]: JSON.stringify(
+            bookingSlots.map((slot) => slot.id)
+          )
+        },
+        stripeCustomerId
+      )
+      this.setStatus(200)
+      return {
+        stripeClientSecret: clientSecret
+      }
+    } catch (e) {
+      this.setStatus(500)
+      console.error("Something went wrong when creating the booking session", e)
+      return {
+        error: "Something went wrong when creating the booking session"
+      }
     }
   }
 }
