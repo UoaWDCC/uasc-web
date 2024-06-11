@@ -20,11 +20,10 @@ export interface DeleteUserRequestBody {
   uid: string
 }
 
-// ticket 341 client select membership type
 export interface UserPaymentRequestModel {
-  membershipType: MembershipTypeValues
+  membershipType?: MembershipTypeValues
 }
-// ticket 129 - Booking checkout session
+
 export interface UserBookingRequestingModel {
   startDate: Timestamp
   endDate: Timestamp

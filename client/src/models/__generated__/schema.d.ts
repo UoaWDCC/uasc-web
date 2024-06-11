@@ -173,7 +173,7 @@ export interface components {
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
     UserPaymentRequestModel: {
-      membershipType: components["schemas"]["MembershipTypeValues"];
+      membershipType?: components["schemas"]["MembershipTypeValues"];
     };
     BookingPaymentResponse: {
       error?: string;

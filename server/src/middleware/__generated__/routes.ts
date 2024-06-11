@@ -139,7 +139,7 @@ const models: TsoaRoute.Models = {
     "UserPaymentRequestModel": {
         "dataType": "refObject",
         "properties": {
-            "membershipType": {"ref":"MembershipTypeValues","required":true},
+            "membershipType": {"ref":"MembershipTypeValues"},
         },
         "additionalProperties": false,
     },
