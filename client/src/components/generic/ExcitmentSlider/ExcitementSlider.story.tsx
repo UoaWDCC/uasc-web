@@ -4,9 +4,9 @@ import ExcitementSlider from "./ExcitementSlider"
 const meta: Meta<typeof ExcitementSlider> = {
   component: ExcitementSlider,
   argTypes: {
-    children: {
-      name: "display text"
-    }
+    // children: {
+    //   name: "display text"
+    // }
   }
 }
 
@@ -17,6 +17,6 @@ type Story = StoryObj<typeof meta>
 export const ExcitementSlider1: Story = {
   tags: ["autodocs"],
   args: {
-    children: "default text"
+    // children: "default text"
   }
 }
