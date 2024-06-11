@@ -12,10 +12,10 @@ export enum MembershipTypeValues {
 /**
  * For lodge bookings
  */
-export const LODGE_BOOKING_TYPE_KEY = "lodge_booking_type"
-export enum LodgeBookingTypeValues {
-  SingleFridayOrSaturday = "weekend",
-  Normal = "weekday"
+export const LODGE_PRICING_TYPE_KEY = "lodge_pricing_type"
+export enum LodgePricingTypeValues {
+  SingleFridayOrSaturday = "single_friday_or_saturday",
+  Normal = "normal"
 }
 
 /*

@@ -8,17 +8,13 @@ import {
 import {
   MembershipTypeValues,
   MEMBERSHIP_TYPE_KEY,
-  LODGE_BOOKING_TYPE_KEY,
-  LodgeBookingTypeValues
+  LODGE_PRICING_TYPE_KEY,
+  LodgePricingTypeValues
 } from "business-layer/utils/StripeProductMetadata"
-import {
-  datesToDateRange,
-  firestoreTimestampToDate
-} from "data-layer/adapters/DateUtils"
+import { datesToDateRange } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
-import { Timestamp } from "firebase-admin/firestore"
 import {
   UserPaymentRequestModel,
   SelfRequestModel,
@@ -41,6 +37,7 @@ import {
   SuccessResponse,
   Body
 } from "tsoa"
+import BookingUtils from "business-layer/utils/BookingUtils"
 
 @Route("payment")
 export class PaymentController extends Controller {
@@ -253,40 +250,33 @@ export class PaymentController extends Controller {
   ): Promise<BookingPaymentResponse> {
     const { uid, customClaims } = request.user
     const { startDate, endDate } = requestBody
+
     if (!customClaims || !customClaims[AuthServiceClaims.MEMBER]) {
       this.setStatus(403)
       return {
         message: "Need a membership to create bookings"
       }
     }
-    // Need to validate the booking date through a startDate and endDate range.
-    const earliestDate = new Date()
-    earliestDate.setUTCHours(0, 0, 0, 0)
-    const latestDate = new Date(earliestDate)
-    latestDate.setFullYear(earliestDate.getFullYear() + 1)
+
     // The request start and end dates
-    if (
-      endDate.seconds < startDate.seconds ||
-      startDate.seconds * 1000 < earliestDate.getTime() ||
-      endDate.seconds * 1000 > latestDate.getTime()
-    ) {
+    if (BookingUtils.validateStartAndEndDates(startDate, endDate)) {
       this.setStatus(401)
       return {
         error:
           "Invalid date, booking start date and end date must be in the range of today up to a year later. "
       }
     }
-    // Calculate number of days of booking, returns a 0 indexed number
-    function getNumberOfDays(startDate: Timestamp, endDate: Timestamp): number {
-      const MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24
-      const numberOfDays =
-        (startDate.seconds * 1000 - endDate.seconds * 1000) / MILLIS_IN_A_DAY
-      return numberOfDays + 1
-    }
-    // Calculate number of days of booking
-    const numberOfDays = getNumberOfDays(startDate, endDate)
+
+    const datesInBooking = datesToDateRange(
+      new Date(startDate.seconds * 1000),
+      new Date(endDate.seconds * 1000)
+    )
+
+    const totalDays = datesInBooking.length
+
+    const MAX_BOOKING_DAYS = 10
     // Validate number of dates to avoid kiddies from forging bookings
-    if (numberOfDays > 10) {
+    if (totalDays > MAX_BOOKING_DAYS) {
       this.setStatus(401)
       return {
         error: "Invalid date range, booking must be a maximum of 10 days. "
@@ -310,17 +300,13 @@ export class PaymentController extends Controller {
         CheckoutTypeValues.BOOKING
       )
       if (activeSession) {
+        this.setStatus(204)
         return {
           stripeClientSecret: activeSession.client_secret,
           message: "Existing booking checkout session found"
         }
       }
     }
-
-    const recentActiveSessions = await stripeService.getRecentActiveSessions(
-      CheckoutTypeValues.BOOKING,
-      30
-    )
 
     const bookingSlotService = new BookingSlotService()
     const bookingDataService = new BookingDataService()
@@ -330,94 +316,87 @@ export class PaymentController extends Controller {
         startDate,
         endDate
       )
-    // Create a date range list to validate against
-    const daysList = datesToDateRange(
-      firestoreTimestampToDate(startDate),
-      firestoreTimestampToDate(endDate)
-    )
 
-    if (bookingSlots.length !== daysList.length) {
+    if (bookingSlots.length !== totalDays) {
       this.setStatus(401)
       return {
         error: "No booking slot available for one or more dates."
       }
     }
-    // iterate through the active stripe sessions and check metadata, reduce the bookingSlots available
-    for (const session of recentActiveSessions) {
-      const bookingSlotMetadata = session.metadata.booking_slots
-      if (bookingSlotMetadata) {
-        for (const bookingSlotId of bookingSlotMetadata) {
-          const bookingSlot = bookingSlots.find(
-            (slot) => slot.id === bookingSlotId
-          )
-          if (bookingSlot) {
-            bookingSlot.max_bookings -= 1
-          }
-        }
-      }
-    }
-    try {
-      Promise.all(
-        daysList.map(async (dateToValidate: Date, index: number) => {
-          // booking slot id and max booking slots
-          const { id, max_bookings } = bookingSlots[index]
-          if (max_bookings < 1) {
-            this.setStatus(401)
-            return {
-              error: "No booking slot available for one or more dates."
-            }
-          }
-          const bookings = await bookingDataService.getBookingsBySlotId(id)
-          if (bookings.some((booking) => booking.user_id === uid)) {
-            this.setStatus(409)
-            return {
-              error: "User already has a booking for this date"
-            }
-          }
-          return dateToValidate
-        })
-      )
-    } catch (e) {
-      this.setStatus(501)
-      return {
-        error: "Something went wrong"
-      }
-    }
+
+    const baseAvailabilities = await bookingDataService.getAvailabilityForUser(
+      uid,
+      datesInBooking,
+      bookingSlots
+    )
 
     const FRIDAY = 5
     const SATURDAY = 6
     // get requiredBookingType
-    let requiredBookingType: LodgeBookingTypeValues
+    let requiredBookingType: LodgePricingTypeValues
     if (
-      numberOfDays === 1 &&
-      [FRIDAY, SATURDAY].includes(daysList[0].getUTCDay())
+      totalDays === 1 &&
+      [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
     ) {
-      requiredBookingType = LodgeBookingTypeValues.SingleFridayOrSaturday
+      requiredBookingType = LodgePricingTypeValues.SingleFridayOrSaturday
     } else {
-      requiredBookingType = LodgeBookingTypeValues.Normal
+      requiredBookingType = LodgePricingTypeValues.Normal
+    }
+
+    // Lets check for open sessions here:
+    const openSessions = await stripeService.getRecentActiveSessions(
+      CheckoutTypeValues.BOOKING,
+      30
+    )
+    const currentlyInCheckoutSlotIds = openSessions.flatMap((session) => {
+      return JSON.parse(session.metadata[BOOKING_SLOTS_KEY])
+    }) as Array<string>
+
+    const slotOccurences: Record<string, number> = {}
+    currentlyInCheckoutSlotIds.map((slotId) => {
+      if (!slotOccurences[slotId]) {
+        slotOccurences[slotId] = 1
+      } else {
+        ++slotOccurences[slotId]
+      }
+      return undefined
+    })
+
+    const outOfStockBecauseSessionActive = baseAvailabilities.some(
+      (availability) =>
+        availability.baseAvailability - slotOccurences[availability.id] <= 0
+    )
+
+    if (outOfStockBecauseSessionActive) {
+      this.setStatus(409)
+      return {
+        error:
+          "Someone may currently have this item in cart, please try again later"
+      }
     }
 
     // implement pricing logic
     const requiredBookingProducts = await stripeService.getProductByMetadata(
-      LODGE_BOOKING_TYPE_KEY,
+      LODGE_PRICING_TYPE_KEY,
       requiredBookingType
     )
     const requiredBookingProduct = requiredBookingProducts.find(
       (product) => product.active
     )
     const { default_price } = requiredBookingProduct
+
     const clientSecret = await stripeService.createCheckoutSession(
       uid,
-      `${process.env.FRONTEND_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
+      `${process.env.FRONTEND_URL}/return?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0]}&endDate=${datesInBooking[totalDays - 1]}`,
       [
         {
           price: default_price as string,
-          quantity: 1
+          quantity: totalDays
         }
       ],
       {
         [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.BOOKING,
-        [LODGE_BOOKING_TYPE_KEY]: requiredBookingType,
+        [LODGE_PRICING_TYPE_KEY]: requiredBookingType,
         [BOOKING_SLOTS_KEY]: JSON.stringify(bookingSlots.map((slot) => slot.id))
       },
       stripeCustomerId
