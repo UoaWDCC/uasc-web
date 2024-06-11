@@ -386,128 +386,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-          "UsersByDateRangeResponse": {
-            "properties": {
-              "data": {
-                "items": {
-                  "properties": {
-                    "users": {
-                      "items": {
-                        "$ref": "#/components/schemas/UserResponse"
-                      },
-                      "type": "array"
-                    },
-                    "date": {
-                      "$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-                    }
-                  },
-                  "required": [
-                    "users",
-                    "date"
-                  ],
-                  "type": "object"
-                },
-                "type": "array"
-              },
-              "error": {
-                "type": "string"
-              }
-            },
-            "type": "object",
-            "additionalProperties": false
-          },
-          "BookingsByDateRangeRequestModel": {
-            "properties": {
-              "startDate": {
-                "$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-              },
-              "endDate": {
-                "$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-              }
-            },
-            "required": [
-              "startDate",
-              "endDate"
-            ],
-            "type": "object",
-            "additionalProperties": false
-          },
-			"BookingSlotUpdateResponse": {
-				"properties": {
-					"error": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"updatedBookingSlots": {
-						"items": {
-							"properties": {
-								"bookingSlotId": {
-									"type": "string"
-								},
-								"date": {
-									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-								}
-							},
-							"required": [
-								"bookingSlotId",
-								"date"
-							],
-							"type": "object"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MakeDatesAvailableRequestBody": {
-				"properties": {
-					"startDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
-					},
-					"endDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
-					},
-					"slots": {
-						"type": "number",
-						"format": "double",
-						"maximum": 32,
-						"minimum": 0
-					}
-				},
-				"required": [
-					"startDate",
-					"endDate"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__": {
-				"properties": {
-					"startDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
-					},
-					"endDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
-					}
-				},
-				"required": [
-					"startDate",
-					"endDate"
-				],
-				"type": "object",
-				"description": "From T, pick a set of properties whose keys are in the union K"
-			},
-			"Omit_MakeDatesAvailableRequestBody.slots_": {
-				"$ref": "#/components/schemas/Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__",
-				"description": "Construct a type with the properties of T except for those in type K."
-			},
 			"UserAdditionalInfo": {
 				"properties": {
 					"date_of_birth": {
@@ -605,13 +483,135 @@
 							}
 						},
 						"required": [
-							"membership",
-							"email",
 							"uid"
 						],
 						"type": "object"
 					}
 				]
+			},
+			"UsersByDateRangeResponse": {
+				"description": "Represents the response structure for fetching users by date range.",
+				"properties": {
+					"data": {
+						"items": {
+							"properties": {
+								"users": {
+									"items": {
+										"$ref": "#/components/schemas/CombinedUserData"
+									},
+									"type": "array"
+								},
+								"date": {
+									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+								}
+							},
+							"required": [
+								"users",
+								"date"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"error": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingsByDateRangeRequestModel": {
+				"description": "Represents the structure of a request model for fetching bookings within a specific date range.",
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingSlotUpdateResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"updatedBookingSlots": {
+						"items": {
+							"properties": {
+								"bookingSlotId": {
+									"type": "string"
+								},
+								"date": {
+									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+								}
+							},
+							"required": [
+								"bookingSlotId",
+								"date"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MakeDatesAvailableRequestBody": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+					},
+					"slots": {
+						"type": "number",
+						"format": "double",
+						"maximum": 32,
+						"minimum": 0
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_MakeDatesAvailableRequestBody.slots_": {
+				"$ref": "#/components/schemas/Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__",
+				"description": "Construct a type with the properties of T except for those in type K."
 			},
 			"AllUsersResponse": {
 				"properties": {
@@ -623,7 +623,7 @@
 					},
 					"nextCursor": {
 						"type": "string",
-						"description": "Needed for firestore operations which do not support offset\nbased pagination\n\n**Will be undefined in case of last page**"
+						"description": "Needed for firestore operations which do not support offset\r\nbased pagination\r\n\r\n**Will be undefined in case of last page**"
 					},
 					"data": {
 						"items": {
@@ -1142,6 +1142,7 @@
 						}
 					}
 				},
+				"description": "This method fetches users based on a booking date range.",
 				"security": [
 					{
 						"jwt": [

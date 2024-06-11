@@ -36,6 +36,7 @@ export interface paths {
     post: operations["GetAvailableDates"];
   };
   "/bookings/fetch-users": {
+    /** @description This method fetches users based on a booking date range. */
     post: operations["FetchUsersByBookingDateRange"];
   };
   "/admin/bookings/make-dates-available": {
@@ -198,13 +199,45 @@ export interface components {
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
+    UserAdditionalInfo: {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding: boolean;
+      does_racing: boolean;
+      does_ski: boolean;
+      gender: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning: boolean;
+      university_year: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+    };
+    /** @enum {string} */
+    UserAccountTypes: "admin" | "member" | "guest";
+    CombinedUserData: components["schemas"]["UserAdditionalInfo"] & {
+      /** @description What type of account the user has */
+      membership?: components["schemas"]["UserAccountTypes"];
+      /** @description The email the user uses to log in */
+      email?: string;
+      /** @description Formatted UTC date string of when the account was created */
+      dateJoined?: string;
+      /** @description Firebase identifier of the user *data* based on the firestore document */
+      uid: string;
+    };
+    /** @description Represents the response structure for fetching users by date range. */
     UsersByDateRangeResponse: {
       data?: {
-        users: components["schemas"]["UserResponse"][];
-        date: components["schemas"]["FirebaseFirestore.Timestamp"];
-      }[];
+          users: components["schemas"]["CombinedUserData"][];
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
       error?: string;
     };
+    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
     BookingsByDateRangeRequestModel: {
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -234,36 +267,6 @@ export interface components {
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
-    UserAdditionalInfo: {
-      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
-      gender: string;
-      emergency_contact?: string;
-      first_name: string;
-      last_name: string;
-      dietary_requirements: string;
-      faculty?: string;
-      university?: string;
-      student_id?: string;
-      returning: boolean;
-      university_year: string;
-      /** @description For identification DO NOT RETURN to users in exposed endpoints */
-      stripe_id?: string;
-    };
-    /** @enum {string} */
-    UserAccountTypes: "admin" | "member" | "guest";
-    CombinedUserData: components["schemas"]["UserAdditionalInfo"] & {
-      /** @description What type of account the user has */
-      membership: components["schemas"]["UserAccountTypes"];
-      /** @description The email the user uses to log in */
-      email: string;
-      /** @description Formatted UTC date string of when the account was created */
-      dateJoined?: string;
-      /** @description Firebase identifier of the user *data* based on the firestore document */
-      uid: string;
-    };
     AllUsersResponse: {
       error?: string;
       message?: string;
@@ -478,6 +481,7 @@ export interface operations {
       };
     };
   };
+  /** @description This method fetches users based on a booking date range. */
   FetchUsersByBookingDateRange: {
     requestBody: {
       content: {

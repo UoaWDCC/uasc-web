@@ -21,7 +21,7 @@ import {
   Request
 } from "tsoa"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
-import { UserResponse } from "../response-models/UserResponse"
+import { CombinedUserData } from "../response-models/UserResponse"
 import { UsersByDateRangeResponse } from "../response-models/CommonResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
 import * as console from "console"
@@ -169,7 +169,7 @@ export class BookingController extends Controller {
         )
 
       /** The response data array */
-      const responseData: Array<{ date: Timestamp; users: UserResponse[] }> = []
+      const responseData: Array<{ date: Timestamp; users: CombinedUserData[] }> = []
 
       /** Iterating through each booking slot */
       for (const slot of bookingSlots) {

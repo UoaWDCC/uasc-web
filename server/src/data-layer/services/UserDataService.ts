@@ -114,7 +114,7 @@ export default class UserDataService {
 
     const users = userDocs
       .filter((doc) => doc.exists)
-      .map((doc) => ({ ...doc.data(), uid: doc.id }))
+      .map((doc) => ({ ...doc.data(), uid: doc.id}))
     return users
   }
 }

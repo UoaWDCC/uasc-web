@@ -1,4 +1,4 @@
-import { UserResponse } from "./UserResponse"
+import { CombinedUserData } from "./UserResponse"
 import { Timestamp } from "firebase-admin/firestore"
 
 export interface CommonResponse {
@@ -29,6 +29,6 @@ export interface CursorPaginatedResponse {
  * Represents the response structure for fetching users by date range.
  */
 export interface UsersByDateRangeResponse {
-  data?: Array<{ date: Timestamp; users: UserResponse[] }>
+  data?: Array<{ date: Timestamp; users: CombinedUserData[] }>
   error?: string
 }
