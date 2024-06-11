@@ -22,7 +22,7 @@ import {
 } from "tsoa"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 import { CombinedUserData } from "../response-models/UserResponse"
-import { UsersByDateRangeResponse } from "../response-models/CommonResponse"
+import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
 import * as console from "console"
 
@@ -196,6 +196,7 @@ export class BookingController extends Controller {
       /** Returning the response data */
       return { data: responseData }
     } catch (e) {
+      console.error('Error in getBookingsByDateRange:', e)
       this.setStatus(500)
 
       return { error: "Something went wrong" }

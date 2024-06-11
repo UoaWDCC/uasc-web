@@ -1,7 +1,6 @@
 import { userInfoMock, userInfoMock2 } from "test-config/mocks/User.mock"
 import UserDataService from "./UserDataService"
 import { cleanFirestore } from "test-config/TestUtils"
-import * as console from "console"
 
 const TEST_UID_1 = "testUser"
 

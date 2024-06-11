@@ -1173,19 +1173,10 @@ describe("Endpoints", () => {
           startDate,
           endDate
         })
-
-      // console.log(res.body.users)
-      // console.log(res.body.date)
       console.log(res.body.data[1])
 
       expect(res.status).toEqual(200)
       expect(res.body.data).toHaveLength(2)
-      // expect(res.body.data).toEqual(
-      //   expect.arrayContaining([
-      //     expect.objectContaining({ uid: MEMBER_USER_UID }),
-      //     expect.objectContaining({ uid: GUEST_USER_UID })
-      //   ])
-      // )
       expect.arrayContaining([
         expect.objectContaining({
           users: expect.arrayContaining([

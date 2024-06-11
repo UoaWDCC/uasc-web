@@ -1,6 +1,5 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
-// import * as console from "console"
 
 export default class UserDataService {
   // Create
