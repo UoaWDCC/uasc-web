@@ -231,13 +231,13 @@ describe("Endpoints", () => {
           .set("Authorization", `Bearer ${guestToken}`)
           .send({ startDate: { seconds: 0, nanoseconds: 0 } })
 
-        expect(res.status).toEqual(409)
+        expect(res.status).toEqual(401)
 
         res = await request
           .post("/payment/booking")
           .send({ seconds: 0, nanoseconds: 0 })
 
-        expect(res.status).toEqual(409)
+        expect(res.status).toEqual(401)
       })
     })
     describe("/membership", () => {
