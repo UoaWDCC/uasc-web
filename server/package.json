@@ -39,6 +39,7 @@
     "nodemon": "nodemon",
     "build": "tsc -p ./tsconfig.prod.json && tsc-alias",
     "serve": "node --es-module-specifier-resolution=node dist/index.js",
-    "token": "ts-node ./tooling/login-prod.ts"
+    "token": "ts-node ./tooling/login-prod.ts",
+    "timestamp": "ts-node ./tooling/timestamp-conversion.ts"
   }
 }

@@ -11,7 +11,10 @@ import {
   LODGE_PRICING_TYPE_KEY,
   LodgePricingTypeValues
 } from "business-layer/utils/StripeProductMetadata"
-import { datesToDateRange } from "data-layer/adapters/DateUtils"
+import {
+  dateToFirestoreTimeStamp,
+  datesToDateRange
+} from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
@@ -277,7 +280,7 @@ export class PaymentController extends Controller {
     const MAX_BOOKING_DAYS = 10
     // Validate number of dates to avoid kiddies from forging bookings
     if (totalDays > MAX_BOOKING_DAYS) {
-      this.setStatus(401)
+      this.setStatus(400)
       return {
         error: "Invalid date range, booking must be a maximum of 10 days. "
       }
@@ -313,12 +316,16 @@ export class PaymentController extends Controller {
 
     const bookingSlots =
       await bookingSlotService.getBookingSlotsBetweenDateRange(
-        startDate,
-        endDate
+        dateToFirestoreTimeStamp(
+          new Date(new Date(startDate.seconds * 1000).toDateString())
+        ),
+        dateToFirestoreTimeStamp(
+          new Date(new Date(endDate.seconds * 1000).toDateString())
+        )
       )
 
     if (bookingSlots.length !== totalDays) {
-      this.setStatus(401)
+      this.setStatus(409)
       return {
         error: "No booking slot available for one or more dates."
       }
@@ -329,18 +336,11 @@ export class PaymentController extends Controller {
       datesInBooking,
       bookingSlots
     )
-
-    const FRIDAY = 5
-    const SATURDAY = 6
-    // get requiredBookingType
-    let requiredBookingType: LodgePricingTypeValues
-    if (
-      totalDays === 1 &&
-      [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
-    ) {
-      requiredBookingType = LodgePricingTypeValues.SingleFridayOrSaturday
-    } else {
-      requiredBookingType = LodgePricingTypeValues.Normal
+    if (baseAvailabilities.some((slot) => !slot)) {
+      this.setStatus(409)
+      return {
+        error: "User has already booked a slot or there is no availability"
+      }
     }
 
     // Lets check for open sessions here:
@@ -376,6 +376,20 @@ export class PaymentController extends Controller {
     }
 
     // implement pricing logic
+
+    const FRIDAY = 5
+    const SATURDAY = 6
+    // get requiredBookingType
+    let requiredBookingType: LodgePricingTypeValues
+    if (
+      totalDays === 1 &&
+      [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
+    ) {
+      requiredBookingType = LodgePricingTypeValues.SingleFridayOrSaturday
+    } else {
+      requiredBookingType = LodgePricingTypeValues.Normal
+    }
+
     const requiredBookingProducts = await stripeService.getProductByMetadata(
       LODGE_PRICING_TYPE_KEY,
       requiredBookingType
