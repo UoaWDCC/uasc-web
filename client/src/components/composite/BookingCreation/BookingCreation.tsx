@@ -6,7 +6,8 @@ import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useState } from "react"
 
 import { BookingAvailability } from "models/Booking"
-import { MS_IN_SECOND, NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
+import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
+import { timestampToDate } from "components/utils/Utils"
 
 type DateRange = {
   startDate: Date
@@ -73,13 +74,17 @@ export const CreateBookingSection = ({
       currentDate.setUTCDate(currentDate.getUTCDate() + 1)
     }
     if (
-      dateArray.some((date) =>
-        disabledDates.some(
-          (disabledDate) =>
-            new Date(
-              disabledDate.date.seconds * MS_IN_SECOND
-            ).toDateString() === date.toDateString()
-        )
+      dateArray.some(
+        (date) =>
+          disabledDates.some(
+            (disabledDate) =>
+              timestampToDate(disabledDate.date).toDateString() ===
+              date.toDateString()
+          ) ||
+          !bookingSlots.some(
+            (slot) =>
+              timestampToDate(slot.date).toDateString() === date.toDateString()
+          )
       )
     ) {
       alert("Invalid date range, some dates are unavailable")
@@ -117,19 +122,19 @@ export const CreateBookingSection = ({
             tileDisabled={({ date }) =>
               !bookingSlots.some(
                 (slot) =>
-                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
+                  timestampToDate(slot.date).toDateString() ===
                   date.toDateString()
               ) ||
               disabledDates.some(
                 (slot) =>
-                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
+                  timestampToDate(slot.date).toDateString() ===
                   date.toDateString()
               )
             }
             tileContent={({ date }) => {
               const slot = bookingSlots.find(
                 (slot) =>
-                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
+                  timestampToDate(slot.date).toDateString() ===
                     date.toDateString() && slot.maxBookings > 0
               )
               return slot ? (
