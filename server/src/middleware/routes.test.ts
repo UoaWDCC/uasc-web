@@ -227,14 +227,14 @@ describe("Endpoints", () => {
       // rest of functionality is handled in other unit tests
       it("should only let members call the endpoint", async () => {
         let res = await request
-          .post("/payment/membership")
+          .post("/payment/booking")
           .set("Authorization", `Bearer ${guestToken}`)
           .send({ startDate: { seconds: 0, nanoseconds: 0 } })
 
         expect(res.status).toEqual(409)
 
         res = await request
-          .post("/payment/membership")
+          .post("/payment/booking")
           .send({ seconds: 0, nanoseconds: 0 })
 
         expect(res.status).toEqual(409)
