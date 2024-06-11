@@ -14,7 +14,7 @@ const InvalidPage = () => {
 
       <h2>Error 404</h2>
       <h4>Sorry! Page not found</h4>
-      <div>
+      <div className="pt-16">
         <Button iconSide="left" variant="progress-default" onClick={handleBack}>
           Back
         </Button>
