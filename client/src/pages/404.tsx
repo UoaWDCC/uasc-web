@@ -1,12 +1,18 @@
 import React from "react"
+import { useNavigate } from "react-router-dom"
 import Wind from "assets/logos/Wind.png"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
-function handleBack() {
-  // window.history.go(-1)
-}
+
 
 const InvalidPage = () => {
+  const navigate = useNavigate();
+  
+  const handleBack = () => {
+    // window.history.go(-1)
+    navigate("/")
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <img src={Wind}></img>
