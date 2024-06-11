@@ -1,3 +1,2 @@
 yarn lint-all
 yarn prettier:ci
-yarn workspace server normalise-newlines
