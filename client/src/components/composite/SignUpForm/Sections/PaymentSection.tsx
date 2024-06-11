@@ -186,7 +186,7 @@ export const PaymentInformationSection = () => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex h-fit flex-col gap-2 md:-ml-16 md:flex-row">
+        <div className="mb-2 flex h-fit flex-col gap-1">
           {prices ? (
             prices.map((price) => {
               if (existingMembershipType) {
@@ -195,7 +195,7 @@ export const PaymentInformationSection = () => {
                     {price.type === existingMembershipType && (
                       <span
                         key={price.type}
-                        className="w-full justify-self-center md:ml-16"
+                        className="w-full justify-self-center"
                       >
                         <PricingCard
                           title={price.title}
