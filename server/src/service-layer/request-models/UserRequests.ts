@@ -46,3 +46,11 @@ export interface AvailableDatesRequestModel {
   startDate?: Timestamp
   endDate?: Timestamp
 }
+
+/**
+ * Represents the structure of a request model for fetching bookings within a specific date range.
+ */
+export interface BookingsByDateRangeRequestModel {
+  startDate: Timestamp
+  endDate: Timestamp
+}
