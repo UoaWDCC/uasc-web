@@ -11,7 +11,7 @@ const NoMatch = () => {
   return (
     <div className="flex h-screen justify-center ">
       <div className="flex h-full flex-col items-center justify-center gap-4">
-        <Wind />
+        <Wind className="fill-dark-blue-100"/>
 
         <h2>Error 404</h2>
         <h4>Sorry! Page not found</h4>
