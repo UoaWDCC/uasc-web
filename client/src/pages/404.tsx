@@ -3,13 +3,13 @@ import Wind from "assets/logos/Wind.png"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
 const NoMatch = () => {
+  const navigate = useNavigate()
   const handleBack = () => {
-    window.history.go(-1)
+    navigate("/")
   }
 
   return (
     <div className="flex h-screen justify-center ">
-      {" "}
       <div className="flex h-full flex-col items-center justify-center gap-4">
         <img src={Wind}></img>
 
