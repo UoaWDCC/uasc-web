@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase-admin/firestore"
 import BookingUtils, { _earliestDate, _latestDate } from "./BookingUtils"
+import { LodgePricingTypeValues } from "./StripeProductMetadata"
 
 describe("BookingUtils", () => {
   describe("hasInvalidStartAndEndDates", () => {
@@ -51,6 +52,34 @@ describe("BookingUtils", () => {
         slot3: 1
       }
       expect(BookingUtils.getSlotOccurences(busySlotIds)).toEqual(expected)
+    })
+  })
+  describe("BookingUtils.getRequiredPricing", () => {
+    it("should return SingleFridayOrSaturday for a single Friday or Saturday", () => {
+      const friday = new Date("2024-06-14")
+      const saturday = new Date("2024-06-15")
+
+      expect(BookingUtils.getRequiredPricing([friday])).toBe(
+        LodgePricingTypeValues.SingleFridayOrSaturday
+      )
+      expect(BookingUtils.getRequiredPricing([saturday])).toBe(
+        LodgePricingTypeValues.SingleFridayOrSaturday
+      )
+    })
+
+    it("should return Normal for other cases", () => {
+      const otherDay = new Date("2024-06-16")
+      const friday = new Date("2024-06-14")
+
+      expect(BookingUtils.getRequiredPricing([otherDay])).toBe(
+        LodgePricingTypeValues.Normal
+      )
+      expect(BookingUtils.getRequiredPricing([])).toBe(
+        LodgePricingTypeValues.Normal
+      )
+      expect(BookingUtils.getRequiredPricing([friday, otherDay])).toBe(
+        LodgePricingTypeValues.Normal
+      )
     })
   })
 })

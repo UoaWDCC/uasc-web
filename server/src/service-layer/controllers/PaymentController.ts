@@ -8,8 +8,7 @@ import {
 import {
   MembershipTypeValues,
   MEMBERSHIP_TYPE_KEY,
-  LODGE_PRICING_TYPE_KEY,
-  LodgePricingTypeValues
+  LODGE_PRICING_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import {
   dateToFirestoreTimeStamp,
@@ -338,10 +337,11 @@ export class PaymentController extends Controller {
         }
       }
 
+      const MINUTES_AGO = 30
       // Lets check for open sessions here:
       const openSessions = await stripeService.getRecentActiveSessions(
         CheckoutTypeValues.BOOKING,
-        30
+        MINUTES_AGO
       )
 
       const currentlyInCheckoutSlotIds = openSessions.flatMap((session) =>
@@ -366,19 +366,8 @@ export class PaymentController extends Controller {
       }
 
       // implement pricing logic
-
-      const FRIDAY = 5
-      const SATURDAY = 6
-      // get requiredBookingType
-      let requiredBookingType: LodgePricingTypeValues
-      if (
-        totalDays === 1 &&
-        [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
-      ) {
-        requiredBookingType = LodgePricingTypeValues.SingleFridayOrSaturday
-      } else {
-        requiredBookingType = LodgePricingTypeValues.Normal
-      }
+      const requiredBookingType =
+        BookingUtils.getRequiredPricing(datesInBooking)
 
       const requiredBookingProducts = await stripeService.getProductByMetadata(
         LODGE_PRICING_TYPE_KEY,

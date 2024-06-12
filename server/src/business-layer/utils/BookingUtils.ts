@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase-admin/firestore"
+import { LodgePricingTypeValues } from "./StripeProductMetadata"
 
 // Need to validate the booking date through a startDate and endDate range.
 /**
@@ -52,6 +53,23 @@ const BookingUtils = {
       return undefined
     })
     return slotOccurences
+  },
+  getRequiredPricing: function (
+    datesInBooking: Date[]
+  ): LodgePricingTypeValues {
+    const totalDays = datesInBooking.length
+    const FRIDAY = 5
+    const SATURDAY = 6
+    // get requiredBookingType
+    if (
+      // Single day requested
+      totalDays === 1 &&
+      [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
+    ) {
+      return LodgePricingTypeValues.SingleFridayOrSaturday
+    } else {
+      return LodgePricingTypeValues.Normal
+    }
   }
 } as const
 
