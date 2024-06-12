@@ -9,15 +9,22 @@ const NoMatch = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <img src={Wind}></img>
+    <div className="flex h-screen justify-center ">
+      {" "}
+      <div className="flex h-full flex-col items-center justify-center gap-4">
+        <img src={Wind}></img>
 
-      <h2>Error 404</h2>
-      <h4>Sorry! Page not found</h4>
-      <div className="pt-12">
-        <Button iconSide="left" variant="progress-default" onClick={handleBack}>
-          Back
-        </Button>
+        <h2>Error 404</h2>
+        <h4>Sorry! Page not found</h4>
+        <div className="pt-12">
+          <Button
+            iconSide="left"
+            variant="progress-default"
+            onClick={handleBack}
+          >
+            Back
+          </Button>
+        </div>
       </div>
     </div>
   )
