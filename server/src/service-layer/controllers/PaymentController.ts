@@ -255,7 +255,15 @@ export class PaymentController extends Controller {
     const { startDate, endDate } = requestBody
 
     // The request start and end dates
-    if (BookingUtils.hasInvalidStartAndEndDates(startDate, endDate)) {
+    if (
+      BookingUtils.hasInvalidStartAndEndDates(
+        startDate,
+        endDate,
+        // Current timestamp
+        new Date(),
+        new Date()
+      )
+    ) {
       this.setStatus(400)
       return {
         error:

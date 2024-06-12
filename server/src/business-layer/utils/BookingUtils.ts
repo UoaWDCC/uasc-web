@@ -27,9 +27,19 @@ const BookingUtils = {
   hasInvalidStartAndEndDates: function (
     startDate: Timestamp,
     endDate: Timestamp,
-    earliestDate: Date = _earliestDate,
-    latestDate: Date = _latestDate
+    earliestDate?: Date,
+    latestDate?: Date
   ) {
+    if (!earliestDate) {
+      earliestDate = _earliestDate
+    }
+    if (!latestDate) {
+      latestDate = _latestDate
+    }
+
+    earliestDate.setUTCHours(0, 0, 0, 0)
+    latestDate.setFullYear(earliestDate.getFullYear() + 1)
+
     return (
       endDate.seconds < startDate.seconds ||
       startDate.seconds * 1000 < earliestDate.getTime() ||
