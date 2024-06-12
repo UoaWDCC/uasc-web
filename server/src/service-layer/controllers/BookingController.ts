@@ -25,6 +25,11 @@ import { CombinedUserData } from "../response-models/UserResponse"
 import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
 import * as console from "console"
+import AuthService from "../../business-layer/services/AuthService"
+import {
+  AuthServiceClaims,
+  UserAccountTypes
+} from "../../business-layer/utils/AuthServiceClaims"
 
 @Route("bookings")
 export class BookingController extends Controller {
@@ -160,7 +165,7 @@ export class BookingController extends Controller {
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
       const userService = new UserDataService()
-
+      const authService = new AuthService()
 
       // Query to get all booking slots within date range
       const bookingSlots =
@@ -186,10 +191,36 @@ export class BookingController extends Controller {
         /** Fetching the users based on the user IDs */
         const users = await userService.getUsersByIds(userIds)
 
+        const authUsers = await authService.bulkRetrieveUsersByUids(
+          userIds.map((uid) => ({ uid }))
+        )
+
+        const combinedUsers: CombinedUserData[] = users.map((user) => {
+          const authUser = authUsers.find((auth) => auth.uid === user.uid)
+
+          let membership: UserAccountTypes = UserAccountTypes.GUEST
+
+          const customClaims = authUser?.customClaims
+
+          if (customClaims) {
+            if (customClaims[AuthServiceClaims.ADMIN]) {
+              membership = UserAccountTypes.ADMIN
+            } else if (customClaims[AuthServiceClaims.MEMBER]) {
+              membership = UserAccountTypes.MEMBER
+            }
+          }
+
+          return {
+            ...user,
+            email: authUser?.email,
+            membership
+          } as CombinedUserData
+        })
+
         /** Adding the date and users to the response data array */
         responseData.push({
           date: slot.date,
-          users
+          users: combinedUsers
         })
       }
 
