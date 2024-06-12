@@ -1133,10 +1133,6 @@ describe("Endpoints", () => {
       await cleanFirestore()
     })
 
-    afterAll(async () => {
-      _app.close()
-    })
-
     it("should return users with bookings within the date range", async () => {
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
