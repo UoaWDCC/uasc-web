@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import Wind from "assets/icons/Wind.svg"
+import Wind from "assets/icons/Wind.svg?react"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
 const NoMatch = () => {
