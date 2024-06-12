@@ -13,7 +13,8 @@ import {
 } from "business-layer/utils/StripeProductMetadata"
 import {
   dateToFirestoreTimeStamp,
-  datesToDateRange
+  datesToDateRange,
+  firestoreTimestampToDate
 } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
@@ -264,8 +265,8 @@ export class PaymentController extends Controller {
     }
 
     const datesInBooking = datesToDateRange(
-      new Date(startDate.seconds * 1000),
-      new Date(endDate.seconds * 1000)
+      firestoreTimestampToDate(startDate),
+      firestoreTimestampToDate(endDate)
     )
 
     const totalDays = datesInBooking.length
@@ -310,10 +311,10 @@ export class PaymentController extends Controller {
       const bookingSlots =
         await bookingSlotService.getBookingSlotsBetweenDateRange(
           dateToFirestoreTimeStamp(
-            new Date(new Date(startDate.seconds * 1000).toDateString())
+            new Date(firestoreTimestampToDate(startDate).toDateString())
           ),
           dateToFirestoreTimeStamp(
-            new Date(new Date(endDate.seconds * 1000).toDateString())
+            new Date(firestoreTimestampToDate(endDate).toDateString())
           )
         )
 
@@ -390,7 +391,7 @@ export class PaymentController extends Controller {
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
-        `${process.env.FRONTEND_URL}/booking/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0]}&endDate=${datesInBooking[totalDays - 1]}`,
+        `${process.env.FRONTEND_URL}/booking/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0].toISOString().split("T")[0]}&endDate=${datesInBooking[totalDays - 1].toISOString().split("T")[0]}`,
         [
           {
             price: default_price as string,
