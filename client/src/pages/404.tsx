@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import wind from "assets/icons/Wind.svg"
+import Wind from "assets/icons/Wind.svg"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
 const NoMatch = () => {
@@ -11,7 +11,7 @@ const NoMatch = () => {
   return (
     <div className="flex h-screen justify-center ">
       <div className="flex h-full flex-col items-center justify-center gap-4">
-        <img src={Wind}></img>
+        <Wind />
 
         <h2>Error 404</h2>
         <h4>Sorry! Page not found</h4>
