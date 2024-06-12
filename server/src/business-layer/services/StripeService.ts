@@ -185,8 +185,10 @@ export default class StripeService {
         gte: createdMinutesAgo
           ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
           : undefined
-      }
+      },
+      limit: 100
     })
+
     const recentActiveSessions = data.filter(
       (session) =>
         session.metadata[CHECKOUT_TYPE_KEY] === sessionType &&
