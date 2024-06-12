@@ -221,9 +221,9 @@ export interface components {
     UserAccountTypes: "admin" | "member" | "guest";
     CombinedUserData: components["schemas"]["UserAdditionalInfo"] & {
       /** @description What type of account the user has */
-      membership?: components["schemas"]["UserAccountTypes"];
+      membership: components["schemas"]["UserAccountTypes"];
       /** @description The email the user uses to log in */
-      email?: string;
+      email: string;
       /** @description Formatted UTC date string of when the account was created */
       dateJoined?: string;
       /** @description Firebase identifier of the user *data* based on the firestore document */

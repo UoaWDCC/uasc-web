@@ -14,11 +14,11 @@ export type CombinedUserData = UserAdditionalInfo & {
   /**
    * The email the user uses to log in
    */
-  email?: string
+  email: string
   /**
    * What type of account the user has
    */
-  membership?: UserAccountTypes
+  membership: UserAccountTypes
 }
 
 export interface AllUsersResponse

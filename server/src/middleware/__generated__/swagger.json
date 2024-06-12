@@ -483,6 +483,8 @@
 							}
 						},
 						"required": [
+							"membership",
+							"email",
 							"uid"
 						],
 						"type": "object"

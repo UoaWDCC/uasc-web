@@ -1,5 +1,11 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import AuthService from "../../business-layer/services/AuthService"
+import { CombinedUserData } from "../../service-layer/response-models/UserResponse"
+import {
+  AuthServiceClaims,
+  UserAccountTypes
+} from "../../business-layer/utils/AuthServiceClaims"
 
 export default class UserDataService {
   // Create
@@ -114,6 +120,31 @@ export default class UserDataService {
     const users = userDocs
       .filter((doc) => doc.exists)
       .map((doc) => ({ ...doc.data(), uid: doc.id }))
-    return users
+
+    const authUsers = await new AuthService().bulkRetrieveUsersByUids(
+      userIds.map((uid) => ({ uid }))
+    )
+
+    return users.map((user) => {
+      const authUser = authUsers.find((auth) => auth.uid === user.uid)
+
+      let membership: UserAccountTypes = UserAccountTypes.GUEST
+
+      const customClaims = authUser.customClaims
+
+      if (customClaims) {
+        if (customClaims[AuthServiceClaims.ADMIN]) {
+          membership = UserAccountTypes.ADMIN
+        } else if (customClaims[AuthServiceClaims.MEMBER]) {
+          membership = UserAccountTypes.MEMBER
+        }
+      }
+
+      return {
+        ...user,
+        email: authUser.email,
+        membership
+      } as CombinedUserData
+    })
   }
 }
