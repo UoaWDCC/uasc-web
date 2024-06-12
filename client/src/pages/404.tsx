@@ -1,5 +1,4 @@
-// import React from "react"
-// import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Wind from "assets/logos/Wind.png"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
