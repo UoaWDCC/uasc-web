@@ -354,7 +354,8 @@ export class PaymentController extends Controller {
 
       const outOfStockBecauseSessionActive = baseAvailabilities.some(
         (availability) =>
-          availability.baseAvailability - slotOccurences[availability.id] <= 0
+          availability.baseAvailability - slotOccurences.get(availability.id) <=
+          0
       )
 
       if (outOfStockBecauseSessionActive) {

@@ -44,15 +44,22 @@ describe("BookingUtils", () => {
   })
 
   describe("getSlotOccurences", () => {
-    it("should return a map of slot occurrences", () => {
-      const busySlotIds = ["slot1", "slot2", "slot1", "slot3", "slot2", "slot2"]
-      const expected = {
-        slot1: 2,
-        slot2: 3,
-        slot3: 1
-      }
-      expect(BookingUtils.getSlotOccurences(busySlotIds)).toEqual(expected)
+    it("should return the correct slot occurrences", () => {
+      const busySlotIds = ["A", "B", "A", "C", "B", "A"]
+
+      const result = BookingUtils.getSlotOccurences(busySlotIds)
+
+      expect(result.get("A")).toBe(3)
+      expect(result.get("B")).toBe(2)
+      expect(result.get("C")).toBe(1)
     })
+
+    it("should handle an empty input array", () => {
+      const result = BookingUtils.getSlotOccurences([])
+      expect(result.size).toBe(0)
+    })
+
+    // Add more test cases as needed
   })
   describe("BookingUtils.getRequiredPricing", () => {
     it("should return SingleFridayOrSaturday for a single Friday or Saturday", () => {

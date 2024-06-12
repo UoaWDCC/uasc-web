@@ -43,14 +43,14 @@ const BookingUtils = {
    * @returns a map keyed by the slot id with the amount of occurences
    */
   getSlotOccurences: function (busySlotIds: Array<string>) {
-    const slotOccurences: Record<string, number> = {}
-    busySlotIds.map((slotId) => {
-      if (!slotOccurences[slotId]) {
-        slotOccurences[slotId] = 1
+    const slotOccurences = new Map<string, number>()
+    busySlotIds.forEach((slotId) => {
+      const currentSlots = slotOccurences.get(slotId)
+      if (!currentSlots) {
+        slotOccurences.set(slotId, 1)
       } else {
-        ++slotOccurences[slotId]
+        slotOccurences.set(slotId, currentSlots + 1)
       }
-      return undefined
     })
     return slotOccurences
   },
