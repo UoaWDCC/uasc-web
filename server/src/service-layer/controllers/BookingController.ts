@@ -1,4 +1,7 @@
-import { AvailableDatesRequestModel } from "service-layer/request-models/UserRequests"
+import {
+  AvailableDatesRequestModel,
+  BookingsByDateRangeRequestModel
+} from "service-layer/request-models/UserRequests"
 import { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
 import { Timestamp } from "firebase-admin/firestore"
 
@@ -18,6 +21,15 @@ import {
   Request
 } from "tsoa"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
+import { CombinedUserData } from "../response-models/UserResponse"
+import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
+import UserDataService from "../../data-layer/services/UserDataService"
+import * as console from "console"
+import AuthService from "../../business-layer/services/AuthService"
+import {
+  AuthServiceClaims,
+  UserAccountTypes
+} from "../../business-layer/utils/AuthServiceClaims"
 
 @Route("bookings")
 export class BookingController extends Controller {
@@ -133,6 +145,95 @@ export class BookingController extends Controller {
       return { data: responseData }
     } catch (e) {
       this.setStatus(500)
+      return { error: "Something went wrong" }
+    }
+  }
+
+  /**
+   * This method fetches users based on a booking date range.
+   */
+  @SuccessResponse("200", "Users found")
+  @Security("jwt", ["admin"])
+  @Post("fetch-users")
+  public async fetchUsersByBookingDateRange(
+    @Body() requestBody: BookingsByDateRangeRequestModel
+  ): Promise<UsersByDateRangeResponse> {
+    try {
+      const { startDate, endDate } = requestBody
+
+      /** Creating instances of the required services */
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+      const userService = new UserDataService()
+      const authService = new AuthService()
+
+      // Query to get all booking slots within date range
+      const bookingSlots =
+        await bookingSlotService.getBookingSlotsBetweenDateRange(
+          startDate,
+          endDate
+        )
+
+      /** The response data array */
+      const responseData: Array<{
+        date: Timestamp
+        users: CombinedUserData[]
+      }> = []
+
+      /** Iterating through each booking slot */
+      for (const slot of bookingSlots) {
+        /** Getting the bookings for the current slot */
+        const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
+
+        /** Extracting the user IDs from the bookings */
+        const userIds = bookings.map((booking) => booking.user_id)
+
+        /** Fetching the users based on the user IDs */
+        const users = await userService.getUsersByIds(userIds)
+
+        const authUsers = await authService.bulkRetrieveUsersByUids(
+          userIds.map((uid) => ({ uid }))
+        )
+
+        const combinedUsers: CombinedUserData[] = users.map((user) => {
+          const authUser = authUsers.find((auth) => auth.uid === user.uid)
+
+          let membership: UserAccountTypes = UserAccountTypes.GUEST
+
+          const customClaims = authUser?.customClaims
+
+          if (customClaims) {
+            if (customClaims[AuthServiceClaims.ADMIN]) {
+              membership = UserAccountTypes.ADMIN
+            } else if (customClaims[AuthServiceClaims.MEMBER]) {
+              membership = UserAccountTypes.MEMBER
+            }
+          }
+
+          return {
+            ...user,
+            email: authUser?.email,
+            membership
+          } as CombinedUserData
+        })
+
+        /** Adding the date and users to the response data array */
+        responseData.push({
+          date: slot.date,
+          users: combinedUsers
+        })
+      }
+
+      console.log(responseData)
+
+      this.setStatus(200)
+
+      /** Returning the response data */
+      return { data: responseData }
+    } catch (e) {
+      console.error("Error in getBookingsByDateRange:", e)
+      this.setStatus(500)
+
       return { error: "Something went wrong" }
     }
   }
