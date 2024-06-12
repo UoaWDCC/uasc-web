@@ -6,7 +6,8 @@ export default createTheme({
       // @ts-ignore
       grey: "#A8ADB0",
       darkGrey: "#474747",
-      white: "#fff"
+      white: "#fff",
+      orange: "#FF6D04"
     },
     primary: {
       main: "#81C7EB", // Blue color 1
