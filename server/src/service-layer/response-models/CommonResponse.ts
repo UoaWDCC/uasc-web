@@ -21,5 +21,3 @@ export interface CursorPaginatedResponse {
    */
   nextCursor?: string
 }
-
-

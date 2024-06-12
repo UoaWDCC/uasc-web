@@ -169,7 +169,10 @@ export class BookingController extends Controller {
         )
 
       /** The response data array */
-      const responseData: Array<{ date: Timestamp; users: CombinedUserData[] }> = []
+      const responseData: Array<{
+        date: Timestamp
+        users: CombinedUserData[]
+      }> = []
 
       /** Iterating through each booking slot */
       for (const slot of bookingSlots) {
@@ -196,7 +199,7 @@ export class BookingController extends Controller {
       /** Returning the response data */
       return { data: responseData }
     } catch (e) {
-      console.error('Error in getBookingsByDateRange:', e)
+      console.error("Error in getBookingsByDateRange:", e)
       this.setStatus(500)
 
       return { error: "Something went wrong" }
