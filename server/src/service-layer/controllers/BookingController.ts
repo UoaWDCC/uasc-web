@@ -161,6 +161,7 @@ export class BookingController extends Controller {
       const bookingDataService = new BookingDataService()
       const userService = new UserDataService()
 
+
       // Query to get all booking slots within date range
       const bookingSlots =
         await bookingSlotService.getBookingSlotsBetweenDateRange(

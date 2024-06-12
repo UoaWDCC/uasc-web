@@ -130,7 +130,7 @@ export default class UserDataService {
 
       let membership: UserAccountTypes = UserAccountTypes.GUEST
 
-      const customClaims = authUser.customClaims
+      const customClaims = authUser?.customClaims
 
       if (customClaims) {
         if (customClaims[AuthServiceClaims.ADMIN]) {
@@ -142,7 +142,7 @@ export default class UserDataService {
 
       return {
         ...user,
-        email: authUser.email,
+        email: authUser?.email,
         membership
       } as CombinedUserData
     })
