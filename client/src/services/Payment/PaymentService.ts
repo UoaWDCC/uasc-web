@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore"
 import { MembershipTypes } from "models/Payment"
 import fetchClient from "services/OpenApiFetchClient"
+import { UnavailableBookingError } from "services/Utils/Errors"
 
 const PaymentService = {
   getMembershipPaymentClientSecret: async function (
@@ -22,12 +23,24 @@ const PaymentService = {
     startDate?: Timestamp
     endDate?: Timestamp
   }) {
-    const { data } = await fetchClient.POST("/payment/booking", {
+    const { data, response } = await fetchClient.POST("/payment/booking", {
       body: {
         startDate: vars.startDate,
         endDate: vars.endDate
       }
     })
+
+    if (response.status === 409) {
+      throw new UnavailableBookingError(
+        "You may already have a booking associated with these dates. Please check the bookings under your profile, otherwise there may not be space left for one or more slots - try refreshing this page"
+      )
+    }
+
+    if (response.status === 423) {
+      throw new UnavailableBookingError(
+        "Someone may already be in a checkout session for these dates. Please try again later."
+      )
+    }
 
     if (!data?.stripeClientSecret) {
       throw new Error(

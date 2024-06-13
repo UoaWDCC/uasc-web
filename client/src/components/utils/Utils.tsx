@@ -24,6 +24,12 @@ export const timestampToDate = (timestamp: {
 }
 
 /**
+ * @param date a date object
+ * @returns a date string in the nz format `dd-mm-yyyy`
+ */
+export const formattedNzDate = (date: Date) => date.toLocaleDateString("en-NZ")
+
+/**
  * This Hook can be used for detecting clicks outside the Opened Menu
  * https://stackoverflow.com/a/63359693
  *

@@ -331,7 +331,7 @@ export class PaymentController extends Controller {
         )
 
       if (bookingSlots.length !== totalDays) {
-        this.setStatus(409)
+        this.setStatus(423) // Resource busy
         return {
           error: "No booking slot available for one or more dates."
         }

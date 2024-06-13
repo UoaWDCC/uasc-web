@@ -9,6 +9,7 @@ interface IBookingContext {
   getExistingSession?: () => void
   message?: string
   isPending?: boolean
+  errorMessage?: string
 }
 
 export const BookingContext = createContext<IBookingContext>({})
@@ -22,7 +23,8 @@ export const BookingContextProvider = ({
   const {
     data: bookingPaymentData,
     mutateAsync,
-    isPending
+    isPending,
+    error
   } = useBookingPaymentClientSecretMutation()
 
   const getExistingSession = async () => {
@@ -58,7 +60,9 @@ export const BookingContextProvider = ({
         message: bookingPaymentData?.message,
         handleBookingCreation,
         getExistingSession,
-        isPending
+        isPending,
+        errorMessage:
+          error?.name === "UnavailableBookingError" ? error?.message : undefined
       }}
     >
       {children}

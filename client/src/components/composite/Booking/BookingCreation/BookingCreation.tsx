@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
-import { timestampToDate } from "components/utils/Utils"
+import { formattedNzDate, timestampToDate } from "components/utils/Utils"
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
 
@@ -130,7 +130,7 @@ export const CreateBookingSection = ({
   const CreateBookingButton = useMemo(() => {
     return (
       <Button
-        disabled={isPending || hasExistingSession}
+        disabled={isPending}
         variant="default"
         onClick={() => {
           if (!isValidForCreation) {
@@ -139,7 +139,9 @@ export const CreateBookingSection = ({
           }
           if (
             checkValidRange(currentStartDate, currentEndDate) &&
-            confirm("Are you sure you want to book these dates?")
+            confirm(
+              `Are you sure you want to book the dates ${formattedNzDate(currentStartDate)} to ${formattedNzDate(currentEndDate)}?`
+            )
           )
             handleBookingCreation?.(
               Timestamp.fromDate(currentStartDate),
@@ -147,10 +149,10 @@ export const CreateBookingSection = ({
             )
         }}
       >
-        "Proceed to Payment"
+        Proceed to Payment
       </Button>
     )
-  }, [currentStartDate, currentEndDate, hasExistingSession])
+  }, [currentStartDate, currentEndDate, isValidForCreation])
 
   return (
     <>
