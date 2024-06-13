@@ -129,17 +129,20 @@ const AdminAvailabilityView = ({
                   ]
                 : undefined
             }
-            tileContent={({ date }) =>
-              // Find slots that are "available"
-              slots.some(
+            tileContent={({ date }) => {
+              const slot = slots.find(
+                // Find slots that are "available"
                 (slot) =>
                   new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
                     date.toDateString() && slot.maxBookings > 0
-              ) ? (
+              )
+              return slot ? (
                 // Apply style if it is
-                <p>{slotQty}</p>
+                <p className="">
+                  {slot.availableSpaces}/{slot.maxBookings}
+                </p>
               ) : null
-            }
+            }}
             onChange={(value) => {
               /**
                * Format: [`startDate`, `endDate`]
