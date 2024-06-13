@@ -223,6 +223,23 @@ describe("Endpoints", () => {
     afterEach(async () => {
       await cleanFirestore()
     })
+    describe("/booking", () => {
+      // rest of functionality is handled in other unit tests
+      it("should only let members call the endpoint", async () => {
+        let res = await request
+          .post("/payment/booking")
+          .set("Authorization", `Bearer ${guestToken}`)
+          .send({ startDate: { seconds: 0, nanoseconds: 0 } })
+
+        expect(res.status).toEqual(401)
+
+        res = await request
+          .post("/payment/booking")
+          .send({ seconds: 0, nanoseconds: 0 })
+
+        expect(res.status).toEqual(401)
+      })
+    })
     describe("/membership", () => {
       it("should not let members to try create sessions", async () => {
         const res = await request

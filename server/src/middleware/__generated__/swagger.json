@@ -310,6 +310,37 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"BookingPaymentResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stripeClientSecret": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserBookingRequestingModel": {
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AllUserBookingSlotsResponse": {
 				"properties": {
 					"error": {
@@ -1063,6 +1094,41 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserPaymentRequestModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/payment/booking": {
+			"post": {
+				"operationId": "GetBookingPayment",
+				"responses": {
+					"200": {
+						"description": "Created booking checkout session",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingPaymentResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"member"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserBookingRequestingModel"
 							}
 						}
 					}

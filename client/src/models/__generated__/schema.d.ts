@@ -29,6 +29,9 @@ export interface paths {
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
+  "/payment/booking": {
+    post: operations["GetBookingPayment"];
+  };
   "/bookings": {
     get: operations["GetAllBookings"];
   };
@@ -175,6 +178,15 @@ export interface components {
     };
     UserPaymentRequestModel: {
       membershipType?: components["schemas"]["MembershipTypeValues"];
+    };
+    BookingPaymentResponse: {
+      error?: string;
+      message?: string;
+      stripeClientSecret?: string;
+    };
+    UserBookingRequestingModel: {
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -452,6 +464,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["MembershipPaymentResponse"];
+        };
+      };
+    };
+  };
+  GetBookingPayment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserBookingRequestingModel"];
+      };
+    };
+    responses: {
+      /** @description Created booking checkout session */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BookingPaymentResponse"];
         };
       };
     };
