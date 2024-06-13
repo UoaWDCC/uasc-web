@@ -1,4 +1,4 @@
-import { ProtectedCreateBookingSection } from "components/composite/BookingCreation/ProtectedCreateBookingSection"
+import { ProtectedCreateBookingSection } from "components/composite/Booking/BookingCreation/ProtectedCreateBookingSection"
 import { Route, Routes } from "react-router-dom"
 import BookingSuccess from "./BookingSuccess"
 import { Footer } from "components/generic/Footer/Footer"
@@ -19,6 +19,7 @@ const Booking = () => {
           </h2>
           <span className="w-full">
             <Routes>
+              <Route index element={<ProtectedCreateBookingSection />} />
               <Route index element={<ProtectedCreateBookingSection />} />
               <Route path="success" element={<BookingSuccess />} />
             </Routes>

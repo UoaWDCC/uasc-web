@@ -1,5 +1,5 @@
 import Calendar from "components/generic/Calendar/Calendar"
-import BookingInfoComponent from "../Booking/BookingInfoComponent/BookingInfoComponent"
+import BookingInfoComponent from "../BookingInfoComponent/BookingInfoComponent"
 import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
