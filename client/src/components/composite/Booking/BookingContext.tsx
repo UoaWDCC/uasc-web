@@ -1,10 +1,13 @@
 import { Timestamp } from "firebase/firestore"
 import { createContext } from "react"
+import { useNavigate } from "react-router-dom"
 import { useBookingPaymentClientSecretMutation } from "services/Payment/PaymentMutations"
 
 interface IBookingContext {
   handleBookingCreation?: (startDate: Timestamp, endDate: Timestamp) => void
   clientSecret?: string
+  getExistingSession?: () => void
+  message?: string
 }
 
 export const BookingContext = createContext<IBookingContext>({})
@@ -14,21 +17,43 @@ export const BookingContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
+  const navigate = useNavigate()
   const { data: bookingPaymentData, mutateAsync } =
     useBookingPaymentClientSecretMutation()
+
+  const getExistingSession = async () => {
+    if (bookingPaymentData?.stripeClientSecret) navigate("/bookings/payment")
+    await mutateAsync(
+      {},
+      {
+        onSuccess() {
+          navigate("/bookings/payment")
+        }
+      }
+    )
+  }
 
   const handleBookingCreation = async (
     startDate: Timestamp,
     endDate: Timestamp
   ) => {
-    await mutateAsync({ startDate, endDate })
+    await mutateAsync(
+      { startDate, endDate },
+      {
+        onSuccess() {
+          navigate("/bookings/payment")
+        }
+      }
+    )
   }
 
   return (
     <BookingContext.Provider
       value={{
         clientSecret: bookingPaymentData?.stripeClientSecret,
-        handleBookingCreation
+        message: bookingPaymentData?.message,
+        handleBookingCreation,
+        getExistingSession
       }}
     >
       {children}

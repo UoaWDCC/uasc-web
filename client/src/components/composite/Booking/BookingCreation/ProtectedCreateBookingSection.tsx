@@ -12,12 +12,13 @@ export const ProtectedCreateBookingSection = () => {
     return <SignUpNotif signedIn={!!currentUser} />
   }
 
-  const { handleBookingCreation } = useContext(BookingContext)
+  const { handleBookingCreation, clientSecret } = useContext(BookingContext)
 
   return (
     <CreateBookingSection
       bookingSlots={data}
       handleBookingCreation={handleBookingCreation}
+      hasExistingSession={!!clientSecret}
     />
   )
 }

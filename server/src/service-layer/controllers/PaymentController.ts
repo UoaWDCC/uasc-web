@@ -271,10 +271,16 @@ export class PaymentController extends Controller {
         CheckoutTypeValues.BOOKING
       )
       if (activeSession) {
+        const THIRTY_MINUTES_MS = 1800000
+
+        const sessionStartTime = new Date(
+          activeSession.created * 1000 + THIRTY_MINUTES_MS
+        ).toLocaleTimeString("en-NZ")
+
         this.setStatus(200)
         return {
           stripeClientSecret: activeSession.client_secret,
-          message: "Existing booking checkout session found"
+          message: `Existing booking checkout session found, you may start a new one after ${sessionStartTime} (NZST)`
         }
       }
     }

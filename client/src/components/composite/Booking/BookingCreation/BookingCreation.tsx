@@ -42,11 +42,13 @@ export const handleDateRangeInputChange = (
 interface ICreateBookingSection {
   bookingSlots?: BookingAvailability[]
   handleBookingCreation?: (startDate: Timestamp, endDate: Timestamp) => void
+  hasExistingSession?: boolean
 }
 
 export const CreateBookingSection = ({
   bookingSlots = [],
-  handleBookingCreation
+  handleBookingCreation,
+  hasExistingSession
 }: ICreateBookingSection) => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
@@ -201,7 +203,9 @@ export const CreateBookingSection = ({
                 )
             }}
           >
-            Proceed to Payment
+            {hasExistingSession
+              ? "Continue Existing Session"
+              : "Proceed to Payment"}
           </Button>
         </div>
       </div>

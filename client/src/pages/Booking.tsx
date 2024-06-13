@@ -1,20 +1,21 @@
 import { ProtectedCreateBookingSection } from "components/composite/Booking/BookingCreation/ProtectedCreateBookingSection"
-import { Route, Routes, useNavigate } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 import BookingSuccess from "./BookingSuccess"
 import { Footer } from "components/generic/Footer/Footer"
-import { useForceRefreshToken } from "hooks/useRefreshedToken"
 import BookingPayment from "components/composite/Booking/BookingPayment/BookingPayment"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { BookingContext } from "components/composite/Booking/BookingContext"
+import { useAppData } from "store/Store"
 
 const Booking = () => {
-  useForceRefreshToken()
-  const navigate = useNavigate()
-  const { clientSecret } = useContext(BookingContext)
+  const { clientSecret, getExistingSession } = useContext(BookingContext)
+  const [{ currentUser }] = useAppData()
 
-  if (clientSecret) {
-    navigate("/bookings/payment")
-  }
+  useEffect(() => {
+    if (currentUser) {
+      getExistingSession?.()
+    }
+  }, [currentUser])
 
   return (
     <>
