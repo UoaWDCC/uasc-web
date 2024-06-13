@@ -11,9 +11,9 @@ import {
   LODGE_PRICING_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import {
-  dateToFirestoreTimeStamp,
   datesToDateRange,
-  firestoreTimestampToDate
+  firestoreTimestampToDate,
+  normaliseFirestoreTimeStamp
 } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
@@ -317,12 +317,8 @@ export class PaymentController extends Controller {
 
       const bookingSlots =
         await bookingSlotService.getBookingSlotsBetweenDateRange(
-          dateToFirestoreTimeStamp(
-            new Date(firestoreTimestampToDate(startDate).toDateString())
-          ),
-          dateToFirestoreTimeStamp(
-            new Date(firestoreTimestampToDate(endDate).toDateString())
-          )
+          normaliseFirestoreTimeStamp(startDate),
+          normaliseFirestoreTimeStamp(endDate)
         )
 
       if (bookingSlots.length !== totalDays) {
