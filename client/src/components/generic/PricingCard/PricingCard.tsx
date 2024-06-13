@@ -72,20 +72,20 @@ const PricingCardHome = ({
     <div className="md:hidden lg:hidden">
       <Divider />
     </div>
-    <div className="flex gap-2 md:flex-col">
-      <div className="">
-        <h1 className="-mt-[5%] text-6xl italic">{discountedPriceString}</h1>
-      </div>
+    <div className="flex gap-2 py-2 md:flex-col">
+      <h1 className="-mt-[5%] text-6xl italic">{discountedPriceString}</h1>
 
-      <p className="text-3xl line-through md:text-lg lg:text-lg">
-        {priceString}
-      </p>
-      <h5
-        className="text-orange md:text-md lg:text-md mr-4 mt-auto text-nowrap
+      <div>
+        <p className="text-3xl line-through md:text-lg lg:text-lg">
+          {priceString}
+        </p>
+        <h5
+          className="text-orange md:text-md lg:text-md mr-4 mt-auto text-nowrap
        font-bold uppercase md:mr-0 md:font-normal lg:mr-0 lg:font-normal"
-      >
-        {extraInfo}
-      </h5>
+        >
+          {extraInfo}
+        </h5>
+      </div>
     </div>
   </div>
 )
