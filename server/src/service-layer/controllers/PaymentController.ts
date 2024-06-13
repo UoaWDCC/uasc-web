@@ -393,9 +393,14 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
+      const BOOKING_START_DATE = datesInBooking[0].toISOString().split("T")[0]
+      const BOOKING_END_DATE = datesInBooking[totalDays - 1]
+        .toISOString()
+        .split("T")[0]
+
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
-        `${process.env.FRONTEND_URL}/bookings/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0].toISOString().split("T")[0]}&endDate=${datesInBooking[totalDays - 1].toISOString().split("T")[0]}`,
+        `${process.env.FRONTEND_URL}/bookings/success?session_id={CHECKOUT_SESSION_ID}&startDate=${BOOKING_START_DATE}&endDate=${BOOKING_END_DATE}`,
         [
           {
             price: default_price as string,
