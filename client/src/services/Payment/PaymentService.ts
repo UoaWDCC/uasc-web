@@ -32,7 +32,7 @@ const PaymentService = {
 
     if (response.status === 409) {
       throw new UnavailableBookingError(
-        "You may already have a booking associated with these dates. Please check the bookings under your profile, otherwise there may not be space left for one or more slots - try refreshing this page"
+        "You may already have a booking associated with these dates. Please check the bookings under your profile, otherwise there may not be space left for one or more slots - try refreshing this page if you do not have any bookings for these dates."
       )
     }
 
