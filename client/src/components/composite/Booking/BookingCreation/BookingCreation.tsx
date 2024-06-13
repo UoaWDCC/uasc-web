@@ -3,7 +3,7 @@ import BookingInfoComponent from "../BookingInfoComponent/BookingInfoComponent"
 import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
@@ -59,7 +59,7 @@ interface ICreateBookingSection {
   /**
    * Callback when dates are changed and valid
    */
-  handleBookingCreation?: (startDate: Timestamp, endDate: Timestamp) => void
+  handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
 
   /**
    * If the user should be notified that they have to continue their existing session
@@ -126,6 +126,31 @@ export const CreateBookingSection = ({
     }
     return true
   }
+
+  const CreateBookingButton = useMemo(() => {
+    return (
+      <Button
+        disabled={isPending || hasExistingSession}
+        variant="default"
+        onClick={() => {
+          if (!isValidForCreation) {
+            alert("Please check all the required acknowledgements")
+            return
+          }
+          if (
+            checkValidRange(currentStartDate, currentEndDate) &&
+            confirm("Are you sure you want to book these dates?")
+          )
+            handleBookingCreation?.(
+              Timestamp.fromDate(currentStartDate),
+              Timestamp.fromDate(currentEndDate)
+            )
+        }}
+      >
+        "Proceed to Payment"
+      </Button>
+    )
+  }, [currentStartDate, currentEndDate, hasExistingSession])
 
   return (
     <>
@@ -230,28 +255,13 @@ export const CreateBookingSection = ({
             }}
           />
 
-          <Button
-            disabled={isPending}
-            variant="default"
-            onClick={() => {
-              if (!isValidForCreation) {
-                alert("Please check all the required acknowledgements")
-                return
-              }
-              if (
-                checkValidRange(currentStartDate, currentEndDate) &&
-                confirm("Are you sure you want to book these dates?")
-              )
-                handleBookingCreation?.(
-                  Timestamp.fromDate(currentStartDate),
-                  Timestamp.fromDate(currentEndDate)
-                )
-            }}
-          >
-            {hasExistingSession
-              ? "Continue Existing Session"
-              : "Proceed to Payment"}
-          </Button>
+          {hasExistingSession ? (
+            <Button onClick={() => handleBookingCreation?.()}>
+              Continue Existing Session
+            </Button>
+          ) : (
+            CreateBookingButton
+          )}
         </div>
       </div>
     </>

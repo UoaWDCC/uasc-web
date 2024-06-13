@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useBookingPaymentClientSecretMutation } from "services/Payment/PaymentMutations"
 
 interface IBookingContext {
-  handleBookingCreation?: (startDate: Timestamp, endDate: Timestamp) => void
+  handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
   clientSecret?: string
   getExistingSession?: () => void
   message?: string
