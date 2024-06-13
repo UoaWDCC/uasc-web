@@ -7,6 +7,7 @@ import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import { DEFAULT_BOOKING_AVAILABILITY, MS_IN_SECOND } from "utils/Constants"
+import { timestampToDate } from "components/utils/Utils"
 
 /**
  * Reasonable amount of items to display on table
@@ -133,7 +134,7 @@ const AdminAvailabilityView = ({
               const slot = slots.find(
                 // Find slots that are "available"
                 (slot) =>
-                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
+                  timestampToDate(slot.date).toDateString() ===
                     date.toDateString() && slot.maxBookings > 0
               )
               return slot ? (
