@@ -349,7 +349,8 @@ export class PaymentController extends Controller {
       // Lets check for open sessions here:
       const openSessions = await stripeService.getRecentActiveSessions(
         CheckoutTypeValues.BOOKING,
-        MINUTES_AGO
+        MINUTES_AGO,
+        true
       )
 
       const currentlyInCheckoutSlotIds = openSessions.flatMap((session) =>

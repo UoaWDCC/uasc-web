@@ -173,14 +173,16 @@ export default class StripeService {
    * I.e to reduce available slots due to pending payments
    * @param sessionType defined as the enum CheckoutTypeValues, only exists for `membership` and `booking` right now
    * @param createdMinutesAgo how long ago to check for checkout sessions
+   * @param shouldPaginate keep fetching active sessions until none left (do not specify if not needed)
    *
    * Will return undefined if no sessions found
    */
   public async getRecentActiveSessions(
     sessionType: CheckoutTypeValues,
-    createdMinutesAgo?: number
+    createdMinutesAgo?: number,
+    shouldPaginate: boolean = false
   ): Promise<Stripe.Checkout.Session[]> {
-    const { data } = await stripe.checkout.sessions.list({
+    let { data, has_more } = await stripe.checkout.sessions.list({
       created: {
         gte: createdMinutesAgo
           ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
@@ -188,6 +190,23 @@ export default class StripeService {
       },
       limit: 100
     })
+
+    if (shouldPaginate && has_more) {
+      while (has_more) {
+        const response = await stripe.checkout.sessions.list({
+          created: {
+            gte: createdMinutesAgo
+              ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
+              : undefined
+          },
+          starting_after: data[data.length - 1].id,
+          limit: 100
+        })
+
+        data = [...data, ...response.data]
+        has_more = response.has_more
+      }
+    }
 
     const recentActiveSessions = data.filter(
       (session) =>
