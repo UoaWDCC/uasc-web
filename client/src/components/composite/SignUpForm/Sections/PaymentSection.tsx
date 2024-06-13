@@ -186,7 +186,7 @@ export const PaymentInformationSection = () => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex h-fit flex-col gap-2 md:-ml-16 md:flex-row">
+        <div className="flex h-fit flex-col gap-1">
           {prices ? (
             prices.map((price) => {
               if (existingMembershipType) {
@@ -195,7 +195,7 @@ export const PaymentInformationSection = () => {
                     {price.type === existingMembershipType && (
                       <span
                         key={price.type}
-                        className="w-full justify-self-center md:ml-16"
+                        className="w-full justify-self-center"
                       >
                         <PricingCard
                           title={price.title}
@@ -230,18 +230,20 @@ export const PaymentInformationSection = () => {
             </>
           )}
         </div>
-        {existingMembershipType ? (
-          <h5>
-            We are using the previously started membership type. You will get
-            the chance to reselect 30 mins after you first started the checkout
-            session
-          </h5>
-        ) : (
-          <h5 className="font-bold uppercase">
-            Please confirm your membership type before hitting Next, you will
-            only be able to select a new one after 30 minutes
-          </h5>
-        )}
+        <span className="my-3">
+          {existingMembershipType ? (
+            <h5>
+              We are using the previously started membership type. You will get
+              the chance to reselect 30 mins after you first started the
+              checkout session
+            </h5>
+          ) : (
+            <h5 className="font-bold uppercase">
+              Please confirm your membership type before hitting Next, you will
+              only be able to select a new one after 30 minutes
+            </h5>
+          )}
+        </span>
       </div>
     </>
   )
