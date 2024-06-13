@@ -3,19 +3,14 @@ import { Route, Routes } from "react-router-dom"
 import BookingSuccess from "./BookingSuccess"
 import { Footer } from "components/generic/Footer/Footer"
 import BookingPayment from "components/composite/Booking/BookingPayment/BookingPayment"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { BookingContext } from "components/composite/Booking/BookingContext"
-import { useAppData } from "store/Store"
+import { useUserLoggedInCallback } from "hooks/useUserLoggedInCallback"
 
 const Booking = () => {
   const { clientSecret, getExistingSession } = useContext(BookingContext)
-  const [{ currentUser }] = useAppData()
 
-  useEffect(() => {
-    if (currentUser) {
-      getExistingSession?.()
-    }
-  }, [currentUser])
+  useUserLoggedInCallback(() => getExistingSession?.())
 
   return (
     <>
