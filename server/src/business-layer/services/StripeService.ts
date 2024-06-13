@@ -4,6 +4,9 @@ import {
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
+import { UserAdditionalInfo } from "data-layer/models/firebase"
+import UserDataService from "data-layer/services/UserDataService"
+import { UserRecord } from "firebase-admin/auth"
 import Stripe from "stripe"
 import AuthService from "./AuthService"
 import BookingDataService from "data-layer/services/BookingDataService"
@@ -47,6 +50,38 @@ export default class StripeService {
       query: `metadata['${key}']:'${value}'`
     })
     return result.data
+  }
+
+  /**
+   * Creates a new Stripe customer if it doesn't exist and sets the Stripe customer id to the user info after creation.
+   * @param user, user data extracted from JWT
+   *
+   * @returns `newUser` as true if they already have a stripe id alongside their `stripe_id`,
+   * false otherwise with the newly created `stripe_id`
+   */
+  public async createCustomerIfNotExist(
+    user: UserRecord,
+    userData: UserAdditionalInfo,
+    userDataService: UserDataService
+  ) {
+    if (userData.stripe_id) {
+      // pre-existing user
+      return {
+        newUser: false,
+        stripeCustomerId: userData.stripe_id
+      }
+    } else {
+      // need to create a new user
+      const { first_name, last_name } = userData
+      const { uid, email } = user
+      const displayName = `${first_name} ${last_name} ${email}`
+      const { id } = await this.createNewUser(displayName, email, uid)
+      await userDataService.editUserData(uid, { stripe_id: id })
+      return {
+        newUser: true,
+        stripeCustomerId: id
+      }
+    }
   }
 
   /**
@@ -131,6 +166,54 @@ export default class StripeService {
     )
     // Might be undefined
     return currentlyActiveSession
+  }
+
+  /**
+   * Used to return recent active payment sessions in the case of one session only payments (i.e memberships or bookings)
+   * I.e to reduce available slots due to pending payments
+   * @param sessionType defined as the enum CheckoutTypeValues, only exists for `membership` and `booking` right now
+   * @param createdMinutesAgo how long ago to check for checkout sessions
+   * @param shouldPaginate keep fetching active sessions until none left (do not specify if not needed)
+   *
+   * Will return undefined if no sessions found
+   */
+  public async getRecentActiveSessions(
+    sessionType: CheckoutTypeValues,
+    createdMinutesAgo?: number,
+    shouldPaginate: boolean = false
+  ): Promise<Stripe.Checkout.Session[]> {
+    let { data, has_more } = await stripe.checkout.sessions.list({
+      created: {
+        gte: createdMinutesAgo
+          ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
+          : undefined
+      },
+      limit: 100
+    })
+
+    if (shouldPaginate && has_more) {
+      while (has_more) {
+        const response = await stripe.checkout.sessions.list({
+          created: {
+            gte: createdMinutesAgo
+              ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
+              : undefined
+          },
+          starting_after: data[data.length - 1].id,
+          limit: 100
+        })
+
+        data = [...data, ...response.data]
+        has_more = response.has_more
+      }
+    }
+
+    const recentActiveSessions = data.filter(
+      (session) =>
+        session.metadata[CHECKOUT_TYPE_KEY] === sessionType &&
+        session.status === "open"
+    )
+    return recentActiveSessions
   }
 
   public async createProduct(

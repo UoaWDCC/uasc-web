@@ -20,9 +20,13 @@ export interface DeleteUserRequestBody {
   uid: string
 }
 
-// ticket 341 client select membership type
 export interface UserPaymentRequestModel {
   membershipType?: MembershipTypeValues
+}
+
+export interface UserBookingRequestingModel {
+  startDate: Timestamp
+  endDate: Timestamp
 }
 
 export interface EditSelfRequestModel {
@@ -45,4 +49,12 @@ export interface DemoteUserRequestBody {
 export interface AvailableDatesRequestModel {
   startDate?: Timestamp
   endDate?: Timestamp
+}
+
+/**
+ * Represents the structure of a request model for fetching bookings within a specific date range.
+ */
+export interface BookingsByDateRangeRequestModel {
+  startDate: Timestamp
+  endDate: Timestamp
 }

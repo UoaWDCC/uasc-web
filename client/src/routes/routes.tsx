@@ -8,6 +8,7 @@ import Login from "pages/Login/Login"
 import Profile from "pages/Profile/Profile"
 import Register from "pages/Register/Register"
 import { Route, Routes } from "react-router-dom"
+import NoMatch from "pages/404"
 
 export const AllRoutes = () => (
   <Routes>
@@ -21,6 +22,7 @@ export const AllRoutes = () => (
       <Route path="bookings/*" element={<Booking />} />
       <Route path="profile" element={<Profile />} />
       <Route path="admin/*" element={<Admin />} />
+      <Route path="*" element={<NoMatch />} />
     </Route>
   </Routes>
 )

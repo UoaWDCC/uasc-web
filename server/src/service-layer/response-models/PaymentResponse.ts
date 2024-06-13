@@ -15,6 +15,10 @@ export interface MembershipPaymentResponse extends CommonResponse {
   membershipType?: MembershipTypeValues
 }
 
+export interface BookingPaymentResponse extends CommonResponse {
+  stripeClientSecret?: string
+}
+
 // Make a data shape matching to the expected response from Stripe API
 export interface MembershipStripeProductResponse extends CommonResponse {
   data?: {

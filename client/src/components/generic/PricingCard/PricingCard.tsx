@@ -30,7 +30,8 @@ const PricingCardDefault = ({
   return (
     <div
       onClick={onClick}
-      className={`${selected ? "bg-dark-blue-100" : "border-dark-blue-100 border bg-transparent"} mb-6 flex  justify-center rounded-md p-8 ${onClick && "cursor-pointer"}`}
+      className={`${selected ? "bg-dark-blue-100" : "border-dark-blue-100 border bg-transparent"} flex
+        justify-center rounded-md  ${onClick && "cursor-pointer"} py-4`}
     >
       <div className="flex items-center justify-center md:flex-col lg:flex-col">
         <h3
@@ -65,22 +66,23 @@ const PricingCardHome = ({
 }: IPricingCardHome) => (
   <div
     className="border-light-blue-100 text-light-blue-100 bg-gray-1 relative flex 
-   items-center justify-center gap-3 rounded-md border px-7 py-5 md:flex-col lg:flex-col"
+    items-center justify-center gap-3 rounded-md border px-7 py-5 md:flex-col md:items-start lg:flex-col"
   >
-    <h3 className="ml-12 font-bold  md:mr-20 lg:mr-20">{title} </h3>
-    <div className="pl-4 md:hidden lg:hidden">
+    <h3 className="font-bold">{title} </h3>
+    <div className="md:hidden lg:hidden">
       <Divider />
     </div>
-    <div className="flex gap-2 align-top md:flex-col md:pr-[75px] lg:flex-col lg:pr-[75px] ">
-      <div className="">
-        <h1 className="-mt-[5%] text-6xl italic">{discountedPriceString}</h1>
-      </div>
+    <div className="flex gap-2 py-2 md:flex-col">
+      <h1 className="-mt-[5%] text-6xl italic">{discountedPriceString}</h1>
 
-      <div className="pl-[5%]">
+      <div>
         <p className="text-3xl line-through md:text-lg lg:text-lg">
           {priceString}
         </p>
-        <h5 className="text-orange md:text-md lg:text-md mr-4 text-nowrap pr-12 font-bold uppercase md:mr-0 md:font-normal lg:mr-0 lg:font-normal">
+        <h5
+          className="text-orange md:text-md lg:text-md mr-4 mt-auto text-nowrap
+       font-bold uppercase md:mr-0 md:font-normal lg:mr-0 lg:font-normal"
+        >
           {extraInfo}
         </h5>
       </div>

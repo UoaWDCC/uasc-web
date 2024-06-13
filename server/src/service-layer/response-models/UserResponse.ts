@@ -2,7 +2,7 @@ import { UserAdditionalInfo } from "data-layer/models/firebase"
 import { CommonResponse, CursorPaginatedResponse } from "./CommonResponse"
 import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 
-type CombinedUserData = UserAdditionalInfo & {
+export type CombinedUserData = UserAdditionalInfo & {
   /**
    * Firebase identifier of the user *data* based on the firestore document
    */

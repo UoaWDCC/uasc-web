@@ -14,6 +14,15 @@ export const dateToFirestoreTimeStamp = (date: Date) => {
 }
 
 /**
+ * removes all the time information from the timestamp
+ * @param timestamp the timestamp to normalise
+ */
+export const normaliseFirestoreTimeStamp = (timestamp: Timestamp) =>
+  dateToFirestoreTimeStamp(
+    new Date(firestoreTimestampToDate(timestamp).toDateString())
+  )
+
+/**
  * @param startDate Date object
  * @param endDate Date object
  * @returns an array of all dates in with **increasing order** of the range (NOTE that months in JS start from 0)

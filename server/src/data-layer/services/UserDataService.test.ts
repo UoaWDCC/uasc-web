@@ -108,4 +108,15 @@ describe("UserService integration tests", () => {
     expect(filteredNameUser.length).toEqual(1)
     expect(filteredNameUser[0].first_name).toEqual("third")
   })
+
+  it("should get list of users that match in list of ids", async () => {
+    await userService.createUserData(TEST_UID_1, userInfoMock)
+    await userService.createUserData("testUser2", userInfoMock)
+    await userService.createUserData("testUser3", userInfoMock2)
+
+    const users = await userService.getUsersByIds([TEST_UID_1, "testUser3"])
+    console.log(users)
+
+    expect(users.length).toEqual(2)
+  })
 })
