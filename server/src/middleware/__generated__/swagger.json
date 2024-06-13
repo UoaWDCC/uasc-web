@@ -334,10 +334,6 @@
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
 					}
 				},
-				"required": [
-					"startDate",
-					"endDate"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},

@@ -8,6 +8,7 @@ import { useState } from "react"
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import { timestampToDate } from "components/utils/Utils"
+import { Timestamp } from "firebase/firestore"
 
 type DateRange = {
   startDate: Date
@@ -40,11 +41,12 @@ export const handleDateRangeInputChange = (
 
 interface ICreateBookingSection {
   bookingSlots?: BookingAvailability[]
+  handleBookingCreation?: (startDate: Timestamp, endDate: Timestamp) => void
 }
 
-// TODO: Pass available dates into here as props, // TODO: and onBookingCreated handler
 export const CreateBookingSection = ({
-  bookingSlots = []
+  bookingSlots = [],
+  handleBookingCreation
 }: ICreateBookingSection) => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
@@ -189,7 +191,18 @@ export const CreateBookingSection = ({
               }}
             />
           </span>
-          <Button variant="default">Proceed to Payment</Button>
+          <Button
+            variant="default"
+            onClick={() => {
+              if (confirm("Are you sure you want to book these dates?"))
+                handleBookingCreation?.(
+                  Timestamp.fromDate(currentStartDate),
+                  Timestamp.fromDate(currentEndDate)
+                )
+            }}
+          >
+            Proceed to Payment
+          </Button>
         </div>
       </div>
     </>

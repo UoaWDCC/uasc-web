@@ -1,11 +1,20 @@
 import { ProtectedCreateBookingSection } from "components/composite/Booking/BookingCreation/ProtectedCreateBookingSection"
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, useNavigate } from "react-router-dom"
 import BookingSuccess from "./BookingSuccess"
 import { Footer } from "components/generic/Footer/Footer"
 import { useForceRefreshToken } from "hooks/useRefreshedToken"
+import BookingPayment from "components/composite/Booking/BookingPayment/BookingPayment"
+import { useContext } from "react"
+import { BookingContext } from "components/composite/Booking/BookingContext"
 
 const Booking = () => {
   useForceRefreshToken()
+  const navigate = useNavigate()
+  const { clientSecret } = useContext(BookingContext)
+
+  if (clientSecret) {
+    navigate("/bookings/payment")
+  }
 
   return (
     <>
@@ -20,7 +29,10 @@ const Booking = () => {
           <span className="w-full">
             <Routes>
               <Route index element={<ProtectedCreateBookingSection />} />
-              <Route index element={<ProtectedCreateBookingSection />} />
+              <Route
+                path="payment"
+                element={<BookingPayment clientSecret={clientSecret} />}
+              />
               <Route path="success" element={<BookingSuccess />} />
             </Routes>
           </span>

@@ -2,6 +2,8 @@ import { useAppData } from "store/Store"
 import { SignUpNotif } from "components/generic/SignUpNotif/SignUpNotif"
 import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
 import { CreateBookingSection } from "./BookingCreation"
+import { useContext } from "react"
+import { BookingContext } from "../BookingContext"
 
 export const ProtectedCreateBookingSection = () => {
   const [{ currentUser, currentUserClaims }] = useAppData()
@@ -9,5 +11,13 @@ export const ProtectedCreateBookingSection = () => {
   if (!currentUserClaims?.member) {
     return <SignUpNotif signedIn={!!currentUser} />
   }
-  return <CreateBookingSection bookingSlots={data} />
+
+  const { handleBookingCreation } = useContext(BookingContext)
+
+  return (
+    <CreateBookingSection
+      bookingSlots={data}
+      handleBookingCreation={handleBookingCreation}
+    />
+  )
 }

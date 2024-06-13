@@ -252,10 +252,38 @@ export class PaymentController extends Controller {
     @Body() requestBody: UserBookingRequestingModel
   ): Promise<BookingPaymentResponse> {
     const { uid } = request.user
-    const { startDate, endDate } = requestBody
 
+    // Create new Stripe checkout session
+    const stripeService = new StripeService()
+    const userDataService = new UserDataService()
+
+    const userData = await userDataService.getUserData(uid)
+    const { newUser, stripeCustomerId } =
+      await stripeService.createCustomerIfNotExist(
+        request.user,
+        userData,
+        userDataService
+      )
+    // If not a new Stripe customer, we want to check for pre-existing bookings
+    if (!newUser) {
+      const activeSession = await stripeService.getActiveSessionForUser(
+        stripeCustomerId,
+        CheckoutTypeValues.BOOKING
+      )
+      if (activeSession) {
+        this.setStatus(200)
+        return {
+          stripeClientSecret: activeSession.client_secret,
+          message: "Existing booking checkout session found"
+        }
+      }
+    }
+
+    const { startDate, endDate } = requestBody
     // The request start and end dates
     if (
+      !startDate ||
+      !endDate ||
       BookingUtils.hasInvalidStartAndEndDates(
         startDate,
         endDate,
@@ -286,32 +314,7 @@ export class PaymentController extends Controller {
         error: "Invalid date range, booking must be a maximum of 10 days. "
       }
     }
-    // Create new Stripe checkout session
-    const stripeService = new StripeService()
-    const userDataService = new UserDataService()
     try {
-      const userData = await userDataService.getUserData(uid)
-      const { newUser, stripeCustomerId } =
-        await stripeService.createCustomerIfNotExist(
-          request.user,
-          userData,
-          userDataService
-        )
-      // If not a new Stripe customer, we want to check for pre-existing bookings
-      if (!newUser) {
-        const activeSession = await stripeService.getActiveSessionForUser(
-          stripeCustomerId,
-          CheckoutTypeValues.BOOKING
-        )
-        if (activeSession) {
-          this.setStatus(200)
-          return {
-            stripeClientSecret: activeSession.client_secret,
-            message: "Existing booking checkout session found"
-          }
-        }
-      }
-
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
 
@@ -386,7 +389,7 @@ export class PaymentController extends Controller {
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
-        `${process.env.FRONTEND_URL}/booking/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0].toISOString().split("T")[0]}&endDate=${datesInBooking[totalDays - 1].toISOString().split("T")[0]}`,
+        `${process.env.FRONTEND_URL}/bookings/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0].toISOString().split("T")[0]}&endDate=${datesInBooking[totalDays - 1].toISOString().split("T")[0]}`,
         [
           {
             price: default_price as string,
