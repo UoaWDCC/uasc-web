@@ -12,7 +12,14 @@ import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
 
 type DateRange = {
+  /**
+   * Javascript date object representing the date of the first night for the booking
+   */
   startDate: Date
+
+  /**
+   * Javascript date object representing the date of the last night for the booking
+   */
   endDate: Date
 }
 
@@ -20,7 +27,10 @@ const formatDateForInput = (date?: Date) => {
   return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
 }
 
-// WARNING: Exported for testing purposes only
+/*
+ * Swaps around dates if invalid
+ * @deprecated Exported for testing purposes only
+ */
 export const handleDateRangeInputChange = (
   startDate: Date,
   endDate: Date,
@@ -41,9 +51,24 @@ export const handleDateRangeInputChange = (
 }
 
 interface ICreateBookingSection {
+  /**
+   * The "unfiltered" booking slots for processing
+   */
   bookingSlots?: BookingAvailability[]
+
+  /**
+   * Callback when dates are changed and valid
+   */
   handleBookingCreation?: (startDate: Timestamp, endDate: Timestamp) => void
+
+  /**
+   * If the user should be notified that they have to continue their existing session
+   */
   hasExistingSession?: boolean
+
+  /**
+   * If a request related to creating/fetching a booking is in progress
+   */
   isPending?: boolean
 }
 
@@ -233,11 +258,16 @@ export const CreateBookingSection = ({
   )
 }
 
+interface IRequirementCheckBoxes {
+  /**
+   * @param newValid if the current state of the checkboxes is valid
+   */
+  onValidityChange: (newValid: boolean) => void
+}
+
 const RequirementCheckBoxes = ({
   onValidityChange
-}: {
-  onValidityChange: (newValid: boolean) => void
-}) => {
+}: IRequirementCheckBoxes) => {
   const [acceptedRequirements, setAcceptedRequirements] = useState<{
     nightPolicy?: boolean
     bookingPolicy?: boolean
