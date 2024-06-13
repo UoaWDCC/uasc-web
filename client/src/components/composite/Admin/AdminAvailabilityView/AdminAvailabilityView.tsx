@@ -6,7 +6,7 @@ import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
-import { DEFAULT_BOOKING_AVAILABILITY, MS_IN_SECOND } from "utils/Constants"
+import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
 import { timestampToDate } from "components/utils/Utils"
 
 /**
@@ -124,10 +124,7 @@ const AdminAvailabilityView = ({
             selectRange
             value={
               dateRangeDefined
-                ? [
-                    timestampToDate(startDate),
-                    timestampToDate(endDate)
-                  ]
+                ? [timestampToDate(startDate), timestampToDate(endDate)]
                 : undefined
             }
             tileContent={({ date }) => {
