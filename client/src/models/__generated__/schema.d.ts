@@ -185,8 +185,8 @@ export interface components {
       stripeClientSecret?: string;
     };
     UserBookingRequestingModel: {
-      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;

@@ -25,8 +25,8 @@ export interface UserPaymentRequestModel {
 }
 
 export interface UserBookingRequestingModel {
-  startDate: Timestamp
-  endDate: Timestamp
+  startDate?: Timestamp
+  endDate?: Timestamp
 }
 
 export interface EditSelfRequestModel {
