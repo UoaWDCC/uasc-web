@@ -373,7 +373,7 @@ export class PaymentController extends Controller {
       )
 
       if (outOfStockBecauseSessionActive) {
-        this.setStatus(423)
+        this.setStatus(409)
         return {
           error:
             "Someone may currently have this item in cart, please try again later"
