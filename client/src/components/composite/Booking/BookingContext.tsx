@@ -8,6 +8,7 @@ interface IBookingContext {
   clientSecret?: string
   getExistingSession?: () => void
   message?: string
+  isPending?: boolean
 }
 
 export const BookingContext = createContext<IBookingContext>({})
@@ -18,8 +19,11 @@ export const BookingContextProvider = ({
   children: React.ReactNode
 }) => {
   const navigate = useNavigate()
-  const { data: bookingPaymentData, mutateAsync } =
-    useBookingPaymentClientSecretMutation()
+  const {
+    data: bookingPaymentData,
+    mutateAsync,
+    isPending
+  } = useBookingPaymentClientSecretMutation()
 
   const getExistingSession = async () => {
     if (bookingPaymentData?.stripeClientSecret) navigate("/bookings/payment")
@@ -53,7 +57,8 @@ export const BookingContextProvider = ({
         clientSecret: bookingPaymentData?.stripeClientSecret,
         message: bookingPaymentData?.message,
         handleBookingCreation,
-        getExistingSession
+        getExistingSession,
+        isPending
       }}
     >
       {children}

@@ -43,12 +43,14 @@ interface ICreateBookingSection {
   bookingSlots?: BookingAvailability[]
   handleBookingCreation?: (startDate: Timestamp, endDate: Timestamp) => void
   hasExistingSession?: boolean
+  isPending?: boolean
 }
 
 export const CreateBookingSection = ({
   bookingSlots = [],
   handleBookingCreation,
-  hasExistingSession
+  hasExistingSession,
+  isPending
 }: ICreateBookingSection) => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
@@ -194,6 +196,7 @@ export const CreateBookingSection = ({
             />
           </span>
           <Button
+            disabled={isPending}
             variant="default"
             onClick={() => {
               if (confirm("Are you sure you want to book these dates?"))
