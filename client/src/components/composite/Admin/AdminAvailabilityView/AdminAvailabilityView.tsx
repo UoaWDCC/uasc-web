@@ -70,7 +70,7 @@ export const formatBookingSlotsForAvailabilityView = (
     .map((slot) => {
       return {
         uid: slot.id,
-        Date: new Date(slot.date.seconds * MS_IN_SECOND).toDateString(),
+        Date: timestampToDate(slot.date).toDateString(),
         "Max Bookings": slot.maxBookings.toString(),
         "Available Spaces": slot.availableSpaces.toString()
       }
@@ -82,7 +82,7 @@ const formatDateRangeForDialog = (
   endDate?: Timestamp
 ) => {
   if (startDate && endDate)
-    return `${new Date(startDate.seconds * MS_IN_SECOND).toDateString()} to ${new Date(endDate.seconds * MS_IN_SECOND).toDateString()}`
+    return `${timestampToDate(startDate).toDateString()} to ${timestampToDate(endDate).toDateString()}`
 
   return ""
 }
@@ -125,8 +125,8 @@ const AdminAvailabilityView = ({
             value={
               dateRangeDefined
                 ? [
-                    new Date(startDate.seconds * MS_IN_SECOND),
-                    new Date(endDate.seconds * MS_IN_SECOND)
+                    timestampToDate(startDate),
+                    timestampToDate(endDate)
                   ]
                 : undefined
             }
