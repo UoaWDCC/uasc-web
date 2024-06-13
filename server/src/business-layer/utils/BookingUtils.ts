@@ -64,6 +64,13 @@ const BookingUtils = {
     })
     return slotOccurences
   },
+  /**
+   * Checks if the dates should be priced differently
+   * (the current condition is if a single Friday or Saturday is requested)
+   *
+   * @param datesInBooking an array of dates for checking
+   * @returns a `LodgePricingTypeValue` based on if the date meets any special conditions
+   */
   getRequiredPricing: function (
     datesInBooking: Date[]
   ): LodgePricingTypeValues {
