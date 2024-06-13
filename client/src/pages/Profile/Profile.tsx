@@ -4,12 +4,16 @@ import { useNavigate } from "react-router-dom"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
+import { useForceRefreshToken } from "hooks/useRefreshedToken"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
   const handleOnclick = () => {
     navigate("/login")
   }
+
+  useForceRefreshToken()
+
   return (
     <div
       className="border-red space-x-4; disabled:bg-gray-3 text-red hover:bg-red

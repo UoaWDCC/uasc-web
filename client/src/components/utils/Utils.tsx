@@ -1,4 +1,5 @@
 import { RefObject, useEffect } from "react"
+import { MS_IN_SECOND } from "utils/Constants"
 
 export const debounce = (fn: (...args: any[]) => void, timeout: number) => {
   let timer: NodeJS.Timeout
@@ -8,6 +9,18 @@ export const debounce = (fn: (...args: any[]) => void, timeout: number) => {
       fn.apply(this, args)
     }, timeout)
   }
+}
+
+/**
+ * @param timestamp any object that contains the `seconds` and `nanosecond` properties,
+ * like the timestamp from `firebase`
+ * @returns a date object representative of the timestamp
+ */
+export const timestampToDate = (timestamp: {
+  seconds: number
+  nanoseconds: number
+}) => {
+  return new Date(timestamp.seconds * MS_IN_SECOND)
 }
 
 /**
