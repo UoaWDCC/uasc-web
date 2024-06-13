@@ -137,7 +137,7 @@ const AdminAvailabilityView = ({
                     date.toDateString() && slot.maxBookings > 0
               ) ? (
                 // Apply style if it is
-                <p>Open</p>
+                <p>{slotQty}</p>
               ) : null
             }
             onChange={(value) => {
