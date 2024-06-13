@@ -3,12 +3,13 @@ import BookingInfoComponent from "../BookingInfoComponent/BookingInfoComponent"
 import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import { timestampToDate } from "components/utils/Utils"
 import { Timestamp } from "firebase/firestore"
+import Checkbox from "components/generic/Checkbox/Checkbox"
 
 type DateRange = {
   startDate: Date
@@ -56,6 +57,8 @@ export const CreateBookingSection = ({
     startDate: new Date(),
     endDate: new Date()
   })
+
+  const [isValidForCreation, setIsValidForCreation] = useState<boolean>(false)
 
   const { startDate: currentStartDate, endDate: currentEndDate } =
     selectedDateRange
@@ -195,11 +198,25 @@ export const CreateBookingSection = ({
               }}
             />
           </span>
+
+          <RequirementCheckBoxes
+            onValidityChange={(newValid) => {
+              setIsValidForCreation(newValid)
+            }}
+          />
+
           <Button
             disabled={isPending}
             variant="default"
             onClick={() => {
-              if (confirm("Are you sure you want to book these dates?"))
+              if (!isValidForCreation) {
+                alert("Please check all the required acknowledgements")
+                return
+              }
+              if (
+                checkValidRange(currentStartDate, currentEndDate) &&
+                confirm("Are you sure you want to book these dates?")
+              )
                 handleBookingCreation?.(
                   Timestamp.fromDate(currentStartDate),
                   Timestamp.fromDate(currentEndDate)
@@ -213,5 +230,44 @@ export const CreateBookingSection = ({
         </div>
       </div>
     </>
+  )
+}
+
+const RequirementCheckBoxes = ({
+  onValidityChange
+}: {
+  onValidityChange: (newValid: boolean) => void
+}) => {
+  const [acceptedRequirements, setAcceptedRequirements] = useState<{
+    nightPolicy?: boolean
+    bookingPolicy?: boolean
+  }>({})
+  useEffect(() => {
+    onValidityChange(
+      !!acceptedRequirements.nightPolicy && !!acceptedRequirements.bookingPolicy
+    )
+  }, [acceptedRequirements])
+
+  return (
+    <span className="flex w-full flex-col gap-1">
+      <Checkbox
+        onChange={(e) => {
+          setAcceptedRequirements({
+            ...acceptedRequirements,
+            nightPolicy: e.target.checked
+          })
+        }}
+        label="I understand that each date corresponds to one night"
+      />
+      <Checkbox
+        label="I have read and acknowledged the booking policy"
+        onChange={(e) => {
+          setAcceptedRequirements({
+            ...acceptedRequirements,
+            bookingPolicy: e.target.checked
+          })
+        }}
+      />
+    </span>
   )
 }
