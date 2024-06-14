@@ -9,4 +9,6 @@ const meta: Meta<typeof profileEdit> = {
 export default meta
 type Story = StoryObj<typeof profileEdit>
 
-export const DefaultLoginForm: Story = {}
+export const ProfileEdit: Story = {
+  args: {}
+}
