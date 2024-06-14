@@ -5,6 +5,8 @@ import ProfileInformationPanel from "components/generic/ProfileInformationPanel/
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
 import { useForceRefreshToken } from "hooks/useRefreshedToken"
+import { timestampToDate } from "components/utils/Utils"
+import { useMemo } from "react"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
@@ -63,15 +65,13 @@ const Field = ({
   )
 }
 export default function Profile() {
-  const [{ currentUserData }] = useAppData()
-  const [{ currentUser }] = useAppData()
+  const [{ currentUserData, currentUser, currentUserClaims }] = useAppData()
 
-  function toDateTime(secs?: number) {
-    const t = new Date() // Epoch
-    t.setSeconds(secs!)
-    const f = t.toDateString()
-    return f
-  }
+  const userMembership = useMemo(() => {
+    if (currentUserClaims?.admin) return "Admin"
+    if (currentUserClaims?.member) return "Member"
+    return "Guest"
+  }, [currentUserClaims])
 
   return (
     <div className="relative min-h-screen">
@@ -79,7 +79,10 @@ export default function Profile() {
         <div className="pb-[15%]">
           <div className="grid-cols grid w-full ">
             <div className="grid grid-cols-5 gap-3 pb-4">
-              <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid pl-4 italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
+              <h2
+                className="text-dark-blue-100 left-0 top-0 col-span-2 grid 
+                             pl-4 italic sm:col-span-4"
+              >{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
               <div className="col-span-1 ml-[-40px] flex items-center justify-end text-nowrap">
                 <SignOutButton />
               </div>
@@ -106,7 +109,10 @@ export default function Profile() {
                     />
                     <Field
                       subtitle="Date of birth"
-                      description={`${toDateTime(currentUserData?.date_of_birth.seconds)}`}
+                      description={
+                        currentUserData?.date_of_birth &&
+                        `${timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
+                      }
                     />
                   </div>
                   <div className="grid grid-cols-4 text-nowrap">
@@ -114,7 +120,10 @@ export default function Profile() {
                       subtitle="Email"
                       description={`${currentUser?.email}`}
                     />
-                    <Field subtitle="Phone number" description="021 123 1234" />
+                    <Field
+                      subtitle="Phone number"
+                      description={`${currentUserData?.phone_number}`}
+                    />
                     <Field
                       subtitle="Emergency contact info"
                       description={`${currentUserData?.emergency_contact}`}
@@ -126,11 +135,11 @@ export default function Profile() {
                 <ProfileInformationPanel title="Membership" onEdit={() => {}}>
                   <Field
                     subtitle="Membership type"
-                    description={"UoA Student"} // value not yet set
+                    description={userMembership}
                   />
                   <Field
                     subtitle="Valid til"
-                    description="9/12/24" // value not yet set
+                    description={`End of ${new Date().getFullYear()}`}
                   />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel

@@ -15,6 +15,10 @@ export interface UserAdditionalInfo {
    */
   does_ski: boolean
   /**
+   * @isNumber Please enter your phone number
+   */
+  phone_number: number
+  /**
    * @isString Please enter your pronouns
    */
   gender: string

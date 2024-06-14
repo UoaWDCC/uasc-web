@@ -42,6 +42,10 @@
 					"does_ski": {
 						"type": "boolean"
 					},
+					"phone_number": {
+						"type": "number",
+						"format": "double"
+					},
 					"gender": {
 						"type": "string"
 					},
@@ -148,6 +152,10 @@
 					"does_ski": {
 						"type": "boolean"
 					},
+					"phone_number": {
+						"type": "number",
+						"format": "double"
+					},
 					"gender": {
 						"type": "string"
 					},
@@ -184,6 +192,7 @@
 					"does_snowboarding",
 					"does_racing",
 					"does_ski",
+					"phone_number",
 					"gender",
 					"first_name",
 					"last_name",
@@ -427,6 +436,10 @@
 					"does_ski": {
 						"type": "boolean"
 					},
+					"phone_number": {
+						"type": "number",
+						"format": "double"
+					},
 					"gender": {
 						"type": "string"
 					},
@@ -467,6 +480,7 @@
 					"does_snowboarding",
 					"does_racing",
 					"does_ski",
+					"phone_number",
 					"gender",
 					"first_name",
 					"last_name",
@@ -694,6 +708,10 @@
 					"does_ski": {
 						"type": "boolean"
 					},
+					"phone_number": {
+						"type": "number",
+						"format": "double"
+					},
 					"gender": {
 						"type": "string"
 					},
@@ -841,6 +859,10 @@
 										"gender": {
 											"type": "string"
 										},
+										"phone_number": {
+											"type": "number",
+											"format": "double"
+										},
 										"does_ski": {
 											"type": "boolean"
 										},
@@ -864,6 +886,7 @@
 										"last_name",
 										"first_name",
 										"gender",
+										"phone_number",
 										"does_ski",
 										"does_racing",
 										"does_snowboarding",
