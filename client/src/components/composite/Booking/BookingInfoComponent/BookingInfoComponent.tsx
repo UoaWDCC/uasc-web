@@ -43,6 +43,15 @@ const BookingInfoComponent = ({
           minutes to confirm the booking.
         </p>
         <p>Please read UASC policy below before booking.</p>
+        <h4>
+          Check in time: <strong>3:00pm</strong>
+        </h4>
+        <h4>
+          Check out time: <strong>10:00am</strong>
+        </h4>
+        <h5>
+          Note that all bookings MUST be made for the user on this account
+        </h5>
       </div>
     </div>
   )

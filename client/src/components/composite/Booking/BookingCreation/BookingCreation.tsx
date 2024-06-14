@@ -62,6 +62,11 @@ interface ICreateBookingSection {
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
 
   /**
+   * To be called when user enters their allergies
+   */
+  handleAllergyChange?: (newAllergies: string) => void
+
+  /**
    * If the user should be notified that they have to continue their existing session
    */
   hasExistingSession?: boolean
@@ -75,6 +80,7 @@ interface ICreateBookingSection {
 export const CreateBookingSection = ({
   bookingSlots = [],
   handleBookingCreation,
+  handleAllergyChange,
   hasExistingSession,
   isPending
 }: ICreateBookingSection) => {
@@ -160,7 +166,7 @@ export const CreateBookingSection = ({
         className="grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center gap-2 px-1
                       sm:px-0 md:grid-cols-2"
       >
-        <div className="h-full max-h-[475px] self-start">
+        <div className="h-full max-h-[600px] self-start">
           <BookingInfoComponent
             pricePerNight="40"
             priceSaturday="60"
@@ -257,6 +263,11 @@ export const CreateBookingSection = ({
             }}
           />
 
+          <TextInput
+            onChange={(e) => handleAllergyChange?.(e.target.value)}
+            label="Please describe your dietary requirements"
+          />
+
           {hasExistingSession ? (
             <Button onClick={() => handleBookingCreation?.()}>
               Continue Existing Session
@@ -304,7 +315,7 @@ export const RequirementCheckBoxes = ({
             nightPolicy: e.target.checked
           })
         }}
-        label="I understand that each date corresponds to one night"
+        label="I understand that each date corresponds to one night's stay"
       />
       <Checkbox
         data-testid="agreed-to-general-policy-checkbox"

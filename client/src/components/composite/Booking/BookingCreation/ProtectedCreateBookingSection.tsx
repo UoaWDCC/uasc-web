@@ -10,7 +10,7 @@ export const ProtectedCreateBookingSection = () => {
 
   const { data } = useAvailableBookingsQuery()
 
-  const { handleBookingCreation, clientSecret, errorMessage } =
+  const { handleBookingCreation, clientSecret, errorMessage, setAllergies } =
     useContext(BookingContext)
 
   useEffect(() => {
@@ -25,6 +25,7 @@ export const ProtectedCreateBookingSection = () => {
     <CreateBookingSection
       bookingSlots={data}
       handleBookingCreation={handleBookingCreation}
+      handleAllergyChange={setAllergies}
       hasExistingSession={!!clientSecret}
     />
   )

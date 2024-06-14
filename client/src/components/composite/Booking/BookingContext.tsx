@@ -1,15 +1,17 @@
 import { Timestamp } from "firebase/firestore"
-import { createContext } from "react"
+import { createContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { BOOKING_AVAILABLITY_KEY } from "services/Booking/BookingQueries"
 import { useBookingPaymentClientSecretMutation } from "services/Payment/PaymentMutations"
 import queryClient from "services/QueryClient"
+import { useEditSelfMutation } from "services/User/UserMutations"
 
 interface IBookingContext {
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
   clientSecret?: string
   getExistingSession?: () => void
   forceRefreshBookings?: () => void
+  setAllergies?: (newAllergies: string) => void
   message?: string
   isPending?: boolean
   errorMessage?: string
@@ -30,6 +32,12 @@ export const BookingContextProvider = ({
     error
   } = useBookingPaymentClientSecretMutation()
 
+  const [allergies, setAllergies] = useState<string>("")
+
+  const { mutateAsync: updateAllergies } = useEditSelfMutation({
+    dietary_requirements: allergies
+  })
+
   const getExistingSession = async () => {
     if (bookingPaymentData?.stripeClientSecret) navigate("/bookings/payment")
     await mutateAsync(
@@ -49,6 +57,7 @@ export const BookingContextProvider = ({
     startDate: Timestamp,
     endDate: Timestamp
   ) => {
+    await updateAllergies()
     await mutateAsync(
       { startDate, endDate },
       {
@@ -67,6 +76,7 @@ export const BookingContextProvider = ({
         handleBookingCreation,
         getExistingSession,
         isPending,
+        setAllergies,
         forceRefreshBookings,
         errorMessage:
           error?.name === "UnavailableBookingError" ? error?.message : undefined

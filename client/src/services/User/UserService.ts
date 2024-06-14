@@ -13,6 +13,13 @@ const UserService = {
       body: userData
     })
     return data || error
+  },
+  editSelf: async function (userData: Partial<ReducedUserAdditionalInfo>) {
+    const { response } = await fetchClient.PATCH("/users/edit-self", {
+      body: { updatedInformation: userData }
+    })
+    if (!response.ok)
+      throw new Error("Something went wrong when editing self data")
   }
 } as const
 
