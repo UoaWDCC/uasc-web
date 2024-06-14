@@ -28,6 +28,10 @@ const BookingInfoComponent = ({
           ${priceSingleFridayOrSaturday}
           <h3 className="font-normal">a single Saturday or Friday</h3>
         </h3>
+        <h5>
+          Bookings can <strong>only</strong> be made for the user on this
+          account
+        </h5>
         <h5 className="font-normal">
           For guest bookings please email{" "}
           <a href="mailto:bookings@uasc.co.nz">
@@ -41,7 +45,7 @@ const BookingInfoComponent = ({
         className="text-dark-blue-100 flex flex-col gap-4 lg:justify-center"
       >
         <p>
-          Once booking has been selected, please complete payment within 20
+          Once booking has been selected, please complete payment within 30
           minutes to confirm the booking.
         </p>
         <p>Please read UASC policy below before booking.</p>
@@ -51,9 +55,6 @@ const BookingInfoComponent = ({
         <h4>
           Check out time: <strong>10:00am</strong>
         </h4>
-        <h5>
-          Note that all bookings MUST be made for the user on this account
-        </h5>
       </div>
     </div>
   )
