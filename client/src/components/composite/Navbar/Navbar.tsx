@@ -86,7 +86,7 @@ const Navbar = ({
           md:flex md:min-h-full md:flex-row md:items-end md:justify-end md:gap-8 md:bg-none md:pr-4 md:pt-0`}
         >
           <WrappedTab to="/">Home</WrappedTab>
-          <WrappedTab to="/bookings">Book the Lodge</WrappedTab>
+          <WrappedTab to="/bookings">Book the Lodge!</WrappedTab>
           <WrappedTab to="/events">Events</WrappedTab>
           <span className="hidden md:block">
             <WrappedMenuTab displayName="about" to="/about">
