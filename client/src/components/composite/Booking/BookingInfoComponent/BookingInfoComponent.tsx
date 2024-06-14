@@ -23,7 +23,7 @@ const BookingInfoComponent = ({
 
         <h3 className="flex gap-2">
           ${priceSaturday}
-          <h3 className="font-normal">a single Saturday</h3>
+          <h3 className="font-normal">a single Saturday or Friday</h3>
         </h3>
         <h3>
           <h3 className="flex gap-2">
