@@ -223,6 +223,23 @@ describe("Endpoints", () => {
     afterEach(async () => {
       await cleanFirestore()
     })
+    describe("/booking", () => {
+      // rest of functionality is handled in other unit tests
+      it("should only let members call the endpoint", async () => {
+        let res = await request
+          .post("/payment/booking")
+          .set("Authorization", `Bearer ${guestToken}`)
+          .send({ startDate: { seconds: 0, nanoseconds: 0 } })
+
+        expect(res.status).toEqual(401)
+
+        res = await request
+          .post("/payment/booking")
+          .send({ seconds: 0, nanoseconds: 0 })
+
+        expect(res.status).toEqual(401)
+      })
+    })
     describe("/membership", () => {
       it("should not let members to try create sessions", async () => {
         const res = await request
@@ -1121,6 +1138,115 @@ describe("Endpoints", () => {
       expect(dates[1].max_bookings).toBeLessThanOrEqual(0)
       expect(dates[1].description).toEqual("skipped a date")
       expect(dates[1].date).toEqual(leapDate)
+    })
+  })
+
+  describe("/bookings/fetch-users", () => {
+    beforeEach(async () => {
+      await createUsers()
+    })
+
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+
+    it("should return users with bookings within the date range", async () => {
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2023"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+
+      const slot1 = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("02/01/2023")),
+        max_bookings: 10
+      })
+
+      const slot2 = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("03/01/2023")),
+        max_bookings: 10
+      })
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: slot1.id,
+        stripe_payment_id: ""
+      })
+
+      await bookingDataService.createBooking({
+        user_id: GUEST_USER_UID,
+        booking_slot_id: slot2.id,
+        stripe_payment_id: ""
+      })
+
+      const res = await request
+        .post("/bookings/fetch-users")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+      console.log(res.body.data[1])
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toHaveLength(2)
+      expect.arrayContaining([
+        expect.objectContaining({
+          users: expect.arrayContaining([
+            expect.objectContaining({ uid: MEMBER_USER_UID })
+          ])
+        }),
+        expect.objectContaining({
+          users: expect.arrayContaining([
+            expect.objectContaining({ uid: GUEST_USER_UID })
+          ])
+        })
+      ])
+    })
+
+    it("should return an empty array if no users have bookings within the date range", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2024"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2024"))
+
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      const slot1 = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("02/01/2025")), // Out of range date
+        max_bookings: 10
+      })
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: slot1.id,
+        stripe_payment_id: ""
+      })
+
+      const res = await request
+        .post("/bookings/fetch-users")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toHaveLength(0)
+    })
+
+    it("should return unauthorized error for non-admin users", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2023"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+
+      const res = await request
+        .post("/bookings/fetch-users")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(401)
     })
   })
 })

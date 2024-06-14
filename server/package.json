@@ -40,6 +40,7 @@
     "build": "tsc -p ./tsconfig.prod.json && tsc-alias",
     "serve": "node --es-module-specifier-resolution=node dist/index.js",
     "token": "ts-node ./tooling/login-prod.ts",
+    "timestamp": "ts-node ./tooling/timestamp-conversion.ts",
     "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json"
   }
 }

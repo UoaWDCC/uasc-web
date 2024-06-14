@@ -98,4 +98,23 @@ export default class UserDataService {
   public async deleteUserData(uid: string) {
     await FirestoreCollections.users.doc(uid).delete()
   }
+
+  /**
+   * Retrieves user documents from Firestore based on the provided user IDs.
+   */
+  public async getUsersByIds(userIds: string[]) {
+    if (userIds.length === 0) {
+      return []
+    }
+
+    const userDocs = await Promise.all(
+      userIds.map((id) => FirestoreCollections.users.doc(id).get())
+    )
+
+    const users = userDocs
+      .filter((doc) => doc.exists)
+      .map((doc) => ({ ...doc.data(), uid: doc.id }))
+
+    return users
+  }
 }
