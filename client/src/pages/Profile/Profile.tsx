@@ -76,14 +76,11 @@ export default function Profile() {
   return (
     <div className="relative min-h-screen">
       <ResponsiveBackgroundImage>
-        <div className="pb-[15%]">
+        <div className="py-8">
           <div className="grid-cols grid w-full ">
-            <div className="grid grid-cols-5 gap-3 pb-4">
-              <h2
-                className="text-dark-blue-100 left-0 top-0 col-span-2 grid 
-                             pl-4 italic sm:col-span-4"
-              >{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
-              <div className="col-span-1 ml-[-40px] flex items-center justify-end text-nowrap">
+            <div className="flex flex-col md:flex-row">
+              <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
+              <div className="max-w my-2 md:ml-auto">
                 <SignOutButton />
               </div>
             </div>
@@ -93,42 +90,38 @@ export default function Profile() {
                 title="Personal details"
                 onEdit={() => {}}
               >
-                <div className="flex w-full flex-col gap-4">
-                  <div className="grid grid-cols-4">
-                    <Field
-                      subtitle="Name"
-                      description={`${currentUserData?.first_name} ${currentUserData?.last_name}`}
-                    />
-                    <Field
-                      subtitle="Gender"
-                      description={`${currentUserData?.gender}`}
-                    />
-                    <Field
-                      subtitle="Student ID"
-                      description={`${currentUserData?.student_id}`}
-                    />
-                    <Field
-                      subtitle="Date of birth"
-                      description={
-                        currentUserData?.date_of_birth &&
-                        `${timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
-                      }
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 text-nowrap">
-                    <Field
-                      subtitle="Email"
-                      description={`${currentUser?.email}`}
-                    />
-                    <Field
-                      subtitle="Phone number"
-                      description={`${currentUserData?.phone_number}`}
-                    />
-                    <Field
-                      subtitle="Emergency contact info"
-                      description={`${currentUserData?.emergency_contact}`}
-                    />
-                  </div>
+                <div className="grid grid-cols-2 gap-x-16 md:grid-cols-4">
+                  <Field
+                    subtitle="Name"
+                    description={`${currentUserData?.first_name} ${currentUserData?.last_name}`}
+                  />
+                  <Field
+                    subtitle="Gender"
+                    description={`${currentUserData?.gender}`}
+                  />
+                  <Field
+                    subtitle="Student ID"
+                    description={`${currentUserData?.student_id}`}
+                  />
+                  <Field
+                    subtitle="Date of birth"
+                    description={
+                      currentUserData?.date_of_birth &&
+                      `${timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
+                    }
+                  />
+                  <Field
+                    subtitle="Email"
+                    description={`${currentUser?.email}`}
+                  />
+                  <Field
+                    subtitle="Phone number"
+                    description={`${currentUserData?.phone_number}`}
+                  />
+                  <Field
+                    subtitle="Emergency contact info"
+                    description={`${currentUserData?.emergency_contact}`}
+                  />
                 </div>
               </ProfileInformationPanel>
               <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
