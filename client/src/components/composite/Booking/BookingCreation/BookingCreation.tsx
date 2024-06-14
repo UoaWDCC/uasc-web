@@ -134,6 +134,9 @@ export const CreateBookingSection = ({
     return true
   }
 
+  /**
+   * Used when the user wants to confirm their choice of dates and is ready to pay
+   */
   const CreateBookingButton = useMemo(() => {
     return (
       <Button
@@ -161,6 +164,9 @@ export const CreateBookingSection = ({
     )
   }, [currentStartDate, currentEndDate, isValidForCreation])
 
+  /**
+   *  a string to be shown to the user about the price for their date selection
+   */
   const estimatedPriceString = useMemo(() => {
     const nights = datesToDateRange(currentStartDate, currentEndDate).length
     const requiredPrice = isSingleFridayOrSaturday(
@@ -170,7 +176,7 @@ export const CreateBookingSection = ({
       ? SPECIAL_PRICE
       : NORMAL_PRICE
 
-    return `$${requiredPrice} * ${nights} night${nights > 1 ? "s" : ""} = $${requiredPrice * nights}`
+    return `$${requiredPrice} * ${nights} night${nights > 1 ? "s" : ""} = $${requiredPrice * nights}` as const
   }, [currentStartDate, currentEndDate])
 
   return (

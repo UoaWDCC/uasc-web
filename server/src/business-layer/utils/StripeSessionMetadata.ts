@@ -1,5 +1,8 @@
 /**
- * To be used when creating checkout sessions
+ * To be used when creating checkout sessions. The value will be the enum
+ * `CheckoutTypeValues`
+ *
+ * @example [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.BOOKING
  */
 export const CHECKOUT_TYPE_KEY = "checkout_type"
 export enum CheckoutTypeValues {
