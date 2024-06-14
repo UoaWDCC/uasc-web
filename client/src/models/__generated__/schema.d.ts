@@ -98,6 +98,8 @@ export interface components {
       does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
+      /** Format: double */
+      phone_number?: number;
       gender?: string;
       emergency_contact?: string;
       first_name?: string;
@@ -133,6 +135,8 @@ export interface components {
       does_snowboarding: boolean;
       does_racing: boolean;
       does_ski: boolean;
+      /** Format: double */
+      phone_number: number;
       gender: string;
       emergency_contact?: string;
       first_name: string;
@@ -216,6 +220,8 @@ export interface components {
       does_snowboarding: boolean;
       does_racing: boolean;
       does_ski: boolean;
+      /** Format: double */
+      phone_number: number;
       gender: string;
       emergency_contact?: string;
       first_name: string;
@@ -301,6 +307,8 @@ export interface components {
       does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
+      /** Format: double */
+      phone_number?: number;
       gender?: string;
       emergency_contact?: string;
       first_name?: string;
@@ -361,6 +369,8 @@ export interface operations {
             first_name: string;
             emergency_contact?: string;
             gender: string;
+            /** Format: double */
+            phone_number: number;
             does_ski: boolean;
             does_racing: boolean;
             does_snowboarding: boolean;
