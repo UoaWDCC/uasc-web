@@ -157,8 +157,8 @@ const models: TsoaRoute.Models = {
     "UserBookingRequestingModel": {
         "dataType": "refObject",
         "properties": {
-            "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "startDate": {"ref":"FirebaseFirestore.Timestamp"},
+            "endDate": {"ref":"FirebaseFirestore.Timestamp"},
         },
         "additionalProperties": false,
     },

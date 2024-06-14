@@ -252,43 +252,11 @@ export class PaymentController extends Controller {
     @Body() requestBody: UserBookingRequestingModel
   ): Promise<BookingPaymentResponse> {
     const { uid } = request.user
-    const { startDate, endDate } = requestBody
 
-    // The request start and end dates
-    if (
-      BookingUtils.hasInvalidStartAndEndDates(
-        startDate,
-        endDate,
-        // Current timestamp
-        new Date(),
-        new Date()
-      )
-    ) {
-      this.setStatus(400)
-      return {
-        error:
-          "Invalid date, booking start date and end date must be in the range of today up to a year later. "
-      }
-    }
-
-    const datesInBooking = datesToDateRange(
-      firestoreTimestampToDate(startDate),
-      firestoreTimestampToDate(endDate)
-    )
-
-    const totalDays = datesInBooking.length
-
-    const MAX_BOOKING_DAYS = 10
-    // Validate number of dates to avoid kiddies from forging bookings
-    if (totalDays > MAX_BOOKING_DAYS) {
-      this.setStatus(400)
-      return {
-        error: "Invalid date range, booking must be a maximum of 10 days. "
-      }
-    }
     // Create new Stripe checkout session
     const stripeService = new StripeService()
     const userDataService = new UserDataService()
+
     try {
       const userData = await userDataService.getUserData(uid)
       const { newUser, stripeCustomerId } =
@@ -304,14 +272,55 @@ export class PaymentController extends Controller {
           CheckoutTypeValues.BOOKING
         )
         if (activeSession) {
+          const THIRTY_MINUTES_MS = 1800000
+
+          const sessionStartTime = new Date(
+            activeSession.created * 1000 + THIRTY_MINUTES_MS
+          ).toLocaleTimeString("en-NZ")
+
           this.setStatus(200)
           return {
             stripeClientSecret: activeSession.client_secret,
-            message: "Existing booking checkout session found"
+            message: `Existing booking checkout session found, you may start a new one after ${sessionStartTime} (NZST)`
           }
         }
       }
 
+      const { startDate, endDate } = requestBody
+      // The request start and end dates
+      if (
+        !startDate ||
+        !endDate ||
+        BookingUtils.hasInvalidStartAndEndDates(
+          startDate,
+          endDate,
+          // Current timestamp
+          new Date(),
+          new Date()
+        )
+      ) {
+        this.setStatus(400)
+        return {
+          error:
+            "Invalid date, booking start date and end date must be in the range of today up to a year later. "
+        }
+      }
+
+      const datesInBooking = datesToDateRange(
+        firestoreTimestampToDate(startDate),
+        firestoreTimestampToDate(endDate)
+      )
+
+      const totalDays = datesInBooking.length
+
+      const MAX_BOOKING_DAYS = 10
+      // Validate number of dates to avoid kiddies from forging bookings
+      if (totalDays > MAX_BOOKING_DAYS) {
+        this.setStatus(400)
+        return {
+          error: "Invalid date range, booking must be a maximum of 10 days. "
+        }
+      }
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
 
@@ -322,7 +331,7 @@ export class PaymentController extends Controller {
         )
 
       if (bookingSlots.length !== totalDays) {
-        this.setStatus(409)
+        this.setStatus(423) // Resource busy
         return {
           error: "No booking slot available for one or more dates."
         }
@@ -384,9 +393,14 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
+      const BOOKING_START_DATE = datesInBooking[0].toISOString().split("T")[0]
+      const BOOKING_END_DATE = datesInBooking[totalDays - 1]
+        .toISOString()
+        .split("T")[0]
+
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
-        `${process.env.FRONTEND_URL}/booking/success?session_id={CHECKOUT_SESSION_ID}&startDate=${datesInBooking[0].toISOString().split("T")[0]}&endDate=${datesInBooking[totalDays - 1].toISOString().split("T")[0]}`,
+        `${process.env.FRONTEND_URL}/bookings/success?session_id={CHECKOUT_SESSION_ID}&startDate=${BOOKING_START_DATE}&endDate=${BOOKING_END_DATE}`,
         [
           {
             price: default_price as string,
