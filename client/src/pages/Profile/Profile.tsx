@@ -132,7 +132,11 @@ export default function Profile() {
                   />
                   <Field
                     subtitle="Valid til"
-                    description={`End of ${new Date().getFullYear()}`}
+                    description={
+                      userMembership === "Member"
+                        ? `End of ${new Date().getFullYear()}`
+                        : ""
+                    }
                   />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel
