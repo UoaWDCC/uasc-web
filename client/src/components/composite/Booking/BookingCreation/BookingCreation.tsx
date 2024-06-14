@@ -183,7 +183,6 @@ export const CreateBookingSection = ({
           <BookingInfoComponent
             pricePerNight={NORMAL_PRICE.toString()}
             priceSaturday={SPECIAL_PRICE.toString()}
-            priceNonMember={SPECIAL_PRICE.toString()}
           />
         </div>
 
