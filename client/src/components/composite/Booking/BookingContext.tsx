@@ -7,13 +7,40 @@ import queryClient from "services/QueryClient"
 import { useEditSelfMutation } from "services/User/UserMutations"
 
 interface IBookingContext {
+  /**
+   * @param startDate to request the session for
+   * @param endDate  to request the session for
+   */
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
+  /**
+   * Used to initiate the checkout component for bookings
+   */
   clientSecret?: string
+  /**
+   * Called to try retrieve any existing sessions for the use
+   */
   getExistingSession?: () => void
+  /**
+   * Invalidates the currently stored booking availability
+   */
   forceRefreshBookings?: () => void
+  /**
+   * Used when the user inputs into the dietary requiements box
+   * @param newAllergies the new updated information to overwrite the users old
+   * `dietary_requirements` field
+   */
   setAllergies?: (newAllergies: string) => void
+  /**
+   * Description of information from server
+   */
   message?: string
+  /**
+   * If there is a currently undergoing operation
+   */
   isPending?: boolean
+  /**
+   * Parsed message describing problems arising from a network call
+   */
   errorMessage?: string
 }
 
