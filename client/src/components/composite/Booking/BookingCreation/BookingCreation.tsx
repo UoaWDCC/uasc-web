@@ -7,7 +7,12 @@ import { useEffect, useMemo, useState } from "react"
 
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
-import { formattedNzDate, timestampToDate } from "components/utils/Utils"
+import {
+  datesToDateRange,
+  formattedNzDate,
+  isSingleFridayOrSaturday,
+  timestampToDate
+} from "components/utils/Utils"
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
 
@@ -77,6 +82,9 @@ interface ICreateBookingSection {
   isPending?: boolean
 }
 
+const NORMAL_PRICE = 40 as const
+const SPECIAL_PRICE = 60 as const
+
 export const CreateBookingSection = ({
   bookingSlots = [],
   handleBookingCreation,
@@ -105,14 +113,7 @@ export const CreateBookingSection = ({
    * @param endDate the last date of the range
    */
   const checkValidRange = (startDate: Date, endDate: Date) => {
-    const dateArray = []
-    const currentDate = new Date(startDate)
-
-    while (currentDate <= new Date(endDate)) {
-      dateArray.push(new Date(currentDate))
-      // Use UTC date to prevent problems with time zones and DST
-      currentDate.setUTCDate(currentDate.getUTCDate() + 1)
-    }
+    const dateArray = datesToDateRange(startDate, endDate)
     if (
       dateArray.some(
         (date) =>
@@ -160,6 +161,18 @@ export const CreateBookingSection = ({
     )
   }, [currentStartDate, currentEndDate, isValidForCreation])
 
+  const estimatedPriceString = useMemo(() => {
+    const nights = datesToDateRange(currentStartDate, currentEndDate).length
+    const requiredPrice = isSingleFridayOrSaturday(
+      currentStartDate,
+      currentEndDate
+    )
+      ? SPECIAL_PRICE
+      : NORMAL_PRICE
+
+    return `$${requiredPrice} * ${nights} night${nights > 1 ? "s" : ""} = $${requiredPrice * nights}`
+  }, [currentStartDate, currentEndDate])
+
   return (
     <>
       <div
@@ -168,9 +181,9 @@ export const CreateBookingSection = ({
       >
         <div className="h-full max-h-[600px] self-start">
           <BookingInfoComponent
-            pricePerNight="40"
-            priceSaturday="60"
-            priceNonMember="60"
+            pricePerNight={NORMAL_PRICE.toString()}
+            priceSaturday={SPECIAL_PRICE.toString()}
+            priceNonMember={SPECIAL_PRICE.toString()}
           />
         </div>
 
@@ -221,6 +234,9 @@ export const CreateBookingSection = ({
             }}
             returnValue="range"
           />
+          <h5 className="self-start font-bold">
+            Estimated price: {estimatedPriceString}{" "}
+          </h5>
           <span className="mb-4 mt-3 flex items-center gap-1">
             <TextInput
               label="From"
