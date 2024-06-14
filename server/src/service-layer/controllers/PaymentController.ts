@@ -257,70 +257,70 @@ export class PaymentController extends Controller {
     const stripeService = new StripeService()
     const userDataService = new UserDataService()
 
-    const userData = await userDataService.getUserData(uid)
-    const { newUser, stripeCustomerId } =
-      await stripeService.createCustomerIfNotExist(
-        request.user,
-        userData,
-        userDataService
-      )
-    // If not a new Stripe customer, we want to check for pre-existing bookings
-    if (!newUser) {
-      const activeSession = await stripeService.getActiveSessionForUser(
-        stripeCustomerId,
-        CheckoutTypeValues.BOOKING
-      )
-      if (activeSession) {
-        const THIRTY_MINUTES_MS = 1800000
+    try {
+      const userData = await userDataService.getUserData(uid)
+      const { newUser, stripeCustomerId } =
+        await stripeService.createCustomerIfNotExist(
+          request.user,
+          userData,
+          userDataService
+        )
+      // If not a new Stripe customer, we want to check for pre-existing bookings
+      if (!newUser) {
+        const activeSession = await stripeService.getActiveSessionForUser(
+          stripeCustomerId,
+          CheckoutTypeValues.BOOKING
+        )
+        if (activeSession) {
+          const THIRTY_MINUTES_MS = 1800000
 
-        const sessionStartTime = new Date(
-          activeSession.created * 1000 + THIRTY_MINUTES_MS
-        ).toLocaleTimeString("en-NZ")
+          const sessionStartTime = new Date(
+            activeSession.created * 1000 + THIRTY_MINUTES_MS
+          ).toLocaleTimeString("en-NZ")
 
-        this.setStatus(200)
-        return {
-          stripeClientSecret: activeSession.client_secret,
-          message: `Existing booking checkout session found, you may start a new one after ${sessionStartTime} (NZST)`
+          this.setStatus(200)
+          return {
+            stripeClientSecret: activeSession.client_secret,
+            message: `Existing booking checkout session found, you may start a new one after ${sessionStartTime} (NZST)`
+          }
         }
       }
-    }
 
-    const { startDate, endDate } = requestBody
-    // The request start and end dates
-    if (
-      !startDate ||
-      !endDate ||
-      BookingUtils.hasInvalidStartAndEndDates(
-        startDate,
-        endDate,
-        // Current timestamp
-        new Date(),
-        new Date()
+      const { startDate, endDate } = requestBody
+      // The request start and end dates
+      if (
+        !startDate ||
+        !endDate ||
+        BookingUtils.hasInvalidStartAndEndDates(
+          startDate,
+          endDate,
+          // Current timestamp
+          new Date(),
+          new Date()
+        )
+      ) {
+        this.setStatus(400)
+        return {
+          error:
+            "Invalid date, booking start date and end date must be in the range of today up to a year later. "
+        }
+      }
+
+      const datesInBooking = datesToDateRange(
+        firestoreTimestampToDate(startDate),
+        firestoreTimestampToDate(endDate)
       )
-    ) {
-      this.setStatus(400)
-      return {
-        error:
-          "Invalid date, booking start date and end date must be in the range of today up to a year later. "
+
+      const totalDays = datesInBooking.length
+
+      const MAX_BOOKING_DAYS = 10
+      // Validate number of dates to avoid kiddies from forging bookings
+      if (totalDays > MAX_BOOKING_DAYS) {
+        this.setStatus(400)
+        return {
+          error: "Invalid date range, booking must be a maximum of 10 days. "
+        }
       }
-    }
-
-    const datesInBooking = datesToDateRange(
-      firestoreTimestampToDate(startDate),
-      firestoreTimestampToDate(endDate)
-    )
-
-    const totalDays = datesInBooking.length
-
-    const MAX_BOOKING_DAYS = 10
-    // Validate number of dates to avoid kiddies from forging bookings
-    if (totalDays > MAX_BOOKING_DAYS) {
-      this.setStatus(400)
-      return {
-        error: "Invalid date range, booking must be a maximum of 10 days. "
-      }
-    }
-    try {
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
 
