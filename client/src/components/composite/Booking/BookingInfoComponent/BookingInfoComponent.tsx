@@ -1,13 +1,22 @@
 interface IBookingInfoProps {
+  /**
+   * The price to *display* for a "normal booking"
+   */
   pricePerNight: string
-  priceSaturday: string
+  /**
+   * The price to *display* for a single friday/saturday
+   */
+  priceSingleFridayOrSaturday: string
 }
 
 type props = IBookingInfoProps
 
 const Divider = () => <span className="bg-dark-blue-100 my-8 h-[1px] w-full" />
 
-const BookingInfoComponent = ({ pricePerNight, priceSaturday }: props) => {
+const BookingInfoComponent = ({
+  pricePerNight,
+  priceSingleFridayOrSaturday
+}: props) => {
   return (
     <div className="border-gray-3 flex h-full w-full flex-col justify-center rounded border bg-white px-8 py-8 pb-8">
       <div id="top" className="text-dark-blue-100 flex flex-col gap-2">
@@ -16,7 +25,7 @@ const BookingInfoComponent = ({ pricePerNight, priceSaturday }: props) => {
           <h3 className="font-normal">per night</h3>
         </h3>
         <h3 className="flex gap-2">
-          ${priceSaturday}
+          ${priceSingleFridayOrSaturday}
           <h3 className="font-normal">a single Saturday or Friday</h3>
         </h3>
         <h5 className="font-normal">

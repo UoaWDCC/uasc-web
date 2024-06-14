@@ -182,7 +182,7 @@ export const CreateBookingSection = ({
         <div className="h-full max-h-[600px] self-start">
           <BookingInfoComponent
             pricePerNight={NORMAL_PRICE.toString()}
-            priceSaturday={SPECIAL_PRICE.toString()}
+            priceSingleFridayOrSaturday={SPECIAL_PRICE.toString()}
           />
         </div>
 

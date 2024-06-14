@@ -44,6 +44,9 @@ interface IBookingContext {
   errorMessage?: string
 }
 
+/**
+ * Should wrap all pages in the bookings route
+ */
 export const BookingContext = createContext<IBookingContext>({})
 
 export const BookingContextProvider = ({
