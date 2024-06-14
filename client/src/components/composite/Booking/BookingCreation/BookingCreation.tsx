@@ -277,7 +277,11 @@ interface IRequirementCheckBoxes {
   onValidityChange: (newValid: boolean) => void
 }
 
-const RequirementCheckBoxes = ({
+/**
+ * Provides a way to see if the user has agreed to all required policy
+ * @deprecated only for internal use in `BookingCreation`, exported for testing purposes
+ */
+export const RequirementCheckBoxes = ({
   onValidityChange
 }: IRequirementCheckBoxes) => {
   const [acceptedRequirements, setAcceptedRequirements] = useState<{
@@ -293,6 +297,7 @@ const RequirementCheckBoxes = ({
   return (
     <span className="flex w-full flex-col gap-1">
       <Checkbox
+        data-testid="agreed-to-night-policy-checkbox"
         onChange={(e) => {
           setAcceptedRequirements({
             ...acceptedRequirements,
@@ -302,6 +307,7 @@ const RequirementCheckBoxes = ({
         label="I understand that each date corresponds to one night"
       />
       <Checkbox
+        data-testid="agreed-to-general-policy-checkbox"
         label="I have read and acknowledged the booking policy"
         onChange={(e) => {
           setAcceptedRequirements({

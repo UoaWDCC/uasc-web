@@ -1,12 +1,15 @@
 import { Timestamp } from "firebase/firestore"
 import { createContext } from "react"
 import { useNavigate } from "react-router-dom"
+import { BOOKING_AVAILABLITY_KEY } from "services/Booking/BookingQueries"
 import { useBookingPaymentClientSecretMutation } from "services/Payment/PaymentMutations"
+import queryClient from "services/QueryClient"
 
 interface IBookingContext {
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
   clientSecret?: string
   getExistingSession?: () => void
+  forceRefreshBookings?: () => void
   message?: string
   isPending?: boolean
   errorMessage?: string
@@ -38,6 +41,9 @@ export const BookingContextProvider = ({
       }
     )
   }
+  const forceRefreshBookings = () => {
+    queryClient.invalidateQueries({ queryKey: [BOOKING_AVAILABLITY_KEY] })
+  }
 
   const handleBookingCreation = async (
     startDate: Timestamp,
@@ -61,6 +67,7 @@ export const BookingContextProvider = ({
         handleBookingCreation,
         getExistingSession,
         isPending,
+        forceRefreshBookings,
         errorMessage:
           error?.name === "UnavailableBookingError" ? error?.message : undefined
       }}

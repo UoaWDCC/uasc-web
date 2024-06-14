@@ -1,4 +1,8 @@
-import { handleDateRangeInputChange } from "./BookingCreation"
+import { fireEvent, render } from "@testing-library/react"
+import {
+  RequirementCheckBoxes,
+  handleDateRangeInputChange
+} from "./BookingCreation"
 
 describe("handleDateRangeInputChange", () => {
   let setDateFunction: any
@@ -31,5 +35,44 @@ describe("handleDateRangeInputChange", () => {
       startDate,
       endDate
     })
+  })
+})
+
+describe("RequirementCheckBoxes", () => {
+  it("should call onValidityChange with true when all checkboxes are checked", () => {
+    const mockOnValidityChange = jest.fn()
+    const { getByTestId } = render(
+      <RequirementCheckBoxes onValidityChange={mockOnValidityChange} />
+    )
+
+    const nightPolicyCheckbox = getByTestId("agreed-to-night-policy-checkbox")
+    const bookingPolicyCheckbox = getByTestId(
+      "agreed-to-general-policy-checkbox"
+    )
+
+    fireEvent.click(nightPolicyCheckbox)
+    fireEvent.click(bookingPolicyCheckbox)
+
+    expect(mockOnValidityChange).toHaveBeenCalledWith(true)
+  })
+
+  it("should call onValidityChange with false when either checkbox is unchecked", () => {
+    const mockOnValidityChange = jest.fn()
+    const { getByTestId } = render(
+      <RequirementCheckBoxes onValidityChange={mockOnValidityChange} />
+    )
+
+    const nightPolicyCheckbox = getByTestId("agreed-to-night-policy-checkbox")
+    const bookingPolicyCheckbox = getByTestId(
+      "agreed-to-general-policy-checkbox"
+    )
+
+    fireEvent.click(nightPolicyCheckbox)
+
+    expect(mockOnValidityChange).toHaveBeenCalledWith(false)
+
+    fireEvent.click(bookingPolicyCheckbox)
+
+    expect(mockOnValidityChange).toHaveBeenCalledWith(true)
   })
 })
