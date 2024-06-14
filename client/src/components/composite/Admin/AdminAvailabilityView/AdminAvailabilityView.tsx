@@ -132,7 +132,7 @@ const AdminAvailabilityView = ({
                 // Find slots that are "available"
                 (slot) =>
                   timestampToDate(slot.date).toDateString() ===
-                    date.toDateString() && slot.maxBookings > 0
+                  date.toDateString()
               )
               return slot ? (
                 // Apply style if it is
