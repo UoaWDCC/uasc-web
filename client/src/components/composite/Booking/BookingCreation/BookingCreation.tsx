@@ -198,17 +198,18 @@ export const CreateBookingSection = ({
                 ? [currentStartDate, currentEndDate]
                 : undefined
             }
-            tileDisabled={({ date }) =>
-              !bookingSlots.some(
+            tileDisabled={({ date, view }) =>
+              view !== "year" &&
+              (!bookingSlots.some(
                 (slot) =>
                   timestampToDate(slot.date).toDateString() ===
                   date.toDateString()
               ) ||
-              disabledDates.some(
-                (slot) =>
-                  timestampToDate(slot.date).toDateString() ===
-                  date.toDateString()
-              )
+                disabledDates.some(
+                  (slot) =>
+                    timestampToDate(slot.date).toDateString() ===
+                    date.toDateString()
+                ))
             }
             tileContent={({ date }) => {
               const slot = bookingSlots.find(
