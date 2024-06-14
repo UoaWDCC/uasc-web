@@ -295,7 +295,7 @@ export const RequirementCheckBoxes = ({
   }, [acceptedRequirements])
 
   return (
-    <span className="flex w-full flex-col gap-1">
+    <span className="mb-3 flex w-full flex-col gap-1">
       <Checkbox
         data-testid="agreed-to-night-policy-checkbox"
         onChange={(e) => {
