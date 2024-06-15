@@ -12,6 +12,7 @@ type buttonVariants =
   | "inverted-default-st"
   | "progress-default"
   | "progress-inverted"
+  | "tertiary"
 
 interface IButtonProps {
   children?: React.ReactNode
@@ -156,8 +157,19 @@ const SecondaryButton = ({ children, ...props }: props) => {
       className="bg-orange enabled:hover:text-orange 
        border-orange font-p
       space-x-4; disabled:bg-orange-60 flex flex-col items-center justify-center rounded-md px-8 py-2 font-bold uppercase
-      text-white hover:bg-white enabled:border
-    "
+      text-white hover:bg-white enabled:border"
+    >
+      {children}
+    </button>
+  )
+}
+
+const TertiaryButton = ({ children, ...props }: props) => {
+  return (
+    <button
+      {...props}
+      className="bg-white border-dark-blue-60 text-dark-blue-60 disabled:bg-dark-blue-60 disabled:text-white enabled:border
+      flex flex-col items-center justify-center rounded-md px-1 sm:px-8 py-1 font-p space-x-4 font-bold uppercase text-h5"
     >
       {children}
     </button>
@@ -194,6 +206,8 @@ const Button = ({ iconSide, children, variant, ...props }: props) => {
           {children}
         </InvertedProgressButton>
       )
+    case "tertiary":
+      return <TertiaryButton {...props}>{children}</TertiaryButton>
   }
   return <DefaultButton {...props}>{children}</DefaultButton>
 }
