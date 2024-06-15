@@ -413,7 +413,13 @@ export class PaymentController extends Controller {
             bookingSlots.map((slot) => slot.id)
           )
         },
-        stripeCustomerId
+        stripeCustomerId,
+        undefined,
+        {
+          submit: {
+            message: `By clicking Pay you agree to booking the nights from ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
+          }
+        }
       )
       this.setStatus(200)
       return {

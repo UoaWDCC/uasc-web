@@ -268,6 +268,7 @@ export default class StripeService {
    * @param line_item format `{price: <price id of item>, quantity: X}`
    * @param metadata KVP of metadata
    * @param expires_after_mins Must be over 30 and under 24 hours (1140) we default to 31 minutes
+   * @param custom_text Object representing [extra text](https://docs.stripe.com/payments/checkout/customization) that the user may need to see
    * @returns client secret
    */
   public async createCheckoutSession(
@@ -279,7 +280,8 @@ export default class StripeService {
     }[],
     metadata: Record<string, string>,
     customer_id: string,
-    expires_after_mins: number = 31
+    expires_after_mins: number = 31,
+    custom_text?: Stripe.Checkout.SessionCreateParams.CustomText
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
@@ -292,7 +294,8 @@ export default class StripeService {
       ui_mode: "embedded",
       mode: "payment",
       currency: "NZD",
-      expires_at: dateNowSecs() + expires_after_mins * ONE_MINUTE_S
+      expires_at: dateNowSecs() + expires_after_mins * ONE_MINUTE_S,
+      custom_text
     })
     return session.client_secret
   }
