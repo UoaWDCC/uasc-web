@@ -114,6 +114,10 @@ export const CreateBookingSection = ({
    */
   const checkValidRange = (startDate: Date, endDate: Date) => {
     const dateArray = datesToDateRange(startDate, endDate)
+    if (dateArray.length > 10) {
+      alert("You may only book up to 10 days max.")
+      return false
+    }
     if (
       dateArray.some(
         (date) =>
