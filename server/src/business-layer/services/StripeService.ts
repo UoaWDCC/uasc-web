@@ -1,10 +1,21 @@
 import {
-  CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues,
+  MEMBERSHIP_PRODUCT_TYPE_KEY,
+  ProductTypeValues,
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
+import { UserAdditionalInfo } from "data-layer/models/firebase"
+import UserDataService from "data-layer/services/UserDataService"
+import { UserRecord } from "firebase-admin/auth"
 import Stripe from "stripe"
+import AuthService from "./AuthService"
+import BookingDataService from "data-layer/services/BookingDataService"
+import {
+  CheckoutTypeValues,
+  CHECKOUT_TYPE_KEY,
+  BOOKING_SLOTS_KEY
+} from "business-layer/utils/StripeSessionMetadata"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -39,6 +50,38 @@ export default class StripeService {
       query: `metadata['${key}']:'${value}'`
     })
     return result.data
+  }
+
+  /**
+   * Creates a new Stripe customer if it doesn't exist and sets the Stripe customer id to the user info after creation.
+   * @param user, user data extracted from JWT
+   *
+   * @returns `newUser` as true if they already have a stripe id alongside their `stripe_id`,
+   * false otherwise with the newly created `stripe_id`
+   */
+  public async createCustomerIfNotExist(
+    user: UserRecord,
+    userData: UserAdditionalInfo,
+    userDataService: UserDataService
+  ) {
+    if (userData.stripe_id) {
+      // pre-existing user
+      return {
+        newUser: false,
+        stripeCustomerId: userData.stripe_id
+      }
+    } else {
+      // need to create a new user
+      const { first_name, last_name } = userData
+      const { uid, email } = user
+      const displayName = `${first_name} ${last_name} ${email}`
+      const { id } = await this.createNewUser(displayName, email, uid)
+      await userDataService.editUserData(uid, { stripe_id: id })
+      return {
+        newUser: true,
+        stripeCustomerId: id
+      }
+    }
   }
 
   /**
@@ -125,6 +168,54 @@ export default class StripeService {
     return currentlyActiveSession
   }
 
+  /**
+   * Used to return recent active payment sessions in the case of one session only payments (i.e memberships or bookings)
+   * I.e to reduce available slots due to pending payments
+   * @param sessionType defined as the enum CheckoutTypeValues, only exists for `membership` and `booking` right now
+   * @param createdMinutesAgo how long ago to check for checkout sessions
+   * @param shouldPaginate keep fetching active sessions until none left (do not specify if not needed)
+   *
+   * Will return undefined if no sessions found
+   */
+  public async getRecentActiveSessions(
+    sessionType: CheckoutTypeValues,
+    createdMinutesAgo?: number,
+    shouldPaginate: boolean = false
+  ): Promise<Stripe.Checkout.Session[]> {
+    let { data, has_more } = await stripe.checkout.sessions.list({
+      created: {
+        gte: createdMinutesAgo
+          ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
+          : undefined
+      },
+      limit: 100
+    })
+
+    if (shouldPaginate && has_more) {
+      while (has_more) {
+        const response = await stripe.checkout.sessions.list({
+          created: {
+            gte: createdMinutesAgo
+              ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
+              : undefined
+          },
+          starting_after: data[data.length - 1].id,
+          limit: 100
+        })
+
+        data = [...data, ...response.data]
+        has_more = response.has_more
+      }
+    }
+
+    const recentActiveSessions = data.filter(
+      (session) =>
+        session.metadata[CHECKOUT_TYPE_KEY] === sessionType &&
+        session.status === "open"
+    )
+    return recentActiveSessions
+  }
+
   public async createProduct(
     name: string,
     metadata: Stripe.MetadataParam,
@@ -149,17 +240,24 @@ export default class StripeService {
     return product
   }
 
+  /**
+   * Fetches a checkout session associated with a given payment intent ID.
+   * @param payment_intent The payment intent used to pay for this checkout session.
+   * @returns The checkout session associated with this payment.
+   */
   public async retrieveCheckoutSessionFromPaymentIntent(
-    payment_intent?: string,
-    customer?: string,
-    status?: Stripe.Checkout.Session.Status
-  ) {
-    return await stripe.checkout.sessions.list({
-      limit: 1,
-      payment_intent,
-      customer,
-      status
+    payment_intent: string
+  ): Promise<Stripe.Checkout.Session> {
+    const sessions = await stripe.checkout.sessions.list({
+      payment_intent
     })
+    if (sessions.has_more) {
+      throw new Error(
+        `Fetching checkout session from payment intent yielded more than expected sessions`
+      )
+    }
+
+    return sessions.data[0]
   }
 
   /**
@@ -256,7 +354,77 @@ export default class StripeService {
       productUpdateParams
     )
 
-    /** Return the updated product */
+    /** Return the updated product
+     *
+     * @returns
+     */
     return updatedProduct
+  }
+
+  /** Fetch all active products from Stripe
+   * @returns membershipProducts - An array of active membership products from Stripe
+   */
+  public async getActiveMembershipProducts() {
+    try {
+      const products = await stripe.products.list({
+        active: true,
+        expand: ["data.default_price"]
+      })
+      // Filter products with the required metadata
+      const membershipProducts = products.data.filter(
+        (product) =>
+          product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] ===
+          ProductTypeValues.MEMBERSHIP
+      )
+      return membershipProducts
+    } catch (error) {
+      console.error("Error fetching Stripe products:", error)
+      throw error
+    }
+  }
+
+  /**
+   * Promotes a user from guest to member status.
+   * @param uid The user ID to promote to a member.
+   * @returns A promise that resolves once the user has been promoted.
+   */
+  public async handleMembershipPaymentSession(uid: string) {
+    const authService = new AuthService()
+
+    await authService.setCustomUserClaim(uid, "member")
+  }
+
+  /**
+   * Handles a booking payment session by creating the booking for the user.
+   * @param uid The user ID to award the booking session.
+   * @param session The Stripe session the user bought.
+   */
+  public async handleBookingPaymentSession(
+    uid: string,
+    session: Stripe.Checkout.Session
+  ) {
+    if (!(BOOKING_SLOTS_KEY in session.metadata)) {
+      throw new Error(
+        `Booking session '${session.id}' from user '${uid}' did not contain a BOOKING_SLOT_KEY`
+      )
+    }
+    const bookingSlotsJson = session.metadata[BOOKING_SLOTS_KEY]
+    const bookingSlotIds = JSON.parse(bookingSlotsJson) as Array<string>
+
+    const bookingDataService = new BookingDataService()
+    const bookingSlotService = new BookingSlotService()
+
+    await Promise.all(
+      bookingSlotIds.map(async (bookingSlotShortId) => {
+        const bookingSlotId = (
+          await bookingSlotService.getBookingSlotById(bookingSlotShortId)
+        ).id
+        await bookingDataService.createBooking({
+          booking_slot_id: bookingSlotId,
+          stripe_payment_id: session.id,
+          user_id: uid
+        })
+      })
+    )
   }
 }

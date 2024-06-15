@@ -4,7 +4,7 @@ import { auth } from "firebase"
 import { useNavigate } from "react-router-dom"
 
 export const AppNavbar = () => {
-  const [{ currentUser }] = useAppData()
+  const [{ currentUser, currentUserClaims }] = useAppData()
   const navigate = useNavigate()
   const signOut = () => {
     auth.signOut()
@@ -18,6 +18,7 @@ export const AppNavbar = () => {
       signInHandler={signIn}
       signOutHandler={signOut}
       isLoggedIn={currentUser !== null}
+      isAdmin={currentUserClaims?.admin}
     />
   )
 }

@@ -1,30 +1,41 @@
-import React from "react"
-import BookingForm from "components/composite/BookingForm/BookingForm"
-import { Typography, Stack } from "@mui/material"
+import { ProtectedCreateBookingSection } from "components/composite/Booking/BookingCreation/ProtectedCreateBookingSection"
+import { Route, Routes } from "react-router-dom"
+import BookingSuccess from "./BookingSuccess"
+import { Footer } from "components/generic/Footer/Footer"
+import BookingPayment from "components/composite/Booking/BookingPayment/BookingPayment"
+import { useContext } from "react"
+import { BookingContext } from "components/composite/Booking/BookingContext"
+import { useUserLoggedInCallback } from "hooks/useUserLoggedInCallback"
 
 const Booking = () => {
+  const { clientSecret, getExistingSession } = useContext(BookingContext)
+
+  useUserLoggedInCallback(() => getExistingSession?.())
+
   return (
-    <div
-      style={{
-        backgroundColor: "#f4f4f4",
-        height: "100%",
-        width: "100%",
-        backgroundImage:
-          "radial-gradient(ellipse 50% 50% at 25% 50%, #81c7ebaa, #ffffff)"
-      }}
-    >
-      <Stack spacing={3} sx={{ padding: "148px" }}>
-        <Typography
-          variant="h1"
-          align="left"
-          color="#474747"
-          sx={{ fontWeight: "bold" }}
-        >
-          Bookings
-        </Typography>
-        <BookingForm />
-      </Stack>
-    </div>
+    <>
+      <div
+        className="bg-book-lodge-image relative z-10 flex min-h-[90vh] w-full
+      flex-col items-center bg-cover bg-top bg-no-repeat py-8"
+      >
+        <div className="flex w-full max-w-[850px] flex-col items-center gap-8">
+          <h2 className="text-dark-blue-100 self-start italic">
+            Book the lodge
+          </h2>
+          <span className="w-full">
+            <Routes>
+              <Route index element={<ProtectedCreateBookingSection />} />
+              <Route
+                path="payment"
+                element={<BookingPayment clientSecret={clientSecret} />}
+              />
+              <Route path="success" element={<BookingSuccess />} />
+            </Routes>
+          </span>
+        </div>
+      </div>
+      <Footer />
+    </>
   )
 }
 

@@ -40,7 +40,8 @@ const Register = () => {
     navigateFn!,
     mutate,
     validateForm,
-    isPending || successfullySignedUp
+    isPending || successfullySignedUp,
+    !!currentUser
   )
   const pageContent = PAGE_CONTENT
 

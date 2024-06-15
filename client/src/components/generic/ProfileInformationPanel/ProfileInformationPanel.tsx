@@ -12,7 +12,7 @@ const ProfileInformationPanel = ({
   onEdit
 }: IProfileInformationPanel) => {
   return (
-    <div className="absolute w-[90%] flex-row rounded border border-stone-300 bg-white p-5">
+    <div className="w-full flex-row rounded border border-stone-300 bg-white p-5">
       <div className="flex flex-nowrap justify-between p-1">
         <h3 className="text-dark-blue-100 text-nowrap">{title}</h3>
         {onEdit && (

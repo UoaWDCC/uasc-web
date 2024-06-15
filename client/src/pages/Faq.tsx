@@ -18,7 +18,7 @@ import Grid from "@mui/material/Grid"
 import { useRef } from "react"
 
 function App() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   const handleClick = () => {
     ref.current?.scrollIntoView({ behavior: "smooth" })
@@ -92,7 +92,7 @@ function App() {
 
   return (
     <div style={{ marginBottom: "40px" }}>
-      <h1 style={useStyles.faqHeader}>FAQ</h1>
+      <h1>FAQ</h1>
       <Container maxWidth="xl">
         <Grid container columnSpacing={3} rowSpacing={3} xs>
           {/* membership */}
@@ -479,7 +479,7 @@ function App() {
             <div ref={ref}></div>
           </Grid>
           {/* gear and lift passes */}
-          <Grid item xs={12} md={5.9} styles={{ marginBottom: "60px" }}>
+          <Grid item xs={12} md={5.9}>
             <Box sx={{ boxShadow: 0 }} style={useStyles.headerTable1}>
               <h1>Gear and Lift passes:</h1>
             </Box>

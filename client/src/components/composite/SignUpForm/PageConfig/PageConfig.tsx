@@ -26,8 +26,6 @@ import {
 } from "../Sections/PaymentSection"
 import TestIcon from "assets/icons/snowboarder.svg?react"
 import { UseMutateFunction } from "@tanstack/react-query"
-import { signInWithCustomToken } from "firebase/auth"
-import { auth } from "firebase"
 import AccountSetupSection from "../Sections/AccountSetupSection"
 
 type FormSubmissionMutationFunction = UseMutateFunction<
@@ -47,7 +45,8 @@ export const PAGINATED_FORM_PAGES = (
   navigateFn: (route: RouteNames | "/profile" | number) => void,
   signUpFn: FormSubmissionMutationFunction,
   validateFormFn: (pageToValidate: PAGES, navigateFn: () => void) => void,
-  disableSubmit: boolean
+  disableSubmit: boolean,
+  isSignedIn: boolean = false
 ): PageProps[] => [
   {
     index: PAGES.PersonalFirst,
@@ -80,12 +79,6 @@ export const PAGINATED_FORM_PAGES = (
     onNext: () => {
       validateFormFn(PAGES.Additional, () =>
         signUpFn(undefined, {
-          async onSuccess(data) {
-            // console.log(data)
-            if (data?.jwtToken) {
-              await signInWithCustomToken(auth, data.jwtToken)
-            }
-          },
           onError(error) {
             console.error("Error signing up " + error)
           }
@@ -108,7 +101,9 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Confirm,
     title: "Confirm",
-    onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE)
+    onNext: () => navigateFn(ACCOUNT_SETUP_ROUTE),
+    nextDisabled: !isSignedIn,
+    backDisabled: !isSignedIn
   },
   {
     index: PAGES.AccountSetup,
