@@ -6,6 +6,9 @@ import { UserClaims } from "models/User"
 import fetchClient, { setToken } from "services/OpenApiFetchClient"
 import { StoreInstance } from "store/Store"
 import { MembershipPaymentStore } from "store/MembershipPayment"
+import queryClient from "services/QueryClient"
+import { BOOKING_AVAILABLITY_KEY } from "services/Booking/BookingQueries"
+import { MEMBERSHIP_CLIENT_SECRET_KEY } from "services/Payment/PaymentQueries"
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -30,6 +33,9 @@ auth.onIdTokenChanged(async (user) => {
 
   if (user === null) {
     // suggests a log out
+    queryClient.resetQueries({
+      queryKey: [BOOKING_AVAILABLITY_KEY, MEMBERSHIP_CLIENT_SECRET_KEY]
+    })
     StoreInstance.actions.resetCurrentUserState()
     return
   }

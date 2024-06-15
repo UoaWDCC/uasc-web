@@ -10,7 +10,11 @@ export enum MembershipTypeValues {
 }
 
 /**
- * For lodge bookings
+ * Used to query stripe for the pricing model to be used for a booking
+ *
+ * Should have a value of `LodgePricingTypeValues`
+ *
+ * @example [LODGE_PRICING_TYPE_KEY]: LodgePricingTypeValues.Normal
  */
 export const LODGE_PRICING_TYPE_KEY = "lodge_pricing_type"
 export enum LodgePricingTypeValues {
