@@ -9,11 +9,11 @@ export type MemberColumnFormat = {
   /**
    * The user id, used for adding handlers for each individual table row.
    */
+  "Date Joined"?: string
+  BedNo?: string
   uid: string
   Name?: string
-  Email?: string
-  Status?: string
-  "Date Joined"?: string
+  phone?: string
 }
 
 interface IAdminBooking {
@@ -46,10 +46,12 @@ interface IAdminBooking {
 
 const defaultData = {
   [TABLE_ROW_IDENTIFIER_KEY]: "",
+  Date: "",
+  BedNo: "",
   Name: "",
-  Status: "",
+  Number: "",
   Email: "",
-  "Date Joined": ""
+  "Dietary Requirement": ""
 }
 
 export const AdminBooking = ({ data, rowOperations }: IAdminBooking) => {
