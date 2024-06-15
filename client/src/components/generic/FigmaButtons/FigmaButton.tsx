@@ -168,8 +168,8 @@ const TertiaryButton = ({ children, ...props }: props) => {
   return (
     <button
       {...props}
-      className="bg-white border-dark-blue-60 text-dark-blue-60 disabled:bg-dark-blue-60 disabled:text-white enabled:border
-      flex flex-col items-center justify-center rounded-md px-1 sm:px-8 py-1 font-p space-x-4 font-bold uppercase text-h5"
+      className="border-dark-blue-60 text-dark-blue-60 disabled:bg-dark-blue-60 font-p text-h5 flex
+      flex-col items-center justify-center space-x-4 rounded-md bg-white px-1 py-1 font-bold uppercase enabled:border disabled:text-white sm:px-8"
     >
       {children}
     </button>
