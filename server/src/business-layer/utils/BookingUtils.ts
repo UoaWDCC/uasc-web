@@ -81,7 +81,7 @@ const BookingUtils = {
     if (
       // Single day requested
       totalDays === 1 &&
-      [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
+      [FRIDAY, SATURDAY].includes(datesInBooking[0].getDay())
     ) {
       return LodgePricingTypeValues.SingleFridayOrSaturday
     } else {
