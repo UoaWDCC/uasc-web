@@ -307,8 +307,8 @@ export class PaymentController extends Controller {
       }
 
       const datesInBooking = datesToDateRange(
-        firestoreTimestampToDate(startDate),
-        firestoreTimestampToDate(endDate)
+        firestoreTimestampToDate(normaliseFirestoreTimeStamp(startDate)),
+        firestoreTimestampToDate(normaliseFirestoreTimeStamp(endDate))
       )
 
       const totalDays = datesInBooking.length
@@ -393,10 +393,9 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
-      const BOOKING_START_DATE = datesInBooking[0].toISOString().split("T")[0]
-      const BOOKING_END_DATE = datesInBooking[totalDays - 1]
-        .toISOString()
-        .split("T")[0]
+      const BOOKING_START_DATE = datesInBooking[0].toLocaleDateString("en-NZ")
+      const BOOKING_END_DATE =
+        datesInBooking[totalDays - 1].toLocaleDateString("en-NZ")
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
