@@ -97,14 +97,14 @@ export const AdminBookingView = ({
         </span>
         <span className="border-gray-3 flex h-fit w-full flex-col items-center border bg-white px-2 py-1 sm:flex-row">
           <h4 className="text-dark-blue-100">
-            {timestampToDate(dateRange.startDate).toDateString()} -
+            {timestampToDate(dateRange.startDate).toDateString()} -{" "}
             {timestampToDate(dateRange.endDate).toDateString()}
           </h4>
           <span className="relative z-50 flex max-h-[40px] sm:ml-auto">
             {displayedCalendar ? (
               <span
                 ref={calendarRef}
-                className="absolute left-1/2 w-[350px] -translate-x-1/2 sm:right-0 sm:top-0"
+                className="absolute -right-1/2 w-[350px] translate-x-1/2 sm:right-0 sm:top-0 sm:translate-x-0"
               >
                 <Calendar
                   value={[
