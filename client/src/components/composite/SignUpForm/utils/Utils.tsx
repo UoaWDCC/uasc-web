@@ -70,23 +70,23 @@ export const getMembershipTypeConfirmationMessage = (
   switch (membershipType) {
     case "uoa_student":
       return formatMessage(
-        "UoA Student",
+        "UoA Student: returning and new",
         "This is for all students who currently attend UoA, both returning and new"
       )
 
     case "returning_member":
       return formatMessage(
-        "Non-student returning member",
+        "Non-student: returning member",
         "This is for non-students who were are returning"
       )
     case "non_uoa_student":
       return formatMessage(
-        "Non-UoA student",
+        "Non-UoA student: returning and new",
         "This is for all non-UoA students, both returning and new"
       )
     case "new_non_student":
       return formatMessage(
-        "New non-student",
+        "Non-student: new member",
         "This is for non-students who are new to the club"
       )
   }
