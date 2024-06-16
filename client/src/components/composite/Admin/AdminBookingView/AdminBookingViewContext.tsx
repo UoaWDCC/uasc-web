@@ -12,8 +12,8 @@ interface IAdminBookingViewContext {
   isUpdating: boolean
   setIsUpdating?: (updating: boolean) => void
   handleSelectedDateChange?: (
-    startDate?: Timestamp,
-    endDate?: Timestamp
+    startDate: Timestamp,
+    endDate: Timestamp
   ) => void
 }
 
@@ -27,7 +27,7 @@ export const AdminBookingViewContext = createContext<IAdminBookingViewContext>({
   isUpdating: false
 })
 
-export const DateSelectionProvider = ({
+export const AdminBookingViewProvider = ({
   children
 }: {
   children: React.ReactNode

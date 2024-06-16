@@ -104,7 +104,10 @@ export const AdminBookingView = ({
                 className="absolute right-4 top-0 w-[350px]"
               >
                 <Calendar
-                value={[timestampToDate(dateRange.startDate), timestampToDate(dateRange.endDate)]}
+                  value={[
+                    timestampToDate(dateRange.startDate),
+                    timestampToDate(dateRange.endDate)
+                  ]}
                   onChange={(range) => {
                     const [start, end] = range as [Date, Date]
                     handleDateRangeChange?.(
