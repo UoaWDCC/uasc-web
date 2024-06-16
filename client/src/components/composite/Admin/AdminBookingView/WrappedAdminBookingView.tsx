@@ -1,9 +1,15 @@
 import { useAdminBookingsQuery } from "services/Admin/AdminQueries"
 import { AdminBookingView, BookingMemberColumnFormat } from "./AdminBookingView"
 import { timestampToDate } from "components/utils/Utils"
-const WrappedAdminBookingView = () => {
-  const { data } = useAdminBookingsQuery()
+import { AdminBookingViewContext } from "./AdminBookingViewContext"
+import { useContext } from "react"
 
+const WrappedAdminBookingView = () => {
+  const {
+    selectedDates: { startDate, endDate }
+  } = useContext(AdminBookingViewContext)
+
+  const { data } = useAdminBookingsQuery(startDate, endDate)
   const dataList = data?.flatMap(
     (date) =>
       date.users.map((user) => {

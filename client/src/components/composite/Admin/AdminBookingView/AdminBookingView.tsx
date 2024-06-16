@@ -7,7 +7,8 @@ import {
   TableRowOperation
 } from "components/generic/ReusableTable/TableUtils"
 import { useState, useRef } from "react"
-import { useClickOutside } from "components/utils/Utils"
+import { useClickOutside, timestampToDate } from "components/utils/Utils"
+import { Timestamp } from "firebase/firestore"
 
 export type BookingMemberColumnFormat = {
   /**
@@ -49,9 +50,9 @@ interface IAdminBookingView {
   fetchNextPage?: () => void
 
   /**
-   * 
+   *
    */
-
+  dateRange: { startDate: Timestamp; endDate: Timestamp }
 }
 
 const defaultData = {
@@ -65,13 +66,9 @@ const defaultData = {
 
 export const AdminBookingView = ({
   data,
-  rowOperations
+  rowOperations,
+  dateRange
 }: IAdminBookingView) => {
-  const [dateRange] = useState<{
-    startDate: Date
-    endDate: Date
-  }>({ startDate: new Date(), endDate: new Date() })
-
   // Have state for if the calendar is displayed or not
   const [displayedCalendar, setDisplayedCalendar] = useState<boolean>(false)
 
@@ -94,8 +91,8 @@ export const AdminBookingView = ({
         </span>
         <span className="border-gray-3 flex h-[51px] w-full items-center border bg-white">
           <h4 className="text-dark-blue-100 pl-4">
-            {dateRange.startDate.toDateString()} -
-            {dateRange.endDate.toDateString()}
+            {timestampToDate(dateRange.startDate).toDateString()} -
+            {timestampToDate(dateRange.endDate).toDateString()}
           </h4>
           <span className="relative ml-auto flex pr-4">
             {displayedCalendar ? (
