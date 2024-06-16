@@ -294,12 +294,12 @@ export interface components {
     };
     UserAdditionalInfo: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
       /** Format: double */
       phone_number: number;
-      gender: string;
+      gender?: string;
       emergency_contact?: string;
       first_name: string;
       last_name: string;
@@ -307,8 +307,7 @@ export interface components {
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning: boolean;
-      university_year: string;
+      university_year?: string;
       /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
     };
