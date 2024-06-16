@@ -61,10 +61,7 @@ export const AdminBookingView = ({
   return (
     <>
       <div className="flex">
-        <div className="mb-4 mt-8 w-full justify-between">
-          <h2>Bookings</h2>
-        </div>
-        <span className="text-nowrap pt-12">
+        <span className="text-nowrap">
           <Button variant="default-sm">Add New booking</Button>
         </span>
       </div>
