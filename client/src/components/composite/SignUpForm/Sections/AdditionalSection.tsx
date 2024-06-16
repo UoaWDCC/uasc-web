@@ -60,7 +60,7 @@ export const AdditionalSection = () => {
   return (
     <div className="flex max-w-sm flex-col gap-5">
       <Dropdown
-        value={determineSport(does_ski, does_snowboarding)}
+        value={determineSport(does_ski || false, does_snowboarding || false)}
         label="Skier or Snowboarder?"
         onChange={(e) =>
           updateFormData({

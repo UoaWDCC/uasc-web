@@ -55,6 +55,7 @@ const AdminUserCreationModal = ({
   handleClose
 }: IAdminUserCreationModal) => {
   const [userType, setUserType] = useState<UserType>("guest")
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const formContainerRef = useRef<HTMLDivElement>(null)
   useClickOutside(formContainerRef, () => {
     handleClose?.()
@@ -62,32 +63,38 @@ const AdminUserCreationModal = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const data = new FormData(e.currentTarget)
-    const shouldGiveUserMembership = userType === "member"
+    setIsSubmitting(true)
+    try {
+      const data = new FormData(e.currentTarget)
+      const shouldGiveUserMembership = userType === "member"
 
-    userCreationHandler?.(
-      {
-        email: data.get(AdminUserCreationFormKeys.EMAIL) as string,
-        user: {
-          date_of_birth: Timestamp.fromDate(
-            new Date(
-              data.get(AdminUserCreationFormKeys.DATE_OF_BIRTH) as string
+      userCreationHandler?.(
+        {
+          email: data.get(AdminUserCreationFormKeys.EMAIL) as string,
+          user: {
+            date_of_birth: Timestamp.fromDate(
+              new Date(
+                data.get(AdminUserCreationFormKeys.DATE_OF_BIRTH) as string
+              )
+            ),
+            first_name: data.get(
+              AdminUserCreationFormKeys.FIRST_NAME
+            ) as string,
+            last_name: data.get(AdminUserCreationFormKeys.LAST_NAME) as string,
+            dietary_requirements: (data.get(
+              AdminUserCreationFormKeys.DIETARY_REQUIREMENTS
+            ) || "") as string,
+            phone_number: Number.parseInt(
+              data.get(AdminUserCreationFormKeys.PHONE_NUMBER) as string
             )
-          ),
-          first_name: data.get(AdminUserCreationFormKeys.FIRST_NAME) as string,
-          last_name: data.get(AdminUserCreationFormKeys.LAST_NAME) as string,
-          dietary_requirements: (data.get(
-            AdminUserCreationFormKeys.DIETARY_REQUIREMENTS
-          ) || "") as string,
-          phone_number: Number.parseInt(
-            data.get(AdminUserCreationFormKeys.PHONE_NUMBER) as string
-          )
-        }
-      },
-      shouldGiveUserMembership
-    )
-    e.currentTarget.reset()
-    handleClose?.()
+          }
+        },
+        shouldGiveUserMembership
+      )
+      e.currentTarget.reset()
+    } finally {
+      setIsSubmitting(false)
+    }
   }
   return (
     <div
@@ -157,7 +164,11 @@ const AdminUserCreationModal = ({
           <option>{GUEST_OPTION}</option>
           <option>{MEMBER_OPTION}</option>
         </Dropdown>
-        <Button type="submit" data-testid="add-new-member-button">
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          data-testid="add-new-member-button"
+        >
           Add Member
         </Button>
       </form>

@@ -25,25 +25,11 @@ import {
   PaymentSection
 } from "../Sections/PaymentSection"
 import TestIcon from "assets/icons/snowboarder.svg?react"
-import { UseMutateFunction } from "@tanstack/react-query"
 import AccountSetupSection from "../Sections/AccountSetupSection"
-
-type FormSubmissionMutationFunction = UseMutateFunction<
-  | {
-      error?: string | undefined
-      message?: string | undefined
-      jwtToken?: string | undefined
-      uid?: string | undefined
-    }
-  | undefined,
-  Error,
-  void,
-  unknown
->
 
 export const PAGINATED_FORM_PAGES = (
   navigateFn: (route: RouteNames | "/profile" | number) => void,
-  signUpFn: FormSubmissionMutationFunction,
+  signUpFn: () => void,
   validateFormFn: (pageToValidate: PAGES, navigateFn: () => void) => void,
   disableSubmit: boolean,
   isSignedIn: boolean = false
@@ -77,13 +63,7 @@ export const PAGINATED_FORM_PAGES = (
     nextButtonText: "Sign Up",
     onBack: () => navigateFn(CONTACT_ROUTE),
     onNext: () => {
-      validateFormFn(PAGES.Additional, () =>
-        signUpFn(undefined, {
-          onError(error) {
-            console.error("Error signing up " + error)
-          }
-        })
-      )
+      validateFormFn(PAGES.Additional, () => signUpFn())
     },
     nextDisabled: disableSubmit
   },
