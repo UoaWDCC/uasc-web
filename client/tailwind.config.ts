@@ -6,6 +6,15 @@ export default {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" }
+        }
+      },
+      animation: {
+        fadeIn: "fadeIn 0.2s ease-in-out 1"
+      },
       backgroundImage: {
         "home-ski-image": "url('$assets/images/homeLandingBackground.png')",
         "home-about-image": "url('$assets/images/AboutBackgroundImage.png')",
