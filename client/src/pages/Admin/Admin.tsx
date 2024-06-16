@@ -55,7 +55,6 @@ const Admin = () => {
                     </>
                   }
                 />
-                {/* TODO: Implement Bookings view for admin */}
               </Routes>
             </div>
           </div>

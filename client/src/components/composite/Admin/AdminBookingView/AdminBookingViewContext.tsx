@@ -11,10 +11,7 @@ interface IAdminBookingViewContext {
   }
   isUpdating: boolean
   setIsUpdating?: (updating: boolean) => void
-  handleSelectedDateChange?: (
-    startDate: Timestamp,
-    endDate: Timestamp
-  ) => void
+  handleSelectedDateChange?: (startDate: Timestamp, endDate: Timestamp) => void
 }
 
 const DEFAULT_DATES = {
