@@ -5,15 +5,16 @@ import {
   TableRowOperation
 } from "components/generic/ReusableTable/TableUtils"
 
-export type MemberColumnFormat = {
+export type BookingMemberColumnFormat = {
   /**
    * The user id, used for adding handlers for each individual table row.
    */
-  "Date Joined"?: string
-  BedNo?: string
   uid: string
+  Date?: string
   Name?: string
-  phone?: string
+  Number?: string
+  Email?: string
+  "Dietary Requirement": string
 }
 
 interface IAdminBooking {
@@ -22,7 +23,7 @@ interface IAdminBooking {
    *
    * @example // {Name: "Jon", Phone: "111"} will display `Name` before `Phone`
    */
-  data?: MemberColumnFormat[]
+  data?: BookingMemberColumnFormat[]
 
   /**
    *
@@ -47,7 +48,6 @@ interface IAdminBooking {
 const defaultData = {
   [TABLE_ROW_IDENTIFIER_KEY]: "",
   Date: "",
-  BedNo: "",
   Name: "",
   Number: "",
   Email: "",
@@ -66,7 +66,7 @@ export const AdminBooking = ({ data, rowOperations }: IAdminBooking) => {
         </span>
       </div>
 
-      <Table<MemberColumnFormat, "multiple-operations">
+      <Table<BookingMemberColumnFormat, "multiple-operations">
         data={data || [defaultData]}
         operationType="multiple-operations"
         rowOperations={rowOperations}
