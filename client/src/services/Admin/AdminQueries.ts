@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { Timestamp } from "firebase/firestore"
 import AdminService from "./AdminService"
 
 export function useUsersQuery() {
@@ -14,7 +15,7 @@ export function useUsersQuery() {
 export function useAdminBookingsQuery() {
   return useQuery({
     queryKey: ["bookingsBetweenRange"],
-    queryFn:  () => AdminService.getBookingsBetweenDateRange({}),
+    queryFn:  () => AdminService.getBookingsBetweenDateRange({endDate: Timestamp.fromDate(new Date("01/01/2025"))}),
     retry: 0,
   })
 }
