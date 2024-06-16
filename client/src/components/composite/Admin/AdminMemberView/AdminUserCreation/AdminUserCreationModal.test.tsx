@@ -5,6 +5,12 @@ import AdminUserCreationModal, {
 import { Timestamp } from "firebase/firestore"
 
 describe("AdminUserCreationModal", () => {
+  let confirmSpy: any
+  beforeAll(() => {
+    confirmSpy = jest.spyOn(window, "confirm")
+    confirmSpy.mockImplementation(jest.fn(() => true))
+  })
+  afterAll(() => confirmSpy.mockRestore())
   it("calls userCreationHandler with correct parameters", () => {
     const mockHandler = jest.fn()
     const { getByTestId } = render(
