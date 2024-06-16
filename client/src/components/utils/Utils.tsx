@@ -15,8 +15,7 @@ export const isSingleFridayOrSaturday = (startDate: Date, endDate: Date) => {
   const SATURDAY = 6
   const dateArray = datesToDateRange(startDate, endDate)
   return (
-    dateArray.length === 1 &&
-    [FRIDAY, SATURDAY].includes(dateArray[0].getUTCDay())
+    dateArray.length === 1 && [FRIDAY, SATURDAY].includes(dateArray[0].getDay())
   )
 }
 

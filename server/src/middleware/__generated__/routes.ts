@@ -197,7 +197,12 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserAdditionalInfo": {
+    "UserAccountTypes": {
+        "dataType": "refEnum",
+        "enums": ["admin","member","guest"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CombinedUserData": {
         "dataType": "refObject",
         "properties": {
             "date_of_birth": {"ref":"FirebaseFirestore.Timestamp","required":true},
@@ -216,24 +221,18 @@ const models: TsoaRoute.Models = {
             "returning": {"dataType":"boolean","required":true},
             "university_year": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your year of study"}}},
             "stripe_id": {"dataType":"string"},
+            "uid": {"dataType":"string","required":true},
+            "dateJoined": {"dataType":"string"},
+            "email": {"dataType":"string","required":true},
+            "membership": {"ref":"UserAccountTypes","required":true},
         },
         "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserAccountTypes": {
-        "dataType": "refEnum",
-        "enums": ["admin","member","guest"],
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CombinedUserData": {
-        "dataType": "refAlias",
-        "type": {"dataType":"intersection","subSchemas":[{"ref":"UserAdditionalInfo"},{"dataType":"nestedObjectLiteral","nestedProperties":{"membership":{"ref":"UserAccountTypes","required":true},"email":{"dataType":"string","required":true},"dateJoined":{"dataType":"string"},"uid":{"dataType":"string","required":true}}}],"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UsersByDateRangeResponse": {
         "dataType": "refObject",
         "properties": {
-            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"refAlias","ref":"CombinedUserData"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
+            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"refObject","ref":"CombinedUserData"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
             "error": {"dataType":"string"},
         },
         "additionalProperties": false,
@@ -284,7 +283,30 @@ const models: TsoaRoute.Models = {
             "error": {"dataType":"string"},
             "message": {"dataType":"string"},
             "nextCursor": {"dataType":"string"},
-            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"CombinedUserData"}},
+            "data": {"dataType":"array","array":{"dataType":"refObject","ref":"CombinedUserData"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserAdditionalInfo": {
+        "dataType": "refObject",
+        "properties": {
+            "date_of_birth": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "does_snowboarding": {"dataType":"boolean","required":true},
+            "does_racing": {"dataType":"boolean","required":true},
+            "does_ski": {"dataType":"boolean","required":true},
+            "phone_number": {"dataType":"double","required":true},
+            "gender": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your pronouns"}}},
+            "emergency_contact": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter a name"}}},
+            "first_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},
+            "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
+            "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
+            "faculty": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
+            "university": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},
+            "student_id": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},
+            "returning": {"dataType":"boolean","required":true},
+            "university_year": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your year of study"}}},
+            "stripe_id": {"dataType":"string"},
         },
         "additionalProperties": false,
     },

@@ -30,39 +30,20 @@ const WrappedAdminMemberView = () => {
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
 
-  const getNameFromUid = (uid: string) => {
-    const matchingUser = transformedDataList?.find((user) => user?.uid === uid)
-    if (matchingUser) {
-      return `${matchingUser.Name}`
-    }
-    return "Unknown"
-  }
-
+  /**
+   * You should optimistically handle the mutations in `AdminMutations`
+   */
   const rowOperations: TableRowOperation[] = [
     {
       name: "promote",
       handler: (uid: string) => {
-        promoteUser(uid, {
-          onSuccess: () =>
-            alert(`Successfully added membership for ${getNameFromUid(uid)}`),
-          onError: () =>
-            alert(
-              `Could not add membership for ${getNameFromUid(uid)}, they may already have membership`
-            )
-        })
+        promoteUser(uid)
       }
     },
     {
       name: "demote",
       handler: (uid: string) => {
-        demoteUser(uid, {
-          onSuccess: () =>
-            alert(`Successfully removed membership for ${getNameFromUid(uid)}`),
-          onError: () =>
-            alert(
-              `Could not remove membership for ${getNameFromUid(uid)}, they may already not have membership`
-            )
-        })
+        demoteUser(uid)
       }
     },
     {

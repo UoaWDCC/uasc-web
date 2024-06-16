@@ -44,7 +44,7 @@ const PaymentService = {
 
     if (!data?.stripeClientSecret) {
       throw new Error(
-        "An error occured when trying to fetch the membership payment client secret"
+        "An error occured when trying to fetch the booking payment client secret"
       )
     }
 
