@@ -94,7 +94,7 @@ export const AdminBookingView = ({
           </h4>
           <span className="relative ml-auto flex pr-4">
             {displayedCalendar ? (
-              <span ref={calendarRef} className="absolute w-[350px]">
+              <span ref={calendarRef} className="absolute right-4 top-0 w-[350px]">
                 <Calendar />
               </span>
             ) : null}
