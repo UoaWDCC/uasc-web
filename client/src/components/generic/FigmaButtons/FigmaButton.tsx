@@ -41,8 +41,8 @@ const StandardButtonInverted = ({ children, ...props }: props) => {
   return (
     <button
       {...props}
-      className="border-dark-blue-100 space-x-4 group
-        text-dark-blue-100 hover:bg-dark-blue-100 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
+      className="border-dark-blue-100 text-dark-blue-100 hover:bg-dark-blue-100
+        group flex flex-col items-center space-x-4 rounded-md px-8 py-2 font-sans font-bold uppercase
        enabled:border enabled:hover:text-white"
     >
       {children}
