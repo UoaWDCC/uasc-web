@@ -1,6 +1,4 @@
 const WrappedAdminBookingView = () => {
     
-  return (
-    <WrappedAdminBookingView  />
-  )
+  return <WrappedAdminBookingView />
 }

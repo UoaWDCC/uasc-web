@@ -54,7 +54,10 @@ const defaultData = {
   "Dietary Requirement": ""
 }
 
-export const AdminBookingView = ({ data, rowOperations }: IAdminBookingView) => {
+export const AdminBookingView = ({
+  data,
+  rowOperations
+}: IAdminBookingView) => {
   return (
     <>
       <div className="flex">
