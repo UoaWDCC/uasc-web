@@ -6,7 +6,8 @@ import { useContext } from "react"
 
 const WrappedAdminBookingView = () => {
   const {
-    selectedDates: { startDate, endDate }
+    selectedDates: { startDate, endDate },
+    handleSelectedDateChange
   } = useContext(AdminBookingViewContext)
 
   const { data } = useAdminBookingsQuery(startDate, endDate)
@@ -25,7 +26,13 @@ const WrappedAdminBookingView = () => {
         return newData
       }) || []
   )
-  return <AdminBookingView data={dataList} />
+  return (
+    <AdminBookingView
+      data={dataList}
+      dateRange={{ startDate, endDate }}
+      handleDateRangeChange={handleSelectedDateChange}
+    />
+  )
 }
 
 export default WrappedAdminBookingView

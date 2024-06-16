@@ -53,6 +53,8 @@ interface IAdminBookingView {
    *
    */
   dateRange: { startDate: Timestamp; endDate: Timestamp }
+
+  handleDateRangeChange?: (startDate: Timestamp, endDate: Timestamp) => void
 }
 
 const defaultData = {
@@ -67,7 +69,8 @@ const defaultData = {
 export const AdminBookingView = ({
   data,
   rowOperations,
-  dateRange
+  dateRange,
+  handleDateRangeChange
 }: IAdminBookingView) => {
   // Have state for if the calendar is displayed or not
   const [displayedCalendar, setDisplayedCalendar] = useState<boolean>(false)
@@ -100,7 +103,17 @@ export const AdminBookingView = ({
                 ref={calendarRef}
                 className="absolute right-4 top-0 w-[350px]"
               >
-                <Calendar selectRange />
+                <Calendar
+                value={[timestampToDate(dateRange.startDate), timestampToDate(dateRange.endDate)]}
+                  onChange={(range) => {
+                    const [start, end] = range as [Date, Date]
+                    handleDateRangeChange?.(
+                      Timestamp.fromDate(start),
+                      Timestamp.fromDate(end)
+                    )
+                  }}
+                  selectRange
+                />
               </span>
             ) : null}
             <Button variant="inverted-default-st" onClick={onClickHandler}>

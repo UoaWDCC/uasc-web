@@ -11,13 +11,15 @@ interface IAdminBookingViewContext {
   }
   isUpdating: boolean
   setIsUpdating?: (updating: boolean) => void
-  handleSelectedDateChange?: (startDate?: Date, endDate?: Date) => void
+  handleSelectedDateChange?: (
+    startDate?: Timestamp,
+    endDate?: Timestamp
+  ) => void
 }
 
 const DEFAULT_DATES = {
-
-    startDate: Timestamp.fromDate(new Date()),
-    endDate: Timestamp.fromDate(new Date())
+  startDate: Timestamp.fromDate(new Date()),
+  endDate: Timestamp.fromDate(new Date())
 }
 
 export const AdminBookingViewContext = createContext<IAdminBookingViewContext>({
@@ -37,10 +39,10 @@ export const DateSelectionProvider = ({
 
   const [isUpdating, setIsUpdating] = useState<boolean>(false)
 
-  const handleDateChange = (newStartDate: Date, newEndDate: Date) => {
+  const handleDateChange = (newStartDate: Timestamp, newEndDate: Timestamp) => {
     setSelectedDates({
-      startDate:  Timestamp.fromDate(new Date(newStartDate.toDateString())),
-      endDate:  Timestamp.fromDate(new Date(newEndDate.toDateString()))
+      startDate: newStartDate,
+      endDate: newEndDate
     })
   }
 
