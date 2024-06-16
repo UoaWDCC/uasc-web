@@ -12,6 +12,7 @@ import {
   RouteNames,
   SUCCESS_ROUTE
 } from "./RouteNames"
+import { MembershipTypes } from "models/Payment"
 
 export const oneLevelUp = (route: string) => {
   return `../${route}`
@@ -50,5 +51,43 @@ export const useCurrentStep = (): PAGES => {
 
     default:
       return PAGES.Unknown
+  }
+}
+
+/**
+ * @param membershipType the type of membership type to display the membership alert for
+ * @returns a formatted string with the required message
+ */
+export const getMembershipTypeConfirmationMessage = (
+  membershipType: MembershipTypes
+) => {
+  const formatMessage = (
+    membershipName: string,
+    membershipDescription: string
+  ) =>
+    `Are you sure you want to select the ${membershipName} membership type? ${membershipDescription}` as const
+
+  switch (membershipType) {
+    case "uoa_student":
+      return formatMessage(
+        "UoA Student: returning and new",
+        "This is for all students who currently attend UoA, both returning and new"
+      )
+
+    case "returning_member":
+      return formatMessage(
+        "Non-student: returning member",
+        "This is for non-students who were are returning"
+      )
+    case "non_uoa_student":
+      return formatMessage(
+        "Non-UoA student: returning and new",
+        "This is for all non-UoA students, both returning and new"
+      )
+    case "new_non_student":
+      return formatMessage(
+        "Non-student: new member",
+        "This is for non-students who are new to the club"
+      )
   }
 }
