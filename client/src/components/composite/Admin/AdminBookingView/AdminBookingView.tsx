@@ -4,6 +4,7 @@ import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
 } from "components/generic/ReusableTable/TableUtils"
+import { useState } from "react"
 
 export type BookingMemberColumnFormat = {
   /**
@@ -58,6 +59,10 @@ export const AdminBookingView = ({
   data,
   rowOperations
 }: IAdminBookingView) => {
+  const [dateRange, setDateRange] = useState<{
+    startDate: Date
+    endDate: Date
+  }>({ startDate: new Date(), endDate: new Date() })
   return (
     <>
       <div className="flex w-full flex-col">
@@ -67,7 +72,13 @@ export const AdminBookingView = ({
             <Button variant="default-sm">Add New booking</Button>
           </div>
         </span>
-        <span className="w-full border border-black bg-white">x</span>
+        <span className="flex h-12 w-full items-center border border-black bg-white">
+          <h4 className="text-dark-blue-100">
+            {dateRange.startDate.toDateString()} -
+            {dateRange.endDate.toDateString()}
+          </h4>
+          <div className=""></div>
+        </span>
         <Table<BookingMemberColumnFormat, "multiple-operations">
           data={data || [defaultData]}
           operationType="multiple-operations"
