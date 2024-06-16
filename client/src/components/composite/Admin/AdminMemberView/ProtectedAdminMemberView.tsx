@@ -40,8 +40,8 @@ const WrappedAdminMemberView = () => {
           alert(
             `Successfully added ${user.first_name} ${user.last_name} (${email})`
           )
+          await sendPasswordResetEmail(auth, email)
           if (accountType === "member" && data?.uid) {
-            await sendPasswordResetEmail(auth, email)
             await promoteUser(data.uid)
           }
           queryClient.invalidateQueries({ queryKey: ["allUsers"] })
