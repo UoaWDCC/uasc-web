@@ -50,10 +50,13 @@ interface IAdminBookingView {
   fetchNextPage?: () => void
 
   /**
-   *
+   * The range of dates to display the bookings for
    */
   dateRange: { startDate: Timestamp; endDate: Timestamp }
 
+  /**
+   * Handler when a new date range is selected on the calendar
+   */
   handleDateRangeChange?: (startDate: Timestamp, endDate: Timestamp) => void
 }
 
