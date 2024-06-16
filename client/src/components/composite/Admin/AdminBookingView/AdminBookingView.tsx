@@ -1,6 +1,6 @@
 import Table from "components/generic/ReusableTable/Table"
 import Button from "components/generic/FigmaButtons/FigmaButton"
-import 
+import CalenderIcon from "assets/icons/calender.svg?react"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
@@ -78,8 +78,15 @@ export const AdminBookingView = ({
             {dateRange.startDate.toDateString()} -
             {dateRange.endDate.toDateString()}
           </h4>
-          <span className="ml-auto pr-4">
-            <Button variant="inverted-default-st">pick date</Button>
+          <span className="ml-auto flex pr-4">
+            <Button variant="inverted-default-st">
+              <span className="flex items-center justify-center gap-2">
+                pick date
+                <span className="h-[22px] w-[22px]">
+                  <CalenderIcon className="hover:fill-white" />
+                </span>
+              </span>
+            </Button>
           </span>
         </span>
         <Table<BookingMemberColumnFormat, "multiple-operations">
