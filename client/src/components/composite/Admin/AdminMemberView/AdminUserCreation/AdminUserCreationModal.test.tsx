@@ -8,7 +8,7 @@ describe("AdminUserCreationModal", () => {
   it("calls userCreationHandler with correct parameters", () => {
     const mockHandler = jest.fn()
     const { getByTestId } = render(
-      <AdminUserCreationModal isOpen userCreationHandler={mockHandler} />
+      <AdminUserCreationModal userCreationHandler={mockHandler} />
     )
 
     fireEvent.change(getByTestId(AdminUserCreationFormKeys.FIRST_NAME), {

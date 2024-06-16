@@ -20,10 +20,6 @@ interface IAdminUserCreationModal {
     giveUserMembership: boolean
   ) => void
   /**
-   * Whether or not the modal should be displayed or not
-   */
-  isOpen?: boolean
-  /**
    * Callback for when a 'close' event is triggered with the modal open
    */
   handleClose?: () => void
@@ -56,7 +52,6 @@ type UserType = typeof GUEST_OPTION | typeof MEMBER_OPTION
  */
 const AdminUserCreationModal = ({
   userCreationHandler,
-  isOpen = false,
   handleClose
 }: IAdminUserCreationModal) => {
   const [userType, setUserType] = useState<UserType>("guest")
@@ -64,8 +59,6 @@ const AdminUserCreationModal = ({
   useClickOutside(formContainerRef, () => {
     handleClose?.()
   })
-
-  if (!isOpen) return null
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -97,84 +90,77 @@ const AdminUserCreationModal = ({
     handleClose?.()
   }
   return (
-    <div className="animate-fadeIn absolute left-0 top-0">
-      <div
-        className="flex h-fit min-h-screen w-[calc(100vw-16px)] max-w-full items-center
-                    justify-center overflow-hidden overflow-y-auto overflow-x-hidden bg-black/75"
-      >
-        <div
-          ref={formContainerRef}
-          className="border-gray-4 flex w-full max-w-[800px] 
+    <div
+      ref={formContainerRef}
+      className="border-gray-4 flex w-full max-w-[800px] 
                     flex-col items-center rounded-md border bg-white px-2 py-8"
-        >
-          <div
-            className="ml-auto mr-2 h-[15px] w-[15px] cursor-pointer sm:mr-8"
-            aria-label="close create users popup"
-            onClick={() => handleClose?.()}
-          >
-            <CloseIcon />
-          </div>
-          <h2>Add new member</h2>
-          <form
-            onSubmit={handleSubmit}
-            className="xs:max-w-[500px] flex w-full max-w-[250px] flex-col gap-2"
-          >
-            <TextInput
-              name={AdminUserCreationFormKeys.FIRST_NAME}
-              type="text"
-              label="First Name"
-              data-testid={AdminUserCreationFormKeys.FIRST_NAME}
-              required
-            />
-            <TextInput
-              name={AdminUserCreationFormKeys.LAST_NAME}
-              label="Last Name"
-              data-testid={AdminUserCreationFormKeys.LAST_NAME}
-              required
-            />
-            <TextInput
-              name={AdminUserCreationFormKeys.EMAIL}
-              data-testid={AdminUserCreationFormKeys.EMAIL}
-              type="email"
-              label="Email"
-              required
-            />
-            <TextInput
-              name={AdminUserCreationFormKeys.DIETARY_REQUIREMENTS}
-              data-testid={AdminUserCreationFormKeys.DIETARY_REQUIREMENTS}
-              type="text"
-              label="Dietary Requirements"
-            />
-            <TextInput
-              name={AdminUserCreationFormKeys.PHONE_NUMBER}
-              data-testid={AdminUserCreationFormKeys.PHONE_NUMBER}
-              label="Phone Number"
-              type="tel"
-              required
-            />
-            <TextInput
-              name={AdminUserCreationFormKeys.PHONE_NUMBER}
-              data-testid={AdminUserCreationFormKeys.DATE_OF_BIRTH}
-              label="Date of Birth"
-              type="date"
-              required
-            />
-            <Dropdown
-              name={AdminUserCreationFormKeys.MEMBERSHIP_TYPE}
-              data-testid={AdminUserCreationFormKeys.MEMBERSHIP_TYPE}
-              value={userType}
-              label="Membership Status"
-              onChange={(e) => setUserType(e.target.value as UserType)}
-            >
-              <option>{GUEST_OPTION}</option>
-              <option>{MEMBER_OPTION}</option>
-            </Dropdown>
-            <Button type="submit" data-testid="add-new-member-button">
-              Add Member
-            </Button>
-          </form>
-        </div>
+    >
+      <div
+        className="ml-auto mr-2 h-[15px] w-[15px] cursor-pointer sm:mr-8"
+        aria-label="close create users popup"
+        onClick={() => handleClose?.()}
+      >
+        <CloseIcon />
       </div>
+      <h2>Add new member</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="xs:max-w-[500px] flex w-full max-w-[250px] flex-col gap-2"
+      >
+        <TextInput
+          name={AdminUserCreationFormKeys.FIRST_NAME}
+          type="text"
+          label="First Name"
+          data-testid={AdminUserCreationFormKeys.FIRST_NAME}
+          required
+        />
+        <TextInput
+          name={AdminUserCreationFormKeys.LAST_NAME}
+          label="Last Name"
+          data-testid={AdminUserCreationFormKeys.LAST_NAME}
+          required
+        />
+        <TextInput
+          name={AdminUserCreationFormKeys.EMAIL}
+          data-testid={AdminUserCreationFormKeys.EMAIL}
+          type="email"
+          label="Email"
+          required
+        />
+        <TextInput
+          name={AdminUserCreationFormKeys.DIETARY_REQUIREMENTS}
+          data-testid={AdminUserCreationFormKeys.DIETARY_REQUIREMENTS}
+          type="text"
+          label="Dietary Requirements"
+        />
+        <TextInput
+          name={AdminUserCreationFormKeys.PHONE_NUMBER}
+          data-testid={AdminUserCreationFormKeys.PHONE_NUMBER}
+          label="Phone Number"
+          type="tel"
+          required
+        />
+        <TextInput
+          name={AdminUserCreationFormKeys.PHONE_NUMBER}
+          data-testid={AdminUserCreationFormKeys.DATE_OF_BIRTH}
+          label="Date of Birth"
+          type="date"
+          required
+        />
+        <Dropdown
+          name={AdminUserCreationFormKeys.MEMBERSHIP_TYPE}
+          data-testid={AdminUserCreationFormKeys.MEMBERSHIP_TYPE}
+          value={userType}
+          label="Membership Status"
+          onChange={(e) => setUserType(e.target.value as UserType)}
+        >
+          <option>{GUEST_OPTION}</option>
+          <option>{MEMBER_OPTION}</option>
+        </Dropdown>
+        <Button type="submit" data-testid="add-new-member-button">
+          Add Member
+        </Button>
+      </form>
     </div>
   )
 }

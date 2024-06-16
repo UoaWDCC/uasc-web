@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 
 import AdminUserCreationModal from "./AdminUserCreationModal"
 import { useState } from "react"
+import ModalContainer from "components/generic/ModalContainer/ModalContainer"
 
 const meta: Meta<typeof AdminUserCreationModal> = {
   component: AdminUserCreationModal
@@ -17,8 +18,7 @@ export const DefaultAdminUserCreationModal: Story = {
         `Signed up user with details:\n ${JSON.stringify(details)}\n,
          This user was also made a ${giveUserMembership ? "Member" : "Guest"}`
       )
-    },
-    isOpen: true
+    }
   }
 }
 
@@ -28,10 +28,9 @@ export const OpenAndClosing = () => {
   return (
     <>
       <button onClick={() => setIsOpen(!isOpen)}>Toggle Open</button>
-      <AdminUserCreationModal
-        isOpen={isOpen}
-        handleClose={() => setIsOpen(false)}
-      />
+      <ModalContainer isOpen={isOpen}>
+        <AdminUserCreationModal handleClose={() => setIsOpen(false)} />
+      </ModalContainer>
     </>
   )
 }
