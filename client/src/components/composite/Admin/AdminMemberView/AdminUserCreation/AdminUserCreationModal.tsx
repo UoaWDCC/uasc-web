@@ -112,8 +112,8 @@ const AdminUserCreationModal = ({
   return (
     <div
       ref={formContainerRef}
-      className="border-gray-4 flex w-full max-w-[800px] flex-col 
-                    items-center rounded-md border bg-white px-2 py-8 sm:mt-16"
+      className="border-gray-4 mt-72 flex w-full max-w-[800px] flex-col 
+                    items-center rounded-md border bg-white px-2 py-8"
     >
       <div
         className="ml-auto mr-2 h-[15px] w-[15px] cursor-pointer sm:mr-8"

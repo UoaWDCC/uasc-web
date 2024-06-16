@@ -94,7 +94,7 @@ export const AdminMemberView = ({
   }
   return (
     <>
-      <span className="mb-4 mt-6 flex w-full justify-between">
+      <span className="mb-4 mt-6 flex w-full flex-col justify-between gap-2 sm:flex-row">
         <span className="flex gap-5">
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
           <Button variant="inverted-default-sm">Filter</Button>
