@@ -89,14 +89,11 @@ export const AdminBookingView = ({
             {dateRange.endDate.toDateString()}
           </h4>
           <span className="ml-auto flex  pr-4">
-            <Button variant="inverted-default-st">
+            <Button variant="inverted-default-st" onClick={onClickHandler}>
               <span className="flex items-center justify-center gap-2 ">
                 pick date
                 <span className="h-[22px] w-[22px] ">
-                  <CalenderIcon
-                    onClick={onClickHandler}
-                    className="fill-dark-blue-100 group-hover:fill-white"
-                  />
+                  <CalenderIcon className="fill-dark-blue-100 group-hover:fill-white" />
                 </span>
               </span>
             </Button>
