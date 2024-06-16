@@ -9,7 +9,7 @@ import AdminUserCreationModal, {
   AccountType
 } from "./AdminUserCreation/AdminUserCreationModal"
 import ModalContainer from "components/generic/ModalContainer/ModalContainer"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { useSignUpUserMutation } from "services/User/UserMutations"
 import queryClient from "services/QueryClient"
 import { sendPasswordResetEmail } from "firebase/auth"
@@ -75,61 +75,37 @@ const WrappedAdminMemberView = () => {
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
 
-  const getNameFromUid = (uid: string) => {
-    const matchingUser = transformedDataList?.find((user) => user?.uid === uid)
-    if (matchingUser) {
-      return `${matchingUser.Name}`
-    }
-    return "Unknown"
-  }
-
-  const rowOperations: TableRowOperation[] = useMemo(
-    () => [
-      {
-        name: "promote",
-        handler: (uid: string) => {
-          promoteUser(uid, {
-            onSuccess: () =>
-              alert(`Successfully added membership for ${getNameFromUid(uid)}`),
-            onError: () =>
-              alert(
-                `Could not add membership for ${getNameFromUid(uid)}, they may already have membership`
-              )
-          })
-        }
-      },
-      {
-        name: "demote",
-        handler: (uid: string) => {
-          demoteUser(uid, {
-            onSuccess: () =>
-              alert(
-                `Successfully removed membership for ${getNameFromUid(uid)}`
-              ),
-            onError: () =>
-              alert(
-                `Could not remove membership for ${getNameFromUid(uid)}, they may already not have membership`
-              )
-          })
-        }
-      },
-      {
-        name: "delete",
-        handler: () => {
-          // TODO
-          throw new Error("Not Implemented")
-        }
-      },
-      {
-        name: "edit",
-        handler: () => {
-          // TODO
-          throw new Error("Not Implemented")
-        }
+  /**
+   * You should optimistically handle the mutations in `AdminMutations`
+   */
+  const rowOperations: TableRowOperation[] = [
+    {
+      name: "promote",
+      handler: (uid: string) => {
+        promoteUser(uid)
       }
-    ],
-    [promoteUser, demoteUser]
-  )
+    },
+    {
+      name: "demote",
+      handler: (uid: string) => {
+        demoteUser(uid)
+      }
+    },
+    {
+      name: "delete",
+      handler: () => {
+        // TODO
+        throw new Error("Not Implemented")
+      }
+    },
+    {
+      name: "edit",
+      handler: () => {
+        // TODO
+        throw new Error("Not Implemented")
+      }
+    }
+  ]
 
   return (
     <>
