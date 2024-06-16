@@ -89,22 +89,22 @@ export const AdminBookingView = ({
   return (
     <>
       <div className="flex w-full flex-col">
-        <span className="my-4 flex w-full items-center justify-center">
+        <span className="my-4 flex w-full flex-col items-center justify-center sm:flex-row">
           <h2 className="text-dark-blue-100 ">Bookings</h2>
-          <div className="ml-auto">
+          <div className="sm:ml-auto">
             <Button variant="default-sm">Add New booking</Button>
           </div>
         </span>
-        <span className="border-gray-3 flex h-[51px] w-full items-center border bg-white">
-          <h4 className="text-dark-blue-100 pl-4">
+        <span className="border-gray-3 flex h-fit w-full flex-col items-center border bg-white px-2 py-1 sm:flex-row">
+          <h4 className="text-dark-blue-100">
             {timestampToDate(dateRange.startDate).toDateString()} -
             {timestampToDate(dateRange.endDate).toDateString()}
           </h4>
-          <span className="relative ml-auto flex pr-4">
+          <span className="relative z-50 flex max-h-[40px] sm:ml-auto">
             {displayedCalendar ? (
               <span
                 ref={calendarRef}
-                className="absolute right-4 top-0 w-[350px]"
+                className="absolute left-1/2 w-[350px] -translate-x-1/2 sm:right-0 sm:top-0"
               >
                 <Calendar
                   value={[
