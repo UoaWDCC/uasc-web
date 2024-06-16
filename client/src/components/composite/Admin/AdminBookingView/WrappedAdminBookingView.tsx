@@ -19,6 +19,7 @@ const WrappedAdminBookingView = () => {
         return newData
       }) || []
   )
+  return <AdminBookingView data={dataList} />
 }
 
 export default WrappedAdminBookingView
