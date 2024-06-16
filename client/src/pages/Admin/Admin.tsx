@@ -40,7 +40,6 @@ const Admin = () => {
                 path="bookings"
                 element={
                   <>
-                    <Heading title="Booking" />
                     <WrappedAdminBookingView />
                   </>
                 }

@@ -19,7 +19,7 @@ export function useAdminBookingsQuery() {
     queryKey: ["bookingsBetweenRange"],
     queryFn: () =>
       AdminService.getBookingsBetweenDateRange({
-        endDate: Timestamp.fromDate(new Date("01/01/2025"))
+        endDate: Timestamp.fromDate(new Date("2025-01-01"))
       }),
     retry: 0
   })

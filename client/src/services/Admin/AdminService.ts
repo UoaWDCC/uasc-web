@@ -52,14 +52,15 @@ const AdminService = {
   },
   getBookingsBetweenDateRange: async function ({
     startDate = Timestamp.fromDate(new Date()),
-    endDate = Timestamp.fromDate(new Date())
+    endDate = Timestamp.fromDate(new Date("2025-01-01"))
   }: {
     startDate?: Timestamp
     endDate?: Timestamp
   }) {
+    const _startDate = {seconds: startDate.seconds, nanoseconds: 0}
     const { data, response } = await fetchClient.POST("/bookings/fetch-users", {
       body: {
-        startDate,
+        startDate: _startDate,
         endDate
       }
     })

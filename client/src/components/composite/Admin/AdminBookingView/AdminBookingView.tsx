@@ -60,19 +60,21 @@ export const AdminBookingView = ({
 }: IAdminBookingView) => {
   return (
     <>
-      <div className="flex">
-        <span className="text-nowrap">
-          <Button variant="default-sm">Add New booking</Button>
+      <div className="flex w-full flex-col">
+        <span className="my-4 flex w-full items-center justify-center">
+          <h2 className="text-dark-blue-100 ">Booking</h2>
+          <div className="ml-auto">
+            <Button variant="default-sm">Add New booking</Button>
+          </div>
         </span>
+        <Table<BookingMemberColumnFormat, "multiple-operations">
+          data={data || [defaultData]}
+          operationType="multiple-operations"
+          rowOperations={rowOperations}
+          // Make sure that this is smaller than the amount we fetch in the `AdminService` for better UX
+          showPerPage={15}
+        />
       </div>
-
-      <Table<BookingMemberColumnFormat, "multiple-operations">
-        data={data || [defaultData]}
-        operationType="multiple-operations"
-        rowOperations={rowOperations}
-        // Make sure that this is smaller than the amount we fetch in the `AdminService` for better UX
-        showPerPage={15}
-      />
     </>
   )
 }
