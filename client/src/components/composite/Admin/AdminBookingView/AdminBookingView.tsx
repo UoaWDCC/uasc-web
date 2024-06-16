@@ -1,6 +1,7 @@
 import Table from "components/generic/ReusableTable/Table"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import CalenderIcon from "assets/icons/calender.svg?react"
+import Calendar from "components/generic/Calendar/Calendar"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
@@ -64,6 +65,15 @@ export const AdminBookingView = ({
     startDate: Date
     endDate: Date
   }>({ startDate: new Date(), endDate: new Date() })
+
+  // Have state for if the calendar is displayed or not
+  const [displayedCalendar, setDisplayedCalendar] = useState<boolean>(false)
+
+  // Add handler for when the Pick Date button is clicked
+  const onClickHandler = () => {
+    setDisplayedCalendar(!displayedCalendar)
+  }
+
   return (
     <>
       <div className="flex w-full flex-col">
@@ -83,7 +93,10 @@ export const AdminBookingView = ({
               <span className="flex items-center justify-center gap-2 ">
                 pick date
                 <span className="h-[22px] w-[22px] ">
-                  <CalenderIcon className="fill-dark-blue-100 group-hover:fill-white" />
+                  <CalenderIcon
+                    onClick={onClickHandler}
+                    className="fill-dark-blue-100 group-hover:fill-white"
+                  />
                 </span>
               </span>
             </Button>
