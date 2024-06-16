@@ -6,7 +6,8 @@ import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
 } from "components/generic/ReusableTable/TableUtils"
-import { useState } from "react"
+import { useState, useRef } from "react"
+import { useClickOutside } from "components/utils/Utils"
 
 export type BookingMemberColumnFormat = {
   /**
@@ -74,7 +75,8 @@ export const AdminBookingView = ({
     setDisplayedCalendar(!displayedCalendar)
   }
   // Close on click outside
-  const 
+  const calendarRef = useRef<HTMLDivElement>(null)
+  useClickOutside(calendarRef, () => setDisplayedCalendar(false))
 
   return (
     <>
@@ -91,7 +93,11 @@ export const AdminBookingView = ({
             {dateRange.endDate.toDateString()}
           </h4>
           <span className="relative ml-auto flex pr-4">
-            {displayedCalendar ? <span className="w-[350px] absolute"><Calendar /></span> : null}
+            {displayedCalendar ? (
+              <span ref={calendarR} className="absolute w-[350px]">
+                <Calendar />
+              </span>
+            ) : null}
             <Button variant="inverted-default-st" onClick={onClickHandler}>
               <span className="flex items-center justify-center gap-2 ">
                 pick date
