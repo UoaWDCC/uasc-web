@@ -44,6 +44,11 @@ interface IAdminMemberView {
    * used to fetch the data once the last page of the table has been reached
    */
   fetchNextPage?: () => void
+
+  /**
+   * Called when the *add new member* button is clicked
+   */
+  openAddMemberView?: () => void
 }
 
 /**
@@ -62,7 +67,8 @@ const ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH = 2 as const
 export const AdminMemberView = ({
   data,
   rowOperations,
-  fetchNextPage
+  fetchNextPage,
+  openAddMemberView
 }: IAdminMemberView) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
   const [isLastPage, setIsLastPage] = useState<boolean>(false)
@@ -93,7 +99,9 @@ export const AdminMemberView = ({
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
           <Button variant="inverted-default-sm">Filter</Button>
         </span>
-        <Button variant="default-sm">Add New Member</Button>
+        <Button variant="default-sm" onClick={() => openAddMemberView?.()}>
+          Add New Member
+        </Button>
       </span>
       <Table<MemberColumnFormat, "multiple-operations">
         data={(data && dataFilter(data)) || [defaultData]}

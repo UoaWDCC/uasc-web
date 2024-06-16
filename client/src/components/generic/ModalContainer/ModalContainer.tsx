@@ -22,10 +22,8 @@ const ModalContainer = ({ children, isOpen = false }: IModalContainer) => {
     <div
       className={`${isOpen && "animate-fadeIn absolute overflow-y-auto overflow-x-hidden"}
                   ${!isOpen && "pointer-events-none fixed overflow-hidden opacity-0"}
-                     left-0 top-0 flex
-                    h-fit min-h-screen w-[calc(100vw-16px)] max-w-full
-                    items-center justify-center 
-                     bg-black/75 transition-opacity`}
+                     left-0 top-0 flex h-full min-h-screen w-[calc(100vw-16px)] max-w-full
+                    items-center justify-center bg-black/75 transition-opacity`}
     >
       {children}
     </div>
