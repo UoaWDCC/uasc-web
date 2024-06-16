@@ -1,7 +1,6 @@
 import { useAdminBookingsQuery } from "services/Admin/AdminQueries"
-import {AdminBookingView} from "./AdminBookingView"
+import { AdminBookingView } from "./AdminBookingView"
 const WrappedAdminBookingView = () => {
-
-  return <AdminBookingView  />
+  return <AdminBookingView />
 }
 export default WrappedAdminBookingView
