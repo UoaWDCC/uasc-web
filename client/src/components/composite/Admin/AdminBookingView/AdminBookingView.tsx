@@ -14,7 +14,7 @@ export type BookingMemberColumnFormat = {
   Name?: string
   Number?: string
   Email?: string
-  "Dietary Requirement": string
+  "Dietary Requirement"?: string
 }
 
 interface IAdminBookingView {
