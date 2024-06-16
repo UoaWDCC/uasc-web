@@ -104,7 +104,8 @@ export const AdminBookingView = ({
             {displayedCalendar ? (
               <span
                 ref={calendarRef}
-                className="absolute -right-1/2 w-[350px] translate-x-1/2 sm:right-0 sm:top-0 sm:translate-x-0"
+                // Be careful when changing this - is essential to ensuring the calendar displays properly on smaller AND larger screens
+                className="absolute left-1/2 max-w-[350px] -translate-x-1/2 sm:left-auto sm:right-0 sm:top-0  sm:translate-x-0 "
               >
                 <Calendar
                   value={[
