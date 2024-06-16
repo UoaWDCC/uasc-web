@@ -90,7 +90,7 @@ export const AdminBookingView = ({
     <>
       <div className="flex w-full flex-col">
         <span className="my-4 flex w-full items-center justify-center">
-          <h2 className="text-dark-blue-100 ">Booking</h2>
+          <h2 className="text-dark-blue-100 ">Bookings</h2>
           <div className="ml-auto">
             <Button variant="default-sm">Add New booking</Button>
           </div>

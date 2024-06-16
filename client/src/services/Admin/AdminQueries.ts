@@ -26,6 +26,6 @@ export function useAdminBookingsQuery(
         endDate
       }),
     retry: 0,
-    staleTime: 30
+    staleTime: 30000 // 30 sec
   })
 }
