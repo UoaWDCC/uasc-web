@@ -47,6 +47,11 @@ interface IAdminBookingView {
    * used to fetch the data once the last page of the table has been reached
    */
   fetchNextPage?: () => void
+
+  /**
+   * 
+   */
+
 }
 
 const defaultData = {
@@ -94,8 +99,11 @@ export const AdminBookingView = ({
           </h4>
           <span className="relative ml-auto flex pr-4">
             {displayedCalendar ? (
-              <span ref={calendarRef} className="absolute right-4 top-0 w-[350px]">
-                <Calendar />
+              <span
+                ref={calendarRef}
+                className="absolute right-4 top-0 w-[350px]"
+              >
+                <Calendar selectRange />
               </span>
             ) : null}
             <Button variant="inverted-default-st" onClick={onClickHandler}>
