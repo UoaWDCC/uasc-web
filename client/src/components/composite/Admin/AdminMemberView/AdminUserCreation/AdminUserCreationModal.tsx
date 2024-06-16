@@ -97,7 +97,7 @@ const AdminUserCreationModal = ({
     handleClose?.()
   }
   return (
-    <div className="xs:left-0 animate-fadeIn absolute -left-4 top-0">
+    <div className="animate-fadeIn absolute left-0 top-0">
       <div
         className="flex h-fit min-h-screen w-[calc(100vw-16px)] max-w-full items-center
                     justify-center overflow-hidden overflow-y-auto overflow-x-hidden bg-black/75"
