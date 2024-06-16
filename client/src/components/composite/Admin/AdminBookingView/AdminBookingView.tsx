@@ -73,6 +73,8 @@ export const AdminBookingView = ({
   const onClickHandler = () => {
     setDisplayedCalendar(!displayedCalendar)
   }
+  // Close on click outside
+  const 
 
   return (
     <>
@@ -88,7 +90,8 @@ export const AdminBookingView = ({
             {dateRange.startDate.toDateString()} -
             {dateRange.endDate.toDateString()}
           </h4>
-          <span className="ml-auto flex  pr-4">
+          <span className="relative ml-auto flex pr-4">
+            {displayedCalendar ? <span className="w-[350px] absolute"><Calendar /></span> : null}
             <Button variant="inverted-default-st" onClick={onClickHandler}>
               <span className="flex items-center justify-center gap-2 ">
                 pick date
