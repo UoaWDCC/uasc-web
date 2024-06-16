@@ -15,7 +15,10 @@ export function useUsersQuery() {
 export function useAdminBookingsQuery() {
   return useQuery({
     queryKey: ["bookingsBetweenRange"],
-    queryFn:  () => AdminService.getBookingsBetweenDateRange({endDate: Timestamp.fromDate(new Date("01/01/2025"))}),
-    retry: 0,
+    queryFn: () =>
+      AdminService.getBookingsBetweenDateRange({
+        endDate: Timestamp.fromDate(new Date("01/01/2025"))
+      }),
+    retry: 0
   })
 }
