@@ -1,0 +1,6 @@
+const WrappedAdminBookingView = () => {
+    
+  return (
+    <WrappedAdminBookingView  />
+  )
+}
