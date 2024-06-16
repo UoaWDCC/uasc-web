@@ -7,26 +7,28 @@ import { SignUpUserBody } from "services/User/UserService"
 import CloseIcon from "assets/icons/x.svg?react"
 import { useClickOutside } from "components/utils/Utils"
 
+const GUEST_OPTION = "guest" as const
+const MEMBER_OPTION = "member" as const
+
+export type AccountType = typeof GUEST_OPTION | typeof MEMBER_OPTION
+
 interface IAdminUserCreationModal {
   /**
    * When the new details have been filled in on the create new user form this
    * callback will be invoked.
    *
    * @param details `SignUpUserBody` type, used to call a sign up endpoint
-   * @param giveUserMembership whether or not the newly created member should be made a member
+   * @param accountType whether or not the newly created member should be made a member
    */
   userCreationHandler?: (
     details: SignUpUserBody,
-    giveUserMembership: boolean
+    accountType: AccountType
   ) => void
   /**
    * Callback for when a 'close' event is triggered with the modal open
    */
   handleClose?: () => void
 }
-
-const GUEST_OPTION = "guest" as const
-const MEMBER_OPTION = "member" as const
 
 /**
  * @deprecated Do not use, exported for testing purposes
@@ -44,7 +46,17 @@ export const AdminUserCreationFormKeys = {
 /**
  * Used for the dropdown indicating what type of member should be created
  */
-type UserType = typeof GUEST_OPTION | typeof MEMBER_OPTION
+
+const userTypeDescription = (userType: AccountType) => {
+  switch (userType) {
+    case "guest":
+      return `A guest member will not be able to make bookings themselves, 
+              however can manually be added to bookings. They may however log in to
+              pay for a membership`
+    case "member":
+      return `A member will be able to make bookings themselves after logging in`
+  }
+}
 
 /**
  * Popup that should be opened when the admin wants to add a new user,
@@ -54,7 +66,7 @@ const AdminUserCreationModal = ({
   userCreationHandler,
   handleClose
 }: IAdminUserCreationModal) => {
-  const [userType, setUserType] = useState<UserType>("guest")
+  const [accountType, setAccountType] = useState<AccountType>("guest")
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const formContainerRef = useRef<HTMLDivElement>(null)
   useClickOutside(formContainerRef, () => {
@@ -66,7 +78,6 @@ const AdminUserCreationModal = ({
     setIsSubmitting(true)
     try {
       const data = new FormData(e.currentTarget)
-      const shouldGiveUserMembership = userType === "member"
 
       userCreationHandler?.(
         {
@@ -89,7 +100,7 @@ const AdminUserCreationModal = ({
             )
           }
         },
-        shouldGiveUserMembership
+        accountType
       )
       e.currentTarget.reset()
     } finally {
@@ -152,18 +163,20 @@ const AdminUserCreationModal = ({
           data-testid={AdminUserCreationFormKeys.DATE_OF_BIRTH}
           label="Date of Birth"
           type="date"
+          defaultValue={"2000-01-01"}
           required
         />
         <Dropdown
           name={AdminUserCreationFormKeys.MEMBERSHIP_TYPE}
           data-testid={AdminUserCreationFormKeys.MEMBERSHIP_TYPE}
-          value={userType}
+          value={accountType}
           label="Membership Status"
-          onChange={(e) => setUserType(e.target.value as UserType)}
+          onChange={(e) => setAccountType(e.target.value as AccountType)}
         >
           <option>{GUEST_OPTION}</option>
           <option>{MEMBER_OPTION}</option>
         </Dropdown>
+        <h5>{userTypeDescription(accountType)}</h5>
         <Button
           disabled={isSubmitting}
           type="submit"
