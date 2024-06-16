@@ -1154,7 +1154,7 @@ describe("Endpoints", () => {
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
 
-      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2023"))
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2022"))
       const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
 
       const slot1 = await bookingSlotService.createBookingSlot({
@@ -1164,6 +1164,12 @@ describe("Endpoints", () => {
 
       const slot2 = await bookingSlotService.createBookingSlot({
         date: dateToFirestoreTimeStamp(new Date("03/01/2023")),
+        max_bookings: 10
+      })
+
+      // Important test case, don't return dates with no bookings
+      await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("01/01/2023")),
         max_bookings: 10
       })
 
