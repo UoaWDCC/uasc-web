@@ -1,5 +1,6 @@
 import Table from "components/generic/ReusableTable/Table"
 import Button from "components/generic/FigmaButtons/FigmaButton"
+import 
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
@@ -72,12 +73,14 @@ export const AdminBookingView = ({
             <Button variant="default-sm">Add New booking</Button>
           </div>
         </span>
-        <span className="border-gray-3 flex h-12 w-full items-center border bg-white">
-          <h4 className="text-dark-blue-100">
+        <span className="border-gray-3 flex h-[51px] w-full items-center border bg-white">
+          <h4 className="text-dark-blue-100 pl-4">
             {dateRange.startDate.toDateString()} -
             {dateRange.endDate.toDateString()}
           </h4>
-          <div className=""></div>
+          <span className="ml-auto pr-4">
+            <Button variant="inverted-default-st">pick date</Button>
+          </span>
         </span>
         <Table<BookingMemberColumnFormat, "multiple-operations">
           data={data || [defaultData]}
