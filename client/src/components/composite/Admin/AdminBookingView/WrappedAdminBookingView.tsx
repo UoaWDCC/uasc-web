@@ -12,8 +12,7 @@ const WrappedAdminBookingView = () => {
         }
         newData.uid = user.uid
         newData.Date = timestampToDate(date.date).toLocaleDateString("en-NZ")
-        newData.Name =
-          `${user.first_name} ${user.last_name}`
+        newData.Name = `${user.first_name} ${user.last_name}`
         newData.Number = user.phone_number ? user.phone_number.toString() : ""
         newData.Email = user.email
         newData["Dietary Requirement"] = user.dietary_requirements
