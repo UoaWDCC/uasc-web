@@ -50,12 +50,24 @@ const AdminService = {
     })
     if (!response.ok) throw new Error(`Failed to promote ${uid}`)
   },
-  getBookingsBetweenDateRange: async function(startDate: Timestamp, endDate: Timestamp) {
-    const {data, response} = await fetchClient.POST("/bookings/fetch-users", {body: {
-      startDate, endDate
-    }})
+  getBookingsBetweenDateRange: async function ({
+    startDate = Timestamp.fromDate(new Date()),
+    endDate = Timestamp.fromDate(new Date())
+  }: {
+    startDate?: Timestamp
+    endDate?: Timestamp
+  }) {
+    const { data, response } = await fetchClient.POST("/bookings/fetch-users", {
+      body: {
+        startDate,
+        endDate
+      }
+    })
 
-    if(!response.ok) throw new Error(`Failed to fetch bookings between ${startDate} to ${endDate}`)
+    if (!response.ok)
+      throw new Error(
+        `Failed to fetch bookings between ${startDate} to ${endDate}`
+      )
 
     return data?.data
   },

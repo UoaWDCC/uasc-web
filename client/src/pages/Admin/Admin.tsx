@@ -4,6 +4,7 @@ import WrappedAdminMemberView from "components/composite/Admin/AdminMemberView/P
 import AdminNavbar from "components/composite/Admin/AdminNavbar/AdminNavbar"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { useAppData } from "store/Store"
+import WrappedAdminBookingView from "components/composite/Admin/AdminBookingView/WrappedAdminBookingView"
 
 const Heading = ({ title }: { title: string }) => (
   <h2 className="text-dark-blue-100 self-start italic">{title}</h2>
@@ -32,6 +33,15 @@ const Admin = () => {
                   <>
                     <Heading title="Members" />
                     <WrappedAdminMemberView />
+                  </>
+                }
+              />
+              <Route
+                path="bookings"
+                element={
+                  <>
+                    <Heading title="Booking" />
+                    <WrappedAdminBookingView />
                   </>
                 }
               />
