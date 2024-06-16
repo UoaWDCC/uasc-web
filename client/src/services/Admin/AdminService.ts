@@ -57,7 +57,7 @@ const AdminService = {
     startDate?: Timestamp
     endDate?: Timestamp
   }) {
-    const _startDate = {seconds: startDate.seconds, nanoseconds: 0}
+    const _startDate = { seconds: startDate.seconds, nanoseconds: 0 }
     const { data, response } = await fetchClient.POST("/bookings/fetch-users", {
       body: {
         startDate: _startDate,

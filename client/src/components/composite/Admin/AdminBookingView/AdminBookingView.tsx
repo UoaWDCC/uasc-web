@@ -67,6 +67,7 @@ export const AdminBookingView = ({
             <Button variant="default-sm">Add New booking</Button>
           </div>
         </span>
+        <span className="w-full border border-black bg-white">x</span>
         <Table<BookingMemberColumnFormat, "multiple-operations">
           data={data || [defaultData]}
           operationType="multiple-operations"
