@@ -20,11 +20,12 @@ interface IModalContainer {
 const ModalContainer = ({ children, isOpen = false }: IModalContainer) => {
   return (
     <div
-      className={`${isOpen && "animate-fadeIn"}  ${!isOpen && "pointer-events-none opacity-0"}
-                    absolute left-0 top-0 flex 
+      className={`${isOpen && "animate-fadeIn absolute overflow-y-auto overflow-x-hidden"}
+                  ${!isOpen && "pointer-events-none fixed overflow-hidden opacity-0"}
+                     left-0 top-0 flex
                     h-fit min-h-screen w-[calc(100vw-16px)] max-w-full
-                    items-center justify-center overflow-hidden overflow-y-auto 
-                    overflow-x-hidden bg-black/75 transition-opacity`}
+                    items-center justify-center 
+                     bg-black/75 transition-opacity`}
     >
       {children}
     </div>
