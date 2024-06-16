@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import AdminBooking, { BookingMemberColumnFormat } from "./AdminBookingView"
+import AdminBookingView, { BookingMemberColumnFormat } from "./AdminBookingView"
 
-const meta: Meta<typeof AdminBooking> = {
-  component: AdminBooking
+const meta: Meta<typeof AdminBookingView> = {
+  component: AdminBookingView
 }
 
 export default meta
@@ -23,6 +23,6 @@ for (let i = 0; i < 100; ++i) {
   mockDataArray.push(mockData)
 }
 
-export const DefaultAdminMemberView: Story = {
+export const DefaultAdminBookingView: Story = {
   args: { data: mockDataArray }
 }

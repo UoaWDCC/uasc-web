@@ -17,7 +17,7 @@ export type BookingMemberColumnFormat = {
   "Dietary Requirement": string
 }
 
-interface IAdminBooking {
+interface IAdminBookingView {
   /**
    * Note that the order of the keys in the first element of the array is the order it'll be displayed in the table.
    *
@@ -54,7 +54,7 @@ const defaultData = {
   "Dietary Requirement": ""
 }
 
-export const AdminBooking = ({ data, rowOperations }: IAdminBooking) => {
+export const AdminBookingView = ({ data, rowOperations }: IAdminBookingView) => {
   return (
     <>
       <div className="flex">
@@ -77,4 +77,4 @@ export const AdminBooking = ({ data, rowOperations }: IAdminBooking) => {
   )
 }
 
-export default AdminBooking
+export default AdminBookingView
