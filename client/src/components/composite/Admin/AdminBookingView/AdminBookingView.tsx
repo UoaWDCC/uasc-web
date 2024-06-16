@@ -59,7 +59,7 @@ export const AdminBookingView = ({
   data,
   rowOperations
 }: IAdminBookingView) => {
-  const [dateRange, setDateRange] = useState<{
+  const [dateRange] = useState<{
     startDate: Date
     endDate: Date
   }>({ startDate: new Date(), endDate: new Date() })
@@ -72,7 +72,7 @@ export const AdminBookingView = ({
             <Button variant="default-sm">Add New booking</Button>
           </div>
         </span>
-        <span className="flex h-12 w-full items-center border border-black bg-white">
+        <span className="border-gray-3 flex h-12 w-full items-center border bg-white">
           <h4 className="text-dark-blue-100">
             {dateRange.startDate.toDateString()} -
             {dateRange.endDate.toDateString()}
