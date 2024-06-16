@@ -75,33 +75,35 @@ const AdminUserCreationModal = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    try {
-      const data = new FormData(e.currentTarget)
-
-      userCreationHandler?.(
-        {
-          email: data.get(AdminUserCreationFormKeys.EMAIL) as string,
-          user: {
-            date_of_birth: Timestamp.fromDate(
-              new Date(
-                data.get(AdminUserCreationFormKeys.DATE_OF_BIRTH) as string
-              )
-            ),
-            first_name: data.get(
-              AdminUserCreationFormKeys.FIRST_NAME
-            ) as string,
-            last_name: data.get(AdminUserCreationFormKeys.LAST_NAME) as string,
-            dietary_requirements: (data.get(
-              AdminUserCreationFormKeys.DIETARY_REQUIREMENTS
-            ) || "") as string,
-            phone_number: Number.parseInt(
-              data.get(AdminUserCreationFormKeys.PHONE_NUMBER) as string
-            )
-          }
-        },
-        accountType
+    const data = new FormData(e.currentTarget)
+    const userData = {
+      email: data.get(AdminUserCreationFormKeys.EMAIL) as string,
+      user: {
+        date_of_birth: Timestamp.fromDate(
+          new Date(data.get(AdminUserCreationFormKeys.DATE_OF_BIRTH) as string)
+        ),
+        first_name: data.get(AdminUserCreationFormKeys.FIRST_NAME) as string,
+        last_name: data.get(AdminUserCreationFormKeys.LAST_NAME) as string,
+        dietary_requirements: (data.get(
+          AdminUserCreationFormKeys.DIETARY_REQUIREMENTS
+        ) || "") as string,
+        phone_number: Number.parseInt(
+          data.get(AdminUserCreationFormKeys.PHONE_NUMBER) as string
+        )
+      }
+    }
+    if (
+      !confirm(
+        `Are you sure you want to add the user ${userData.user.first_name} 
+        ${userData.user.last_name} (${userData.email}) as a ${accountType}?`
       )
+    ) {
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+      userCreationHandler?.(userData, accountType)
       e.currentTarget.reset()
     } finally {
       setIsSubmitting(false)

@@ -33,14 +33,6 @@ const WrappedAdminMemberView = () => {
     user: ReducedUserAdditionalInfo,
     accountType: AccountType
   ) => {
-    if (
-      !confirm(
-        `Are you sure you want to add the user ${user.first_name} ${user.last_name} (${email}) as a ${accountType}?`
-      )
-    ) {
-      return
-    }
-
     await addNewUser(
       { email, user },
       {
