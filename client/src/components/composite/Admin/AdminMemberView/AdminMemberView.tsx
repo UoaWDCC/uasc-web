@@ -44,6 +44,11 @@ interface IAdminMemberView {
    * used to fetch the data once the last page of the table has been reached
    */
   fetchNextPage?: () => void
+
+  /**
+   * Used to indicate if there is currently an operation going on
+   */
+  isUpdating?: boolean
 }
 
 /**
@@ -62,7 +67,8 @@ const ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH = 2 as const
 export const AdminMemberView = ({
   data,
   rowOperations,
-  fetchNextPage
+  fetchNextPage,
+  isUpdating
 }: IAdminMemberView) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
   const [isLastPage, setIsLastPage] = useState<boolean>(false)
@@ -87,7 +93,9 @@ export const AdminMemberView = ({
     setCurrentSearchQuery(newQuery)
   }
   return (
-    <>
+    <div
+      className={`w-full ${isUpdating ? "brightness-75" : "brightness-100"}`}
+    >
       <span className="mb-4 mt-6 flex w-full justify-between">
         <span className="flex gap-5">
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
@@ -105,6 +113,6 @@ export const AdminMemberView = ({
           setIsLastPage(last)
         }}
       />
-    </>
+    </div>
   )
 }

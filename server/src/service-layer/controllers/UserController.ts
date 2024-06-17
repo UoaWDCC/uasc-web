@@ -71,7 +71,7 @@ export class UsersController extends Controller {
         const userDataService = new UserDataService()
 
         const userClaims = await authService.getCustomerUserClaim(userUid)
-        if (userClaims.admin) {
+        if (userClaims && userClaims.admin) {
           this.setStatus(403) // forbidden request
           return { error: "Cannot delete another admin." }
         }
@@ -82,6 +82,7 @@ export class UsersController extends Controller {
       }
     } catch (err) {
       this.setStatus(500)
+      console.error(err)
       return { error: "Failed to delete user." }
     }
   }

@@ -1,6 +1,7 @@
 import { useUsersQuery } from "services/Admin/AdminQueries"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
 import {
+  useDeleteUserMutation,
   useDemoteUserMutation,
   usePromoteUserMutation
 } from "services/Admin/AdminMutations"
@@ -29,6 +30,7 @@ const WrappedAdminMemberView = () => {
 
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
+  const { mutateAsync: deleteUser, isPending } = useDeleteUserMutation()
 
   /**
    * You should optimistically handle the mutations in `AdminMutations`
@@ -48,9 +50,16 @@ const WrappedAdminMemberView = () => {
     },
     {
       name: "delete",
-      handler: () => {
-        // TODO
-        throw new Error("Not Implemented")
+      handler: (uid: string) => {
+        const matchingUser = transformedDataList?.find(
+          (user) => user.uid === uid
+        )
+        if (
+          confirm(
+            `Are you SURE you want to delete the user ${matchingUser?.Name} (${matchingUser?.Email}). This action can NOT be undone!!!`
+          )
+        )
+          deleteUser({ uid })
       }
     },
     {
@@ -67,6 +76,7 @@ const WrappedAdminMemberView = () => {
       fetchNextPage={() => {
         !isFetchingNextPage && hasNextPage && fetchNextPage()
       }}
+      isUpdating={isPending}
       rowOperations={rowOperations}
       data={transformedDataList}
     />
