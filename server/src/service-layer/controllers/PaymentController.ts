@@ -306,6 +306,10 @@ export class PaymentController extends Controller {
         }
       }
 
+      /**
+       * IMPORTANT - these should NOT be pre-processed as the front end must be the
+       * one which sends it in the correct format.
+       */
       const datesInBooking = datesToDateRange(
         firestoreTimestampToDate(startDate),
         firestoreTimestampToDate(endDate)
