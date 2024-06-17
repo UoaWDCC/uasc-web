@@ -77,7 +77,6 @@ export class UsersController extends Controller {
         } catch (e) {
           console.info(`Couldn't fetch user claims for ${userUid}. ${e}`)
         }
-        console.log(userClaims)
         if (userClaims && userClaims[AuthServiceClaims.ADMIN]) {
           this.setStatus(403) // forbidden request
           return { error: "Cannot delete another admin." }
