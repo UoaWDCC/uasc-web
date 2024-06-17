@@ -50,6 +50,7 @@ const AdminService = {
     })
     if (!response.ok) throw new Error(`Failed to promote ${uid}`)
   },
+
   getBookingsBetweenDateRange: async function ({
     startDate = Timestamp.fromDate(new Date(Date.now())),
     endDate = Timestamp.fromDate(new Date(Date.now()))
@@ -76,6 +77,16 @@ const AdminService = {
       )
 
     return data?.data
+  },
+
+
+  deleteUser: async function ({ uid }: { uid: string }) {
+    const { response } = await fetchClient.DELETE("/users/delete-user", {
+      body: {
+        uid
+      }
+    })
+    if (!response.ok) throw new Error(`Failed to delete user ${uid}`)
   },
 
   makeDatesAvailable: async function (

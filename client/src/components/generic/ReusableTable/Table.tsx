@@ -83,7 +83,10 @@ export const OperationButton = <
                   data-testid={`multiple-operation-item-${index}`}
                   className="hover:text-light-blue-100 cursor-pointer select-none"
                   key={operation.name}
-                  onClick={() => operation.handler(uid)}
+                  onClick={() => {
+                    operation.handler(uid)
+                    setIsOpen(false)
+                  }}
                 >
                   {operation.name}
                 </p>

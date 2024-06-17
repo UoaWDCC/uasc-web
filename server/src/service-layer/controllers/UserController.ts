@@ -18,6 +18,7 @@ import {
   Patch,
   Delete
 } from "tsoa"
+import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 
 @Route("users")
 export class UsersController extends Controller {
@@ -70,18 +71,33 @@ export class UsersController extends Controller {
         const authService = new AuthService()
         const userDataService = new UserDataService()
 
-        const userClaims = await authService.getCustomerUserClaim(userUid)
-        if (userClaims.admin) {
+        let userClaims
+        try {
+          userClaims = await authService.getCustomerUserClaim(userUid)
+        } catch (e) {
+          console.info(`Couldn't fetch user claims for ${userUid}. ${e}`)
+        }
+        if (userClaims && userClaims[AuthServiceClaims.ADMIN]) {
           this.setStatus(403) // forbidden request
           return { error: "Cannot delete another admin." }
         }
 
         this.setStatus(200)
-        await authService.deleteUser(userUid)
-        await userDataService.deleteUserData(userUid)
+        try {
+          await authService.deleteUser(userUid)
+        } catch (e) {
+          console.info(`Couldn't delete ${userUid} in auth. ${e}`)
+        }
+
+        try {
+          await userDataService.deleteUserData(userUid)
+        } catch (e) {
+          console.info(`Couldn't delete ${userUid} in firestore. ${e}`)
+        }
       }
     } catch (err) {
       this.setStatus(500)
+      console.error(err)
       return { error: "Failed to delete user." }
     }
   }
