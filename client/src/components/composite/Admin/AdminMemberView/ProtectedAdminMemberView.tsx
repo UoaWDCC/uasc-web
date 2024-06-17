@@ -34,6 +34,13 @@ const WrappedAdminMemberView = () => {
    */
   const { mutateAsync: addNewUser } = useSignUpUserMutation("admin")
 
+  /**
+   * @param email the email to be associated with the newly created user
+   * @param user the details to be appended to the user account. This should be the required fields for `UserAdditionalInfo`
+   * @param accountType what status the user account should be after creation:
+   * - a `guest` will have to pay to access all features
+   * - a `member` will be able to use all features right away after signing in
+   */
   const userCreationHandler = async (
     email: string,
     user: ReducedUserAdditionalInfo,
