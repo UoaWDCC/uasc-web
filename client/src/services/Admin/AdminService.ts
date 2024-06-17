@@ -51,17 +51,22 @@ const AdminService = {
     if (!response.ok) throw new Error(`Failed to promote ${uid}`)
   },
   getBookingsBetweenDateRange: async function ({
-    startDate = Timestamp.fromDate(new Date()),
-    endDate = Timestamp.fromDate(new Date("2025-01-01"))
+    startDate = Timestamp.fromDate(new Date(Date.now())),
+    endDate = Timestamp.fromDate(new Date(Date.now()))
   }: {
     startDate?: Timestamp
     endDate?: Timestamp
   }) {
+    /**
+     * We can **NOT** have any nanoseconds because it causes weird offset problems
+     */
     const _startDate = { seconds: startDate.seconds, nanoseconds: 0 }
+    const _endDate = { seconds: endDate.seconds, nanoseconds: 0 }
+
     const { data, response } = await fetchClient.POST("/bookings/fetch-users", {
       body: {
         startDate: _startDate,
-        endDate
+        endDate: _endDate
       }
     })
 
