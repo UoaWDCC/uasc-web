@@ -49,6 +49,10 @@ interface IAdminMemberView {
    * Called when the *add new member* button is clicked
    */
   openAddMemberView?: () => void
+  /*
+   * Used to indicate if there is currently an operation going on
+   */
+  isUpdating?: boolean
 }
 
 /**
@@ -80,7 +84,8 @@ export const AdminMemberView = ({
   data,
   rowOperations,
   fetchNextPage,
-  openAddMemberView
+  openAddMemberView,
+  isUpdating
 }: IAdminMemberView) => {
   /**
    * For use with `AdminSearchBar`
@@ -112,8 +117,10 @@ export const AdminMemberView = ({
     setCurrentSearchQuery(newQuery)
   }
   return (
-    <>
-      <span className="mb-4 mt-6 flex w-full flex-col justify-between gap-2 sm:flex-row">
+    <div
+      className={`w-full ${isUpdating ? "brightness-75" : "brightness-100"}`}
+    >
+      <span className="mb-4 mt-6 flex w-full justify-between">
         <span className="flex gap-5">
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
           <Button variant="inverted-default-sm">Filter</Button>
@@ -132,6 +139,6 @@ export const AdminMemberView = ({
           setIsLastPage(last)
         }}
       />
-    </>
+    </div>
   )
 }

@@ -58,6 +58,17 @@ export function useDemoteUserMutation() {
   })
 }
 
+export function useDeleteUserMutation() {
+  return useMutation({
+    mutationKey: ["delete-user"],
+    mutationFn: AdminService.deleteUser,
+    retry: 0,
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: [ALL_USERS_QUERY] })
+    }
+  })
+}
+
 export function useMakeDatesAvailableMutation(
   startDate?: Timestamp,
   endDate?: Timestamp,
