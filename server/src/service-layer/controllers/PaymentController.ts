@@ -307,8 +307,8 @@ export class PaymentController extends Controller {
       }
 
       const datesInBooking = datesToDateRange(
-        firestoreTimestampToDate(normaliseFirestoreTimeStamp(startDate)),
-        firestoreTimestampToDate(normaliseFirestoreTimeStamp(endDate))
+        firestoreTimestampToDate(startDate),
+        firestoreTimestampToDate(endDate)
       )
 
       const totalDays = datesInBooking.length
