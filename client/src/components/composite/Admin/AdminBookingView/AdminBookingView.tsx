@@ -126,6 +126,7 @@ export const AdminBookingView = ({
                       Timestamp.fromDate(start),
                       Timestamp.fromDate(end)
                     )
+                    setDisplayedCalendar(false)
                   }}
                   selectRange
                 />
