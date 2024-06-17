@@ -54,6 +54,13 @@ const WrappedAdminMemberView = () => {
         const matchingUser = transformedDataList?.find(
           (user) => user.uid === uid
         )
+        /**
+         * This should be enforced in the endpoint anyway, exists for UX
+         */
+        if (matchingUser?.Status === "admin") {
+          alert("You may not delete admins")
+          return
+        }
         if (
           confirm(
             `Are you SURE you want to delete the user ${matchingUser?.Name} (${matchingUser?.Email}). This action can NOT be undone!!!`
