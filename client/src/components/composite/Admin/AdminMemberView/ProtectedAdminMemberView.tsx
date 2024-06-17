@@ -16,6 +16,12 @@ import { sendPasswordResetEmail } from "firebase/auth"
 import { auth } from "firebase"
 import { ReducedUserAdditionalInfo } from "models/User"
 
+/**
+ * Component that handles all the network requests for `AdminMemberView`
+ *
+ * This should be the one used on the actual page to allow for isolated testing
+ * of the presentation on the `AdminMemberView`
+ */
 const WrappedAdminMemberView = () => {
   /**
    * Note that the followind queries/mutations should be scoped to only admins only,
@@ -40,10 +46,16 @@ const WrappedAdminMemberView = () => {
           alert(
             `Successfully added ${user.first_name} ${user.last_name} (${email})`
           )
+          /**
+           * We need to do this for both guests and members
+           */
           await sendPasswordResetEmail(auth, email)
           if (accountType === "member" && data?.uid) {
             await promoteUser(data.uid)
           }
+          /**
+           * Force refetch after adding the new user
+           */
           queryClient.invalidateQueries({ queryKey: ["allUsers"] })
         },
         onError(error) {

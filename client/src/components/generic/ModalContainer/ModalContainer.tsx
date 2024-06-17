@@ -10,11 +10,12 @@ interface IModalContainer {
  * Used as the absolutely positioned wrapper for popup elements. Will hide the children and
  * disable pointer events when closed.
  *
- * Must be controlled via the `isOpen` prop.
+ * Must be controlled via the `isOpen` prop. It is recommended to have an `onClose` handler
+ * or similar on any child elements, as this does now provide one
  *
  * @example
- * <ModalContainer>
- *  <ModalContents/>
+ * <ModalContainer isOpen={openState}>
+ *  <ModalContents handleClose={() => setOpenState(false)}/>
  * </ModalContainer>
  */
 const ModalContainer = ({ children, isOpen = false }: IModalContainer) => {

@@ -66,8 +66,17 @@ const AdminUserCreationModal = ({
   userCreationHandler,
   handleClose
 }: IAdminUserCreationModal) => {
+  /**
+   * Used to accomdate for conditional handling of user creation
+   * (i.e guests do not need to be "promted" after creation )
+   */
   const [accountType, setAccountType] = useState<AccountType>("guest")
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+
+  /**
+   * We should assume the modal is to be closed after clicking outside the form
+   * container
+   */
   const formContainerRef = useRef<HTMLDivElement>(null)
   useClickOutside(formContainerRef, () => {
     handleClose?.()
