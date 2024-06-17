@@ -10,7 +10,7 @@ const WrappedAdminBookingView = () => {
     handleSelectedDateChange
   } = useContext(AdminBookingViewContext)
 
-  const { data } = useAdminBookingsQuery(startDate, endDate)
+  const { data, isLoading } = useAdminBookingsQuery(startDate, endDate)
   const dataList = data?.flatMap(
     (date) =>
       date.users.map((user) => {
@@ -28,6 +28,7 @@ const WrappedAdminBookingView = () => {
   )
   return (
     <AdminBookingView
+      isUpdating={isLoading}
       data={dataList}
       dateRange={{ startDate, endDate }}
       handleDateRangeChange={handleSelectedDateChange}

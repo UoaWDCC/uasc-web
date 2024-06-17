@@ -58,6 +58,11 @@ interface IAdminBookingView {
    * Handler when a new date range is selected on the calendar
    */
   handleDateRangeChange?: (startDate: Timestamp, endDate: Timestamp) => void
+
+  /**
+   * Whether or not to display a loading indicator (i.e when fetching a new date range)
+   */
+  isUpdating?: boolean
 }
 
 const defaultData = {
@@ -73,7 +78,8 @@ export const AdminBookingView = ({
   data,
   rowOperations,
   dateRange,
-  handleDateRangeChange
+  handleDateRangeChange,
+  isUpdating
 }: IAdminBookingView) => {
   // Have state for if the calendar is displayed or not
   const [displayedCalendar, setDisplayedCalendar] = useState<boolean>(false)
@@ -88,7 +94,9 @@ export const AdminBookingView = ({
 
   return (
     <>
-      <div className="flex w-full flex-col">
+      <div
+        className={`flex w-full flex-col ${isUpdating ? "brightness-75" : "brightness-100"}`}
+      >
         <span className="my-4 flex w-full flex-col items-center justify-center sm:flex-row">
           <h2 className="text-dark-blue-100 ">Bookings</h2>
           <div className="sm:ml-auto">
