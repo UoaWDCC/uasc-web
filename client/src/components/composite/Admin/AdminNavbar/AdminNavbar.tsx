@@ -18,7 +18,7 @@ const AdminNavbar = () => {
       className="top-13 fixed  z-[99] flex h-[46px] w-screen 
       items-center overflow-hidden border bg-white"
     >
-      <span className="relative flex w-full items-center px-4">
+      <span className="relative flex w-full items-center px-4 md:pl-28">
         <div className="flex gap-4 pt-[13px]">
           <WrappedTab mobileCompatiability={false} to="/admin/members">
             members
