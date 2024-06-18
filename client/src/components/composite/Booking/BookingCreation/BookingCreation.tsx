@@ -64,6 +64,8 @@ interface ICreateBookingSection {
 
   /**
    * Callback when dates are changed and valid
+   *
+   * **This will be called with a UTC midnight timestamp representing the date**
    */
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
 

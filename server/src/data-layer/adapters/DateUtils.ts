@@ -13,20 +13,28 @@ export const dateToFirestoreTimeStamp = (date: Date) => {
   return output
 }
 
-const MS_IN_DAY = 60 * 60 * 24 * 1000
-/**
- * @param startDate Date object
- * @param endDate Date object
- * @returns an array of all dates in with **increasing order** of the range (NOTE that months in JS start from 0)
- */
-export const datesToDateRange = (startDate: Date, endDate: Date, steps = 1) => {
-  const dateArray = []
-  let currentDate = new Date(startDate.getTime())
+const S_IN_DAY = 60 * 60 * 24
 
-  while (currentDate <= new Date(endDate.getTime())) {
-    dateArray.push(new Date(currentDate.getTime()))
-    // Use UTC date to prevent problems with time zones and DST
-    currentDate = new Date(currentDate.getTime() + steps * MS_IN_DAY)
+/**
+ * Gets all timestamps within a range at a step resolution
+ * of a multiple of days
+ *
+ * @param startDate timestamp (inclusive) of the first date
+ * @param endDate timestamp (inclusive of the last date)
+ * @param steps how many **days** to increment in
+ * @returns an array of all timestamps in the range
+ */
+export const timestampsInRange = (
+  startDate: Timestamp,
+  endDate: Timestamp,
+  steps = 1
+) => {
+  const dateArray = []
+  let currentSeconds = startDate.seconds
+
+  while (currentSeconds <= endDate.seconds) {
+    dateArray.push(Timestamp.fromMillis(currentSeconds * 1000))
+    currentSeconds += S_IN_DAY * steps
   }
 
   return dateArray

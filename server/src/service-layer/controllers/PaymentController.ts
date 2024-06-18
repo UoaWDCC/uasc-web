@@ -11,8 +11,8 @@ import {
   LODGE_PRICING_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import {
-  datesToDateRange,
-  firestoreTimestampToDate
+  firestoreTimestampToDate,
+  timestampsInRange
 } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
@@ -305,14 +305,7 @@ export class PaymentController extends Controller {
         }
       }
 
-      /**
-       * IMPORTANT - these should NOT be pre-processed as the front end must be the
-       * one which sends it in the correct format.
-       */
-      const datesInBooking = datesToDateRange(
-        firestoreTimestampToDate(startDate),
-        firestoreTimestampToDate(endDate)
-      )
+      const datesInBooking = timestampsInRange(startDate, endDate)
 
       const totalDays = datesInBooking.length
 
@@ -396,11 +389,15 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
-      const BOOKING_START_DATE = new Date(datesInBooking[0].getTime())
+      const BOOKING_START_DATE = new Date(
+        firestoreTimestampToDate(datesInBooking[0])
+      )
         .toISOString()
         .split("T")[0]
 
-      const BOOKING_END_DATE = new Date(datesInBooking[totalDays - 1].getTime())
+      const BOOKING_END_DATE = new Date(
+        firestoreTimestampToDate(datesInBooking[totalDays - 1])
+      )
         .toISOString()
         .split("T")[0]
 

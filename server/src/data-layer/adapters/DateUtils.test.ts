@@ -1,4 +1,5 @@
-import { dateToFirestoreTimeStamp, datesToDateRange } from "./DateUtils"
+import { Timestamp } from "firebase-admin/firestore"
+import { dateToFirestoreTimeStamp, timestampsInRange } from "./DateUtils"
 
 describe("DateUtils Unit test", () => {
   it("should return correct firestore formatted timestamp", () => {
@@ -9,29 +10,18 @@ describe("DateUtils Unit test", () => {
     })
   })
 
-  describe("Date range converter", () => {
-    it("should format single date properly", () => {
-      const result = datesToDateRange(
-        new Date("10/07/2020"),
-        new Date("10/07/2020")
-      )
-      expect(result).toHaveLength(1)
-      expect(result[0].getUTCMonth()).toEqual(9)
-      expect(result[0]).toEqual(new Date("10/07/2020"))
-    })
-    it("should format dates properly", () => {
-      const result = datesToDateRange(
-        new Date("10/07/2020"),
-        new Date("10/12/2020")
-      )
-      expect(result).toHaveLength(6)
+  describe("timestampsToRange", () => {
+    it("should generate correct range of timestamps", () => {
+      const startDate = Timestamp.fromDate(new Date("2024-01-01T00:00:00Z"))
+      const endDate = Timestamp.fromDate(new Date("2024-01-03T00:00:00Z"))
+      const steps = 1
 
-      expect(result[0]).toEqual(new Date("10/07/2020"))
-      expect(result[1]).toEqual(new Date("10/08/2020"))
-      expect(result[2]).toEqual(new Date("10/09/2020"))
-      expect(result[3]).toEqual(new Date("10/10/2020"))
-      expect(result[4]).toEqual(new Date("10/11/2020"))
-      expect(result[5]).toEqual(new Date("10/12/2020"))
+      const result = timestampsInRange(startDate, endDate, steps)
+
+      expect(result.length).toBe(3)
+      expect(result[0].toDate().toISOString()).toBe("2024-01-01T00:00:00.000Z")
+      expect(result[1].toDate().toISOString()).toBe("2024-01-02T00:00:00.000Z")
+      expect(result[2].toDate().toISOString()).toBe("2024-01-03T00:00:00.000Z")
     })
   })
 })
