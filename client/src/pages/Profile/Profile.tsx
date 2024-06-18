@@ -5,8 +5,8 @@ import ProfileInformationPanel from "components/generic/ProfileInformationPanel/
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
 import { useForceRefreshToken } from "hooks/useRefreshedToken"
-import { timestampToDate } from "components/utils/Utils"
 import { useMemo } from "react"
+import { DateUtils } from "components/utils/DateUtils"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
@@ -107,7 +107,7 @@ export default function Profile() {
                     subtitle="Date of birth"
                     description={
                       currentUserData?.date_of_birth &&
-                      `${timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
+                      `${DateUtils.timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
                     }
                   />
                   <Field

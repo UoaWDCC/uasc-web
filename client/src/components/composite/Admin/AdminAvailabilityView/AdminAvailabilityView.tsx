@@ -6,9 +6,8 @@ import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
-import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
-import { timestampToDate } from "components/utils/Utils"
-
+import { DEFAULT_BOOKING_AVAILABILITY, MS_IN_SECOND } from "utils/Constants"
+import { DateUtils } from "components/utils/DateUtils"
 /**
  * Reasonable amount of items to display on table
  */
@@ -70,7 +69,7 @@ export const formatBookingSlotsForAvailabilityView = (
     .map((slot) => {
       return {
         uid: slot.id,
-        Date: timestampToDate(slot.date).toDateString(),
+        Date: DateUtils.timestampToDate(slot.date).toDateString(),
         "Max Bookings": slot.maxBookings.toString(),
         "Available Spaces": slot.availableSpaces.toString()
       }
@@ -128,8 +127,9 @@ const AdminAvailabilityView = ({
               const slot = slots.find(
                 // Find slots that are "available"
                 (slot) =>
-                  timestampToDate(slot.date).toDateString() ===
-                  date.toDateString()
+                  DateUtils.timestampSeconds(slot.date) ===
+                  DateUtils.convertLocalDateToUTCDate(date).getTime() /
+                    MS_IN_SECOND
               )
               return slot ? (
                 // Apply style if it is

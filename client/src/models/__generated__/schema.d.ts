@@ -197,12 +197,22 @@ export interface components {
       message?: string;
       dates?: string[];
     };
+    /**
+     * @description Should be used over the firestore `Timestamp` when returning data from
+     * endpoint as readonly properties get serialised to `_seconds` and `_nanoseconds`
+     */
+    ReducedTimestamp: {
+      /** Format: double */
+      seconds: number;
+      /** Format: double */
+      nanoseconds: number;
+    };
     AvailableDates: {
       /** Format: double */
       availableSpaces: number;
       /** Format: double */
       maxBookings: number;
-      date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      date: components["schemas"]["ReducedTimestamp"];
       description?: string;
       id: string;
     };
@@ -249,7 +259,7 @@ export interface components {
     UsersByDateRangeResponse: {
       data?: {
           users: components["schemas"]["CombinedUserData"][];
-          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+          date: components["schemas"]["ReducedTimestamp"];
         }[];
       error?: string;
     };
@@ -263,7 +273,7 @@ export interface components {
       message?: string;
       updatedBookingSlots?: {
           bookingSlotId: string;
-          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+          date: components["schemas"]["ReducedTimestamp"];
         }[];
     };
     MakeDatesAvailableRequestBody: {

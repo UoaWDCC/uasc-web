@@ -2,6 +2,7 @@ import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { BookingSlot } from "data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 import { DocumentDataWithUid } from "data-layer/models/common"
+import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
 export default class BookingSlotService {
   // Create
@@ -25,7 +26,7 @@ export default class BookingSlotService {
     date: Timestamp
   ): Promise<Array<DocumentDataWithUid<BookingSlot>>> {
     const result = await FirestoreCollections.bookingSlots
-      .where("date", "==", date)
+      .where("date", "==", firestoreTimestampToDate(date))
       .get()
     const bookingSlotArray = result.docs.map((docs) => {
       return { ...docs.data(), id: docs.id }
@@ -38,8 +39,8 @@ export default class BookingSlotService {
     endDate: Timestamp
   ): Promise<Array<DocumentDataWithUid<BookingSlot>>> {
     const result = await FirestoreCollections.bookingSlots
-      .where("date", ">=", startDate)
-      .where("date", "<=", endDate)
+      .where("date", ">=", firestoreTimestampToDate(startDate))
+      .where("date", "<=", firestoreTimestampToDate(endDate))
       .get()
     const bookingSlotArray = result.docs.map((docs) => {
       return { ...docs.data(), id: docs.id }

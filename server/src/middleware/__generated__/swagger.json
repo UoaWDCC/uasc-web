@@ -364,6 +364,25 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ReducedTimestamp": {
+				"description": "Should be used over the firestore `Timestamp` when returning data from\nendpoint as readonly properties get serialised to `_seconds` and `_nanoseconds`",
+				"properties": {
+					"seconds": {
+						"type": "number",
+						"format": "double"
+					},
+					"nanoseconds": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"seconds",
+					"nanoseconds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AvailableDates": {
 				"properties": {
 					"availableSpaces": {
@@ -375,7 +394,7 @@
 						"format": "double"
 					},
 					"date": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+						"$ref": "#/components/schemas/ReducedTimestamp"
 					},
 					"description": {
 						"type": "string"
@@ -531,7 +550,7 @@
 									"type": "array"
 								},
 								"date": {
-									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+									"$ref": "#/components/schemas/ReducedTimestamp"
 								}
 							},
 							"required": [
@@ -581,7 +600,7 @@
 									"type": "string"
 								},
 								"date": {
-									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+									"$ref": "#/components/schemas/ReducedTimestamp"
 								}
 							},
 							"required": [

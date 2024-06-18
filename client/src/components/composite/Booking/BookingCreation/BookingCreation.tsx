@@ -7,15 +7,9 @@ import { useEffect, useMemo, useState } from "react"
 
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
-import {
-  datesToDateRange,
-  convertLocalDateToUTCDate,
-  formattedNzDate,
-  isSingleFridayOrSaturday,
-  timestampToDate
-} from "components/utils/Utils"
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
+import { DateUtils } from "components/utils/DateUtils"
 
 type DateRange = {
   /**
@@ -116,7 +110,7 @@ export const CreateBookingSection = ({
    * @param endDate the last date of the range
    */
   const checkValidRange = (startDate: Date, endDate: Date) => {
-    const dateArray = datesToDateRange(startDate, endDate)
+    const dateArray = DateUtils.datesToDateRange(startDate, endDate)
     if (dateArray.length > 10) {
       alert("You may only book up to 10 days max.")
       return false
@@ -126,12 +120,13 @@ export const CreateBookingSection = ({
         (date) =>
           disabledDates.some(
             (disabledDate) =>
-              timestampToDate(disabledDate.date).toDateString() ===
+              DateUtils.timestampToDate(disabledDate.date).toDateString() ===
               date.toDateString()
           ) ||
           !bookingSlots.some(
             (slot) =>
-              timestampToDate(slot.date).toDateString() === date.toDateString()
+              DateUtils.timestampToDate(slot.date).toDateString() ===
+              date.toDateString()
           )
       )
     ) {
@@ -157,12 +152,18 @@ export const CreateBookingSection = ({
           if (
             checkValidRange(currentStartDate, currentEndDate) &&
             confirm(
-              `Are you sure you want to book the dates ${formattedNzDate(currentStartDate)} to ${formattedNzDate(currentEndDate)}?`
+              `Are you sure you want to book the dates 
+              ${DateUtils.formattedNzDate(currentStartDate)} to 
+              ${DateUtils.formattedNzDate(currentEndDate)}?`
             )
           )
             handleBookingCreation?.(
-              Timestamp.fromDate(convertLocalDateToUTCDate(currentStartDate)),
-              Timestamp.fromDate(convertLocalDateToUTCDate(currentEndDate))
+              Timestamp.fromDate(
+                DateUtils.convertLocalDateToUTCDate(currentStartDate)
+              ),
+              Timestamp.fromDate(
+                DateUtils.convertLocalDateToUTCDate(currentEndDate)
+              )
             )
         }}
       >
@@ -175,8 +176,11 @@ export const CreateBookingSection = ({
    *  a string to be shown to the user about the price for their date selection
    */
   const estimatedPriceString = useMemo(() => {
-    const nights = datesToDateRange(currentStartDate, currentEndDate).length
-    const requiredPrice = isSingleFridayOrSaturday(
+    const nights = DateUtils.datesToDateRange(
+      currentStartDate,
+      currentEndDate
+    ).length
+    const requiredPrice = DateUtils.isSingleFridayOrSaturday(
       currentStartDate,
       currentEndDate
     )
@@ -215,19 +219,19 @@ export const CreateBookingSection = ({
               view !== "year" &&
               (!bookingSlots.some(
                 (slot) =>
-                  timestampToDate(slot.date).toDateString() ===
+                  DateUtils.timestampToDate(slot.date).toDateString() ===
                   date.toDateString()
               ) ||
                 disabledDates.some(
                   (slot) =>
-                    timestampToDate(slot.date).toDateString() ===
+                    DateUtils.timestampToDate(slot.date).toDateString() ===
                     date.toDateString()
                 ))
             }
             tileContent={({ date }) => {
               const slot = bookingSlots.find(
                 (slot) =>
-                  timestampToDate(slot.date).toDateString() ===
+                  DateUtils.timestampToDate(slot.date).toDateString() ===
                     date.toDateString() && slot.maxBookings > 0
               )
               return slot ? (
