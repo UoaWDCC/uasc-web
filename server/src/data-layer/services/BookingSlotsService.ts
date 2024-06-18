@@ -6,7 +6,7 @@ import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
 export default class BookingSlotService {
   /**
-   * Creates a bookings slot **with only seconds precision**
+   * Creates a bookings slot **with only ms precision**
    *
    * @param bookingSlotData the fields to add to the new `booking_slot` document
    * @returns the created `booking_slot` document
@@ -14,7 +14,10 @@ export default class BookingSlotService {
   public async createBookingSlot(bookingSlotData: BookingSlot) {
     return await FirestoreCollections.bookingSlots.add({
       ...bookingSlotData,
-      date: Timestamp.fromMillis(bookingSlotData.date.seconds * 1000)
+      date: Timestamp.fromMillis(
+        bookingSlotData.date.seconds * 1000 +
+          bookingSlotData.date.nanoseconds / 1000000
+      ) // Need to do this because firestore does not like "raw" {seconds, nanoseconds}
     })
   }
 

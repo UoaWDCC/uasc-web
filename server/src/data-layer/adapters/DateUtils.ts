@@ -1,9 +1,23 @@
 import { Timestamp } from "firebase-admin/firestore"
 
+/**
+ * @param firestoreDate the timestamp to conver to date,
+ * using Millisecond precision
+ * @returns the new Date object
+ */
 export const firestoreTimestampToDate = (firestoreDate: Timestamp) => {
-  return new Date(firestoreDate.seconds * 1000)
+  return new Date(
+    firestoreDate.seconds * 1000 + firestoreDate.nanoseconds / 1000000
+  )
 }
 
+/**
+ * converts a (even with underscores) to to its corresponding Timestamp
+ *
+ * @param date the date to be converted into a timestamp
+ * @returns a timestamp representing the point in them corresponding to
+ * the `getTime` method of the date
+ */
 export const dateToFirestoreTimeStamp = (date: Date) => {
   let output = Timestamp.fromDate(date) as Timestamp & {
     _seconds?: number
