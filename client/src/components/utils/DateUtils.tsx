@@ -35,9 +35,7 @@ export const DateUtils = {
    * @returns `true` if the two are equal
    */
   dateEqualToTimestamp: (date: Date, timestamp: UnknownTimestamp) => {
-    return (
-      date.getTime() / MS_IN_SECOND === DateUtils.timestampSeconds(timestamp)
-    )
+    return date.getTime() === DateUtils.timestampMilliseconds(timestamp)
   },
 
   /**
@@ -52,13 +50,16 @@ export const DateUtils = {
   /**
    * Used to deal with readonly props being serialised with an underscore
    *
+   * This is preferred over the `toMillis` method due to it possibly being `undefined`
+   * on timestamp objects received from the backend
+   *
    * @param timestamp timestamp which may have underscores
-   * @returns the seconds values
+   * @returns the milliseconds values
    */
-  timestampSeconds: (timestamp: UnknownTimestamp) => {
-    if (timestamp.seconds) return timestamp.seconds
-    if (timestamp._seconds) return timestamp._seconds
-    throw new Error("Object does not have any fields for timestamp seconds")
+  timestampMilliseconds: (timestamp: UnknownTimestamp) => {
+    const seconds = timestamp.seconds || timestamp._seconds || 0
+    const nanoseconds = timestamp.nanoseconds || timestamp._nanoseconds || 0
+    return seconds * 1000 + nanoseconds / 1000000
   },
 
   /**

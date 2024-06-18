@@ -53,22 +53,15 @@ describe("DateUtils", () => {
     })
   })
 
-  describe("timestampSeconds", () => {
+  describe("timestampMilliseconds", () => {
     it("should return seconds from timestamp", () => {
       const timestamp = { seconds: 1609459200 }
-      expect(DateUtils.timestampSeconds(timestamp)).toBe(1609459200)
+      expect(DateUtils.timestampMilliseconds(timestamp)).toBe(1609459200000)
     })
 
     it("should return _seconds from timestamp", () => {
       const timestamp = { _seconds: 1609459200 }
-      expect(DateUtils.timestampSeconds(timestamp)).toBe(1609459200)
-    })
-
-    it("should throw error if timestamp does not have seconds or _seconds", () => {
-      const timestamp = { nanoseconds: 0 }
-      expect(() => DateUtils.timestampSeconds(timestamp)).toThrow(
-        "Object does not have any fields for timestamp seconds"
-      )
+      expect(DateUtils.timestampMilliseconds(timestamp)).toBe(1609459200000)
     })
   })
 
