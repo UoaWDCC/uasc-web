@@ -59,7 +59,7 @@ export const DateUtils = {
   timestampMilliseconds: (timestamp: UnknownTimestamp) => {
     const seconds = timestamp.seconds || timestamp._seconds || 0
     const nanoseconds = timestamp.nanoseconds || timestamp._nanoseconds || 0
-    return seconds * 1000 + nanoseconds / 1000000
+    return seconds * MS_IN_SECOND + nanoseconds / 1000000
   },
 
   /**
@@ -75,7 +75,9 @@ export const DateUtils = {
    * @returns a Date object that was converted
    */
   convertLocalDateToUTCDate: (d: Date) => {
-    const utcDate = new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
+    const utcDate = new Date(
+      d.getTime() - d.getTimezoneOffset() * 60 * MS_IN_SECOND
+    )
     utcDate.setUTCHours(0, 0, 0, 0)
     return utcDate
   },
