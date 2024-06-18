@@ -83,7 +83,7 @@ const BookingUtils = {
       // Single day requested
       totalDays === 1 &&
       [FRIDAY, SATURDAY].includes(
-        new Date(datesInBooking[0].seconds * 1000).getUTCDay()
+        new Date(firestoreTimestampToDate(datesInBooking[0])).getUTCDay()
       )
     ) {
       return LodgePricingTypeValues.SingleFridayOrSaturday

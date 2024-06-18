@@ -66,7 +66,11 @@ export const timestampsInRange = (
   let currentSeconds = startDate.seconds
 
   while (currentSeconds <= endDate.seconds) {
-    dateArray.push(Timestamp.fromMillis(currentSeconds * 1000))
+    dateArray.push(
+      Timestamp.fromMillis(
+        currentSeconds * 1000 + startDate.nanoseconds / 1000000
+      )
+    )
     currentSeconds += S_IN_DAY * steps
   }
 
