@@ -332,8 +332,6 @@ export class PaymentController extends Controller {
           startDate,
           endDate
         )
-      console.log("fuck", bookingSlots)
-      console.log(datesInBooking)
 
       if (bookingSlots.length !== totalDays) {
         this.setStatus(423) // Resource busy
