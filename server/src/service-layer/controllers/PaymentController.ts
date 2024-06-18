@@ -332,6 +332,8 @@ export class PaymentController extends Controller {
           startDate,
           endDate
         )
+      console.log("fuck", bookingSlots)
+      console.log(datesInBooking)
 
       if (bookingSlots.length !== totalDays) {
         this.setStatus(423) // Resource busy
@@ -396,11 +398,13 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
-      const BOOKING_START_DATE = new Date(datesInBooking[0].toUTCString())
+      const BOOKING_START_DATE = new Date(datesInBooking[0].getTime())
+        .toISOString()
+        .split("T")[0]
 
-      const BOOKING_END_DATE = new Date(
-        datesInBooking[totalDays - 1].toUTCString()
-      )
+      const BOOKING_END_DATE = new Date(datesInBooking[totalDays - 1].getTime())
+        .toISOString()
+        .split("T")[0]
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,

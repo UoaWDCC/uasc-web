@@ -29,12 +29,13 @@ export const normaliseFirestoreTimeStamp = (timestamp: Timestamp) =>
  */
 export const datesToDateRange = (startDate: Date, endDate: Date, steps = 1) => {
   const dateArray = []
-  const currentDate = new Date(startDate)
+  let currentDate = new Date(startDate.getTime())
 
-  while (currentDate <= new Date(endDate)) {
-    dateArray.push(new Date(currentDate))
+  while (currentDate <= new Date(endDate.getTime())) {
+    dateArray.push(new Date(currentDate.getTime()))
     // Use UTC date to prevent problems with time zones and DST
-    currentDate.setUTCDate(currentDate.getUTCDate() + steps)
+    currentDate = new Date(currentDate.getTime() + steps * 86400 * 1000)
+    console.log(currentDate)
   }
 
   return dateArray

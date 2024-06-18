@@ -238,7 +238,7 @@ export const CreateBookingSection = ({
               const [start, end] = e as [Date, Date]
               if (checkValidRange(start, end)) {
                 setSelectedDateRange({
-                  startDate: currentStartDate,
+                  startDate: start,
                   endDate: end
                 })
               }

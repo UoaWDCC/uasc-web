@@ -44,7 +44,9 @@ export const timestampToDate = (timestamp: {
 }
 
 export const formatInputDateIntoUTC = (d: Date) => {
-  return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
+  const utcDate = new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
+  utcDate.setUTCHours(0, 0, 0, 0)
+  return utcDate
 }
 
 export const UTCStringToLocal = (utcString: string) => {
