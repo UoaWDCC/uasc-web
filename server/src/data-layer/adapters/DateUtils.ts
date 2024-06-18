@@ -13,6 +13,7 @@ export const dateToFirestoreTimeStamp = (date: Date) => {
   return output
 }
 
+const MS_IN_DAY = 60 * 60 * 24 * 1000
 /**
  * @param startDate Date object
  * @param endDate Date object
@@ -25,7 +26,7 @@ export const datesToDateRange = (startDate: Date, endDate: Date, steps = 1) => {
   while (currentDate <= new Date(endDate.getTime())) {
     dateArray.push(new Date(currentDate.getTime()))
     // Use UTC date to prevent problems with time zones and DST
-    currentDate = new Date(currentDate.getTime() + steps * 86400 * 1000)
+    currentDate = new Date(currentDate.getTime() + steps * MS_IN_DAY)
   }
 
   return dateArray

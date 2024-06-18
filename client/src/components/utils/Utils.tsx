@@ -48,12 +48,14 @@ export const timestampToDate = (timestamp: {
  * introduced by the timezone while also making sure that it is the
  * midnight time (Essentially removes the time component)
  *
+ * This should be used on **ALL** requests that send dates to the backend
+ *
  * **Note**: the original date is not mutated
  *
  * @param d the date to convert to UTC
  * @returns a Date object that was converted
  */
-export const formatInputDateIntoUTC = (d: Date) => {
+export const convertLocalDateToUTCDate = (d: Date) => {
   const utcDate = new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
   utcDate.setUTCHours(0, 0, 0, 0)
   return utcDate

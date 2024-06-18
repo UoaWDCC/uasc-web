@@ -7,7 +7,7 @@ import {
 import { useContext } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
 import { Timestamp } from "firebase/firestore"
-import { formatInputDateIntoUTC } from "components/utils/Utils"
+import { convertLocalDateToUTCDate } from "components/utils/Utils"
 
 /**
  * This must be wrapped in a `DateSelectionProvider`
@@ -22,9 +22,9 @@ export const WrappedAdminAvailabilityView = () => {
   } = useContext(DateSelectionContext)
 
   const _startDate =
-    startDate && Timestamp.fromDate(formatInputDateIntoUTC(startDate))
+    startDate && Timestamp.fromDate(convertLocalDateToUTCDate(startDate))
   const _endDate =
-    endDate && Timestamp.fromDate(formatInputDateIntoUTC(endDate))
+    endDate && Timestamp.fromDate(convertLocalDateToUTCDate(endDate))
 
   const { mutateAsync: makeAvailableMutation } = useMakeDatesAvailableMutation(
     _startDate,

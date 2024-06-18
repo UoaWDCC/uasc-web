@@ -9,7 +9,7 @@ import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import {
   datesToDateRange,
-  formatInputDateIntoUTC,
+  convertLocalDateToUTCDate,
   formattedNzDate,
   isSingleFridayOrSaturday,
   timestampToDate
@@ -159,8 +159,8 @@ export const CreateBookingSection = ({
             )
           )
             handleBookingCreation?.(
-              Timestamp.fromDate(formatInputDateIntoUTC(currentStartDate)),
-              Timestamp.fromDate(formatInputDateIntoUTC(currentEndDate))
+              Timestamp.fromDate(convertLocalDateToUTCDate(currentStartDate)),
+              Timestamp.fromDate(convertLocalDateToUTCDate(currentEndDate))
             )
         }}
       >
