@@ -11,6 +11,7 @@ import {
   LODGE_PRICING_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import {
+  UTCDateToDdMmYyyy,
   firestoreTimestampToDate,
   timestampsInRange
 } from "data-layer/adapters/DateUtils"
@@ -305,9 +306,9 @@ export class PaymentController extends Controller {
         }
       }
 
-      const datesInBooking = timestampsInRange(startDate, endDate)
+      const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
 
-      const totalDays = datesInBooking.length
+      const totalDays = dateTimestampsInBooking.length
 
       const MAX_BOOKING_DAYS = 10
       // Validate number of dates to avoid kiddies from forging bookings
@@ -336,7 +337,7 @@ export class PaymentController extends Controller {
       const baseAvailabilities =
         await bookingDataService.getAvailabilityForUser(
           uid,
-          datesInBooking,
+          dateTimestampsInBooking,
           bookingSlots
         )
       if (baseAvailabilities.some((slot) => !slot)) {
@@ -377,8 +378,9 @@ export class PaymentController extends Controller {
       }
 
       // implement pricing logic
-      const requiredBookingType =
-        BookingUtils.getRequiredPricing(datesInBooking)
+      const requiredBookingType = BookingUtils.getRequiredPricing(
+        dateTimestampsInBooking
+      )
 
       const requiredBookingProducts = await stripeService.getProductByMetadata(
         LODGE_PRICING_TYPE_KEY,
@@ -389,17 +391,15 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
-      const BOOKING_START_DATE = new Date(
-        firestoreTimestampToDate(datesInBooking[0])
+      const BOOKING_START_DATE = UTCDateToDdMmYyyy(
+        new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
       )
-        .toISOString()
-        .split("T")[0] // this works because we assume every date is UTC midnight
 
-      const BOOKING_END_DATE = new Date(
-        firestoreTimestampToDate(datesInBooking[totalDays - 1])
+      const BOOKING_END_DATE = UTCDateToDdMmYyyy(
+        new Date(
+          firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
+        )
       )
-        .toISOString()
-        .split("T")[0] // this works because we assume every date is UTC midnight
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,

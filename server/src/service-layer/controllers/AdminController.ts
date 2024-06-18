@@ -50,9 +50,9 @@ export class AdminController extends Controller {
     const { startDate, endDate, slots } = requestBody
     const bookingSlotService = new BookingSlotService()
 
-    const dates = timestampsInRange(startDate, endDate)
+    const dateTimestamps = timestampsInRange(startDate, endDate)
 
-    const datesToUpdatePromises = dates.map(async (dateTimestamp) => {
+    const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)
@@ -99,9 +99,9 @@ export class AdminController extends Controller {
     const { startDate, endDate } = requestBody
     const bookingSlotService = new BookingSlotService()
 
-    const dates = timestampsInRange(startDate, endDate)
+    const dateTimestamps = timestampsInRange(startDate, endDate)
 
-    const datesToUpdatePromises = dates.map(async (dateTimestamp) => {
+    const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)

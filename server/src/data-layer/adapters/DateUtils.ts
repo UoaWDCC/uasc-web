@@ -31,7 +31,8 @@ export const dateToFirestoreTimeStamp = (date: Date) => {
 }
 
 /**
- * Util for tests
+ * Util for tests - the endpoints serialise the timestamp objects
+ * with underscores prefixing the `readonly` fields
  */
 export const removeUnderscoresFromTimestamp = (timestamp: {
   seconds?: number
@@ -39,6 +40,10 @@ export const removeUnderscoresFromTimestamp = (timestamp: {
   _seconds?: number
   _nanoseconds?: number
 }) => {
+  /**
+   * If the received data is from a serialised JSON object it wll be
+   * prefixed with underscores
+   */
   const output = {
     seconds: timestamp._seconds || timestamp.seconds || 0,
     nanoseconds: timestamp._nanoseconds || timestamp.nanoseconds || 0
@@ -63,10 +68,16 @@ export const timestampsInRange = (
   steps = 1
 ) => {
   const dateArray = []
+  /**
+   * Only care about seconds resolution when dealing with days
+   */
   let currentSeconds = startDate.seconds
 
   while (currentSeconds <= endDate.seconds) {
     dateArray.push(
+      /**
+       * We want the full timestamp object with all of the additional methods
+       */
       Timestamp.fromMillis(
         currentSeconds * 1000 + startDate.nanoseconds / 1000000
       )
@@ -75,4 +86,19 @@ export const timestampsInRange = (
   }
 
   return dateArray
+}
+
+/**
+ * Formats a based on a date object's **UTC Date** into the format `DD/MM/YYYY`
+ *
+ * This is an alternative to displaying the default ISO string format of `YYYY-MM-DD`
+ *
+ * @param date the date object that requires its **UTC** Date to be formatted into the format
+ * @returns
+ */
+export const UTCDateToDdMmYyyy = (date: Date) => {
+  const yyyyMmDd = date.toISOString().split("T")[0]
+  const parts = yyyyMmDd.split("-")
+
+  return `${parts[2]}/${parts[1]}/${parts[0]}`
 }
