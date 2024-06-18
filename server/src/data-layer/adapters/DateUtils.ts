@@ -1,14 +1,33 @@
 import { Timestamp } from "firebase-admin/firestore"
 
 export const firestoreTimestampToDate = (firestoreDate: Timestamp) => {
-  return new Date(firestoreDate.seconds * 1000) // date takes ms
+  return new Date(firestoreDate.seconds * 1000)
 }
 
 export const dateToFirestoreTimeStamp = (date: Date) => {
-  let output = Timestamp.fromDate(date)
+  let output = Timestamp.fromDate(date) as Timestamp & {
+    _seconds?: number
+    _nanoseconds?: number
+  }
   output = {
-    seconds: output.seconds,
-    nanoseconds: output.nanoseconds
+    seconds: output.seconds || output._seconds,
+    nanoseconds: output.nanoseconds || output._nanoseconds
+  } as Timestamp
+  return output
+}
+
+/**
+ * Util for tests
+ */
+export const removeUnderscoresFromTimestamp = (timestamp: {
+  seconds?: number
+  nanoseconds?: number
+  _seconds?: number
+  _nanoseconds?: number
+}) => {
+  const output = {
+    seconds: timestamp._seconds || timestamp.seconds || 0,
+    nanoseconds: timestamp._nanoseconds || timestamp.nanoseconds || 0
   } as Timestamp
   return output
 }

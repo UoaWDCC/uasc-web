@@ -1,11 +1,11 @@
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 import { CommonResponse } from "./CommonResponse"
-import { ReducedTimestamp } from "data-layer/adapters/DateUtils"
+import { Timestamp } from "firebase-admin/firestore"
 
 type AvailableDates = {
   id: string
   description?: string
-  date: ReducedTimestamp
+  date: Timestamp
   maxBookings: number
   availableSpaces: number
 }

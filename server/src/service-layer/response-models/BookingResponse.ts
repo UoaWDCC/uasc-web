@@ -1,9 +1,9 @@
+import { Timestamp } from "firebase-admin/firestore"
 import { CommonResponse } from "./CommonResponse"
 import { CombinedUserData } from "./UserResponse"
-import { ReducedTimestamp } from "data-layer/adapters/DateUtils"
 
 export interface BookingSlotUpdateResponse extends CommonResponse {
-  updatedBookingSlots?: { date: ReducedTimestamp; bookingSlotId: string }[]
+  updatedBookingSlots?: { date: Timestamp; bookingSlotId: string }[]
 }
 
 export interface AllUserBookingSlotsResponse extends CommonResponse {
@@ -14,6 +14,6 @@ export interface AllUserBookingSlotsResponse extends CommonResponse {
  * Represents the response structure for fetching users by date range.
  */
 export interface UsersByDateRangeResponse {
-  data?: Array<{ date: ReducedTimestamp; users: CombinedUserData[] }>
+  data?: Array<{ date: Timestamp; users: CombinedUserData[] }>
   error?: string
 }

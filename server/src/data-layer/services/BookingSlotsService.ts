@@ -5,9 +5,17 @@ import { DocumentDataWithUid } from "data-layer/models/common"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
 export default class BookingSlotService {
-  // Create
+  /**
+   * Creates a bookings slot **with only seconds precision**
+   *
+   * @param bookingSlotData the fields to add to the new `booking_slot` document
+   * @returns the created `booking_slot` document
+   */
   public async createBookingSlot(bookingSlotData: BookingSlot) {
-    return await FirestoreCollections.bookingSlots.add(bookingSlotData)
+    return await FirestoreCollections.bookingSlots.add({
+      ...bookingSlotData,
+      date: Timestamp.fromMillis(bookingSlotData.date.seconds * 1000)
+    })
   }
 
   /**
