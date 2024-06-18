@@ -9,6 +9,7 @@ import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import {
   datesToDateRange,
+  formatInputDateIntoUTC,
   formattedNzDate,
   isSingleFridayOrSaturday,
   timestampToDate
@@ -158,8 +159,8 @@ export const CreateBookingSection = ({
             )
           )
             handleBookingCreation?.(
-              Timestamp.fromDate(currentStartDate),
-              Timestamp.fromDate(currentEndDate)
+              Timestamp.fromDate(formatInputDateIntoUTC(currentStartDate)),
+              Timestamp.fromDate(formatInputDateIntoUTC(currentEndDate))
             )
         }}
       >
@@ -234,11 +235,11 @@ export const CreateBookingSection = ({
               ) : null
             }}
             onChange={(e) => {
-              const range = e as [Date, Date]
-              if (checkValidRange(range[0], range[1])) {
+              const [start, end] = e as [Date, Date]
+              if (checkValidRange(start, end)) {
                 setSelectedDateRange({
-                  startDate: range[0],
-                  endDate: range[1]
+                  startDate: currentStartDate,
+                  endDate: end
                 })
               }
             }}

@@ -43,6 +43,18 @@ export const timestampToDate = (timestamp: {
   return new Date(timestamp.seconds * MS_IN_SECOND)
 }
 
+export const formatInputDateIntoUTC = (d: Date) => {
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
+}
+
+export const UTCStringToLocal = (utcString: string) => {
+  if (!utcString.endsWith("Z")) {
+    throw new Error("utcString is not a valid UTC string")
+  }
+
+  return new Date(utcString.slice(0, -1))
+}
+
 /**
  * @param date a date object
  * @returns a date string in the nz format `dd-mm-yyyy`

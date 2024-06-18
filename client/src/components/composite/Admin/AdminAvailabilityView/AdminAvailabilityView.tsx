@@ -77,12 +77,9 @@ export const formatBookingSlotsForAvailabilityView = (
     })
 }
 
-const formatDateRangeForDialog = (
-  startDate?: Timestamp,
-  endDate?: Timestamp
-) => {
+const formatDateRangeForDialog = (startDate?: Date, endDate?: Date) => {
   if (startDate && endDate)
-    return `${timestampToDate(startDate).toDateString()} to ${timestampToDate(endDate).toDateString()}`
+    return `${startDate.toDateString()} to ${endDate.toDateString()}`
 
   return ""
 }
@@ -107,7 +104,11 @@ const AdminAvailabilityView = ({
   const dateRangeDefined = startDate && endDate
 
   const tableData: CondensedBookingInfoColumn[] = dateRangeDefined
-    ? formatBookingSlotsForAvailabilityView(startDate, endDate, slots)
+    ? formatBookingSlotsForAvailabilityView(
+        Timestamp.fromDate(startDate),
+        Timestamp.fromDate(endDate),
+        slots
+      )
     : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
 
   const formattedDateRanges = formatDateRangeForDialog(startDate, endDate)
@@ -120,13 +121,9 @@ const AdminAvailabilityView = ({
       <div className="flex flex-col gap-2">
         <span className="max-w-[380px] sm:w-[380px]">
           <Calendar
-            minDate={new Date(new Date().toDateString())}
+            minDate={new Date(Date.now())}
             selectRange
-            value={
-              dateRangeDefined
-                ? [timestampToDate(startDate), timestampToDate(endDate)]
-                : undefined
-            }
+            value={dateRangeDefined ? [startDate, endDate] : undefined}
             tileContent={({ date }) => {
               const slot = slots.find(
                 // Find slots that are "available"

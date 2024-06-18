@@ -12,8 +12,7 @@ import {
 } from "business-layer/utils/StripeProductMetadata"
 import {
   datesToDateRange,
-  firestoreTimestampToDate,
-  normaliseFirestoreTimeStamp
+  firestoreTimestampToDate
 } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
@@ -330,8 +329,8 @@ export class PaymentController extends Controller {
 
       const bookingSlots =
         await bookingSlotService.getBookingSlotsBetweenDateRange(
-          normaliseFirestoreTimeStamp(startDate),
-          normaliseFirestoreTimeStamp(endDate)
+          startDate,
+          endDate
         )
 
       if (bookingSlots.length !== totalDays) {
@@ -397,13 +396,11 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
-      const BOOKING_START_DATE = new Date(
-        datesInBooking[0].toDateString()
-      ).toLocaleDateString("en-NZ")
+      const BOOKING_START_DATE = new Date(datesInBooking[0].toUTCString())
 
       const BOOKING_END_DATE = new Date(
-        datesInBooking[totalDays - 1].toDateString()
-      ).toLocaleDateString("en-NZ")
+        datesInBooking[totalDays - 1].toUTCString()
+      )
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
