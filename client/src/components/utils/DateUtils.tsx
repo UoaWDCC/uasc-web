@@ -1,5 +1,11 @@
 import { MS_IN_SECOND } from "utils/Constants"
 
+/**
+ * Utility type to allow us to handle cases where the timestamp may actually have
+ * `_seconds` or `_nanoseconds`
+ */
+export interface UnknownTimestamp extends Record<string, number> {}
+
 export const DateUtils = {
   datesToDateRange: (startDate: Date, endDate: Date) => {
     const dateArray = []
@@ -22,6 +28,18 @@ export const DateUtils = {
       [FRIDAY, SATURDAY].includes(dateArray[0].getDay())
     )
   },
+
+  /**
+   * @param date to compare
+   * @param timestamp to compare
+   * @returns `true` if the two are equal
+   */
+  dateEqualToTimestamp: (date: Date, timestamp: UnknownTimestamp) => {
+    return (
+      date.getTime() / MS_IN_SECOND === DateUtils.timestampSeconds(timestamp)
+    )
+  },
+
   /**
    * @param timestamp any object that contains the `seconds` and `nanosecond` properties,
    * like the timestamp from `firebase`
@@ -31,7 +49,13 @@ export const DateUtils = {
     return new Date(timestamp.seconds * MS_IN_SECOND)
   },
 
-  timestampSeconds: <T extends Record<string, number>>(timestamp: T) => {
+  /**
+   * Used to deal with readonly props being serialised with an underscore
+   *
+   * @param timestamp timestamp which may have underscores
+   * @returns the seconds values
+   */
+  timestampSeconds: (timestamp: UnknownTimestamp) => {
     if (timestamp.seconds) return timestamp.seconds
     if (timestamp._seconds) return timestamp._seconds
     throw new Error("Object does not have any fields for timestamp seconds")

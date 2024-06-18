@@ -6,7 +6,7 @@ import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
-import { DEFAULT_BOOKING_AVAILABILITY, MS_IN_SECOND } from "utils/Constants"
+import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
 import { DateUtils } from "components/utils/DateUtils"
 /**
  * Reasonable amount of items to display on table
@@ -127,9 +127,10 @@ const AdminAvailabilityView = ({
               const slot = slots.find(
                 // Find slots that are "available"
                 (slot) =>
-                  DateUtils.timestampSeconds(slot.date) ===
-                  DateUtils.convertLocalDateToUTCDate(date).getTime() /
-                    MS_IN_SECOND
+                  DateUtils.dateEqualToTimestamp(
+                    DateUtils.convertLocalDateToUTCDate(date),
+                    slot.date
+                  )
               )
               return slot ? (
                 // Apply style if it is
