@@ -393,13 +393,13 @@ export class PaymentController extends Controller {
         firestoreTimestampToDate(datesInBooking[0])
       )
         .toISOString()
-        .split("T")[0]
+        .split("T")[0] // this works because we assume every date is UTC midnight
 
       const BOOKING_END_DATE = new Date(
         firestoreTimestampToDate(datesInBooking[totalDays - 1])
       )
         .toISOString()
-        .split("T")[0]
+        .split("T")[0] // this works because we assume every date is UTC midnight
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,

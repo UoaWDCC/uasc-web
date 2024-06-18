@@ -2,12 +2,12 @@ import { Timestamp } from "firebase-admin/firestore"
 
 export interface MakeDatesAvailableRequestBody {
   /**
-   * Firestore timestamp, ideally with the time information removed (set to midnight)
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
    */
   startDate: Timestamp
 
   /**
-   * Firestore timestamp, ideally with the time information removed (set to midnight)
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
    */
   endDate: Timestamp
 
