@@ -43,18 +43,20 @@ export const timestampToDate = (timestamp: {
   return new Date(timestamp.seconds * MS_IN_SECOND)
 }
 
+/**
+ * Converts date to the corresponding UTC date by removing the offset
+ * introduced by the timezone while also making sure that it is the
+ * midnight time (Essentially removes the time component)
+ *
+ * **Note**: the original date is not mutated
+ *
+ * @param d the date to convert to UTC
+ * @returns a Date object that was converted
+ */
 export const formatInputDateIntoUTC = (d: Date) => {
   const utcDate = new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
   utcDate.setUTCHours(0, 0, 0, 0)
   return utcDate
-}
-
-export const UTCStringToLocal = (utcString: string) => {
-  if (!utcString.endsWith("Z")) {
-    throw new Error("utcString is not a valid UTC string")
-  }
-
-  return new Date(utcString.slice(0, -1))
 }
 
 /**
