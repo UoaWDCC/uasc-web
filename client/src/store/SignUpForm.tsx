@@ -27,7 +27,6 @@ const initialState: State = {
   faculty: undefined,
   university: undefined,
   student_id: undefined,
-  returning: false,
   university_year: "",
   formValidity: {
     success: false

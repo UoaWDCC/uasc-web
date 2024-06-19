@@ -2,26 +2,14 @@ import { Timestamp } from "firebase-admin/firestore"
 
 export interface UserAdditionalInfo {
   date_of_birth: Timestamp
-  /**
-   * @isbool Please enter true or false
-   */
-  does_snowboarding: boolean
-  /**
-   * @isbool Please enter true or false
-   */
-  does_racing: boolean
-  /**
-   * @isbool Please enter true or false
-   */
-  does_ski: boolean
+  does_snowboarding?: boolean
+  does_racing?: boolean
+  does_ski?: boolean
   /**
    * @isNumber Please enter your phone number
    */
   phone_number: number
-  /**
-   * @isString Please enter your pronouns
-   */
-  gender: string
+  gender?: string
   /**
    * @isString Please enter a name
    */
@@ -51,13 +39,9 @@ export interface UserAdditionalInfo {
    */
   student_id?: string
   /**
-   * @isbool Please enter true or false
-   */
-  returning: boolean
-  /**
    * @isString Please enter your year of study
    */
-  university_year: string
+  university_year?: string
   /**
    * For identification DO NOT RETURN to users in exposed endpoints
    */
