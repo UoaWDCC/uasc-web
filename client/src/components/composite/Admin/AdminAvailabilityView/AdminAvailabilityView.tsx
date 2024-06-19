@@ -76,9 +76,14 @@ export const formatBookingSlotsForAvailabilityView = (
     })
 }
 
+/**
+ * @param startDate the first date of the range
+ * @param endDate the last date of the range
+ * @returns a string that describes the date range being booked
+ */
 const formatDateRangeForDialog = (startDate?: Date, endDate?: Date) => {
   if (startDate && endDate)
-    return `${startDate.toDateString()} to ${endDate.toDateString()}`
+    return `${startDate.toDateString()} to ${endDate.toDateString()}` as const
 
   return ""
 }
