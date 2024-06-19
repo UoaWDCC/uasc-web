@@ -9,6 +9,7 @@ import Profile from "pages/Profile/Profile"
 import Register from "pages/Register/Register"
 import { Route, Routes } from "react-router-dom"
 import NoMatch from "pages/404"
+import { BookingContextProvider } from "components/composite/Booking/BookingContext"
 
 export const AllRoutes = () => (
   <Routes>
@@ -19,7 +20,14 @@ export const AllRoutes = () => (
       <Route path="contact" element={<Contact />} />
       <Route path="register/*" element={<Register />} />
       <Route path="login/*" element={<Login />} />
-      <Route path="bookings/*" element={<Booking />} />
+      <Route
+        path="bookings/*"
+        element={
+          <BookingContextProvider>
+            <Booking />
+          </BookingContextProvider>
+        }
+      />
       <Route path="profile" element={<Profile />} />
       <Route path="admin/*" element={<Admin />} />
       <Route path="*" element={<NoMatch />} />

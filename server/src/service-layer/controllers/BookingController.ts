@@ -7,7 +7,6 @@ import { Timestamp } from "firebase-admin/firestore"
 
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-// import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
 import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import {
@@ -187,6 +186,10 @@ export class BookingController extends Controller {
 
         /** Extracting the user IDs from the bookings */
         const userIds = bookings.map((booking) => booking.user_id)
+
+        if (userIds.length === 0) {
+          continue
+        }
 
         /** Fetching the users based on the user IDs */
         const users = await userService.getUsersByIds(userIds)

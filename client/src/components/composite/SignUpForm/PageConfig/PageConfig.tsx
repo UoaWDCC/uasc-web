@@ -26,8 +26,6 @@ import {
 } from "../Sections/PaymentSection"
 import TestIcon from "assets/icons/snowboarder.svg?react"
 import { UseMutateFunction } from "@tanstack/react-query"
-import { signInWithCustomToken } from "firebase/auth"
-import { auth } from "firebase"
 import AccountSetupSection from "../Sections/AccountSetupSection"
 
 type FormSubmissionMutationFunction = UseMutateFunction<
@@ -81,12 +79,6 @@ export const PAGINATED_FORM_PAGES = (
     onNext: () => {
       validateFormFn(PAGES.Additional, () =>
         signUpFn(undefined, {
-          async onSuccess(data) {
-            // console.log(data)
-            if (data?.jwtToken) {
-              await signInWithCustomToken(auth, data.jwtToken)
-            }
-          },
           onError(error) {
             console.error("Error signing up " + error)
           }

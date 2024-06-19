@@ -10,6 +10,26 @@ export const debounce = (fn: (...args: any[]) => void, timeout: number) => {
     }, timeout)
   }
 }
+export const isSingleFridayOrSaturday = (startDate: Date, endDate: Date) => {
+  const FRIDAY = 5
+  const SATURDAY = 6
+  const dateArray = datesToDateRange(startDate, endDate)
+  return (
+    dateArray.length === 1 && [FRIDAY, SATURDAY].includes(dateArray[0].getDay())
+  )
+}
+
+export const datesToDateRange = (startDate: Date, endDate: Date) => {
+  const dateArray = []
+  const currentDate = new Date(startDate)
+
+  while (currentDate <= new Date(endDate)) {
+    dateArray.push(new Date(currentDate))
+    // Use UTC date to prevent problems with time zones and DST
+    currentDate.setUTCDate(currentDate.getUTCDate() + 1)
+  }
+  return dateArray
+}
 
 /**
  * @param timestamp any object that contains the `seconds` and `nanosecond` properties,
@@ -22,6 +42,12 @@ export const timestampToDate = (timestamp: {
 }) => {
   return new Date(timestamp.seconds * MS_IN_SECOND)
 }
+
+/**
+ * @param date a date object
+ * @returns a date string in the nz format `dd-mm-yyyy`
+ */
+export const formattedNzDate = (date: Date) => date.toLocaleDateString("en-NZ")
 
 /**
  * This Hook can be used for detecting clicks outside the Opened Menu

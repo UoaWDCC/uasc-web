@@ -1,6 +1,7 @@
 import { useUsersQuery } from "services/Admin/AdminQueries"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
 import {
+  useDeleteUserMutation,
   useDemoteUserMutation,
   usePromoteUserMutation
 } from "services/Admin/AdminMutations"
@@ -29,47 +30,43 @@ const WrappedAdminMemberView = () => {
 
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
+  const { mutateAsync: deleteUser, isPending } = useDeleteUserMutation()
 
-  const getNameFromUid = (uid: string) => {
-    const matchingUser = transformedDataList?.find((user) => user?.uid === uid)
-    if (matchingUser) {
-      return `${matchingUser.Name}`
-    }
-    return "Unknown"
-  }
-
+  /**
+   * You should optimistically handle the mutations in `AdminMutations`
+   */
   const rowOperations: TableRowOperation[] = [
     {
       name: "promote",
       handler: (uid: string) => {
-        promoteUser(uid, {
-          onSuccess: () =>
-            alert(`Successfully added membership for ${getNameFromUid(uid)}`),
-          onError: () =>
-            alert(
-              `Could not add membership for ${getNameFromUid(uid)}, they may already have membership`
-            )
-        })
+        promoteUser(uid)
       }
     },
     {
       name: "demote",
       handler: (uid: string) => {
-        demoteUser(uid, {
-          onSuccess: () =>
-            alert(`Successfully removed membership for ${getNameFromUid(uid)}`),
-          onError: () =>
-            alert(
-              `Could not remove membership for ${getNameFromUid(uid)}, they may already not have membership`
-            )
-        })
+        demoteUser(uid)
       }
     },
     {
       name: "delete",
-      handler: () => {
-        // TODO
-        throw new Error("Not Implemented")
+      handler: (uid: string) => {
+        const matchingUser = transformedDataList?.find(
+          (user) => user.uid === uid
+        )
+        /**
+         * This should be enforced in the endpoint anyway, exists for UX
+         */
+        if (matchingUser?.Status === "admin") {
+          alert("You may not delete admins")
+          return
+        }
+        if (
+          confirm(
+            `Are you SURE you want to delete the user ${matchingUser?.Name} (${matchingUser?.Email}). This action can NOT be undone!!!`
+          )
+        )
+          deleteUser({ uid })
       }
     },
     {
@@ -86,6 +83,7 @@ const WrappedAdminMemberView = () => {
       fetchNextPage={() => {
         !isFetchingNextPage && hasNextPage && fetchNextPage()
       }}
+      isUpdating={isPending}
       rowOperations={rowOperations}
       data={transformedDataList}
     />

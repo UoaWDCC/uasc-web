@@ -29,6 +29,9 @@ export interface paths {
   "/payment/membership": {
     post: operations["GetMembershipPayment"];
   };
+  "/payment/booking": {
+    post: operations["GetBookingPayment"];
+  };
   "/bookings": {
     get: operations["GetAllBookings"];
   };
@@ -95,6 +98,8 @@ export interface components {
       does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
+      /** Format: double */
+      phone_number?: number;
       gender?: string;
       emergency_contact?: string;
       first_name?: string;
@@ -130,6 +135,8 @@ export interface components {
       does_snowboarding: boolean;
       does_racing: boolean;
       does_ski: boolean;
+      /** Format: double */
+      phone_number: number;
       gender: string;
       emergency_contact?: string;
       first_name: string;
@@ -176,6 +183,15 @@ export interface components {
     UserPaymentRequestModel: {
       membershipType?: components["schemas"]["MembershipTypeValues"];
     };
+    BookingPaymentResponse: {
+      error?: string;
+      message?: string;
+      stripeClientSecret?: string;
+    };
+    UserBookingRequestingModel: {
+      startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
     AllUserBookingSlotsResponse: {
       error?: string;
       message?: string;
@@ -199,11 +215,15 @@ export interface components {
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
-    UserAdditionalInfo: {
+    /** @enum {string} */
+    UserAccountTypes: "admin" | "member" | "guest";
+    CombinedUserData: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_snowboarding: boolean;
       does_racing: boolean;
       does_ski: boolean;
+      /** Format: double */
+      phone_number: number;
       gender: string;
       emergency_contact?: string;
       first_name: string;
@@ -216,18 +236,14 @@ export interface components {
       university_year: string;
       /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
-    };
-    /** @enum {string} */
-    UserAccountTypes: "admin" | "member" | "guest";
-    CombinedUserData: components["schemas"]["UserAdditionalInfo"] & {
-      /** @description What type of account the user has */
-      membership: components["schemas"]["UserAccountTypes"];
-      /** @description The email the user uses to log in */
-      email: string;
-      /** @description Formatted UTC date string of when the account was created */
-      dateJoined?: string;
       /** @description Firebase identifier of the user *data* based on the firestore document */
       uid: string;
+      /** @description Formatted UTC date string of when the account was created */
+      dateJoined?: string;
+      /** @description The email the user uses to log in */
+      email: string;
+      /** @description What type of account the user has */
+      membership: components["schemas"]["UserAccountTypes"];
     };
     /** @description Represents the response structure for fetching users by date range. */
     UsersByDateRangeResponse: {
@@ -279,6 +295,26 @@ export interface components {
       nextCursor?: string;
       data?: components["schemas"]["CombinedUserData"][];
     };
+    UserAdditionalInfo: {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding: boolean;
+      does_racing: boolean;
+      does_ski: boolean;
+      /** Format: double */
+      phone_number: number;
+      gender: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      returning: boolean;
+      university_year: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+    };
     CreateUserRequestBody: {
       uid: string;
       user: components["schemas"]["UserAdditionalInfo"];
@@ -289,6 +325,8 @@ export interface components {
       does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
+      /** Format: double */
+      phone_number?: number;
       gender?: string;
       emergency_contact?: string;
       first_name?: string;
@@ -349,6 +387,8 @@ export interface operations {
             first_name: string;
             emergency_contact?: string;
             gender: string;
+            /** Format: double */
+            phone_number: number;
             does_ski: boolean;
             does_racing: boolean;
             does_snowboarding: boolean;
@@ -452,6 +492,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["MembershipPaymentResponse"];
+        };
+      };
+    };
+  };
+  GetBookingPayment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserBookingRequestingModel"];
+      };
+    };
+    responses: {
+      /** @description Created booking checkout session */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BookingPaymentResponse"];
         };
       };
     };

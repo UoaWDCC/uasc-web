@@ -4,6 +4,9 @@ import {
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
+import { UserAdditionalInfo } from "data-layer/models/firebase"
+import UserDataService from "data-layer/services/UserDataService"
+import { UserRecord } from "firebase-admin/auth"
 import Stripe from "stripe"
 import AuthService from "./AuthService"
 import BookingDataService from "data-layer/services/BookingDataService"
@@ -47,6 +50,38 @@ export default class StripeService {
       query: `metadata['${key}']:'${value}'`
     })
     return result.data
+  }
+
+  /**
+   * Creates a new Stripe customer if it doesn't exist and sets the Stripe customer id to the user info after creation.
+   * @param user, user data extracted from JWT
+   *
+   * @returns `newUser` as true if they already have a stripe id alongside their `stripe_id`,
+   * false otherwise with the newly created `stripe_id`
+   */
+  public async createCustomerIfNotExist(
+    user: UserRecord,
+    userData: UserAdditionalInfo,
+    userDataService: UserDataService
+  ) {
+    if (userData.stripe_id) {
+      // pre-existing user
+      return {
+        newUser: false,
+        stripeCustomerId: userData.stripe_id
+      }
+    } else {
+      // need to create a new user
+      const { first_name, last_name } = userData
+      const { uid, email } = user
+      const displayName = `${first_name} ${last_name} ${email}`
+      const { id } = await this.createNewUser(displayName, email, uid)
+      await userDataService.editUserData(uid, { stripe_id: id })
+      return {
+        newUser: true,
+        stripeCustomerId: id
+      }
+    }
   }
 
   /**
@@ -133,6 +168,54 @@ export default class StripeService {
     return currentlyActiveSession
   }
 
+  /**
+   * Used to return recent active payment sessions in the case of one session only payments (i.e memberships or bookings)
+   * I.e to reduce available slots due to pending payments
+   * @param sessionType defined as the enum CheckoutTypeValues, only exists for `membership` and `booking` right now
+   * @param createdMinutesAgo how long ago to check for checkout sessions
+   * @param shouldPaginate keep fetching active sessions until none left (do not specify if not needed)
+   *
+   * Will return undefined if no sessions found
+   */
+  public async getRecentActiveSessions(
+    sessionType: CheckoutTypeValues,
+    createdMinutesAgo?: number,
+    shouldPaginate: boolean = false
+  ): Promise<Stripe.Checkout.Session[]> {
+    let { data, has_more } = await stripe.checkout.sessions.list({
+      created: {
+        gte: createdMinutesAgo
+          ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
+          : undefined
+      },
+      limit: 100
+    })
+
+    if (shouldPaginate && has_more) {
+      while (has_more) {
+        const response = await stripe.checkout.sessions.list({
+          created: {
+            gte: createdMinutesAgo
+              ? dateNowSecs() - createdMinutesAgo * ONE_MINUTE_S
+              : undefined
+          },
+          starting_after: data[data.length - 1].id,
+          limit: 100
+        })
+
+        data = [...data, ...response.data]
+        has_more = response.has_more
+      }
+    }
+
+    const recentActiveSessions = data.filter(
+      (session) =>
+        session.metadata[CHECKOUT_TYPE_KEY] === sessionType &&
+        session.status === "open"
+    )
+    return recentActiveSessions
+  }
+
   public async createProduct(
     name: string,
     metadata: Stripe.MetadataParam,
@@ -185,6 +268,7 @@ export default class StripeService {
    * @param line_item format `{price: <price id of item>, quantity: X}`
    * @param metadata KVP of metadata
    * @param expires_after_mins Must be over 30 and under 24 hours (1140) we default to 31 minutes
+   * @param custom_text Object representing [extra text](https://docs.stripe.com/payments/checkout/customization) that the user may need to see
    * @returns client secret
    */
   public async createCheckoutSession(
@@ -196,7 +280,8 @@ export default class StripeService {
     }[],
     metadata: Record<string, string>,
     customer_id: string,
-    expires_after_mins: number = 31
+    expires_after_mins: number = 31,
+    custom_text?: Stripe.Checkout.SessionCreateParams.CustomText
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
@@ -209,7 +294,8 @@ export default class StripeService {
       ui_mode: "embedded",
       mode: "payment",
       currency: "NZD",
-      expires_at: dateNowSecs() + expires_after_mins * ONE_MINUTE_S
+      expires_at: dateNowSecs() + expires_after_mins * ONE_MINUTE_S,
+      custom_text
     })
     return session.client_secret
   }

@@ -1,5 +1,6 @@
-import { Booking } from "data-layer/models/firebase"
+import { Booking, BookingSlot } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
+import { DocumentDataWithUid } from "data-layer/models/common"
 
 export default class BookingDataService {
   public async createBooking(bookingData: Booking) {
@@ -73,5 +74,45 @@ export default class BookingDataService {
    */
   public async deleteBooking(bookingId: string) {
     return await FirestoreCollections.bookings.doc(bookingId).delete()
+  }
+
+  /**
+   *
+   * Gets the base availability of a date if the user does not already have a booking on one of the
+   * dates and there is still space left. Otherwise returns an array containing undefined objects which
+   * should be handled appropriately
+   *
+   * @param uid the `uid` of the user to check
+   * @param datesInBooking a list of `Date` objects, representing each one to check against.
+   * @param bookingSlots `bookingSlots` that fall within the date range to be validated
+   * @returns an array of objects containing a booking slot id and the corresponding base availability.
+   * The presence of an undefined object in the array means that this range is invalid and should be handled
+   */
+  public async getAvailabilityForUser(
+    uid: string,
+    datesInBooking: Date[],
+    bookingSlots: Array<DocumentDataWithUid<BookingSlot>>
+  ) {
+    const dates = await Promise.all(
+      datesInBooking.map(async (dateToValidate: Date) => {
+        // booking slot id and max booking slots
+        const { id, max_bookings } = bookingSlots.find(
+          (slot) =>
+            new Date(slot.date.seconds * 1000).toDateString() ===
+            dateToValidate.toDateString()
+        )
+
+        const currentBookingsForSlot = await this.getBookingsBySlotId(id)
+        const baseAvailability = max_bookings - currentBookingsForSlot.length
+        if (
+          currentBookingsForSlot.some((booking) => booking.user_id === uid) ||
+          baseAvailability <= 0
+        ) {
+          return undefined
+        }
+        return { id, baseAvailability }
+      })
+    )
+    return dates
   }
 }

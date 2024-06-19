@@ -1,15 +1,19 @@
 import { PaymentForm } from "components/generic/PaymentComponent/PaymentForm"
 import PricingCard from "components/generic/PricingCard/PricingCard"
 import { useState } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
-import { oneLevelUp } from "../utils/Utils"
+import {
+  getMembershipTypeConfirmationMessage,
+  oneLevelUp
+} from "../utils/Utils"
 import {
   useBankPaymentDetailsQuery,
   useMembershipPricesQuery
 } from "services/AppData/AppDataQueries"
 import { ACCOUNT_SETUP_ROUTE } from "../utils/RouteNames"
 import { useMembershipPaymentDetails } from "store/MembershipPayment"
+import { useAppData } from "store/Store"
 type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
@@ -151,6 +155,7 @@ export const PaymentSection = () => {
   const [wantsBankTransfer, setWantsBankTransfer] = useState<boolean>(
     searchParams.get("bank") === "true"
   )
+
   const _setWantsBankTransfer = (state: boolean) => {
     // keep in URL so if user goes back can return to correct state
     setSearchParams({ bank: `${state}` })
@@ -177,6 +182,8 @@ export const PaymentInformationSection = () => {
   const { data: userMembershipDetails } =
     useMembershipClientSecretQuery(undefined)
 
+  const [{ currentUser }] = useAppData()
+
   const existingMembershipType = userMembershipDetails?.membershipType
 
   if (existingMembershipType) {
@@ -186,7 +193,20 @@ export const PaymentInformationSection = () => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex h-fit flex-col gap-2 md:-ml-16 md:flex-row">
+        <h5>
+          <strong>Important</strong>
+        </h5>
+        <h5 className="mb-5 mt-1">
+          You should have gotten a password reset email sent to{" "}
+          <strong>{currentUser?.email}</strong>. If the email{" "}
+          <strong>{currentUser?.email}</strong> is incorrect you should{" "}
+          <strong>not</strong> proceed with payment and instead first update
+          your email by going to{" "}
+          <Link to="/profile">
+            <strong className="text-light-blue-100">profile</strong>
+          </Link>
+        </h5>
+        <div className="flex h-fit flex-col gap-1">
           {prices ? (
             prices.map((price) => {
               if (existingMembershipType) {
@@ -195,7 +215,7 @@ export const PaymentInformationSection = () => {
                     {price.type === existingMembershipType && (
                       <span
                         key={price.type}
-                        className="w-full justify-self-center md:ml-16"
+                        className="w-full justify-self-center"
                       >
                         <PricingCard
                           title={price.title}
@@ -218,7 +238,15 @@ export const PaymentInformationSection = () => {
                     selected={price.type === membershipType}
                     extraInfo={price.extraInfo}
                     discountedPriceString=""
-                    onClick={() => setMembershipType(price.type)}
+                    onClick={() => {
+                      if (
+                        confirm(
+                          getMembershipTypeConfirmationMessage(price.type)
+                        )
+                      ) {
+                        setMembershipType(price.type)
+                      }
+                    }}
                   />
                 </>
               )
@@ -230,18 +258,20 @@ export const PaymentInformationSection = () => {
             </>
           )}
         </div>
-        {existingMembershipType ? (
-          <h5>
-            We are using the previously started membership type. You will get
-            the chance to reselect 30 mins after you first started the checkout
-            session
-          </h5>
-        ) : (
-          <h5 className="font-bold uppercase">
-            Please confirm your membership type before hitting Next, you will
-            only be able to select a new one after 30 minutes
-          </h5>
-        )}
+        <span className="my-3">
+          {existingMembershipType ? (
+            <h5>
+              We are using the previously started membership type. You will get
+              the chance to reselect 30 mins after you first started the
+              checkout session
+            </h5>
+          ) : (
+            <h5 className="font-bold uppercase">
+              Please confirm your membership type before hitting Next, you will
+              only be able to select a new one after 30 minutes
+            </h5>
+          )}
+        </span>
       </div>
     </>
   )

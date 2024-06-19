@@ -20,9 +20,13 @@ export interface DeleteUserRequestBody {
   uid: string
 }
 
-// ticket 341 client select membership type
 export interface UserPaymentRequestModel {
   membershipType?: MembershipTypeValues
+}
+
+export interface UserBookingRequestingModel {
+  startDate?: Timestamp
+  endDate?: Timestamp
 }
 
 export interface EditSelfRequestModel {

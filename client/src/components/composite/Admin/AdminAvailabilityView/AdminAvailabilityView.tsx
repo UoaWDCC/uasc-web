@@ -6,7 +6,8 @@ import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
-import { DEFAULT_BOOKING_AVAILABILITY, MS_IN_SECOND } from "utils/Constants"
+import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
+import { timestampToDate } from "components/utils/Utils"
 
 /**
  * Reasonable amount of items to display on table
@@ -69,7 +70,7 @@ export const formatBookingSlotsForAvailabilityView = (
     .map((slot) => {
       return {
         uid: slot.id,
-        Date: new Date(slot.date.seconds * MS_IN_SECOND).toDateString(),
+        Date: timestampToDate(slot.date).toDateString(),
         "Max Bookings": slot.maxBookings.toString(),
         "Available Spaces": slot.availableSpaces.toString()
       }
@@ -81,7 +82,7 @@ const formatDateRangeForDialog = (
   endDate?: Timestamp
 ) => {
   if (startDate && endDate)
-    return `${new Date(startDate.seconds * MS_IN_SECOND).toDateString()} to ${new Date(endDate.seconds * MS_IN_SECOND).toDateString()}`
+    return `${timestampToDate(startDate).toDateString()} to ${timestampToDate(endDate).toDateString()}`
 
   return ""
 }
@@ -123,23 +124,23 @@ const AdminAvailabilityView = ({
             selectRange
             value={
               dateRangeDefined
-                ? [
-                    new Date(startDate.seconds * MS_IN_SECOND),
-                    new Date(endDate.seconds * MS_IN_SECOND)
-                  ]
+                ? [timestampToDate(startDate), timestampToDate(endDate)]
                 : undefined
             }
-            tileContent={({ date }) =>
-              // Find slots that are "available"
-              slots.some(
+            tileContent={({ date }) => {
+              const slot = slots.find(
+                // Find slots that are "available"
                 (slot) =>
-                  new Date(slot.date.seconds * MS_IN_SECOND).toDateString() ===
-                    date.toDateString() && slot.maxBookings > 0
-              ) ? (
+                  timestampToDate(slot.date).toDateString() ===
+                  date.toDateString()
+              )
+              return slot ? (
                 // Apply style if it is
-                <p>Open</p>
+                <p className="">
+                  {slot.availableSpaces}/{slot.maxBookings}
+                </p>
               ) : null
-            }
+            }}
             onChange={(value) => {
               /**
                * Format: [`startDate`, `endDate`]
