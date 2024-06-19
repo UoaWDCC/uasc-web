@@ -180,7 +180,7 @@ export class BookingController extends Controller {
       }> = []
 
       /** Iterating through each booking slot */
-      for (const slot of bookingSlots) {
+      const bookingPromises = bookingSlots.map(async (slot) => {
         /** Getting the bookings for the current slot */
         const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
 
@@ -188,7 +188,7 @@ export class BookingController extends Controller {
         const userIds = bookings.map((booking) => booking.user_id)
 
         if (userIds.length === 0) {
-          continue
+          return
         }
 
         /** Fetching the users based on the user IDs */
@@ -225,14 +225,21 @@ export class BookingController extends Controller {
           date: slot.date,
           users: combinedUsers
         })
-      }
+      })
+
+      await Promise.all(bookingPromises)
 
       console.log(responseData)
 
       this.setStatus(200)
 
-      /** Returning the response data */
-      return { data: responseData }
+      /**
+       * Returning the response data
+       *
+       * The filter is required to not include data that is null
+       * because of the early return in the map
+       */
+      return { data: responseData.filter((data) => !!data) }
     } catch (e) {
       console.error("Error in getBookingsByDateRange:", e)
       this.setStatus(500)
