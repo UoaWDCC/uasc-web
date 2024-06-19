@@ -5,6 +5,9 @@ import { AdminBookingViewContext } from "./AdminBookingViewContext"
 import { useContext } from "react"
 import { Timestamp } from "firebase/firestore"
 
+/**
+ * Should be wrapped the `AdminBookingViewContext`
+ */
 const WrappedAdminBookingView = () => {
   const {
     selectedDates: { startDate, endDate },

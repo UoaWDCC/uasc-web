@@ -10,6 +10,13 @@ interface IAdminBookingViewContext {
   }
   isUpdating: boolean
   setIsUpdating?: (updating: boolean) => void
+  /**
+   * Should be called when a UI event changes the range of dates
+   * the admin wants to look through on the admin booking view
+   *
+   * @param startDate the first (inclusive) date in the range
+   * @param endDate the last (inclusive) date in the range
+   */
   handleSelectedDateChange?: (startDate: Date, endDate: Date) => void
 }
 
@@ -18,6 +25,9 @@ const DEFAULT_DATES = {
   endDate: new Date()
 }
 
+/**
+ * For use with components related to `AdminBookingView`
+ */
 export const AdminBookingViewContext = createContext<IAdminBookingViewContext>({
   selectedDates: DEFAULT_DATES,
   isUpdating: false
