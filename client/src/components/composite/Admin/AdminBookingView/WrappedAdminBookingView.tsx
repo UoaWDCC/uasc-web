@@ -3,6 +3,7 @@ import { AdminBookingView, BookingMemberColumnFormat } from "./AdminBookingView"
 import { timestampToDate } from "components/utils/Utils"
 import { AdminBookingViewContext } from "./AdminBookingViewContext"
 import { useContext } from "react"
+import { Timestamp } from "firebase/firestore"
 
 const WrappedAdminBookingView = () => {
   const {
@@ -10,7 +11,10 @@ const WrappedAdminBookingView = () => {
     handleSelectedDateChange
   } = useContext(AdminBookingViewContext)
 
-  const { data, isLoading } = useAdminBookingsQuery(startDate, endDate)
+  const { data, isLoading } = useAdminBookingsQuery(
+    Timestamp.fromDate(startDate), // TODO: Convert to UTC
+    Timestamp.fromDate(endDate) // TODO: Convert to UTC
+  )
   const dataList = data?.flatMap(
     (date) =>
       date.users.map((user) => {

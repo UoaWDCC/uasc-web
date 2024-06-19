@@ -7,8 +7,7 @@ import {
   TableRowOperation
 } from "components/generic/ReusableTable/TableUtils"
 import { useState, useRef } from "react"
-import { useClickOutside, timestampToDate } from "components/utils/Utils"
-import { Timestamp } from "firebase/firestore"
+import { useClickOutside } from "components/utils/Utils"
 
 export type BookingMemberColumnFormat = {
   /**
@@ -52,12 +51,12 @@ interface IAdminBookingView {
   /**
    * The range of dates to display the bookings for
    */
-  dateRange: { startDate: Timestamp; endDate: Timestamp }
+  dateRange: { startDate: Date; endDate: Date }
 
   /**
    * Handler when a new date range is selected on the calendar
    */
-  handleDateRangeChange?: (startDate: Timestamp, endDate: Timestamp) => void
+  handleDateRangeChange?: (startDate: Date, endDate: Date) => void
 
   /**
    * Whether or not to display a loading indicator (i.e when fetching a new date range)
@@ -105,8 +104,8 @@ export const AdminBookingView = ({
         </span>
         <span className="border-gray-3 flex h-fit w-full flex-col items-center border bg-white px-2 py-1 sm:flex-row">
           <h4 className="text-dark-blue-100">
-            {timestampToDate(dateRange.startDate).toDateString()} -{" "}
-            {timestampToDate(dateRange.endDate).toDateString()}
+            {dateRange.startDate.toDateString()} -{" "}
+            {dateRange.endDate.toDateString()}
           </h4>
           <span className="relative z-50 flex max-h-[40px] sm:ml-auto">
             {displayedCalendar ? (
@@ -116,16 +115,10 @@ export const AdminBookingView = ({
                 className="absolute left-1/2 w-[350px] -translate-x-1/2 sm:left-auto sm:right-0 sm:top-0  sm:translate-x-0 "
               >
                 <Calendar
-                  value={[
-                    timestampToDate(dateRange.startDate),
-                    timestampToDate(dateRange.endDate)
-                  ]}
+                  value={[dateRange.startDate, dateRange.endDate]}
                   onChange={(range) => {
                     const [start, end] = range as [Date, Date]
-                    handleDateRangeChange?.(
-                      Timestamp.fromDate(start),
-                      Timestamp.fromDate(end)
-                    )
+                    handleDateRangeChange?.(start, end)
                     setDisplayedCalendar(false)
                   }}
                   selectRange

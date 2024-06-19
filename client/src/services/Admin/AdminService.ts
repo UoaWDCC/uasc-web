@@ -79,7 +79,6 @@ const AdminService = {
     return data?.data
   },
 
-
   deleteUser: async function ({ uid }: { uid: string }) {
     const { response } = await fetchClient.DELETE("/users/delete-user", {
       body: {
