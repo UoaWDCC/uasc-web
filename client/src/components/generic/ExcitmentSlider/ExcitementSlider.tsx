@@ -24,18 +24,12 @@ const ExcitementSlider: React.FC<ExcitementSliderProps> = ({ min, max }) => {
             max={max}
             value={value}
             onChange={handleChange}
-            className="slider h-3 w-full rounded-md"
-            style={{
-              WebkitAppearance: "none",
-              background: "#E5E5E5", // i cant find the value for slider background colour grey, so i just hard coded it
-              transform: "translateY(+75%)"
-            }}
+            className="slider bg-gray-2 rounded-m h-3 w-full translate-y-3/4 transform appearance-none"
           />
           <div className="pointer-events-none absolute top-0 h-10 w-full overflow-hidden rounded-md">
             <div
-              className="bg-orange p-1 text-center text-3xl font-black italic text-white transition-all duration-100 ease-in-out"
+              className="bg-orange  w-[calc(100%-20px)] p-1 text-center text-3xl font-black italic text-white transition-all duration-100 ease-in-out"
               style={{
-                width: "calc(100% - 20px)",
                 clipPath: `inset(0 ${(1 - value / max) * 100}% 0 0)`
               }}
             >
@@ -43,18 +37,16 @@ const ExcitementSlider: React.FC<ExcitementSliderProps> = ({ min, max }) => {
             </div>
           </div>
         </div>
-
         <style>
           {` 
           input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
             appearance: none;
             width: 20px;
             height: 40px;
             background: #fff;
             border: 2px solid darkgrey;
             border-radius: 0.25rem; 
-            cursor: pointer; // styling for the thumb of the slide bar, shaped as a rounded rectangle
+            cursor: pointer;
           }
         `}
         </style>
