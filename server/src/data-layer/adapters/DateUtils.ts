@@ -51,7 +51,7 @@ export const removeUnderscoresFromTimestamp = (timestamp: {
   return output
 }
 
-const S_IN_DAY = 60 * 60 * 24
+const SECONDS_IN_DAY = 60 * 60 * 24
 
 /**
  * Gets all timestamps within a range at a step resolution
@@ -84,7 +84,7 @@ export const timestampsInRange = (
         currentSeconds * 1000 + startDate.nanoseconds / 1000000
       )
     )
-    currentSeconds += S_IN_DAY * steps
+    currentSeconds += SECONDS_IN_DAY * steps
   }
 
   return dateArray
@@ -100,7 +100,7 @@ export const timestampsInRange = (
  */
 export const UTCDateToDdMmYyyy = (date: Date) => {
   const yyyyMmDd = date.toISOString().split("T")[0]
-  const parts = yyyyMmDd.split("-")
+  const parts = yyyyMmDd.split("-") // default will be `["yyyy", "mm", "dd"]
 
   return `${parts[2]}/${parts[1]}/${parts[0]}`
 }
