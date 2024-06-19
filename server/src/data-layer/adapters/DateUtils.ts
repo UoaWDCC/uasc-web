@@ -58,7 +58,7 @@ const S_IN_DAY = 60 * 60 * 24
  * of a multiple of days
  *
  * @param startDate timestamp (inclusive) of the first date
- * @param endDate timestamp (inclusive of the last date)
+ * @param endDate timestamp (inclusive) of the last date
  * @param steps how many **days** to increment in
  * @returns an array of all timestamps in the range
  */
@@ -77,6 +77,8 @@ export const timestampsInRange = (
     dateArray.push(
       /**
        * We want the full timestamp object with all of the additional methods
+       * The original one may not be stored properly in firebase, as it will appear as
+       * an object like { seconds, nanoseconds } rather than an actual date
        */
       Timestamp.fromMillis(
         currentSeconds * 1000 + startDate.nanoseconds / 1000000
@@ -94,7 +96,7 @@ export const timestampsInRange = (
  * This is an alternative to displaying the default ISO string format of `YYYY-MM-DD`
  *
  * @param date the date object that requires its **UTC** Date to be formatted into the format
- * @returns
+ * @returns The formatted date in `DD/MM/YYYY` format
  */
 export const UTCDateToDdMmYyyy = (date: Date) => {
   const yyyyMmDd = date.toISOString().split("T")[0]

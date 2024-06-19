@@ -144,7 +144,6 @@ export class AdminController extends Controller {
   /**
    *  User Operations
    */
-
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
   @Get("/users")
