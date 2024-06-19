@@ -70,9 +70,6 @@
 					"student_id": {
 						"type": "string"
 					},
-					"returning": {
-						"type": "boolean"
-					},
 					"university_year": {
 						"type": "string"
 					}
@@ -180,25 +177,16 @@
 					"student_id": {
 						"type": "string"
 					},
-					"returning": {
-						"type": "boolean"
-					},
 					"university_year": {
 						"type": "string"
 					}
 				},
 				"required": [
 					"date_of_birth",
-					"does_snowboarding",
-					"does_racing",
-					"does_ski",
 					"phone_number",
-					"gender",
 					"first_name",
 					"last_name",
-					"dietary_requirements",
-					"returning",
-					"university_year"
+					"dietary_requirements"
 				],
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
@@ -472,9 +460,6 @@
 					"student_id": {
 						"type": "string"
 					},
-					"returning": {
-						"type": "boolean"
-					},
 					"university_year": {
 						"type": "string"
 					},
@@ -501,16 +486,10 @@
 				},
 				"required": [
 					"date_of_birth",
-					"does_snowboarding",
-					"does_racing",
-					"does_ski",
 					"phone_number",
-					"gender",
 					"first_name",
 					"last_name",
 					"dietary_requirements",
-					"returning",
-					"university_year",
 					"uid",
 					"email",
 					"membership"
@@ -706,9 +685,6 @@
 					"student_id": {
 						"type": "string"
 					},
-					"returning": {
-						"type": "boolean"
-					},
 					"university_year": {
 						"type": "string"
 					},
@@ -719,16 +695,10 @@
 				},
 				"required": [
 					"date_of_birth",
-					"does_snowboarding",
-					"does_racing",
-					"does_ski",
 					"phone_number",
-					"gender",
 					"first_name",
 					"last_name",
-					"dietary_requirements",
-					"returning",
-					"university_year"
+					"dietary_requirements"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -790,9 +760,6 @@
 					},
 					"student_id": {
 						"type": "string"
-					},
-					"returning": {
-						"type": "boolean"
 					},
 					"university_year": {
 						"type": "string"
@@ -887,9 +854,6 @@
 										"university_year": {
 											"type": "string"
 										},
-										"returning": {
-											"type": "boolean"
-										},
 										"student_id": {
 											"type": "string"
 										},
@@ -935,16 +899,10 @@
 										}
 									},
 									"required": [
-										"university_year",
-										"returning",
 										"dietary_requirements",
 										"last_name",
 										"first_name",
-										"gender",
 										"phone_number",
-										"does_ski",
-										"does_racing",
-										"does_snowboarding",
 										"date_of_birth",
 										"uid"
 									],

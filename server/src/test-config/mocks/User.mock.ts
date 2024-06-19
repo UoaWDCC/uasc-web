@@ -15,7 +15,6 @@ export const userInfoMock: UserAdditionalInfo = {
   faculty: "engineering",
   university: "uoa",
   student_id: "11299211",
-  returning: true,
   university_year: "2nd",
   stripe_id: "default"
 }
@@ -33,7 +32,6 @@ export const userInfoMock2: UserAdditionalInfo = {
   faculty: "science",
   university: "uoa",
   student_id: "125366427",
-  returning: true,
   university_year: "3rd"
 }
 
@@ -51,6 +49,5 @@ export const signupUserMock: UserAdditionalInfo = {
   faculty: "string",
   university: "string",
   student_id: "string",
-  returning: true,
   university_year: "string"
 }
