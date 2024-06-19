@@ -24,5 +24,11 @@ for (let i = 0; i < 100; ++i) {
 }
 
 export const DefaultAdminBookingView: Story = {
-  args: { data: mockDataArray }
+  args: {
+    data: mockDataArray,
+    dateRange: {
+      startDate: new Date("6969-10-10"),
+      endDate: new Date("9696-10-01")
+    }
+  }
 }
