@@ -19,7 +19,16 @@ export const DateUtils = {
     return dateArray
   },
 
-  isSingleFridayOrSaturday: (startDate: Date, endDate: Date) => {
+  /**
+   *
+   * Checks if date range is a single friday or saturday, to be used for
+   * price estimation on the front end
+   *
+   * @param startDate the first date in the selected range
+   * @param endDate the last date in the selected range
+   * @returns `true` if it is a single friday or saturday, `false` otherwise
+   */
+  isSingleFridayOrSaturday: (startDate: Date, endDate: Date): boolean => {
     const FRIDAY = 5
     const SATURDAY = 6
     const dateArray = DateUtils.datesToDateRange(startDate, endDate)
@@ -34,7 +43,7 @@ export const DateUtils = {
    * @param timestamp to compare
    * @returns `true` if the two are equal
    */
-  dateEqualToTimestamp: (date: Date, timestamp: UnknownTimestamp) => {
+  dateEqualToTimestamp: (date: Date, timestamp: UnknownTimestamp): boolean => {
     return date.getTime() === DateUtils.timestampMilliseconds(timestamp)
   },
 
@@ -43,7 +52,10 @@ export const DateUtils = {
    * like the timestamp from `firebase`
    * @returns a date object representative of the timestamp
    */
-  timestampToDate: (timestamp: { seconds: number; nanoseconds: number }) => {
+  timestampToDate: (timestamp: {
+    seconds: number
+    nanoseconds: number
+  }): Date => {
     return new Date(timestamp.seconds * MS_IN_SECOND)
   },
 
@@ -56,7 +68,7 @@ export const DateUtils = {
    * @param timestamp timestamp which may have underscores
    * @returns the milliseconds values
    */
-  timestampMilliseconds: (timestamp: UnknownTimestamp) => {
+  timestampMilliseconds: (timestamp: UnknownTimestamp): number => {
     const seconds = timestamp.seconds || timestamp._seconds || 0
     const nanoseconds = timestamp.nanoseconds || timestamp._nanoseconds || 0
     return seconds * MS_IN_SECOND + nanoseconds / 1000000
@@ -74,7 +86,7 @@ export const DateUtils = {
    * @param d the date to convert to UTC
    * @returns a Date object that was converted
    */
-  convertLocalDateToUTCDate: (d: Date) => {
+  convertLocalDateToUTCDate: (d: Date): Date => {
     const utcDate = new Date(
       d.getTime() - d.getTimezoneOffset() * 60 * MS_IN_SECOND
     )
@@ -86,5 +98,5 @@ export const DateUtils = {
    * @param date a date object
    * @returns a date string in the nz format `dd-mm-yyyy`
    */
-  formattedNzDate: (date: Date) => date.toLocaleDateString("en-NZ")
+  formattedNzDate: (date: Date): string => date.toLocaleDateString("en-NZ")
 } as const
