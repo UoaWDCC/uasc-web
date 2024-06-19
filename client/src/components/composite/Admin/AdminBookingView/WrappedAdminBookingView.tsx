@@ -6,7 +6,7 @@ import { useContext } from "react"
 import { Timestamp } from "firebase/firestore"
 
 /**
- * Should be wrapped the `AdminBookingViewContext`
+ * Should be wrapped the `AdminBookingViewProvider`
  */
 const WrappedAdminBookingView = () => {
   const {

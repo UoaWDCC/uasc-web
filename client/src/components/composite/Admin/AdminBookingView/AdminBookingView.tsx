@@ -73,6 +73,9 @@ const defaultData = {
   "Dietary Requirement": ""
 }
 
+/**
+ * @deprecated not for direct use on any pages, use `WrappedAdminBookingView` instead
+ */
 export const AdminBookingView = ({
   data,
   rowOperations,
