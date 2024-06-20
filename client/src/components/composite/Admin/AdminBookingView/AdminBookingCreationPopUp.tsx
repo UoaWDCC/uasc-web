@@ -14,24 +14,24 @@ interface IAdminBookingCreationPopUp {
 }
 
 const Divider = () => {
-  return <div className="bg-gray-3 flex h-screen w-[1px]"></div>
+  return <div className="bg-gray-3 ml-auto flex h-screen w-[1px]"></div>
 }
 
 const AdminBookingCreationPopUp = ({
   handleClose
 }: IAdminBookingCreationPopUp) => {
   return (
-    <div className="flex w-full">
-      <div className="flex flex-col">
-        <p className="opacity-20 ">Select user</p>
-        <div className="w-[70%]">
+    <div className="flex max-w-[800px] gap-7">
+      <div className="flex basis-1/2">
+        <div className="flex w-full flex-col">
+          <p className="opacity-20 ">Select user</p>
           <AdminSearchBar />
-        </div>
 
-        <p className="mt-8">Creating booking for:</p>
+          <p className="mt-8">Creating booking for:</p>
+        </div>
       </div>
       <Divider />
-      <div className="flex">
+      <div className="flex basis-1/2">
         <div className="max-w-[380px]">
           <Calendar />
           <DateRangePicker />
