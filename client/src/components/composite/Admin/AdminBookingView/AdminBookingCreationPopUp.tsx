@@ -115,15 +115,20 @@ const AdminBookingCreationPopUp = ({
         {currentStage === FlowStages.SELECT_DATES && (
           <div>
             <p className="mt-8">Creating booking for:</p>
-            <div className="border-gray-3 h-[110px] w-[350px] rounded-sm border">
-              {currentlySelectedUser?.first_name}{" "}
-              {currentlySelectedUser?.last_name}
+            <div className="border-gray-3 navbar-shadow  w flex flex-col justify-center rounded-sm border">
+              <h5 className="font-bold uppercase">
+                {currentlySelectedUser?.membership}
+              </h5>
+              <h4>
+                {currentlySelectedUser?.first_name}{" "}
+                {currentlySelectedUser?.last_name}
+              </h4>
             </div>
           </div>
         )}
 
-        {currentStage ===
-        FlowStages. ? undefined : currentSelectedUserUid ? (
+        {currentStage !==
+        FlowStages.SEARCH_FOR_USER ? null : currentSelectedUserUid ? (
           <DetailedUserInfoPanel />
         ) : (
           <div className="border-gray-3 rounded-md border">
