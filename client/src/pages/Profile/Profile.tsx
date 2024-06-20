@@ -149,11 +149,17 @@ export default function Profile() {
                     description={`${currentUserData?.dietary_requirements}`}
                   />
                   <Field
-                    subtitle="Skiier/Snowboarder"
-                    description={determineUserSkiSnowboardStatus({
-                      Ski: currentUserData?.does_ski,
-                      Snowboard: currentUserData?.does_snowboarding
-                    })}
+                    subtitle="Valid til"
+                    description={
+                      userMembership === "Member" ||
+                      userMembership === "Admin" ? (
+                        `End of ${new Date().getFullYear()}`
+                      ) : userMembership === "Guest" ? (
+                        <Link to="./signup" className="text-light-blue-100">
+                          Sign up
+                        </Link>
+                      ) : undefined // Return undefined for other cases
+                    }
                   />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel title="Current bookings">
