@@ -107,98 +107,103 @@ const AdminBookingCreationPopUp = ({
   )
 
   return (
-    <div className="flex w-full max-w-[900px] flex-col gap-7 sm:flex-row">
-      <div className="flex w-full flex-col sm:basis-1/2">
-        <p className="opacity-20">Select user</p>
-        <AdminSearchBar
-          onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
-        />
-        {currentStage === FlowStages.SELECT_DATES && (
-          <div>
-            <p className="mt-8">Creating booking for:</p>
-            <div
-              className="border-gray-3 navbar-shadow mt-4 flex items-center
+    <div className="flex flex-col gap-8">
+      <span>
+        <h3 className="text-dark-blue-100">Add a booking</h3>
+      </span>
+      <div className="flex w-full max-w-[900px] flex-col gap-7 sm:flex-row">
+        <div className="flex w-full flex-col sm:basis-1/2">
+          <p className="opacity-20">Select user</p>
+          <AdminSearchBar
+            onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
+          />
+          {currentStage === FlowStages.SELECT_DATES && (
+            <div>
+              <p className="mt-8">Creating booking for:</p>
+              <div
+                className="border-gray-3 navbar-shadow mt-4 flex items-center
                             justify-between gap-2 rounded-sm border p-6"
-            >
-              <div className=" flex flex-col">
-                <h5 className="font-bold uppercase">
-                  {currentlySelectedUser?.membership}
-                </h5>
-                <h4>
-                  {currentlySelectedUser?.first_name}{" "}
-                  {currentlySelectedUser?.last_name}
-                </h4>
-              </div>
+              >
+                <div className="flex flex-col">
+                  <h5 className="font-bold uppercase">
+                    {currentlySelectedUser?.membership}
+                  </h5>
+                  <h4>
+                    {currentlySelectedUser?.first_name}{" "}
+                    {currentlySelectedUser?.last_name}
+                  </h4>
+                </div>
 
-              <div className="h-[15px] w-[15px]">
-                <Tick />
+                <div className="h-[15px] w-[15px]">
+                  <Tick />
+                </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {currentStage !==
-        FlowStages.SEARCH_FOR_USER ? null : currentSelectedUserUid ? (
-          <DetailedUserInfoPanel />
-        ) : (
-          <div className="border-gray-3 rounded-md border">
-            {usersToDisplay.map((user) => (
-              <div
-                key={user.uid}
-                className="flex w-full p-2"
-                onClick={() => handleSelectUser(user.uid)}
-              >
-                <p>
-                  {user.first_name} {user.last_name}
-                </p>
-                <p
-                  className={`ml-auto font-bold uppercase ${
-                    user.membership === "member"
-                      ? "text-dark-blue-100"
-                      : "text-gray-3"
-                  }`}
-                >
-                  {user.membership}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-        <span className="mt-8">
-          {currentStage === FlowStages.SELECT_DATES ? (
-            <button
-              onClick={() => {
-                setCurrentStage(FlowStages.SEARCH_FOR_USER)
-                setCurrentSelectedUserUid(undefined)
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <div className="flex h-[15px] w-[15px] items-center">
-                  <LeftArrowButton className="fill-dark-blue-100" />
-                </div>
-                <h5 className="text-dark-blue-100 font-bold uppercase">
-                  Select Different User
-                </h5>
-              </div>
-            </button>
-          ) : (
-            <Button
-              disabled={!currentSelectedUserUid}
-              onClick={() => setCurrentStage(FlowStages.SELECT_DATES)}
-            >
-              Select User
-            </Button>
           )}
-        </span>
-      </div>
-      <Divider />
-      <div className="flex sm:basis-1/2">
-        <div className="w-full max-w-[380px]">
-          <Calendar />
-          <DateRangePicker />
-          <Button disabled={currentStage !== FlowStages.SELECT_DATES}>
-            Add New Booking
-          </Button>
+
+          {currentStage !==
+          FlowStages.SEARCH_FOR_USER ? null : currentSelectedUserUid ? (
+            <DetailedUserInfoPanel />
+          ) : (
+            <div className="border-gray-3 rounded-md border">
+              {usersToDisplay.map((user) => (
+                <div
+                  key={user.uid}
+                  className="flex w-full p-2"
+                  onClick={() => handleSelectUser(user.uid)}
+                >
+                  <p>
+                    {user.first_name} {user.last_name}
+                  </p>
+                  <p
+                    className={`ml-auto font-bold uppercase ${
+                      user.membership === "member"
+                        ? "text-dark-blue-100"
+                        : "text-gray-3"
+                    }`}
+                  >
+                    {user.membership}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+          <span className="mt-8">
+            {currentStage === FlowStages.SELECT_DATES ? (
+              <button
+                onClick={() => {
+                  setCurrentStage(FlowStages.SEARCH_FOR_USER)
+                  setCurrentSelectedUserUid(undefined)
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="flex h-[15px] w-[15px] items-center">
+                    <LeftArrowButton className="fill-dark-blue-100" />
+                  </div>
+                  <h5 className="text-dark-blue-100 font-bold uppercase">
+                    Select Different User
+                  </h5>
+                </div>
+              </button>
+            ) : (
+              <Button
+                disabled={!currentSelectedUserUid}
+                onClick={() => setCurrentStage(FlowStages.SELECT_DATES)}
+              >
+                Select User
+              </Button>
+            )}
+          </span>
+        </div>
+        <Divider />
+        <div className="flex sm:basis-1/2">
+          <div className="w-full max-w-[380px]">
+            <Calendar />
+            <DateRangePicker />
+            <Button disabled={currentStage !== FlowStages.SELECT_DATES}>
+              Add New Booking
+            </Button>
+          </div>
         </div>
       </div>
     </div>
