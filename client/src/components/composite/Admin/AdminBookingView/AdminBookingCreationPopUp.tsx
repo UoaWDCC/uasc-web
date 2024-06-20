@@ -107,14 +107,14 @@ const AdminBookingCreationPopUp = ({
   )
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex w-full max-w-[820px] flex-col gap-8">
       <span className="flex justify-between">
         <h3 className="text-dark-blue-100">Add a booking</h3>
         <div className="h-[15px] w-[15px] cursor-pointer">
           <CloseButton />
         </div>
       </span>
-      <div className="flex w-full max-w-[900px] flex-col gap-7 sm:flex-row">
+      <div className="flex w-full flex-col gap-7 sm:flex-row">
         <div className="flex w-full flex-col sm:basis-1/2">
           <p className="opacity-20">Select user</p>
           <AdminSearchBar
