@@ -3,7 +3,7 @@ import { CombinedUserData } from "models/User"
 import Calendar from "components/generic/Calendar/Calendar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 
 interface IAdminBookingCreationPopUp {
   bookingCreationHandler?: () => void
@@ -27,22 +27,47 @@ const Divider = () => {
 }
 
 const AdminBookingCreationPopUp = ({
-  handleClose
+  handleClose,
+  users = []
 }: IAdminBookingCreationPopUp) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState<
     string | undefined
   >(undefined)
 
-  const onQueryChanged = (newQuery: string)) => {
-    
-  } 
+  const onQueryChanged = (newQuery: string) => {
+    if (newQuery.length < 3) {
+      setCurrentSearchQuery(undefined)
+      return
+    }
+    currentSearchQuery?.toString = setCurrentSearchQuery(newQuery)
+  }
+
+  const usersToDisplay = useMemo(() => {
+    if (currentSearchQuery) {
+      return users.filter((user) =>
+        user.email.toLowerCase().includes(currentSearchQuery)
+      )
+    } else {
+      return []
+    }
+  }, [currentSearchQuery, users])
 
   return (
     <div className="flex w-full max-w-[900px] flex-col gap-7 sm:flex-row">
       <div className="flex w-full flex-col sm:basis-1/2">
         <p className="opacity-20">Select user</p>
-        <AdminSearchBar onQueryChanged={(newQuery: string} = onQueryChanged(string)/>
+        <AdminSearchBar
+          onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
+        />
 
+        <div>
+          {usersToDisplay.map((user) => (
+            <div key={user.uid}>
+              <h2>{user.first_name}</h2>
+              <h2>{user.membership}</h2>
+            </div>
+          ))}
+        </div>
         <p className="mt-8">Creating booking for:</p>
       </div>
       <Divider />
