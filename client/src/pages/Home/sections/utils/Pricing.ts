@@ -6,7 +6,7 @@ export const pricingNote =
 export const pricingBannerContent: PricingBannerContent = {
   headline: "Great nightly rates",
   priceInformation: "$40 per night*",
-  disclaimer: "*$60 when booking a single saturday"
+  disclaimer: "*$60 when booking a single Friday or Saturday"
 }
 
 export const Pricings: Pricing[] = [
