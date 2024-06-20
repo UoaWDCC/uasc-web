@@ -39,13 +39,16 @@ const AdminBookingCreationPopUp = ({
       setCurrentSearchQuery(undefined)
       return
     }
-    currentSearchQuery?.toString = setCurrentSearchQuery(newQuery)
+
+    setCurrentSearchQuery(newQuery)
   }
 
   const usersToDisplay = useMemo(() => {
     if (currentSearchQuery) {
-      return users.filter((user) =>
-        user.email.toLowerCase().includes(currentSearchQuery)
+      return users.filter(
+        (user) =>
+          user.email.toLowerCase().includes(currentSearchQuery) ||
+          user.first_name.toLowerCase().includes(currentSearchQuery)
       )
     } else {
       return []
