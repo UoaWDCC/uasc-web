@@ -15,6 +15,7 @@ interface IAdminBookingCreationPopUp {
 }
 
 enum FlowStages {
+  SEARCH_FOR_USER = "search_for_user",
   SELECT_USER = "select_user",
   VIEW_USER = "view_user",
   SELECT_DATES = "select_dates"
@@ -34,8 +35,12 @@ const AdminBookingCreationPopUp = ({
     string | undefined
   >(undefined)
 
+  const [currentStage, setCurrentStage] = useState<FlowStages>(
+    FlowStages.SEARCH_FOR_USER
+  )
+
   const onQueryChanged = (newQuery: string) => {
-    if (newQuery.length < 3) {
+    if (newQuery.length < 2) {
       setCurrentSearchQuery(undefined)
       return
     }
@@ -63,11 +68,13 @@ const AdminBookingCreationPopUp = ({
           onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
         />
 
-        <div>
+        <div className="border-gray-3 rounded-md border">
           {usersToDisplay.map((user) => (
-            <div key={user.uid}>
-              <h2>{user.first_name}</h2>
-              <h2>{user.membership}</h2>
+            <div key={user.uid} className="flex w-full">
+              <h2>
+                {user.first_name} {user.last_name}
+              </h2>
+              <h2 className="ml-auto">{user.membership}</h2>
             </div>
           ))}
         </div>
