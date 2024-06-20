@@ -70,11 +70,11 @@ const AdminBookingCreationPopUp = ({
 
         <div className="border-gray-3 rounded-md border">
           {usersToDisplay.map((user) => (
-            <div key={user.uid} className="flex w-full">
+            <div key={user.uid} className="flex w-full p-2">
               <p>
                 {user.first_name} {user.last_name}
               </p>
-              <p className="ml-auto">{user.membership}</p>
+              <p className="bold dark-blue-100 ml-auto">{user.membership}</p>
             </div>
           ))}
         </div>
