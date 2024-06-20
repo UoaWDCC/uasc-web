@@ -1,17 +1,82 @@
 import { useUsersQuery } from "services/Admin/AdminQueries"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
 import {
+  useDeleteUserMutation,
   useDemoteUserMutation,
   usePromoteUserMutation
 } from "services/Admin/AdminMutations"
 import { TableRowOperation } from "components/generic/ReusableTable/TableUtils"
+import AdminUserCreationModal, {
+  AccountType
+} from "./AdminUserCreation/AdminUserCreationModal"
+import ModalContainer from "components/generic/ModalContainer/ModalContainer"
+import { useState } from "react"
+import { useSignUpUserMutation } from "services/User/UserMutations"
+import queryClient from "services/QueryClient"
+import { sendPasswordResetEmail } from "firebase/auth"
+import { auth } from "firebase"
+import { ReducedUserAdditionalInfo } from "models/User"
 
+/**
+ * Component that handles all the network requests for `AdminMemberView`
+ *
+ * This should be the one used on the actual page to allow for isolated testing
+ * of the presentation on the `AdminMemberView`
+ */
 const WrappedAdminMemberView = () => {
   /**
    * Note that the followind queries/mutations should be scoped to only admins only,
    */
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useUsersQuery()
+
+  /**
+   * The `admin` key is important as we don't want to share cache with the normal sign up
+   */
+  const { mutateAsync: addNewUser } = useSignUpUserMutation("admin")
+
+  /**
+   * @param email the email to be associated with the newly created user
+   * @param user the details to be appended to the user account. This should be the required fields for `UserAdditionalInfo`
+   * @param accountType what status the user account should be after creation:
+   * - a `guest` will have to pay to access all features
+   * - a `member` will be able to use all features right away after signing in
+   */
+  const userCreationHandler = async (
+    email: string,
+    user: ReducedUserAdditionalInfo,
+    accountType: AccountType
+  ) => {
+    await addNewUser(
+      { email, user },
+      {
+        async onSuccess(data) {
+          alert(
+            `Successfully added ${user.first_name} ${user.last_name} (${email})`
+          )
+          /**
+           * We need to do this for both guests and members
+           */
+          await sendPasswordResetEmail(auth, email)
+          if (accountType === "member" && data?.uid) {
+            await promoteUser(data.uid)
+          }
+          /**
+           * Force refetch after adding the new user
+           */
+          queryClient.invalidateQueries({ queryKey: ["allUsers"] })
+        },
+        onError(error) {
+          alert(error.message)
+        }
+      }
+    )
+  }
+
+  /**
+   * Controls if the *Add new user* modal should be shown
+   */
+  const [showAddUserModal, setShowAddUserModal] = useState<boolean>(false)
 
   // Need flatmap because of inner map
   const transformedDataList = data?.pages.flatMap(
@@ -29,47 +94,43 @@ const WrappedAdminMemberView = () => {
 
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
+  const { mutateAsync: deleteUser, isPending } = useDeleteUserMutation()
 
-  const getNameFromUid = (uid: string) => {
-    const matchingUser = transformedDataList?.find((user) => user?.uid === uid)
-    if (matchingUser) {
-      return `${matchingUser.Name}`
-    }
-    return "Unknown"
-  }
-
+  /**
+   * You should optimistically handle the mutations in `AdminMutations`
+   */
   const rowOperations: TableRowOperation[] = [
     {
       name: "promote",
       handler: (uid: string) => {
-        promoteUser(uid, {
-          onSuccess: () =>
-            alert(`Successfully added membership for ${getNameFromUid(uid)}`),
-          onError: () =>
-            alert(
-              `Could not add membership for ${getNameFromUid(uid)}, they may already have membership`
-            )
-        })
+        promoteUser(uid)
       }
     },
     {
       name: "demote",
       handler: (uid: string) => {
-        demoteUser(uid, {
-          onSuccess: () =>
-            alert(`Successfully removed membership for ${getNameFromUid(uid)}`),
-          onError: () =>
-            alert(
-              `Could not remove membership for ${getNameFromUid(uid)}, they may already not have membership`
-            )
-        })
+        demoteUser(uid)
       }
     },
     {
       name: "delete",
-      handler: () => {
-        // TODO
-        throw new Error("Not Implemented")
+      handler: (uid: string) => {
+        const matchingUser = transformedDataList?.find(
+          (user) => user.uid === uid
+        )
+        /**
+         * This should be enforced in the endpoint anyway, exists for UX
+         */
+        if (matchingUser?.Status === "admin") {
+          alert("You may not delete admins")
+          return
+        }
+        if (
+          confirm(
+            `Are you SURE you want to delete the user ${matchingUser?.Name} (${matchingUser?.Email}). This action can NOT be undone!!!`
+          )
+        )
+          deleteUser({ uid })
       }
     },
     {
@@ -82,13 +143,25 @@ const WrappedAdminMemberView = () => {
   ]
 
   return (
-    <AdminMemberView
-      fetchNextPage={() => {
-        !isFetchingNextPage && hasNextPage && fetchNextPage()
-      }}
-      rowOperations={rowOperations}
-      data={transformedDataList}
-    />
+    <>
+      <AdminMemberView
+        fetchNextPage={() => {
+          !isFetchingNextPage && hasNextPage && fetchNextPage()
+        }}
+        isUpdating={isPending}
+        rowOperations={rowOperations}
+        data={transformedDataList}
+        openAddMemberView={() => setShowAddUserModal(true)}
+      />
+      <ModalContainer isOpen={showAddUserModal}>
+        <AdminUserCreationModal
+          handleClose={() => setShowAddUserModal(false)}
+          userCreationHandler={async ({ email, user }, accountType) => {
+            await userCreationHandler(email, user, accountType)
+          }}
+        />
+      </ModalContainer>
+    </>
   )
 }
 

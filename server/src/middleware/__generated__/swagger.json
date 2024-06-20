@@ -61,6 +61,10 @@
 					"dietary_requirements": {
 						"type": "string"
 					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
 					"faculty": {
 						"type": "string"
 					},
@@ -69,9 +73,6 @@
 					},
 					"student_id": {
 						"type": "string"
-					},
-					"returning": {
-						"type": "boolean"
 					},
 					"university_year": {
 						"type": "string"
@@ -171,6 +172,10 @@
 					"dietary_requirements": {
 						"type": "string"
 					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
 					"faculty": {
 						"type": "string"
 					},
@@ -180,25 +185,16 @@
 					"student_id": {
 						"type": "string"
 					},
-					"returning": {
-						"type": "boolean"
-					},
 					"university_year": {
 						"type": "string"
 					}
 				},
 				"required": [
 					"date_of_birth",
-					"does_snowboarding",
-					"does_racing",
-					"does_ski",
 					"phone_number",
-					"gender",
 					"first_name",
 					"last_name",
-					"dietary_requirements",
-					"returning",
-					"university_year"
+					"dietary_requirements"
 				],
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
@@ -422,7 +418,15 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"UserAdditionalInfo": {
+			"UserAccountTypes": {
+				"enum": [
+					"admin",
+					"member",
+					"guest"
+				],
+				"type": "string"
+			},
+			"CombinedUserData": {
 				"properties": {
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
@@ -455,6 +459,10 @@
 					"dietary_requirements": {
 						"type": "string"
 					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
 					"faculty": {
 						"type": "string"
 					},
@@ -464,73 +472,42 @@
 					"student_id": {
 						"type": "string"
 					},
-					"returning": {
-						"type": "boolean"
-					},
 					"university_year": {
 						"type": "string"
 					},
 					"stripe_id": {
 						"type": "string",
 						"description": "For identification DO NOT RETURN to users in exposed endpoints"
+					},
+					"uid": {
+						"type": "string",
+						"description": "Firebase identifier of the user *data* based on the firestore document"
+					},
+					"dateJoined": {
+						"type": "string",
+						"description": "Formatted UTC date string of when the account was created"
+					},
+					"email": {
+						"type": "string",
+						"description": "The email the user uses to log in"
+					},
+					"membership": {
+						"$ref": "#/components/schemas/UserAccountTypes",
+						"description": "What type of account the user has"
 					}
 				},
 				"required": [
 					"date_of_birth",
-					"does_snowboarding",
-					"does_racing",
-					"does_ski",
 					"phone_number",
-					"gender",
 					"first_name",
 					"last_name",
 					"dietary_requirements",
-					"returning",
-					"university_year"
+					"uid",
+					"email",
+					"membership"
 				],
 				"type": "object",
 				"additionalProperties": false
-			},
-			"UserAccountTypes": {
-				"enum": [
-					"admin",
-					"member",
-					"guest"
-				],
-				"type": "string"
-			},
-			"CombinedUserData": {
-				"allOf": [
-					{
-						"$ref": "#/components/schemas/UserAdditionalInfo"
-					},
-					{
-						"properties": {
-							"membership": {
-								"$ref": "#/components/schemas/UserAccountTypes",
-								"description": "What type of account the user has"
-							},
-							"email": {
-								"type": "string",
-								"description": "The email the user uses to log in"
-							},
-							"dateJoined": {
-								"type": "string",
-								"description": "Formatted UTC date string of when the account was created"
-							},
-							"uid": {
-								"type": "string",
-								"description": "Firebase identifier of the user *data* based on the firestore document"
-							}
-						},
-						"required": [
-							"membership",
-							"email",
-							"uid"
-						],
-						"type": "object"
-					}
-				]
 			},
 			"UsersByDateRangeResponse": {
 				"description": "Represents the response structure for fetching users by date range.",
@@ -678,6 +655,70 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UserAdditionalInfo": {
+				"properties": {
+					"date_of_birth": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"does_snowboarding": {
+						"type": "boolean"
+					},
+					"does_racing": {
+						"type": "boolean"
+					},
+					"does_ski": {
+						"type": "boolean"
+					},
+					"phone_number": {
+						"type": "number",
+						"format": "double"
+					},
+					"gender": {
+						"type": "string"
+					},
+					"emergency_contact": {
+						"type": "string"
+					},
+					"first_name": {
+						"type": "string"
+					},
+					"last_name": {
+						"type": "string"
+					},
+					"dietary_requirements": {
+						"type": "string"
+					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
+					"faculty": {
+						"type": "string"
+					},
+					"university": {
+						"type": "string"
+					},
+					"student_id": {
+						"type": "string"
+					},
+					"university_year": {
+						"type": "string"
+					},
+					"stripe_id": {
+						"type": "string",
+						"description": "For identification DO NOT RETURN to users in exposed endpoints"
+					}
+				},
+				"required": [
+					"date_of_birth",
+					"phone_number",
+					"first_name",
+					"last_name",
+					"dietary_requirements"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CreateUserRequestBody": {
 				"properties": {
 					"uid": {
@@ -727,6 +768,10 @@
 					"dietary_requirements": {
 						"type": "string"
 					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
 					"faculty": {
 						"type": "string"
 					},
@@ -735,9 +780,6 @@
 					},
 					"student_id": {
 						"type": "string"
-					},
-					"returning": {
-						"type": "boolean"
 					},
 					"university_year": {
 						"type": "string"
@@ -832,9 +874,6 @@
 										"university_year": {
 											"type": "string"
 										},
-										"returning": {
-											"type": "boolean"
-										},
 										"student_id": {
 											"type": "string"
 										},
@@ -842,6 +881,9 @@
 											"type": "string"
 										},
 										"faculty": {
+											"type": "string"
+										},
+										"ethnicity": {
 											"type": "string"
 										},
 										"dietary_requirements": {
@@ -880,16 +922,10 @@
 										}
 									},
 									"required": [
-										"university_year",
-										"returning",
 										"dietary_requirements",
 										"last_name",
 										"first_name",
-										"gender",
 										"phone_number",
-										"does_ski",
-										"does_racing",
-										"does_snowboarding",
 										"date_of_birth",
 										"uid"
 									],

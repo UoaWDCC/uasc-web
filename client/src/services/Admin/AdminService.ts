@@ -50,6 +50,14 @@ const AdminService = {
     })
     if (!response.ok) throw new Error(`Failed to promote ${uid}`)
   },
+  deleteUser: async function ({ uid }: { uid: string }) {
+    const { response } = await fetchClient.DELETE("/users/delete-user", {
+      body: {
+        uid
+      }
+    })
+    if (!response.ok) throw new Error(`Failed to delete user ${uid}`)
+  },
   makeDatesAvailable: async function (
     startDate: Timestamp,
     endDate: Timestamp,
