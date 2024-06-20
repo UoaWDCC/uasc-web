@@ -116,14 +116,23 @@ const AdminBookingCreationPopUp = ({
         {currentStage === FlowStages.SELECT_DATES && (
           <div>
             <p className="mt-8">Creating booking for:</p>
-            <div className="border-gray-3 navbar-shadow mt-4 flex flex-col justify-center gap-2 rounded-sm border p-6">
-              <h5 className="font-bold uppercase">
-                {currentlySelectedUser?.membership}
-              </h5>
-              <h4>
-                {currentlySelectedUser?.first_name}{" "}
-                {currentlySelectedUser?.last_name}
-              </h4>
+            <div
+              className="border-gray-3 navbar-shadow mt-4 flex items-center
+                            justify-between gap-2 rounded-sm border p-6"
+            >
+              <div className=" flex flex-col">
+                <h5 className="font-bold uppercase">
+                  {currentlySelectedUser?.membership}
+                </h5>
+                <h4>
+                  {currentlySelectedUser?.first_name}{" "}
+                  {currentlySelectedUser?.last_name}
+                </h4>
+              </div>
+
+              <div className="h-[15px] w-[15px]">
+                <Tick />
+              </div>
             </div>
           </div>
         )}
@@ -155,7 +164,7 @@ const AdminBookingCreationPopUp = ({
             ))}
           </div>
         )}
-        <span className="">
+        <span className="mt-8">
           {currentStage === FlowStages.SELECT_DATES ? (
             <button
               onClick={() => {
