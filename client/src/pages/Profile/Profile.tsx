@@ -152,6 +152,13 @@ export default function Profile() {
                     subtitle="Dietary requirements"
                     description={`${currentUserData?.dietary_requirements}`}
                   />
+                  <Field
+                    subtitle="Skiier/Snowboarder"
+                    description={determineUserSkiSnowboardStatus({
+                      Ski: currentUserData?.does_ski,
+                      Snowboard: currentUserData?.does_snowboarding
+                    })}
+                  />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel title="Current bookings">
                   <div className="border border-black p-4">
