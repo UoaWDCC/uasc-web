@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     headline: "Great nightly rates",
-    priceInformation: "$60 per night*",
-    disclaimer: "*$50 when booking a single saturday"
+    priceInformation: "$40 per night*",
+    disclaimer: "*$60 when booking a single Friday or Saturday"
   }
 }
