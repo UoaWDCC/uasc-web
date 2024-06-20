@@ -27,6 +27,10 @@ export interface UserAdditionalInfo {
    */
   dietary_requirements: string
   /**
+   * **OPTIONAL** field that the user should have the choice to provide
+   */
+  ethnicity?: string
+  /**
    * @isString Please enter your faculty
    */
   faculty?: string
