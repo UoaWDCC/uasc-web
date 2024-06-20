@@ -6,6 +6,7 @@ import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 import { useState, useMemo } from "react"
 import CloseButton from "assets/icons/x.svg?react"
 import LeftArrowButton from "assets/icons/leftarrow.svg?react"
+import Tick from "assets/icons/tick.svg?react"
 
 interface IAdminBookingCreationPopUp {
   bookingCreationHandler?: () => void
@@ -115,7 +116,7 @@ const AdminBookingCreationPopUp = ({
         {currentStage === FlowStages.SELECT_DATES && (
           <div>
             <p className="mt-8">Creating booking for:</p>
-            <div className="border-gray-3 navbar-shadow  w flex flex-col justify-center rounded-sm border">
+            <div className="border-gray-3 navbar-shadow mt-4 flex flex-col justify-center gap-2 rounded-sm border p-6">
               <h5 className="font-bold uppercase">
                 {currentlySelectedUser?.membership}
               </h5>
@@ -154,7 +155,7 @@ const AdminBookingCreationPopUp = ({
             ))}
           </div>
         )}
-        <span className="mt-auto">
+        <span className="">
           {currentStage === FlowStages.SELECT_DATES ? (
             <button
               onClick={() => {
