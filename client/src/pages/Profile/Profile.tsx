@@ -1,5 +1,5 @@
 import { useAppData } from "store/Store"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
@@ -49,7 +49,7 @@ const Field = ({
   description
 }: {
   subtitle: string
-  description?: string
+  description?: string | JSX.Element
 }) => {
   return (
     <>
@@ -73,6 +73,14 @@ export default function Profile() {
     return "Guest"
   }, [currentUserClaims])
 
+  let description
+  if (userMembership === "Admin" || userMembership === "Member") {
+    description = `End of ${new Date().getFullYear}`
+  } else if (userMembership === "Guest") {
+    description = <Link to="./signup">Sign Up</Link>
+  } else {
+    description = undefined
+  }
   return (
     <div className="relative min-h-screen">
       <ResponsiveBackgroundImage>
@@ -130,14 +138,7 @@ export default function Profile() {
                     subtitle="Membership type"
                     description={userMembership}
                   />
-                  <Field
-                    subtitle="Valid til"
-                    description={
-                      userMembership === "Member"
-                        ? `End of ${new Date().getFullYear()}`
-                        : ""
-                    }
-                  />
+                  <Field subtitle="Valid til" description={description} />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel
                   title="Additional details"
