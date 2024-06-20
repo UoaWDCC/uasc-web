@@ -115,38 +115,40 @@ const AdminBookingCreationPopUp = ({
         {currentStage === FlowStages.SELECT_DATES && (
           <div>
             <p className="mt-8">Creating booking for:</p>
-            <div className="border-gray-3 rou h-[110px] w-[350px] rounded-sm border"></div>
+            <div className="border-gray-3 h-[110px] w-[350px] rounded-sm border">
+              {currentlySelectedUser?.first_name}{" "}
+              {currentlySelectedUser?.last_name}
+            </div>
           </div>
         )}
 
-        {
-          (currentStage = currentSelectedUserUid ? (
-            <DetailedUserInfoPanel />
-          ) : (
-            <div className="border-gray-3 rounded-md border">
-              {usersToDisplay.map((user) => (
-                <div
-                  key={user.uid}
-                  className="flex w-full p-2"
-                  onClick={() => handleSelectUser(user.uid)}
+        {currentStage ===
+        FlowStages. ? undefined : currentSelectedUserUid ? (
+          <DetailedUserInfoPanel />
+        ) : (
+          <div className="border-gray-3 rounded-md border">
+            {usersToDisplay.map((user) => (
+              <div
+                key={user.uid}
+                className="flex w-full p-2"
+                onClick={() => handleSelectUser(user.uid)}
+              >
+                <p>
+                  {user.first_name} {user.last_name}
+                </p>
+                <p
+                  className={`ml-auto font-bold uppercase ${
+                    user.membership === "member"
+                      ? "text-dark-blue-100"
+                      : "text-gray-3"
+                  }`}
                 >
-                  <p>
-                    {user.first_name} {user.last_name}
-                  </p>
-                  <p
-                    className={`ml-auto font-bold uppercase ${
-                      user.membership === "member"
-                        ? "text-dark-blue-100"
-                        : "text-gray-3"
-                    }`}
-                  >
-                    {user.membership}
-                  </p>
-                </div>
-              ))}
-            </div>
-          ))
-        }
+                  {user.membership}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
         <span className="mt-auto">
           {currentStage === FlowStages.SELECT_DATES ? (
             <button
