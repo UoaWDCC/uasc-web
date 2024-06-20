@@ -74,7 +74,7 @@ const AdminBookingCreationPopUp = ({
   }, [currentSelectedUserUid])
 
   const DetailedUserInfoPanel = () => (
-    <div className="border-gray-4 flex flex-col rounded-md pt-4">
+    <div className="border-gray-4  flex flex-col rounded-md border pt-4">
       <h5 className="font-bold uppercase">
         {currentlySelectedUser?.membership}
       </h5>
