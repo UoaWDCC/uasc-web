@@ -74,15 +74,18 @@ const AdminBookingCreationPopUp = ({
   }, [currentSelectedUserUid])
 
   const DetailedUserInfoPanel = () => (
-    <div className="flex flex-col">
-      <p>Name</p>
+    <div className="border-gray-4 flex flex-col rounded-md pt-4">
+      <h5 className="font-bold uppercase">
+        {currentlySelectedUser?.membership}
+      </h5>
       <p>
         {currentlySelectedUser?.first_name} {currentlySelectedUser?.last_name}
       </p>
-      <p></p>
-
+      <p className="text-gray-3">Allergies/Dietary Requirements</p>
       <p>{currentlySelectedUser?.dietary_requirements}</p>
+      <p className="text-gray-3">Email</p>
       <p> {currentlySelectedUser?.email}</p>
+      <p className="text-gray-3">Number</p>
       <p> {currentlySelectedUser?.phone_number}</p>
     </div>
   )
@@ -95,7 +98,7 @@ const AdminBookingCreationPopUp = ({
           onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
         />
 
-        {currentlySe ? (
+        {currentSelectedUserUid ? (
           <DetailedUserInfoPanel />
         ) : (
           <div className="border-gray-3 rounded-md border">
