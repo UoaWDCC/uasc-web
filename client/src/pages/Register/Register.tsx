@@ -14,7 +14,7 @@ const INVALID_EMAIL_PLACEHOLDER = ""
 
 const Register = () => {
   const navigateFn = useNavigate()
-  const [signUpFormData, { validateForm }] = useSignUpFormData()
+  const [signUpFormData, { validateForm, resetForm }] = useSignUpFormData()
   const [{ currentUser }] = useAppData()
   const { email, confirmEmail, formValidity, ...user } = signUpFormData
 
@@ -40,6 +40,9 @@ const Register = () => {
         user
       },
       {
+        onSuccess() {
+          resetForm()
+        },
         onError(error) {
           console.error("Error signing up " + error)
         }

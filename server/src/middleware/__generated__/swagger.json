@@ -61,6 +61,10 @@
 					"dietary_requirements": {
 						"type": "string"
 					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
 					"faculty": {
 						"type": "string"
 					},
@@ -167,6 +171,10 @@
 					},
 					"dietary_requirements": {
 						"type": "string"
+					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
 					},
 					"faculty": {
 						"type": "string"
@@ -451,6 +459,10 @@
 					"dietary_requirements": {
 						"type": "string"
 					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
 					"faculty": {
 						"type": "string"
 					},
@@ -676,6 +688,10 @@
 					"dietary_requirements": {
 						"type": "string"
 					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
 					"faculty": {
 						"type": "string"
 					},
@@ -751,6 +767,10 @@
 					},
 					"dietary_requirements": {
 						"type": "string"
+					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
 					},
 					"faculty": {
 						"type": "string"
@@ -861,6 +881,9 @@
 											"type": "string"
 										},
 										"faculty": {
+											"type": "string"
+										},
+										"ethnicity": {
 											"type": "string"
 										},
 										"dietary_requirements": {
