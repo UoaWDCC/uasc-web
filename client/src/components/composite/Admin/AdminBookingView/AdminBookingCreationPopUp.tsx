@@ -43,10 +43,6 @@ const AdminBookingCreationPopUp = ({
     string | undefined
   >(undefined)
 
-  const currentlySelectedUser = useMemo(() => {
-    return usersToDisplay.find((user) => user.uid === currentSelectedUserUid)
-  }, [currentSelectedUserUid])
-
   const onQueryChanged = (newQuery: string) => {
     if (newQuery.length < 2) {
       setCurrentSearchQuery(undefined)
@@ -73,6 +69,24 @@ const AdminBookingCreationPopUp = ({
     }
   }, [currentSearchQuery, users])
 
+  const currentlySelectedUser = useMemo(() => {
+    return usersToDisplay.find((user) => user.uid === currentSelectedUserUid)
+  }, [currentSelectedUserUid])
+
+  const DetailedUserInfoPanel = () => (
+    <div className="flex flex-col">
+      <p>Name</p>
+      <p>
+        {currentlySelectedUser?.first_name} {currentlySelectedUser?.last_name}
+      </p>
+      <p></p>
+
+      <p>{currentlySelectedUser?.dietary_requirements}</p>
+      <p> {currentlySelectedUser?.email}</p>
+      <p> {currentlySelectedUser?.phone_number}</p>
+    </div>
+  )
+
   return (
     <div className="flex w-full max-w-[900px] flex-col gap-7 sm:flex-row">
       <div className="flex w-full flex-col sm:basis-1/2">
@@ -81,11 +95,11 @@ const AdminBookingCreationPopUp = ({
           onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
         />
 
-        <div className="border-gray-3 rounded-md border">
-          {currentSelectedUserUid ? (
-            <>{currentlySelectedUser}</>
-          ) : (
-            usersToDisplay.map((user) => (
+        {currentlySe ? (
+          <DetailedUserInfoPanel />
+        ) : (
+          <div className="border-gray-3 rounded-md border">
+            {usersToDisplay.map((user) => (
               <div
                 key={user.uid}
                 className="flex w-full p-2 hover:bg-white"
@@ -104,9 +118,9 @@ const AdminBookingCreationPopUp = ({
                   {user.membership}
                 </p>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
         <span className="mt-auto">
           <Button>Select User</Button>
         </span>
