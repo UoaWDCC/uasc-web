@@ -73,14 +73,6 @@ export default function Profile() {
     return "Guest"
   }, [currentUserClaims])
 
-  let description
-  if (userMembership === "Admin" || userMembership === "Member") {
-    description = `End of ${new Date().getFullYear}`
-  } else if (userMembership === "Guest") {
-    description = <Link to="./signup">Sign Up</Link>
-  } else {
-    description = undefined
-  }
   return (
     <div className="relative min-h-screen">
       <ResponsiveBackgroundImage>
@@ -138,16 +130,6 @@ export default function Profile() {
                     subtitle="Membership type"
                     description={userMembership}
                   />
-                  <Field subtitle="Valid til" description={description} />
-                </ProfileInformationPanel>
-                <ProfileInformationPanel
-                  title="Additional details"
-                  onEdit={() => {}}
-                >
-                  <Field
-                    subtitle="Dietary requirements"
-                    description={`${currentUserData?.dietary_requirements}`}
-                  />
                   <Field
                     subtitle="Valid til"
                     description={
@@ -160,6 +142,15 @@ export default function Profile() {
                         </Link>
                       ) : undefined // Return undefined for other cases
                     }
+                  />
+                </ProfileInformationPanel>
+                <ProfileInformationPanel
+                  title="Additional details"
+                  onEdit={() => {}}
+                >
+                  <Field
+                    subtitle="Dietary requirements"
+                    description={`${currentUserData?.dietary_requirements}`}
                   />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel title="Current bookings">
