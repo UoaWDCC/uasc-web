@@ -6,13 +6,77 @@ import {
   usePromoteUserMutation
 } from "services/Admin/AdminMutations"
 import { TableRowOperation } from "components/generic/ReusableTable/TableUtils"
+import AdminUserCreationModal, {
+  AccountType
+} from "./AdminUserCreation/AdminUserCreationModal"
+import ModalContainer from "components/generic/ModalContainer/ModalContainer"
+import { useState } from "react"
+import { useSignUpUserMutation } from "services/User/UserMutations"
+import queryClient from "services/QueryClient"
+import { sendPasswordResetEmail } from "firebase/auth"
+import { auth } from "firebase"
+import { ReducedUserAdditionalInfo } from "models/User"
 
+/**
+ * Component that handles all the network requests for `AdminMemberView`
+ *
+ * This should be the one used on the actual page to allow for isolated testing
+ * of the presentation on the `AdminMemberView`
+ */
 const WrappedAdminMemberView = () => {
   /**
    * Note that the followind queries/mutations should be scoped to only admins only,
    */
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useUsersQuery()
+
+  /**
+   * The `admin` key is important as we don't want to share cache with the normal sign up
+   */
+  const { mutateAsync: addNewUser } = useSignUpUserMutation("admin")
+
+  /**
+   * @param email the email to be associated with the newly created user
+   * @param user the details to be appended to the user account. This should be the required fields for `UserAdditionalInfo`
+   * @param accountType what status the user account should be after creation:
+   * - a `guest` will have to pay to access all features
+   * - a `member` will be able to use all features right away after signing in
+   */
+  const userCreationHandler = async (
+    email: string,
+    user: ReducedUserAdditionalInfo,
+    accountType: AccountType
+  ) => {
+    await addNewUser(
+      { email, user },
+      {
+        async onSuccess(data) {
+          alert(
+            `Successfully added ${user.first_name} ${user.last_name} (${email})`
+          )
+          /**
+           * We need to do this for both guests and members
+           */
+          await sendPasswordResetEmail(auth, email)
+          if (accountType === "member" && data?.uid) {
+            await promoteUser(data.uid)
+          }
+          /**
+           * Force refetch after adding the new user
+           */
+          queryClient.invalidateQueries({ queryKey: ["allUsers"] })
+        },
+        onError(error) {
+          alert(error.message)
+        }
+      }
+    )
+  }
+
+  /**
+   * Controls if the *Add new user* modal should be shown
+   */
+  const [showAddUserModal, setShowAddUserModal] = useState<boolean>(false)
 
   // Need flatmap because of inner map
   const transformedDataList = data?.pages.flatMap(
@@ -79,14 +143,25 @@ const WrappedAdminMemberView = () => {
   ]
 
   return (
-    <AdminMemberView
-      fetchNextPage={() => {
-        !isFetchingNextPage && hasNextPage && fetchNextPage()
-      }}
-      isUpdating={isPending}
-      rowOperations={rowOperations}
-      data={transformedDataList}
-    />
+    <>
+      <AdminMemberView
+        fetchNextPage={() => {
+          !isFetchingNextPage && hasNextPage && fetchNextPage()
+        }}
+        isUpdating={isPending}
+        rowOperations={rowOperations}
+        data={transformedDataList}
+        openAddMemberView={() => setShowAddUserModal(true)}
+      />
+      <ModalContainer isOpen={showAddUserModal}>
+        <AdminUserCreationModal
+          handleClose={() => setShowAddUserModal(false)}
+          userCreationHandler={async ({ email, user }, accountType) => {
+            await userCreationHandler(email, user, accountType)
+          }}
+        />
+      </ModalContainer>
+    </>
   )
 }
 

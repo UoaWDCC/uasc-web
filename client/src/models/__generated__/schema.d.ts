@@ -105,10 +105,11 @@ export interface components {
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning?: boolean;
       university_year?: string;
     };
     /** @description Construct a type with the properties of T except for those in type K. */
@@ -132,21 +133,22 @@ export interface components {
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__": {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
       /** Format: double */
       phone_number: number;
-      gender: string;
+      gender?: string;
       emergency_contact?: string;
       first_name: string;
       last_name: string;
       dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning: boolean;
-      university_year: string;
+      university_year?: string;
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_UserAdditionalInfo.stripe_id_": components["schemas"]["Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__"];
@@ -223,21 +225,22 @@ export interface components {
     UserAccountTypes: "admin" | "member" | "guest";
     CombinedUserData: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
       /** Format: double */
       phone_number: number;
-      gender: string;
+      gender?: string;
       emergency_contact?: string;
       first_name: string;
       last_name: string;
       dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning: boolean;
-      university_year: string;
+      university_year?: string;
       /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
       /** @description Firebase identifier of the user *data* based on the firestore document */
@@ -303,21 +306,22 @@ export interface components {
     };
     UserAdditionalInfo: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
       /** Format: double */
       phone_number: number;
-      gender: string;
+      gender?: string;
       emergency_contact?: string;
       first_name: string;
       last_name: string;
       dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning: boolean;
-      university_year: string;
+      university_year?: string;
       /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
     };
@@ -338,10 +342,11 @@ export interface components {
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning?: boolean;
       university_year?: string;
       /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
@@ -383,21 +388,21 @@ export interface operations {
         content: {
           "application/json": {
             stripe_id?: string;
-            university_year: string;
-            returning: boolean;
+            university_year?: string;
             student_id?: string;
             university?: string;
             faculty?: string;
+            ethnicity?: string;
             dietary_requirements: string;
             last_name: string;
             first_name: string;
             emergency_contact?: string;
-            gender: string;
+            gender?: string;
             /** Format: double */
             phone_number: number;
-            does_ski: boolean;
-            does_racing: boolean;
-            does_snowboarding: boolean;
+            does_ski?: boolean;
+            does_racing?: boolean;
+            does_snowboarding?: boolean;
             date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
             uid: string;
           };

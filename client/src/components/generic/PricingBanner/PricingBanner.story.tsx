@@ -13,6 +13,6 @@ export const Default: Story = {
   args: {
     headline: "Great nightly rates",
     priceInformation: "$40 per night*",
-    disclaimer: "*$50 when booking a single saturday"
+    disclaimer: "*$60 when booking a single Friday or Saturday"
   }
 }

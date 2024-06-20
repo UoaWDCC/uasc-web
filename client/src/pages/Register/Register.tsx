@@ -14,14 +14,11 @@ const INVALID_EMAIL_PLACEHOLDER = ""
 
 const Register = () => {
   const navigateFn = useNavigate()
-  const [signUpFormData, { validateForm }] = useSignUpFormData()
+  const [signUpFormData, { validateForm, resetForm }] = useSignUpFormData()
   const [{ currentUser }] = useAppData()
   const { email, confirmEmail, formValidity, ...user } = signUpFormData
 
-  const { mutate, isPending, error, data } = useSignUpUserMutation({
-    email: email === confirmEmail ? email : INVALID_EMAIL_PLACEHOLDER,
-    user
-  })
+  const { mutate, isPending, error, data } = useSignUpUserMutation()
 
   const successfullySignedUp = !!data?.jwtToken
 
@@ -36,9 +33,26 @@ const Register = () => {
           : undefined
       }
 
+  const signUpHandler = () => {
+    mutate(
+      {
+        email: email === confirmEmail ? email : INVALID_EMAIL_PLACEHOLDER,
+        user
+      },
+      {
+        onSuccess() {
+          resetForm()
+        },
+        onError(error) {
+          console.error("Error signing up " + error)
+        }
+      }
+    )
+  }
+
   const pages = PAGINATED_FORM_PAGES(
     navigateFn!,
-    mutate,
+    signUpHandler,
     validateForm,
     isPending || successfullySignedUp,
     !!currentUser
