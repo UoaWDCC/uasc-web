@@ -4,6 +4,7 @@ import Calendar from "components/generic/Calendar/Calendar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 import { useState, useMemo } from "react"
+import CloseButton from "assets/icons/x.svg"
 
 interface IAdminBookingCreationPopUp {
   bookingCreationHandler?: () => void
@@ -74,7 +75,7 @@ const AdminBookingCreationPopUp = ({
   }, [currentSelectedUserUid])
 
   const DetailedUserInfoPanel = () => (
-    <div className="border-gray-3  flex flex-col  gap-3 rounded-sm border px-2 pb-4 pt-4">
+    <div className="border-gray-3 mt-4 flex flex-col gap-3 rounded-sm border px-4 py-3">
       <h5 className="font-bold uppercase">
         {currentlySelectedUser?.membership}
       </h5>
