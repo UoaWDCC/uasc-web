@@ -39,6 +39,14 @@ const AdminBookingCreationPopUp = ({
     FlowStages.SEARCH_FOR_USER
   )
 
+  const [currentSelectedUserUid, setCurrentSelectedUserUid] = useState<
+    string | undefined
+  >(undefined)
+
+  const currentlySelectedUser = useMemo(() => {
+    return usersToDisplay.find((user) => user.uid === currentSelectedUserUid)
+  }, [currentSelectedUserUid])
+
   const onQueryChanged = (newQuery: string) => {
     if (newQuery.length < 2) {
       setCurrentSearchQuery(undefined)
@@ -48,12 +56,17 @@ const AdminBookingCreationPopUp = ({
     setCurrentSearchQuery(newQuery)
   }
 
+  const handleSelectUser = (uid: string) => {
+    setCurrentSelectedUserUid(uid)
+  }
+
   const usersToDisplay = useMemo(() => {
     if (currentSearchQuery) {
       return users.filter(
         (user) =>
           user.email.toLowerCase().includes(currentSearchQuery) ||
-          user.first_name.toLowerCase().includes(currentSearchQuery) ||         user.membership !== "admin"
+          user.first_name.toLowerCase().includes(currentSearchQuery) ||
+          user.membership !== "admin"
       )
     } else {
       return []
@@ -69,15 +82,30 @@ const AdminBookingCreationPopUp = ({
         />
 
         <div className="border-gray-3 rounded-md border">
-          {usersToDisplay.map((user) => (
-            <div key={user.uid} className="flex w-full p-2">
-              <p>
-                {user.first_name} {user.last_name}
-              </p>
-              <p className={`ml-auto font-bold uppercase ${user.membership==="member"?
-                "text-dark-blue-100":"text-gray-3"}`}>{user.membership}</p>
-            </div>
-          ))}
+          {currentSelectedUserUid ? (
+            <>{currentlySelectedUser}</>
+          ) : (
+            usersToDisplay.map((user) => (
+              <div
+                key={user.uid}
+                className="flex w-full p-2 hover:bg-white"
+                onClick={() => handleSelectUser(user.uid)}
+              >
+                <p>
+                  {user.first_name} {user.last_name}
+                </p>
+                <p
+                  className={`ml-auto font-bold uppercase ${
+                    user.membership === "member"
+                      ? "text-dark-blue-100"
+                      : "text-gray-3"
+                  }`}
+                >
+                  {user.membership}
+                </p>
+              </div>
+            ))
+          )}
         </div>
         <span className="mt-auto">
           <Button>Select User</Button>
@@ -91,9 +119,9 @@ const AdminBookingCreationPopUp = ({
           <DateRangePicker />
           <Button>Add New Booking</Button>
         </div>
-      </di
+      </div>
     </div>
- } )
+  )
 }
 
 export default AdminBookingCreationPopUp
