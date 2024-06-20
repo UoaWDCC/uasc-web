@@ -74,6 +74,34 @@ const AdminBookingCreationPopUp = ({
     return usersToDisplay.find((user) => user.uid === currentSelectedUserUid)
   }, [currentSelectedUserUid])
 
+  const UserList = useMemo(
+    () => (
+      <div className="border-gray-3 rounded-md border">
+        {usersToDisplay.map((user) => (
+          <div
+            key={user.uid}
+            className="flex w-full p-2"
+            onClick={() => handleSelectUser(user.uid)}
+          >
+            <p>
+              {user.first_name} {user.last_name}
+            </p>
+            <p
+              className={`ml-auto font-bold uppercase ${
+                user.membership === "member"
+                  ? "text-dark-blue-100"
+                  : "text-gray-3"
+              }`}
+            >
+              {user.membership}
+            </p>
+          </div>
+        ))}
+      </div>
+    ),
+    [usersToDisplay]
+  )
+
   const DetailedUserInfoPanel = () => (
     <div className="border-gray-3 mt-4 flex flex-col gap-3 rounded-sm border px-4 py-3">
       <span className="flex">
@@ -148,28 +176,7 @@ const AdminBookingCreationPopUp = ({
           FlowStages.SEARCH_FOR_USER ? null : currentSelectedUserUid ? (
             <DetailedUserInfoPanel />
           ) : (
-            <div className="border-gray-3 rounded-md border">
-              {usersToDisplay.map((user) => (
-                <div
-                  key={user.uid}
-                  className="flex w-full p-2"
-                  onClick={() => handleSelectUser(user.uid)}
-                >
-                  <p>
-                    {user.first_name} {user.last_name}
-                  </p>
-                  <p
-                    className={`ml-auto font-bold uppercase ${
-                      user.membership === "member"
-                        ? "text-dark-blue-100"
-                        : "text-gray-3"
-                    }`}
-                  >
-                    {user.membership}
-                  </p>
-                </div>
-              ))}
-            </div>
+            UserList
           )}
           <span className="mt-8">
             {currentStage === FlowStages.SELECT_DATES ? (
