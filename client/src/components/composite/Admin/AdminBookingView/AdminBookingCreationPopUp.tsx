@@ -13,26 +13,33 @@ interface IAdminBookingCreationPopUp {
   users?: CombinedUserData[]
 }
 
+enum FlowStages {
+  SELECT_USER = "select_user",
+  VIEW_USER = "view_user",
+  SELECT_DATES = "select_dates"
+}
+
 const Divider = () => {
-  return <div className="bg-gray-3 ml-auto flex h-screen w-[1px]"></div>
+  return (
+    <div className="bg-gray-3 ml-auto hidden h-screen w-[1px] md:block"></div>
+  )
 }
 
 const AdminBookingCreationPopUp = ({
   handleClose
 }: IAdminBookingCreationPopUp) => {
+  swi
   return (
-    <div className="flex max-w-[800px] gap-7">
-      <div className="flex basis-1/2">
-        <div className="flex w-full flex-col">
-          <p className="opacity-20 ">Select user</p>
-          <AdminSearchBar />
+    <div className="flex max-w-[800px] flex-col gap-7 md:flex-row">
+      <div className="flex w-full flex-col md:basis-1/2">
+        <p className="opacity-20">Select user</p>
+        <AdminSearchBar />
 
-          <p className="mt-8">Creating booking for:</p>
-        </div>
+        <p className="mt-8">Creating booking for:</p>
       </div>
       <Divider />
-      <div className="flex basis-1/2">
-        <div className="max-w-[380px]">
+      <div className="flex md:basis-1/2">
+        <div className="w-full max-w-[380px]">
           <Calendar />
           <DateRangePicker />
           <Button>Add New Booking</Button>
