@@ -76,7 +76,9 @@ const AdminBookingCreationPopUp = ({
 
   const UserList = useMemo(
     () => (
-      <div className="border-gray-3 rounded-md border">
+      <div
+        className={`border-gray-3 rounded-md border ${!currentSearchQuery && "border-none"} `}
+      >
         {usersToDisplay.map((user) => (
           <div
             key={user.uid}
