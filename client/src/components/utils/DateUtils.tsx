@@ -79,6 +79,10 @@ export const DateUtils = {
    * introduced by the timezone while also making sure that it is the
    * midnight time (Essentially removes the time component)
    *
+   * [React calendar reference](https://github.com/wojtekmaj/react-calendar/issues/511#issuecomment-835333976)
+   *
+   * [UASC Wiki reference](https://github.com/UoaWDCC/uasc-web/wiki/Backend-Architecture#note-on-dates)
+   *
    * This should be used on **ALL** requests that send dates to the backend
    *
    * **Note**: the original date is not mutated
