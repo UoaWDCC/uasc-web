@@ -1,18 +1,28 @@
+import TextInput from "../TextInputComponent/TextInput"
 interface IDateRangePicker {
   valueStart: Date
   valueEnd: Date
   handleDateRangeInputChange: (start?: Date, end?: Date) => void
 }
-const DateRangePicker = () => (
+
+const formatDateForInput = (date?: Date) => {
+  return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
+}
+
+const DateRangePicker = ({
+  valueStart,
+  valueEnd,
+  handleDateRangeInputChange
+}: IDateRangePicker) => (
   <>
     <TextInput
       label="From"
       type="date"
-      value={formatDateForInput(selectedDateRange.startDate)}
+      value={formatDateForInput(valueStart)}
       data-testid="start-date-picker"
       onChange={(e) => {
         const newStartDate = e.target.valueAsDate || new Date()
-        handleDateRangeInputChange: start
+        handleDateRangeInputChange(newStartDate, undefined)
       }}
     />
     <span className="mt-5 w-6">
@@ -22,7 +32,7 @@ const DateRangePicker = () => (
       label="To"
       type="date"
       data-testid="end-date-picker"
-      value={formatDateForInput(selectedDateRange.endDate)}
+      value={formatDateForInput(valueEnd)}
       onChange={(e) => {
         const newEndDate = e.target.valueAsDate || new Date()
         if (checkValidRange(currentStartDate, newEndDate))

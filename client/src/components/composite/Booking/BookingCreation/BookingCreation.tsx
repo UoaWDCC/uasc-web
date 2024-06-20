@@ -28,10 +28,6 @@ type DateRange = {
   endDate: Date
 }
 
-const formatDateForInput = (date?: Date) => {
-  return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
-}
-
 /*
  * Swaps around dates if invalid
  * @deprecated Exported for testing purposes only

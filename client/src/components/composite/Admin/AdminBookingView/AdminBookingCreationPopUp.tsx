@@ -13,7 +13,7 @@ interface IAdminBookingCreationPopUp {
 }
 
 const Divider = () => {
-  return <div className="bg-gray-3 h-8"></div>
+  return <div className="bg-gray-3 h-screen w-[1px]"></div>
 }
 
 const AdminBookingCreationPopUp = ({
@@ -26,6 +26,7 @@ const AdminBookingCreationPopUp = ({
         <AdminSearchBar />
         <p className="mt-8">Creating booking for:</p>
       </div>
+      <Divider />
       <div className="flex flex-col">
         <div className="max-w-[380px]">
           <Calendar />
