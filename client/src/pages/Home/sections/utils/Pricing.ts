@@ -5,7 +5,7 @@ export const pricingNote =
 
 export const pricingBannerContent: PricingBannerContent = {
   headline: "Great nightly rates",
-  priceInformation: "$40 per night*",
+  priceInformation: "$60 per night*",
   disclaimer: "*$50 when booking a single saturday"
 }
 
