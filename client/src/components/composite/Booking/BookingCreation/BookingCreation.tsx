@@ -173,7 +173,7 @@ export const CreateBookingSection = ({
         Proceed to Payment
       </Button>
     )
-  }, [currentStartDate, currentEndDate, isValidForCreation])
+  }, [currentStartDate, currentEndDate, isValidForCreation, isPending])
 
   /**
    *  a string to be shown to the user about the price for their date selection
@@ -224,8 +224,9 @@ export const CreateBookingSection = ({
                 disabledDates.some((slot) => UTCDatesEqual(slot.date, date)))
             }
             tileContent={({ date }) => {
-              const slot = bookingSlots.find((slot) =>
-                UTCDatesEqual(slot.date, date)
+              const slot = bookingSlots.find(
+                (slot) =>
+                  UTCDatesEqual(slot.date, date) && slot.availableSpaces > 0
               )
               return slot ? (
                 <p className="text-xs">
