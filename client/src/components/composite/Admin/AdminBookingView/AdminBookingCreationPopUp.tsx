@@ -53,7 +53,7 @@ const AdminBookingCreationPopUp = ({
       return users.filter(
         (user) =>
           user.email.toLowerCase().includes(currentSearchQuery) ||
-          user.first_name.toLowerCase().includes(currentSearchQuery)
+          user.first_name.toLowerCase().includes(currentSearchQuery) ||         user.membership !== "admin"
       )
     } else {
       return []
@@ -74,10 +74,14 @@ const AdminBookingCreationPopUp = ({
               <p>
                 {user.first_name} {user.last_name}
               </p>
-              <p className="bold dark-blue-100 ml-auto">{user.membership}</p>
+              <p className={`ml-auto font-bold uppercase ${user.membership==="member"?
+                "text-dark-blue-100":"text-gray-3"}`}>{user.membership}</p>
             </div>
           ))}
         </div>
+        <span className="mt-auto">
+          <Button>Select User</Button>
+        </span>
         <p className="mt-8">Creating booking for:</p>
       </div>
       <Divider />
@@ -87,9 +91,9 @@ const AdminBookingCreationPopUp = ({
           <DateRangePicker />
           <Button>Add New Booking</Button>
         </div>
-      </div>
+      </di
     </div>
-  )
+ } )
 }
 
 export default AdminBookingCreationPopUp
