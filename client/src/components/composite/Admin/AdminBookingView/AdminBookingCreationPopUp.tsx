@@ -5,7 +5,7 @@ import Button from "components/generic/FigmaButtons/FigmaButton"
 import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 import { useState, useMemo } from "react"
 import CloseButton from "assets/icons/x.svg?react"
-import LeftArrowButton from "assets/icons/leftarrow.svg"
+import LeftArrowButton from "assets/icons/leftarrow.svg?react"
 
 interface IAdminBookingCreationPopUp {
   bookingCreationHandler?: () => void
@@ -18,8 +18,6 @@ interface IAdminBookingCreationPopUp {
 
 enum FlowStages {
   SEARCH_FOR_USER = "search_for_user",
-  SELECT_USER = "select_user",
-  VIEW_USER = "view_user",
   SELECT_DATES = "select_dates"
 }
 
@@ -143,7 +141,21 @@ const AdminBookingCreationPopUp = ({
         )}
         <span className="mt-auto">
           {currentStage === FlowStages.SELECT_DATES ? (
-            <button></button>
+            <button
+              onClick={() => {
+                setCurrentStage(FlowStages.SEARCH_FOR_USER)
+                setCurrentSelectedUserUid(undefined)
+              }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="flex h-[15px] w-[15px] items-center">
+                  <LeftArrowButton className="fill-dark-blue-100" />
+                </div>
+                <h5 className="text-dark-blue-100 font-bold uppercase">
+                  Select Different User
+                </h5>
+              </div>
+            </button>
           ) : (
             <Button
               disabled={!currentSelectedUserUid}
