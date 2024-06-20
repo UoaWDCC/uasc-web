@@ -5,6 +5,7 @@ import Button from "components/generic/FigmaButtons/FigmaButton"
 import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 import { useState, useMemo } from "react"
 import CloseButton from "assets/icons/x.svg?react"
+import LeftArrowButton from "assets/icons/leftarrow.svg"
 
 interface IAdminBookingCreationPopUp {
   bookingCreationHandler?: () => void
@@ -121,7 +122,7 @@ const AdminBookingCreationPopUp = ({
             {usersToDisplay.map((user) => (
               <div
                 key={user.uid}
-                className="flex w-full p-2 hover:bg-white"
+                className="flex w-full p-2"
                 onClick={() => handleSelectUser(user.uid)}
               >
                 <p>
@@ -141,7 +142,16 @@ const AdminBookingCreationPopUp = ({
           </div>
         )}
         <span className="mt-auto">
-          <Button>Select User</Button>
+          {currentStage === FlowStages.SELECT_DATES ? (
+            <button></button>
+          ) : (
+            <Button
+              disabled={!currentSelectedUserUid}
+              onClick={() => setCurrentStage(FlowStages.SELECT_DATES)}
+            >
+              Select User
+            </Button>
+          )}
         </span>
         <p className="mt-8">Creating booking for:</p>
       </div>
@@ -150,7 +160,9 @@ const AdminBookingCreationPopUp = ({
         <div className="w-full max-w-[380px]">
           <Calendar />
           <DateRangePicker />
-          <Button>Add New Booking</Button>
+          <Button disabled={currentStage !== FlowStages.SELECT_DATES}>
+            Add New Booking
+          </Button>
         </div>
       </div>
     </div>
