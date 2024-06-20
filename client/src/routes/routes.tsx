@@ -3,18 +3,18 @@ import Admin from "pages/Admin/Admin"
 import Booking from "pages/Booking"
 import Contact from "pages/Contact"
 import Events from "pages/Events"
-import Home from "pages/Home/Home"
 import Login from "pages/Login/Login"
 import Profile from "pages/Profile/Profile"
 import Register from "pages/Register/Register"
 import { Route, Routes } from "react-router-dom"
 import NoMatch from "pages/404"
 import { BookingContextProvider } from "components/composite/Booking/BookingContext"
+import WrappedHomeComponent from "pages/Home/sections/utils/WrappedHomeComponent"
 
 export const AllRoutes = () => (
   <Routes>
     <Route path="/">
-      <Route index element={<Home />} />
+      <Route index element={<WrappedHomeComponent />} />
       <Route path="about" element={<About />} />
       <Route path="events" element={<Events />} />
       <Route path="contact" element={<Contact />} />

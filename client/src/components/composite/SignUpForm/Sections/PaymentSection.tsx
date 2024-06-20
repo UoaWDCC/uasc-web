@@ -21,7 +21,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
     useMembershipClientSecretQuery(membershipType)
   const { data } = useBankPaymentDetailsQuery()
   const requiredPrice = prices?.find(
-    (price) => price.type === userMembershipDetails?.membershipType
+    (price) => price.name === userMembershipDetails?.membershipType
   )
   /**
    * Use data fetched to find the correct price
@@ -209,15 +209,15 @@ export const PaymentInformationSection = () => {
               if (existingMembershipType) {
                 return (
                   <>
-                    {price.type === existingMembershipType && (
+                    {price.name === existingMembershipType && (
                       <span
-                        key={price.type}
+                        key={price.title}
                         className="w-full justify-self-center"
                       >
                         <PricingCard
                           title={price.title}
                           priceString={price.priceString}
-                          selected={price.type === membershipType}
+                          selected={price.name === membershipType}
                           extraInfo={price.extraInfo}
                           discountedPriceString=""
                         />
@@ -229,13 +229,13 @@ export const PaymentInformationSection = () => {
               return (
                 <>
                   <PricingCard
-                    key={price.type}
+                    key={price.title}
                     title={price.title}
                     priceString={price.priceString}
-                    selected={price.type === membershipType}
+                    selected={price.name === membershipType}
                     extraInfo={price.extraInfo}
                     discountedPriceString=""
-                    onClick={() => setMembershipType(price.type)}
+                    onClick={() => setMembershipType(price.name)}
                   />
                 </>
               )
