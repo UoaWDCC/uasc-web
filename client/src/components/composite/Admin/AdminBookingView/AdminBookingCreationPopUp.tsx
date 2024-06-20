@@ -112,33 +112,41 @@ const AdminBookingCreationPopUp = ({
         <AdminSearchBar
           onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
         />
-
-        {currentSelectedUserUid ? (
-          <DetailedUserInfoPanel />
-        ) : (
-          <div className="border-gray-3 rounded-md border">
-            {usersToDisplay.map((user) => (
-              <div
-                key={user.uid}
-                className="flex w-full p-2"
-                onClick={() => handleSelectUser(user.uid)}
-              >
-                <p>
-                  {user.first_name} {user.last_name}
-                </p>
-                <p
-                  className={`ml-auto font-bold uppercase ${
-                    user.membership === "member"
-                      ? "text-dark-blue-100"
-                      : "text-gray-3"
-                  }`}
-                >
-                  {user.membership}
-                </p>
-              </div>
-            ))}
+        {currentStage === FlowStages.SELECT_DATES && (
+          <div>
+            <p className="mt-8">Creating booking for:</p>
+            <div className="border-gray-3 rou h-[110px] w-[350px] rounded-sm border"></div>
           </div>
         )}
+
+        {
+          (currentStage = currentSelectedUserUid ? (
+            <DetailedUserInfoPanel />
+          ) : (
+            <div className="border-gray-3 rounded-md border">
+              {usersToDisplay.map((user) => (
+                <div
+                  key={user.uid}
+                  className="flex w-full p-2"
+                  onClick={() => handleSelectUser(user.uid)}
+                >
+                  <p>
+                    {user.first_name} {user.last_name}
+                  </p>
+                  <p
+                    className={`ml-auto font-bold uppercase ${
+                      user.membership === "member"
+                        ? "text-dark-blue-100"
+                        : "text-gray-3"
+                    }`}
+                  >
+                    {user.membership}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ))
+        }
         <span className="mt-auto">
           {currentStage === FlowStages.SELECT_DATES ? (
             <button
@@ -165,7 +173,6 @@ const AdminBookingCreationPopUp = ({
             </Button>
           )}
         </span>
-        <p className="mt-8">Creating booking for:</p>
       </div>
       <Divider />
       <div className="flex sm:basis-1/2">
