@@ -3,6 +3,7 @@ import { CombinedUserData } from "models/User"
 import Calendar from "components/generic/Calendar/Calendar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
+import { useState } from "react"
 
 interface IAdminBookingCreationPopUp {
   bookingCreationHandler?: () => void
@@ -28,11 +29,19 @@ const Divider = () => {
 const AdminBookingCreationPopUp = ({
   handleClose
 }: IAdminBookingCreationPopUp) => {
+  const [currentSearchQuery, setCurrentSearchQuery] = useState<
+    string | undefined
+  >(undefined)
+
+  const onQueryChanged = (newQuery: string)) => {
+    
+  } 
+
   return (
     <div className="flex w-full max-w-[900px] flex-col gap-7 sm:flex-row">
       <div className="flex w-full flex-col sm:basis-1/2">
         <p className="opacity-20">Select user</p>
-        <AdminSearchBar />
+        <AdminSearchBar onQueryChanged={(newQuery: string} = onQueryChanged(string)/>
 
         <p className="mt-8">Creating booking for:</p>
       </div>
