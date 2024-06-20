@@ -2,6 +2,7 @@ import AdminSearchBar from "../AdminMemberView/AdminSearchBar"
 import { CombinedUserData } from "models/User"
 import Calendar from "components/generic/Calendar/Calendar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
+import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 
 interface IAdminBookingCreationPopUp {
   bookingCreationHandler?: () => void
@@ -13,23 +14,27 @@ interface IAdminBookingCreationPopUp {
 }
 
 const Divider = () => {
-  return <div className="bg-gray-3 h-screen w-[1px]"></div>
+  return <div className="bg-gray-3 flex h-screen w-[1px]"></div>
 }
 
 const AdminBookingCreationPopUp = ({
   handleClose
 }: IAdminBookingCreationPopUp) => {
   return (
-    <div className="grid grid-cols-2">
-      <div className="space-between flex flex-col">
+    <div className="flex w-full">
+      <div className="flex flex-col">
         <p className="opacity-20 ">Select user</p>
-        <AdminSearchBar />
+        <div className="w-[70%]">
+          <AdminSearchBar />
+        </div>
+
         <p className="mt-8">Creating booking for:</p>
       </div>
       <Divider />
-      <div className="flex flex-col">
+      <div className="flex">
         <div className="max-w-[380px]">
           <Calendar />
+          <DateRangePicker />
           <Button>Add New Booking</Button>
         </div>
       </div>

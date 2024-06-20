@@ -1,7 +1,18 @@
 import TextInput from "../TextInputComponent/TextInput"
+import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
+
 interface IDateRangePicker {
+  /**
+   * The date to be displayed on the first input, should be local time
+   */
   valueStart: Date
+  /**
+   * The date to be displayed on the last input, should be local time
+   */
   valueEnd: Date
+  /**
+   * Callback when user tries to change one of the inputs
+   */
   handleDateRangeInputChange: (start?: Date, end?: Date) => void
 }
 
@@ -14,7 +25,7 @@ const DateRangePicker = ({
   valueEnd,
   handleDateRangeInputChange
 }: IDateRangePicker) => (
-  <>
+  <span className="mb-4 mt-3 flex items-center gap-1">
     <TextInput
       label="From"
       type="date"
@@ -35,13 +46,10 @@ const DateRangePicker = ({
       value={formatDateForInput(valueEnd)}
       onChange={(e) => {
         const newEndDate = e.target.valueAsDate || new Date()
-        if (checkValidRange(currentStartDate, newEndDate))
-          handleDateRangeInputChange(
-            currentStartDate,
-            newEndDate,
-            setSelectedDateRange
-          )
+        handleDateRangeInputChange(undefined, newEndDate)
       }}
     />
-  </>
+  </span>
 )
+
+export default DateRangePicker
