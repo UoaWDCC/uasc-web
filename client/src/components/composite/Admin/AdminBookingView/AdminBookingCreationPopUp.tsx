@@ -138,7 +138,7 @@ const AdminBookingCreationPopUp = ({
     <div className="flex w-full max-w-[820px] flex-col gap-8">
       <span className="flex justify-between">
         <h3 className="text-dark-blue-100">Add a booking</h3>
-        <div className="h-[15px] w-[15px] cursor-pointer">
+        <div className="h-[15px] w-[15px] cursor-pointer" onClick={handleClose}>
           <CloseButton />
         </div>
       </span>
@@ -209,7 +209,11 @@ const AdminBookingCreationPopUp = ({
         <div className="flex sm:basis-1/2">
           <div className="w-full max-w-[380px]">
             <Calendar />
-            <DateRangePicker />
+            <DateRangePicker
+              valueStart={new Date()}
+              valueEnd={new Date()}
+              handleDateRangeInputChange={() => {}}
+            />
             <Button disabled={currentStage !== FlowStages.SELECT_DATES}>
               Add New Booking
             </Button>
