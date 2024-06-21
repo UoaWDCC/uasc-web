@@ -1,4 +1,4 @@
-import { MembershipTypes } from "models/Payment" // may have to add PricingDetails here
+import { MembershipTypes } from "models/Payment"
 import fetchClient from "services/OpenApiFetchClient"
 
 export type Prices = {
@@ -63,12 +63,12 @@ const AppDataService = {
               break
           }
           if (data.originalPrice != null) {
-            data.originalPrice = "$" + data.originalPrice
+            data.originalPrice = `$${data.originalPrice}`
           }
           return {
             title: displayName,
             name: data.name,
-            priceString: "$" + data.displayPrice,
+            priceString: `$${data.displayPrice}`,
             originalPrice: data.originalPrice,
             extraInfo: data.description
           }

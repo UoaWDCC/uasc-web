@@ -7,7 +7,6 @@ import PricingBanner from "components/generic/PricingBanner/PricingBanner"
 
 interface IPricingSection {
   note?: string
-  // TODO: Update this type to the type of data returned by the `fetch-users` endpoint
   pricings: Prices[]
   bannerContent?: PricingBannerContent
 }

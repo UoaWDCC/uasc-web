@@ -7,7 +7,7 @@ import { pricingBannerContent, pricingNote } from "./sections/utils/Pricing"
 import { Footer } from "components/generic/Footer/Footer"
 import { Prices } from "services/AppData/AppDataService"
 
-type HomeProps = {
+export type HomeProps = {
   data: Prices[]
 }
 
