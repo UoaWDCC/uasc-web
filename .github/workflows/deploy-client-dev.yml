@@ -1,6 +1,17 @@
-name: Deploy DEV
+name: Deploy Production Build of Client for UASC 
 
 on: [workflow_dispatch]
+
+env:
+  VITE_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
+  VITE_FIREBASE_AUTH_DOMAIN: ${{secrets.PROD_FIREBASE_AUTH_DOMAIN}}
+  VITE_FIREBASE_PROJECT_ID: ${{secrets.PROD_FIREBASE_PROJECT_ID}}
+  VITE_FIREBASE_STORAGE_BUCKET: ${{secrets.PROD_FIREBASE_STORAGE_BUCKET}}
+  VITE_FIREBASE_MESSAGING_SENDER_ID: ${{secrets.PROD_FIREBASE_MESSAGING_SENDER_ID}}
+  VITE_FIREBASE_APP_ID: ${{secrets.PROD_FIREBASE_APP_ID}}
+  VITE_BACKEND_BASE_URL: ${{secrets.PROD_BACKEND_BASE_URL}}
+  VITE_ENV_STRIPE_PUBLISHABLE_KEY: ${{secrets.PROD_STRIPE_PK}}
+  VITE_ENV: production
 
 jobs:
   Deploy-Client:
@@ -15,9 +26,6 @@ jobs:
 
       - name: Enable corepack
         run: corepack enable
-
-      - name: Create env file
-        run: echo ${{ secrets.UASC_DEV_FRONTEND_ENVFILE }} | base64 --decode > .env
 
       - run: sudo yarn workspaces focus client
       - run: CI=false sudo yarn build
