@@ -10,7 +10,7 @@ const meta: Meta<typeof PricingSection> = {
 
 export default meta
 
-export const DefaultPricingSection = ({data}: HomeProps) => {
+export const DefaultPricingSection = ({ data }: HomeProps) => {
   return (
     <PricingSection
       pricings={data}
