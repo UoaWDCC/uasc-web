@@ -39,18 +39,16 @@ export const loginHandler = async ({
     return { success: true }
   } catch (error) {
     let message
+    console.log(error)
     switch (error.code) {
-      case AuthErrorCodes.INVALID_EMAIL:
-        message = "Invalid Email"
-        break
-      case AuthErrorCodes.INVALID_PASSWORD:
-        message = "Incorrect Password"
+      case AuthErrorCodes.INVALID_LOGIN_CREDENTIALS:
+        message = "Incorrect password or email"
         break
       case AuthErrorCodes.USER_DELETED:
         message = "User does not exist"
         break
       default:
-        message = "Unknown Error"
+        message = "Network error - please contact us"
         break
     }
     return {
