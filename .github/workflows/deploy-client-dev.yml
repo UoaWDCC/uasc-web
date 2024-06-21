@@ -27,9 +27,6 @@ jobs:
       - name: Enable corepack
         run: corepack enable
 
-      - name: Create env file
-        run: echo ${{ secrets.UASC_DEV_FRONTEND_ENVFILE }} | base64 --decode > .env
-
       - run: sudo yarn workspaces focus client
       - run: CI=false sudo yarn build
 
