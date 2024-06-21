@@ -44,6 +44,15 @@ interface IAdminMemberView {
    * used to fetch the data once the last page of the table has been reached
    */
   fetchNextPage?: () => void
+
+  /**
+   * Called when the *add new member* button is clicked
+   */
+  openAddMemberView?: () => void
+  /*
+   * Used to indicate if there is currently an operation going on
+   */
+  isUpdating?: boolean
 }
 
 /**
@@ -59,11 +68,28 @@ const defaultData = {
 
 const ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH = 2 as const
 
+/**
+ * The view to be displayed on the `admin` route when the admin wants to:
+ * - Add new users
+ * - Change the user membership (between guest and member)
+ * - Delete users
+ * - Access an "edit" view for users
+ *
+ * @deprecated do not use directly on page, instead use `WrappedAdminMemberView`
+ *
+ * Data fetching should **not** be performed inside this component, instead do such
+ * inside `WrappedAdminMemberView`
+ */
 export const AdminMemberView = ({
   data,
   rowOperations,
-  fetchNextPage
+  fetchNextPage,
+  openAddMemberView,
+  isUpdating
 }: IAdminMemberView) => {
+  /**
+   * For use with `AdminSearchBar`
+   */
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
   const [isLastPage, setIsLastPage] = useState<boolean>(false)
   const isValidSearchQuery =
@@ -78,6 +104,10 @@ export const AdminMemberView = ({
       : oldData
 
   useEffect(() => {
+    /**
+     * We need to *scroll* to the next page of user data as it is assumed
+     * that the endpoint for fetching all users is paginated
+     */
     if (isLastPage || isValidSearchQuery) {
       fetchNextPage?.()
     }
@@ -87,13 +117,17 @@ export const AdminMemberView = ({
     setCurrentSearchQuery(newQuery)
   }
   return (
-    <>
+    <div
+      className={`w-full ${isUpdating ? "brightness-75" : "brightness-100"}`}
+    >
       <span className="mb-4 mt-6 flex w-full justify-between">
         <span className="flex gap-5">
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
           <Button variant="inverted-default-sm">Filter</Button>
         </span>
-        <Button variant="default-sm">Add New Member</Button>
+        <Button variant="default-sm" onClick={() => openAddMemberView?.()}>
+          Add New Member
+        </Button>
       </span>
       <Table<MemberColumnFormat, "multiple-operations">
         data={(data && dataFilter(data)) || [defaultData]}
@@ -105,6 +139,6 @@ export const AdminMemberView = ({
           setIsLastPage(last)
         }}
       />
-    </>
+    </div>
   )
 }

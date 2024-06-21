@@ -3,7 +3,10 @@ import PricingCard from "components/generic/PricingCard/PricingCard"
 import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
-import { oneLevelUp } from "../utils/Utils"
+import {
+  getMembershipTypeConfirmationMessage,
+  oneLevelUp
+} from "../utils/Utils"
 import {
   useBankPaymentDetailsQuery,
   useMembershipPricesQuery
@@ -235,7 +238,15 @@ export const PaymentInformationSection = () => {
                     selected={price.name === membershipType}
                     extraInfo={price.extraInfo}
                     discountedPriceString=""
-                    onClick={() => setMembershipType(price.name)}
+                    onClick={() => {
+                      if (
+                        confirm(
+                          getMembershipTypeConfirmationMessage(price.name)
+                        )
+                      ) {
+                        setMembershipType(price.name)
+                      }
+                    }}
                   />
                 </>
               )

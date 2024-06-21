@@ -7,7 +7,6 @@ import { Timestamp } from "firebase-admin/firestore"
 
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-// import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
 import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import {
@@ -181,12 +180,16 @@ export class BookingController extends Controller {
       }> = []
 
       /** Iterating through each booking slot */
-      for (const slot of bookingSlots) {
+      const bookingPromises = bookingSlots.map(async (slot) => {
         /** Getting the bookings for the current slot */
         const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
 
         /** Extracting the user IDs from the bookings */
         const userIds = bookings.map((booking) => booking.user_id)
+
+        if (userIds.length === 0) {
+          return
+        }
 
         /** Fetching the users based on the user IDs */
         const users = await userService.getUsersByIds(userIds)
@@ -222,14 +225,21 @@ export class BookingController extends Controller {
           date: slot.date,
           users: combinedUsers
         })
-      }
+      })
+
+      await Promise.all(bookingPromises)
 
       console.log(responseData)
 
       this.setStatus(200)
 
-      /** Returning the response data */
-      return { data: responseData }
+      /**
+       * Returning the response data
+       *
+       * The filter is required to not include data that is null
+       * because of the early return in the map
+       */
+      return { data: responseData.filter((data) => !!data) }
     } catch (e) {
       console.error("Error in getBookingsByDateRange:", e)
       this.setStatus(500)
