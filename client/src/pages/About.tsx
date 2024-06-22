@@ -1,8 +1,8 @@
 import AboutSection from "components/generic/AboutSection/AboutSection"
 // import all 4 images
-import ImageLeft from "assets/images/hut.png"
-import ImageRight from "assets/images/MountainBackgroundImage.png"
-import ImageBottom from "assets/images/ImageBottom.png"
+import ImageLeft from "assets/images/lodge.jpg"
+import ImageRight from "assets/images/people.jpg"
+import ImageBottom from "assets/images/view.jpg"
 
 const About = () => {
   return (
