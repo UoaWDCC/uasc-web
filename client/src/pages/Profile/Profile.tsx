@@ -135,7 +135,10 @@ export default function Profile() {
                 </div>
               </ProfileInformationPanel>
               <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
-                <ProfileInformationPanel title="Membership" onEdit={() => {}}>
+                <ProfileInformationPanel
+                  title="Membership"
+                  onEdit={userMembership !== "Admin" ? () => {} : undefined}
+                >
                   <Field
                     subtitle="Membership type"
                     description={userMembership}
