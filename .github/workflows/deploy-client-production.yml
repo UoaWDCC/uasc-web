@@ -6,12 +6,11 @@ jobs:
   Deploy-Client:
     runs-on: ubuntu-latest
     environment: Client Production
-    defaults:
-      run:
-        working-directory: ./client
 
     steps:
       - uses: actions/checkout@v3
+
+      - run: cd client
 
       - name: Enable corepack
         run: corepack enable
@@ -31,7 +30,7 @@ jobs:
           cat .env
 
       - run: sudo yarn workspaces focus client
-      - run: CI=false sudo yarn build
+      - run: yarn workspace client build
 
       - uses: "google-github-actions/auth@v2"
         with:
