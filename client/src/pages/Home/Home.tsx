@@ -3,14 +3,18 @@ import BenefitSection from "./sections/BenefitSection"
 import LandingSection from "./sections/LandingSection"
 import PricingSection from "./sections/PricingSection"
 import { benefits } from "./sections/utils/Benefits"
-import {
-  Pricings,
-  pricingBannerContent,
-  pricingNote
-} from "./sections/utils/Pricing"
+import { pricingBannerContent, pricingNote } from "./sections/utils/Pricing"
 import { Footer } from "components/generic/Footer/Footer"
+import { Prices } from "services/AppData/AppDataService"
 
-const Home = () => {
+export type HomeProps = {
+  data: Prices[]
+}
+
+/**
+ * @deprecated do not use, use `WrappedHomeComponent` instead
+ */
+const Home = ({ data }: HomeProps) => {
   return (
     <>
       <div className="">
@@ -18,7 +22,7 @@ const Home = () => {
         <AboutSection />
         <BenefitSection benefits={benefits} />
         <PricingSection
-          pricings={Pricings}
+          pricings={data}
           note={pricingNote}
           bannerContent={pricingBannerContent}
         />

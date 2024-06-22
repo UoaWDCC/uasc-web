@@ -21,7 +21,7 @@ export const WrappedTab = ({
     <NavLink
       to={to}
       state={{ to }}
-      className="flex w-full px-8 md:w-fit md:px-0"
+      className={`flex w-full ${mobileCompatiability ? "px-8" : "px-0"} md:w-fit md:px-0`}
     >
       <Tab
         stretchesOnSmallScreen={mobileCompatiability}

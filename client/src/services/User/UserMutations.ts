@@ -19,7 +19,7 @@ export function useSignUpUserMutation(signUpType: SignUpType = "member") {
       if (signUpType === "admin") return
       if (data?.jwtToken) {
         try {
-          await sendPasswordResetEmail(auth, variables.email)
+          sendPasswordResetEmail(auth, variables.email) // It must be non-blocking
         } finally {
           await signInWithCustomToken(auth, data.jwtToken)
         }

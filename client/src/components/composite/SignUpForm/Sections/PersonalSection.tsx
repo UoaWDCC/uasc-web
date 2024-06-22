@@ -39,14 +39,19 @@ export const PersonalSectionFirst = () => {
             .toISOString()
             .split("T")[0]
         }
+        min={new Date(0).toISOString().split("T")[0]} // 1970
+        max={new Date().toISOString().split("T")[0]} // Today
         onChange={(e) => {
-          updateFormData({
-            date_of_birth: {
-              seconds: Timestamp.fromDate(new Date(e.target.value)).seconds,
-              nanoseconds: Timestamp.fromDate(new Date(e.target.value))
-                .nanoseconds
-            }
-          })
+          const value = e.target.valueAsDate
+          if (value) {
+            updateFormData({
+              date_of_birth: {
+                seconds: Timestamp.fromDate(new Date(e.target.value)).seconds,
+                nanoseconds: Timestamp.fromDate(new Date(e.target.value))
+                  .nanoseconds
+              }
+            })
+          }
         }}
         required
       />
