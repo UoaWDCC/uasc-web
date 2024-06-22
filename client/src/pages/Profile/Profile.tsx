@@ -140,7 +140,7 @@ export default function Profile() {
                           Sign up
                         </Link>
                       ) : (
-                        <p className="text-red font-bold">no expiry date</p>
+                        <p className="text-red font-bold">No Expiry Date</p>
                       )
                     }
                   />
