@@ -16,7 +16,7 @@ env:
 jobs:
   Deploy-Client:
     runs-on: ubuntu-latest
-    environment: DEV
+    environment: Client Production
     defaults:
       run:
         working-directory: ./client
