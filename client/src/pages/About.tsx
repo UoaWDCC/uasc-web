@@ -7,7 +7,7 @@ import ImageBottom from "assets/images/view.jpg"
 const About = () => {
   return (
     <div className="flex w-full flex-col">
-      <h2 className="text-dark-blue-100 text-center italic lg:text-left">
+      <h2 className="text-dark-blue-100 mt-8 text-center italic lg:text-left">
         About us
       </h2>
       <div className="w-full">
