@@ -1,12 +1,12 @@
 import { useAppData } from "store/Store"
 import { useNavigate } from "react-router-dom"
+import { useEffect, useMemo } from "react"
 
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
 import { useForceRefreshToken } from "hooks/useRefreshedToken"
 import { timestampToDate } from "components/utils/Utils"
-import { useMemo } from "react"
 import { signOut } from "firebase/auth"
 import { auth } from "firebase"
 
@@ -69,6 +69,13 @@ const Field = ({
 }
 export default function Profile() {
   const [{ currentUserData, currentUser, currentUserClaims }] = useAppData()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login")
+    }
+  }, [currentUser, navigate])
 
   const userMembership = useMemo(() => {
     if (currentUserClaims?.admin) return "Admin"
@@ -128,7 +135,10 @@ export default function Profile() {
                 </div>
               </ProfileInformationPanel>
               <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
-                <ProfileInformationPanel title="Membership" onEdit={() => {}}>
+                <ProfileInformationPanel
+                  title="Membership"
+                  onEdit={userMembership !== "Admin" ? () => {} : undefined}
+                >
                   <Field
                     subtitle="Membership type"
                     description={userMembership}
