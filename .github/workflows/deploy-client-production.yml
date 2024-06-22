@@ -2,46 +2,34 @@ name: Deploy Production Build of Client for UASC
 
 on: [workflow_dispatch]
 
+env:
+  VITE_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
+  VITE_FIREBASE_AUTH_DOMAIN: ${{secrets.PROD_FIREBASE_AUTH_DOMAIN}}
+  VITE_FIREBASE_PROJECT_ID: ${{secrets.PROD_FIREBASE_PROJECT_ID}}
+  VITE_FIREBASE_STORAGE_BUCKET: ${{secrets.PROD_FIREBASE_STORAGE_BUCKET}}
+  VITE_FIREBASE_MESSAGING_SENDER_ID: ${{secrets.PROD_FIREBASE_MESSAGING_SENDER_ID}}
+  VITE_FIREBASE_APP_ID: ${{secrets.PROD_FIREBASE_APP_ID}}
+  VITE_BACKEND_BASE_URL: ${{secrets.PROD_BACKEND_BASE_URL}}
+  VITE_ENV_STRIPE_PUBLISHABLE_KEY: ${{secrets.PROD_STRIPE_PK}}
+  VITE_ENV: production
+
 jobs:
   Deploy-Client:
     runs-on: ubuntu-latest
     environment: Client Production
 
     steps:
-      - uses: actions/checkout@v3
-
-      - run: cd client
-
       - name: Enable corepack
         run: corepack enable
 
-      - name: 'Create env file'
-        run: |
-          touch .env
-          echo VITE_FIREBASE_API_KEY=${{secrets.PROD_FIREBASE_API_KEY}} >> .env
-          echo VITE_FIREBASE_AUTH_DOMAIN=${{secrets.PROD_FIREBASE_AUTH_DOMAIN}} >> .env
-          echo VITE_FIREBASE_PROJECT_ID=${{secrets.PROD_FIREBASE_PROJECT_ID}} >> .env
-          echo VITE_FIREBASE_STORAGE_BUCKET=${{secrets.PROD_FIREBASE_STORAGE_BUCKET}} >> .env
-          echo VITE_FIREBASE_MESSAGING_SENDER_ID=${{secrets.PROD_FIREBASE_MESSAGING_SENDER_ID}} >> .env
-          echo VITE_FIREBASE_APP_ID=${{secrets.PROD_FIREBASE_APP_ID}} >> .env
-          echo VITE_BACKEND_BASE_URL=${{secrets.PROD_BACKEND_BASE_URL}} >> .env
-          echo VITE_ENV_STRIPE_PUBLISHABLE_KEY=${{secrets.PROD_STRIPE_PK}} >> .env
-          echo VITE_ENV=production >> .env
-          cat .env
+      - uses: actions/checkout@v3
 
-      - run: sudo yarn workspaces focus client
-      - run: yarn workspace client build
+      - run: cd client && yarn workspaces focus client && yarn run build
 
-      - uses: "google-github-actions/auth@v2"
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          # Credentials stored inside WDCC organisation secrets
-          credentials_json: "${{ secrets.UASC_DEV_GCP_DEPLOYMENT_SA_CREDENTIALS }}"
-
-      - uses: "google-github-actions/upload-cloud-storage@v2"
-        with:
-          # Build path (path is excluded if parent: false flag)
-          path: "client/build"
-          parent: false
-
-          # Buckets to add contents into
-          destination: "uasc-dev.wdcc.co.nz"
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.PROD_SERVER_SERVICE_ACCOUNT }}"
+          channelId: live
+          projectId: uasc-prod
+          entryPoint: client
