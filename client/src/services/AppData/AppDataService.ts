@@ -60,13 +60,13 @@ const AppDataService = {
               displayName = MembershipLongNames.ALL_UOA_STUDENTS
               break
             case "non_uoa_student":
-              displayName = MembershipLongNames.NON_STUDENT_NEW
+              displayName = MembershipLongNames.ALL_OTHER_STUDENTS
               break
             case "returning_member":
               displayName = MembershipLongNames.NON_STUDENT_RETURNING
               break
             case "new_non_student":
-              displayName = MembershipLongNames.ALL_OTHER_STUDENTS
+              displayName = MembershipLongNames.NON_STUDENT_NEW
               break
           }
           if (data.originalPrice != null) {
