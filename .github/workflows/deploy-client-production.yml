@@ -16,9 +16,6 @@ jobs:
       - name: Enable corepack
         run: corepack enable
 
-      - run: sudo yarn workspaces focus client
-      - run: CI=false sudo yarn build
-
       - name: 'Create env file'
         run: |
           touch .env
@@ -32,6 +29,9 @@ jobs:
           echo VITE_ENV_STRIPE_PUBLISHABLE_KEY=${{secrets.PROD_STRIPE_PK}} >> .env
           echo VITE_ENV=production >> .env
           cat .env
+
+      - run: sudo yarn workspaces focus client
+      - run: CI=false sudo yarn build
 
       - uses: "google-github-actions/auth@v2"
         with:
