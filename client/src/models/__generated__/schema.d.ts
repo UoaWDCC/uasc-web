@@ -105,6 +105,8 @@ export interface components {
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
@@ -141,6 +143,8 @@ export interface components {
       first_name: string;
       last_name: string;
       dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
@@ -227,6 +231,8 @@ export interface components {
       first_name: string;
       last_name: string;
       dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
@@ -304,6 +310,8 @@ export interface components {
       first_name: string;
       last_name: string;
       dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
@@ -328,6 +336,8 @@ export interface components {
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
@@ -376,6 +386,7 @@ export interface operations {
             student_id?: string;
             university?: string;
             faculty?: string;
+            ethnicity?: string;
             dietary_requirements: string;
             last_name: string;
             first_name: string;
