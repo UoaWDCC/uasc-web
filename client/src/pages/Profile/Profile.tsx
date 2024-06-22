@@ -136,7 +136,7 @@ export default function Profile() {
                       userMembership === "Member" ? (
                         `End of ${new Date().getFullYear()}`
                       ) : userMembership === "Guest" ? (
-                        <Link to="./signup" className="text-light-blue-100">
+                        <Link to="./about" className="text-light-blue-100">
                           Sign up
                         </Link>
                       ) : undefined // Return undefined for other cases
