@@ -139,7 +139,9 @@ export default function Profile() {
                         <Link to="/register" className="text-light-blue-100">
                           Sign up
                         </Link>
-                      ) : undefined // Return undefined for other cases
+                      ) : (
+                        <p className="text-red font-bold">no expiry date</p>
+                      )
                     }
                   />
                 </ProfileInformationPanel>
