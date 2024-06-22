@@ -7,10 +7,13 @@ import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundIm
 import { useForceRefreshToken } from "hooks/useRefreshedToken"
 import { timestampToDate } from "components/utils/Utils"
 import { useMemo } from "react"
+import { signOut } from "firebase/auth"
+import { auth } from "firebase"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
-  const handleOnclick = () => {
+  const handleOnclick = async () => {
+    await signOut(auth)
     navigate("/login")
   }
 
