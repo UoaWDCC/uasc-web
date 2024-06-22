@@ -9,6 +9,13 @@ export type Prices = {
   extraInfo?: string
 }
 
+const MembershipLongNames = {
+  ALL_UOA_STUDENTS: "All UoA Students",
+  NON_STUDENT_RETURNING: "Non-Student: Returning",
+  NON_STUDENT_NEW: "Non-Student: New",
+  ALL_OTHER_STUDENTS: "All Other Students"
+} as const
+
 const AppDataService = {
   getBankPaymentDetails: async function () {
     // TODO: Dynamically fetch and make sure there is appropriate fallback
@@ -20,24 +27,24 @@ const AppDataService = {
 
     const fallbackData: Prices[] = [
       {
-        title: "UoA Student",
+        title: MembershipLongNames.ALL_UOA_STUDENTS,
         name: "uoa_student",
         priceString: "$45",
         originalPrice: "$65",
         extraInfo: "Save $20"
       },
       {
-        title: "Returning Member",
+        title: MembershipLongNames.NON_STUDENT_RETURNING,
         name: "returning_member",
         priceString: "$65"
       },
       {
-        title: "New Non Student",
+        title: MembershipLongNames.NON_STUDENT_NEW,
         name: "new_non_student",
         priceString: "$75"
       },
       {
-        title: "Non Uoa Student New",
+        title: MembershipLongNames.ALL_OTHER_STUDENTS,
         name: "non_uoa_student",
         priceString: "$95"
       }
@@ -50,16 +57,16 @@ const AppDataService = {
           let displayName
           switch (data.name) {
             case "uoa_student":
-              displayName = "UoA Student"
+              displayName = MembershipLongNames.ALL_UOA_STUDENTS
               break
             case "non_uoa_student":
-              displayName = "Non-UoA Student"
+              displayName = MembershipLongNames.NON_STUDENT_NEW
               break
             case "returning_member":
-              displayName = "Returning Member"
+              displayName = MembershipLongNames.NON_STUDENT_RETURNING
               break
             case "new_non_student":
-              displayName = "New Non-UoA Student"
+              displayName = MembershipLongNames.ALL_OTHER_STUDENTS
               break
           }
           if (data.originalPrice != null) {
