@@ -2,22 +2,14 @@ import { Timestamp } from "firebase-admin/firestore"
 
 export interface UserAdditionalInfo {
   date_of_birth: Timestamp
+  does_snowboarding?: boolean
+  does_racing?: boolean
+  does_ski?: boolean
   /**
-   * @isbool Please enter true or false
+   * @isNumber Please enter your phone number
    */
-  does_snowboarding: boolean
-  /**
-   * @isbool Please enter true or false
-   */
-  does_racing: boolean
-  /**
-   * @isbool Please enter true or false
-   */
-  does_ski: boolean
-  /**
-   * @isString Please enter your pronouns
-   */
-  gender: string
+  phone_number: number
+  gender?: string
   /**
    * @isString Please enter a name
    */
@@ -35,6 +27,10 @@ export interface UserAdditionalInfo {
    */
   dietary_requirements: string
   /**
+   * **OPTIONAL** field that the user should have the choice to provide
+   */
+  ethnicity?: string
+  /**
    * @isString Please enter your faculty
    */
   faculty?: string
@@ -47,13 +43,9 @@ export interface UserAdditionalInfo {
    */
   student_id?: string
   /**
-   * @isbool Please enter true or false
-   */
-  returning: boolean
-  /**
    * @isString Please enter your year of study
    */
-  university_year: string
+  university_year?: string
   /**
    * For identification DO NOT RETURN to users in exposed endpoints
    */
@@ -61,9 +53,20 @@ export interface UserAdditionalInfo {
 }
 
 export interface BookingSlot {
-  stripe_product_id: string
-  description: string
+  /**
+   * An optional description for this date
+   * @example Beginners Weekend
+   */
+  description?: string
+  /**
+   * The {@link Timestamp} this booking slot refers to.
+   * @example 23 July 2024 at 00:00:00
+   */
   date: Timestamp
+  /**
+   * The maximum number of bookings that can exist on this date
+   * @example 30
+   */
   max_bookings: number
 }
 
@@ -101,8 +104,20 @@ export interface DateChange extends UserRequest {
 }
 
 export interface Booking {
-  user_id: string // Reference to user ID
-  booking_slot_id: string // Reference
+  /**
+   * The reference to the {@link UserAdditionalInfo} collection ID for the user who made this booking.
+   * @example /users/lVsOjAp06AfD6atT8bnrVEpcdcg2
+   */
+  user_id: string
+  /**
+   * The reference to the {@link BookingSlot} collection ID that the user is booked under.
+   * @exmaple /booking_slot/sddsdsdsds
+   */
+  booking_slot_id: string
+  /**
+   * The Stripe payment ID the user made when paying for this booking.
+   * @example 'cs_test_a11YYufWQzNY63zpQ6QSNRQhkUpVph4WRmzW0zWJO2znZKdVujZ0N0S22u'
+   */
   stripe_payment_id: string
 }
 

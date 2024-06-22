@@ -1,21 +1,39 @@
-import { UseMutationOptions, useMutation } from "@tanstack/react-query"
-import UserService, { EditUsersBody, SignUpUserBody } from "./UserService"
+import { useMutation } from "@tanstack/react-query"
+import UserService from "./UserService"
+import { sendPasswordResetEmail, signInWithCustomToken } from "firebase/auth"
+import { auth } from "firebase"
+import { ReducedUserAdditionalInfo } from "models/User"
 
 const SIGN_UP_USER_MUTATION_KEY = "signUpUser" as const
 
-export function useEditUserMutation(
-  users: EditUsersBody,
-  options: UseMutationOptions
-) {
+/**
+ * Specifies who is calling the sign up end point
+ */
+type SignUpType = "admin" | "member"
+
+export function useSignUpUserMutation(signUpType: SignUpType = "member") {
   return useMutation({
-    ...options,
-    mutationFn: () => UserService.editUsers(users)
+    mutationKey: [SIGN_UP_USER_MUTATION_KEY, signUpType],
+    mutationFn: UserService.signUpUser,
+    onSuccess: async (data, variables) => {
+      if (signUpType === "admin") return
+      if (data?.jwtToken) {
+        try {
+          sendPasswordResetEmail(auth, variables.email) // It must be non-blocking
+        } finally {
+          await signInWithCustomToken(auth, data.jwtToken)
+        }
+      }
+    },
+    retry: 0
   })
 }
 
-export function useSignUpUserMutation(userData: SignUpUserBody) {
+export function useEditSelfMutation(
+  userData: Partial<ReducedUserAdditionalInfo>
+) {
   return useMutation({
-    mutationKey: [SIGN_UP_USER_MUTATION_KEY],
-    mutationFn: () => UserService.signUpUser(userData)
+    mutationKey: ["editSelf"],
+    mutationFn: () => UserService.editSelf(userData)
   })
 }

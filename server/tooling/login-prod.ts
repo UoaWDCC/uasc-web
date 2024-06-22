@@ -7,9 +7,11 @@ dotenv.config()
  *
  * How to use:
  * ```
- * ts-node ./test/scripts/loginScript <USER_UID>
+ * ts-node ./test/scripts/loginScript // to log in with admin using the UID defined in .env
  *
- * ts-node ./test/scripts/loginScript mdLy2GYwTMZovNtnkj121dWU2YP2
+ * ts-node ./test/scripts/loginScript mdLy2GYwTMZovNtnkj121dWU2YP2 admin // to login with admin
+ *
+ * ts-node ./test/scripts/loginScript mdLy2GYwTMZovNtnkj121dWU2YP2 // to login without admin
  * ```
  */
 
@@ -19,8 +21,14 @@ admin.initializeApp({
   )
 })
 
-const createIdToken = async (uid: string) => {
+const createIdToken = async (uid: string, makeUserAdmin: boolean) => {
   try {
+    if (makeUserAdmin) {
+      await admin.auth().setCustomUserClaims(uid, { member: true, admin: true })
+    } else {
+      await admin.auth().setCustomUserClaims(uid, { admin: false })
+    }
+
     const customToken = await admin.auth().createCustomToken(uid)
 
     const res = await fetch(
@@ -51,9 +59,12 @@ const createIdToken = async (uid: string) => {
 const args = process.argv.slice(2)
 
 if (args.length === 0) {
-  console.log("Login with User ID:", process.env.USER_ID)
-  createIdToken(process.env.USER_ID)
+  console.log("Login with env User ID as admin:", process.env.USER_ID)
+  createIdToken(process.env.USER_ID, true)
+} else if (args.length === 2 && args[1] === "admin") {
+  console.log("Login with User ID as admin:", args[0])
+  createIdToken(args[0], true)
 } else {
-  console.log("Login with User ID:", args[0])
-  createIdToken(args[0])
+  console.log("Login with User ID without admin:", args[0])
+  createIdToken(args[0], false)
 }

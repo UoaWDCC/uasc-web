@@ -39,20 +39,25 @@ export const PersonalSectionFirst = () => {
             .toISOString()
             .split("T")[0]
         }
+        min={new Date(0).toISOString().split("T")[0]} // 1970
+        max={new Date().toISOString().split("T")[0]} // Today
         onChange={(e) => {
-          updateFormData({
-            date_of_birth: {
-              seconds: Timestamp.fromDate(new Date(e.target.value)).seconds,
-              nanoseconds: Timestamp.fromDate(new Date(e.target.value))
-                .nanoseconds
-            }
-          })
+          const value = e.target.valueAsDate
+          if (value) {
+            updateFormData({
+              date_of_birth: {
+                seconds: Timestamp.fromDate(new Date(e.target.value)).seconds,
+                nanoseconds: Timestamp.fromDate(new Date(e.target.value))
+                  .nanoseconds
+              }
+            })
+          }
         }}
         required
       />
 
-      <p className="mb-2 mt-5">Gender</p>
-      <div className="flex max-w-sm flex-col gap-2">
+      <p className="mb-2 mt-5">Gender - Optional</p>
+      <div className="mb-3 flex max-w-sm flex-col gap-2">
         <Radio
           value="Male"
           checked={gender === "Male"}
@@ -82,6 +87,12 @@ export const PersonalSectionFirst = () => {
           Prefer not to say
         </Radio>
       </div>
+
+      <TextInput
+        type="text"
+        onChange={(e) => updateFormData({ ethnicity: e.target.value })}
+        label="Ethnicity - Optional"
+      />
     </div>
   )
 }

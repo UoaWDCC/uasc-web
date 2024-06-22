@@ -1,6 +1,7 @@
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import { UserAdditionalInfo } from "models/User"
+import { MS_IN_SECOND } from "utils/Constants"
 
 interface IUserInformationEdit {
   userData?: UserAdditionalInfo
@@ -29,7 +30,9 @@ const UserInformationEdit = ({
               </>
             )
           })}
-          <h5>{new Date(date_of_birth.seconds * 1000).toDateString()}</h5>
+          <h5>
+            {new Date(date_of_birth.seconds * MS_IN_SECOND).toDateString()}
+          </h5>
         </div>
       </>
     )

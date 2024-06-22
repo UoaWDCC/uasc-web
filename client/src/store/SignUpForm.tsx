@@ -1,4 +1,5 @@
 import { PAGES } from "components/composite/SignUpForm/utils/RouteNames"
+import { Timestamp } from "firebase/firestore"
 import { ReducedUserAdditionalInfo } from "models/User"
 import { createStore, Action, createHook } from "react-sweet-state"
 
@@ -13,10 +14,8 @@ type State = ReducedUserAdditionalInfo & {
 const initialState: State = {
   email: "",
   confirmEmail: "",
-  date_of_birth: {
-    seconds: 0,
-    nanoseconds: 0
-  },
+  phone_number: 0x0,
+  date_of_birth: Timestamp.fromDate(new Date("2000/01/01")),
   does_snowboarding: false,
   does_racing: false,
   does_ski: false,
@@ -28,7 +27,6 @@ const initialState: State = {
   faculty: undefined,
   university: undefined,
   student_id: undefined,
-  returning: false,
   university_year: "",
   formValidity: {
     success: false
@@ -56,7 +54,7 @@ const actions = {
       }
 
       const validateContactSection = (invalidFields: string[]) => {
-        const { email, confirmEmail } = getState()
+        const { email, confirmEmail, phone_number } = getState()
         const validRegex =
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
@@ -65,6 +63,9 @@ const actions = {
         }
         if (confirmEmail !== email) {
           invalidFields.push("Confirm Email")
+        }
+        if (phone_number.toString().length < 6) {
+          invalidFields.push("Phone Number")
         }
       }
 

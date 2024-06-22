@@ -1,5 +1,4 @@
 import { FormEvent, useState } from "react"
-import { Alert } from "@mui/material"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 
@@ -133,16 +132,12 @@ const LoginForm = ({
         >
           Login
         </Button>
-        {messages.success && (
-          <Alert severity="success" sx={{ marginTop: "1vh" }}>
-            {messages.success}
-          </Alert>
-        )}
-        {messages.error && (
-          <Alert severity="error" sx={{ marginTop: "1vh" }}>
-            {messages.error}
-          </Alert>
-        )}
+        <div className="mt-6 uppercase">
+          {messages.success && (
+            <h5 className="font-bold">{messages.success}</h5>
+          )}
+          {messages.error && <h5 className="font-bold">{messages.error}</h5>}
+        </div>
       </form>
     </div>
   )

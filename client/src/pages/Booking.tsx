@@ -1,9 +1,17 @@
-import { ProtectedCreateBookingSection } from "components/composite/BookingCreation/BookingCreation"
+import { ProtectedCreateBookingSection } from "components/composite/Booking/BookingCreation/ProtectedCreateBookingSection"
 import { Route, Routes } from "react-router-dom"
 import BookingSuccess from "./BookingSuccess"
 import { Footer } from "components/generic/Footer/Footer"
+import BookingPayment from "components/composite/Booking/BookingPayment/BookingPayment"
+import { useContext } from "react"
+import { BookingContext } from "components/composite/Booking/BookingContext"
+import { useUserLoggedInCallback } from "hooks/useUserLoggedInCallback"
 
 const Booking = () => {
+  const { clientSecret, getExistingSession } = useContext(BookingContext)
+
+  useUserLoggedInCallback(() => getExistingSession?.())
+
   return (
     <>
       <div
@@ -17,6 +25,10 @@ const Booking = () => {
           <span className="w-full">
             <Routes>
               <Route index element={<ProtectedCreateBookingSection />} />
+              <Route
+                path="payment"
+                element={<BookingPayment clientSecret={clientSecret} />}
+              />
               <Route path="success" element={<BookingSuccess />} />
             </Routes>
           </span>

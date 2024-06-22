@@ -1,5 +1,6 @@
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import { Timestamp } from "firebase-admin/firestore"
 import { UserRecord } from "firebase-admin/lib/auth/user-record"
 
 export interface EditUsersRequestBody {
@@ -15,9 +16,17 @@ export interface SelfRequestModel {
   user?: UserRecord
 }
 
-// ticket 341 client select membership type
+export interface DeleteUserRequestBody {
+  uid: string
+}
+
 export interface UserPaymentRequestModel {
   membershipType?: MembershipTypeValues
+}
+
+export interface UserBookingRequestingModel {
+  startDate?: Timestamp
+  endDate?: Timestamp
 }
 
 export interface EditSelfRequestModel {
@@ -35,4 +44,17 @@ export interface PromoteUserRequestBody {
 
 export interface DemoteUserRequestBody {
   uid: string
+}
+
+export interface AvailableDatesRequestModel {
+  startDate?: Timestamp
+  endDate?: Timestamp
+}
+
+/**
+ * Represents the structure of a request model for fetching bookings within a specific date range.
+ */
+export interface BookingsByDateRangeRequestModel {
+  startDate: Timestamp
+  endDate: Timestamp
 }

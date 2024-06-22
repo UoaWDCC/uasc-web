@@ -13,13 +13,33 @@ export default class UserDataService {
     await FirestoreCollections.users.doc(uid).set(additionalInfo)
   }
 
-  // Read
-  public async getAllUserData() {
-    const res = await FirestoreCollections.users.get()
+  /**
+   * @param [limit] how many users to fetch at once
+   * @param [startAfter] the cursor to start searching for users at
+   * @returns list of users, sorted by first name *and* the next cursor
+   */
+  public async getAllUserData(
+    limit: number = 100,
+    startAfter?: FirebaseFirestore.DocumentSnapshot<
+      UserAdditionalInfo,
+      FirebaseFirestore.DocumentData
+    >
+  ) {
+    // is ordered by id by default
+    const res = await FirestoreCollections.users
+      .orderBy("first_name")
+      .startAfter(startAfter || 0)
+      .limit(limit)
+      .get()
+
     const users = res.docs.map((user) => {
       return { ...user.data(), uid: user.id }
     })
-    return users
+    return { users, nextCursor: res.docs[res.docs.length - 1]?.id || undefined }
+  }
+
+  public async getUserDocumentSnapshot(uid: string) {
+    return await FirestoreCollections.users.doc(uid).get()
   }
 
   public async getUserData(uid: string) {
@@ -77,5 +97,24 @@ export default class UserDataService {
   // Delete
   public async deleteUserData(uid: string) {
     await FirestoreCollections.users.doc(uid).delete()
+  }
+
+  /**
+   * Retrieves user documents from Firestore based on the provided user IDs.
+   */
+  public async getUsersByIds(userIds: string[]) {
+    if (userIds.length === 0) {
+      return []
+    }
+
+    const userDocs = await Promise.all(
+      userIds.map((id) => FirestoreCollections.users.doc(id).get())
+    )
+
+    const users = userDocs
+      .filter((doc) => doc.exists)
+      .map((doc) => ({ ...doc.data(), uid: doc.id }))
+
+    return users
   }
 }

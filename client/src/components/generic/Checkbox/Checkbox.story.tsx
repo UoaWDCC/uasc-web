@@ -4,7 +4,7 @@ import Checkbox from "./Checkbox"
 const meta: Meta<typeof Checkbox> = {
   component: Checkbox,
   argTypes: {
-    children: {
+    label: {
       name: "content"
     }
   }
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   tags: ["autodocs"],
   args: {
-    children: "Default",
+    label: "Default",
     disabled: false
   }
 }
@@ -24,7 +24,7 @@ export const Default: Story = {
 export const Disabled: Story = {
   tags: ["autodocs"],
   args: {
-    children: "Disabled",
+    label: "Disabled",
     disabled: true
   }
 }
