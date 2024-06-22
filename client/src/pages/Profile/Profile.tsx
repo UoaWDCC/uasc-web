@@ -133,8 +133,7 @@ export default function Profile() {
                   <Field
                     subtitle="Valid til"
                     description={
-                      userMembership === "Member" ||
-                      userMembership === "Admin" ? (
+                      userMembership === "Member" ? (
                         `End of ${new Date().getFullYear()}`
                       ) : userMembership === "Guest" ? (
                         <Link to="./signup" className="text-light-blue-100">
