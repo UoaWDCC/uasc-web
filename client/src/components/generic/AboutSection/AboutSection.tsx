@@ -36,14 +36,11 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
     )
   } else {
     return (
-      <div className="w-full">
-        <img
-          src={imageSrc}
-          className="ml-auto flex w-full rounded-t-lg md:h-[500px] md:w-[900px]"
-        ></img>
-        <div className=" border-dark-blue-100 flex w-full flex-col rounded-b-lg border bg-white sm:rounded-t-none md:w-[50%] md:rounded-lg lg:ml-[25%] lg:w-[670px] lg:rounded-t-lg ">
+      <div className="grid-col grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
+        <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white sm:rounded-t-none md:rounded-lg lg:rounded-t-lg ">
           <TextStyler title={title} text={text} />
         </div>
+        <img src={imageSrc} className=" flex w-full rounded-t-lg "></img>
       </div>
     )
   }
