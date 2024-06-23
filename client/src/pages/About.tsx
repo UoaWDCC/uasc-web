@@ -6,8 +6,8 @@ import ImageBottom from "assets/images/view.jpg"
 
 const About = () => {
   return (
-    <div className="flex w-full flex-col gap-8 p-8">
-      <h2 className="text-dark-blue-100 mt-8 text-center italic lg:text-left">
+    <div className="flex w-full flex-col gap-4 ">
+      <h2 className="text-dark-blue-100 mt-8 pl-4 text-center italic lg:text-left">
         About us
       </h2>
       <div className="p-4">
