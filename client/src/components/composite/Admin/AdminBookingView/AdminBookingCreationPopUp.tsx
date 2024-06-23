@@ -199,6 +199,7 @@ const AdminBookingCreationPopUp = ({
           >
             <p className="opacity-20">Select user</p>
             <AdminSearchBar
+              placeholder="Search for name or email"
               onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
             />
           </span>
