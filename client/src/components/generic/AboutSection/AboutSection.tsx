@@ -29,7 +29,7 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
           src={imageSrc}
           className="object-fit: cover relative w-full rounded-t-lg"
         ></img>
-        <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white md:rounded-lg lg:rounded-t-lg">
+        <div className=" border-dark-blue-100 mt-auto w-full rounded-b-lg border bg-white md:rounded-lg lg:h-[50%] lg:rounded-t-lg">
           <TextStyler title={title} text={text} />
         </div>
       </div>
@@ -39,7 +39,7 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
       <div className="grid-col grid w-full md:grid-cols-2 md:gap-4 lg:grid-cols-2 lg:gap-4">
         {window.innerWidth > 768 ? (
           <>
-            <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white sm:rounded-t-none md:rounded-lg lg:rounded-t-lg ">
+            <div className=" border-dark-blue-100 mt-auto w-full rounded-b-lg border bg-white sm:rounded-t-none md:rounded-lg lg:h-[50%] lg:rounded-t-lg ">
               <TextStyler title={title} text={text} />
             </div>
             <img src={imageSrc} className="flex w-full rounded-t-lg" />
