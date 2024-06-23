@@ -37,10 +37,21 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
   } else {
     return (
       <div className="grid-col grid w-full md:grid-cols-2 md:gap-4 lg:grid-cols-2 lg:gap-4">
-        <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white sm:rounded-t-none md:rounded-lg lg:rounded-t-lg ">
-          <TextStyler title={title} text={text} />
-        </div>
-        <img src={imageSrc} className=" flex w-full rounded-t-lg "></img>
+        {window.innerWidth > 768 ? (
+          <>
+            <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white sm:rounded-t-none md:rounded-lg lg:rounded-t-lg ">
+              <TextStyler title={title} text={text} />
+            </div>
+            <img src={imageSrc} className="flex w-full rounded-t-lg" />
+          </>
+        ) : (
+          <>
+            <img src={imageSrc} className="flex w-full rounded-t-lg" />
+            <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white sm:rounded-t-none md:rounded-lg lg:rounded-t-lg ">
+              <TextStyler title={title} text={text} />
+            </div>
+          </>
+        )}
       </div>
     )
   }
