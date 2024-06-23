@@ -1,0 +1,35 @@
+name: Deploy Production Build of Client for UASC 
+
+on: [workflow_dispatch]
+
+env:
+  VITE_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
+  VITE_FIREBASE_AUTH_DOMAIN: ${{secrets.PROD_FIREBASE_AUTH_DOMAIN}}
+  VITE_FIREBASE_PROJECT_ID: ${{secrets.PROD_FIREBASE_PROJECT_ID}}
+  VITE_FIREBASE_STORAGE_BUCKET: ${{secrets.PROD_FIREBASE_STORAGE_BUCKET}}
+  VITE_FIREBASE_MESSAGING_SENDER_ID: ${{secrets.PROD_FIREBASE_MESSAGING_SENDER_ID}}
+  VITE_FIREBASE_APP_ID: ${{secrets.PROD_FIREBASE_APP_ID}}
+  VITE_BACKEND_BASE_URL: ${{secrets.PROD_BACKEND_BASE_URL}}
+  VITE_ENV_STRIPE_PUBLISHABLE_KEY: ${{secrets.PROD_STRIPE_PK}}
+  VITE_ENV: production
+
+jobs:
+  Deploy-Client:
+    runs-on: ubuntu-latest
+    environment: Client Production
+
+    steps:
+      - name: Enable corepack
+        run: corepack enable
+
+      - uses: actions/checkout@v3
+
+      - run: cd client && yarn workspaces focus client && yarn run build
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD }}"
+          channelId: live
+          projectId: uasc-prod
+          entryPoint: client

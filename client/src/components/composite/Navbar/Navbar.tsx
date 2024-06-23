@@ -1,15 +1,16 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useLocation } from "react-router-dom"
 import WrappedMenuTab from "./utils/WrappedMenuTab"
 import { WrappedTab } from "./utils/WrappedTab"
 import UASCLogo from "assets/logos/UASC-LOGO-White.svg?react"
 import HamburgerIcon from "assets/icons/hamburger.svg?react"
 import LoginIndicator from "./utils/LoginIndicator"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export interface INavbarProps {
   signInHandler: () => void
   signOutHandler: () => void
   isLoggedIn: boolean
+  isAdmin?: boolean
 }
 
 const Logo = () => {
@@ -54,9 +55,19 @@ const navStyle = (active: boolean) => (active ? "text-light-blue-100" : "")
 const Navbar = ({
   signInHandler,
   signOutHandler,
-  isLoggedIn
+  isLoggedIn,
+  isAdmin
 }: INavbarProps) => {
+  const location = useLocation()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  useEffect(() => {
+    /**
+     * "Close navbar on route change"
+     */
+    setIsOpen(false)
+  }, [location])
+
   const _signOutHandler = () => {
     signOutHandler()
     setIsOpen(false)
@@ -75,7 +86,7 @@ const Navbar = ({
           md:flex md:min-h-full md:flex-row md:items-end md:justify-end md:gap-8 md:bg-none md:pr-4 md:pt-0`}
         >
           <WrappedTab to="/">Home</WrappedTab>
-          <WrappedTab to="/bookings">Bookings</WrappedTab>
+          <WrappedTab to="/bookings">Book the Lodge!</WrappedTab>
           <WrappedTab to="/events">Events</WrappedTab>
           <span className="hidden md:block">
             <WrappedMenuTab displayName="about" to="/about">
@@ -84,6 +95,7 @@ const Navbar = ({
           </span>
           <AboutMenuItemsMobile />
           <LoginIndicator
+            isAdmin={isAdmin}
             isLoggedIn={isLoggedIn}
             signOutHandler={_signOutHandler}
             signInHandler={_signInHandler}

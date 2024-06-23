@@ -1,6 +1,7 @@
 import { useSignUpFormData } from "store/SignUpForm"
 import Dropdown from "components/generic/Dropdown/Dropdown"
 import TextInput from "components/generic/TextInputComponent/TextInput"
+import ExcitementSlider from "components/generic/ExcitmentSlider/ExcitementSlider"
 
 enum SportOptions {
   SKIER = "Skier",
@@ -59,7 +60,7 @@ export const AdditionalSection = () => {
   return (
     <div className="flex max-w-sm flex-col gap-5">
       <Dropdown
-        value={determineSport(does_ski, does_snowboarding)}
+        value={determineSport(does_ski || false, does_snowboarding || false)}
         label="Skier or Snowboarder?"
         onChange={(e) =>
           updateFormData({
@@ -116,6 +117,13 @@ export const AdditionalSection = () => {
         }}
         required
       />
+
+      <div className="flex flex-col">
+        <label htmlFor="hypeLevel">
+          How f#&@g excited are you to SEND IT IN 2024!!!!
+        </label>
+        <ExcitementSlider min={0} max={20} />
+      </div>
     </div>
   )
 }

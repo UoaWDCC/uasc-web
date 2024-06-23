@@ -1,4 +1,5 @@
-import { Pricing, PricingBannerContent } from "components/utils/types"
+import { PricingBannerContent } from "components/utils/types"
+import { Prices } from "services/AppData/AppDataService"
 import HomeSectionHeading from "./utils/HomeSectionHeading"
 import HomeSectionWrapper from "./utils/HomeSectionWrapper"
 import PricingCard from "components/generic/PricingCard/PricingCard"
@@ -6,7 +7,7 @@ import PricingBanner from "components/generic/PricingBanner/PricingBanner"
 
 interface IPricingSection {
   note?: string
-  pricings: Pricing[]
+  pricings: Prices[]
   bannerContent?: PricingBannerContent
 }
 
@@ -19,13 +20,13 @@ const PricingSection = ({ note, pricings, bannerContent }: IPricingSection) => (
           {note}
         </h5>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {pricings.map((pricing) => {
-            const { discountedPrice, originalPrice, extraInfo, title } = pricing
+          {pricings?.map((pricing) => {
+            const { priceString, originalPrice, extraInfo, title } = pricing
             return (
               <span key={title}>
                 <PricingCard
                   variant="home"
-                  discountedPriceString={discountedPrice}
+                  discountedPriceString={priceString}
                   priceString={originalPrice || ""}
                   extraInfo={extraInfo}
                   title={title}

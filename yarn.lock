@@ -15816,7 +15816,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.0.0, prettier@npm:^3.2.5":
+"prettier@npm:^3.0.0, prettier@npm:~3.2.5":
   version: 3.2.5
   resolution: "prettier@npm:3.2.5"
   bin:
@@ -18829,7 +18829,7 @@ __metadata:
     jest: "npm:^29.7.0"
     lint-staged: "npm:^15.2.2"
     nodemon: "npm:^3.1.0"
-    prettier: "npm:^3.2.5"
+    prettier: "npm:~3.2.5"
     prettier-plugin-tailwindcss: "npm:^0.5.13"
     ts-jest: "npm:^29.1.2"
     ts-node: "npm:^10.9.2"

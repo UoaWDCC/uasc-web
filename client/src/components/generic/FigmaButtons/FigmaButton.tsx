@@ -4,6 +4,8 @@ import LeftArrowIcon from "assets/icons/leftarrow.svg?react"
 type buttonVariants =
   | "default"
   | "default-sm"
+  | "default-big"
+  | "inverted-default-big"
   | "alternative"
   | "secondary"
   | "inverted-default-sm"
@@ -12,6 +14,7 @@ type buttonVariants =
   | "inverted-default-st"
   | "progress-default"
   | "progress-inverted"
+  | "tertiary"
 
 interface IButtonProps {
   children?: React.ReactNode
@@ -38,9 +41,35 @@ const StandardButtonInverted = ({ children, ...props }: props) => {
   return (
     <button
       {...props}
-      className="border-dark-blue-100 space-x-4;
-        text-dark-blue-100 hover:bg-dark-blue-100 flex flex-col items-center rounded-md px-8 py-2 font-sans font-bold uppercase
+      className="border-dark-blue-100 text-dark-blue-100 hover:bg-dark-blue-100
+        group flex flex-col items-center space-x-4 rounded-md px-8 py-2 font-sans font-bold uppercase
        enabled:border enabled:hover:text-white"
+    >
+      {children}
+    </button>
+  )
+}
+const DefaultButtonBig = ({ children, ...props }: props) => {
+  return (
+    <button
+      {...props}
+      className="bg-dark-blue-100 enabled:hover:text-dark-blue-100 border-dark-blue-100 disabled:bg-dark-blue-60
+      flex w-full flex-col items-center rounded-md py-3 font-sans
+      font-bold uppercase text-white hover:bg-white enabled:border
+      sm:text-3xl md:py-4 md:text-4xl"
+    >
+      {children}
+    </button>
+  )
+}
+
+const StandardButtonInvertedBig = ({ children, ...props }: props) => {
+  return (
+    <button
+      {...props}
+      className="border-dark-blue-100 text-dark-blue-100 hover:bg-dark-blue-100 flex
+      w-full flex-col items-center rounded-md bg-white py-3 font-sans font-bold uppercase
+      enabled:border enabled:hover:text-white disabled:bg-gray-400 sm:text-3xl md:py-4 md:text-4xl"
     >
       {children}
     </button>
@@ -153,11 +182,22 @@ const SecondaryButton = ({ children, ...props }: props) => {
   return (
     <button
       {...props}
-      className="bg-orange enabled:hover:text-orange 
+      className="bg-orange enabled:hover:text-orange
        border-orange font-p
       space-x-4; disabled:bg-orange-60 flex flex-col items-center justify-center rounded-md px-8 py-2 font-bold uppercase
-      text-white hover:bg-white enabled:border
-    "
+      text-white hover:bg-white enabled:border"
+    >
+      {children}
+    </button>
+  )
+}
+
+const TertiaryButton = ({ children, ...props }: props) => {
+  return (
+    <button
+      {...props}
+      className="border-dark-blue-60 text-dark-blue-60 disabled:bg-dark-blue-60 font-p text-h5 flex
+      flex-col items-center justify-center space-x-4 rounded-md bg-white px-1 py-1 font-bold uppercase enabled:border disabled:text-white sm:px-8"
     >
       {children}
     </button>
@@ -170,6 +210,14 @@ const Button = ({ iconSide, children, variant, ...props }: props) => {
       return <DefaultButton {...props}>{children}</DefaultButton>
     case "alternative":
       return <AlternativeButton {...props}>{children}</AlternativeButton>
+    case "default-big":
+      return <DefaultButtonBig {...props}>{children}</DefaultButtonBig>
+    case "inverted-default-big":
+      return (
+        <StandardButtonInvertedBig {...props}>
+          {children}
+        </StandardButtonInvertedBig>
+      )
     case "secondary":
       return <SecondaryButton {...props}>{children}</SecondaryButton>
     case "inverted-default-sm":
@@ -194,6 +242,8 @@ const Button = ({ iconSide, children, variant, ...props }: props) => {
           {children}
         </InvertedProgressButton>
       )
+    case "tertiary":
+      return <TertiaryButton {...props}>{children}</TertiaryButton>
   }
   return <DefaultButton {...props}>{children}</DefaultButton>
 }
