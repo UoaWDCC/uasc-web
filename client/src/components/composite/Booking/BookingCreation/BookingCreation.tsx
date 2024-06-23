@@ -1,6 +1,6 @@
 import Calendar from "components/generic/Calendar/Calendar"
 import BookingInfoComponent from "../BookingInfoComponent/BookingInfoComponent"
-import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
+import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useEffect, useMemo, useState } from "react"
@@ -21,10 +21,6 @@ type DateRange = {
    * Javascript date object representing the date of the last night for the booking
    */
   endDate: Date
-}
-
-const formatDateForInput = (date?: Date) => {
-  return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
 }
 
 /*
@@ -253,51 +249,20 @@ export const CreateBookingSection = ({
           <h5 className="self-start font-bold">
             Estimated price: {estimatedPriceString}{" "}
           </h5>
-          <span className="mb-4 mt-3 flex items-center gap-1">
-            <TextInput
-              label="From"
-              type="date"
-              value={formatDateForInput(selectedDateRange.startDate)}
-              data-testid="start-date-picker"
-              onChange={(e) => {
-                const newStartDate = e.target.valueAsDate || new Date()
-                if (
-                  checkValidRange(
-                    DateUtils.convertLocalDateToUTCDate(newStartDate),
-                    DateUtils.convertLocalDateToUTCDate(currentEndDate)
-                  )
+          <DateRangePicker
+            valueStart={currentStartDate}
+            valueEnd={currentEndDate}
+            handleDateRangeInputChange={(start, end) => {
+              const newStartDate = start || currentStartDate
+              const newEndDate = end || currentEndDate
+              if (checkValidRange(newStartDate, newEndDate))
+                handleDateRangeInputChange(
+                  newStartDate,
+                  newEndDate,
+                  setSelectedDateRange
                 )
-                  handleDateRangeInputChange(
-                    newStartDate,
-                    currentEndDate,
-                    setSelectedDateRange
-                  )
-              }}
-            />
-            <span className="mt-5 w-6">
-              <LongRightArrow />
-            </span>
-            <TextInput
-              label="To"
-              type="date"
-              data-testid="end-date-picker"
-              value={formatDateForInput(selectedDateRange.endDate)}
-              onChange={(e) => {
-                const newEndDate = e.target.valueAsDate || new Date()
-                if (
-                  checkValidRange(
-                    DateUtils.convertLocalDateToUTCDate(currentStartDate),
-                    DateUtils.convertLocalDateToUTCDate(newEndDate)
-                  )
-                )
-                  handleDateRangeInputChange(
-                    currentStartDate,
-                    newEndDate,
-                    setSelectedDateRange
-                  )
-              }}
-            />
-          </span>
+            }}
+          />
 
           <RequirementCheckBoxes
             onValidityChange={(newValid) => {
