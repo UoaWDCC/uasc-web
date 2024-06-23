@@ -29,7 +29,7 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
           src={imageSrc}
           className="object-fit: cover relative w-full rounded-t-lg"
         ></img>
-        <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white md:w-[50%] md:rounded-lg lg:rounded-t-lg">
+        <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white md:rounded-lg lg:rounded-t-lg">
           <TextStyler title={title} text={text} />
         </div>
       </div>
