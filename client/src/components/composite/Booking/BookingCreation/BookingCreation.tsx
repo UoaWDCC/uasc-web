@@ -255,7 +255,12 @@ export const CreateBookingSection = ({
             handleDateRangeInputChange={(start, end) => {
               const newStartDate = start || currentStartDate
               const newEndDate = end || currentEndDate
-              if (checkValidRange(newStartDate, newEndDate))
+              if (
+                checkValidRange(
+                  DateUtils.convertLocalDateToUTCDate(newStartDate),
+                  DateUtils.convertLocalDateToUTCDate(newEndDate)
+                )
+              )
                 handleDateRangeInputChange(
                   newStartDate,
                   newEndDate,
