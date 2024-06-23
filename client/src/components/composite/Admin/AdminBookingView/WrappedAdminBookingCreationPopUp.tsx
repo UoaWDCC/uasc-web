@@ -19,6 +19,8 @@ const WrappedAdminBookingCreationPopUp = ({
 
   const { data: bookingSlots } = useAvailableBookingsQuery()
 
+  // TODO: call mutation hook for adding booking
+
   useEffect(() => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage()

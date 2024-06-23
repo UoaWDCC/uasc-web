@@ -10,13 +10,23 @@ import Tick from "assets/icons/tick.svg?react"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import { DateRange, DateUtils } from "components/utils/DateUtils"
 import { BookingAvailability } from "models/Booking"
+import { Timestamp } from "firebase/firestore"
 
 interface IAdminBookingCreationPopUp {
-  bookingCreationHandler?: () => void
+  /**
+   * Performs the required mutation to add the user(s) to the bookings within date range.
+   */
+  bookingCreationHandler?: (startDate: Timestamp, endDate: Timestamp) => void
+
   /**
    * Callback for when a 'close' event is triggered with the modal open
    */
   handleClose?: () => void
+
+  /**
+   * When the user is in process of being added to avoid extra calls
+   */
+  isPending?: boolean
 
   /**
    * The "unfiltered" booking slots for processing
@@ -39,6 +49,7 @@ const Divider = () => {
 
 const AdminBookingCreationPopUp = ({
   handleClose,
+  bookingCreationHandler,
   bookingSlots = [],
   users = []
 }: IAdminBookingCreationPopUp) => {
@@ -318,7 +329,21 @@ const AdminBookingCreationPopUp = ({
               valueEnd={new Date()}
               handleDateRangeInputChange={() => {}}
             />
-            <Button disabled={currentStage !== FlowStages.SELECT_DATES}>
+            <Button
+              disabled={currentStage !== FlowStages.SELECT_DATES}
+              onClick={() => {
+                if (checkValidRange(currentStartDate, currentEndDate)) {
+                  bookingCreationHandler?.(
+                    Timestamp.fromDate(
+                      DateUtils.convertLocalDateToUTCDate(currentStartDate)
+                    ),
+                    Timestamp.fromDate(
+                      DateUtils.convertLocalDateToUTCDate(currentEndDate)
+                    )
+                  )
+                }
+              }}
+            >
               Add New Booking
             </Button>
           </div>
