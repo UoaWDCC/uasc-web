@@ -24,7 +24,7 @@ enum FlowStages {
 
 const Divider = () => {
   return (
-    <div className="bg-gray-3 ml-auto hidden h-screen w-[1px] sm:block"></div>
+    <div className="bg-gray-3 ml-auto hidden h-full w-[1px] md:block"></div>
   )
 }
 
@@ -63,7 +63,8 @@ const AdminBookingCreationPopUp = ({
         (user) =>
           user.email.toLowerCase().includes(currentSearchQuery) ||
           user.first_name.toLowerCase().includes(currentSearchQuery) ||
-          user.membership !== "admin"
+          (user.last_name.toLowerCase().includes(currentSearchQuery) &&
+            user.membership !== "admin")
       )
     } else {
       return []
@@ -137,15 +138,15 @@ const AdminBookingCreationPopUp = ({
   )
 
   return (
-    <div className="flex w-full max-w-[820px] flex-col gap-8">
+    <div className="flex h-full w-full max-w-[820px] flex-col gap-8 bg-white px-8 py-8">
       <span className="flex justify-between">
         <h3 className="text-dark-blue-100">Add a booking</h3>
         <div className="h-[15px] w-[15px] cursor-pointer" onClick={handleClose}>
           <CloseButton />
         </div>
       </span>
-      <div className="flex w-full flex-col gap-7 sm:flex-row">
-        <div className="flex w-full flex-col sm:basis-1/2">
+      <div className="flex h-full w-full flex-col gap-7 md:flex-row">
+        <div className="flex w-full flex-col md:basis-1/2">
           <p className="opacity-20">Select user</p>
           <AdminSearchBar
             onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
@@ -208,7 +209,7 @@ const AdminBookingCreationPopUp = ({
           </span>
         </div>
         <Divider />
-        <div className="flex sm:basis-1/2">
+        <div className="flex md:basis-1/2">
           <div className="w-full max-w-[380px]">
             <Calendar />
             <DateRangePicker
