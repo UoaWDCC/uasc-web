@@ -108,10 +108,10 @@ const AdminBookingCreationPopUp = ({
     if (currentSearchQuery) {
       return users.filter(
         (user) =>
-          user.email.toLowerCase().includes(currentSearchQuery) ||
-          user.first_name.toLowerCase().includes(currentSearchQuery) ||
-          (user.last_name.toLowerCase().includes(currentSearchQuery) &&
-            user.membership !== "admin")
+          (user.email.toLowerCase().includes(currentSearchQuery) ||
+            user.first_name.toLowerCase().includes(currentSearchQuery) ||
+            user.last_name.toLowerCase().includes(currentSearchQuery)) &&
+          user.membership !== "admin"
       )
     } else {
       return []
