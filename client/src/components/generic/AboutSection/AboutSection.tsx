@@ -14,7 +14,7 @@ const TextStyler = ({ title, text }: Omit<Props, "variant" | "imageSrc">) => {
       <h4 className="lg:text-h2 md:text-h4 text-dark-blue-100 ml-2 mr-2 mt-1 text-center font-bold italic md:ml-2 md:mr-2 md:mt-1 md:text-left md:font-bold lg:ml-8 lg:mr-8 lg:mt-4 lg:text-left">
         {title}
       </h4>
-      <p className=" text-dark-blue-100 lg:text-p mb-2 ml-2 mr-2 mt-1 items-center md:ml-2 md:mr-2 md:mt-1 lg:mb-8 lg:ml-8 lg:mr-8">
+      <p className=" text-dark-blue-100 lg:text-h5 mb-2 ml-2 mr-2 mt-1 items-center overflow-hidden md:ml-2 md:mr-2 md:mt-1 lg:mb-8 lg:ml-8 lg:mr-8">
         {text}
       </p>
     </div>
@@ -37,7 +37,7 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
   } else {
     return (
       <div className="grid-col grid w-full md:grid-cols-2 md:gap-4 lg:grid-cols-2 lg:gap-4">
-        {window.innerWidth > 768 ? (
+        {screen.width >= 768 ? (
           <>
             <div className=" border-dark-blue-100 mt-auto w-full rounded-b-lg border bg-white sm:rounded-t-none md:rounded-lg lg:h-[50%] lg:rounded-t-lg ">
               <TextStyler title={title} text={text} />
