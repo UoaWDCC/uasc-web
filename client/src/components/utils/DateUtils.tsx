@@ -1,5 +1,17 @@
+import { BookingAvailability } from "models/Booking"
 import { MS_IN_SECOND } from "utils/Constants"
 
+export type DateRange = {
+  /**
+   * Javascript date object representing the date of the first night for the booking
+   */
+  startDate: Date
+
+  /**
+   * Javascript date object representing the date of the last night for the booking
+   */
+  endDate: Date
+}
 /**
  * Utility type to allow us to handle cases where the timestamp may actually have
  * `_seconds` or `_nanoseconds`
@@ -7,6 +19,21 @@ import { MS_IN_SECOND } from "utils/Constants"
 export interface UnknownTimestamp extends Record<string, number> {}
 
 export const DateUtils = {
+  /**
+   * gets a list of dates that are unavailable from availability objects
+   *
+   * @param bookingSlots the list of booking slots for which to search for unavailbale dates
+   * @returns the fully unavailable dates
+   */
+  unavailableDates: (bookingSlots: BookingAvailability[]) =>
+    bookingSlots.filter((slot) => slot.availableSpaces <= 0),
+
+  UTCDatesEqual: (slot: UnknownTimestamp, date: Date) => {
+    return DateUtils.dateEqualToTimestamp(
+      DateUtils.convertLocalDateToUTCDate(date),
+      slot
+    )
+  },
   datesToDateRange: (startDate: Date, endDate: Date) => {
     const dateArray = []
     const currentDate = new Date(startDate)

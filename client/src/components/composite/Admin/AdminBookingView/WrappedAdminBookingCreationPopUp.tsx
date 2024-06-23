@@ -1,6 +1,7 @@
 import { useUsersQuery } from "services/Admin/AdminQueries"
 import AdminBookingCreationPopUp from "./AdminBookingCreationPopUp"
 import { useEffect, useMemo } from "react"
+import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
 
 interface IWrappedAdminBookingCreationPopUp {
   handleClose: () => void
@@ -9,8 +10,14 @@ interface IWrappedAdminBookingCreationPopUp {
 const WrappedAdminBookingCreationPopUp = ({
   handleClose
 }: IWrappedAdminBookingCreationPopUp) => {
-  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useUsersQuery()
+  const {
+    data: userPages,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage
+  } = useUsersQuery()
+
+  const { data: bookingSlots } = useAvailableBookingsQuery()
 
   useEffect(() => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -19,13 +26,17 @@ const WrappedAdminBookingCreationPopUp = ({
   }, [fetchNextPage, isFetchingNextPage, hasNextPage])
 
   const users = useMemo(
-    () => data?.pages.flatMap((page) => page.data || []),
-    [data]
+    () => userPages?.pages.flatMap((page) => page.data || []),
+    [userPages]
   )
 
   return (
     <span className="absolute top-14 max-h-fit">
-      <AdminBookingCreationPopUp users={users} handleClose={handleClose} />
+      <AdminBookingCreationPopUp
+        users={users}
+        bookingSlots={bookingSlots}
+        handleClose={handleClose}
+      />
     </span>
   )
 }

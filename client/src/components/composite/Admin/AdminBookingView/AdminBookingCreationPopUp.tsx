@@ -7,6 +7,9 @@ import { useState, useMemo } from "react"
 import CloseButton from "assets/icons/x.svg?react"
 import LeftArrowButton from "assets/icons/leftarrow.svg?react"
 import Tick from "assets/icons/tick.svg?react"
+import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
+import { DateRange, DateUtils } from "components/utils/DateUtils"
+import { BookingAvailability } from "models/Booking"
 
 interface IAdminBookingCreationPopUp {
   bookingCreationHandler?: () => void
@@ -14,6 +17,12 @@ interface IAdminBookingCreationPopUp {
    * Callback for when a 'close' event is triggered with the modal open
    */
   handleClose?: () => void
+
+  /**
+   * The "unfiltered" booking slots for processing
+   */
+  bookingSlots?: BookingAvailability[]
+
   users?: CombinedUserData[]
 }
 
@@ -30,8 +39,46 @@ const Divider = () => {
 
 const AdminBookingCreationPopUp = ({
   handleClose,
+  bookingSlots = [],
   users = []
 }: IAdminBookingCreationPopUp) => {
+  const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
+    startDate: new Date(),
+    endDate: new Date()
+  })
+
+  const { startDate: currentStartDate, endDate: currentEndDate } =
+    selectedDateRange
+
+  const disabledDates = DateUtils.unavailableDates(bookingSlots)
+
+  /**
+   * Function to be called to confirm the date range selected by the user.
+   *
+   * Will notify user if an unavailable date was included in the new date range
+   *
+   * @param startDate the first date of the range
+   * @param endDate the last date of the range
+   */
+  const checkValidRange = (startDate: Date, endDate: Date) => {
+    const dateArray = DateUtils.datesToDateRange(startDate, endDate)
+    if (
+      dateArray.some(
+        (date) =>
+          disabledDates.some((disabledDate) =>
+            DateUtils.dateEqualToTimestamp(date, disabledDate.date)
+          ) ||
+          !bookingSlots.some((slot) =>
+            DateUtils.dateEqualToTimestamp(date, slot.date)
+          )
+      )
+    ) {
+      alert("Invalid date range, some dates are unavailable")
+      return false
+    }
+    return true
+  }
+
   const [currentSearchQuery, setCurrentSearchQuery] = useState<
     string | undefined
   >(undefined)
@@ -147,10 +194,14 @@ const AdminBookingCreationPopUp = ({
       </span>
       <div className="flex h-full w-full flex-col gap-7 md:flex-row">
         <div className="flex w-full flex-col md:basis-1/2">
-          <p className="opacity-20">Select user</p>
-          <AdminSearchBar
-            onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
-          />
+          <span
+            className={`${currentStage === FlowStages.SELECT_DATES && "pointer-events-none blur-sm"}`}
+          >
+            <p className="opacity-20">Select user</p>
+            <AdminSearchBar
+              onQueryChanged={(newQuery: string) => onQueryChanged(newQuery)}
+            />
+          </span>
           {currentStage === FlowStages.SELECT_DATES && (
             <div>
               <p className="mt-8">Creating booking for:</p>
@@ -209,9 +260,58 @@ const AdminBookingCreationPopUp = ({
           </span>
         </div>
         <Divider />
-        <div className="flex md:basis-1/2">
+        <div
+          className={`flex md:basis-1/2 ${currentStage === FlowStages.SELECT_DATES ? "pointer-events-auto" : "pointer-events-none blur-sm"}`}
+        >
           <div className="w-full max-w-[380px]">
-            <Calendar />
+            <Calendar
+              minDate={TODAY}
+              minDetail="year"
+              maxDetail="month"
+              maxDate={NEXT_YEAR_FROM_TODAY}
+              selectRange
+              value={
+                currentStartDate && currentEndDate
+                  ? [currentStartDate, currentEndDate]
+                  : undefined
+              }
+              tileDisabled={({ date, view }) =>
+                view !== "year" &&
+                (!bookingSlots.some((slot) =>
+                  DateUtils.UTCDatesEqual(slot.date, date)
+                ) ||
+                  disabledDates.some((slot) =>
+                    DateUtils.UTCDatesEqual(slot.date, date)
+                  ))
+              }
+              tileContent={({ date }) => {
+                const slot = bookingSlots.find(
+                  (slot) =>
+                    DateUtils.UTCDatesEqual(slot.date, date) &&
+                    slot.availableSpaces > 0
+                )
+                return slot ? (
+                  <p className="text-xs">
+                    {slot?.availableSpaces}/{slot.maxBookings}
+                  </p>
+                ) : null
+              }}
+              onChange={(e) => {
+                const [start, end] = e as [Date, Date]
+                if (
+                  checkValidRange(
+                    DateUtils.convertLocalDateToUTCDate(start),
+                    DateUtils.convertLocalDateToUTCDate(end)
+                  )
+                ) {
+                  setSelectedDateRange({
+                    startDate: start,
+                    endDate: end
+                  })
+                }
+              }}
+              returnValue="range"
+            />
             <DateRangePicker
               valueStart={new Date()}
               valueEnd={new Date()}
