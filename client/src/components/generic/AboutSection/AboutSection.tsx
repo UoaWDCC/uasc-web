@@ -10,14 +10,14 @@ interface IAboutSectionProps {
 type Props = IAboutSectionProps
 const TextStyler = ({ title, text }: Omit<Props, "variant" | "imageSrc">) => {
   return (
-    <>
+    <div className="flex-col items-center">
       <h4 className="lg:text-h2 md:text-h4 text-dark-blue-100 ml-2 mr-2 mt-1 text-center font-bold italic md:ml-2 md:mr-2 md:mt-1 md:text-left md:font-bold lg:ml-8 lg:mr-8 lg:mt-4 lg:text-left">
         {title}
       </h4>
-      <p className=" text-dark-blue-100 lg:text-p mb-2 ml-2 mr-2 mt-1 md:ml-2 md:mr-2 md:mt-1 lg:mb-8 lg:ml-8 lg:mr-8">
+      <p className=" text-dark-blue-100 lg:text-p mb-2 ml-2 mr-2 mt-1 items-center md:ml-2 md:mr-2 md:mt-1 lg:mb-8 lg:ml-8 lg:mr-8">
         {text}
       </p>
-    </>
+    </div>
   )
 }
 
