@@ -125,7 +125,7 @@ describe("BookingDataService", () => {
 
       let result = await bookingDataService.getAvailabilityForUser(
         MOCK_USER_ID,
-        [slotDate],
+        [slotTimestamp],
         bookingSlots
       )
 
@@ -142,7 +142,7 @@ describe("BookingDataService", () => {
 
       result = await bookingDataService.getAvailabilityForUser(
         MOCK_USER_ID,
-        [slotDate],
+        [slotTimestamp],
         bookingSlots
       )
 
