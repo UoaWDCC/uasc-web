@@ -24,10 +24,10 @@ const TextStyler = ({ title, text }: Omit<Props, "variant" | "imageSrc">) => {
 const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
   if (variant === "left") {
     return (
-      <div className="grid-col w-full">
+      <div className="grid-col grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
         <img
           src={imageSrc}
-          className="object-fit: cover relative w-full rounded-t-lg md:h-[500px] md:w-[900px]"
+          className="object-fit: cover relative w-full rounded-t-lg"
         ></img>
         <div className=" border-dark-blue-100 w-full rounded-b-lg border bg-white md:w-[50%] md:rounded-lg lg:rounded-t-lg">
           <TextStyler title={title} text={text} />
