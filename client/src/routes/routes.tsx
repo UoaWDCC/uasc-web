@@ -4,6 +4,7 @@ import NoMatch from "pages/404"
 import { BookingContextProvider } from "components/composite/Booking/BookingContext"
 import WrappedHomeComponent from "pages/Home/sections/utils/WrappedHomeComponent"
 import { Suspense, lazy } from "react"
+import Loader from "components/generic/SuspenseComponent/Loader"
 
 const AsyncBooking = lazy(() => import("pages/Booking"))
 const AsyncAdmin = lazy(() => import("pages/Admin/Admin"))
@@ -19,7 +20,7 @@ export const AllRoutes = () => (
       <Route
         path="register/*"
         element={
-          <Suspense>
+          <Suspense fallback={<Loader />}>
             <AsyncRegister />
           </Suspense>
         }
@@ -27,7 +28,7 @@ export const AllRoutes = () => (
       <Route
         path="login/*"
         element={
-          <Suspense>
+          <Suspense fallback={<Loader />}>
             <AsyncLogin />
           </Suspense>
         }
@@ -36,7 +37,7 @@ export const AllRoutes = () => (
         path="bookings/*"
         element={
           <BookingContextProvider>
-            <Suspense>
+            <Suspense fallback={<Loader />}>
               <AsyncBooking />
             </Suspense>
           </BookingContextProvider>
@@ -45,7 +46,7 @@ export const AllRoutes = () => (
       <Route
         path="profile"
         element={
-          <Suspense>
+          <Suspense fallback={<Loader />}>
             <AsyncProfile />
           </Suspense>
         }
@@ -53,7 +54,7 @@ export const AllRoutes = () => (
       <Route
         path="admin/*"
         element={
-          <Suspense>
+          <Suspense fallback={<Loader />}>
             <AsyncAdmin />
           </Suspense>
         }
