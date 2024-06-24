@@ -7,6 +7,7 @@ import { useForceRefreshToken } from "hooks/useRefreshedToken"
 import { signOut } from "firebase/auth"
 import { auth } from "firebase"
 import { DateUtils } from "components/utils/DateUtils"
+import { useEffect, useMemo } from "react"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
