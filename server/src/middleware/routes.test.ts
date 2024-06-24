@@ -22,7 +22,10 @@ import AuthService from "business-layer/services/AuthService"
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
+import {
+  dateToFirestoreTimeStamp,
+  removeUnderscoresFromTimestamp
+} from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
@@ -860,8 +863,12 @@ describe("Endpoints", () => {
 
       expect(res.status).toEqual(201)
       expect(res.body.updatedBookingSlots).toHaveLength(6)
-      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
-      expect(res.body.updatedBookingSlots[5].date).toEqual(endDate)
+      expect(
+        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
+      ).toEqual(startDate)
+      expect(
+        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[5].date)
+      ).toEqual(endDate)
 
       const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
         startDate,
@@ -899,8 +906,12 @@ describe("Endpoints", () => {
 
       expect(res.status).toEqual(201)
       expect(res.body.updatedBookingSlots).toHaveLength(6)
-      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
-      expect(res.body.updatedBookingSlots[5].date).toEqual(endDate)
+      expect(
+        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
+      ).toEqual(startDate)
+      expect(
+        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[5].date)
+      ).toEqual(endDate)
 
       let dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
         startDate,
@@ -924,8 +935,12 @@ describe("Endpoints", () => {
           slots: CUSTOM_SLOTS
         })
       expect(res.body.updatedBookingSlots).toHaveLength(6)
-      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
-      expect(res.body.updatedBookingSlots[5].date).toEqual(endDate)
+      expect(
+        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
+      ).toEqual(startDate)
+      expect(
+        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[5].date)
+      ).toEqual(endDate)
 
       dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
         startDate,
@@ -986,7 +1001,9 @@ describe("Endpoints", () => {
 
       expect(res.status).toEqual(201)
       expect(res.body.updatedBookingSlots).toHaveLength(1)
-      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
+      expect(
+        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
+      ).toEqual(startDate)
 
       dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
         startDate,
@@ -1080,7 +1097,9 @@ describe("Endpoints", () => {
 
       expect(res.status).toEqual(201)
       expect(res.body.updatedBookingSlots).toHaveLength(1)
-      expect(res.body.updatedBookingSlots[0].date).toEqual(startDate)
+      expect(
+        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
+      ).toEqual(startDate)
 
       dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
         startDate,
@@ -1090,7 +1109,7 @@ describe("Endpoints", () => {
       expect(dates).toHaveLength(1)
       expect(dates[0].max_bookings).toBeLessThanOrEqual(0)
       expect(dates[0].description).toEqual("my test")
-      expect(dates[0].date).toEqual(startDate)
+      expect(removeUnderscoresFromTimestamp(dates[0].date)).toEqual(startDate)
     })
 
     it("Should work with a 'gap' in between the dates", async () => {
@@ -1133,11 +1152,11 @@ describe("Endpoints", () => {
       expect(dates).toHaveLength(2)
       expect(dates[0].max_bookings).toBeLessThanOrEqual(0)
       expect(dates[0].description).toEqual("my test")
-      expect(dates[0].date).toEqual(startDate)
+      expect(removeUnderscoresFromTimestamp(dates[0].date)).toEqual(startDate)
 
       expect(dates[1].max_bookings).toBeLessThanOrEqual(0)
       expect(dates[1].description).toEqual("skipped a date")
-      expect(dates[1].date).toEqual(leapDate)
+      expect(removeUnderscoresFromTimestamp(dates[1].date)).toEqual(leapDate)
     })
   })
 
