@@ -8,8 +8,8 @@ import {
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
 import {
-  dateToFirestoreTimeStamp,
-  datesToDateRange
+  firestoreTimestampToDate,
+  timestampsInRange
 } from "data-layer/adapters/DateUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
@@ -50,14 +50,10 @@ export class AdminController extends Controller {
     const { startDate, endDate, slots } = requestBody
     const bookingSlotService = new BookingSlotService()
 
-    const dates = datesToDateRange(
-      new Date(startDate.seconds * 1000),
-      new Date(endDate.seconds * 1000)
-    )
+    const dateTimestamps = timestampsInRange(startDate, endDate)
 
-    const datesToUpdatePromises = dates.map(async (date) => {
+    const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
-        const dateTimestamp = dateToFirestoreTimeStamp(date)
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)
 
@@ -77,7 +73,8 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date ${date.toString()} available`
+          `Something went wrong when trying to make the date 
+          ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
       }
@@ -102,14 +99,10 @@ export class AdminController extends Controller {
     const { startDate, endDate } = requestBody
     const bookingSlotService = new BookingSlotService()
 
-    const dates = datesToDateRange(
-      new Date(startDate.seconds * 1000),
-      new Date(endDate.seconds * 1000)
-    )
+    const dateTimestamps = timestampsInRange(startDate, endDate)
 
-    const datesToUpdatePromises = dates.map(async (date) => {
+    const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
-        const dateTimestamp = dateToFirestoreTimeStamp(date)
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)
 
@@ -128,7 +121,8 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date ${date.toString()} available`
+          `Something went wrong when trying to make the date 
+          ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
       }
@@ -150,7 +144,6 @@ export class AdminController extends Controller {
   /**
    *  User Operations
    */
-
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
   @Get("/users")

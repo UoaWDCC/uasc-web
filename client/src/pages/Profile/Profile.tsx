@@ -1,14 +1,13 @@
 import { useAppData } from "store/Store"
-import { useNavigate } from "react-router-dom"
-import { useEffect, useMemo } from "react"
-
+import { Link, useNavigate } from "react-router-dom"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
 import { useForceRefreshToken } from "hooks/useRefreshedToken"
-import { timestampToDate } from "components/utils/Utils"
 import { signOut } from "firebase/auth"
 import { auth } from "firebase"
+import { DateUtils } from "components/utils/DateUtils"
+import { useEffect, useMemo } from "react"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
@@ -52,7 +51,7 @@ const Field = ({
   description
 }: {
   subtitle: string
-  description?: string
+  description?: string | JSX.Element
 }) => {
   return (
     <>
@@ -117,7 +116,7 @@ export default function Profile() {
                     subtitle="Date of birth"
                     description={
                       currentUserData?.date_of_birth &&
-                      `${timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
+                      `${DateUtils.timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
                     }
                   />
                   <Field
@@ -146,9 +145,15 @@ export default function Profile() {
                   <Field
                     subtitle="Valid til"
                     description={
-                      userMembership === "Member"
-                        ? `End of ${new Date().getFullYear()}`
-                        : ""
+                      userMembership === "Member" ? (
+                        `End of ${new Date().getFullYear()}`
+                      ) : userMembership === "Guest" ? (
+                        <Link to="/register" className="text-light-blue-100">
+                          Sign up
+                        </Link>
+                      ) : (
+                        <p className="text-red font-bold">No Expiry Date</p>
+                      )
                     }
                   />
                 </ProfileInformationPanel>

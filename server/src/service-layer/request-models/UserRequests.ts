@@ -25,7 +25,13 @@ export interface UserPaymentRequestModel {
 }
 
 export interface UserBookingRequestingModel {
+  /**
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
+   */
   startDate?: Timestamp
+  /**
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
+   */
   endDate?: Timestamp
 }
 
@@ -47,7 +53,13 @@ export interface DemoteUserRequestBody {
 }
 
 export interface AvailableDatesRequestModel {
+  /**
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
+   */
   startDate?: Timestamp
+  /**
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
+   */
   endDate?: Timestamp
 }
 
@@ -55,6 +67,12 @@ export interface AvailableDatesRequestModel {
  * Represents the structure of a request model for fetching bookings within a specific date range.
  */
 export interface BookingsByDateRangeRequestModel {
+  /**
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
+   */
   startDate: Timestamp
+  /**
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
+   */
   endDate: Timestamp
 }
