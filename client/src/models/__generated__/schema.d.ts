@@ -207,11 +207,6 @@ export interface components {
         }[];
       error?: string;
     };
-    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
-    BookingsByDateRangeRequestModel: {
-      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-    };
     AllUserBookingSlotsResponse: {
       error?: string;
       message?: string;
