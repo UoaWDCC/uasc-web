@@ -62,11 +62,14 @@ export const PAGINATED_FORM_PAGES = (
     title: "Additional info",
     nextButtonText: "Sign Up",
     onBack: () => navigateFn(CONTACT_ROUTE),
+    // Move these
     onNext: () => {
-      validateFormFn(PAGES.Additional, () => signUpFn())
+      validateFormFn(PAGES.Contact, () => navigateFn(ADDITIONAL_ROUTE))
+      // validateFormFn(PAGES.Additional, () => signUpFn())
     },
     nextDisabled: disableSubmit
   },
+  // add confirmation page here
   {
     index: PAGES.PaymentInfo,
     title: "Payment Information",
@@ -109,6 +112,7 @@ export const PAGE_CONTENT = [
   <PersonalSectionSecond key="personal-second" />,
   <ContactSection key="contact" />,
   <AdditionalSection key="additional" />,
+  // Add the new section here
   <PaymentInformationSection key="payment-info" />,
   <PaymentSection key="payment" />,
   <ConfirmationSection
