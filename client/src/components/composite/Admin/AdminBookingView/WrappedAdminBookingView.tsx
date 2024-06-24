@@ -1,6 +1,6 @@
 import { useAdminBookingsQuery } from "services/Admin/AdminQueries"
 import { AdminBookingView, BookingMemberColumnFormat } from "./AdminBookingView"
-import { timestampToDate } from "components/utils/Utils"
+import { DateUtils } from "components/utils/DateUtils"
 import { AdminBookingViewContext } from "./AdminBookingViewContext"
 import { useContext } from "react"
 import { Timestamp } from "firebase/firestore"
@@ -15,8 +15,8 @@ const WrappedAdminBookingView = () => {
   } = useContext(AdminBookingViewContext)
 
   const { data, isLoading } = useAdminBookingsQuery(
-    Timestamp.fromDate(startDate), // TODO: Convert to UTC
-    Timestamp.fromDate(endDate) // TODO: Convert to UTC
+    Timestamp.fromDate(DateUtils.convertLocalDateToUTCDate(startDate)),
+    Timestamp.fromDate(DateUtils.convertLocalDateToUTCDate(endDate))
   )
   const dataList = data?.flatMap(
     (date) =>
@@ -25,7 +25,9 @@ const WrappedAdminBookingView = () => {
           uid: ""
         }
         newData.uid = user.uid
-        newData.Date = timestampToDate(date.date).toLocaleDateString("en-NZ")
+        newData.Date = DateUtils.formattedNzDate(
+          new Date(DateUtils.timestampMilliseconds(date.date))
+        )
         newData.Name = `${user.first_name} ${user.last_name}`
         newData.Number = user.phone_number ? user.phone_number.toString() : ""
         newData.Email = user.email

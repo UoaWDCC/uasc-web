@@ -333,10 +333,12 @@
 			"UserBookingRequestingModel": {
 				"properties": {
 					"startDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					},
 					"endDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					}
 				},
 				"type": "object",
@@ -457,10 +459,12 @@
 			"AvailableDatesRequestModel": {
 				"properties": {
 					"startDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					},
 					"endDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					}
 				},
 				"type": "object",
@@ -588,6 +592,27 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+
+			"BookingsByDateRangeRequestModel": {
+				"description": "Represents the structure of a request model for fetching bookings within a specific date range.",
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+
 			"BookingSlotUpdateResponse": {
 				"properties": {
 					"error": {
@@ -622,11 +647,11 @@
 				"properties": {
 					"startDate": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					},
 					"endDate": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					},
 					"slots": {
 						"type": "number",
@@ -646,11 +671,11 @@
 				"properties": {
 					"startDate": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					},
 					"endDate": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Firestore timestamp, ideally with the time information removed (set to midnight)"
+						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					}
 				},
 				"required": [

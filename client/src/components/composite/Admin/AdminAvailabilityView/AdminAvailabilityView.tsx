@@ -7,8 +7,7 @@ import Table from "components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
-import { timestampToDate } from "components/utils/Utils"
-
+import { DateUtils } from "components/utils/DateUtils"
 /**
  * Reasonable amount of items to display on table
  */
@@ -70,19 +69,21 @@ export const formatBookingSlotsForAvailabilityView = (
     .map((slot) => {
       return {
         uid: slot.id,
-        Date: timestampToDate(slot.date).toDateString(),
+        Date: DateUtils.timestampToDate(slot.date).toDateString(),
         "Max Bookings": slot.maxBookings.toString(),
         "Available Spaces": slot.availableSpaces.toString()
       }
     })
 }
 
-const formatDateRangeForDialog = (
-  startDate?: Timestamp,
-  endDate?: Timestamp
-) => {
+/**
+ * @param startDate the first date of the range
+ * @param endDate the last date of the range
+ * @returns a string that describes the date range being booked
+ */
+const formatDateRangeForDialog = (startDate?: Date, endDate?: Date) => {
   if (startDate && endDate)
-    return `${timestampToDate(startDate).toDateString()} to ${timestampToDate(endDate).toDateString()}`
+    return `${startDate.toDateString()} to ${endDate.toDateString()}` as const
 
   return ""
 }
@@ -107,7 +108,11 @@ const AdminAvailabilityView = ({
   const dateRangeDefined = startDate && endDate
 
   const tableData: CondensedBookingInfoColumn[] = dateRangeDefined
-    ? formatBookingSlotsForAvailabilityView(startDate, endDate, slots)
+    ? formatBookingSlotsForAvailabilityView(
+        Timestamp.fromDate(startDate),
+        Timestamp.fromDate(endDate),
+        slots
+      )
     : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
 
   const formattedDateRanges = formatDateRangeForDialog(startDate, endDate)
@@ -120,19 +125,17 @@ const AdminAvailabilityView = ({
       <div className="flex flex-col gap-2">
         <span className="max-w-[380px] sm:w-[380px]">
           <Calendar
-            minDate={new Date(new Date().toDateString())}
+            minDate={new Date(Date.now())}
             selectRange
-            value={
-              dateRangeDefined
-                ? [timestampToDate(startDate), timestampToDate(endDate)]
-                : undefined
-            }
+            value={dateRangeDefined ? [startDate, endDate] : undefined}
             tileContent={({ date }) => {
               const slot = slots.find(
                 // Find slots that are "available"
                 (slot) =>
-                  timestampToDate(slot.date).toDateString() ===
-                  date.toDateString()
+                  DateUtils.dateEqualToTimestamp(
+                    DateUtils.convertLocalDateToUTCDate(date),
+                    slot.date
+                  )
               )
               return slot ? (
                 // Apply style if it is

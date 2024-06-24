@@ -55,6 +55,9 @@ const BookingInfoComponent = ({
         <h4>
           Check out time: <strong>10:00am</strong>
         </h4>
+        <h4 className="text-red font-bold italic">
+          You must have a booking to stay at the lodge!
+        </h4>
       </div>
     </div>
   )

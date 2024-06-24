@@ -69,6 +69,13 @@ export function useDeleteUserMutation() {
   })
 }
 
+/**
+ * Hook for dealing with making dates available
+ *
+ * @param startDate **UTC midnight** date representing the start (inclusive) date of the range
+ * @param endDate **UTC midnight** date representing the end (inclusive) date of the range
+ * @param slots how many *slots* to make available (defaults to 32)
+ */
 export function useMakeDatesAvailableMutation(
   startDate?: Timestamp,
   endDate?: Timestamp,
@@ -87,6 +94,12 @@ export function useMakeDatesAvailableMutation(
   })
 }
 
+/**
+ * Hook for dealing with making dates unavailable
+ *
+ * @param startDate **UTC midnight** date representing the start (inclusive) date of the range
+ * @param endDate **UTC midnight** date representing the end (inclusive) date of the range
+ */
 export function useMakeDatesUnavailableMutation(
   startDate?: Timestamp,
   endDate?: Timestamp

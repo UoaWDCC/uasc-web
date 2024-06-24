@@ -194,7 +194,9 @@ export interface components {
       stripeClientSecret?: string;
     };
     UserBookingRequestingModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     /** @description Represents the response structure for fetching user ids by date range. */
@@ -230,7 +232,9 @@ export interface components {
       data?: components["schemas"]["AvailableDates"][];
     };
     AvailableDatesRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     /** @enum {string} */
@@ -272,6 +276,15 @@ export interface components {
         }[];
       error?: string;
     };
+    
+    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
+    BookingsByDateRangeRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
+
     BookingSlotUpdateResponse: {
       error?: string;
       message?: string;
@@ -281,18 +294,18 @@ export interface components {
         }[];
     };
     MakeDatesAvailableRequestBody: {
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
       /** Format: double */
       slots?: number;
     };
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__": {
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     /** @description Construct a type with the properties of T except for those in type K. */
