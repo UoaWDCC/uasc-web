@@ -58,7 +58,7 @@ export class BookingController extends Controller {
       /** The response data array */
       const responseData: Array<{
         date: Timestamp
-        users: string[] // May have to add start and enddates here
+        users: string[]
       }> = []
 
       /** Iterating through each booking slot */

@@ -116,9 +116,9 @@ export interface Booking {
   booking_slot_id: string
   /**
    * The Stripe payment ID the user made when paying for this booking.
-   * 
+   *
    * Should be set to "manual entry" if the user was not added via payment
-   * 
+   *
    * @example 'cs_test_a11YYufWQzNY63zpQ6QSNRQhkUpVph4WRmzW0zWJO2znZKdVujZ0N0S22u'
    */
   stripe_payment_id: string
