@@ -1013,7 +1013,7 @@ describe("Endpoints", () => {
       expect(dates).toHaveLength(1)
       expect(dates[0].max_bookings).toBeGreaterThan(0)
       expect(dates[0].description).toEqual("my test")
-      expect(dates[0].date).toEqual(startDate)
+      expect(removeUnderscoresFromTimestamp(dates[0].date)).toEqual(startDate)
     })
   })
 
