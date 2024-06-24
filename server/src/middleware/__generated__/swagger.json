@@ -342,6 +342,54 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UIdssByDateRangeResponse": {
+				"description": "Represents the response structure for fetching user ids by date range.",
+				"properties": {
+					"data": {
+						"items": {
+							"properties": {
+								"users": {
+									"items": {
+										"type": "string"
+									},
+									"type": "array"
+								},
+								"date": {
+									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+								}
+							},
+							"required": [
+								"users",
+								"date"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"error": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingsByDateRangeRequestModel": {
+				"description": "Represents the structure of a request model for fetching bookings within a specific date range.",
+				"properties": {
+					"startDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"endDate": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					}
+				},
+				"required": [
+					"startDate",
+					"endDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AllUserBookingSlotsResponse": {
 				"properties": {
 					"error": {
@@ -537,23 +585,6 @@
 						"type": "string"
 					}
 				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"BookingsByDateRangeRequestModel": {
-				"description": "Represents the structure of a request model for fetching bookings within a specific date range.",
-				"properties": {
-					"startDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-					},
-					"endDate": {
-						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-					}
-				},
-				"required": [
-					"startDate",
-					"endDate"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -1184,6 +1215,41 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserBookingRequestingModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/bookings/create-bookings": {
+			"post": {
+				"operationId": "CreateBookings",
+				"responses": {
+					"200": {
+						"description": "Bookings successfully created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UIdssByDateRangeResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BookingsByDateRangeRequestModel"
 							}
 						}
 					}

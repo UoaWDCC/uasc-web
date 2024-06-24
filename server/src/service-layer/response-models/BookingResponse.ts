@@ -17,3 +17,11 @@ export interface UsersByDateRangeResponse {
   data?: Array<{ date: Timestamp; users: CombinedUserData[] }>
   error?: string
 }
+
+/**
+ * Represents the response structure for fetching user ids by date range.
+ */
+export interface UIdssByDateRangeResponse {
+  data?: Array<{ date: Timestamp; users: string[] }>
+  error?: string
+}

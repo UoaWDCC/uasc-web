@@ -1255,4 +1255,118 @@ describe("Endpoints", () => {
       expect(res.status).toEqual(401)
     })
   })
+
+  describe("/bookings/create-bookings", () => {
+    beforeEach(async () => {
+      await createUsers()
+    })
+
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+
+    it("should return userIds for successful bookings within the date range", async () => {
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2022"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+
+      const slot1 = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("02/01/2023")),
+        max_bookings: 10
+      })
+
+      const slot2 = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("03/01/2023")),
+        max_bookings: 10
+      })
+
+      // Important test case, don't return dates with no bookings
+      await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("01/01/2023")),
+        max_bookings: 10
+      })
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: slot1.id,
+        stripe_payment_id: ""
+      })
+
+      await bookingDataService.createBooking({
+        user_id: GUEST_USER_UID,
+        booking_slot_id: slot2.id,
+        stripe_payment_id: ""
+      })
+
+      const res = await request
+        .post("/bookings/create-bookings")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toHaveLength(2)
+      expect.arrayContaining([
+        expect.objectContaining({
+          users: expect.arrayContaining([
+            expect.objectContaining({ uid: MEMBER_USER_UID })
+          ])
+        }),
+        expect.objectContaining({
+          users: expect.arrayContaining([
+            expect.objectContaining({ uid: GUEST_USER_UID })
+          ])
+        })
+      ])
+    })
+
+    it("should return an empty array if no users have bookings within the date range", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2024"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2024"))
+
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      const slot1 = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("02/01/2025")), // Out of range date
+        max_bookings: 10
+      })
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: slot1.id,
+        stripe_payment_id: ""
+      })
+
+      const res = await request
+        .post("/bookings/create-bookings")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toHaveLength(0)
+    })
+
+    it("should return unauthorized error for non-admin users", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2023"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+
+      const res = await request
+        .post("/bookings/create-bookings")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(401)
+    })
+  })
 })

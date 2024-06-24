@@ -7,7 +7,10 @@ import { Timestamp } from "firebase-admin/firestore"
 
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
+import {
+  AllUserBookingSlotsResponse,
+  UIdssByDateRangeResponse
+} from "service-layer/response-models/BookingResponse"
 import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import {
   Controller,
@@ -32,6 +35,94 @@ import {
 
 @Route("bookings")
 export class BookingController extends Controller {
+  @SuccessResponse("200", "Bookings successfully created")
+  @Security("jwt", ["admin"])
+  @Post("create-bookings")
+  public async createBookings(
+    @Body() requestBody: BookingsByDateRangeRequestModel
+  ): Promise<UIdssByDateRangeResponse> {
+    try {
+      const { startDate, endDate } = requestBody
+
+      /** Creating instances of the required services */
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      // Query to get all booking slots within date range
+      const bookingSlots =
+        await bookingSlotService.getBookingSlotsBetweenDateRange(
+          startDate,
+          endDate
+        )
+
+      /** The response data array */
+      const responseData: Array<{
+        date: Timestamp
+        users: string[] // May have to add start and enddates here
+      }> = []
+
+      /** Iterating through each booking slot */
+      const bookingPromises = bookingSlots.map(async (slot) => {
+        /** Getting the bookings for the current slot */
+        const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
+
+        /** Extracting the all 3 Ids from the bookings */
+        const userIds = bookings.map((booking) => booking.user_id)
+        const slotIds = bookings.map((booking) => booking.booking_slot_id)
+        const stripePaymentIds = bookings.map(
+          (booking) => booking.stripe_payment_id
+        )
+
+        if (userIds.length === 0) {
+          return
+        }
+
+        /** For every slotid add a booking for that id only if user doesn't already have a booking */
+        let i: number
+        for (i = 0; i < userIds.length; i++) {
+          if (
+            (await bookingDataService.getBookingsByUserId(userIds[i]))
+              .length !== 0
+          ) {
+            delete userIds[i] // Remove user from list if they already have a booking
+            break
+          } else {
+            bookingDataService.createBooking({
+              user_id: userIds[i],
+              booking_slot_id: slotIds[i],
+              stripe_payment_id: stripePaymentIds[i]
+            })
+          }
+        }
+
+        /** List of usersIds successfully added */
+        responseData.push({
+          date: slot.date,
+          users: userIds
+        })
+      })
+
+      await Promise.all(bookingPromises)
+
+      console.log(responseData)
+
+      this.setStatus(200)
+
+      /**
+       * Returning the response data
+       *
+       * The filter is required to not include data that is null
+       * because of the early return in the map
+       */
+      return { data: responseData.filter((data) => !!data) }
+    } catch (e) {
+      console.error("Error in getBookingsByDateRange:", e)
+      this.setStatus(500)
+
+      return { error: "Something went wrong" }
+    }
+  }
+
   @SuccessResponse("200", "Found bookings")
   @Security("jwt", ["member"])
   @Get()

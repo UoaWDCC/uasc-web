@@ -32,6 +32,9 @@ export interface paths {
   "/payment/booking": {
     post: operations["GetBookingPayment"];
   };
+  "/bookings/create-bookings": {
+    post: operations["CreateBookings"];
+  };
   "/bookings": {
     get: operations["GetAllBookings"];
   };
@@ -194,6 +197,19 @@ export interface components {
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
+    /** @description Represents the response structure for fetching user ids by date range. */
+    UIdssByDateRangeResponse: {
+      data?: {
+          users: string[];
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
+      error?: string;
+    };
+    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
+    BookingsByDateRangeRequestModel: {
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
     AllUserBookingSlotsResponse: {
       error?: string;
       message?: string;
@@ -255,11 +271,6 @@ export interface components {
           date: components["schemas"]["FirebaseFirestore.Timestamp"];
         }[];
       error?: string;
-    };
-    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
-    BookingsByDateRangeRequestModel: {
-      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     BookingSlotUpdateResponse: {
       error?: string;
@@ -512,6 +523,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["BookingPaymentResponse"];
+        };
+      };
+    };
+  };
+  CreateBookings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BookingsByDateRangeRequestModel"];
+      };
+    };
+    responses: {
+      /** @description Bookings successfully created */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
         };
       };
     };
