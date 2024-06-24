@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>
 export const LeftAboutSection: Story = {
   args: {
     variant: "left",
-    title: "Founded in 1996",
+    title: "Founded in 1966",
     text: "Back in 1966 a few of our founding members built the club lodge on Mt. Ruapehu. The lodge is geared up to sleep 32 and host raging parties all winter, and even with all the student antics we’ve been able to keep the place in good knick.",
     imageSrc: ImageLeft
   }
