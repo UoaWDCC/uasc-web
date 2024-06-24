@@ -1,6 +1,6 @@
 const Loader = () => {
   return (
-    <div className="w-full">
+    <div className="flex h-screen w-full items-center justify-center">
       <h2 className="text-dark-blue-100 font-bold">Loading...</h2>
     </div>
   )
