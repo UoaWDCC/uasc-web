@@ -60,11 +60,14 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   const [closed, setClosed] = useState(false)
   if (!closed) {
     return (
-      <div className="flex w-full flex-col items-center justify-center ">
+      <div className="flex w-[480px] flex-col items-center justify-center ">
         <div className="border-gray-3 mt-4 flex w-full  flex-col gap-4 rounded-md border p-4">
-          <div className="grid w-full grid-cols-2">
+          <div className="flex w-full">
             <h3 className="text-dark-blue-100">{title}</h3>{" "}
-            <CloseButton onClick={handleClose} className="ml-auto w-[15px]" />
+            <CloseButton
+              onClick={handleClose}
+              className="hover:fill-light-blue-100 ml-auto w-[15px]"
+            />
           </div>
 
           {fields.map((field) => {
@@ -77,8 +80,11 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
               />
             )
           })}
+
+          <div className="w-[200px]">
+            <Button onClick={() => {}}>Update details</Button>
+          </div>
         </div>
-        <Button onClick={() => {}}>Update details</Button>
       </div>
     )
   } else {
