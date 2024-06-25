@@ -13,6 +13,7 @@ export const DefaultProfileEdit = () => {
       first_name: string
       last_name: string
       date_of_birth: { seconds: number; nanoseconds: number }
+      faculty: string
       phone_number: number
       emergency_contact: string
       student_id: string
@@ -22,6 +23,7 @@ export const DefaultProfileEdit = () => {
         { fieldName: "first_name", defaultFieldValue: "ray" },
         { fieldName: "last_name", defaultFieldValue: "cho" },
         { fieldName: "date_of_birth", defaultFieldValue: "2004/06/09" },
+        { fieldName: "faculty", defaultFieldValue: "unemployed n word" },
         { fieldName: "phone_number", defaultFieldValue: "6969696" },
         { fieldName: "emergency_contact", defaultFieldValue: "no one" },
         { fieldName: "student_id", defaultFieldValue: "111" }

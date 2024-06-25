@@ -26,11 +26,11 @@ const nameTransformer = (
     case "does_ski":
       return "Does Ski"
     case "phone_number":
-      return "Phone Number"
+      return "Mobile number"
     case "gender":
       return "Gender"
     case "emergency_contact":
-      return "Emergency Contact"
+      return "Emergency contact info"
     case "first_name":
       return "First Name"
     case "last_name":
@@ -44,7 +44,7 @@ const nameTransformer = (
     case "university":
       return "University"
     case "student_id":
-      return "Student Id"
+      return "UoA Student ID Number"
     case "university_year":
       return "University Year"
   }
