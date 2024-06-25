@@ -3,6 +3,7 @@ import { Timestamp } from "firebase/firestore"
 import AdminService from "./AdminService"
 
 export const ALL_USERS_QUERY = "allUsers"
+export const ALL_BOOKINGS_BETWEEN_RANGE_QUERY = "bookings-between-range"
 
 export function useUsersQuery() {
   return useInfiniteQuery({
@@ -19,7 +20,7 @@ export function useAdminBookingsQuery(
   endDate: Timestamp
 ) {
   return useQuery({
-    queryKey: ["bookingsBetweenRange", startDate, endDate],
+    queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY, startDate, endDate],
     queryFn: () =>
       AdminService.getBookingsBetweenDateRange({
         startDate,

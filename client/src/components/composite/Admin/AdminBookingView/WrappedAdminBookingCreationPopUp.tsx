@@ -2,6 +2,7 @@ import { useUsersQuery } from "services/Admin/AdminQueries"
 import AdminBookingCreationPopUp from "./AdminBookingCreationPopUp"
 import { useEffect, useMemo } from "react"
 import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
+import { useAddUserToBookingMutation } from "services/Admin/AdminMutations"
 
 interface IWrappedAdminBookingCreationPopUp {
   handleClose: () => void
@@ -19,7 +20,8 @@ const WrappedAdminBookingCreationPopUp = ({
 
   const { data: bookingSlots } = useAvailableBookingsQuery()
 
-  // TODO: call mutation hook for adding booking
+  const { mutateAsync: handleAddUserToBooking, isPending } =
+    useAddUserToBookingMutation()
 
   useEffect(() => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -38,6 +40,10 @@ const WrappedAdminBookingCreationPopUp = ({
         users={users}
         bookingSlots={bookingSlots}
         handleClose={handleClose}
+        isPending={isPending}
+        bookingCreationHandler={async (startDate, endDate, uid) =>
+          await handleAddUserToBooking({ startDate, endDate, userIds: [uid] })
+        }
       />
     </span>
   )

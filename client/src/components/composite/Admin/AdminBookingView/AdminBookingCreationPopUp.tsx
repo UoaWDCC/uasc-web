@@ -16,7 +16,11 @@ interface IAdminBookingCreationPopUp {
   /**
    * Performs the required mutation to add the user(s) to the bookings within date range.
    */
-  bookingCreationHandler?: (startDate: Timestamp, endDate: Timestamp) => void
+  bookingCreationHandler?: (
+    startDate: Timestamp,
+    endDate: Timestamp,
+    selectedUserUid: string
+  ) => void
 
   /**
    * Callback for when a 'close' event is triggered with the modal open
@@ -33,6 +37,9 @@ interface IAdminBookingCreationPopUp {
    */
   bookingSlots?: BookingAvailability[]
 
+  /**
+   * Users to display during a search
+   */
   users?: CombinedUserData[]
 }
 
@@ -51,7 +58,8 @@ const AdminBookingCreationPopUp = ({
   handleClose,
   bookingCreationHandler,
   bookingSlots = [],
-  users = []
+  users = [],
+  isPending
 }: IAdminBookingCreationPopUp) => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
@@ -330,16 +338,20 @@ const AdminBookingCreationPopUp = ({
               handleDateRangeInputChange={() => {}}
             />
             <Button
-              disabled={currentStage !== FlowStages.SELECT_DATES}
+              disabled={currentStage !== FlowStages.SELECT_DATES || isPending}
               onClick={() => {
-                if (checkValidRange(currentStartDate, currentEndDate)) {
+                if (
+                  checkValidRange(currentStartDate, currentEndDate) &&
+                  currentSelectedUserUid
+                ) {
                   bookingCreationHandler?.(
                     Timestamp.fromDate(
                       DateUtils.convertLocalDateToUTCDate(currentStartDate)
                     ),
                     Timestamp.fromDate(
                       DateUtils.convertLocalDateToUTCDate(currentEndDate)
-                    )
+                    ),
+                    currentSelectedUserUid
                   )
                 }
               }}

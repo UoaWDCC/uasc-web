@@ -172,11 +172,12 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "BookingsByDateRangeRequestModel": {
+    "CreateBookingsRequestModel": {
         "dataType": "refObject",
         "properties": {
             "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "userIds": {"dataType":"array","array":{"dataType":"string"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -252,6 +253,15 @@ const models: TsoaRoute.Models = {
         "properties": {
             "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"refObject","ref":"CombinedUserData"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
             "error": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "BookingsByDateRangeRequestModel": {
+        "dataType": "refObject",
+        "properties": {
+            "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
         },
         "additionalProperties": false,
     },
@@ -653,7 +663,7 @@ export function RegisterRoutes(app: Router) {
 
             function BookingController_createBookings(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"BookingsByDateRangeRequestModel"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateBookingsRequestModel"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

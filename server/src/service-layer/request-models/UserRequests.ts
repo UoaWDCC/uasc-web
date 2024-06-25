@@ -76,3 +76,11 @@ export interface BookingsByDateRangeRequestModel {
    */
   endDate: Timestamp
 }
+
+export interface CreateBookingsRequestModel
+  extends BookingsByDateRangeRequestModel {
+  /**
+   * List of users to add to the bookings between date range
+   */
+  userIds: string[]
+}

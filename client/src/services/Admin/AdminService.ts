@@ -130,6 +130,34 @@ const AdminService = {
         `Failed to make dates ${startDate.toString()} to ${endDate.toString()} available`
       )
     return data
+  },
+  addUsersToBookingForDateRange: async function ({
+    startDate,
+    endDate,
+    userIds
+  }: {
+    startDate: Timestamp
+    endDate: Timestamp
+    userIds: string[]
+  }) {
+    const { response, data } = await fetchClient.POST(
+      "/bookings/create-bookings",
+      {
+        body: {
+          startDate,
+          endDate,
+          userIds
+        }
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to add the users ${userIds.join(",")} to the date range ${startDate.toString()} to ${endDate.toString()} `
+      )
+    }
+
+    return data?.data
   }
 } as const
 

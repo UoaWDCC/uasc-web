@@ -1284,19 +1284,18 @@ describe("Endpoints", () => {
       await cleanFirestore()
     })
 
-    it("should return userIds for successful bookings within the date range", async () => {
+    it("should create bookings for userIds within the date range", async () => {
       const bookingSlotService = new BookingSlotService()
-      const bookingDataService = new BookingDataService()
 
       const startDate = dateToFirestoreTimeStamp(new Date("01/01/2022"))
       const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
 
-      const slot1 = await bookingSlotService.createBookingSlot({
+      await bookingSlotService.createBookingSlot({
         date: dateToFirestoreTimeStamp(new Date("02/01/2023")),
         max_bookings: 10
       })
 
-      const slot2 = await bookingSlotService.createBookingSlot({
+      await bookingSlotService.createBookingSlot({
         date: dateToFirestoreTimeStamp(new Date("03/01/2023")),
         max_bookings: 10
       })
@@ -1307,28 +1306,17 @@ describe("Endpoints", () => {
         max_bookings: 10
       })
 
-      await bookingDataService.createBooking({
-        user_id: MEMBER_USER_UID,
-        booking_slot_id: slot1.id,
-        stripe_payment_id: ""
-      })
-
-      await bookingDataService.createBooking({
-        user_id: GUEST_USER_UID,
-        booking_slot_id: slot2.id,
-        stripe_payment_id: ""
-      })
-
       const res = await request
         .post("/bookings/create-bookings")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           startDate,
-          endDate
+          endDate,
+          userIds: [GUEST_USER_UID, MEMBER_USER_UID]
         })
 
       expect(res.status).toEqual(200)
-      expect(res.body.data).toHaveLength(2)
+      expect(res.body.data).toHaveLength(3)
       expect.arrayContaining([
         expect.objectContaining({
           users: expect.arrayContaining([
@@ -1341,57 +1329,6 @@ describe("Endpoints", () => {
           ])
         })
       ])
-
-      // Check to see if the bookings are created correctly
-      const result1 =
-        await bookingDataService.getBookingsByUserId(MEMBER_USER_UID)
-      const result2 =
-        await bookingDataService.getBookingsByUserId(GUEST_USER_UID)
-      const result3 = await bookingDataService.getBookingsBySlotId(slot1.id)
-
-      expect(result1).toHaveLength(1)
-      expect.arrayContaining([
-        expect.objectContaining({ booking_slot_id: slot1.id }),
-        expect.objectContaining({ user_id: MEMBER_USER_UID }),
-        expect.objectContaining({ stripe_payment_id: "a" })
-      ])
-      expect(result2).toHaveLength(1)
-      expect.arrayContaining([
-        expect.objectContaining({ booking_slot_id: slot2.id }),
-        expect.objectContaining({ user_id: GUEST_USER_UID }),
-        expect.objectContaining({ stripe_payment_id: "" })
-      ])
-      expect(result1).toEqual(result3)
-    })
-
-    it("should return an empty array if no users have bookings within the date range", async () => {
-      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2024"))
-      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2024"))
-
-      const bookingSlotService = new BookingSlotService()
-      const bookingDataService = new BookingDataService()
-
-      const slot1 = await bookingSlotService.createBookingSlot({
-        date: dateToFirestoreTimeStamp(new Date("02/01/2025")), // Out of range date
-        max_bookings: 10
-      })
-
-      await bookingDataService.createBooking({
-        user_id: MEMBER_USER_UID,
-        booking_slot_id: slot1.id,
-        stripe_payment_id: ""
-      })
-
-      const res = await request
-        .post("/bookings/create-bookings")
-        .set("Authorization", `Bearer ${adminToken}`)
-        .send({
-          startDate,
-          endDate
-        })
-
-      expect(res.status).toEqual(200)
-      expect(res.body.data).toHaveLength(0)
     })
 
     it("should return unauthorized error for non-admin users", async () => {
@@ -1403,7 +1340,8 @@ describe("Endpoints", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({
           startDate,
-          endDate
+          endDate,
+          userIds: []
         })
 
       expect(res.status).toEqual(401)
@@ -1438,7 +1376,8 @@ describe("Endpoints", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           startDate,
-          endDate
+          endDate,
+          userIds: [MEMBER_USER_UID]
         })
 
       expect(res.status).toEqual(200)
