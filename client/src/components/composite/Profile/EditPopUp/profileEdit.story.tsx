@@ -2,13 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react"
 
 import ProfileEdit from "./profileEdit"
 
-const meta: Meta<typeof ProfileEdit> = {
-  component: ProfileEdit
-}
-
-export default meta
-type Story = StoryObj<typeof ProfileEdit>
-
-export const DefaultProfileEdit: Story = {
-  args: {}
+export const DefaultProfileEdit = () => {
+  return (
+    <ProfileEdit<{
+      first_name: string
+      last_name: string
+      phone_number: string
+    }>
+      fields
+    />
+  )
 }
