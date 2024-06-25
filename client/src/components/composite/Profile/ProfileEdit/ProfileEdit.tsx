@@ -1,5 +1,6 @@
 import { ReducedUserAdditionalInfo } from "models/User"
 import TextInput from "components/generic/TextInputComponent/TextInput"
+import Button from "components/generic/FigmaButtons/FigmaButton"
 
 interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
   title: string
@@ -8,24 +9,6 @@ interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
     defaultFieldValue: string
   }[]
   onEdit: (fields: Partial<T>) => void
-}
-
-const Field = ({
-  subtitle,
-  description
-}: {
-  subtitle: string
-  description: string
-}) => {
-  return (
-    <>
-      <div>
-        <p className="">{subtitle}</p>
-
-        <p>{description}</p>
-      </div>
-    </>
-  )
 }
 
 const nameTransformer = (
@@ -71,7 +54,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   onEdit
 }: IProfileEdit<T>) => {
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex w-full flex-col items-center justify-center">
       <h3 className="">{title}</h3>
       <div className="w-full border border-black">
         {fields.map((field) => {
@@ -85,6 +68,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
           )
         })}
       </div>
+      <Button onClick={onEdit}>Update details</Button>
     </div>
   )
 }
