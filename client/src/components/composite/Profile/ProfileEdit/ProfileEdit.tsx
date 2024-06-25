@@ -61,7 +61,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   if (!closed) {
     return (
       <div className="flex w-[480px] flex-col items-center justify-center ">
-        <div className="border-gray-3 mt-4 flex w-full  flex-col gap-4 rounded-md border p-4">
+        <div className="border-gray-3 mt-4 flex w-full flex-col gap-4 rounded-md border p-4">
           <div className="flex w-full">
             <h3 className="text-dark-blue-100">{title}</h3>{" "}
             <CloseButton
