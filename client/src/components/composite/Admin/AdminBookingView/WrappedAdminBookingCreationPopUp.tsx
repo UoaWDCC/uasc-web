@@ -41,9 +41,9 @@ const WrappedAdminBookingCreationPopUp = ({
         bookingSlots={bookingSlots}
         handleClose={handleClose}
         isPending={isPending}
-        bookingCreationHandler={async (startDate, endDate, uid) =>
+        bookingCreationHandler={async (startDate, endDate, uid) => {
           await handleAddUserToBooking({ startDate, endDate, userIds: [uid] })
-        }
+        }}
       />
     </span>
   )

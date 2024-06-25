@@ -3,7 +3,7 @@ import { CombinedUserData } from "models/User"
 import Calendar from "components/generic/Calendar/Calendar"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef } from "react"
 import CloseButton from "assets/icons/x.svg?react"
 import LeftArrowButton from "assets/icons/leftarrow.svg?react"
 import Tick from "assets/icons/tick.svg?react"
@@ -11,6 +11,7 @@ import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import { DateRange, DateUtils } from "components/utils/DateUtils"
 import { BookingAvailability } from "models/Booking"
 import { Timestamp } from "firebase/firestore"
+import { useClickOutside } from "components/utils/Utils"
 
 interface IAdminBookingCreationPopUp {
   /**
@@ -61,6 +62,9 @@ const AdminBookingCreationPopUp = ({
   users = [],
   isPending
 }: IAdminBookingCreationPopUp) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  useClickOutside(containerRef, () => handleClose?.())
+
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
     endDate: new Date()
@@ -171,40 +175,46 @@ const AdminBookingCreationPopUp = ({
     [usersToDisplay]
   )
 
-  const DetailedUserInfoPanel = () => (
-    <div className="border-gray-3 mt-4 flex flex-col gap-3 rounded-sm border px-4 py-3">
-      <span className="flex">
-        <h5 className="font-bold uppercase">
-          {currentlySelectedUser?.membership}
-        </h5>
-        <div
-          onClick={() => setCurrentSelectedUserUid(undefined)}
-          className="ml-auto h-[15px] w-[15px] cursor-pointer"
-        >
-          <CloseButton />
+  const DetailedUserInfoPanel = useMemo(
+    () => (
+      <div className="border-gray-3 mt-4 flex flex-col gap-3 rounded-sm border px-4 py-3">
+        <span className="flex">
+          <h5 className="font-bold uppercase">
+            {currentlySelectedUser?.membership}
+          </h5>
+          <div
+            onClick={() => setCurrentSelectedUserUid(undefined)}
+            className="ml-auto h-[15px] w-[15px] cursor-pointer"
+          >
+            <CloseButton />
+          </div>
+        </span>
+        <p>
+          {currentlySelectedUser?.first_name} {currentlySelectedUser?.last_name}
+        </p>
+        <div className="flex flex-col">
+          <p className="text-gray-3">Allergies/Dietary Requirements</p>
+          <p>{currentlySelectedUser?.dietary_requirements}</p>
         </div>
-      </span>
-      <p>
-        {currentlySelectedUser?.first_name} {currentlySelectedUser?.last_name}
-      </p>
-      <div className="flex flex-col">
-        <p className="text-gray-3">Allergies/Dietary Requirements</p>
-        <p>{currentlySelectedUser?.dietary_requirements}</p>
-      </div>
 
-      <div className="flex flex-col">
-        <p className="text-gray-3">Email</p>
-        <p> {currentlySelectedUser?.email}</p>
+        <div className="flex flex-col">
+          <p className="text-gray-3">Email</p>
+          <p> {currentlySelectedUser?.email}</p>
+        </div>
+        <div className="flex flex-col">
+          <p className="text-gray-3">Number</p>
+          <p> {currentlySelectedUser?.phone_number}</p>
+        </div>
       </div>
-      <div className="flex flex-col">
-        <p className="text-gray-3">Number</p>
-        <p> {currentlySelectedUser?.phone_number}</p>
-      </div>
-    </div>
+    ),
+    [currentlySelectedUser]
   )
 
   return (
-    <div className="flex h-full w-full max-w-[820px] flex-col gap-8 bg-white px-8 py-8">
+    <div
+      className="flex h-full w-full max-w-[820px] flex-col gap-8 bg-white px-8 py-8"
+      ref={containerRef}
+    >
       <span className="flex justify-between">
         <h3 className="text-dark-blue-100">Add a booking</h3>
         <div className="h-[15px] w-[15px] cursor-pointer" onClick={handleClose}>
@@ -246,12 +256,11 @@ const AdminBookingCreationPopUp = ({
             </div>
           )}
 
-          {currentStage !==
-          FlowStages.SEARCH_FOR_USER ? null : currentSelectedUserUid ? (
-            <DetailedUserInfoPanel />
-          ) : (
-            UserList
-          )}
+          {currentStage !== FlowStages.SEARCH_FOR_USER
+            ? null
+            : currentSelectedUserUid
+              ? DetailedUserInfoPanel
+              : UserList}
           <span className="mt-8">
             {currentStage === FlowStages.SELECT_DATES ? (
               <button
@@ -361,15 +370,18 @@ const AdminBookingCreationPopUp = ({
                   ) &&
                   currentSelectedUserUid
                 ) {
-                  bookingCreationHandler?.(
-                    Timestamp.fromDate(
-                      DateUtils.convertLocalDateToUTCDate(currentStartDate)
-                    ),
-                    Timestamp.fromDate(
-                      DateUtils.convertLocalDateToUTCDate(currentEndDate)
-                    ),
-                    currentSelectedUserUid
-                  )
+                  confirm(`Are you sure you want to add 
+                    ${currentlySelectedUser?.first_name} ${currentlySelectedUser?.last_name} 
+                    to the dates ${selectedDateRange.startDate.toDateString()} - ${selectedDateRange.endDate.toDateString()}`) &&
+                    bookingCreationHandler?.(
+                      Timestamp.fromDate(
+                        DateUtils.convertLocalDateToUTCDate(currentStartDate)
+                      ),
+                      Timestamp.fromDate(
+                        DateUtils.convertLocalDateToUTCDate(currentEndDate)
+                      ),
+                      currentSelectedUserUid
+                    )
                 }
               }}
             >
