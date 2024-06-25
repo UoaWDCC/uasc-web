@@ -1,6 +1,8 @@
 import { ReducedUserAdditionalInfo } from "models/User"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
+import CloseButton from "assets/icons/x.svg?react"
+import { useState } from "react"
 
 interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
   title: string
@@ -52,24 +54,36 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   title,
   fields
 }: IProfileEdit<T>) => {
-  return (
-    <div className="flex w-full flex-col items-center justify-center ">
-      <div className="border-gray-3 mt-4 flex w-full  flex-col gap-4 rounded-md border p-4">
-        <h3 className="text-dark-blue-100">{title}</h3>
-        {fields.map((field) => {
-          return (
-            <TextInput
-              key={field.fieldName.toString()}
-              label={nameTransformer(
-                field.fieldName as keyof ReducedUserAdditionalInfo
-              )}
-            />
-          )
-        })}
+  function handleClose() {
+    setClosed(true)
+  }
+  const [closed, setClosed] = useState(false)
+  if (!closed) {
+    return (
+      <div className="flex w-full flex-col items-center justify-center ">
+        <div className="border-gray-3 mt-4 flex w-full  flex-col gap-4 rounded-md border p-4">
+          <div className="grid w-full grid-cols-2">
+            <h3 className="text-dark-blue-100">{title}</h3>{" "}
+            <CloseButton onClick={handleClose} className="ml-auto w-[15px]" />
+          </div>
+
+          {fields.map((field) => {
+            return (
+              <TextInput
+                key={field.fieldName.toString()}
+                label={nameTransformer(
+                  field.fieldName as keyof ReducedUserAdditionalInfo
+                )}
+              />
+            )
+          })}
+        </div>
+        <Button onClick={() => {}}>Update details</Button>
       </div>
-      <Button onClick={() => {}}>Update details</Button>
-    </div>
-  )
+    )
+  } else {
+    return null
+  }
 }
 
 export default ProfileEdit
