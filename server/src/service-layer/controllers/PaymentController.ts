@@ -11,9 +11,9 @@ import {
   LODGE_PRICING_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import {
-  datesToDateRange,
+  UTCDateToDdMmYyyy,
   firestoreTimestampToDate,
-  normaliseFirestoreTimeStamp
+  timestampsInRange
 } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
@@ -306,12 +306,9 @@ export class PaymentController extends Controller {
         }
       }
 
-      const datesInBooking = datesToDateRange(
-        firestoreTimestampToDate(startDate),
-        firestoreTimestampToDate(endDate)
-      )
+      const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
 
-      const totalDays = datesInBooking.length
+      const totalDays = dateTimestampsInBooking.length
 
       const MAX_BOOKING_DAYS = 10
       // Validate number of dates to avoid kiddies from forging bookings
@@ -326,8 +323,8 @@ export class PaymentController extends Controller {
 
       const bookingSlots =
         await bookingSlotService.getBookingSlotsBetweenDateRange(
-          normaliseFirestoreTimeStamp(startDate),
-          normaliseFirestoreTimeStamp(endDate)
+          startDate,
+          endDate
         )
 
       if (bookingSlots.length !== totalDays) {
@@ -340,7 +337,7 @@ export class PaymentController extends Controller {
       const baseAvailabilities =
         await bookingDataService.getAvailabilityForUser(
           uid,
-          datesInBooking,
+          dateTimestampsInBooking,
           bookingSlots
         )
       if (baseAvailabilities.some((slot) => !slot)) {
@@ -381,8 +378,9 @@ export class PaymentController extends Controller {
       }
 
       // implement pricing logic
-      const requiredBookingType =
-        BookingUtils.getRequiredPricing(datesInBooking)
+      const requiredBookingType = BookingUtils.getRequiredPricing(
+        dateTimestampsInBooking
+      )
 
       const requiredBookingProducts = await stripeService.getProductByMetadata(
         LODGE_PRICING_TYPE_KEY,
@@ -393,10 +391,15 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
-      const BOOKING_START_DATE = datesInBooking[0].toISOString().split("T")[0]
-      const BOOKING_END_DATE = datesInBooking[totalDays - 1]
-        .toISOString()
-        .split("T")[0]
+      const BOOKING_START_DATE = UTCDateToDdMmYyyy(
+        new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
+      )
+
+      const BOOKING_END_DATE = UTCDateToDdMmYyyy(
+        new Date(
+          firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
+        )
+      )
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
@@ -414,7 +417,13 @@ export class PaymentController extends Controller {
             bookingSlots.map((slot) => slot.id)
           )
         },
-        stripeCustomerId
+        stripeCustomerId,
+        undefined,
+        {
+          submit: {
+            message: `By clicking Pay you agree to booking the nights from ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
+          }
+        }
       )
       this.setStatus(200)
       return {

@@ -63,8 +63,11 @@ describe("BookingUtils", () => {
   })
   describe("BookingUtils.getRequiredPricing", () => {
     it("should return SingleFridayOrSaturday for a single Friday or Saturday", () => {
-      const friday = new Date("2024-06-14")
-      const saturday = new Date("2024-06-15")
+      const _friday = new Date("2024-06-14")
+      const _saturday = new Date("2024-06-15")
+
+      const friday = Timestamp.fromDate(_friday)
+      const saturday = Timestamp.fromDate(_saturday)
 
       expect(BookingUtils.getRequiredPricing([friday])).toBe(
         LodgePricingTypeValues.SingleFridayOrSaturday
@@ -75,8 +78,11 @@ describe("BookingUtils", () => {
     })
 
     it("should return Normal for other cases", () => {
-      const otherDay = new Date("2024-06-16")
-      const friday = new Date("2024-06-14")
+      const _otherDay = new Date("2024-06-16")
+      const _friday = new Date("2024-06-14")
+
+      const otherDay = Timestamp.fromDate(_otherDay)
+      const friday = Timestamp.fromDate(_friday)
 
       expect(BookingUtils.getRequiredPricing([otherDay])).toBe(
         LodgePricingTypeValues.Normal

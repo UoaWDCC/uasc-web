@@ -83,7 +83,10 @@ export const OperationButton = <
                   data-testid={`multiple-operation-item-${index}`}
                   className="hover:text-light-blue-100 cursor-pointer select-none"
                   key={operation.name}
-                  onClick={() => operation.handler(uid)}
+                  onClick={() => {
+                    operation.handler(uid)
+                    setIsOpen(false)
+                  }}
                 >
                   {operation.name}
                 </p>
@@ -202,7 +205,10 @@ const Table = <
           {currentDataSlice.map((obj, index) => (
             <tr key={index} className="">
               {dataKeys.map((key) => (
-                <td className="pb-2 pl-4 pt-2" key={key}>
+                <td
+                  className="break-all pb-2 pl-4 pt-2 sm:break-keep"
+                  key={key}
+                >
                   {obj[key] || ""}
                 </td>
               ))}

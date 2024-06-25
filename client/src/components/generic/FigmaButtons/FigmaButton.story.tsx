@@ -51,6 +51,14 @@ export const defaultButtonInvertedSt: Story = {
   }
 }
 
+export const TertiaryButton: Story = {
+  tags: ["autodocs"],
+  args: {
+    variant: "tertiary",
+    children: "Tertiary Button Variant"
+  }
+}
+
 export const progressButtons = () => (
   <span className="flex items-center gap-2">
     <Button variant="progress-inverted">Back</Button>

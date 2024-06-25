@@ -1,11 +1,12 @@
 import { Timestamp } from "firebase-admin/firestore"
 import { LodgePricingTypeValues } from "./StripeProductMetadata"
+import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
 // Need to validate the booking date through a startDate and endDate range.
 /**
  * @deprecated do not use, exported for testing purposes
  */
-export const _earliestDate = new Date()
+export const _earliestDate = new Date(Date.now())
 _earliestDate.setUTCHours(0, 0, 0, 0)
 
 /**
@@ -42,8 +43,8 @@ const BookingUtils = {
 
     return (
       endDate.seconds < startDate.seconds ||
-      startDate.seconds * 1000 < earliestDate.getTime() ||
-      endDate.seconds * 1000 > latestDate.getTime()
+      firestoreTimestampToDate(startDate) < earliestDate ||
+      firestoreTimestampToDate(endDate) > latestDate
     )
   },
   /**
@@ -72,7 +73,7 @@ const BookingUtils = {
    * @returns a `LodgePricingTypeValue` based on if the date meets any special conditions
    */
   getRequiredPricing: function (
-    datesInBooking: Date[]
+    datesInBooking: Timestamp[]
   ): LodgePricingTypeValues {
     const totalDays = datesInBooking.length
     const FRIDAY = 5
@@ -81,7 +82,9 @@ const BookingUtils = {
     if (
       // Single day requested
       totalDays === 1 &&
-      [FRIDAY, SATURDAY].includes(datesInBooking[0].getUTCDay())
+      [FRIDAY, SATURDAY].includes(
+        new Date(firestoreTimestampToDate(datesInBooking[0])).getUTCDay()
+      )
     ) {
       return LodgePricingTypeValues.SingleFridayOrSaturday
     } else {

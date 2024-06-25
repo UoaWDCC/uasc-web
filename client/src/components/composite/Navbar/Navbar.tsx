@@ -42,7 +42,7 @@ const AboutMenuItemsFull = () => {
 const AboutMenuItemsMobile = () => {
   return (
     <div className="flex w-full flex-col gap-2 md:hidden">
-      <WrappedTab to="/faq">About</WrappedTab>
+      <WrappedTab to="/about">About</WrappedTab>
       <WrappedTab to="/faq">FAQ</WrappedTab>
       <WrappedTab to="/policy">Policy</WrappedTab>
       <WrappedTab to="/contact">Contact</WrappedTab>
@@ -86,7 +86,7 @@ const Navbar = ({
           md:flex md:min-h-full md:flex-row md:items-end md:justify-end md:gap-8 md:bg-none md:pr-4 md:pt-0`}
         >
           <WrappedTab to="/">Home</WrappedTab>
-          <WrappedTab to="/bookings">Bookings</WrappedTab>
+          <WrappedTab to="/bookings">Book the Lodge!</WrappedTab>
           <WrappedTab to="/events">Events</WrappedTab>
           <span className="hidden md:block">
             <WrappedMenuTab displayName="about" to="/about">

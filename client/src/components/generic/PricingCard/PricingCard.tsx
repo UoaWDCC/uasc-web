@@ -33,9 +33,9 @@ const PricingCardDefault = ({
       className={`${selected ? "bg-dark-blue-100" : "border-dark-blue-100 border bg-transparent"} flex
         justify-center rounded-md  ${onClick && "cursor-pointer"} py-4`}
     >
-      <div className="flex items-center justify-center md:flex-col lg:flex-col">
+      <div className="flex flex-col items-center justify-center">
         <h3
-          className={`${selected ? "text-white" : "text-dark-blue-100"} mr-[30%] flex-col text-nowrap md:mr-0 lg:mr-0`}
+          className={`${selected ? "text-white" : "text-dark-blue-100"} flex-col text-nowrap`}
         >
           {title}
         </h3>

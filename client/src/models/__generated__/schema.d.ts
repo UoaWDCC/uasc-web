@@ -32,6 +32,9 @@ export interface paths {
   "/payment/booking": {
     post: operations["GetBookingPayment"];
   };
+  "/bookings/create-bookings": {
+    post: operations["CreateBookings"];
+  };
   "/bookings": {
     get: operations["GetAllBookings"];
   };
@@ -98,15 +101,18 @@ export interface components {
       does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
+      /** Format: double */
+      phone_number?: number;
       gender?: string;
       emergency_contact?: string;
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning?: boolean;
       university_year?: string;
     };
     /** @description Construct a type with the properties of T except for those in type K. */
@@ -130,19 +136,22 @@ export interface components {
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__": {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
-      gender: string;
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      /** Format: double */
+      phone_number: number;
+      gender?: string;
       emergency_contact?: string;
       first_name: string;
       last_name: string;
       dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning: boolean;
-      university_year: string;
+      university_year?: string;
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_UserAdditionalInfo.stripe_id_": components["schemas"]["Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__"];
@@ -185,8 +194,25 @@ export interface components {
       stripeClientSecret?: string;
     };
     UserBookingRequestingModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
+    /** @description Represents the response structure for fetching user ids by date range. */
+    UIdssByDateRangeResponse: {
+      data?: {
+          users: string[];
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
+      error?: string;
+    };
+    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
+    BookingsByDateRangeRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -208,38 +234,41 @@ export interface components {
       data?: components["schemas"]["AvailableDates"][];
     };
     AvailableDatesRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
-    UserAdditionalInfo: {
+    /** @enum {string} */
+    UserAccountTypes: "admin" | "member" | "guest";
+    CombinedUserData: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
-      does_snowboarding: boolean;
-      does_racing: boolean;
-      does_ski: boolean;
-      gender: string;
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      /** Format: double */
+      phone_number: number;
+      gender?: string;
       emergency_contact?: string;
       first_name: string;
       last_name: string;
       dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning: boolean;
-      university_year: string;
+      university_year?: string;
       /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
-    };
-    /** @enum {string} */
-    UserAccountTypes: "admin" | "member" | "guest";
-    CombinedUserData: components["schemas"]["UserAdditionalInfo"] & {
-      /** @description What type of account the user has */
-      membership: components["schemas"]["UserAccountTypes"];
-      /** @description The email the user uses to log in */
-      email: string;
-      /** @description Formatted UTC date string of when the account was created */
-      dateJoined?: string;
       /** @description Firebase identifier of the user *data* based on the firestore document */
       uid: string;
+      /** @description Formatted UTC date string of when the account was created */
+      dateJoined?: string;
+      /** @description The email the user uses to log in */
+      email: string;
+      /** @description What type of account the user has */
+      membership: components["schemas"]["UserAccountTypes"];
     };
     /** @description Represents the response structure for fetching users by date range. */
     UsersByDateRangeResponse: {
@@ -248,11 +277,6 @@ export interface components {
           date: components["schemas"]["FirebaseFirestore.Timestamp"];
         }[];
       error?: string;
-    };
-    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
-    BookingsByDateRangeRequestModel: {
-      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     BookingSlotUpdateResponse: {
       error?: string;
@@ -263,18 +287,18 @@ export interface components {
         }[];
     };
     MakeDatesAvailableRequestBody: {
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
       /** Format: double */
       slots?: number;
     };
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__": {
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     /** @description Construct a type with the properties of T except for those in type K. */
@@ -291,6 +315,27 @@ export interface components {
       nextCursor?: string;
       data?: components["schemas"]["CombinedUserData"][];
     };
+    UserAdditionalInfo: {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      /** Format: double */
+      phone_number: number;
+      gender?: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      university_year?: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+    };
     CreateUserRequestBody: {
       uid: string;
       user: components["schemas"]["UserAdditionalInfo"];
@@ -301,15 +346,18 @@ export interface components {
       does_snowboarding?: boolean;
       does_racing?: boolean;
       does_ski?: boolean;
+      /** Format: double */
+      phone_number?: number;
       gender?: string;
       emergency_contact?: string;
       first_name?: string;
       last_name?: string;
       dietary_requirements?: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
       faculty?: string;
       university?: string;
       student_id?: string;
-      returning?: boolean;
       university_year?: string;
       /** @description For identification DO NOT RETURN to users in exposed endpoints */
       stripe_id?: string;
@@ -351,19 +399,21 @@ export interface operations {
         content: {
           "application/json": {
             stripe_id?: string;
-            university_year: string;
-            returning: boolean;
+            university_year?: string;
             student_id?: string;
             university?: string;
             faculty?: string;
+            ethnicity?: string;
             dietary_requirements: string;
             last_name: string;
             first_name: string;
             emergency_contact?: string;
-            gender: string;
-            does_ski: boolean;
-            does_racing: boolean;
-            does_snowboarding: boolean;
+            gender?: string;
+            /** Format: double */
+            phone_number: number;
+            does_ski?: boolean;
+            does_racing?: boolean;
+            does_snowboarding?: boolean;
             date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
             uid: string;
           };
@@ -479,6 +529,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["BookingPaymentResponse"];
+        };
+      };
+    };
+  };
+  CreateBookings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BookingsByDateRangeRequestModel"];
+      };
+    };
+    responses: {
+      /** @description Bookings successfully created */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
         };
       };
     };

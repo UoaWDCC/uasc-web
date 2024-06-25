@@ -30,24 +30,20 @@ const ConfirmationSection = ({
     }
   }, [])
   return (
-    <div className="">
-      <div className="flex flex-row items-center justify-center">
-        <div className="max-w-[204px]">
-          <h3 className="">
-            {subHeader}
-            <p className="pb-[50px]">{textTop}</p>
-            <p>{textBottom}</p>
-          </h3>
-        </div>
-        <div className="pl-[175px] max-sm:hidden">
-          {SvgIcon && (
-            <SvgIcon
-              width="255px"
-              height="255px"
-              className="fill-light-blue-100"
-            />
-          )}
-        </div>
+    <div className="flex max-w-[600px] items-center gap-4 sm:justify-center">
+      <div className="flex flex-col gap-1">
+        <h3>{subHeader}</h3>
+        <p>{textTop}</p>
+        <p>{textBottom}</p>
+      </div>
+      <div className="ml-auto hidden sm:block">
+        {SvgIcon && (
+          <SvgIcon
+            width="255px"
+            height="255px"
+            className="fill-light-blue-100"
+          />
+        )}
       </div>
     </div>
   )

@@ -100,8 +100,8 @@ const PasswordResetForm = ({
             Reset
           </Button>
         </span>
-        {messages.success && <>{messages.success}</>}
-        {messages.error && <>{messages.error}</>}
+        {messages.success && <h5>{messages.success}</h5>}
+        {messages.error && <h5>{messages.error}</h5>}
       </form>
     </div>
   )
