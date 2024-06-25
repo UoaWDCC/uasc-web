@@ -29,6 +29,7 @@ export const DefaultProfileEdit = () => {
         { fieldName: "student_id", defaultFieldValue: "111" }
       ]}
       onEdit={() => {}}
+      onClose={() => {}}
     />
   )
 }
