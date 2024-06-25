@@ -30,7 +30,7 @@ const nameTransformer = (
     case "emergency_contact":
       return "Emergency Contact"
     case "first_name":
-      return "First NameF"
+      return "First Name"
     case "last_name":
       return "Last Name"
     case "dietary_requirements":

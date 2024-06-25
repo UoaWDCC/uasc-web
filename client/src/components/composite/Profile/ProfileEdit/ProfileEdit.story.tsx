@@ -12,13 +12,19 @@ export const DefaultProfileEdit = () => {
     <ProfileEdit<{
       first_name: string
       last_name: string
+      date_of_birth: { seconds: number; nanoseconds: number }
       phone_number: number
+      emergency_contact: string
+      student_id: string
     }>
       title="Update personal details"
       fields={[
         { fieldName: "first_name", defaultFieldValue: "ray" },
         { fieldName: "last_name", defaultFieldValue: "cho" },
-        { fieldName: "phone_number", defaultFieldValue: "6969696" }
+        { fieldName: "date_of_birth", defaultFieldValue: "2004/06/09" },
+        { fieldName: "phone_number", defaultFieldValue: "6969696" },
+        { fieldName: "emergency_contact", defaultFieldValue: "no one" },
+        { fieldName: "student_id", defaultFieldValue: "111" }
       ]}
       onEdit={() => {}}
     />
