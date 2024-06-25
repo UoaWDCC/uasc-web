@@ -1341,6 +1341,27 @@ describe("Endpoints", () => {
           ])
         })
       ])
+
+      // Check to see if the bookings are created correctly
+      const result1 =
+        await bookingDataService.getBookingsByUserId(MEMBER_USER_UID)
+      const result2 =
+        await bookingDataService.getBookingsByUserId(GUEST_USER_UID)
+      const result3 = await bookingDataService.getBookingsBySlotId(slot1.id)
+
+      expect(result1).toHaveLength(1)
+      expect.arrayContaining([
+        expect.objectContaining({ booking_slot_id: slot1.id }),
+        expect.objectContaining({ user_id: MEMBER_USER_UID }),
+        expect.objectContaining({ stripe_payment_id: "a" })
+      ])
+      expect(result2).toHaveLength(1)
+      expect.arrayContaining([
+        expect.objectContaining({ booking_slot_id: slot2.id }),
+        expect.objectContaining({ user_id: GUEST_USER_UID }),
+        expect.objectContaining({ stripe_payment_id: "" })
+      ])
+      expect(result1).toEqual(result3)
     })
 
     it("should return an empty array if no users have bookings within the date range", async () => {

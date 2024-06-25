@@ -78,28 +78,28 @@ export class BookingController extends Controller {
         }
 
         /** For every slotid add a booking for that id only if user doesn't already have a booking */
-        let i: number
-        for (i = 0; i < userIds.length; i++) {
+        const userIdsPromises = userIds.map(async (userId, i) => {
           if (
             (await bookingDataService.getBookingsByUserId(userIds[i]))
               .length !== 0
           ) {
             delete userIds[i] // Remove user from list if they already have a booking
-            break
           } else {
-            bookingDataService.createBooking({
+            await bookingDataService.createBooking({
               user_id: userIds[i],
               booking_slot_id: slotIds[i],
               stripe_payment_id: stripePaymentIds[i]
             })
           }
-        }
+        })
 
         /** List of usersIds successfully added */
         responseData.push({
           date: slot.date,
           users: userIds
         })
+
+        await Promise.all(userIdsPromises)
       })
 
       await Promise.all(bookingPromises)
