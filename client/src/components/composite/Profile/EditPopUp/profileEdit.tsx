@@ -1,6 +1,7 @@
+import { FieldValue } from "firebase/firestore"
 import { ReducedUserAdditionalInfo } from "models/User"
 import { useAppData } from "store/Store"
-
+import TextInput from "components/generic/TextInputComponent/TextInput"
 interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
   title: string
   fields: {
@@ -37,10 +38,9 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   return (
     <div className="flex w-full items-center justify-center">
       <div className="w-full border border-black">
-        <Field
-          subtitle="Name"
-          description={`${currentUserData?.first_name}`}
-        ></Field>
+        {fields.map((field) => {
+          return <input key={field.fieldName}></input>
+        })}
       </div>
     </div>
   )
