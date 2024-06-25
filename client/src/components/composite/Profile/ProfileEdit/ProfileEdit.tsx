@@ -60,8 +60,8 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   const [closed, setClosed] = useState(false)
   if (!closed) {
     return (
-      <div className="border-gray-3 flex w-[480px] flex-col items-center justify-center rounded-md border">
-        <div className=" mt-4 flex w-full flex-col gap-4  p-4">
+      <div className="flex w-[480px] flex-col items-center justify-center ">
+        <div className="border-gray-3 mt-4 flex w-full  flex-col gap-4 rounded-md border p-4">
           <div className="flex w-full">
             <h3 className="text-dark-blue-100">{title}</h3>{" "}
             <CloseButton
@@ -80,9 +80,10 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
               />
             )
           })}
-        </div>
-        <div className="mt-4 w-[200px]">
-          <Button onClick={() => {}}>Update details</Button>
+
+          <div className=" mt-2 w-[200px]">
+            <Button onClick={() => {}}>Update details</Button>
+          </div>
         </div>
       </div>
     )
