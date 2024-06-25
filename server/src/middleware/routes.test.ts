@@ -1408,5 +1408,48 @@ describe("Endpoints", () => {
 
       expect(res.status).toEqual(401)
     })
+
+    it("Shouldn't duplicate members in the same slot", async () => {
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2022"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+
+      const slot1 = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("02/01/2023")),
+        max_bookings: 10
+      })
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: slot1.id,
+        stripe_payment_id: ""
+      })
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: slot1.id,
+        stripe_payment_id: ""
+      })
+
+      const res = await request
+        .post("/bookings/create-bookings")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate
+        })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toHaveLength(1)
+      expect.arrayContaining([
+        expect.objectContaining({
+          users: expect.arrayContaining([
+            expect.objectContaining({ uid: MEMBER_USER_UID })
+          ])
+        })
+      ])
+    })
   })
 })
