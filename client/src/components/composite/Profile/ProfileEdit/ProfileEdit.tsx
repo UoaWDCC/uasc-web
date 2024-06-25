@@ -50,8 +50,7 @@ const nameTransformer = (
 
 const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   title,
-  fields,
-  onEdit
+  fields
 }: IProfileEdit<T>) => {
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -60,7 +59,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
         {fields.map((field) => {
           return (
             <TextInput
-              key={field.fieldName}
+              key={field.fieldName.toString()}
               label={nameTransformer(
                 field.fieldName as keyof ReducedUserAdditionalInfo
               )}
@@ -68,7 +67,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
           )
         })}
       </div>
-      <Button onClick={onEdit}>Update details</Button>
+      <Button onClick={() => {}}>Update details</Button>
     </div>
   )
 }
