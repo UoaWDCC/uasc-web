@@ -28,6 +28,43 @@ const Field = ({
   )
 }
 
+const nameTransformer = (
+  originalName: keyof ReducedUserAdditionalInfo
+): string => {
+  switch (originalName) {
+    case "date_of_birth":
+      return "Date of Birth"
+    case "does_snowboarding":
+      return "Does Snowboarding"
+    case "does_racing":
+      return "Does Racing"
+    case "does_ski":
+      return "Does Ski"
+    case "phone_number":
+      return "Phone Number"
+    case "gender":
+      return "Gender"
+    case "emergency_contact":
+      return "Emergency Contact"
+    case "first_name":
+      return "First NameF"
+    case "last_name":
+      return "Last Name"
+    case "dietary_requirements":
+      return "Dietary Requirements"
+    case "ethnicity":
+      return "Ethnicity"
+    case "faculty":
+      return "Faculty"
+    case "university":
+      return "University"
+    case "student_id":
+      return "Student Id"
+    case "university_year":
+      return "University Year"
+  }
+}
+
 const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   title,
   fields,
@@ -38,7 +75,14 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
       <h3 className="">{title}</h3>
       <div className="w-full border border-black">
         {fields.map((field) => {
-          return <TextInput key={field.fieldName} label={field.fieldName} />
+          return (
+            <TextInput
+              key={field.fieldName}
+              label={nameTransformer(
+                field.fieldName as keyof ReducedUserAdditionalInfo
+              )}
+            />
+          )
         })}
       </div>
     </div>
