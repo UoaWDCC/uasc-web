@@ -9,7 +9,13 @@ export const DefaultProfileEdit = () => {
       last_name: string
       phone_number: string
     }>
-      fields
+      title="U"
+      fields={[
+        { fieldName: "first_name", defaultFieldValue: "ray" },
+        { fieldName: "last_name", defaultFieldValue: "cho" },
+        { fieldName: "phone_number", defaultFieldValue: "6969696" }
+      ]}
+      onEdit={() => {}}
     />
   )
 }

@@ -4,7 +4,7 @@ import TextInput from "components/generic/TextInputComponent/TextInput"
 interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
   title: string
   fields: {
-    fieldName: string
+    fieldName: keyof T
     defaultFieldValue: string
   }[]
   onEdit: (fields: Partial<T>) => void
