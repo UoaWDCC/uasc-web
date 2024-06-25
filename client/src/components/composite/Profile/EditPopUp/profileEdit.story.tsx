@@ -1,6 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react"
-
-import ProfileEdit from "./profileEdit"
+import ProfileEdit from "./ProfileEdit"
 
 export const DefaultProfileEdit = () => {
   return (
@@ -9,7 +7,7 @@ export const DefaultProfileEdit = () => {
       last_name: string
       phone_number: string
     }>
-      title="U"
+      title="Update Personal Details"
       fields={[
         { fieldName: "first_name", defaultFieldValue: "ray" },
         { fieldName: "last_name", defaultFieldValue: "cho" },
