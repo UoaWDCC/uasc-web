@@ -9,6 +9,7 @@ interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
   fields: {
     fieldName: keyof T
     defaultFieldValue: string
+    onClose: () => void
   }[]
   onEdit: (fields: Partial<T>) => void
 }
@@ -54,42 +55,34 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   title,
   fields
 }: IProfileEdit<T>) => {
-  function handleClose() {
-    setClosed(true)
-  }
-  const [closed, setClosed] = useState(false)
-  if (!closed) {
-    return (
-      <div className="flex w-[480px] flex-col items-center justify-center ">
-        <div className="border-gray-3 mt-4 flex w-full flex-col gap-4 rounded-md border p-4">
-          <div className="flex w-full">
-            <h3 className="text-dark-blue-100">{title}</h3>{" "}
-            <CloseButton
-              onClick={handleClose}
-              className="hover:fill-light-blue-100 ml-auto w-[15px] cursor-pointer"
+  return (
+    <div className="flex w-[480px] flex-col items-center justify-center ">
+      <div className="border-gray-3 mt-4 flex w-full flex-col gap-4 rounded-md border p-4">
+        <div className="flex w-full">
+          <h3 className="text-dark-blue-100">{title}</h3>{" "}
+          <CloseButton
+            onClick={onClose}
+            className="hover:fill-light-blue-100 ml-auto w-[15px] cursor-pointer"
+          />
+        </div>
+
+        {fields.map((field) => {
+          return (
+            <TextInput
+              key={field.fieldName.toString()}
+              label={nameTransformer(
+                field.fieldName as keyof ReducedUserAdditionalInfo
+              )}
             />
-          </div>
+          )
+        })}
 
-          {fields.map((field) => {
-            return (
-              <TextInput
-                key={field.fieldName.toString()}
-                label={nameTransformer(
-                  field.fieldName as keyof ReducedUserAdditionalInfo
-                )}
-              />
-            )
-          })}
-
-          <div className=" mt-2 w-[200px]">
-            <Button onClick={() => {}}>Update details</Button>
-          </div>
+        <div className=" mt-2 w-[200px]">
+          <Button onClick={() => {}}>Update details</Button>
         </div>
       </div>
-    )
-  } else {
-    return null
-  }
+    </div>
+  )
 }
 
 export default ProfileEdit
