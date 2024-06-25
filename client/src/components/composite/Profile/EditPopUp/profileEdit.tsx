@@ -1,6 +1,8 @@
 import { ReducedUserAdditionalInfo } from "models/User"
 import { useAppData } from "store/Store"
 
+inter
+
 const Field = ({
   subtitle,
   description
@@ -19,7 +21,7 @@ const Field = ({
   )
 }
 
-const profileEdit = <T extends Partial<ReducedUserAdditionalInfo>>() => {
+const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>() => {
   const [{ currentUserData }] = useAppData()
   return (
     <div className="flex w-full items-center justify-center">
