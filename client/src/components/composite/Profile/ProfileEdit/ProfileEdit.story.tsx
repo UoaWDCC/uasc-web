@@ -1,4 +1,11 @@
+import type { Meta } from "@storybook/react"
 import ProfileEdit from "./ProfileEdit"
+
+const meta: Meta<typeof ProfileEdit> = {
+  component: ProfileEdit
+}
+
+export default meta
 
 export const DefaultProfileEdit = () => {
   return (
