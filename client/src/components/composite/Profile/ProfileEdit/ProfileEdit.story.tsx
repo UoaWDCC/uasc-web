@@ -12,7 +12,7 @@ export const DefaultProfileEdit = () => {
     <ProfileEdit<{
       first_name: string
       last_name: string
-      phone_number: string
+      phone_number: number
     }>
       title="Update Personal Details"
       fields={[
