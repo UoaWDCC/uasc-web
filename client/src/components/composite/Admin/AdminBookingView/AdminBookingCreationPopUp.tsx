@@ -333,15 +333,32 @@ const AdminBookingCreationPopUp = ({
               returnValue="range"
             />
             <DateRangePicker
-              valueStart={new Date()}
-              valueEnd={new Date()}
-              handleDateRangeInputChange={() => {}}
+              valueStart={selectedDateRange.startDate}
+              valueEnd={selectedDateRange.endDate}
+              handleDateRangeInputChange={(start, end) => {
+                const newStartDate = start || currentStartDate
+                const newEndDate = end || currentEndDate
+                if (
+                  checkValidRange(
+                    DateUtils.convertLocalDateToUTCDate(newStartDate),
+                    DateUtils.convertLocalDateToUTCDate(newEndDate)
+                  )
+                ) {
+                  setSelectedDateRange({
+                    startDate: newStartDate,
+                    endDate: newEndDate
+                  })
+                }
+              }}
             />
             <Button
               disabled={currentStage !== FlowStages.SELECT_DATES || isPending}
               onClick={() => {
                 if (
-                  checkValidRange(currentStartDate, currentEndDate) &&
+                  checkValidRange(
+                    DateUtils.convertLocalDateToUTCDate(currentStartDate),
+                    DateUtils.convertLocalDateToUTCDate(currentEndDate)
+                  ) &&
                   currentSelectedUserUid
                 ) {
                   bookingCreationHandler?.(
