@@ -2,14 +2,13 @@ import { ReducedUserAdditionalInfo } from "models/User"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import CloseButton from "assets/icons/x.svg?react"
-import { useState } from "react"
 
 interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
   title: string
+  onClose: () => void
   fields: {
     fieldName: keyof T
     defaultFieldValue: string
-    onClose: () => void
   }[]
   onEdit: (fields: Partial<T>) => void
 }
@@ -53,7 +52,8 @@ const nameTransformer = (
 
 const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   title,
-  fields
+  fields,
+  onClose
 }: IProfileEdit<T>) => {
   return (
     <div className="flex w-[480px] flex-col items-center justify-center ">
