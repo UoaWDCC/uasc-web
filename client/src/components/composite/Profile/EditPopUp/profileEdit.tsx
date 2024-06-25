@@ -40,7 +40,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
     <div className="flex w-full items-center justify-center">
       <div className="w-full border border-black">
         {fields.map((field) => {
-          return <TextInput key={field.fieldName} la />
+          return <TextInput key={field.fieldName} label={field.fieldName} />
         })}
       </div>
     </div>
