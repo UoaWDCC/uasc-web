@@ -54,8 +54,8 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
 }: IProfileEdit<T>) => {
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <h3 className="">{title}</h3>
-      <div className="w-full border border-black">
+      <h3 className="text-dark-blue-100">{title}</h3>
+      <div className="border-gray-3 w-full rounded-md border p-2">
         {fields.map((field) => {
           return (
             <TextInput

@@ -14,7 +14,7 @@ export const DefaultProfileEdit = () => {
       last_name: string
       phone_number: number
     }>
-      title="Update Personal Details"
+      title="Update personal details"
       fields={[
         { fieldName: "first_name", defaultFieldValue: "ray" },
         { fieldName: "last_name", defaultFieldValue: "cho" },
