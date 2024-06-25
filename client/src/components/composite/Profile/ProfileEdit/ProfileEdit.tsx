@@ -66,7 +66,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
             <h3 className="text-dark-blue-100">{title}</h3>{" "}
             <CloseButton
               onClick={handleClose}
-              className="hover:fill-light-blue-100 ml-auto w-[15px]"
+              className="hover:fill-light-blue-100 ml-auto w-[15px] cursor-pointer"
             />
           </div>
 
