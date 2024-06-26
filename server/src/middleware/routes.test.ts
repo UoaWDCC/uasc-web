@@ -1228,11 +1228,13 @@ describe("Endpoints", () => {
         }),
         expect.objectContaining({
           bookingIds: expect.arrayContaining([
-            expect.objectContaining({ booking_slot_id: slot1.id })])
+            expect.objectContaining({ booking_slot_id: slot1.id })
+          ])
         }),
         expect.objectContaining({
           bookingIds: expect.arrayContaining([
-            expect.objectContaining({ booking_slot_id: slot2.id })])
+            expect.objectContaining({ booking_slot_id: slot2.id })
+          ])
         })
       ])
     })
