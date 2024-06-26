@@ -80,7 +80,8 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date ${firestoreTimestampToDate(dateTimestamp).toString()} available`
+          `Something went wrong when trying to make the date
+          ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
       }
@@ -127,7 +128,8 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date ${firestoreTimestampToDate(dateTimestamp).toString()} available`
+          `Something went wrong when trying to make the date
+          ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
       }
