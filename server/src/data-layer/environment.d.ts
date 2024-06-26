@@ -24,6 +24,18 @@ declare global {
        * for how to obtain one for local testing.
        */
       STRIPE_WEBHOOK_SECRET: string
+      /**
+       * The email from which NodeMailer emails should be sent from
+       *
+       * You will need to have access to this account to obtain the password
+       */
+      NODE_MAILER_EMAIL: string
+      /**
+       * The **App Password** for the gmail account specified by `NODE_MAILER_EMAIL`.
+       *
+       * Refer to https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237
+       */
+      NODE_MAILER_PASSWORD: string
     }
   }
 }
