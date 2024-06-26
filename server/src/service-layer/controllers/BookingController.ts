@@ -1,6 +1,7 @@
 import {
   AvailableDatesRequestModel,
-  BookingsByDateRangeRequestModel
+  BookingsByDateRangeRequestModel,
+  CreateBookingsRequestModel
 } from "service-layer/request-models/UserRequests"
 import { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
 import { Timestamp } from "firebase-admin/firestore"
@@ -39,7 +40,7 @@ export class BookingController extends Controller {
   @Security("jwt", ["admin"])
   @Post("create-bookings")
   public async createBookings(
-    @Body() requestBody: BookingsByDateRangeRequestModel
+    @Body() requestBody: CreateBookingsRequestModel
   ): Promise<UIdssByDateRangeResponse> {
     try {
       const { startDate, endDate } = requestBody
@@ -63,32 +64,18 @@ export class BookingController extends Controller {
 
       /** Iterating through each booking slot */
       const bookingPromises = bookingSlots.map(async (slot) => {
-        /** Getting the bookings for the current slot */
-        const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
-
-        /** Extracting the all 3 Ids from the bookings */
-        const userIds = bookings.map((booking) => booking.user_id)
-        const slotIds = bookings.map((booking) => booking.booking_slot_id)
-        const stripePaymentIds = bookings.map(
-          (booking) => booking.stripe_payment_id
-        )
-
-        if (userIds.length === 0) {
-          return
-        }
-
+        let userIds = [...requestBody.userIds]
         /** For every slotid add a booking for that id only if user doesn't already have a booking */
-        const userIdsPromises = userIds.map(async (userId, i) => {
+        const userIdsPromises = userIds.map(async (userId) => {
           if (
-            (await bookingDataService.getBookingsByUserId(userIds[i]))
-              .length !== 0
+            (await bookingDataService.getBookingsByUserId(userId)).length !== 0
           ) {
-            delete userIds[i] // Remove user from list if they already have a booking
+            userIds = userIds.filter((id) => id !== userId) // Remove user from list if they already have a booking
           } else {
             await bookingDataService.createBooking({
-              user_id: userIds[i],
-              booking_slot_id: slotIds[i],
-              stripe_payment_id: stripePaymentIds[i]
+              user_id: userId,
+              booking_slot_id: slot.id,
+              stripe_payment_id: "manual_entry"
             })
           }
         })

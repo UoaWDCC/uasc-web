@@ -207,12 +207,13 @@ export interface components {
         }[];
       error?: string;
     };
-    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
-    BookingsByDateRangeRequestModel: {
+    CreateBookingsRequestModel: {
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description List of users to add to the bookings between date range */
+      userIds: string[];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -277,6 +278,13 @@ export interface components {
           date: components["schemas"]["FirebaseFirestore.Timestamp"];
         }[];
       error?: string;
+    };
+    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
+    BookingsByDateRangeRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     BookingSlotUpdateResponse: {
       error?: string;
@@ -536,7 +544,7 @@ export interface operations {
   CreateBookings: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["BookingsByDateRangeRequestModel"];
+        "application/json": components["schemas"]["CreateBookingsRequestModel"];
       };
     };
     responses: {

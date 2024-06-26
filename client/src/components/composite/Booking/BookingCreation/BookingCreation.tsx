@@ -9,19 +9,7 @@ import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
-import { DateUtils, UnknownTimestamp } from "components/utils/DateUtils"
-
-type DateRange = {
-  /**
-   * Javascript date object representing the date of the first night for the booking
-   */
-  startDate: Date
-
-  /**
-   * Javascript date object representing the date of the last night for the booking
-   */
-  endDate: Date
-}
+import { DateRange, DateUtils } from "components/utils/DateUtils"
 
 /*
  * Swaps around dates if invalid
@@ -74,12 +62,6 @@ interface ICreateBookingSection {
    */
   isPending?: boolean
 }
-const UTCDatesEqual = (slot: UnknownTimestamp, date: Date) => {
-  return DateUtils.dateEqualToTimestamp(
-    DateUtils.convertLocalDateToUTCDate(date),
-    slot
-  )
-}
 
 const NORMAL_PRICE = 40 as const
 const SPECIAL_PRICE = 60 as const
@@ -101,7 +83,7 @@ export const CreateBookingSection = ({
   const { startDate: currentStartDate, endDate: currentEndDate } =
     selectedDateRange
 
-  const disabledDates = bookingSlots.filter((slot) => slot.availableSpaces <= 0)
+  const disabledDates = DateUtils.unavailableDates(bookingSlots)
 
   /**
    * Function to be called to confirm the date range selected by the user.
@@ -216,13 +198,18 @@ export const CreateBookingSection = ({
             }
             tileDisabled={({ date, view }) =>
               view !== "year" &&
-              (!bookingSlots.some((slot) => UTCDatesEqual(slot.date, date)) ||
-                disabledDates.some((slot) => UTCDatesEqual(slot.date, date)))
+              (!bookingSlots.some((slot) =>
+                DateUtils.UTCDatesEqual(slot.date, date)
+              ) ||
+                disabledDates.some((slot) =>
+                  DateUtils.UTCDatesEqual(slot.date, date)
+                ))
             }
             tileContent={({ date }) => {
               const slot = bookingSlots.find(
                 (slot) =>
-                  UTCDatesEqual(slot.date, date) && slot.availableSpaces > 0
+                  DateUtils.UTCDatesEqual(slot.date, date) &&
+                  slot.availableSpaces > 0
               )
               return slot ? (
                 <p className="text-xs">
