@@ -1169,7 +1169,7 @@ describe("Endpoints", () => {
       await cleanFirestore()
     })
 
-    it("should return users with bookings within the date range", async () => {
+    it("should return users with bookings (and their corresponding bookingIds) within the date range", async () => {
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
 
@@ -1225,6 +1225,14 @@ describe("Endpoints", () => {
           users: expect.arrayContaining([
             expect.objectContaining({ uid: GUEST_USER_UID })
           ])
+        }),
+        expect.objectContaining({
+          bookingIds: expect.arrayContaining([
+            expect.objectContaining({ booking_slot_id: slot1.id })])
+        }),
+        expect.objectContaining({
+          bookingIds: expect.arrayContaining([
+            expect.objectContaining({ booking_slot_id: slot2.id })])
         })
       ])
     })

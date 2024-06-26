@@ -23,7 +23,7 @@ import {
   Request
 } from "tsoa"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
-import { CombinedUserData } from "../response-models/UserResponse"
+import { BookingIdandUserData, CombinedUserData } from "../response-models/UserResponse"
 import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
 import * as console from "console"
@@ -267,7 +267,7 @@ export class BookingController extends Controller {
       /** The response data array */
       const responseData: Array<{
         date: Timestamp
-        users: CombinedUserData[]
+        users: BookingIdandUserData[]
       }> = []
 
       /** Iterating through each booking slot */
@@ -275,8 +275,9 @@ export class BookingController extends Controller {
         /** Getting the bookings for the current slot */
         const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
 
-        /** Extracting the user IDs from the bookings */
+        /** Extracting the user and booking slot IDs from the bookings */
         const userIds = bookings.map((booking) => booking.user_id)
+        const bookingSlotIds = bookings.map((booking) => booking.booking_slot_id)
 
         if (userIds.length === 0) {
           return
@@ -307,14 +308,18 @@ export class BookingController extends Controller {
           return {
             ...user,
             email: authUser?.email,
-            membership
+            membership,
           } as CombinedUserData
         })
 
         /** Adding the date and users to the response data array */
         responseData.push({
           date: slot.date,
-          users: combinedUsers
+          // Mapping the users to include the booking ID
+          users: combinedUsers.map((user, i) => ({
+            ...user,
+            bookingId: bookingSlotIds[i]
+          }))
         })
       })
 
