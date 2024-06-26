@@ -316,7 +316,7 @@ export class PaymentController extends Controller {
           this.setStatus(200)
           return {
             stripeClientSecret: activeSession.client_secret,
-            message: `Existing booking checkout session found for the dates ${activeSession.metadata[START_DATE] || ""} to ${activeSession.metadata[END_DATE] || ""}, you may start a new one after ${sessionStartTime} (NZST)`
+            message: `Existing booking checkout session found for the nights ${activeSession.metadata[START_DATE] || ""} to ${activeSession.metadata[END_DATE] || ""}, you may start a new one after ${sessionStartTime} (NZST)`
           }
         }
       }
@@ -451,7 +451,7 @@ export class PaymentController extends Controller {
       this.setStatus(200)
       return {
         stripeClientSecret: clientSecret,
-        message: `You have until ${new Date(Date.now() + THIRTY_MINUTES_MS).toLocaleTimeString("en-NZ")} to pay for the dates ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
+        message: `You have until ${new Date(Date.now() + THIRTY_MINUTES_MS).toLocaleTimeString("en-NZ")} to pay for the nights ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
       }
     } catch (e) {
       this.setStatus(500)
