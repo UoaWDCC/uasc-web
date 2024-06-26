@@ -3,7 +3,9 @@ import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 import {
   BOOKING_SLOTS_KEY,
   CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues
+  CheckoutTypeValues,
+  END_DATE,
+  START_DATE
 } from "business-layer/utils/StripeSessionMetadata"
 import {
   MembershipTypeValues,
@@ -309,7 +311,7 @@ export class PaymentController extends Controller {
           this.setStatus(200)
           return {
             stripeClientSecret: activeSession.client_secret,
-            message: `Existing booking checkout session found for the dates ${BOOKING_START_DATE} to ${BOOKING_END_DATE}, you may start a new one after ${sessionStartTime} (NZST)`
+            message: `Existing booking checkout session found for the dates ${activeSession.metadata[START_DATE] || ""} to ${activeSession.metadata[END_DATE] || ""}, you may start a new one after ${sessionStartTime} (NZST)`
           }
         }
       }
@@ -429,7 +431,9 @@ export class PaymentController extends Controller {
           [LODGE_PRICING_TYPE_KEY]: requiredBookingType,
           [BOOKING_SLOTS_KEY]: JSON.stringify(
             bookingSlots.map((slot) => slot.id)
-          )
+          ),
+          [START_DATE]: BOOKING_START_DATE,
+          [END_DATE]: BOOKING_END_DATE
         },
         stripeCustomerId,
         undefined,
