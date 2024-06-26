@@ -246,6 +246,11 @@ export class PaymentController extends Controller {
     }
   }
 
+  /**
+   * Creates a new booking session for the date ranges passed in,
+   * will return any existing sessions if they have been started in
+   * the last 30 minutes (the minimum period stripe has to persist a session for)
+   */
   @SuccessResponse("200", "Created booking checkout session")
   @Security("jwt", ["member"])
   @Post("booking")
