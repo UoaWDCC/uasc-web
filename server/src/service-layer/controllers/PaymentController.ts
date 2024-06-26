@@ -266,22 +266,33 @@ export class PaymentController extends Controller {
           userDataService
         )
 
+      /**
+       * Declare these with outer scope as they are used in most paths
+       */
       const { startDate, endDate } = requestBody
 
       const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
+      const totalDays = dateTimestampsInBooking.length
 
+      /**
+       * Used for formatted display to user
+       */
       const BOOKING_START_DATE = UTCDateToDdMmYyyy(
         new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
       )
 
-      const totalDays = dateTimestampsInBooking.length
-
+      /**
+       * Used for formatted display to user
+       */
       const BOOKING_END_DATE = UTCDateToDdMmYyyy(
         new Date(
           firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
         )
       )
 
+      /**
+       * The amount of time users have to complete a session
+       */
       const THIRTY_MINUTES_MS = 1800000
 
       // If not a new Stripe customer, we want to check for pre-existing bookings
