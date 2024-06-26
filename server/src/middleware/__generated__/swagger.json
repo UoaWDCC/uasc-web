@@ -713,12 +713,12 @@
 			},
 			"DeleteBookingRequest": {
 				"properties": {
-					"bookingId": {
+					"bookingID": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"bookingId"
+					"bookingID"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -1499,7 +1499,7 @@
 				},
 				"security": [
 					{
-						"Jwt": [
+						"jwt": [
 							"admin"
 						]
 					}

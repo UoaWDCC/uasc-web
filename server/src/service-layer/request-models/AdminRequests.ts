@@ -23,5 +23,5 @@ export interface DeleteBookingRequest {
   /**
    * @bookingId The id of the booking(not booking slot id) that was created
    */
-  bookingId: string
+  bookingID: string
 }

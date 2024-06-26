@@ -149,21 +149,23 @@ export class AdminController extends Controller {
   }
 
   @SuccessResponse("200", "Booking deleted successfuly")
-  @Security("Jwt", ["admin"])
   @Post("/bookings/delete")
   public async removeBooking(
     @Body() requestBody: DeleteBookingRequest
   ): Promise<BookingDeleteResponse> {
-    const { bookingId } = requestBody
+    const { bookingID } = requestBody
     // Validate and check if the booking actually exists
     const bookingDataService = new BookingDataService()
-    const { user_id } = await bookingDataService.getBookingById(bookingId)
-    if (!user_id) {
+    let user_id
+    try {
+      const booking = await bookingDataService.getBookingById(bookingID)
+      user_id = booking.user_id
+    } catch (err) {
       this.setStatus(404)
       return { message: "Booking not found with that booking ID." }
-    } else {
-      await bookingDataService.deleteBooking(bookingId)
     }
+    // attempt to delete
+    await bookingDataService.deleteBooking(bookingID)
     return { user_id }
   }
 

@@ -1202,7 +1202,7 @@ describe("Endpoints", () => {
         .send({ bookingID: createdBooking.id })
 
       expect(deleteRes.status).toEqual(200)
-      expect(deleteRes.body.user_id).toEqual("Edding Wang")
+      expect(deleteRes.body.user_id).toEqual("Eddie Wang")
 
       const res2 = await request
         .post("/bookings/available-dates")

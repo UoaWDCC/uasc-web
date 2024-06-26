@@ -309,7 +309,7 @@ const models: TsoaRoute.Models = {
     "DeleteBookingRequest": {
         "dataType": "refObject",
         "properties": {
-            "bookingId": {"dataType":"string","required":true},
+            "bookingID": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -861,7 +861,7 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/admin/bookings/delete',
-            authenticateMiddleware([{"Jwt":["admin"]}]),
+            authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.removeBooking)),
 

@@ -320,7 +320,7 @@ export interface components {
       user_id?: string;
     };
     DeleteBookingRequest: {
-      bookingId: string;
+      bookingID: string;
     };
     AllUsersResponse: {
       error?: string;
