@@ -13,10 +13,11 @@ import BookingDataService from "data-layer/services/BookingDataService"
 import {
   CheckoutTypeValues,
   CHECKOUT_TYPE_KEY,
-  BOOKING_SLOTS_KEY
+  BOOKING_SLOTS_KEY,
+  START_DATE,
+  END_DATE
 } from "business-layer/utils/StripeSessionMetadata"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { UTCDateToDdMmYyyy } from "data-layer/adapters/DateUtils"
 import MailService from "./MailService"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
@@ -419,8 +420,6 @@ export default class StripeService {
     const bookingDataService = new BookingDataService()
     const bookingSlotService = new BookingSlotService()
 
-    const timestampsInBooking: number[] = []
-
     await Promise.all(
       bookingSlotIds.map(async (bookingSlotShortId) => {
         const bookingSlot =
@@ -432,28 +431,20 @@ export default class StripeService {
           stripe_payment_id: session.id,
           user_id: uid
         })
-        timestampsInBooking.push(bookingSlot.date.toMillis())
       })
     )
     /**
      * Send confirmation email to the user
      */
     try {
-      const startDateString = UTCDateToDdMmYyyy(
-        new Date(Math.min(...timestampsInBooking))
-      )
-      const endDateString = UTCDateToDdMmYyyy(
-        new Date(Math.max(...timestampsInBooking))
-      )
-
       const [userAuthData] = await new AuthService().bulkRetrieveUsersByUids([
         { uid }
       ])
 
       await new MailService().sendBookingConfirmationEmail(
         userAuthData.email,
-        startDateString,
-        endDateString
+        session.metadata[START_DATE],
+        session.metadata[END_DATE]
       )
     } catch (error) {
       console.error(`Failed to send an email to the user ${uid}`, error)
