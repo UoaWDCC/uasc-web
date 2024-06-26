@@ -104,7 +104,6 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
 }
 
 const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
-  const navigate = useNavigate()
   const [{ membershipType }] = useMembershipPaymentDetails()
 
   const { data, isLoading, isError } =
@@ -138,13 +137,6 @@ const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
         onClick={() => wantsBankTransfer(true)}
       >
         Can’t pay through card? Bank Transfer instead
-      </h5>
-
-      <h5
-        className="text-dark-blue-100  cursor-pointer font-bold uppercase"
-        onClick={() => navigate(oneLevelUp(ACCOUNT_SETUP_ROUTE))}
-      >
-        set up account (pay later)
       </h5>
     </>
   )
