@@ -7,7 +7,14 @@ import { useForceRefreshToken } from "hooks/useRefreshedToken"
 import { signOut } from "firebase/auth"
 import { auth } from "firebase"
 import { DateUtils } from "components/utils/DateUtils"
-import { Suspense, lazy, useEffect, useMemo, useState } from "react"
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from "react"
 import { useSelfDataQuery } from "services/User/UserQueries"
 
 const AsyncEditPersonalPanel = lazy(() => import("./EditPersonalPanel"))
@@ -69,14 +76,18 @@ const Field = ({
   )
 }
 
+type EditPanels = "none" | "personal" | "additional"
+
 export default function Profile() {
   const [{ currentUser, currentUserClaims }] = useAppData()
   const { data: currentUserData, isLoading } = useSelfDataQuery()
   const navigate = useNavigate()
 
-  const [editPanelOpen, setEditPanelOpen] = useState<
-    "none" | "personal" | "additional"
-  >("none")
+  const [editPanelOpen, setEditPanelOpen] = useState<EditPanels>("none")
+
+  const closePanel = useCallback(() => {
+    setEditPanelOpen("none")
+  }, [])
 
   useForceRefreshToken()
 
@@ -98,13 +109,13 @@ export default function Profile() {
         <Suspense>
           <AsyncEditPersonalPanel
             isOpen={editPanelOpen === "personal"}
-            handleClose={() => setEditPanelOpen("none")}
+            handleClose={closePanel}
           />
         </Suspense>
         <Suspense>
           <AsyncEditAdditionalPanel
             isOpen={editPanelOpen === "additional"}
-            handleClose={() => setEditPanelOpen("none")}
+            handleClose={closePanel}
           />
         </Suspense>
         <div className="py-8">
