@@ -25,3 +25,7 @@ export interface UIdssByDateRangeResponse {
   data?: Array<{ date: Timestamp; users: string[] }>
   error?: string
 }
+
+export interface BookingDeleteResponse extends CommonResponse {
+  user_id?: string
+}

@@ -696,6 +696,33 @@
 				"$ref": "#/components/schemas/Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__",
 				"description": "Construct a type with the properties of T except for those in type K."
 			},
+			"BookingDeleteResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"user_id": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteBookingRequest": {
+				"properties": {
+					"bookingID": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"bookingID"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AllUsersResponse": {
 				"properties": {
 					"error": {
@@ -1449,6 +1476,41 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/Omit_MakeDatesAvailableRequestBody.slots_"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/bookings/delete": {
+			"post": {
+				"operationId": "RemoveBooking",
+				"responses": {
+					"200": {
+						"description": "Booking deleted successfuly",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingDeleteResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeleteBookingRequest"
 							}
 						}
 					}

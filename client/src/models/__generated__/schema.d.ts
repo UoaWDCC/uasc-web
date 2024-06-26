@@ -52,6 +52,9 @@ export interface paths {
   "/admin/bookings/make-dates-unavailable": {
     post: operations["MakeDateUnavailable"];
   };
+  "/admin/bookings/delete": {
+    post: operations["RemoveBooking"];
+  };
   "/admin/users": {
     /** @description User Operations */
     get: operations["GetAllUsers"];
@@ -311,6 +314,14 @@ export interface components {
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
+    BookingDeleteResponse: {
+      error?: string;
+      message?: string;
+      user_id?: string;
+    };
+    DeleteBookingRequest: {
+      bookingID: string;
+    };
     AllUsersResponse: {
       error?: string;
       message?: string;
@@ -624,6 +635,21 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["BookingSlotUpdateResponse"];
+        };
+      };
+    };
+  };
+  RemoveBooking: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteBookingRequest"];
+      };
+    };
+    responses: {
+      /** @description Booking deleted successfuly */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BookingDeleteResponse"];
         };
       };
     };
