@@ -7,10 +7,11 @@ import { useForceRefreshToken } from "hooks/useRefreshedToken"
 import { signOut } from "firebase/auth"
 import { auth } from "firebase"
 import { DateUtils } from "components/utils/DateUtils"
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, lazy, useEffect, useMemo, useState } from "react"
 import { useSelfDataQuery } from "services/User/UserQueries"
-import EditPersonalPanel from "./EditPersonalPanel"
-import EditAdditionalPanel from "./EditAdditionalPanel"
+
+const AsyncEditPersonalPanel = lazy(() => import("./EditPersonalPanel"))
+const AsyncEditAdditionalPanel = lazy(() => import("./EditAdditionalPanel"))
 
 const SignOutButton = () => {
   const navigate = useNavigate()
@@ -94,14 +95,18 @@ export default function Profile() {
   return (
     <div className={`relative min-h-screen ${isLoading && "blur-sm"}`}>
       <ResponsiveBackgroundImage>
-        <EditPersonalPanel
-          isOpen={editPanelOpen === "personal"}
-          handleClose={() => setEditPanelOpen("none")}
-        />
-        <EditAdditionalPanel
-          isOpen={editPanelOpen === "additional"}
-          handleClose={() => setEditPanelOpen("none")}
-        />
+        <Suspense>
+          <AsyncEditPersonalPanel
+            isOpen={editPanelOpen === "personal"}
+            handleClose={() => setEditPanelOpen("none")}
+          />
+        </Suspense>
+        <Suspense>
+          <AsyncEditAdditionalPanel
+            isOpen={editPanelOpen === "additional"}
+            handleClose={() => setEditPanelOpen("none")}
+          />
+        </Suspense>
         <div className="py-8">
           <div className="grid-cols grid w-full ">
             <div className="flex flex-col md:flex-row">

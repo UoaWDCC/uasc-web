@@ -3,7 +3,7 @@ import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import CloseButton from "assets/icons/x.svg?react"
 import { Timestamp } from "firebase/firestore"
-import { DateUtils } from "components/utils/DateUtils"
+import { DateUtils, UnknownTimestamp } from "components/utils/DateUtils"
 import { useState } from "react"
 
 interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
@@ -134,13 +134,15 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
                 })
               }
               defaultValue={
-                isDate
+                isDate && defaultValue
                   ? DateUtils.formatDateForInput(
                       new Date(
-                        (field.defaultFieldValue as Timestamp).seconds * 1000
+                        DateUtils.timestampMilliseconds(
+                          defaultValue as UnknownTimestamp
+                        )
                       )
                     )
-                  : (field.defaultFieldValue as string)
+                  : (defaultValue as string)
               }
             />
           )
