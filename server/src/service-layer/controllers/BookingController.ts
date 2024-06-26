@@ -1,6 +1,7 @@
 import {
   AvailableDatesRequestModel,
-  BookingsByDateRangeRequestModel
+  BookingsByDateRangeRequestModel,
+  CreateBookingsRequestModel
 } from "service-layer/request-models/UserRequests"
 import { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
 import { Timestamp } from "firebase-admin/firestore"
@@ -35,6 +36,12 @@ import {
   AuthServiceClaims,
   UserAccountTypes
 } from "../../business-layer/utils/AuthServiceClaims"
+import {
+  BOOKING_SLOTS_KEY,
+  CheckoutTypeValues
+} from "business-layer/utils/StripeSessionMetadata"
+import StripeService from "business-layer/services/StripeService"
+import BookingUtils from "business-layer/utils/BookingUtils"
 
 @Route("bookings")
 export class BookingController extends Controller {
@@ -42,7 +49,7 @@ export class BookingController extends Controller {
   @Security("jwt", ["admin"])
   @Post("create-bookings")
   public async createBookings(
-    @Body() requestBody: BookingsByDateRangeRequestModel
+    @Body() requestBody: CreateBookingsRequestModel
   ): Promise<UIdssByDateRangeResponse> {
     try {
       const { startDate, endDate } = requestBody
@@ -66,32 +73,18 @@ export class BookingController extends Controller {
 
       /** Iterating through each booking slot */
       const bookingPromises = bookingSlots.map(async (slot) => {
-        /** Getting the bookings for the current slot */
-        const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
-
-        /** Extracting the all 3 Ids from the bookings */
-        const userIds = bookings.map((booking) => booking.user_id)
-        const slotIds = bookings.map((booking) => booking.booking_slot_id)
-        const stripePaymentIds = bookings.map(
-          (booking) => booking.stripe_payment_id
-        )
-
-        if (userIds.length === 0) {
-          return
-        }
-
+        let userIds = [...requestBody.userIds]
         /** For every slotid add a booking for that id only if user doesn't already have a booking */
-        const userIdsPromises = userIds.map(async (userId, i) => {
+        const userIdsPromises = userIds.map(async (userId) => {
           if (
-            (await bookingDataService.getBookingsByUserId(userIds[i]))
-              .length !== 0
+            (await bookingDataService.getBookingsByUserId(userId)).length !== 0
           ) {
-            delete userIds[i] // Remove user from list if they already have a booking
+            userIds = userIds.filter((id) => id !== userId) // Remove user from list if they already have a booking
           } else {
             await bookingDataService.createBooking({
-              user_id: userIds[i],
-              booking_slot_id: slotIds[i],
-              stripe_payment_id: stripePaymentIds[i]
+              user_id: userId,
+              booking_slot_id: slot.id,
+              stripe_payment_id: "manual_entry"
             })
           }
         })
@@ -218,12 +211,33 @@ export class BookingController extends Controller {
         }
       })
 
+      const stripeService = new StripeService()
+
+      const MINUTES_AGO = 32
+      // Lets check for open sessions here:
+      const openSessions = await stripeService.getRecentActiveSessions(
+        CheckoutTypeValues.BOOKING,
+        MINUTES_AGO,
+        true
+      )
+
+      const currentlyInCheckoutSlotIds = openSessions.flatMap((session) =>
+        JSON.parse(session.metadata[BOOKING_SLOTS_KEY])
+      ) as Array<string>
+
+      const slotOccurences = BookingUtils.getSlotOccurences(
+        currentlyInCheckoutSlotIds
+      )
+
       // Find the amount of bookings matching each of the booking slots
       const queryPromises = bookingSlotsToQuery.map(async (toQuery) => {
         const matchingBookings = await bookingDataService.getBookingsBySlotId(
           toQuery.id
         )
-        const availableSpaces = toQuery.maxBookings - matchingBookings.length
+        const availableSpaces =
+          toQuery.maxBookings -
+          matchingBookings.length -
+          (slotOccurences.get(toQuery.id) || 0)
 
         return {
           ...toQuery,

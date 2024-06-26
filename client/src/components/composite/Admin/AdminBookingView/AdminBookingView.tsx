@@ -6,8 +6,9 @@ import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
 } from "components/generic/ReusableTable/TableUtils"
-import { useState, useRef } from "react"
+import { useState, useRef, lazy, Suspense } from "react"
 import { useClickOutside } from "components/utils/Utils"
+import ModalContainer from "components/generic/ModalContainer/ModalContainer"
 
 export type BookingMemberColumnFormat = {
   /**
@@ -73,6 +74,13 @@ const defaultData = {
   "Dietary Requirement": ""
 }
 
+const AsyncWrappedAdminBookingCreationPopup = lazy(
+  () =>
+    import(
+      "components/composite/Admin/AdminBookingView/WrappedAdminBookingCreationPopUp"
+    )
+)
+
 /**
  * @deprecated not for direct use on any pages, use `WrappedAdminBookingView` instead
  */
@@ -85,6 +93,8 @@ export const AdminBookingView = ({
 }: IAdminBookingView) => {
   // Have state for if the calendar is displayed or not
   const [displayedCalendar, setDisplayedCalendar] = useState<boolean>(false)
+
+  const [openAddBookingPopup, setOpenAddBookingPopup] = useState<boolean>(false)
 
   // Add handler for when the Pick Date button is clicked
   const onClickHandler = () => {
@@ -102,7 +112,12 @@ export const AdminBookingView = ({
         <span className="my-4 flex w-full flex-col items-center justify-center sm:flex-row">
           <h2 className="text-dark-blue-100 ">Bookings</h2>
           <div className="sm:ml-auto">
-            <Button variant="default-sm">Add New booking</Button>
+            <Button
+              variant="default-sm"
+              onClick={() => setOpenAddBookingPopup(true)}
+            >
+              Add New booking
+            </Button>
           </div>
         </span>
         <span className="border-gray-3 flex h-fit w-full flex-col items-center border bg-white px-2 py-1 sm:flex-row">
@@ -146,6 +161,13 @@ export const AdminBookingView = ({
           showPerPage={15}
         />
       </div>
+      <ModalContainer isOpen={openAddBookingPopup}>
+        <Suspense fallback={<>Loading</>}>
+          <AsyncWrappedAdminBookingCreationPopup
+            handleClose={() => setOpenAddBookingPopup(false)}
+          />
+        </Suspense>
+      </ModalContainer>
     </>
   )
 }

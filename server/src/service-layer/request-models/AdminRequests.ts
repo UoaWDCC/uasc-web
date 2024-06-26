@@ -18,3 +18,10 @@ export interface MakeDatesAvailableRequestBody {
    */
   slots?: number
 }
+
+export interface DeleteBookingRequest {
+  /**
+   * @bookingId The id of the booking(not booking slot id) that was created
+   */
+  bookingID: string
+}

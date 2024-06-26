@@ -30,6 +30,11 @@ export interface paths {
     post: operations["GetMembershipPayment"];
   };
   "/payment/booking": {
+    /**
+     * @description Creates a new booking session for the date ranges passed in,
+     * will return any existing sessions if they have been started in
+     * the last 30 minutes (the minimum period stripe has to persist a session for)
+     */
     post: operations["GetBookingPayment"];
   };
   "/bookings/create-bookings": {
@@ -51,6 +56,9 @@ export interface paths {
   };
   "/admin/bookings/make-dates-unavailable": {
     post: operations["MakeDateUnavailable"];
+  };
+  "/admin/bookings/delete": {
+    post: operations["RemoveBooking"];
   };
   "/admin/users": {
     /** @description User Operations */
@@ -207,12 +215,13 @@ export interface components {
         }[];
       error?: string;
     };
-    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
-    BookingsByDateRangeRequestModel: {
+    CreateBookingsRequestModel: {
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description List of users to add to the bookings between date range */
+      userIds: string[];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -278,6 +287,13 @@ export interface components {
         }[];
       error?: string;
     };
+    /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
+    BookingsByDateRangeRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
     BookingSlotUpdateResponse: {
       error?: string;
       message?: string;
@@ -303,6 +319,14 @@ export interface components {
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
+    BookingDeleteResponse: {
+      error?: string;
+      message?: string;
+      user_id?: string;
+    };
+    DeleteBookingRequest: {
+      bookingID: string;
+    };
     AllUsersResponse: {
       error?: string;
       message?: string;
@@ -518,6 +542,11 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Creates a new booking session for the date ranges passed in,
+   * will return any existing sessions if they have been started in
+   * the last 30 minutes (the minimum period stripe has to persist a session for)
+   */
   GetBookingPayment: {
     requestBody: {
       content: {
@@ -536,7 +565,7 @@ export interface operations {
   CreateBookings: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["BookingsByDateRangeRequestModel"];
+        "application/json": components["schemas"]["CreateBookingsRequestModel"];
       };
     };
     responses: {
@@ -616,6 +645,21 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["BookingSlotUpdateResponse"];
+        };
+      };
+    };
+  };
+  RemoveBooking: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteBookingRequest"];
+      };
+    };
+    responses: {
+      /** @description Booking deleted successfuly */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BookingDeleteResponse"];
         };
       };
     };
