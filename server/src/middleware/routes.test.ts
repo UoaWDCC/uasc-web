@@ -1160,6 +1160,59 @@ describe("Endpoints", () => {
     })
   })
 
+  describe("admin/bookings/delete", () => {
+    beforeEach(async () => {
+      await createUsers()
+    })
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+    it("should error on deleting invalid booking id", async () => {
+      const res = await request
+        .post(`/admin/bookings/delete`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ bookingID: "blah blah" })
+
+      expect(res.status).toEqual(404)
+    })
+    it("should delete booking by booking id", async () => {
+      const bookingDataService = new BookingDataService()
+      const bookingSlotService = new BookingSlotService()
+
+      const { id } = await bookingSlotService.createBookingSlot({
+        date: Timestamp.fromMillis(Date.now() + 5000),
+        max_bookings: 10
+      })
+
+      const createdBooking = await bookingDataService.createBooking({
+        user_id: "Eddie Wang",
+        booking_slot_id: id,
+        stripe_payment_id: ""
+      })
+      const res = await request
+        .post("/bookings/available-dates")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+
+      expect(res.body.data[0].availableSpaces).toEqual(9)
+
+      const deleteRes = await request
+        .post(`/admin/bookings/delete`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ bookingID: createdBooking.id })
+
+      expect(deleteRes.status).toEqual(200)
+      expect(deleteRes.body.user_id).toEqual("Edding Wang")
+
+      const res2 = await request
+        .post("/bookings/available-dates")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+
+      expect(res2.body.data[0].availableSpaces).toEqual(10)
+    })
+  })
+
   describe("/bookings/fetch-users", () => {
     beforeEach(async () => {
       await createUsers()
