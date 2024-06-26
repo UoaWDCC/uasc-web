@@ -7,13 +7,33 @@ import { DateUtils, UnknownTimestamp } from "components/utils/DateUtils"
 import { useState } from "react"
 
 interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {
+  /**
+   * The text to be displayed as the heading
+   */
   title: string
+  /**
+   * Callback for when the X button is clicked
+   */
   onClose: () => void
   fields: {
+    /**
+     * the **key** of the value in `ReducedUserAdditionalInfo` to display as a field
+     */
     fieldName: keyof T
+    /**
+     * The value to display in the field with no edits made
+     */
     defaultFieldValue?: ReducedUserAdditionalInfo[keyof ReducedUserAdditionalInfo]
   }[]
+  /**
+   * Callback that provides the fields that were changed in the edit form
+   *
+   * @param fields an object of all the changed fields
+   */
   onEdit: (fields: Partial<T>) => void
+  /**
+   * If there is an ongoing operation (i.e calling the edit endpoint)
+   */
   isPending?: boolean
 }
 

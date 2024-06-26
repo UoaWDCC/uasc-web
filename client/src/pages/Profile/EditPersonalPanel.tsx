@@ -1,9 +1,6 @@
-import ProfileEdit from "components/composite/Profile/ProfileEdit/ProfileEdit"
-import ModalContainer from "components/generic/ModalContainer/ModalContainer"
 import { ReducedUserAdditionalInfo } from "models/User"
-import { useEffect } from "react"
-import { useEditSelfMutation } from "services/User/UserMutations"
 import { useSelfDataQuery } from "services/User/UserQueries"
+import WrappedProfileEdit, { IGeneralProfileEdit } from "./WrappedProfileEdit"
 
 type EditPersonalFields = Pick<
   Partial<ReducedUserAdditionalInfo>,
@@ -16,70 +13,49 @@ type EditPersonalFields = Pick<
   | "emergency_contact"
 >
 
-const EditPersonalPanel = ({
-  isOpen,
-  handleClose
-}: {
-  isOpen: boolean
-  handleClose: () => void
-}) => {
+/**
+ * Displays the fields required to edit the personal section
+ *
+ * TODO: extend to include editing auth details (email etc)
+ */
+const EditPersonalPanel = ({ isOpen, handleClose }: IGeneralProfileEdit) => {
   const { data: currentUserData } = useSelfDataQuery()
-  const { mutateAsync, error, isPending, isSuccess } = useEditSelfMutation()
-
-  useEffect(() => {
-    if (error) {
-      alert(error.message)
-    }
-  }, [error])
-
-  useEffect(() => {
-    if (isSuccess) {
-      handleClose()
-    }
-  }, [isSuccess])
-
   return (
-    <ModalContainer isOpen={isOpen}>
-      <ProfileEdit<EditPersonalFields>
-        title="Personal Details"
-        isPending={isPending}
-        onClose={handleClose}
-        fields={[
-          {
-            fieldName: "first_name",
-            defaultFieldValue: currentUserData?.first_name
-          },
-          {
-            fieldName: "last_name",
-            defaultFieldValue: currentUserData?.last_name
-          },
+    <WrappedProfileEdit<EditPersonalFields>
+      isOpen={isOpen}
+      handleClose={handleClose}
+      fields={[
+        {
+          fieldName: "first_name",
+          defaultFieldValue: currentUserData?.first_name
+        },
+        {
+          fieldName: "last_name",
+          defaultFieldValue: currentUserData?.last_name
+        },
 
-          {
-            fieldName: "gender",
-            defaultFieldValue: currentUserData?.gender
-          },
-          {
-            fieldName: "date_of_birth",
-            defaultFieldValue: currentUserData?.date_of_birth
-          },
-          {
-            fieldName: "phone_number",
-            defaultFieldValue: currentUserData?.phone_number
-          },
-          {
-            fieldName: "emergency_contact",
-            defaultFieldValue: currentUserData?.emergency_contact
-          },
-          {
-            fieldName: "student_id",
-            defaultFieldValue: currentUserData?.student_id
-          }
-        ]}
-        onEdit={async (userData) => {
-          await mutateAsync(userData)
-        }}
-      />
-    </ModalContainer>
+        {
+          fieldName: "gender",
+          defaultFieldValue: currentUserData?.gender
+        },
+        {
+          fieldName: "date_of_birth",
+          defaultFieldValue: currentUserData?.date_of_birth
+        },
+        {
+          fieldName: "phone_number",
+          defaultFieldValue: currentUserData?.phone_number
+        },
+        {
+          fieldName: "emergency_contact",
+          defaultFieldValue: currentUserData?.emergency_contact
+        },
+        {
+          fieldName: "student_id",
+          defaultFieldValue: currentUserData?.student_id
+        }
+      ]}
+    ></WrappedProfileEdit>
   )
 }
 export default EditPersonalPanel
