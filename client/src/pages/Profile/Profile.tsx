@@ -7,7 +7,10 @@ import { useForceRefreshToken } from "hooks/useRefreshedToken"
 import { signOut } from "firebase/auth"
 import { auth } from "firebase"
 import { DateUtils } from "components/utils/DateUtils"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useSelfDataQuery } from "services/User/UserQueries"
+import EditPersonalPanel from "./EditPersonalPanel"
+import EditAdditionalPanel from "./EditAdditionalPanel"
 
 const SignOutButton = () => {
   const navigate = useNavigate()
@@ -15,8 +18,6 @@ const SignOutButton = () => {
     await signOut(auth)
     navigate("/login")
   }
-
-  useForceRefreshToken()
 
   return (
     <div
@@ -66,9 +67,17 @@ const Field = ({
     </>
   )
 }
+
 export default function Profile() {
-  const [{ currentUserData, currentUser, currentUserClaims }] = useAppData()
+  const [{ currentUser, currentUserClaims }] = useAppData()
+  const { data: currentUserData, isLoading } = useSelfDataQuery()
   const navigate = useNavigate()
+
+  const [editPanelOpen, setEditPanelOpen] = useState<
+    "none" | "personal" | "additional"
+  >("none")
+
+  useForceRefreshToken()
 
   useEffect(() => {
     if (!currentUser) {
@@ -83,8 +92,16 @@ export default function Profile() {
   }, [currentUserClaims])
 
   return (
-    <div className="relative min-h-screen">
+    <div className={`relative min-h-screen ${isLoading && "blur-sm"}`}>
       <ResponsiveBackgroundImage>
+        <EditPersonalPanel
+          isOpen={editPanelOpen === "personal"}
+          handleClose={() => setEditPanelOpen("none")}
+        />
+        <EditAdditionalPanel
+          isOpen={editPanelOpen === "additional"}
+          handleClose={() => setEditPanelOpen("none")}
+        />
         <div className="py-8">
           <div className="grid-cols grid w-full ">
             <div className="flex flex-col md:flex-row">
@@ -97,7 +114,9 @@ export default function Profile() {
             <div className="grid w-full gap-4">
               <ProfileInformationPanel
                 title="Personal details"
-                onEdit={() => {}}
+                onEdit={() => {
+                  setEditPanelOpen("personal")
+                }}
               >
                 <div className="grid grid-cols-2 gap-x-16 md:grid-cols-4">
                   <Field
@@ -134,10 +153,7 @@ export default function Profile() {
                 </div>
               </ProfileInformationPanel>
               <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
-                <ProfileInformationPanel
-                  title="Membership"
-                  onEdit={userMembership !== "Admin" ? () => {} : undefined}
-                >
+                <ProfileInformationPanel title="Membership">
                   <Field
                     subtitle="Membership type"
                     description={userMembership}
@@ -159,7 +175,9 @@ export default function Profile() {
                 </ProfileInformationPanel>
                 <ProfileInformationPanel
                   title="Additional details"
-                  onEdit={() => {}}
+                  onEdit={() => {
+                    setEditPanelOpen("additional")
+                  }}
                 >
                   <Field
                     subtitle="Dietary requirements"
