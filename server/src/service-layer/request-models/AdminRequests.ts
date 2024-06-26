@@ -2,12 +2,12 @@ import { Timestamp } from "firebase-admin/firestore"
 
 export interface MakeDatesAvailableRequestBody {
   /**
-   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
+   * Firestore timestamp, ideally with the time information removed (set to midnight)
    */
   startDate: Timestamp
 
   /**
-   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
+   * Firestore timestamp, ideally with the time information removed (set to midnight)
    */
   endDate: Timestamp
 
@@ -17,4 +17,11 @@ export interface MakeDatesAvailableRequestBody {
    * @minimum 0 must be positive
    */
   slots?: number
+}
+
+export interface DeleteBookingRequest {
+  /**
+   * @bookingId The id of the booking(not booking slot id) that was created
+   */
+  bookingId: string
 }

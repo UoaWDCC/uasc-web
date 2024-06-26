@@ -12,16 +12,23 @@ import {
   timestampsInRange
 } from "data-layer/adapters/DateUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
-import { MakeDatesAvailableRequestBody } from "service-layer/request-models/AdminRequests"
+import {
+  DeleteBookingRequest,
+  MakeDatesAvailableRequestBody
+} from "service-layer/request-models/AdminRequests"
 import {
   CreateUserRequestBody,
   DemoteUserRequestBody,
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
-import { BookingSlotUpdateResponse } from "service-layer/response-models/BookingResponse"
+import {
+  BookingDeleteResponse,
+  BookingSlotUpdateResponse
+} from "service-layer/response-models/BookingResponse"
 import { AllUsersResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
@@ -73,7 +80,7 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date 
+          `Something went wrong when trying to make the date
           ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
@@ -121,7 +128,7 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date 
+          `Something went wrong when trying to make the date
           ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
@@ -139,6 +146,25 @@ export class AdminController extends Controller {
       console.error(`An error occurred when making dates unavailable: ${e}`)
       return { error: "Something went wrong when making dates unavailable" }
     }
+  }
+
+  @SuccessResponse("200", "Booking deleted successfuly")
+  @Security("Jwt", ["admin"])
+  @Post("/bookings/delete")
+  public async removeBooking(
+    @Body() requestBody: DeleteBookingRequest
+  ): Promise<BookingDeleteResponse> {
+    const { bookingId } = requestBody
+    // Validate and check if the booking actually exists
+    const bookingDataService = new BookingDataService()
+    const { user_id } = await bookingDataService.getBookingById(bookingId)
+    if (!user_id) {
+      this.setStatus(404)
+      return { message: "Booking not found with that booking ID." }
+    } else {
+      await bookingDataService.deleteBooking(bookingId)
+    }
+    return { user_id }
   }
 
   /**
