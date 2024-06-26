@@ -265,6 +265,36 @@ export class PaymentController extends Controller {
           userData,
           userDataService
         )
+
+      /**
+       * Declare these with outer scope as they are used in most paths
+       */
+      const { startDate, endDate } = requestBody
+
+      const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
+      const totalDays = dateTimestampsInBooking.length
+
+      /**
+       * Used for formatted display to user
+       */
+      const BOOKING_START_DATE = UTCDateToDdMmYyyy(
+        new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
+      )
+
+      /**
+       * Used for formatted display to user
+       */
+      const BOOKING_END_DATE = UTCDateToDdMmYyyy(
+        new Date(
+          firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
+        )
+      )
+
+      /**
+       * The amount of time users have to complete a session
+       */
+      const THIRTY_MINUTES_MS = 1800000
+
       // If not a new Stripe customer, we want to check for pre-existing bookings
       if (!newUser) {
         const activeSession = await stripeService.getActiveSessionForUser(
@@ -272,8 +302,6 @@ export class PaymentController extends Controller {
           CheckoutTypeValues.BOOKING
         )
         if (activeSession) {
-          const THIRTY_MINUTES_MS = 1800000
-
           const sessionStartTime = new Date(
             activeSession.created * 1000 + THIRTY_MINUTES_MS
           ).toLocaleTimeString("en-NZ")
@@ -281,12 +309,11 @@ export class PaymentController extends Controller {
           this.setStatus(200)
           return {
             stripeClientSecret: activeSession.client_secret,
-            message: `Existing booking checkout session found, you may start a new one after ${sessionStartTime} (NZST)`
+            message: `Existing booking checkout session found for the dates ${BOOKING_START_DATE} to ${BOOKING_END_DATE}, you may start a new one after ${sessionStartTime} (NZST)`
           }
         }
       }
 
-      const { startDate, endDate } = requestBody
       // The request start and end dates
       if (
         !startDate ||
@@ -305,10 +332,6 @@ export class PaymentController extends Controller {
             "Invalid date, booking start date and end date must be in the range of today up to a year later. "
         }
       }
-
-      const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
-
-      const totalDays = dateTimestampsInBooking.length
 
       const MAX_BOOKING_DAYS = 10
       // Validate number of dates to avoid kiddies from forging bookings
@@ -347,7 +370,7 @@ export class PaymentController extends Controller {
         }
       }
 
-      const MINUTES_AGO = 30
+      const MINUTES_AGO = 32 // To be safe
       // Lets check for open sessions here:
       const openSessions = await stripeService.getRecentActiveSessions(
         CheckoutTypeValues.BOOKING,
@@ -365,7 +388,8 @@ export class PaymentController extends Controller {
 
       const outOfStockBecauseSessionActive = baseAvailabilities.some(
         (availability) =>
-          availability.baseAvailability - slotOccurences.get(availability.id) <=
+          availability.baseAvailability -
+            (slotOccurences.get(availability.id) || 0) <=
           0
       )
 
@@ -390,16 +414,6 @@ export class PaymentController extends Controller {
         (product) => product.active
       )
       const { default_price } = requiredBookingProduct
-
-      const BOOKING_START_DATE = UTCDateToDdMmYyyy(
-        new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
-      )
-
-      const BOOKING_END_DATE = UTCDateToDdMmYyyy(
-        new Date(
-          firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
-        )
-      )
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
@@ -427,7 +441,8 @@ export class PaymentController extends Controller {
       )
       this.setStatus(200)
       return {
-        stripeClientSecret: clientSecret
+        stripeClientSecret: clientSecret,
+        message: `You have until ${new Date(Date.now() + THIRTY_MINUTES_MS).toLocaleTimeString("en-NZ")} to pay for the dates ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
       }
     } catch (e) {
       this.setStatus(500)
