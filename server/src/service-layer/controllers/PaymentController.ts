@@ -265,6 +265,25 @@ export class PaymentController extends Controller {
           userData,
           userDataService
         )
+
+      const { startDate, endDate } = requestBody
+
+      const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
+
+      const BOOKING_START_DATE = UTCDateToDdMmYyyy(
+        new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
+      )
+
+      const totalDays = dateTimestampsInBooking.length
+
+      const BOOKING_END_DATE = UTCDateToDdMmYyyy(
+        new Date(
+          firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
+        )
+      )
+
+      const THIRTY_MINUTES_MS = 1800000
+
       // If not a new Stripe customer, we want to check for pre-existing bookings
       if (!newUser) {
         const activeSession = await stripeService.getActiveSessionForUser(
@@ -272,8 +291,6 @@ export class PaymentController extends Controller {
           CheckoutTypeValues.BOOKING
         )
         if (activeSession) {
-          const THIRTY_MINUTES_MS = 1800000
-
           const sessionStartTime = new Date(
             activeSession.created * 1000 + THIRTY_MINUTES_MS
           ).toLocaleTimeString("en-NZ")
@@ -281,12 +298,11 @@ export class PaymentController extends Controller {
           this.setStatus(200)
           return {
             stripeClientSecret: activeSession.client_secret,
-            message: `Existing booking checkout session found, you may start a new one after ${sessionStartTime} (NZST)`
+            message: `Existing booking checkout session found for the dates ${BOOKING_START_DATE} to ${BOOKING_END_DATE}, you may start a new one after ${sessionStartTime} (NZST)`
           }
         }
       }
 
-      const { startDate, endDate } = requestBody
       // The request start and end dates
       if (
         !startDate ||
@@ -305,10 +321,6 @@ export class PaymentController extends Controller {
             "Invalid date, booking start date and end date must be in the range of today up to a year later. "
         }
       }
-
-      const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
-
-      const totalDays = dateTimestampsInBooking.length
 
       const MAX_BOOKING_DAYS = 10
       // Validate number of dates to avoid kiddies from forging bookings
@@ -392,16 +404,6 @@ export class PaymentController extends Controller {
       )
       const { default_price } = requiredBookingProduct
 
-      const BOOKING_START_DATE = UTCDateToDdMmYyyy(
-        new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
-      )
-
-      const BOOKING_END_DATE = UTCDateToDdMmYyyy(
-        new Date(
-          firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
-        )
-      )
-
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
         `${process.env.FRONTEND_URL}/bookings/success?session_id={CHECKOUT_SESSION_ID}&startDate=${BOOKING_START_DATE}&endDate=${BOOKING_END_DATE}`,
@@ -428,7 +430,8 @@ export class PaymentController extends Controller {
       )
       this.setStatus(200)
       return {
-        stripeClientSecret: clientSecret
+        stripeClientSecret: clientSecret,
+        message: `You have until ${new Date(Date.now() + THIRTY_MINUTES_MS).toLocaleTimeString("en-NZ")} to pay for the dates ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
       }
     } catch (e) {
       this.setStatus(500)
