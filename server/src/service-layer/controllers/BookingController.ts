@@ -210,7 +210,7 @@ export class BookingController extends Controller {
 
       const stripeService = new StripeService()
 
-      const MINUTES_AGO = 30
+      const MINUTES_AGO = 32
       // Lets check for open sessions here:
       const openSessions = await stripeService.getRecentActiveSessions(
         CheckoutTypeValues.BOOKING,

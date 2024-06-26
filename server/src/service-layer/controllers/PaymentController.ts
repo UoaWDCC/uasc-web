@@ -347,7 +347,7 @@ export class PaymentController extends Controller {
         }
       }
 
-      const MINUTES_AGO = 30
+      const MINUTES_AGO = 32 // To be safe
       // Lets check for open sessions here:
       const openSessions = await stripeService.getRecentActiveSessions(
         CheckoutTypeValues.BOOKING,
