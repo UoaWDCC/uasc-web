@@ -30,6 +30,11 @@ export interface paths {
     post: operations["GetMembershipPayment"];
   };
   "/payment/booking": {
+    /**
+     * @description Creates a new booking session for the date ranges passed in,
+     * will return any existing sessions if they have been started in
+     * the last 30 minutes (the minimum period stripe has to persist a session for)
+     */
     post: operations["GetBookingPayment"];
   };
   "/bookings/create-bookings": {
@@ -537,6 +542,11 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Creates a new booking session for the date ranges passed in,
+   * will return any existing sessions if they have been started in
+   * the last 30 minutes (the minimum period stripe has to persist a session for)
+   */
   GetBookingPayment: {
     requestBody: {
       content: {

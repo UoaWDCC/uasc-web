@@ -3,7 +3,9 @@ import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 import {
   BOOKING_SLOTS_KEY,
   CHECKOUT_TYPE_KEY,
-  CheckoutTypeValues
+  CheckoutTypeValues,
+  END_DATE,
+  START_DATE
 } from "business-layer/utils/StripeSessionMetadata"
 import {
   MembershipTypeValues,
@@ -244,6 +246,11 @@ export class PaymentController extends Controller {
     }
   }
 
+  /**
+   * Creates a new booking session for the date ranges passed in,
+   * will return any existing sessions if they have been started in
+   * the last 30 minutes (the minimum period stripe has to persist a session for)
+   */
   @SuccessResponse("200", "Created booking checkout session")
   @Security("jwt", ["member"])
   @Post("booking")
@@ -309,7 +316,7 @@ export class PaymentController extends Controller {
           this.setStatus(200)
           return {
             stripeClientSecret: activeSession.client_secret,
-            message: `Existing booking checkout session found for the dates ${BOOKING_START_DATE} to ${BOOKING_END_DATE}, you may start a new one after ${sessionStartTime} (NZST)`
+            message: `Existing booking checkout session found for the nights ${activeSession.metadata[START_DATE] || ""} to ${activeSession.metadata[END_DATE] || ""}, you may start a new one after ${sessionStartTime} (NZST)`
           }
         }
       }
@@ -429,7 +436,9 @@ export class PaymentController extends Controller {
           [LODGE_PRICING_TYPE_KEY]: requiredBookingType,
           [BOOKING_SLOTS_KEY]: JSON.stringify(
             bookingSlots.map((slot) => slot.id)
-          )
+          ),
+          [START_DATE]: BOOKING_START_DATE,
+          [END_DATE]: BOOKING_END_DATE
         },
         stripeCustomerId,
         undefined,
@@ -442,7 +451,7 @@ export class PaymentController extends Controller {
       this.setStatus(200)
       return {
         stripeClientSecret: clientSecret,
-        message: `You have until ${new Date(Date.now() + THIRTY_MINUTES_MS).toLocaleTimeString("en-NZ")} to pay for the dates ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
+        message: `You have until ${new Date(Date.now() + THIRTY_MINUTES_MS).toLocaleTimeString("en-NZ")} to pay for the nights ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
       }
     } catch (e) {
       this.setStatus(500)
