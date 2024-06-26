@@ -422,9 +422,9 @@ export default class StripeService {
 
     await Promise.all(
       bookingSlotIds.map(async (bookingSlotShortId) => {
-        const bookingSlot =
+        const bookingSlotId = (
           await bookingSlotService.getBookingSlotById(bookingSlotShortId)
-        const bookingSlotId = bookingSlot.id
+        ).id
 
         await bookingDataService.createBooking({
           booking_slot_id: bookingSlotId,
