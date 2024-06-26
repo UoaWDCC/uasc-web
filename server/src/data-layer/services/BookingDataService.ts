@@ -9,6 +9,17 @@ export default class BookingDataService {
   }
 
   /**
+   * Fetches a booking based on a given booking ID.
+   *
+   * @param bookingID The booking ID to retrieve.
+   * @returns The booking based on the booking ID.
+   */
+  public async getBookingById(bookingID: string): Promise<Booking> {
+    const result = await FirestoreCollections.bookings.doc(bookingID).get()
+    return result.data()
+  }
+
+  /**
    * Fetches all bookings associated with a user ID.
    * @param userId The Firestore user collection ID to retrieve bookings for.
    * @returns All bookings associated with this user.
