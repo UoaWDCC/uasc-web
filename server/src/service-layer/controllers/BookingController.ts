@@ -33,6 +33,12 @@ import {
   AuthServiceClaims,
   UserAccountTypes
 } from "../../business-layer/utils/AuthServiceClaims"
+import {
+  BOOKING_SLOTS_KEY,
+  CheckoutTypeValues
+} from "business-layer/utils/StripeSessionMetadata"
+import StripeService from "business-layer/services/StripeService"
+import BookingUtils from "business-layer/utils/BookingUtils"
 
 @Route("bookings")
 export class BookingController extends Controller {
@@ -202,12 +208,33 @@ export class BookingController extends Controller {
         }
       })
 
+      const stripeService = new StripeService()
+
+      const MINUTES_AGO = 32
+      // Lets check for open sessions here:
+      const openSessions = await stripeService.getRecentActiveSessions(
+        CheckoutTypeValues.BOOKING,
+        MINUTES_AGO,
+        true
+      )
+
+      const currentlyInCheckoutSlotIds = openSessions.flatMap((session) =>
+        JSON.parse(session.metadata[BOOKING_SLOTS_KEY])
+      ) as Array<string>
+
+      const slotOccurences = BookingUtils.getSlotOccurences(
+        currentlyInCheckoutSlotIds
+      )
+
       // Find the amount of bookings matching each of the booking slots
       const queryPromises = bookingSlotsToQuery.map(async (toQuery) => {
         const matchingBookings = await bookingDataService.getBookingsBySlotId(
           toQuery.id
         )
-        const availableSpaces = toQuery.maxBookings - matchingBookings.length
+        const availableSpaces =
+          toQuery.maxBookings -
+          matchingBookings.length -
+          (slotOccurences.get(toQuery.id) || 0)
 
         return {
           ...toQuery,
