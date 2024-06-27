@@ -47,3 +47,12 @@ export const createUserWithClaim = async (uid: string, claim?: claims) => {
 export const deleteUsersFromAuth = async (uids: string[]) => {
   await auth.deleteUsers(uids)
 }
+
+export const createUserDataWithStripeId = async (
+  uid: string,
+  additionalData?: any
+) => {
+  userInfoMock.stripe_id = null
+  const userData = { ...userInfoMock, ...additionalData }
+  await userService.createUserData(uid, userData)
+}

@@ -14,7 +14,10 @@ import {
 import { UserAdditionalInfo } from "data-layer/models/firebase"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
-import { MakeDatesAvailableRequestBody } from "service-layer/request-models/AdminRequests"
+import {
+  AddCouponRequestBody,
+  MakeDatesAvailableRequestBody
+} from "service-layer/request-models/AdminRequests"
 import {
   CreateUserRequestBody,
   DemoteUserRequestBody,
@@ -35,6 +38,8 @@ import {
   Security,
   SuccessResponse
 } from "tsoa"
+import * as console from "console"
+import StripeService from "../../business-layer/services/StripeService"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -306,6 +311,38 @@ export class AdminController extends Controller {
     } catch (e) {
       console.error(e)
       this.setStatus(500) // unknown server error?
+    }
+  }
+
+  @SuccessResponse("200", "Coupon Added")
+  @Post("users/add-coupon")
+  public async addCoupon(
+    @Body() requestBody: AddCouponRequestBody
+  ): Promise<void> {
+    const { uid, quantity } = requestBody
+    const amount = 40 // Hardcoded amount
+    try {
+      const userService = new UserDataService()
+      const stripeService = new StripeService()
+      const user = await userService.getUserData(uid)
+
+      if (!user) {
+        this.setStatus(404)
+        return
+      }
+      if (!user.stripe_id) {
+        this.setStatus(400)
+        return
+      }
+      console.log("Just before await")
+      // Add coupon to the user using Stripe ID
+      for (let i = 0; i < quantity; i++) {
+        await stripeService.addCouponToUser(user.stripe_id, amount)
+      }
+
+      this.setStatus(200)
+    } catch (e) {
+      this.setStatus(500)
     }
   }
 }

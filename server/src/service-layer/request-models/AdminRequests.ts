@@ -18,3 +18,15 @@ export interface MakeDatesAvailableRequestBody {
    */
   slots?: number
 }
+
+export interface AddCouponRequestBody {
+  /**
+   * The UID of the user to whom the coupon will be added.
+   */
+  uid: string
+
+  /**
+   * The number of the coupon to be added.
+   */
+  quantity: number
+}

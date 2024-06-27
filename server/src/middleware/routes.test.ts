@@ -9,7 +9,8 @@ import {
   MEMBER_USER_UID,
   createUserData,
   createUserWithClaim,
-  deleteUsersFromAuth
+  deleteUsersFromAuth,
+  createUserDataWithStripeId
 } from "./routes.mock"
 
 import {
@@ -28,7 +29,6 @@ import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
 import * as admin from "firebase-admin"
 import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
-
 const request = supertest(_app)
 
 /**
@@ -72,6 +72,20 @@ jest.mock("stripe", () => {
               }
             }
           }
+        },
+        coupons: {
+          create: jest.fn().mockResolvedValue({
+            id: "mock_coupon_id",
+            amount_off: 4000, // amount off in cents
+            currency: "nzd"
+          })
+        },
+        promotionCodes: {
+          create: jest.fn().mockResolvedValue({
+            id: "mock_promotion_code_id",
+            coupon: "mock_coupon_id",
+            customer: "mock_customer_id"
+          })
         }
       }
     })
@@ -1253,6 +1267,67 @@ describe("Endpoints", () => {
         })
 
       expect(res.status).toEqual(401)
+    })
+  })
+
+  describe("/admin/users/add-coupon", () => {
+    beforeEach(async () => {
+      await createUsers()
+    })
+
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+
+    it("Should allow admins to add a coupon to a user", async () => {
+      // Create a user with a stripe_id
+      const stripeId = "test_stripe_id"
+      await createUserDataWithStripeId(ADMIN_USER_UID, { stripe_id: stripeId })
+
+      const response = await request
+        .post("/admin/users/add-coupon")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ uid: ADMIN_USER_UID, quantity: 5 })
+
+      expect(response.status).toEqual(200)
+    })
+
+    it("Should not allow adding a coupon to a user without stripe_id", async () => {
+      await createUserData(MEMBER_USER_UID)
+
+      const response = await request
+        .post("/admin/users/add-coupon")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ uid: MEMBER_USER_UID, quantity: 5 })
+
+      expect(response.status).toEqual(400)
+    })
+
+    it("Should return 404 if user is not found", async () => {
+      const response = await request
+        .post("/admin/users/add-coupon")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ uid: "non_existent_user", quantity: 5 })
+
+      expect(response.status).toEqual(404)
+    })
+
+    it("Should not allow members to add a coupon", async () => {
+      const response = await request
+        .post("/admin/users/add-coupon")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({ uid: MEMBER_USER_UID, quantity: 5 })
+
+      expect(response.status).toEqual(401)
+    })
+
+    it("Should not allow guests to add a coupon", async () => {
+      const response = await request
+        .post("/admin/users/add-coupon")
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send({ uid: MEMBER_USER_UID, quantity: 5 })
+
+      expect(response.status).toEqual(401)
     })
   })
 })
