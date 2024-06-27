@@ -265,6 +265,7 @@ export const CreateBookingSection = ({
           <TextInput
             onChange={(e) => handleAllergyChange?.(e.target.value)}
             label="Please describe your dietary requirements"
+            placeholder="Enter dietary requirements here"
           />
 
           {hasExistingSession ? (
