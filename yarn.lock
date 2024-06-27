@@ -8838,6 +8838,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csv-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "csv-parser@npm:3.0.0"
+  dependencies:
+    minimist: "npm:^1.2.0"
+  bin:
+    csv-parser: bin/csv-parser
+  checksum: 10c0/206aef102c10d532a31c7d85e6b1b0e53c7cb8346037eb9f23e0bd7369788960d8f2431639ea9f62e34ddf54d0182dfb345691c11c666802324f25c51dba79bc
+  languageName: node
+  linkType: hard
+
 "dashdash@npm:^1.12.0":
   version: 1.14.1
   resolution: "dashdash@npm:1.14.1"
@@ -18833,6 +18844,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^7.1.0"
     "@typescript-eslint/parser": "npm:^7.1.0"
     cross-env: "npm:^7.0.3"
+    csv-parser: "npm:^3.0.0"
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-config-standard: "npm:^17.1.0"
