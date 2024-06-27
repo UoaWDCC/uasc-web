@@ -129,5 +129,13 @@ export const DateUtils = {
    * @param date a date object
    * @returns a date string in the nz format `dd-mm-yyyy`
    */
-  formattedNzDate: (date: Date): string => date.toLocaleDateString("en-NZ")
+  formattedNzDate: (date: Date): string => date.toLocaleDateString("en-NZ"),
+
+  /**
+   * @param date the date to put into format for input
+   * @returns the date string for date input to parse
+   */
+  formatDateForInput: (date?: Date) => {
+    return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
+  }
 } as const
