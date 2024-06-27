@@ -1279,7 +1279,7 @@
 						}
 					}
 				},
-				"description": "Creates a new booking session for the date ranges passed in,\nwill return any existing sessions if they have been started in\nthe last 30 minutes (the minimum period stripe has to persist a session for)",
+				"description": "Creates a new booking session for the date ranges passed in,\r\nwill return any existing sessions if they have been started in\r\nthe last 30 minutes (the minimum period stripe has to persist a session for)",
 				"security": [
 					{
 						"jwt": [
