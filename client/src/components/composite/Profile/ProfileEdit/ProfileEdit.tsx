@@ -117,68 +117,67 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
             className="hover:fill-light-blue-100 ml-auto w-[15px] cursor-pointer"
           />
         </div>
-
-        {fields.map((field) => {
-          const defaultValue = field.defaultFieldValue
-          const isDate = field.fieldName === "date_of_birth"
-          const isTel = typeof defaultValue === "number"
-          const isBool =
-            field.fieldName === "does_snowboarding" ||
-            field.fieldName === "does_ski"
-          return (
-            <TextInput
-              key={field.fieldName.toString()}
-              label={nameTransformer(
-                field.fieldName as keyof ReducedUserAdditionalInfo
-              )}
-              type={
-                isDate ? "date" : isTel ? "tel" : isBool ? "checkbox" : "text"
-              }
-              onChange={(e) =>
-                setCurrentFormState({
-                  ...currentFormState,
-                  [field.fieldName]: isDate
-                    ? // Need to store as timestamp, not date which the input provides
-                      Timestamp.fromDate(
-                        DateUtils.convertLocalDateToUTCDate(
-                          e.target.valueAsDate || new Date()
+        <form>
+          {fields.map((field) => {
+            const defaultValue = field.defaultFieldValue
+            const isDate = field.fieldName === "date_of_birth"
+            const isTel = field.fieldName === "phone_number"
+            const isBool =
+              field.fieldName === "does_snowboarding" ||
+              field.fieldName === "does_ski"
+            return (
+              <TextInput
+                key={field.fieldName.toString()}
+                label={nameTransformer(
+                  field.fieldName as keyof ReducedUserAdditionalInfo
+                )}
+                type={
+                  isDate ? "date" : isTel ? "tel" : isBool ? "checkbox" : "text"
+                }
+                onChange={(e) =>
+                  setCurrentFormState({
+                    ...currentFormState,
+                    [field.fieldName]: isDate
+                      ? // Need to store as timestamp, not date which the input provides
+                        Timestamp.fromDate(
+                          DateUtils.convertLocalDateToUTCDate(
+                            e.target.valueAsDate || new Date()
+                          )
+                        )
+                      : // Does skiing/snowboarding
+                        isBool
+                        ? e.target.checked
+                        : // Phone number
+                          e.target.value
+                  })
+                }
+                defaultValue={
+                  isDate && defaultValue
+                    ? DateUtils.formatDateForInput(
+                        new Date(
+                          DateUtils.timestampMilliseconds(
+                            defaultValue as UnknownTimestamp
+                          )
                         )
                       )
-                    : // Does skiing/snowboarding
-                      isBool
-                      ? e.target.checked
-                      : // Phone number
-                        isTel
-                        ? e.target.valueAsNumber
-                        : e.target.value
-                })
-              }
-              defaultValue={
-                isDate && defaultValue
-                  ? DateUtils.formatDateForInput(
-                      new Date(
-                        DateUtils.timestampMilliseconds(
-                          defaultValue as UnknownTimestamp
-                        )
-                      )
-                    )
-                  : (defaultValue as string)
-              }
-            />
-          )
-        })}
+                    : (defaultValue as string)
+                }
+              />
+            )
+          })}
 
-        <div className=" mt-2 w-[200px]">
-          <Button
-            disabled={isPending || !currentFormState}
-            onClick={() => {
-              onEdit(currentFormState as T)
-              setCurrentFormState(undefined)
-            }}
-          >
-            Update details
-          </Button>
-        </div>
+          <div className=" mt-2 w-[200px]">
+            <Button
+              disabled={isPending || !currentFormState}
+              onClick={() => {
+                onEdit(currentFormState as T)
+                setCurrentFormState(undefined)
+              }}
+            >
+              Update details
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   )
