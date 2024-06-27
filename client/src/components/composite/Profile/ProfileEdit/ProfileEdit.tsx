@@ -117,7 +117,13 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
             className="hover:fill-light-blue-100 ml-auto w-[15px] cursor-pointer"
           />
         </div>
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            onEdit(currentFormState as T)
+            setCurrentFormState(undefined)
+          }}
+        >
           {fields.map((field) => {
             const defaultValue = field.defaultFieldValue
             const isDate = field.fieldName === "date_of_birth"
@@ -167,13 +173,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
           })}
 
           <div className=" mt-2 w-[200px]">
-            <Button
-              disabled={isPending || !currentFormState}
-              onClick={() => {
-                onEdit(currentFormState as T)
-                setCurrentFormState(undefined)
-              }}
-            >
+            <Button type="submit" disabled={isPending || !currentFormState}>
               Update details
             </Button>
           </div>
