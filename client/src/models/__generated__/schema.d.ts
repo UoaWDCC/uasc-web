@@ -30,7 +30,15 @@ export interface paths {
     post: operations["GetMembershipPayment"];
   };
   "/payment/booking": {
+    /**
+     * @description Creates a new booking session for the date ranges passed in,
+     * will return any existing sessions if they have been started in
+     * the last 30 minutes (the minimum period stripe has to persist a session for)
+     */
     post: operations["GetBookingPayment"];
+  };
+  "/bookings/create-bookings": {
+    post: operations["CreateBookings"];
   };
   "/bookings": {
     get: operations["GetAllBookings"];
@@ -48,6 +56,9 @@ export interface paths {
   };
   "/admin/bookings/make-dates-unavailable": {
     post: operations["MakeDateUnavailable"];
+  };
+  "/admin/bookings/delete": {
+    post: operations["RemoveBooking"];
   };
   "/admin/users": {
     /** @description User Operations */
@@ -191,8 +202,26 @@ export interface components {
       stripeClientSecret?: string;
     };
     UserBookingRequestingModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
+    /** @description Represents the response structure for fetching user ids by date range. */
+    UIdssByDateRangeResponse: {
+      data?: {
+          users: string[];
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
+      error?: string;
+    };
+    CreateBookingsRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description List of users to add to the bookings between date range */
+      userIds: string[];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -214,7 +243,9 @@ export interface components {
       data?: components["schemas"]["AvailableDates"][];
     };
     AvailableDatesRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     /** @enum {string} */
@@ -258,7 +289,9 @@ export interface components {
     };
     /** @description Represents the structure of a request model for fetching bookings within a specific date range. */
     BookingsByDateRangeRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     BookingSlotUpdateResponse: {
@@ -270,22 +303,30 @@ export interface components {
         }[];
     };
     MakeDatesAvailableRequestBody: {
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
       /** Format: double */
       slots?: number;
     };
     /** @description From T, pick a set of properties whose keys are in the union K */
     "Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__": {
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Firestore timestamp, ideally with the time information removed (set to midnight) */
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
+    BookingDeleteResponse: {
+      error?: string;
+      message?: string;
+      user_id?: string;
+    };
+    DeleteBookingRequest: {
+      bookingID: string;
+    };
     AllUsersResponse: {
       error?: string;
       message?: string;
@@ -501,6 +542,11 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Creates a new booking session for the date ranges passed in,
+   * will return any existing sessions if they have been started in
+   * the last 30 minutes (the minimum period stripe has to persist a session for)
+   */
   GetBookingPayment: {
     requestBody: {
       content: {
@@ -512,6 +558,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["BookingPaymentResponse"];
+        };
+      };
+    };
+  };
+  CreateBookings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateBookingsRequestModel"];
+      };
+    };
+    responses: {
+      /** @description Bookings successfully created */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
         };
       };
     };
@@ -584,6 +645,21 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["BookingSlotUpdateResponse"];
+        };
+      };
+    };
+  };
+  RemoveBooking: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteBookingRequest"];
+      };
+    };
+    responses: {
+      /** @description Booking deleted successfuly */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BookingDeleteResponse"];
         };
       };
     };

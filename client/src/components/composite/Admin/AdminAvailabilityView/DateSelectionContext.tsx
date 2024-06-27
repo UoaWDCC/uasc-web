@@ -1,4 +1,3 @@
-import { Timestamp } from "firebase/firestore"
 import { createContext, useState } from "react"
 import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
 
@@ -7,8 +6,8 @@ interface IDateSelectionContext {
    * Should **both** be defined for meaningful usage (shows a valid range has been selected)
    */
   selectedDates: {
-    startDate?: Timestamp
-    endDate?: Timestamp
+    startDate?: Date
+    endDate?: Date
   }
   isUpdating: boolean
   handleSelectedDateChange?: (startDate?: Date, endDate?: Date) => void
@@ -35,8 +34,8 @@ export const DateSelectionProvider = ({
   children: React.ReactNode
 }) => {
   const [selectedDates, setSelectedDates] = useState<{
-    startDate?: Timestamp
-    endDate?: Timestamp
+    startDate?: Date
+    endDate?: Date
   }>({})
 
   const [slotQty, setSlotQty] = useState<number>(DEFAULT_BOOKING_AVAILABILITY)
@@ -45,12 +44,8 @@ export const DateSelectionProvider = ({
 
   const handleDateChange = (newStartDate?: Date, newEndDate?: Date) => {
     setSelectedDates({
-      startDate: newStartDate
-        ? Timestamp.fromDate(new Date(newStartDate.toDateString()))
-        : undefined,
+      startDate: newStartDate,
       endDate: newEndDate
-        ? Timestamp.fromDate(new Date(newEndDate.toDateString()))
-        : undefined
     })
   }
 

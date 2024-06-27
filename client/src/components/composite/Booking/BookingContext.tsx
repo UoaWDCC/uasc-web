@@ -8,8 +8,8 @@ import { useEditSelfMutation } from "services/User/UserMutations"
 
 interface IBookingContext {
   /**
-   * @param startDate to request the session for
-   * @param endDate  to request the session for
+   * @param startDate **UTC Midnight** date to request the session for
+   * @param endDate **UTC Midnight** date to request the session for
    */
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
   /**

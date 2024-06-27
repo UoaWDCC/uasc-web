@@ -1,36 +1,15 @@
 import Calendar from "components/generic/Calendar/Calendar"
 import BookingInfoComponent from "../BookingInfoComponent/BookingInfoComponent"
-import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
+import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useEffect, useMemo, useState } from "react"
 
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
-import {
-  datesToDateRange,
-  formattedNzDate,
-  isSingleFridayOrSaturday,
-  timestampToDate
-} from "components/utils/Utils"
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
-
-type DateRange = {
-  /**
-   * Javascript date object representing the date of the first night for the booking
-   */
-  startDate: Date
-
-  /**
-   * Javascript date object representing the date of the last night for the booking
-   */
-  endDate: Date
-}
-
-const formatDateForInput = (date?: Date) => {
-  return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
-}
+import { DateRange, DateUtils } from "components/utils/DateUtils"
 
 /*
  * Swaps around dates if invalid
@@ -63,6 +42,8 @@ interface ICreateBookingSection {
 
   /**
    * Callback when dates are changed and valid
+   *
+   * **This will be called with a UTC midnight timestamp representing the date**
    */
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
 
@@ -102,7 +83,7 @@ export const CreateBookingSection = ({
   const { startDate: currentStartDate, endDate: currentEndDate } =
     selectedDateRange
 
-  const disabledDates = bookingSlots.filter((slot) => slot.availableSpaces <= 0)
+  const disabledDates = DateUtils.unavailableDates(bookingSlots)
 
   /**
    * Function to be called to confirm the date range selected by the user.
@@ -113,7 +94,7 @@ export const CreateBookingSection = ({
    * @param endDate the last date of the range
    */
   const checkValidRange = (startDate: Date, endDate: Date) => {
-    const dateArray = datesToDateRange(startDate, endDate)
+    const dateArray = DateUtils.datesToDateRange(startDate, endDate)
     if (dateArray.length > 10) {
       alert("You may only book up to 10 days max.")
       return false
@@ -121,14 +102,11 @@ export const CreateBookingSection = ({
     if (
       dateArray.some(
         (date) =>
-          disabledDates.some(
-            (disabledDate) =>
-              timestampToDate(disabledDate.date).toDateString() ===
-              date.toDateString()
+          disabledDates.some((disabledDate) =>
+            DateUtils.dateEqualToTimestamp(date, disabledDate.date)
           ) ||
-          !bookingSlots.some(
-            (slot) =>
-              timestampToDate(slot.date).toDateString() === date.toDateString()
+          !bookingSlots.some((slot) =>
+            DateUtils.dateEqualToTimestamp(date, slot.date)
           )
       )
     ) {
@@ -152,28 +130,38 @@ export const CreateBookingSection = ({
             return
           }
           if (
-            checkValidRange(currentStartDate, currentEndDate) &&
+            checkValidRange(
+              DateUtils.convertLocalDateToUTCDate(currentStartDate),
+              DateUtils.convertLocalDateToUTCDate(currentEndDate)
+            ) &&
             confirm(
-              `Are you sure you want to book the dates ${formattedNzDate(currentStartDate)} to ${formattedNzDate(currentEndDate)}?`
+              `Are you sure you want to book the dates ${DateUtils.formattedNzDate(currentStartDate)} to ${DateUtils.formattedNzDate(currentEndDate)}?`
             )
           )
             handleBookingCreation?.(
-              Timestamp.fromDate(currentStartDate),
-              Timestamp.fromDate(currentEndDate)
+              Timestamp.fromDate(
+                DateUtils.convertLocalDateToUTCDate(currentStartDate)
+              ),
+              Timestamp.fromDate(
+                DateUtils.convertLocalDateToUTCDate(currentEndDate)
+              )
             )
         }}
       >
         Proceed to Payment
       </Button>
     )
-  }, [currentStartDate, currentEndDate, isValidForCreation])
+  }, [currentStartDate, currentEndDate, isValidForCreation, isPending])
 
   /**
    *  a string to be shown to the user about the price for their date selection
    */
   const estimatedPriceString = useMemo(() => {
-    const nights = datesToDateRange(currentStartDate, currentEndDate).length
-    const requiredPrice = isSingleFridayOrSaturday(
+    const nights = DateUtils.datesToDateRange(
+      currentStartDate,
+      currentEndDate
+    ).length
+    const requiredPrice = DateUtils.isSingleFridayOrSaturday(
       currentStartDate,
       currentEndDate
     )
@@ -210,22 +198,18 @@ export const CreateBookingSection = ({
             }
             tileDisabled={({ date, view }) =>
               view !== "year" &&
-              (!bookingSlots.some(
-                (slot) =>
-                  timestampToDate(slot.date).toDateString() ===
-                  date.toDateString()
+              (!bookingSlots.some((slot) =>
+                DateUtils.UTCDatesEqual(slot.date, date)
               ) ||
-                disabledDates.some(
-                  (slot) =>
-                    timestampToDate(slot.date).toDateString() ===
-                    date.toDateString()
+                disabledDates.some((slot) =>
+                  DateUtils.UTCDatesEqual(slot.date, date)
                 ))
             }
             tileContent={({ date }) => {
               const slot = bookingSlots.find(
                 (slot) =>
-                  timestampToDate(slot.date).toDateString() ===
-                    date.toDateString() && slot.maxBookings > 0
+                  DateUtils.UTCDatesEqual(slot.date, date) &&
+                  slot.availableSpaces > 0
               )
               return slot ? (
                 <p className="text-xs">
@@ -234,11 +218,16 @@ export const CreateBookingSection = ({
               ) : null
             }}
             onChange={(e) => {
-              const range = e as [Date, Date]
-              if (checkValidRange(range[0], range[1])) {
+              const [start, end] = e as [Date, Date]
+              if (
+                checkValidRange(
+                  DateUtils.convertLocalDateToUTCDate(start),
+                  DateUtils.convertLocalDateToUTCDate(end)
+                )
+              ) {
                 setSelectedDateRange({
-                  startDate: range[0],
-                  endDate: range[1]
+                  startDate: start,
+                  endDate: end
                 })
               }
             }}
@@ -247,41 +236,25 @@ export const CreateBookingSection = ({
           <h5 className="self-start font-bold">
             Estimated price: {estimatedPriceString}{" "}
           </h5>
-          <span className="mb-4 mt-3 flex items-center gap-1">
-            <TextInput
-              label="From"
-              type="date"
-              value={formatDateForInput(selectedDateRange.startDate)}
-              data-testid="start-date-picker"
-              onChange={(e) => {
-                const newStartDate = e.target.valueAsDate || new Date()
-                if (checkValidRange(newStartDate, currentEndDate))
-                  handleDateRangeInputChange(
-                    newStartDate,
-                    currentEndDate,
-                    setSelectedDateRange
-                  )
-              }}
-            />
-            <span className="mt-5 w-6">
-              <LongRightArrow />
-            </span>
-            <TextInput
-              label="To"
-              type="date"
-              data-testid="end-date-picker"
-              value={formatDateForInput(selectedDateRange.endDate)}
-              onChange={(e) => {
-                const newEndDate = e.target.valueAsDate || new Date()
-                if (checkValidRange(currentStartDate, newEndDate))
-                  handleDateRangeInputChange(
-                    currentStartDate,
-                    newEndDate,
-                    setSelectedDateRange
-                  )
-              }}
-            />
-          </span>
+          <DateRangePicker
+            valueStart={currentStartDate}
+            valueEnd={currentEndDate}
+            handleDateRangeInputChange={(start, end) => {
+              const newStartDate = start || currentStartDate
+              const newEndDate = end || currentEndDate
+              if (
+                checkValidRange(
+                  DateUtils.convertLocalDateToUTCDate(newStartDate),
+                  DateUtils.convertLocalDateToUTCDate(newEndDate)
+                )
+              )
+                handleDateRangeInputChange(
+                  newStartDate,
+                  newEndDate,
+                  setSelectedDateRange
+                )
+            }}
+          />
 
           <RequirementCheckBoxes
             onValidityChange={(newValid) => {

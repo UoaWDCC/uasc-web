@@ -8,13 +8,15 @@ import {
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
 import {
-  dateToFirestoreTimeStamp,
-  datesToDateRange
+  firestoreTimestampToDate,
+  timestampsInRange
 } from "data-layer/adapters/DateUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
 import {
+  DeleteBookingRequest,
   AddCouponRequestBody,
   MakeDatesAvailableRequestBody
 } from "service-layer/request-models/AdminRequests"
@@ -24,7 +26,10 @@ import {
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
-import { BookingSlotUpdateResponse } from "service-layer/response-models/BookingResponse"
+import {
+  BookingDeleteResponse,
+  BookingSlotUpdateResponse
+} from "service-layer/response-models/BookingResponse"
 import { AllUsersResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
@@ -55,14 +60,10 @@ export class AdminController extends Controller {
     const { startDate, endDate, slots } = requestBody
     const bookingSlotService = new BookingSlotService()
 
-    const dates = datesToDateRange(
-      new Date(startDate.seconds * 1000),
-      new Date(endDate.seconds * 1000)
-    )
+    const dateTimestamps = timestampsInRange(startDate, endDate)
 
-    const datesToUpdatePromises = dates.map(async (date) => {
+    const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
-        const dateTimestamp = dateToFirestoreTimeStamp(date)
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)
 
@@ -82,7 +83,8 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date ${date.toString()} available`
+          `Something went wrong when trying to make the date
+          ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
       }
@@ -107,14 +109,10 @@ export class AdminController extends Controller {
     const { startDate, endDate } = requestBody
     const bookingSlotService = new BookingSlotService()
 
-    const dates = datesToDateRange(
-      new Date(startDate.seconds * 1000),
-      new Date(endDate.seconds * 1000)
-    )
+    const dateTimestamps = timestampsInRange(startDate, endDate)
 
-    const datesToUpdatePromises = dates.map(async (date) => {
+    const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
-        const dateTimestamp = dateToFirestoreTimeStamp(date)
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)
 
@@ -133,7 +131,8 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date ${date.toString()} available`
+          `Something went wrong when trying to make the date
+          ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
       }
@@ -152,10 +151,30 @@ export class AdminController extends Controller {
     }
   }
 
+  @SuccessResponse("200", "Booking deleted successfuly")
+  @Post("/bookings/delete")
+  public async removeBooking(
+    @Body() requestBody: DeleteBookingRequest
+  ): Promise<BookingDeleteResponse> {
+    const { bookingID } = requestBody
+    // Validate and check if the booking actually exists
+    const bookingDataService = new BookingDataService()
+    let user_id
+    try {
+      const booking = await bookingDataService.getBookingById(bookingID)
+      user_id = booking.user_id
+    } catch (err) {
+      this.setStatus(404)
+      return { message: "Booking not found with that booking ID." }
+    }
+    // attempt to delete
+    await bookingDataService.deleteBooking(bookingID)
+    return { user_id }
+  }
+
   /**
    *  User Operations
    */
-
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
   @Get("/users")

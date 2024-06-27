@@ -5,6 +5,7 @@ import { useAppData } from "store/Store"
 import { loginHandler, resetPassword } from "./utils/Handlers"
 import PasswordResetForm from "components/composite/LoginForm/PasswordResetForm/PasswordResetForm"
 import { Footer } from "components/generic/Footer/Footer"
+import { useEffect } from "react"
 
 const Login = () => {
   const [{ currentUser }] = useAppData()
@@ -19,9 +20,11 @@ const Login = () => {
     navigate("")
   }
 
-  if (currentUser) {
-    navigate("/profile")
-  }
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/profile")
+    }
+  }, [currentUser])
 
   return (
     <FullPageBackgroundImage>
