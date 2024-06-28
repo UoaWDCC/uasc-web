@@ -26,7 +26,7 @@ const ModalContainer = ({ children, isOpen = false }: IModalContainer) => {
                     min-w-screen absolute left-0 top-0 flex h-full min-h-screen w-full items-center
                     justify-center overflow-auto bg-black/75 transition-opacity sm:pb-4`}
     >
-      {children}
+      {isOpen && children}
     </div>
   )
 }
