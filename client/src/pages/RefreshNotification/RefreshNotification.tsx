@@ -1,5 +1,7 @@
 /**
  * Used for if there is a lazy load error due to a chunk not being found
+ *
+ * Also catches any unhandled errors
  */
 const RefreshNotification = () => {
   return (
