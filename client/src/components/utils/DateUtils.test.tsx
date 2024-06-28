@@ -72,4 +72,14 @@ describe("DateUtils", () => {
       expect(DateUtils.convertLocalDateToUTCDate(localDate)).toEqual(utcDate)
     })
   })
+
+  describe("nzDateStringToMillis", () => {
+    it("should get the correct time", () => {
+      const date = new Date(69696969)
+      const nzDateString = DateUtils.formattedNzDate(date)
+      expect(
+        new Date(DateUtils.nzDateStringToMillis(nzDateString)).toDateString()
+      ).toEqual(date.toDateString())
+    })
+  })
 })
