@@ -10,7 +10,8 @@ import {
   createUserData,
   createUserWithClaim,
   deleteUsersFromAuth,
-  createUserDataWithStripeId
+  createUserDataWithStripeId,
+  createUserWithEmailVerification
 } from "./routes.mock"
 
 import {
@@ -32,6 +33,7 @@ import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
 import * as admin from "firebase-admin"
 import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
+import console from "console"
 const request = supertest(_app)
 
 /**
@@ -255,6 +257,43 @@ describe("Endpoints", () => {
           .send({ seconds: 0, nanoseconds: 0 })
 
         expect(res.status).toEqual(401)
+      })
+
+      it("should block booking payment if email is not verified", async () => {
+        const nonVerifiedUserToken = await createUserWithEmailVerification(
+          "nonVerifiedUser",
+          false,
+          "member"
+        )
+
+        const res = await request
+          .post("/payment/booking")
+          .set("Authorization", `Bearer ${nonVerifiedUserToken}`)
+          .send({
+            startDate: { seconds: 0, nanoseconds: 0 },
+            endDate: { seconds: 1000, nanoseconds: 0 }
+          })
+
+        expect(res.status).toEqual(403)
+        expect(res.body.error).toEqual("Email is not verified")
+      })
+
+      it("should allow booking payment if email is verified", async () => {
+        const verifiedUserToken = await createUserWithEmailVerification(
+          "verifiedUser",
+          true,
+          "member"
+        )
+
+        const res = await request
+          .post("/payment/booking")
+          .set("Authorization", `Bearer ${verifiedUserToken}`)
+          .send({
+            startDate: { seconds: 0, nanoseconds: 0 },
+            endDate: { seconds: 1000, nanoseconds: 0 }
+          })
+
+        expect(res.status).not.toEqual(403)
       })
     })
     describe("/membership", () => {
