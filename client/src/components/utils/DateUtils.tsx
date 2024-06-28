@@ -132,6 +132,25 @@ export const DateUtils = {
   formattedNzDate: (date: Date): string => date.toLocaleDateString("en-NZ"),
 
   /**
+   *
+   * @param nzDate a string formatted with the format `DD/MM/YYYY`
+   * @returns the amount of milliseconds for that date
+   */
+  nzDateToTime: (nzDate: string): number => {
+    const parts = nzDate.split("/")
+
+    if (parts.length !== 3) {
+      console.error("Invalid date given. Must be in format DD/MM/YYYY")
+      return 0
+    }
+    // Format
+    return new Date(
+      Number.parseInt(parts[2]),
+      Number.parseInt(parts[1]) - 1, // Months are 0 indexed
+      Number.parseInt(parts[0])
+    ).getTime()
+  },
+  /**
    * @param date the date to put into format for input
    * @returns the date string for date input to parse
    */
