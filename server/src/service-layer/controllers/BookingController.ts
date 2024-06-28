@@ -292,11 +292,8 @@ export class BookingController extends Controller {
         /** Getting the bookings for the current slot */
         const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
 
-        /** Extracting the user and booking slot IDs from the bookings */
+        /** Extracting the user from the bookings */
         const userIds = bookings.map((booking) => booking.user_id)
-        const bookingSlotIds = bookings.map(
-          (booking) => booking.booking_slot_id
-        )
 
         if (userIds.length === 0) {
           return
@@ -335,9 +332,13 @@ export class BookingController extends Controller {
         responseData.push({
           date: slot.date,
           // Mapping the users to include the booking ID
-          users: combinedUsers.map((user, i) => ({
+          users: combinedUsers.map((user) => ({
             ...user,
-            bookingId: bookingSlotIds[i]
+            bookingId: bookings.find(
+              (booking) =>
+                booking.user_id === user.uid &&
+                booking.booking_slot_id === slot.id
+            )?.id
           }))
         })
       })

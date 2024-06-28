@@ -1245,17 +1245,19 @@ describe("Endpoints", () => {
         max_bookings: 10
       })
 
-      await bookingDataService.createBooking({
+      const bookingResult1 = await bookingDataService.createBooking({
         user_id: MEMBER_USER_UID,
         booking_slot_id: slot1.id,
         stripe_payment_id: ""
       })
+      const id1 = bookingResult1.id
 
-      await bookingDataService.createBooking({
+      const bookingResult2 = await bookingDataService.createBooking({
         user_id: GUEST_USER_UID,
         booking_slot_id: slot2.id,
         stripe_payment_id: ""
       })
+      const id2 = bookingResult2.id
 
       const res = await request
         .post("/bookings/fetch-users")
@@ -1281,12 +1283,12 @@ describe("Endpoints", () => {
         }),
         expect.objectContaining({
           bookingIds: expect.arrayContaining([
-            expect.objectContaining({ booking_slot_id: slot1.id })
+            expect.objectContaining({ bookingId: id1 })
           ])
         }),
         expect.objectContaining({
           bookingIds: expect.arrayContaining([
-            expect.objectContaining({ booking_slot_id: slot2.id })
+            expect.objectContaining({ bookingId: id2 })
           ])
         })
       ])
