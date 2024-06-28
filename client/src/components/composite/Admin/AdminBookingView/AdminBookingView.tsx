@@ -159,6 +159,7 @@ export const AdminBookingView = ({
           rowOperations={rowOperations}
           // Make sure that this is smaller than the amount we fetch in the `AdminService` for better UX
           showPerPage={32}
+          groupSameRows
         />
       </div>
       <ModalContainer isOpen={openAddBookingPopup}>
