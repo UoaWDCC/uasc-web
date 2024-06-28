@@ -1,5 +1,5 @@
 import { User } from "firebase/auth"
-import { UserAdditionalInfo, UserClaims } from "models/User"
+import { UserClaims } from "models/User"
 import {
   defaultRegistry,
   createStore,
@@ -9,14 +9,12 @@ import {
 
 type State = {
   currentUser: User | null // firebase type
-  currentUserData?: UserAdditionalInfo
   currentUserClaims?: UserClaims
 }
 
 const defaultUserState = {
   currentUser: null,
-  currentUserClaims: undefined,
-  currentUserData: undefined
+  currentUserClaims: undefined
 }
 
 const initialState: State = {
@@ -25,15 +23,10 @@ const initialState: State = {
 
 const actions = {
   setCurrentUser:
-    (
-      user: User | null,
-      userData: UserAdditionalInfo | undefined,
-      userClaims: UserClaims | undefined
-    ): Action<State> =>
+    (user: User | null, userClaims: UserClaims | undefined): Action<State> =>
     ({ setState }) => {
       setState({
         currentUser: user,
-        currentUserData: userData,
         currentUserClaims: userClaims
       })
     },

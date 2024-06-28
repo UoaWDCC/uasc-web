@@ -7,6 +7,16 @@ export type SignUpUserBody = {
 }
 
 const UserService = {
+  getSelfData: async function () {
+    const { data, response } = await fetchClient.GET("/users/self")
+    if (!response.ok) {
+      throw new Error(
+        "There was a problem fetching the user data for the current user"
+      )
+    }
+
+    return data
+  },
   signUpUser: async function (userData: SignUpUserBody) {
     // gets data from signup and returns data (all data needed after signing up)
     const { data, response } = await fetchClient.POST("/signup", {
