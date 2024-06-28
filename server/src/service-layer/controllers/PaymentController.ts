@@ -265,37 +265,18 @@ export class PaymentController extends Controller {
     const userDataService = new UserDataService()
 
     try {
+      /**
+       * Declare these with outer scope as they are used in most paths
+       */
+      const { startDate, endDate } = requestBody
       const userData = await userDataService.getUserData(uid)
+
       const { newUser, stripeCustomerId } =
         await stripeService.createCustomerIfNotExist(
           request.user,
           userData,
           userDataService
         )
-
-      /**
-       * Declare these with outer scope as they are used in most paths
-       */
-      const { startDate, endDate } = requestBody
-
-      const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
-      const totalDays = dateTimestampsInBooking.length
-
-      /**
-       * Used for formatted display to user
-       */
-      const BOOKING_START_DATE = UTCDateToDdMmYyyy(
-        new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
-      )
-
-      /**
-       * Used for formatted display to user
-       */
-      const BOOKING_END_DATE = UTCDateToDdMmYyyy(
-        new Date(
-          firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
-        )
-      )
 
       /**
        * The amount of time users have to complete a session
@@ -339,6 +320,25 @@ export class PaymentController extends Controller {
             "Invalid date, booking start date and end date must be in the range of today up to a year later. "
         }
       }
+
+      const dateTimestampsInBooking = timestampsInRange(startDate, endDate)
+      const totalDays = dateTimestampsInBooking.length
+
+      /**
+       * Used for formatted display to user
+       */
+      const BOOKING_START_DATE = UTCDateToDdMmYyyy(
+        new Date(firestoreTimestampToDate(dateTimestampsInBooking[0]))
+      )
+
+      /**
+       * Used for formatted display to user
+       */
+      const BOOKING_END_DATE = UTCDateToDdMmYyyy(
+        new Date(
+          firestoreTimestampToDate(dateTimestampsInBooking[totalDays - 1])
+        )
+      )
 
       const MAX_BOOKING_DAYS = 10
       // Validate number of dates to avoid kiddies from forging bookings
