@@ -43,9 +43,15 @@ import {
   Body
 } from "tsoa"
 import BookingUtils from "business-layer/utils/BookingUtils"
+import { auth } from "business-layer/security/Firebase"
 
 @Route("payment")
 export class PaymentController extends Controller {
+  private async isEmailVerified(uid: string): Promise<boolean> {
+    const user = await auth.getUser(uid)
+    return user.emailVerified
+  }
+
   @Get("membership_prices")
   public async getMembershipPrices(): Promise<MembershipStripeProductResponse> {
     const stripeService = new StripeService()
@@ -133,6 +139,13 @@ export class PaymentController extends Controller {
   ): Promise<MembershipPaymentResponse> {
     try {
       const { uid, customClaims } = request.user
+
+      // Check if email is verified
+      const emailVerified = await this.isEmailVerified(uid)
+      if (!emailVerified) {
+        this.setStatus(403)
+        return { error: "Email is not verified" }
+      }
       if (customClaims && customClaims[AuthServiceClaims.MEMBER]) {
         // Can't pay for membership if already member
         this.setStatus(409)
@@ -259,6 +272,13 @@ export class PaymentController extends Controller {
     @Body() requestBody: UserBookingRequestingModel
   ): Promise<BookingPaymentResponse> {
     const { uid } = request.user
+
+    // Check if email is verified
+    const emailVerified = await this.isEmailVerified(uid)
+    if (!emailVerified) {
+      this.setStatus(403)
+      return { error: "Email is not verified" }
+    }
 
     // Create new Stripe checkout session
     const stripeService = new StripeService()
