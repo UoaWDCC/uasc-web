@@ -2,7 +2,7 @@ export const PERSONAL_ROUTE_1 = "personal_1" as const
 export const PERSONAL_ROUTE_2 = "personal_2" as const
 export const CONTACT_ROUTE = "contact" as const
 export const ADDITIONAL_ROUTE = "additional" as const
-// confirm-details
+export const CONFIRM_DETAILS_ROUTE = "confirm-details" as const
 export const PAYMENT_INFORMATION_ROUTE = "payment-info" as const
 export const PAYMENT_ROUTE = "payment" as const
 export const CONFIRM_ROUTE = "confirm" as const
@@ -14,7 +14,7 @@ export type RouteNames =
   | typeof PERSONAL_ROUTE_2
   | typeof CONTACT_ROUTE
   | typeof ADDITIONAL_ROUTE
-  // Create confirm details route here
+  | typeof CONFIRM_DETAILS_ROUTE
   | typeof PAYMENT_INFORMATION_ROUTE
   | typeof PAYMENT_ROUTE
   | typeof CONFIRM_ROUTE
@@ -29,7 +29,7 @@ export enum PAGES {
   PersonalSecond,
   Contact,
   Additional,
-  // Insert page for confirm section here
+  ConfirmDetails,
   PaymentInfo,
   Payment,
   Confirm,

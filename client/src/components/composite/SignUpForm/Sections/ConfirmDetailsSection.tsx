@@ -11,9 +11,7 @@ export const ConfirmDetailsSection = () => {
       <span className="mb-3 flex gap-5">
         <ConfirmDetailsForm>
           <p className="mb-2 mt-5">Personal Details</p>
-          <p className="mb-2 mt-5" style={{ opacity: 0.7 }}>
-            Name
-          </p>
+          <p className="mb-2 mt-5 opacity-70">Name</p>
           <p>{full_name}</p>
           <p className="mb-2 mt-5" style={{ opacity: 0.7 }}>
             DOB
