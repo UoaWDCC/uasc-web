@@ -132,11 +132,12 @@ export const DateUtils = {
   formattedNzDate: (date: Date): string => date.toLocaleDateString("en-NZ"),
 
   /**
+   * Gets the ms since unix epoch from a nz date
    *
    * @param nzDate a string formatted with the format `DD/MM/YYYY`
    * @returns the amount of milliseconds for that date
    */
-  nzDateToTime: (nzDate: string): number => {
+  nzDateStringToMillis: (nzDate: string): number => {
     const parts = nzDate.split("/")
 
     if (parts.length !== 3) {

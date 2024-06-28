@@ -39,8 +39,8 @@ const WrappedAdminBookingView = () => {
     () =>
       dataList?.sort(
         (a, b) =>
-          DateUtils.nzDateToTime(a.Date || "00/00/0000") -
-          DateUtils.nzDateToTime(b.Date || "00/00/0000")
+          DateUtils.nzDateStringToMillis(a.Date || "00/00/0000") -
+          DateUtils.nzDateStringToMillis(b.Date || "00/00/0000")
       ),
     [dataList]
   )
