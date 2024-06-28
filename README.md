@@ -39,7 +39,7 @@ Project initiated by WDCC in 2023.
 **2023:** This project is focused on developing a new website for the University of Auckand's Snowsports Club (UASC) from their existing website,
 with the purpose of improving bookings for both users and admins.
 
-**2024:** We are focused on providing a functional membership management system for UASC
+**2024:** We are focused on creating a functional website the University of Auckand's Snowsports Club (UASC) for their existing website, by the clients proposed mid-year deadline. The functional website will comprise a sign-up process, membership management system and booking process. The follow-up focus after the proposed mid-year deadline is to improve the website through user experience updates, quality of life updates, implementing new features on the website and improving the website user inferface.
 
 ## Get started
 
