@@ -733,7 +733,7 @@
 					},
 					"nextCursor": {
 						"type": "string",
-						"description": "Needed for firestore operations which do not support offset\r\nbased pagination\r\n\r\n**Will be undefined in case of last page**"
+						"description": "Needed for firestore operations which do not support offset\nbased pagination\n\n**Will be undefined in case of last page**"
 					},
 					"data": {
 						"items": {
@@ -1260,7 +1260,7 @@
 						}
 					}
 				},
-				"description": "Creates a new booking session for the date ranges passed in,\r\nwill return any existing sessions if they have been started in\r\nthe last 30 minutes (the minimum period stripe has to persist a session for)",
+				"description": "Creates a new booking session for the date ranges passed in,\nwill return any existing sessions if they have been started in\nthe last 30 minutes (the minimum period stripe has to persist a session for)",
 				"security": [
 					{
 						"jwt": [
