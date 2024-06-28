@@ -18,7 +18,14 @@ const ConfirmDetailsForm = ({ children }: IFormContainerProps) => {
     maxHeight: "90vh"
   }
 
-  return <div style={formStyles}>{children}</div>
+  // put all the css in classname instead of formStyles
+  // (search up the tailwindcss equivalent of the css properties)
+
+  return (
+    <div className="w-[530px]" style={formStyles}>
+      {children}
+    </div>
+  )
 }
 
 export default ConfirmDetailsForm

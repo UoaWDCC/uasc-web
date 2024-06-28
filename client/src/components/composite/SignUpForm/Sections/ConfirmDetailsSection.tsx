@@ -1,6 +1,9 @@
 import { useSignUpFormData } from "store/SignUpForm"
 import ConfirmDetailsForm from "components/generic/ConfirmDetailsForm/ConfirmDetailsForm"
 
+const MyText = ({ text }: { text: string }) => {
+  return <p className="mb-2 mt-5">{text}</p>
+}
 export const ConfirmDetailsSection = () => {
   const [{ first_name, last_name }] = useSignUpFormData()
 
@@ -10,6 +13,7 @@ export const ConfirmDetailsSection = () => {
     <div className="max-w-sm">
       <span className="mb-3 flex gap-5">
         <ConfirmDetailsForm>
+          <MyText text="" />
           <p className="mb-2 mt-5">Personal Details</p>
           <p className="mb-2 mt-5 opacity-70">Name</p>
           <p>{full_name}</p>
