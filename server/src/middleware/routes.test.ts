@@ -1236,7 +1236,7 @@ describe("Endpoints", () => {
       await cleanFirestore()
     })
 
-    it("should return users with bookings within the date range", async () => {
+    it("should return users with bookings (and their corresponding bookingIds) within the date range", async () => {
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
 
@@ -1259,17 +1259,19 @@ describe("Endpoints", () => {
         max_bookings: 10
       })
 
-      await bookingDataService.createBooking({
+      const bookingResult1 = await bookingDataService.createBooking({
         user_id: MEMBER_USER_UID,
         booking_slot_id: slot1.id,
         stripe_payment_id: ""
       })
+      const id1 = bookingResult1.id
 
-      await bookingDataService.createBooking({
+      const bookingResult2 = await bookingDataService.createBooking({
         user_id: GUEST_USER_UID,
         booking_slot_id: slot2.id,
         stripe_payment_id: ""
       })
+      const id2 = bookingResult2.id
 
       const res = await request
         .post("/bookings/fetch-users")
@@ -1291,6 +1293,16 @@ describe("Endpoints", () => {
         expect.objectContaining({
           users: expect.arrayContaining([
             expect.objectContaining({ uid: GUEST_USER_UID })
+          ])
+        }),
+        expect.objectContaining({
+          bookingIds: expect.arrayContaining([
+            expect.objectContaining({ bookingId: id1 })
+          ])
+        }),
+        expect.objectContaining({
+          bookingIds: expect.arrayContaining([
+            expect.objectContaining({ bookingId: id2 })
           ])
         })
       ])

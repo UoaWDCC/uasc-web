@@ -3,6 +3,8 @@ import queryClient from "services/QueryClient"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { AllRoutes } from "./routes/routes"
 import { AppNavbar } from "components/composite/Navbar/AppNavbar"
+import { ErrorBoundary } from "react-error-boundary"
+import RefreshNotification from "pages/RefreshNotification/RefreshNotification"
 
 function App() {
   return (
@@ -10,7 +12,14 @@ function App() {
       <BrowserRouter>
         <AppNavbar />
         <div className="pt-[51px]">
-          <AllRoutes />
+          <ErrorBoundary
+            fallback={<RefreshNotification />}
+            onError={() => {
+              window.location.reload()
+            }}
+          >
+            <AllRoutes />
+          </ErrorBoundary>
         </div>
       </BrowserRouter>
     </QueryClientProvider>

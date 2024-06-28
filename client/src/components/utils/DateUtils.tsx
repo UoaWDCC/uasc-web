@@ -129,5 +129,33 @@ export const DateUtils = {
    * @param date a date object
    * @returns a date string in the nz format `dd-mm-yyyy`
    */
-  formattedNzDate: (date: Date): string => date.toLocaleDateString("en-NZ")
+  formattedNzDate: (date: Date): string => date.toLocaleDateString("en-NZ"),
+
+  /**
+   * Gets the ms since unix epoch from a nz date
+   *
+   * @param nzDate a string formatted with the format `DD/MM/YYYY`
+   * @returns the amount of milliseconds for that date
+   */
+  nzDateStringToMillis: (nzDate: string): number => {
+    const parts = nzDate.split("/")
+
+    if (parts.length !== 3) {
+      console.error("Invalid date given. Must be in format DD/MM/YYYY")
+      return 0
+    }
+    // Format
+    return new Date(
+      Number.parseInt(parts[2]),
+      Number.parseInt(parts[1]) - 1, // Months are 0 indexed
+      Number.parseInt(parts[0])
+    ).getTime()
+  },
+  /**
+   * @param date the date to put into format for input
+   * @returns the date string for date input to parse
+   */
+  formatDateForInput: (date?: Date) => {
+    return date?.toLocaleDateString("en-CA", { timeZone: "Pacific/Auckland" })
+  }
 } as const

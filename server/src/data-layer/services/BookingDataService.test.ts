@@ -27,7 +27,7 @@ describe("BookingDataService", () => {
     })
 
     it("Should get bookings based on specific id", async () => {
-      await new BookingDataService().createBooking({
+      const booking1 = await new BookingDataService().createBooking({
         user_id: "Person1",
         booking_slot_id: "booking1",
         stripe_payment_id: "stripeID1"
@@ -53,7 +53,8 @@ describe("BookingDataService", () => {
       expect(bookingsBy_BSID[0]).toEqual({
         user_id: "Person1",
         booking_slot_id: "booking1",
-        stripe_payment_id: "stripeID1"
+        stripe_payment_id: "stripeID1",
+        id: booking1.id
       })
 
       const bookingsBy_SPID =

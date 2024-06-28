@@ -2,7 +2,7 @@ import { useAdminBookingsQuery } from "services/Admin/AdminQueries"
 import { AdminBookingView, BookingMemberColumnFormat } from "./AdminBookingView"
 import { DateUtils } from "components/utils/DateUtils"
 import { AdminBookingViewContext } from "./AdminBookingViewContext"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { Timestamp } from "firebase/firestore"
 
 /**
@@ -35,10 +35,19 @@ const WrappedAdminBookingView = () => {
         return newData
       }) || []
   )
+  const sortedData = useMemo(
+    () =>
+      dataList?.sort(
+        (a, b) =>
+          DateUtils.nzDateStringToMillis(a.Date || "00/00/0000") -
+          DateUtils.nzDateStringToMillis(b.Date || "00/00/0000")
+      ),
+    [dataList]
+  )
   return (
     <AdminBookingView
       isUpdating={isLoading}
-      data={dataList}
+      data={sortedData}
       dateRange={{ startDate, endDate }}
       handleDateRangeChange={handleSelectedDateChange}
     />
