@@ -457,7 +457,6 @@ export default class StripeService {
     amount: number
   ): Promise<void> {
     try {
-
       const coupon = await stripe.coupons.create({
         amount_off: amount * 100, // to cents
         currency: "nzd"

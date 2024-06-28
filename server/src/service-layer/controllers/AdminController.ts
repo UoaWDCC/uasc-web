@@ -359,7 +359,9 @@ export class AdminController extends Controller {
         await stripeService.addCouponToUser(user.stripe_id, amount)
       }
 
-      const couponPromises = Array.from({length: quantity}, () => stripeService.addCouponToUser(user.stripe_id, amount))
+      const couponPromises = Array.from({ length: quantity }, () =>
+        stripeService.addCouponToUser(user.stripe_id, amount)
+      )
       await Promise.all(couponPromises)
 
       this.setStatus(200)
