@@ -353,11 +353,14 @@ export class AdminController extends Controller {
         this.setStatus(400)
         return
       }
-      console.log("Just before await")
+
       // Add coupon to the user using Stripe ID
       for (let i = 0; i < quantity; i++) {
         await stripeService.addCouponToUser(user.stripe_id, amount)
       }
+
+      const couponPromises = Array.from({length: quantity}, () => stripeService.addCouponToUser(user.stripe_id, amount))
+      await Promise.all(couponPromises)
 
       this.setStatus(200)
     } catch (e) {
