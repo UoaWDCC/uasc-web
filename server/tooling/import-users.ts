@@ -21,18 +21,25 @@ type ExcelUserColumns = {
 }
 
 admin.initializeApp({
-  credential: admin.credential.cert(
-    JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
-  )
+  credential: admin.credential.cert(JSON.parse(process.env.PROD_JSON))
 })
 
-const addAllUsers = async (csvPath: string) => {
+// DO NOT COMMIT
+const badUsers: string[] = []
+
+const addAllUsers = async (csvPath: string, filter?: string[]) => {
   const users: ExcelUserColumns[] = []
   createReadStream(csvPath)
     .pipe(csv.default())
     .on("data", (data) => users.push(data))
     .on("end", async () => {
       for (const user of users) {
+        if (
+          filter &&
+          !filter.includes(user["E-mail address"].trim().toLowerCase())
+        )
+          continue
+
         try {
           let existing
           try {
@@ -93,8 +100,8 @@ const args = process.argv.slice(2)
 
 if (args.length === 1) {
   addAllUsers(args[0])
-} else if (args.length === 2 && args[1] === "reset-password") {
-  addAllUsers(args[0])
+} else if (args.length === 2 && args[1] === "filter") {
+  addAllUsers(args[0], badUsers)
 }
 
 console.log("exited script")

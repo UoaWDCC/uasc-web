@@ -34,7 +34,7 @@ const checkAllUsers = async (csvPath: string) => {
       // Get all Firebase Auth users
       const firebaseUsers = await admin.auth().listUsers()
       const firebaseEmails = firebaseUsers.users.map((user) => user.email)
-
+      const badUsers: string[] = []
       // Check if each email from the CSV exists in Firebase Auth
       users.forEach((user) => {
         if (
@@ -43,8 +43,11 @@ const checkAllUsers = async (csvPath: string) => {
           console.log(
             `User with email ${user["E-mail address"]} does not exist in Firebase Auth.`
           )
+          badUsers.push(user["E-mail address"].trim().toLowerCase())
         }
       })
+      console.log(`array of users: \n":
+         ${JSON.stringify(badUsers)}`)
     })
 }
 
