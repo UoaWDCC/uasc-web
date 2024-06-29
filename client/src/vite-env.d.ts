@@ -13,6 +13,8 @@ interface ImportMetaEnv {
   readonly VITE_FIREBASE_MESSAGING_SENDER_ID: string
   /** Firebase App ID */
   readonly VITE_FIREBASE_APP_ID: string
+  /** For analytics */
+  readonly VITE_FIREBASE_MEASUREMENT_ID: string
   /** Backend Base URL */
   readonly VITE_BACKEND_BASE_URL: string
   /** Stripe Publishable Key */
