@@ -6,14 +6,14 @@ interface IFormContainerProps {
 
 const ConfirmDetailsForm = ({ children }: IFormContainerProps) => {
   const formStyles: CSSProperties = {
-    width: "530px",
-    height: "1194px",
     flexShrink: 0,
     borderRadius: "6px",
     border: "1px solid var(--Greys-60, #BDBDBD)",
     background: "#FFF",
     paddingLeft: "25px",
     overflowY: "auto",
+    width: "100%",
+    height: "100%",
     maxWidth: "100%",
     maxHeight: "90vh"
   }

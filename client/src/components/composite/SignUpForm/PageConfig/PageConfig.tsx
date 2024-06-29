@@ -62,7 +62,7 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Additional,
     title: "Additional info",
-    nextButtonText: "Sign Up",
+    nextButtonText: "Next",
     onBack: () => navigateFn(CONTACT_ROUTE),
     onNext: () =>
       validateFormFn(PAGES.Additional, () => navigateFn(CONFIRM_DETAILS_ROUTE))
