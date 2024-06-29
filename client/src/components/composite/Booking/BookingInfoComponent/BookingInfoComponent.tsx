@@ -40,7 +40,10 @@ const BookingInfoComponent = ({
             <strong>bookings@uasc.co.nz</strong>
           </a>
         </h5>
+        <p>Bookings open - 5th July </p>
+        <p>Lodge open - 12th of July</p>
       </div>
+
       <Divider />
       <div
         id="bottom"
