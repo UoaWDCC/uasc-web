@@ -1019,6 +1019,25 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"AddCouponRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string",
+						"description": "The UID of the user to whom the coupon will be added."
+					},
+					"quantity": {
+						"type": "number",
+						"format": "double",
+						"description": "The number of the coupon to be added."
+					}
+				},
+				"required": [
+					"uid",
+					"quantity"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -1755,6 +1774,34 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/DemoteUserRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/users/add-coupon": {
+			"post": {
+				"operationId": "AddCoupon",
+				"responses": {
+					"200": {
+						"description": "Coupon Added"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AddCouponRequestBody"
 							}
 						}
 					}

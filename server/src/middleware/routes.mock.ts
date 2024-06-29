@@ -36,8 +36,7 @@ export const createUserData = async (uid: string) => {
 }
 
 export const createUserWithClaim = async (uid: string, claim?: claims) => {
-  await auth.createUser({ uid })
-
+  await auth.createUser({ uid, emailVerified: true }) // creating user that also has emailed verified to allow other tests to proceed
   const customToken = await auth.createCustomToken(uid)
   await auth.setCustomUserClaims(uid, { [claim]: true })
   const { user } = await signInWithCustomToken(clientAuth, customToken)
@@ -46,4 +45,25 @@ export const createUserWithClaim = async (uid: string, claim?: claims) => {
 
 export const deleteUsersFromAuth = async (uids: string[]) => {
   await auth.deleteUsers(uids)
+}
+
+export const createUserDataWithStripeId = async (
+  uid: string,
+  additionalData?: any
+) => {
+  userInfoMock.stripe_id = null
+  const userData = { ...userInfoMock, ...additionalData }
+  await userService.createUserData(uid, userData)
+}
+
+export const createUserWithEmailVerification = async (
+  uid: string,
+  emailVerified: boolean,
+  claim: claims
+) => {
+  await auth.createUser({ uid, emailVerified })
+  const customToken = await auth.createCustomToken(uid)
+  await auth.setCustomUserClaims(uid, { [claim]: true })
+  const { user } = await signInWithCustomToken(clientAuth, customToken)
+  return await user.getIdToken()
 }
