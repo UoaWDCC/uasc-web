@@ -11,6 +11,7 @@ import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
 import { DateRange, DateUtils } from "components/utils/DateUtils"
 
+import { ProtectedCreateBookingSection } from "./ProtectedCreateBookingSection"
 /*
  * Swaps around dates if invalid
  * @deprecated Exported for testing purposes only
@@ -184,7 +185,9 @@ export const CreateBookingSection = ({
           />
         </div>
 
-        <div className="flex max-w-[381px] flex-col items-center gap-2">
+        <div
+          className={`flex max-w-[381px] flex-col items-center gap-2 ${ProtectedCreateBookingSection ? "blur-sm" : "blur-none"} `}
+        >
           <Calendar
             minDate={TODAY}
             minDetail="year"
