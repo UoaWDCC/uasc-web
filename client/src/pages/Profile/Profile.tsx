@@ -16,6 +16,8 @@ import {
   useState
 } from "react"
 import { useSelfDataQuery } from "services/User/UserQueries"
+import { useBookingsForSelfQuery } from "services/Booking/BookingQueries"
+import Table from "components/generic/ReusableTable/Table"
 
 const AsyncEditPersonalPanel = lazy(() => import("./EditPersonalPanel"))
 const AsyncEditAdditionalPanel = lazy(() => import("./EditAdditionalPanel"))
@@ -76,6 +78,66 @@ const Field = ({
   )
 }
 
+type BookingTableColumn = {
+  uid: string
+  /**
+   * A date **string** to display on the table
+   */
+  Date: string
+}
+const defaultBookingTableData: BookingTableColumn[] = [{ uid: "", Date: "" }]
+
+/**
+ * Contains all the logic for fetching the bookings for current user
+ */
+const ProfileBookingsTable = () => {
+  const { data } = useBookingsForSelfQuery()
+
+  const bookingTableData: BookingTableColumn[] = useMemo(() => {
+    if (!data) {
+      return defaultBookingTableData
+    }
+    let dates =
+      data.dates?.map((date) => {
+        return { uid: date, Date: date }
+      }) || bookingTableData
+
+    // We get the dates as a UTC one so its ok to parse like this
+    dates.sort(
+      (a, b) => new Date(a.Date).getTime() - new Date(b.Date).getTime()
+    )
+
+    dates = dates.map((date) => {
+      return { ...date, Date: DateUtils.formattedNzDate(new Date(date.Date)) }
+    })
+
+    return dates
+  }, [data])
+
+  return (
+    <ProfileInformationPanel title="Current bookings">
+      <h5>
+        Head to{" "}
+        <Link to="/bookings" className="text-light-blue-100 font-bold">
+          Bookings
+        </Link>{" "}
+        to make a booking!
+      </h5>
+      <h5>
+        Please email{" "}
+        <a
+          className="text-light-blue-100 font-bold"
+          href="mailto:club.admin@uasc.co.nz"
+        >
+          club.admin@uasc.co.nz
+        </a>{" "}
+        for any alteration requests
+      </h5>
+      <Table data={bookingTableData} />
+    </ProfileInformationPanel>
+  )
+}
+
 type EditPanels = "none" | "personal" | "additional"
 
 export default function Profile() {
@@ -118,7 +180,7 @@ export default function Profile() {
             handleClose={closePanel}
           />
         </Suspense>
-        <div className="py-8">
+        <div className="max-w-[1100px] py-8">
           <div className="grid-cols grid w-full ">
             <div className="flex flex-col md:flex-row">
               <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
@@ -207,19 +269,13 @@ export default function Profile() {
                     })}
                   />
                 </ProfileInformationPanel>
-                <ProfileInformationPanel title="Current bookings">
-                  <div className="border border-black p-4">
-                    Calender component waiting to be implemented
-                  </div>
-                </ProfileInformationPanel>
+                <ProfileBookingsTable />
               </div>
             </div>
           </div>
         </div>
       </ResponsiveBackgroundImage>
-      <div className="absolute bottom-0 w-full">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   )
 }
