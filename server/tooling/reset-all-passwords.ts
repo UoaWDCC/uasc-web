@@ -20,8 +20,10 @@ const resetAllPasswords = async () => {
   const firebaseUsers = await admin.auth().listUsers()
   console.log("found user count", firebaseUsers.users.length)
   for (const user of firebaseUsers.users) {
-    console.log(`Sending password reset for ${user.email}`)
-    await sendPasswordResetEmail(auth, user.email)
+    if (user.customClaims && !user.customClaims.admin) {
+      console.log(`Sending password reset for ${user.email}`)
+      await sendPasswordResetEmail(auth, user.email)
+    }
   }
 }
 

@@ -66,15 +66,13 @@ const addAllUsers = async (csvPath: string, filter?: string[]) => {
             .collection("users")
             .doc(uid)
             .set({
-              date_of_birth: Timestamp.fromDate(
-                new Date(user["Date of Birth"])
-              ),
+              date_of_birth: Timestamp.fromMillis(0),
               first_name: user["First Name"],
               last_name: user["Last Name"],
-              phone_number: Number.parseInt(user["Mobile Number"]),
+              phone_number: 0,
               dietary_requirements: "Has not been entered",
               emergency_contact: user["Emergency Contact details"] || "",
-              gender: user.Gender,
+              gender: user.Gender || "",
               does_ski:
                 user["Skier/Snowboarder"] === "Both" ||
                 user["Skier/Snowboarder"] === "Ski",
