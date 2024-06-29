@@ -117,6 +117,13 @@ const ProfileBookingsTable = () => {
   return (
     <ProfileInformationPanel title="Current bookings">
       <h5>
+        Head to{" "}
+        <Link to="/bookings" className="text-light-blue-100 font-bold">
+          Bookings
+        </Link>{" "}
+        to make a booking!
+      </h5>
+      <h5>
         Please email{" "}
         <a
           className="text-light-blue-100 font-bold"
