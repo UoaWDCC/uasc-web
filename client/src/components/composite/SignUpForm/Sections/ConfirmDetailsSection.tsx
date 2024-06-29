@@ -84,8 +84,8 @@ export const ConfirmDetailsSection = () => {
   }
 
   return (
-    <div className="max-w-sm">
-      <p className="font-inter mb-3 text-base text-sm leading-5 text-black">
+    <div>
+      <p className="font-family: Inter; mb-4 text-base leading-5 text-black">
         Please review member details before proceeding to payment
       </p>
 
