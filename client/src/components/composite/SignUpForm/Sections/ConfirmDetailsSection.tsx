@@ -85,6 +85,10 @@ export const ConfirmDetailsSection = () => {
 
   return (
     <div className="max-w-sm">
+      <p className="font-inter mb-3 text-base text-sm leading-5 text-black">
+        Please review member details before proceeding to payment
+      </p>
+
       <span className="mb-3 flex gap-5">
         <ConfirmDetailsForm>
           <Title text="Personal Details" />

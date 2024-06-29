@@ -70,7 +70,7 @@ export const PAGINATED_FORM_PAGES = (
 
   {
     index: PAGES.ConfirmDetails,
-    title: "Confirm Details",
+    title: "Review Details",
     nextButtonText: "Sign Up",
     onBack: () => navigateFn(ADDITIONAL_ROUTE),
     onNext: () => {
