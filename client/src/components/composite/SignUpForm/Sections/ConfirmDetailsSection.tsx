@@ -107,7 +107,9 @@ export const ConfirmDetailsSection = () => {
                 ? "Both"
                 : does_snowboarding
                   ? "Snowboarder"
-                  : "Skier"
+                  : does_ski
+                    ? "Skier"
+                    : "New!"
             }
           />{" "}
           <Field text="Keen on Racing?" />
