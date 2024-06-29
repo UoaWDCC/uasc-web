@@ -2,7 +2,7 @@ import { useSignUpFormData } from "store/SignUpForm"
 import ConfirmDetailsForm from "components/generic/ConfirmDetailsForm/ConfirmDetailsForm"
 
 const MyText = ({ text = "N/A" }: { text?: string }) => {
-  return <p className="mb-2">{text}</p>
+  return <p className="mb-5">{text}</p>
 }
 
 const Field = ({ text }: { text: string }) => {
@@ -35,6 +35,18 @@ const Title = ({ text }: { text: string }) => {
   )
 }
 
+const SectionSeparator = () => {
+  return (
+    <hr
+      style={{
+        width: "80%",
+        height: "1px",
+        background: "#BDBDBD"
+      }}
+    />
+  )
+}
+
 export const ConfirmDetailsSection = () => {
   const [
     {
@@ -44,11 +56,32 @@ export const ConfirmDetailsSection = () => {
       gender,
       student_id,
       university_year,
-      faculty
+      faculty,
+      email,
+      phone_number,
+      emergency_contact,
+      does_ski,
+      does_snowboarding,
+      does_racing,
+      dietary_requirements
     }
   ] = useSignUpFormData()
 
   const full_name = `${first_name} ${last_name}`
+
+  const formatDateOfBirth = (
+    timestamp: { seconds: number; nanoseconds: number } | undefined
+  ) => {
+    if (!timestamp) return "N/A"
+
+    const dob = new Date(timestamp.seconds * 1000)
+
+    const day = dob.getDate().toString().padStart(2, "0")
+    const month = (dob.getMonth() + 1).toString().padStart(2, "0")
+    const year = dob.getFullYear()
+
+    return `${day}/${month}/${year}`
+  }
 
   return (
     <div className="max-w-sm">
@@ -58,15 +91,51 @@ export const ConfirmDetailsSection = () => {
           <Field text="Name" />
           <MyText text={full_name} />
           <Field text="DOB" />
-          <MyText text={date_of_birth.seconds.toString()} />
+          <MyText text={formatDateOfBirth(date_of_birth)} />
           <Field text="Gender" />
-          <MyText text={gender} />
+          {gender ? <MyText text={gender} /> : <MyText text="N/A" />}{" "}
           <Field text="Student ID Number" />
           <MyText text={student_id} />
           <Field text="University Year" />
-          <MyText text={university_year} />
+          {university_year ? (
+            <MyText text={university_year} />
+          ) : (
+            <MyText text="N/A" />
+          )}{" "}
           <Field text="Faculty" />
           <MyText text={faculty} />
+          <SectionSeparator />
+          <Title text="Contact Information" />
+          <Field text="Email" />
+          <MyText text={email} />
+          <Field text="Mobile Number" />
+          <MyText text={phone_number.toString()} />
+          <Field text="Emergency Contact" />
+          {emergency_contact ? (
+            <MyText text={emergency_contact} />
+          ) : (
+            <MyText text="N/A" />
+          )}{" "}
+          <SectionSeparator />
+          <Title text="Additional Information" />
+          <Field text="Skier/Snowboarder?" />
+          <MyText
+            text={
+              does_ski && does_snowboarding
+                ? "Both"
+                : does_snowboarding
+                  ? "Snowboarder"
+                  : "Skier"
+            }
+          />{" "}
+          <Field text="Keen on Racing?" />
+          <MyText text={does_racing ? "Yes" : "No"} />
+          <Field text="Dietary Requirements" />
+          {dietary_requirements ? (
+            <MyText text={dietary_requirements} />
+          ) : (
+            <MyText text="N/A" />
+          )}{" "}
         </ConfirmDetailsForm>
       </span>
     </div>

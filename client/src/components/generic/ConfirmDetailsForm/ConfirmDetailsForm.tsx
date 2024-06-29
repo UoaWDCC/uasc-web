@@ -14,8 +14,7 @@ const ConfirmDetailsForm = ({ children }: IFormContainerProps) => {
     overflowY: "auto",
     width: "100%",
     height: "100%",
-    maxWidth: "100%",
-    maxHeight: "90vh"
+    maxWidth: "100%"
   }
 
   // put all the css in classname instead of formStyles
