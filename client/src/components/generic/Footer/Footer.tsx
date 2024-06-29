@@ -13,7 +13,7 @@ const HorizontalDivider = () => (
 export const Footer = () => {
   return (
     <div
-      className="text-gray-3 flex h-fit w-full flex-col justify-center gap-3 border
+      className="text-gray-3 flex h-fit min-h-[56px] w-full flex-col justify-center gap-3 border
      border-black bg-black py-2 lg:flex-row lg:items-center lg:text-nowrap lg:pl-[32px]"
     >
       <h5 className="flex items-center justify-center text-center uppercase">
