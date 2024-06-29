@@ -15,7 +15,7 @@ const Login = () => {
 
   const passwordResetHandler = () => {
     navigate("reset")
-    fireAnalytics("page_view")
+    fireAnalytics("page_view", { page_title: "Password Reset" })
   }
 
   const backToLoginHandler = () => {
