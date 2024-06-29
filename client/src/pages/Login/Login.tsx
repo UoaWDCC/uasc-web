@@ -29,32 +29,33 @@ const Login = () => {
   }, [currentUser])
 
   return (
-    <FullPageBackgroundImage>
-      <Routes>
-        <Route
-          index
-          element={
-            <LoginForm
-              loginHandler={loginHandler}
-              passwordResetHandler={passwordResetHandler}
-            />
-          }
-        />
-        <Route
-          path="reset"
-          element={
-            <PasswordResetForm
-              passwordResetHandler={resetPassword}
-              backHandler={backToLoginHandler}
-            />
-          }
-        />
-      </Routes>
-      <Outlet />
-      <span className="absolute bottom-0 w-full">
-        <Footer />
-      </span>
-    </FullPageBackgroundImage>
+    <>
+      <FullPageBackgroundImage>
+        <Routes>
+          <Route
+            index
+            element={
+              <LoginForm
+                loginHandler={loginHandler}
+                passwordResetHandler={passwordResetHandler}
+              />
+            }
+          />
+          <Route
+            path="reset"
+            element={
+              <PasswordResetForm
+                passwordResetHandler={resetPassword}
+                backHandler={backToLoginHandler}
+              />
+            }
+          />
+        </Routes>
+        <Outlet />
+      </FullPageBackgroundImage>
+
+      <Footer />
+    </>
   )
 }
 
