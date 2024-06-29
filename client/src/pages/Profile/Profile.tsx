@@ -16,6 +16,8 @@ import {
   useState
 } from "react"
 import { useSelfDataQuery } from "services/User/UserQueries"
+import { useBookingsForSelfQuery } from "services/Booking/BookingQueries"
+import Table from "components/generic/ReusableTable/Table"
 
 const AsyncEditPersonalPanel = lazy(() => import("./EditPersonalPanel"))
 const AsyncEditAdditionalPanel = lazy(() => import("./EditAdditionalPanel"))
@@ -76,6 +78,43 @@ const Field = ({
   )
 }
 
+type BookingTableColumn = {
+  uid: string
+  Date: string
+}
+const defaultBookingTableData: BookingTableColumn[] = [{ uid: "", Date: "" }]
+
+const ProfileBookingsTable = () => {
+  const { data } = useBookingsForSelfQuery()
+
+  const bookingTableData: BookingTableColumn[] = useMemo(() => {
+    if (!data) {
+      return defaultBookingTableData
+    }
+    let dates =
+      data.dates?.map((date) => {
+        return { uid: date, Date: date }
+      }) || bookingTableData
+
+    // We get the dates as a UTC one so its ok to parse like this
+    dates.sort(
+      (a, b) => new Date(a.Date).getTime() - new Date(b.Date).getTime()
+    )
+
+    dates = dates.map((date) => {
+      return { ...date, Date: DateUtils.formattedNzDate(new Date(date.Date)) }
+    })
+
+    return dates
+  }, [data])
+
+  return (
+    <ProfileInformationPanel title="Current bookings">
+      <Table data={bookingTableData} showPerPage={10} />
+    </ProfileInformationPanel>
+  )
+}
+
 type EditPanels = "none" | "personal" | "additional"
 
 export default function Profile() {
@@ -104,7 +143,7 @@ export default function Profile() {
   }, [currentUserClaims])
 
   return (
-    <div className={`relative min-h-screen ${isLoading && "blur-md"}`}>
+    <div className={`relative h-fit ${isLoading && "blur-md"}`}>
       <ResponsiveBackgroundImage>
         <Suspense>
           <AsyncEditPersonalPanel
@@ -207,19 +246,13 @@ export default function Profile() {
                     })}
                   />
                 </ProfileInformationPanel>
-                <ProfileInformationPanel title="Current bookings">
-                  <div className="border border-black p-4">
-                    Calender component waiting to be implemented
-                  </div>
-                </ProfileInformationPanel>
+                <ProfileBookingsTable />
               </div>
             </div>
           </div>
         </div>
       </ResponsiveBackgroundImage>
-      <div className="absolute bottom-0 w-full">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   )
 }
