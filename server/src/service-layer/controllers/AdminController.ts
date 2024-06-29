@@ -152,6 +152,7 @@ export class AdminController extends Controller {
   }
 
   @SuccessResponse("200", "Booking deleted successfuly")
+  // TODO: Refactor this to be a DELETE request
   @Post("/bookings/delete")
   public async removeBooking(
     @Body() requestBody: DeleteBookingRequest
