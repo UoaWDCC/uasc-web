@@ -13,9 +13,13 @@ import BookingDataService from "data-layer/services/BookingDataService"
 import {
   CheckoutTypeValues,
   CHECKOUT_TYPE_KEY,
-  BOOKING_SLOTS_KEY
+  BOOKING_SLOTS_KEY,
+  START_DATE,
+  END_DATE
 } from "business-layer/utils/StripeSessionMetadata"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
+import console from "console"
+import MailService from "./MailService"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -422,6 +426,7 @@ export default class StripeService {
         const bookingSlotId = (
           await bookingSlotService.getBookingSlotById(bookingSlotShortId)
         ).id
+
         await bookingDataService.createBooking({
           booking_slot_id: bookingSlotId,
           stripe_payment_id: session.id,
@@ -429,5 +434,40 @@ export default class StripeService {
         })
       })
     )
+    /**
+     * Send confirmation email to the user
+     */
+    try {
+      const [userAuthData] = await new AuthService().bulkRetrieveUsersByUids([
+        { uid }
+      ])
+
+      await new MailService().sendBookingConfirmationEmail(
+        userAuthData.email,
+        session.metadata[START_DATE],
+        session.metadata[END_DATE]
+      )
+    } catch (error) {
+      console.error(`Failed to send an email to the user ${uid}`, error)
+    }
+  }
+
+  public async addCouponToUser(
+    stripeId: string,
+    amount: number
+  ): Promise<void> {
+    try {
+      const coupon = await stripe.coupons.create({
+        amount_off: amount * 100, // to cents
+        currency: "nzd"
+      })
+
+      await stripe.promotionCodes.create({
+        coupon: coupon.id,
+        customer: stripeId
+      })
+    } catch (e) {
+      throw new Error("Failed to add coupon to user")
+    }
   }
 }

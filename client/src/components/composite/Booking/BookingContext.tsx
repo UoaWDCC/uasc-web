@@ -8,8 +8,8 @@ import { useEditSelfMutation } from "services/User/UserMutations"
 
 interface IBookingContext {
   /**
-   * @param startDate to request the session for
-   * @param endDate  to request the session for
+   * @param startDate **UTC Midnight** date to request the session for
+   * @param endDate **UTC Midnight** date to request the session for
    */
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
   /**
@@ -64,9 +64,7 @@ export const BookingContextProvider = ({
 
   const [allergies, setAllergies] = useState<string>("")
 
-  const { mutateAsync: updateAllergies } = useEditSelfMutation({
-    dietary_requirements: allergies
-  })
+  const { mutateAsync: updateAllergies } = useEditSelfMutation()
 
   const getExistingSession = async () => {
     if (bookingPaymentData?.stripeClientSecret) navigate("/bookings/payment")
@@ -87,7 +85,7 @@ export const BookingContextProvider = ({
     startDate: Timestamp,
     endDate: Timestamp
   ) => {
-    await updateAllergies()
+    await updateAllergies({ dietary_requirements: allergies })
     await mutateAsync(
       { startDate, endDate },
       {

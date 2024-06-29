@@ -3,7 +3,10 @@ import AdminService from "./AdminService"
 import { Timestamp } from "firebase/firestore"
 import queryClient from "services/QueryClient"
 import { BOOKING_AVAILABLITY_KEY } from "services/Booking/BookingQueries"
-import { ALL_USERS_QUERY } from "./AdminQueries"
+import {
+  ALL_BOOKINGS_BETWEEN_RANGE_QUERY,
+  ALL_USERS_QUERY
+} from "./AdminQueries"
 import { CombinedUserData } from "models/User"
 import { replaceUserInPage } from "./AdminUtils"
 
@@ -69,6 +72,13 @@ export function useDeleteUserMutation() {
   })
 }
 
+/**
+ * Hook for dealing with making dates available
+ *
+ * @param startDate **UTC midnight** date representing the start (inclusive) date of the range
+ * @param endDate **UTC midnight** date representing the end (inclusive) date of the range
+ * @param slots how many *slots* to make available (defaults to 32)
+ */
 export function useMakeDatesAvailableMutation(
   startDate?: Timestamp,
   endDate?: Timestamp,
@@ -87,6 +97,12 @@ export function useMakeDatesAvailableMutation(
   })
 }
 
+/**
+ * Hook for dealing with making dates unavailable
+ *
+ * @param startDate **UTC midnight** date representing the start (inclusive) date of the range
+ * @param endDate **UTC midnight** date representing the end (inclusive) date of the range
+ */
 export function useMakeDatesUnavailableMutation(
   startDate?: Timestamp,
   endDate?: Timestamp
@@ -100,6 +116,32 @@ export function useMakeDatesUnavailableMutation(
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [BOOKING_AVAILABLITY_KEY] })
+    }
+  })
+}
+
+export function useAddUserToBookingMutation() {
+  return useMutation({
+    mutationKey: ["add-users-to-booking"],
+    retry: false,
+    mutationFn: AdminService.addUsersToBookingForDateRange,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
+      })
+    }
+  })
+}
+
+export function useDeleteBookingMutation() {
+  return useMutation({
+    mutationKey: ["delete-booking"],
+    retry: false,
+    mutationFn: AdminService.deleteBooking,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
+      })
     }
   })
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowObjectWithIdentifier,
@@ -41,6 +41,17 @@ interface ITable<
    * @example // {operationName: "Delete User", (identifier: string) => {deleteUserWithUid(identifier)}}
    */
   rowOperations?: TableRowOperations<S>
+
+  /**
+   * Colour codes the rows based on grouping the first column.
+   *
+   * i.e for a first group of dates ranging [27/10/2002, 28/10/2002, 30/10/2002]
+   *
+   * 27/10/2002 - unhighlighed
+   * 28/10/2002 - highlighted
+   * 30/10/2002 - unhighlighed
+   */
+  groupSameRows?: boolean
 }
 
 /**
@@ -102,6 +113,7 @@ export const OperationButton = <
         <div className="flex h-full items-center px-2">
           <h5
             data-testid="single-operation-button"
+            className="text-red cursor-pointer font-bold"
             onClick={() => rowOperations && rowOperations[0]?.handler(uid)}
           >
             X
@@ -141,7 +153,8 @@ const Table = <
   showPerPage = 15,
   operationType = "none",
   rowOperations,
-  onPageChange
+  onPageChange,
+  groupSameRows = false
 }: ITable<T & TableRowObjectWithIdentifier, S>) => {
   // Needs to be zero-indexed
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0)
@@ -186,6 +199,49 @@ const Table = <
     )
   })
 
+  /**
+   * Displays the content of the table (i.e everything underneath the headers)
+   */
+  const TableData = useMemo(() => {
+    let currentGroup = 0
+    let lastKey: keyof T | null = null
+
+    return currentDataSlice.map((obj, index) => {
+      // Check if the key has changed
+      if (lastKey !== null && obj[dataKeys[0]] !== lastKey) {
+        // If the key has changed, increment the current group
+        currentGroup++
+      }
+      // Update the last key
+      lastKey = obj[dataKeys[0]]
+
+      // Check if its an even or odd group
+      const rowClass =
+        currentGroup % 2 === 0 ? "" : "text-dark-blue-100 font-bold"
+
+      return (
+        <tr key={index} className="">
+          {dataKeys.map((key) => {
+            return (
+              <td
+                className={`break-all pb-2 pl-4 pt-2 sm:break-keep 
+                    ${groupSameRows && rowClass}`}
+                key={key}
+              >
+                {obj[key] || ""}
+              </td>
+            )
+          })}
+          <OperationButton
+            operationType={operationType}
+            rowOperations={rowOperations}
+            uid={obj[TABLE_ROW_IDENTIFIER_KEY]}
+          />
+        </tr>
+      )
+    })
+  }, [operationType, rowOperations, dataKeys, currentDataSlice, groupSameRows])
+
   return (
     <div className="border-gray-3 h-full w-full  overflow-y-visible rounded-t-sm border bg-white">
       <table className="h-full w-full">
@@ -201,25 +257,7 @@ const Table = <
             ))}
           </tr>
         </thead>
-        <tbody className="">
-          {currentDataSlice.map((obj, index) => (
-            <tr key={index} className="">
-              {dataKeys.map((key) => (
-                <td
-                  className="break-all pb-2 pl-4 pt-2 sm:break-keep"
-                  key={key}
-                >
-                  {obj[key] || ""}
-                </td>
-              ))}
-              <OperationButton
-                operationType={operationType}
-                rowOperations={rowOperations}
-                uid={obj[TABLE_ROW_IDENTIFIER_KEY]}
-              />
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{TableData}</tbody>
       </table>
       <div
         className="border-b-gray-3 text-gray-3 flex h-11 items-center 

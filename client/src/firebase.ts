@@ -3,7 +3,7 @@ import { initializeApp, type FirebaseOptions } from "firebase/app"
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
 import { ParsedToken, getAuth } from "firebase/auth"
 import { UserClaims } from "models/User"
-import fetchClient, { setToken } from "services/OpenApiFetchClient"
+import { setToken } from "services/OpenApiFetchClient"
 import { StoreInstance } from "store/Store"
 import { MembershipPaymentStore } from "store/MembershipPayment"
 import queryClient from "services/QueryClient"
@@ -52,17 +52,7 @@ auth.onIdTokenChanged(async (user) => {
   // update fetch client token to use
   setToken(token)
 
-  // retrieve and update cached user data
-  let userData
-  try {
-    const { data } = await fetchClient.GET("/users/self")
-    userData = data
-  } catch (error) {
-    console.error(
-      `Failed to fetch user data during auth token change: ${error}`
-    )
-  }
-  StoreInstance.actions.setCurrentUser(user, userData, claims as UserClaims)
+  StoreInstance.actions.setCurrentUser(user, claims as UserClaims)
 })
 
 export { auth, db }
