@@ -113,6 +113,7 @@ export const OperationButton = <
         <div className="flex h-full items-center px-2">
           <h5
             data-testid="single-operation-button"
+            className="text-red cursor-pointer font-bold"
             onClick={() => rowOperations && rowOperations[0]?.handler(uid)}
           >
             X

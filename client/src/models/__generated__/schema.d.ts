@@ -253,7 +253,7 @@ export interface components {
     };
     /** @enum {string} */
     UserAccountTypes: "admin" | "member" | "guest";
-    CombinedUserData: {
+    BookingIdandUserData: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_snowboarding?: boolean;
       does_racing?: boolean;
@@ -281,11 +281,12 @@ export interface components {
       email: string;
       /** @description What type of account the user has */
       membership: components["schemas"]["UserAccountTypes"];
+      bookingId: string;
     };
     /** @description Represents the response structure for fetching users by date range. */
     UsersByDateRangeResponse: {
       data?: {
-          users: components["schemas"]["CombinedUserData"][];
+          users: components["schemas"]["BookingIdandUserData"][];
           date: components["schemas"]["FirebaseFirestore.Timestamp"];
         }[];
       error?: string;
@@ -329,6 +330,35 @@ export interface components {
     };
     DeleteBookingRequest: {
       bookingID: string;
+    };
+    CombinedUserData: {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      /** Format: double */
+      phone_number: number;
+      gender?: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      university_year?: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+      /** @description Firebase identifier of the user *data* based on the firestore document */
+      uid: string;
+      /** @description Formatted UTC date string of when the account was created */
+      dateJoined?: string;
+      /** @description The email the user uses to log in */
+      email: string;
+      /** @description What type of account the user has */
+      membership: components["schemas"]["UserAccountTypes"];
     };
     AllUsersResponse: {
       error?: string;
