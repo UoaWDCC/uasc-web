@@ -80,6 +80,9 @@ const Field = ({
 
 type BookingTableColumn = {
   uid: string
+  /**
+   * A date **string** to display on the table
+   */
   Date: string
 }
 const defaultBookingTableData: BookingTableColumn[] = [{ uid: "", Date: "" }]
