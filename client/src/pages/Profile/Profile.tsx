@@ -166,7 +166,7 @@ export default function Profile() {
   }, [currentUserClaims])
 
   return (
-    <div className={`relative h-fit ${isLoading && "blur-md"}`}>
+    <div className={`relative min-h-screen ${isLoading && "blur-md"}`}>
       <ResponsiveBackgroundImage>
         <Suspense>
           <AsyncEditPersonalPanel
