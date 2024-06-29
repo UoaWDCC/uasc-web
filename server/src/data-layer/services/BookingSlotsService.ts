@@ -73,4 +73,12 @@ export default class BookingSlotService {
   public async deleteBookingSlot(bookingSlotId: string) {
     return await FirestoreCollections.bookingSlots.doc(bookingSlotId).delete()
   }
+
+  public async isLastSpotTaken(date: string): Promise<boolean> {
+    const bookingSlots = await FirestoreCollections.bookingSlots
+      .where("date", "==", date)
+      .get()
+    const availableSlots = bookingSlots.docs.length
+    return availableSlots <= 1 // Current booking is the last one
+  }
 }
