@@ -355,12 +355,8 @@ export class AdminController extends Controller {
       }
 
       // Add coupon to the user using Stripe ID
-      for (let i = 0; i < quantity; i++) {
+      const couponPromises = Array.from({ length: quantity }, async () =>
         await stripeService.addCouponToUser(user.stripe_id, amount)
-      }
-
-      const couponPromises = Array.from({ length: quantity }, () =>
-        stripeService.addCouponToUser(user.stripe_id, amount)
       )
       await Promise.all(couponPromises)
 
