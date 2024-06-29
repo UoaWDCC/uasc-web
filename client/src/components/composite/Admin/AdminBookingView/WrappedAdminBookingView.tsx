@@ -16,7 +16,7 @@ const WrappedAdminBookingView = () => {
     handleSelectedDateChange
   } = useContext(AdminBookingViewContext)
 
-  const { data, isLoading } = useAdminBookingsQuery(
+  const { data, isLoading: isFetchingUsers } = useAdminBookingsQuery(
     Timestamp.fromDate(DateUtils.convertLocalDateToUTCDate(startDate)),
     Timestamp.fromDate(DateUtils.convertLocalDateToUTCDate(endDate))
   )
@@ -47,7 +47,8 @@ const WrappedAdminBookingView = () => {
     [dataList]
   )
 
-  const { mutateAsync: deleteBooking } = useDeleteBookingMutation()
+  const { mutateAsync: deleteBooking, isPending: isDeletingBooking } =
+    useDeleteBookingMutation()
   const rowOperations: [TableRowOperation] = [
     {
       name: "delete booking",
@@ -70,7 +71,7 @@ const WrappedAdminBookingView = () => {
 
   return (
     <AdminBookingView
-      isUpdating={isLoading}
+      isUpdating={isFetchingUsers || isDeletingBooking}
       data={sortedData}
       rowOperation={rowOperations}
       dateRange={{ startDate, endDate }}
