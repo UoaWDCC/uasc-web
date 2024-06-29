@@ -1,3 +1,4 @@
+import { fireAnalytics } from "firebase"
 import { Timestamp } from "firebase/firestore"
 import { createContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -94,6 +95,7 @@ export const BookingContextProvider = ({
         }
       }
     )
+    fireAnalytics("add_to_cart", { payment_type: "booking" })
   }
 
   return (
