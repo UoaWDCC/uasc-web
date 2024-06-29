@@ -7,10 +7,7 @@ const MyText = ({ text = "N/A" }: { text?: string }) => {
 
 const Field = ({ text }: { text: string }) => {
   return (
-    <p
-      className="font-family: Inter; mb-2 mt-5 opacity-70"
-      style={{ color: "var(--Greys-60, #BDBDBD) " }}
-    >
+    <p className="font-family: Inter; mb-2 mt-5 text-gray-400 opacity-70">
       {text}
     </p>
   )
@@ -18,33 +15,14 @@ const Field = ({ text }: { text: string }) => {
 
 const Title = ({ text }: { text: string }) => {
   return (
-    <p
-      style={{
-        color: "var(--Dark-Blues-100, #283D87)",
-        fontFeatureSettings: "'clig' off, 'liga' off",
-        marginTop: "20px",
-        fontFamily: "Inter",
-        fontSize: "14px",
-        fontStyle: "normal",
-        fontWeight: 700,
-        textTransform: "uppercase"
-      }}
-    >
+    <p className="font-family: Inter; mt-5 text-sm font-bold uppercase not-italic text-blue-800">
       {text}
     </p>
   )
 }
 
 const SectionSeparator = () => {
-  return (
-    <hr
-      style={{
-        width: "80%",
-        height: "1px",
-        background: "#BDBDBD"
-      }}
-    />
-  )
+  return <hr className="h-px w-4/5 border-gray-400" />
 }
 
 export const ConfirmDetailsSection = () => {
