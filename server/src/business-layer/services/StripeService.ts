@@ -18,6 +18,7 @@ import {
   END_DATE
 } from "business-layer/utils/StripeSessionMetadata"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
+import console from "console"
 import MailService from "./MailService"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
@@ -448,6 +449,25 @@ export default class StripeService {
       )
     } catch (error) {
       console.error(`Failed to send an email to the user ${uid}`, error)
+    }
+  }
+
+  public async addCouponToUser(
+    stripeId: string,
+    amount: number
+  ): Promise<void> {
+    try {
+      const coupon = await stripe.coupons.create({
+        amount_off: amount * 100, // to cents
+        currency: "nzd"
+      })
+
+      await stripe.promotionCodes.create({
+        coupon: coupon.id,
+        customer: stripeId
+      })
+    } catch (e) {
+      throw new Error("Failed to add coupon to user")
     }
   }
 }

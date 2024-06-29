@@ -76,6 +76,9 @@ export interface paths {
   "/admin/users/demote": {
     put: operations["DemoteUser"];
   };
+  "/admin/users/add-coupon": {
+    post: operations["AddCoupon"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -428,6 +431,15 @@ export interface components {
     DemoteUserRequestBody: {
       uid: string;
     };
+    AddCouponRequestBody: {
+      /** @description The UID of the user to whom the coupon will be added. */
+      uid: string;
+      /**
+       * Format: double
+       * @description The number of the coupon to be added.
+       */
+      quantity: number;
+    };
   };
   responses: {
   };
@@ -758,6 +770,19 @@ export interface operations {
     };
     responses: {
       /** @description Demoted user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  AddCoupon: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddCouponRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Coupon Added */
       200: {
         content: never;
       };
