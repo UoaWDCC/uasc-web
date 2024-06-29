@@ -4,6 +4,8 @@ import { DateUtils } from "components/utils/DateUtils"
 import { AdminBookingViewContext } from "./AdminBookingViewContext"
 import { useContext, useMemo } from "react"
 import { Timestamp } from "firebase/firestore"
+import { TableRowOperation } from "components/generic/ReusableTable/TableUtils"
+import { useDeleteBookingMutation } from "services/Admin/AdminMutations"
 
 /**
  * Should be wrapped the `AdminBookingViewProvider`
@@ -24,7 +26,7 @@ const WrappedAdminBookingView = () => {
         const newData: BookingMemberColumnFormat = {
           uid: ""
         }
-        newData.uid = user.uid
+        newData.uid = user.bookingId
         newData.Date = DateUtils.formattedNzDate(
           new Date(DateUtils.timestampMilliseconds(date.date))
         )
@@ -44,10 +46,33 @@ const WrappedAdminBookingView = () => {
       ),
     [dataList]
   )
+
+  const { mutateAsync: deleteBooking } = useDeleteBookingMutation()
+  const rowOperations: [TableRowOperation] = [
+    {
+      name: "delete booking",
+      handler: (bookingId: string) => {
+        const matchingBooking = sortedData?.find(
+          (data) => data.uid === bookingId
+        )
+        if (
+          confirm(
+            `Are you SURE you want to delete the booking for the user ${matchingBooking?.Email} on the date ${matchingBooking?.Date}?
+             This can NOT be undone!
+            `
+          )
+        ) {
+          deleteBooking(bookingId)
+        }
+      }
+    }
+  ]
+
   return (
     <AdminBookingView
       isUpdating={isLoading}
       data={sortedData}
+      rowOperation={rowOperations}
       dateRange={{ startDate, endDate }}
       handleDateRangeChange={handleSelectedDateChange}
     />
