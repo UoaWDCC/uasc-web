@@ -87,6 +87,9 @@ type BookingTableColumn = {
 }
 const defaultBookingTableData: BookingTableColumn[] = [{ uid: "", Date: "" }]
 
+/**
+ * Contains all the logic for fetching the bookings for current user
+ */
 const ProfileBookingsTable = () => {
   const { data } = useBookingsForSelfQuery()
 
@@ -113,7 +116,17 @@ const ProfileBookingsTable = () => {
 
   return (
     <ProfileInformationPanel title="Current bookings">
-      <Table data={bookingTableData} showPerPage={10} />
+      <h5>
+        Please email{" "}
+        <a
+          className="text-light-blue-100 font-bold"
+          href="mailto:club.admin@uasc.co.nz"
+        >
+          club.admin@uasc.co.nz
+        </a>{" "}
+        for any alteration requests
+      </h5>
+      <Table data={bookingTableData} />
     </ProfileInformationPanel>
   )
 }
@@ -160,7 +173,7 @@ export default function Profile() {
             handleClose={closePanel}
           />
         </Suspense>
-        <div className="py-8">
+        <div className="max-w-[1100px] py-8">
           <div className="grid-cols grid w-full ">
             <div className="flex flex-col md:flex-row">
               <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
