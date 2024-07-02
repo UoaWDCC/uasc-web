@@ -122,10 +122,10 @@ export const AdminMemberView = ({
   const isValidSearchQuery =
     currentSearchQuery.length > ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH
 
+  const shouldFilterByAccount = filteredAccountType !== "all"
+
   const dataFilter = useCallback(
     (oldData: MemberColumnFormat[]) => {
-      const shouldFilterByAccount = filteredAccountType !== "all"
-
       return isValidSearchQuery || shouldFilterByAccount
         ? oldData.filter(
             (item) =>
@@ -142,13 +142,20 @@ export const AdminMemberView = ({
 
   useEffect(() => {
     /**
+     * If the user is currently trying to search for a user using some filters
+     * we need to make sure that the whole list is given to them to search from
+     *
+     * need to update this when new filters are added
+     */
+    const isQuerying = isValidSearchQuery || shouldFilterByAccount
+    /**
      * We need to *scroll* to the next page of user data as it is assumed
      * that the endpoint for fetching all users is paginated
      */
-    if (isLastPage || isValidSearchQuery) {
+    if (isLastPage || isQuerying) {
       fetchNextPage?.()
     }
-  }, [isLastPage, fetchNextPage, isValidSearchQuery])
+  }, [isLastPage, fetchNextPage, isValidSearchQuery, shouldFilterByAccount])
 
   const onSeachQueryChangedHandler = (newQuery: string) => {
     setCurrentSearchQuery(newQuery)
