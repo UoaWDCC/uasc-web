@@ -432,6 +432,17 @@ export default class StripeService {
           stripe_payment_id: session.id,
           user_id: uid
         })
+
+        // Check if the last spot is taken and expire other sessions
+        const isLastSpot = await this.isLastSpotTaken(
+          bookingSlotService,
+          bookingDataService,
+          stripe,
+          bookingSlotId
+        )
+        if (isLastSpot) {
+          await this.expireOtherCheckoutSessions(stripe, bookingSlotId)
+        }
       })
     )
     /**
@@ -449,6 +460,71 @@ export default class StripeService {
       )
     } catch (error) {
       console.error(`Failed to send an email to the user ${uid}`, error)
+    }
+  }
+
+  private async isLastSpotTaken(
+    bookingSlotService: BookingSlotService,
+    bookingDataService: BookingDataService,
+    stripe: Stripe,
+    bookingSlotId: string
+  ): Promise<boolean> {
+    const bookingSlot =
+      await bookingSlotService.getBookingSlotById(bookingSlotId)
+
+    const bookings = await bookingDataService.getBookingsBySlotId(bookingSlotId)
+    const bookingCount = bookings.length
+
+    const sessions = await stripe.checkout.sessions.list({
+      limit: 100,
+      expand: ["data.payment_intent"]
+    })
+
+    // Pending checkout sessions for this slot
+    const pendingSessions = sessions.data.filter(
+      (session) =>
+        session.metadata.booking_slot_id === bookingSlotId &&
+        (session.payment_intent as Stripe.PaymentIntent)?.status ===
+          "requires_payment_method"
+    ).length
+
+    const availableSlots =
+      bookingSlot.max_bookings - bookingCount - pendingSessions
+    return availableSlots <= 0
+  }
+
+  private async expireOtherCheckoutSessions(
+    stripe: Stripe,
+    date: string
+  ): Promise<void> {
+    try {
+      // Fetch all checkout sessions for the specific date
+      const sessions = await stripe.checkout.sessions.list({
+        limit: 100,
+        expand: ["data.payment_intent"]
+      })
+
+      const sessionsToExpire = sessions.data.filter(
+        (session) =>
+          session.metadata.dates.includes(date) &&
+          (session.payment_intent as Stripe.PaymentIntent)?.status ===
+            "requires_payment_method"
+      )
+
+      // Expire each session that matches the date
+      await Promise.all(
+        sessionsToExpire.map(async (session) => {
+          if (session.id) {
+            await stripe.checkout.sessions.expire(session.id)
+          }
+        })
+      )
+
+      console.log(
+        `[WEBHOOK] Expired ${sessionsToExpire.length} sessions for date ${date}`
+      )
+    } catch (err) {
+      console.error(`[WEBHOOK] Error expiring checkout sessions: ${err}`)
     }
   }
 

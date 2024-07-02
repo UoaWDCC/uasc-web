@@ -8,7 +8,6 @@ import {
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues
 } from "business-layer/utils/StripeSessionMetadata"
-import BookingSlotService from "../../data-layer/services/BookingSlotsService"
 
 @Route("webhook")
 export class StripeWebhook extends Controller {
@@ -33,7 +32,6 @@ export class StripeWebhook extends Controller {
     // Create services
     const userService = new UserDataService()
     const stripeService = new StripeService()
-    const bookingSlotService = new BookingSlotService()
 
     switch (event.type) {
       case "payment_intent.succeeded":
@@ -71,14 +69,6 @@ export class StripeWebhook extends Controller {
             case CheckoutTypeValues.BOOKING: {
               try {
                 await stripeService.handleBookingPaymentSession(uid, session)
-
-                // Check if the last spot is taken and expire other sessions
-                const date = session.metadata.date
-                const isLastSpot =
-                  await bookingSlotService.isLastSpotTaken(date)
-                if (isLastSpot) {
-                  await this.expireOtherCheckoutSessions(stripe, date)
-                }
               } catch (e) {
                 console.error(
                   `[WEBHOOK] Failed to handle booking payment session '${session.id}': ${e}`
@@ -109,40 +99,5 @@ export class StripeWebhook extends Controller {
     }
 
     return this.setStatus(501)
-  }
-
-  private async expireOtherCheckoutSessions(
-    stripe: Stripe,
-    date: string
-  ): Promise<void> {
-    try {
-      // Fetch all checkout sessions for the specific date
-      const sessions = await stripe.checkout.sessions.list({
-        limit: 100,
-        expand: ["data.payment_intent"]
-      })
-
-      const sessionsToExpire = sessions.data.filter(
-        (session) =>
-          session.metadata.date === date &&
-          (session.payment_intent as Stripe.PaymentIntent)?.status ===
-            "requires_payment_method"
-      )
-
-      // Expire each session that matches the date
-      await Promise.all(
-        sessionsToExpire.map(async (session) => {
-          if (session.id) {
-            await stripe.checkout.sessions.expire(session.id)
-          }
-        })
-      )
-
-      console.log(
-        `[WEBHOOK] Expired ${sessionsToExpire.length} sessions for date ${date}`
-      )
-    } catch (err) {
-      console.error(`[WEBHOOK] Error expiring checkout sessions: ${err}`)
-    }
   }
 }
