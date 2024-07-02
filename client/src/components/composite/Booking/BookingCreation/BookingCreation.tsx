@@ -4,7 +4,6 @@ import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useEffect, useMemo, useState } from "react"
-
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import { Timestamp } from "firebase/firestore"
@@ -184,7 +183,9 @@ export const CreateBookingSection = ({
           />
         </div>
 
-        <div className="flex max-w-[381px] flex-col items-center gap-2">
+        <div
+          className={`flex max-w-[381px] flex-col ${isPending && "blur-md"} items-center gap-2`}
+        >
           <Calendar
             minDate={TODAY}
             minDetail="year"

@@ -8,8 +8,7 @@ import { BookingContext } from "../BookingContext"
 export const ProtectedCreateBookingSection = () => {
   const [{ currentUser, currentUserClaims }] = useAppData()
 
-  const { data } = useAvailableBookingsQuery()
-
+  const { data, isLoading } = useAvailableBookingsQuery()
   const {
     handleBookingCreation,
     clientSecret,
@@ -32,7 +31,7 @@ export const ProtectedCreateBookingSection = () => {
       handleBookingCreation={handleBookingCreation}
       handleAllergyChange={setAllergies}
       hasExistingSession={!!clientSecret}
-      isPending={isPending}
+      isPending={isPending || isLoading}
     />
   )
 }
