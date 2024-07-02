@@ -13,5 +13,5 @@ jobs:
       - name: Install volta
         uses: volta-cli/action@v4
 
-      - run: sudo yarn
+      - run: yarn
       - run: yarn prettier:ci

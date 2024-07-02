@@ -16,8 +16,8 @@ jobs:
       - name: Install volta
         uses: volta-cli/action@v4
 
-      - run: sudo yarn workspaces focus client
-      - run: sudo yarn workspace client build
+      - run: yarn workspaces focus client
+      - run: yarn workspace client build
 
   check_server_build:
     runs-on: ubuntu-latest
@@ -28,5 +28,5 @@ jobs:
       - name: Enable corepack
         run: corepack enable
       
-      - run: sudo yarn workspaces focus server
-      - run: sudo yarn workspace server build
+      - run: yarn workspaces focus server
+      - run: yarn workspace server build

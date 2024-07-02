@@ -17,6 +17,6 @@ jobs:
       - name: Install volta
         uses: volta-cli/action@v4
 
-      - run: sudo npm install -g firebase-tools
-      - run: sudo yarn
+      - run: npm install -g firebase-tools
+      - run: yarn
       - run: yarn test
