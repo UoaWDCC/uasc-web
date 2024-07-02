@@ -5,7 +5,8 @@ import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
 } from "components/generic/ReusableTable/TableUtils"
-import { useEffect, useState } from "react"
+import { AccountType } from "models/User"
+import { useCallback, useEffect, useState } from "react"
 
 export type MemberColumnFormat = {
   /**
@@ -68,6 +69,8 @@ const defaultData = {
 
 const ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH = 2 as const
 
+type AccountTypeFilter = AccountType | "all"
+
 /**
  * The view to be displayed on the `admin` route when the admin wants to:
  * - Add new users
@@ -91,17 +94,51 @@ export const AdminMemberView = ({
    * For use with `AdminSearchBar`
    */
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
+
+  const [filteredAccountType, setFilteredAccountType] =
+    useState<AccountTypeFilter>("all")
+
+  /**
+   * Sets the current role filter to the next one.
+   * Note that the sequence should repeat circularly
+   */
+  const nextAccountFilter = useCallback(() => {
+    switch (filteredAccountType) {
+      case "admin":
+        setFilteredAccountType("member")
+        return
+      case "member":
+        setFilteredAccountType("guest")
+        return
+      case "guest":
+        setFilteredAccountType("all")
+        return
+      case "all":
+        setFilteredAccountType("admin")
+    }
+  }, [filteredAccountType])
+
   const [isLastPage, setIsLastPage] = useState<boolean>(false)
   const isValidSearchQuery =
     currentSearchQuery.length > ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH
-  const dataFilter = (oldData: MemberColumnFormat[]) =>
-    isValidSearchQuery
-      ? oldData.filter(
-          (item) =>
-            item.Email?.toLowerCase().includes(currentSearchQuery) ||
-            item.Name?.toLowerCase().includes(currentSearchQuery)
-        )
-      : oldData
+
+  const dataFilter = useCallback(
+    (oldData: MemberColumnFormat[]) => {
+      const shouldFilterByAccount = filteredAccountType !== "all"
+
+      return isValidSearchQuery || shouldFilterByAccount
+        ? oldData.filter(
+            (item) =>
+              (isValidSearchQuery &&
+                (item.Email?.toLowerCase().includes(currentSearchQuery) ||
+                  item.Name?.toLowerCase().includes(currentSearchQuery))) ||
+              (shouldFilterByAccount &&
+                filteredAccountType === item.Status?.toLowerCase())
+          )
+        : oldData
+    },
+    [isValidSearchQuery, currentSearchQuery, filteredAccountType]
+  )
 
   useEffect(() => {
     /**
@@ -123,7 +160,12 @@ export const AdminMemberView = ({
       <span className="mb-4 mt-6 flex w-full justify-between">
         <span className="flex gap-5">
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
-          <Button variant="inverted-default-sm">Filter</Button>
+          <Button
+            variant="inverted-default-sm"
+            onClick={() => nextAccountFilter()}
+          >
+            {filteredAccountType}
+          </Button>
         </span>
         <Button variant="default-sm" onClick={() => openAddMemberView?.()}>
           Add New Member
