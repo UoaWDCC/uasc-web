@@ -434,11 +434,7 @@ export default class StripeService {
         })
 
         // Check if the last spot is taken and expire other sessions
-        const isLastSpot = await this.isLastSpotTaken(
-          bookingSlotService,
-          bookingDataService,
-          bookingSlotId
-        )
+        const isLastSpot = await this.isLastSpotTaken(bookingSlotId)
         if (isLastSpot) {
           await this.expireOtherCheckoutSessions(bookingSlotId)
         }
@@ -462,11 +458,10 @@ export default class StripeService {
     }
   }
 
-  private async isLastSpotTaken(
-    bookingSlotService: BookingSlotService,
-    bookingDataService: BookingDataService,
-    bookingSlotId: string
-  ): Promise<boolean> {
+  private async isLastSpotTaken(bookingSlotId: string): Promise<boolean> {
+    const bookingDataService = new BookingDataService()
+    const bookingSlotService = new BookingSlotService()
+
     const bookingSlot =
       await bookingSlotService.getBookingSlotById(bookingSlotId)
 
@@ -481,7 +476,7 @@ export default class StripeService {
     bookingSlotId: string
   ): Promise<void> {
     try {
-      // Fetch all checkout sessions for the specific date
+      // Fetch all checkout sessions for the specific booking slot id
       const sessions = await stripe.checkout.sessions.list({
         limit: 100,
         expand: ["data.payment_intent"]
