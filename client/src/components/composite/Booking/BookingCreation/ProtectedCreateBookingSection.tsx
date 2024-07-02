@@ -31,7 +31,7 @@ export const ProtectedCreateBookingSection = () => {
       handleBookingCreation={handleBookingCreation}
       handleAllergyChange={setAllergies}
       hasExistingSession={!!clientSecret}
-      isPending={isPending}
+      isPending={isPending || isLoading}
     />
   )
 }

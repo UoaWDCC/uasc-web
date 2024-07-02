@@ -185,7 +185,9 @@ export const CreateBookingSection = ({
           />
         </div>
 
-        <div className="flex max-w-[381px] flex-col items-center gap-2">
+        <div
+          className={`flex max-w-[381px] flex-col ${isPending && "blur-md"} items-center gap-2`}
+        >
           <Calendar
             minDate={TODAY}
             minDetail="year"
