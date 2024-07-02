@@ -121,16 +121,22 @@ export const AdminMemberView = ({
   const [isLastPage, setIsLastPage] = useState<boolean>(false)
   const isValidSearchQuery =
     currentSearchQuery.length > ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH
+
   const dataFilter = useCallback(
-    (oldData: MemberColumnFormat[]) =>
-      isValidSearchQuery || filteredAccountType !== "all"
+    (oldData: MemberColumnFormat[]) => {
+      const shouldFilterByAccount = filteredAccountType !== "all"
+
+      return isValidSearchQuery || shouldFilterByAccount
         ? oldData.filter(
             (item) =>
-              (item.Email?.toLowerCase().includes(currentSearchQuery) ||
-                item.Name?.toLowerCase().includes(currentSearchQuery)) &&
-              filteredAccountType === item.Status?.toLowerCase()
+              (isValidSearchQuery &&
+                (item.Email?.toLowerCase().includes(currentSearchQuery) ||
+                  item.Name?.toLowerCase().includes(currentSearchQuery))) ||
+              (shouldFilterByAccount &&
+                filteredAccountType === item.Status?.toLowerCase())
           )
-        : oldData,
+        : oldData
+    },
     [isValidSearchQuery, currentSearchQuery, filteredAccountType]
   )
 
