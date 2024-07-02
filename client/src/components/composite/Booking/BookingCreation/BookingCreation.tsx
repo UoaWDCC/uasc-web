@@ -3,14 +3,12 @@ import BookingInfoComponent from "../BookingInfoComponent/BookingInfoComponent"
 import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
 import TextInput from "components/generic/TextInputComponent/TextInput"
 import Button from "components/generic/FigmaButtons/FigmaButton"
-import { useContext, useEffect, useMemo, useState } from "react"
-
+import { useEffect, useMemo, useState } from "react"
 import { BookingAvailability } from "models/Booking"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
 import { DateRange, DateUtils } from "components/utils/DateUtils"
-import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
 
 /*
  * Swaps around dates if invalid
