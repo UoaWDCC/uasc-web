@@ -15,8 +15,8 @@ const Exit = () => {
 const AdminNavbar = () => {
   return (
     <div
-      className="top-13 fixed  z-[99] flex h-[46px] w-screen 
-      items-center overflow-hidden border bg-white"
+      className="top-13 absolute z-[99] flex h-[46px] w-screen items-center 
+      overflow-hidden border bg-white md:fixed"
     >
       <span className="relative flex w-full items-center px-4 md:pl-28">
         <div className="flex gap-4 pt-[13px]">
