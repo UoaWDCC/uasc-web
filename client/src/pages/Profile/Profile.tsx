@@ -230,11 +230,9 @@ export default function Profile() {
                     description={`${currentUserData?.emergency_contact}`}
                   />
                   <div></div>
-                  <Link to={"/register"} className="mt-4 ">
-                    <h5 className="text-dark-blue-100 font-bold">
-                      CHANGE PASSWORD
-                    </h5>
-                  </Link>
+                  <h5 className="text-dark-blue-100 mt-4 font-bold">
+                    <Link to={"/register"}>CHANGE PASSWORD</Link>
+                  </h5>
                 </div>
               </ProfileInformationPanel>
               <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
