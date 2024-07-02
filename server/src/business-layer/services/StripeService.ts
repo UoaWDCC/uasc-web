@@ -437,11 +437,10 @@ export default class StripeService {
         const isLastSpot = await this.isLastSpotTaken(
           bookingSlotService,
           bookingDataService,
-          stripe,
           bookingSlotId
         )
         if (isLastSpot) {
-          await this.expireOtherCheckoutSessions(stripe, bookingSlotId)
+          await this.expireOtherCheckoutSessions(bookingSlotId)
         }
       })
     )
@@ -466,7 +465,6 @@ export default class StripeService {
   private async isLastSpotTaken(
     bookingSlotService: BookingSlotService,
     bookingDataService: BookingDataService,
-    stripe: Stripe,
     bookingSlotId: string
   ): Promise<boolean> {
     const bookingSlot =
@@ -475,14 +473,12 @@ export default class StripeService {
     const bookings = await bookingDataService.getBookingsBySlotId(bookingSlotId)
     const bookingCount = bookings.length
 
-    const availableSlots =
-      bookingSlot.max_bookings - bookingCount
+    const availableSlots = bookingSlot.max_bookings - bookingCount
     return availableSlots <= 0
   }
 
   private async expireOtherCheckoutSessions(
-    stripe: Stripe,
-    date: string
+    bookingSlotId: string
   ): Promise<void> {
     try {
       // Fetch all checkout sessions for the specific date
@@ -491,14 +487,18 @@ export default class StripeService {
         expand: ["data.payment_intent"]
       })
 
-      const sessionsToExpire = sessions.data.filter(
-        (session) =>
-          session.metadata.dates.includes(date) &&
+      const sessionsToExpire = sessions.data.filter((session) => {
+        const bookingSlots = JSON.parse(
+          session.metadata[BOOKING_SLOTS_KEY]
+        ) as Array<string>
+        return (
+          bookingSlots.includes(bookingSlotId) &&
           (session.payment_intent as Stripe.PaymentIntent)?.status ===
             "requires_payment_method"
-      )
+        )
+      })
 
-      // Expire each session that matches the date
+      // Expire each session that matches the booking slot id
       await Promise.all(
         sessionsToExpire.map(async (session) => {
           if (session.id) {
@@ -508,7 +508,7 @@ export default class StripeService {
       )
 
       console.log(
-        `[WEBHOOK] Expired ${sessionsToExpire.length} sessions for date ${date}`
+        `[WEBHOOK] Expired ${sessionsToExpire.length} sessions for booking slot ${bookingSlotId}`
       )
     } catch (err) {
       console.error(`[WEBHOOK] Error expiring checkout sessions: ${err}`)
