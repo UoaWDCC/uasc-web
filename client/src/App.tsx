@@ -5,6 +5,7 @@ import { AllRoutes } from "./routes/routes"
 import { AppNavbar } from "components/composite/Navbar/AppNavbar"
 import { ErrorBoundary } from "react-error-boundary"
 import RefreshNotification from "pages/RefreshNotification/RefreshNotification"
+import { fireAnalytics } from "firebase"
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <ErrorBoundary
             fallback={<RefreshNotification />}
             onError={() => {
+              fireAnalytics("exception", { event_label: "uncaught exception" })
               window.location.reload()
             }}
           >
