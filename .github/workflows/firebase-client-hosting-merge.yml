@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Enable corepack
-        run: corepack enable
+      - name: Install volta
+        run: curl https://get.volta.sh | bash
 
       - uses: actions/checkout@v3
       - run: cd client && yarn workspaces focus client && yarn run build

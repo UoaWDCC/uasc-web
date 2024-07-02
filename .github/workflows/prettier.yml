@@ -10,8 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Enable corepack
-        run: corepack enable
+      - name: Install volta
+        run: curl https://get.volta.sh | bash
 
       - run: sudo yarn
       - run: yarn prettier:ci

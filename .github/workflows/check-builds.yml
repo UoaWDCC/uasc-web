@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Enable corepack
-        run: corepack enable
+      - name: Install volta
+        run: curl https://get.volta.sh | bash 
 
       - run: sudo yarn workspaces focus client
       - run: sudo yarn workspace client build

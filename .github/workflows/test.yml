@@ -14,8 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Enable corepack
-        run: corepack enable
+      - name: Install volta
+        run: curl https://get.volta.sh | bash
 
       - run: sudo npm install -g firebase-tools
       - run: sudo yarn

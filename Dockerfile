@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20
+ARG NODE_VERSION=20.3
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Node.js"
@@ -9,7 +9,7 @@ LABEL fly_launch_runtime="Node.js"
 WORKDIR /app
 
 # Set production environment
-RUN corepack enable
+RUN curl https://get.volta.sh | bash
 
 # Throw-away build stage to reduce size of final image
 FROM base as install 

@@ -20,8 +20,8 @@ jobs:
     environment: Client Production
 
     steps:
-      - name: Enable corepack
-        run: corepack enable
+      - name: install volta
+        run: curl https://get.volta.sh | bash 
 
       - uses: actions/checkout@v3
 

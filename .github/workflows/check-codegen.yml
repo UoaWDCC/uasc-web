@@ -14,8 +14,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Enable corepack
-        run: corepack enable
+      - name: Install volta
+        run: curl https://get.volta.sh | bash 
 
       - name: Install dependencies 
         run: sudo yarn
