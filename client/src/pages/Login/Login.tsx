@@ -6,6 +6,7 @@ import { loginHandler, resetPassword } from "./utils/Handlers"
 import PasswordResetForm from "components/composite/LoginForm/PasswordResetForm/PasswordResetForm"
 import { Footer } from "components/generic/Footer/Footer"
 import { useEffect } from "react"
+import { fireAnalytics } from "firebase"
 
 const Login = () => {
   const [{ currentUser }] = useAppData()
@@ -14,6 +15,7 @@ const Login = () => {
 
   const passwordResetHandler = () => {
     navigate("reset")
+    fireAnalytics("page_view", { page_title: "Password Reset" })
   }
 
   const backToLoginHandler = () => {

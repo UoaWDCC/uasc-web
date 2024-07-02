@@ -2,6 +2,7 @@ import {
   LoginHandlerArgs,
   HandlerResponse
 } from "components/composite/LoginForm/LoginForm"
+import { fireAnalytics } from "firebase"
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -36,6 +37,7 @@ export const loginHandler = async ({
   const auth = getAuth()
   try {
     await signInWithEmailAndPassword(auth, email, password)
+    fireAnalytics("login")
     return { success: true }
   } catch (error) {
     let message

@@ -5,7 +5,7 @@ import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
 import { useForceRefreshToken } from "hooks/useRefreshedToken"
 import { signOut } from "firebase/auth"
-import { auth } from "firebase"
+import { auth, fireAnalytics } from "firebase"
 import { DateUtils } from "components/utils/DateUtils"
 import {
   Suspense,
@@ -194,6 +194,7 @@ export default function Profile() {
                 title="Personal details"
                 onEdit={() => {
                   setEditPanelOpen("personal")
+                  fireAnalytics("screen_view", { screen_name: "edit personal" })
                 }}
               >
                 <div className="grid grid-cols-2 gap-x-16 md:grid-cols-4">
@@ -255,6 +256,9 @@ export default function Profile() {
                   title="Additional details"
                   onEdit={() => {
                     setEditPanelOpen("additional")
+                    fireAnalytics("screen_view", {
+                      screen_name: "edit additional"
+                    })
                   }}
                 >
                   <Field
