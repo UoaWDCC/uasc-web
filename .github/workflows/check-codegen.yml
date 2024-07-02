@@ -18,7 +18,7 @@ jobs:
         uses: volta-cli/action@v4
 
       - name: Install dependencies 
-        run: sudo yarn
+        run: yarn
 
       - name: Generate server code
         run: yarn workspace server tsoa spec-and-routes
