@@ -23,10 +23,11 @@ jobs:
     steps:
 
       - name: Install volta
+        uses: actions/checkout@v3
         uses: volta-cli/action@v4
 
-      - uses: actions/checkout@v3
-      - run: cd client && yarn workspaces focus client && yarn run build
+      - run: yarn workspaces focus client && yarn workspace client build && cd client
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
