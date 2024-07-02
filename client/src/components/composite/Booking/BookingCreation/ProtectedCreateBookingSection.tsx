@@ -8,8 +8,7 @@ import { BookingContext } from "../BookingContext"
 export const ProtectedCreateBookingSection = () => {
   const [{ currentUser, currentUserClaims }] = useAppData()
 
-  const { data } = useAvailableBookingsQuery()
-
+  const { data, isLoading } = useAvailableBookingsQuery()
   const {
     handleBookingCreation,
     clientSecret,
