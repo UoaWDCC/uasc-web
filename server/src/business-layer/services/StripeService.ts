@@ -475,21 +475,8 @@ export default class StripeService {
     const bookings = await bookingDataService.getBookingsBySlotId(bookingSlotId)
     const bookingCount = bookings.length
 
-    const sessions = await stripe.checkout.sessions.list({
-      limit: 100,
-      expand: ["data.payment_intent"]
-    })
-
-    // Pending checkout sessions for this slot
-    const pendingSessions = sessions.data.filter(
-      (session) =>
-        session.metadata.booking_slot_id === bookingSlotId &&
-        (session.payment_intent as Stripe.PaymentIntent)?.status ===
-          "requires_payment_method"
-    ).length
-
     const availableSlots =
-      bookingSlot.max_bookings - bookingCount - pendingSessions
+      bookingSlot.max_bookings - bookingCount
     return availableSlots <= 0
   }
 
