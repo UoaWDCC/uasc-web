@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Install volta
-      - uses: volta-cli/action@v4
+        uses: volta-cli/action@v4
 
       - uses: actions/checkout@v3
 
