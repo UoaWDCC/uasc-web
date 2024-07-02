@@ -11,7 +11,6 @@ import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
 import { DateRange, DateUtils } from "components/utils/DateUtils"
 
-import { ProtectedCreateBookingSection } from "./ProtectedCreateBookingSection"
 /*
  * Swaps around dates if invalid
  * @deprecated Exported for testing purposes only
