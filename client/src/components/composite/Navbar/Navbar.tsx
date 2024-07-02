@@ -77,13 +77,13 @@ const Navbar = ({
     setIsOpen(false)
   }
   return (
-    <div className="bg-gray-1 navbar-shadow fixed z-[999] flex w-screen px-8 pt-3 md:px-4">
+    <div className="bg-gray-1 navbar-shadow absolute z-[999] flex w-screen px-8 pt-3 md:fixed md:px-4">
       <div className="flex w-full">
         <Logo />
         <div
           className={`left-0 md:ml-auto ${isOpen ? "flex" : "hidden"} bg-gray-1 absolute top-12 h-fit min-h-screen
-          w-full flex-col items-center justify-start gap-2 self-end pt-8 md:relative md:top-0 md:ml-auto
-          md:flex md:min-h-full md:flex-row md:items-end md:justify-end md:gap-8 md:bg-none md:pr-4 md:pt-0`}
+          w-full flex-col items-center justify-start gap-2 self-end py-8 md:relative md:top-0 md:ml-auto
+          md:flex md:min-h-full md:flex-row md:items-end md:justify-end md:gap-8 md:bg-none md:py-0 md:pr-4`}
         >
           <WrappedTab to="/">Home</WrappedTab>
           <WrappedTab to="/bookings">Book the Lodge!</WrappedTab>
