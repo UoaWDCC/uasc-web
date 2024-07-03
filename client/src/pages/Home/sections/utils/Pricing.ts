@@ -1,7 +1,6 @@
 import { Pricing, PricingBannerContent } from "components/utils/types"
 
-export const pricingNote =
-  "*We have a discounted membership price on offer until Sunday 17th March so lock in now for a year of awesome memories!"
+export const pricingNote = ""
 
 export const pricingBannerContent: PricingBannerContent = {
   headline: "Great nightly rates",
