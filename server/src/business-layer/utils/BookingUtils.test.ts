@@ -100,13 +100,12 @@ describe("BookingUtils", () => {
     })
   })
 
-  describe('isLastSpotTaken', () => {
-
+  describe("isLastSpotTaken", () => {
     afterEach(async () => {
       await cleanFirestore()
     })
 
-    it('should return true if the last spot is taken', async () => {
+    it("should return true if the last spot is taken", async () => {
       // Create a booking slot with a maximum of 2 bookings
       const timestamp = Timestamp.fromDate(new Date(2024, 4, 23))
       const bookingSlotData: BookingSlot = {
@@ -131,13 +130,12 @@ describe("BookingUtils", () => {
         stripe_payment_id: "stripeID1"
       })
 
-
       const result = await BookingUtils.isLastSpotTaken(slotId)
 
       expect(result).toBe(true)
     })
 
-    it('should return false if spots are still available', async () => {
+    it("should return false if spots are still available", async () => {
       // Create a booking slot with a maximum of 7 bookings
       const timestamp = Timestamp.fromDate(new Date(2024, 4, 23))
       const bookingSlotData: BookingSlot = {
@@ -155,7 +153,6 @@ describe("BookingUtils", () => {
         booking_slot_id: slotId,
         stripe_payment_id: "stripeID3"
       })
-
 
       const result = await BookingUtils.isLastSpotTaken(slotId)
 
