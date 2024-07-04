@@ -477,20 +477,16 @@ export default class StripeService {
   ): Promise<void> {
     try {
       // Fetch all checkout sessions for the specific booking slot id
-      const sessions = await stripe.checkout.sessions.list({
-        limit: 100,
-        expand: ["data.payment_intent"]
-      })
+      const sessions = await this.getRecentActiveSessions(
+        CheckoutTypeValues.BOOKING,
+        1440
+      )
 
-      const sessionsToExpire = sessions.data.filter((session) => {
+      const sessionsToExpire = sessions.filter((session) => {
         const bookingSlots = JSON.parse(
           session.metadata[BOOKING_SLOTS_KEY]
         ) as Array<string>
-        return (
-          bookingSlots.includes(bookingSlotId) &&
-          (session.payment_intent as Stripe.PaymentIntent)?.status ===
-            "requires_payment_method"
-        )
+        return bookingSlots.includes(bookingSlotId)
       })
 
       // Expire each session that matches the booking slot id
