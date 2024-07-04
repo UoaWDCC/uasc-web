@@ -6,7 +6,7 @@ import BookingPayment from "components/composite/Booking/BookingPayment/BookingP
 import { useContext } from "react"
 import { BookingContext } from "components/composite/Booking/BookingContext"
 import { useUserLoggedInCallback } from "hooks/useUserLoggedInCallback"
-import { PolicyTabs } from "components/composite/BookingsPolicyTabs/tabscontent"
+import { PolicyTabs } from "components/composite/BookingsPolicyTabs/TabsContent"
 
 const Booking = () => {
   const { clientSecret, getExistingSession } = useContext(BookingContext)
