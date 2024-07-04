@@ -1,6 +1,10 @@
 import { Timestamp } from "firebase-admin/firestore"
 import BookingUtils, { _earliestDate, _latestDate } from "./BookingUtils"
 import { LodgePricingTypeValues } from "./StripeProductMetadata"
+import BookingDataService from "../../data-layer/services/BookingDataService"
+import { cleanFirestore } from "../../test-config/TestUtils"
+import { BookingSlot } from "../../data-layer/models/firebase"
+import BookingSlotsService from "../../data-layer/services/BookingSlotsService"
 
 describe("BookingUtils", () => {
   describe("hasInvalidStartAndEndDates", () => {
@@ -93,6 +97,69 @@ describe("BookingUtils", () => {
       expect(BookingUtils.getRequiredPricing([friday, otherDay])).toBe(
         LodgePricingTypeValues.Normal
       )
+    })
+  })
+
+  describe('isLastSpotTaken', () => {
+
+    afterEach(async () => {
+      await cleanFirestore()
+    })
+
+    it('should return true if the last spot is taken', async () => {
+      // Create a booking slot with a maximum of 2 bookings
+      const timestamp = Timestamp.fromDate(new Date(2024, 4, 23))
+      const bookingSlotData: BookingSlot = {
+        date: timestamp,
+        description: "booking_slot_description",
+        max_bookings: 2
+      }
+      const { id: slotId } = await new BookingSlotsService().createBookingSlot(
+        bookingSlotData
+      )
+
+      // Create two bookings for the same slot
+      await new BookingDataService().createBooking({
+        user_id: "ronaldo",
+        booking_slot_id: slotId,
+        stripe_payment_id: "stripeID3"
+      })
+
+      await new BookingDataService().createBooking({
+        user_id: "sui",
+        booking_slot_id: slotId,
+        stripe_payment_id: "stripeID1"
+      })
+
+
+      const result = await BookingUtils.isLastSpotTaken(slotId)
+
+      expect(result).toBe(true)
+    })
+
+    it('should return false if spots are still available', async () => {
+      // Create a booking slot with a maximum of 7 bookings
+      const timestamp = Timestamp.fromDate(new Date(2024, 4, 23))
+      const bookingSlotData: BookingSlot = {
+        date: timestamp,
+        description: "booking_slot_description",
+        max_bookings: 7
+      }
+      const { id: slotId } = await new BookingSlotsService().createBookingSlot(
+        bookingSlotData
+      )
+
+      // Create 1 booking for the slot
+      await new BookingDataService().createBooking({
+        user_id: "sdf",
+        booking_slot_id: slotId,
+        stripe_payment_id: "stripeID3"
+      })
+
+
+      const result = await BookingUtils.isLastSpotTaken(slotId)
+
+      expect(result).toBe(false)
     })
   })
 })

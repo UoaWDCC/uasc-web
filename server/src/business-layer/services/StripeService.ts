@@ -20,6 +20,7 @@ import {
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import console from "console"
 import MailService from "./MailService"
+import BookingUtils from "../utils/BookingUtils"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -434,7 +435,7 @@ export default class StripeService {
         })
 
         // Check if the last spot is taken and expire other sessions
-        const isLastSpot = await this.isLastSpotTaken(bookingSlotId)
+        const isLastSpot = await BookingUtils.isLastSpotTaken(bookingSlotId)
         if (isLastSpot) {
           await this.expireOtherCheckoutSessions(bookingSlotId)
         }
@@ -456,20 +457,6 @@ export default class StripeService {
     } catch (error) {
       console.error(`Failed to send an email to the user ${uid}`, error)
     }
-  }
-
-  private async isLastSpotTaken(bookingSlotId: string): Promise<boolean> {
-    const bookingDataService = new BookingDataService()
-    const bookingSlotService = new BookingSlotService()
-
-    const bookingSlot =
-      await bookingSlotService.getBookingSlotById(bookingSlotId)
-
-    const bookings = await bookingDataService.getBookingsBySlotId(bookingSlotId)
-    const bookingCount = bookings.length
-
-    const availableSlots = bookingSlot.max_bookings - bookingCount
-    return availableSlots <= 0
   }
 
   private async expireOtherCheckoutSessions(
