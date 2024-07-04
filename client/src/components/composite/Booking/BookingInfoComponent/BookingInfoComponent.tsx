@@ -28,7 +28,10 @@ const BookingInfoComponent = ({
         </h3>
         <h3 className="flex gap-2">
           ${priceSingleFridayOrSaturday}
-          <h3 className="font-normal">a single Friday or Saturday</h3>
+          <h3 className="font-normal">
+            if booking a friday without a saturday <strong>or</strong> saturday
+            without a saturday
+          </h3>
         </h3>
         <h5>
           Bookings can <strong>only</strong> be made for the user on this

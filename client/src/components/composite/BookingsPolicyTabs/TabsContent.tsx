@@ -26,9 +26,12 @@ export const BookingPolicyContent = () => (
         <li>Bookings can be made through our website www.uasc.co.nz</li>
         <li>
           The cost of staying at UASC lodge for members is NZD$40.00 per night
-          (NZD$60.00 for a Friday/Saturday single night booking). For guests
-          (who may only stay with a current member), the cost is NZD$60.00 per
-          guest per night or NZD$80.00 for staying Friday/Saturday night only.
+          (NZD$60.00 for a Friday/Saturday night in a booking that includes a
+          Friday night without a Saturday night or Saturday night without a
+          Friday night). For guests (who may only stay with a current member),
+          the cost is NZD$60.00 per guest per night or NZD$80.00 for a
+          Friday/Saturday night in a booking that includes Friday night without
+          a Saturday night or Saturday night without a Friday night.
         </li>
         <li>
           Members must be aware of and understand the club’s cancellation policy
