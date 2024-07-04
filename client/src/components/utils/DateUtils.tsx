@@ -47,21 +47,21 @@ export const DateUtils = {
   },
 
   /**
-   *
-   * Checks if date range is a single friday or saturday, to be used for
-   * price estimation on the front end
-   *
    * @param startDate the first date in the selected range
    * @param endDate the last date in the selected range
-   * @returns `true` if it is a single friday or saturday, `false` otherwise
+   * @returns `true` if it contains a single friday without saturday, or other way round
    */
-  isSingleFridayOrSaturday: (startDate: Date, endDate: Date): boolean => {
+  fridayXorSaturday: (startDate: Date, endDate: Date): boolean => {
     const FRIDAY = 5
     const SATURDAY = 6
     const dateArray = DateUtils.datesToDateRange(startDate, endDate)
+    const containsFriday = dateArray.some((date) => date.getDay() === FRIDAY)
+    const containsSaturday = dateArray.some(
+      (date) => date.getDay() === SATURDAY
+    )
     return (
-      dateArray.length === 1 &&
-      [FRIDAY, SATURDAY].includes(dateArray[0].getDay())
+      (containsFriday && !containsSaturday) ||
+      (!containsFriday && containsSaturday)
     )
   },
 

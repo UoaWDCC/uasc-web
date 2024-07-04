@@ -1,5 +1,4 @@
 import { Timestamp } from "firebase-admin/firestore"
-import { LodgePricingTypeValues } from "./StripeProductMetadata"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
 // Need to validate the booking date through a startDate and endDate range.
@@ -72,24 +71,76 @@ const BookingUtils = {
    * @param datesInBooking an array of dates for checking
    * @returns a `LodgePricingTypeValue` based on if the date meets any special conditions
    */
-  getRequiredPricing: function (
-    datesInBooking: Timestamp[]
-  ): LodgePricingTypeValues {
-    const totalDays = datesInBooking.length
+  fridayXorSaturday: function (datesInBooking: Timestamp[]): boolean {
     const FRIDAY = 5
     const SATURDAY = 6
+    const containsFriday = datesInBooking.some(
+      (timestamp) =>
+        new Date(firestoreTimestampToDate(timestamp)).getUTCDay() === FRIDAY
+    )
+    const containsSaturday = datesInBooking.some(
+      (timestamp) =>
+        new Date(firestoreTimestampToDate(timestamp)).getUTCDay() === SATURDAY
+    )
     // get requiredBookingType
     if (
-      // Single day requested
-      totalDays === 1 &&
-      [FRIDAY, SATURDAY].includes(
-        new Date(firestoreTimestampToDate(datesInBooking[0])).getUTCDay()
-      )
+      // Friday XOR Saturday
+      (containsFriday && !containsSaturday) ||
+      (!containsFriday && containsSaturday)
     ) {
-      return LodgePricingTypeValues.SingleFridayOrSaturday
+      return true
     } else {
-      return LodgePricingTypeValues.Normal
+      return false
     }
+  },
+  /**
+   * Creates the required line items for a booking checkout
+   *
+   * @param containsSpecialPrice if we need to add a special price for a more expensive date
+   * @param totalDays amount of dates TOTAL in the bookng
+   * @param specialDefaultPrice the stripe price id of the special price
+   * @param normalDefaultPrice the stripe price if of the normal price
+   * @returns line items that can be passed into a checkout session
+   */
+  createBookingLineItems: function (
+    containsSpecialPrice: boolean,
+    totalDays: number,
+    specialDefaultPrice: string,
+    normalDefaultPrice: string
+  ): {
+    price: string
+    quantity: number
+  }[] {
+    const lineItems: {
+      price: string
+      quantity: number
+    }[] = []
+
+    if (totalDays === 0) {
+      return lineItems
+    }
+
+    if (containsSpecialPrice) {
+      lineItems.push({
+        price: specialDefaultPrice,
+        quantity: 1
+      })
+    }
+
+    if (containsSpecialPrice && totalDays > 1) {
+      lineItems.push({
+        price: normalDefaultPrice,
+        quantity: totalDays - 1
+      })
+    }
+
+    if (!containsSpecialPrice) {
+      lineItems.push({
+        price: normalDefaultPrice,
+        quantity: totalDays
+      })
+    }
+    return lineItems
   }
 } as const
 

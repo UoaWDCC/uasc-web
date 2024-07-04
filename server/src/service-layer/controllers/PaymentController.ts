@@ -10,7 +10,8 @@ import {
 import {
   MembershipTypeValues,
   MEMBERSHIP_TYPE_KEY,
-  LODGE_PRICING_TYPE_KEY
+  LODGE_PRICING_TYPE_KEY,
+  LodgePricingTypeValues
 } from "business-layer/utils/StripeProductMetadata"
 import {
   UTCDateToDdMmYyyy,
@@ -409,31 +410,40 @@ export class PaymentController extends Controller {
       }
 
       // implement pricing logic
-      const requiredBookingType = BookingUtils.getRequiredPricing(
+      const containsSpecialPrice = BookingUtils.fridayXorSaturday(
         dateTimestampsInBooking
       )
 
-      const requiredBookingProducts = await stripeService.getProductByMetadata(
+      const normalPrices = await stripeService.getProductByMetadata(
         LODGE_PRICING_TYPE_KEY,
-        requiredBookingType
+        LodgePricingTypeValues.Normal
       )
-      const requiredBookingProduct = requiredBookingProducts.find(
-        (product) => product.active
+      const specialPrices = await stripeService.getProductByMetadata(
+        LODGE_PRICING_TYPE_KEY,
+        LodgePricingTypeValues.SingleFridayOrSaturday
       )
-      const { default_price } = requiredBookingProduct
+
+      const normalPrice = normalPrices.find((product) => product.active)
+      const specialPrice = specialPrices.find((product) => product.active)
+
+      const { default_price: normalDefaultPrice } = normalPrice
+      const { default_price: specialDefaultPrice } = specialPrice
+      const lineItems = BookingUtils.createBookingLineItems(
+        containsSpecialPrice,
+        totalDays,
+        specialDefaultPrice as string,
+        normalDefaultPrice as string
+      )
 
       const clientSecret = await stripeService.createCheckoutSession(
         uid,
         `${process.env.FRONTEND_URL}/bookings/success?session_id={CHECKOUT_SESSION_ID}&startDate=${BOOKING_START_DATE}&endDate=${BOOKING_END_DATE}`,
-        [
-          {
-            price: default_price as string,
-            quantity: totalDays
-          }
-        ],
+        lineItems,
         {
           [CHECKOUT_TYPE_KEY]: CheckoutTypeValues.BOOKING,
-          [LODGE_PRICING_TYPE_KEY]: requiredBookingType,
+          [LODGE_PRICING_TYPE_KEY]: containsSpecialPrice
+            ? LodgePricingTypeValues.SingleFridayOrSaturday
+            : LodgePricingTypeValues.Normal,
           [BOOKING_SLOTS_KEY]: JSON.stringify(
             bookingSlots.map((slot) => slot.id)
           ),

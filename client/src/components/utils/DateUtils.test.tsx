@@ -19,15 +19,15 @@ describe("DateUtils", () => {
     it("should return true if the date range is a single Friday or Saturday", () => {
       const friday = new Date("2024-01-05")
       const saturday = new Date("2024-01-06")
-      expect(DateUtils.isSingleFridayOrSaturday(friday, friday)).toBe(true)
-      expect(DateUtils.isSingleFridayOrSaturday(saturday, saturday)).toBe(true)
+      expect(DateUtils.fridayXorSaturday(friday, friday)).toBe(true)
+      expect(DateUtils.fridayXorSaturday(saturday, saturday)).toBe(true)
     })
 
     it("should return false if the date range is not a single Friday or Saturday", () => {
       const thursday = new Date("2024-01-04")
       const sunday = new Date("2024-01-07")
-      expect(DateUtils.isSingleFridayOrSaturday(thursday, thursday)).toBe(false)
-      expect(DateUtils.isSingleFridayOrSaturday(sunday, sunday)).toBe(false)
+      expect(DateUtils.fridayXorSaturday(thursday, thursday)).toBe(false)
+      expect(DateUtils.fridayXorSaturday(sunday, sunday)).toBe(false)
     })
   })
 

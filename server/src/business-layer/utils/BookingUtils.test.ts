@@ -1,6 +1,5 @@
 import { Timestamp } from "firebase-admin/firestore"
 import BookingUtils, { _earliestDate, _latestDate } from "./BookingUtils"
-import { LodgePricingTypeValues } from "./StripeProductMetadata"
 
 describe("BookingUtils", () => {
   describe("hasInvalidStartAndEndDates", () => {
@@ -58,41 +57,62 @@ describe("BookingUtils", () => {
       const result = BookingUtils.getSlotOccurences([])
       expect(result.size).toBe(0)
     })
-
-    // Add more test cases as needed
   })
-  describe("BookingUtils.getRequiredPricing", () => {
-    it("should return SingleFridayOrSaturday for a single Friday or Saturday", () => {
-      const _friday = new Date("2024-06-14")
-      const _saturday = new Date("2024-06-15")
+  describe("BookingUtils.fridayXorSaturday", () => {
+    it("should return true if the dates contain only a Friday or only a Saturday", () => {
+      const friday = Timestamp.fromDate(new Date("2024-07-05T00:00:00Z"))
+      const saturday = Timestamp.fromDate(new Date("2024-07-06T00:00:00Z"))
+      const sunday = Timestamp.fromDate(new Date("2024-07-07T00:00:00Z"))
 
-      const friday = Timestamp.fromDate(_friday)
-      const saturday = Timestamp.fromDate(_saturday)
-
-      expect(BookingUtils.getRequiredPricing([friday])).toBe(
-        LodgePricingTypeValues.SingleFridayOrSaturday
+      expect(BookingUtils.fridayXorSaturday([friday])).toBe(true)
+      expect(BookingUtils.fridayXorSaturday([saturday])).toBe(true)
+      expect(BookingUtils.fridayXorSaturday([friday, saturday])).toBe(false)
+      expect(BookingUtils.fridayXorSaturday([friday, sunday])).toBe(true)
+      expect(BookingUtils.fridayXorSaturday([saturday, sunday])).toBe(true)
+      expect(BookingUtils.fridayXorSaturday([sunday])).toBe(false)
+    })
+  })
+  describe("createLineItems", () => {
+    test("should return an empty array when totalDays is 0", () => {
+      const lineItems = BookingUtils.createBookingLineItems(
+        false,
+        0,
+        "special",
+        "normal"
       )
-      expect(BookingUtils.getRequiredPricing([saturday])).toBe(
-        LodgePricingTypeValues.SingleFridayOrSaturday
-      )
+      expect(lineItems).toEqual([])
     })
 
-    it("should return Normal for other cases", () => {
-      const _otherDay = new Date("2024-06-16")
-      const _friday = new Date("2024-06-14")
+    test("should add a normal price item when totalDays is greater than 1", () => {
+      const lineItems = BookingUtils.createBookingLineItems(
+        false,
+        2,
+        "special",
+        "normal"
+      )
+      expect(lineItems).toContainEqual({ price: "normal", quantity: 2 })
+    })
 
-      const otherDay = Timestamp.fromDate(_otherDay)
-      const friday = Timestamp.fromDate(_friday)
+    test("should add a normal price item with quantity equal to totalDays when containsSpecialPrice is false", () => {
+      const lineItems = BookingUtils.createBookingLineItems(
+        false,
+        2,
+        "special",
+        "normal"
+      )
+      expect(lineItems).not.toContainEqual({ price: "normal", quantity: 1 })
+      expect(lineItems).toContainEqual({ price: "normal", quantity: 2 })
+    })
 
-      expect(BookingUtils.getRequiredPricing([otherDay])).toBe(
-        LodgePricingTypeValues.Normal
+    test("should not add a normal price item with quantity equal to totalDays when containsSpecialPrice is true", () => {
+      const lineItems = BookingUtils.createBookingLineItems(
+        true,
+        2,
+        "special",
+        "normal"
       )
-      expect(BookingUtils.getRequiredPricing([])).toBe(
-        LodgePricingTypeValues.Normal
-      )
-      expect(BookingUtils.getRequiredPricing([friday, otherDay])).toBe(
-        LodgePricingTypeValues.Normal
-      )
+      expect(lineItems).toContainEqual({ price: "normal", quantity: 1 })
+      expect(lineItems).toContainEqual({ price: "special", quantity: 1 })
     })
   })
 })

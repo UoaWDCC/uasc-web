@@ -161,14 +161,21 @@ export const CreateBookingSection = ({
       currentStartDate,
       currentEndDate
     ).length
-    const requiredPrice = DateUtils.isSingleFridayOrSaturday(
+
+    const needsSpecialPrice: boolean = DateUtils.fridayXorSaturday(
       currentStartDate,
       currentEndDate
     )
-      ? SPECIAL_PRICE
-      : NORMAL_PRICE
 
-    return `$${requiredPrice} * ${nights} night${nights > 1 ? "s" : ""} = $${requiredPrice * nights}` as const
+    if (needsSpecialPrice && nights === 1) {
+      return `$${SPECIAL_PRICE} x 1 night = ${SPECIAL_PRICE}`
+    }
+
+    if (needsSpecialPrice && nights > 1) {
+      return `$${SPECIAL_PRICE} x 1 night + $${NORMAL_PRICE} x ${nights - 1} night(s) = $${SPECIAL_PRICE + NORMAL_PRICE * (nights - 1)} `
+    }
+
+    return `$${NORMAL_PRICE} x ${nights} night(s) = $${NORMAL_PRICE * nights} `
   }, [currentStartDate, currentEndDate])
 
   return (
