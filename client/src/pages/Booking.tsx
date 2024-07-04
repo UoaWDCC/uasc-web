@@ -6,6 +6,7 @@ import BookingPayment from "components/composite/Booking/BookingPayment/BookingP
 import { useContext } from "react"
 import { BookingContext } from "components/composite/Booking/BookingContext"
 import { useUserLoggedInCallback } from "hooks/useUserLoggedInCallback"
+import { PolicyTabs } from "components/composite/BookingsPolicyTabs/tabscontent"
 
 const Booking = () => {
   const { clientSecret, getExistingSession } = useContext(BookingContext)
@@ -34,6 +35,9 @@ const Booking = () => {
           </span>
         </div>
       </div>
+      <span className="relative z-[11]">
+        <PolicyTabs />
+      </span>
       <Footer />
     </>
   )
