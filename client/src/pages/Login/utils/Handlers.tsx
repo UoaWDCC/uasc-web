@@ -2,6 +2,7 @@ import {
   LoginHandlerArgs,
   HandlerResponse
 } from "components/composite/LoginForm/LoginForm"
+import { fireAnalytics } from "firebase"
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -36,21 +37,20 @@ export const loginHandler = async ({
   const auth = getAuth()
   try {
     await signInWithEmailAndPassword(auth, email, password)
+    fireAnalytics("login")
     return { success: true }
   } catch (error) {
     let message
+    console.error(error)
     switch (error.code) {
-      case AuthErrorCodes.INVALID_EMAIL:
-        message = "Invalid Email"
-        break
-      case AuthErrorCodes.INVALID_PASSWORD:
-        message = "Incorrect Password"
+      case AuthErrorCodes.INVALID_LOGIN_CREDENTIALS:
+        message = "Incorrect password or email"
         break
       case AuthErrorCodes.USER_DELETED:
         message = "User does not exist"
         break
       default:
-        message = "Unknown Error"
+        message = "Unknown Error, Please contact us"
         break
     }
     return {

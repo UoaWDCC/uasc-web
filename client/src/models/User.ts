@@ -2,6 +2,8 @@ import { components } from "./__generated__/schema"
 
 export type UserAdditionalInfo = components["schemas"]["UserAdditionalInfo"]
 
+export type AccountType = components["schemas"]["UserAccountTypes"]
+
 export type ReducedUserAdditionalInfo =
   components["schemas"]["Pick_UserAdditionalInfo.Exclude_keyofUserAdditionalInfo.stripe_id__"]
 

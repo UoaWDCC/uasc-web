@@ -5,6 +5,7 @@ import {
 } from "../Sections/PersonalSection"
 import { ContactSection } from "../Sections/ContactSection"
 import { AdditionalSection } from "../Sections/AdditionalSection"
+import { ConfirmDetailsSection } from "../Sections/ConfirmDetailsSection"
 import ConfirmationSection from "../Sections/ConfirmationSection"
 import SuccessSection from "../Sections/SuccessSection"
 
@@ -14,6 +15,7 @@ import {
   CONTACT_ROUTE,
   PAGES,
   PAYMENT_INFORMATION_ROUTE,
+  CONFIRM_DETAILS_ROUTE,
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
@@ -60,10 +62,19 @@ export const PAGINATED_FORM_PAGES = (
   {
     index: PAGES.Additional,
     title: "Additional info",
-    nextButtonText: "Sign Up",
+    nextButtonText: "Next",
     onBack: () => navigateFn(CONTACT_ROUTE),
+    onNext: () =>
+      validateFormFn(PAGES.Additional, () => navigateFn(CONFIRM_DETAILS_ROUTE))
+  },
+
+  {
+    index: PAGES.ConfirmDetails,
+    title: "Review Details",
+    nextButtonText: "Sign Up",
+    onBack: () => navigateFn(ADDITIONAL_ROUTE),
     onNext: () => {
-      validateFormFn(PAGES.Additional, () => signUpFn())
+      signUpFn()
     },
     nextDisabled: disableSubmit
   },
@@ -109,6 +120,7 @@ export const PAGE_CONTENT = [
   <PersonalSectionSecond key="personal-second" />,
   <ContactSection key="contact" />,
   <AdditionalSection key="additional" />,
+  <ConfirmDetailsSection key="confirm-details" />,
   <PaymentInformationSection key="payment-info" />,
   <PaymentSection key="payment" />,
   <ConfirmationSection

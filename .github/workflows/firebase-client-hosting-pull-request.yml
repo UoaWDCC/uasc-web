@@ -19,12 +19,14 @@ jobs:
   Build-And-Preview:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
-    steps:
-      - name: Enable corepack
-        run: corepack enable
 
+    steps:
       - uses: actions/checkout@v3
-      - run: cd client && yarn workspaces focus client && yarn run build
+
+      - name: Install volta
+        uses: volta-cli/action@v4
+
+      - run: yarn workspaces focus client && yarn workspace client build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"

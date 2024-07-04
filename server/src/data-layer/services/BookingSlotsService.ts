@@ -2,11 +2,23 @@ import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { BookingSlot } from "data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 import { DocumentDataWithUid } from "data-layer/models/common"
+import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
 export default class BookingSlotService {
-  // Create
+  /**
+   * Creates a bookings slot **with only ms precision**
+   *
+   * @param bookingSlotData the fields to add to the new `booking_slot` document
+   * @returns the created `booking_slot` document
+   */
   public async createBookingSlot(bookingSlotData: BookingSlot) {
-    return await FirestoreCollections.bookingSlots.add(bookingSlotData)
+    return await FirestoreCollections.bookingSlots.add({
+      ...bookingSlotData,
+      date: Timestamp.fromMillis(
+        bookingSlotData.date.seconds * 1000 +
+          bookingSlotData.date.nanoseconds / 1000000
+      ) // Need to do this because firestore does not like "raw" {seconds, nanoseconds}
+    })
   }
 
   /**
@@ -25,7 +37,7 @@ export default class BookingSlotService {
     date: Timestamp
   ): Promise<Array<DocumentDataWithUid<BookingSlot>>> {
     const result = await FirestoreCollections.bookingSlots
-      .where("date", "==", date)
+      .where("date", "==", firestoreTimestampToDate(date))
       .get()
     const bookingSlotArray = result.docs.map((docs) => {
       return { ...docs.data(), id: docs.id }
@@ -38,8 +50,8 @@ export default class BookingSlotService {
     endDate: Timestamp
   ): Promise<Array<DocumentDataWithUid<BookingSlot>>> {
     const result = await FirestoreCollections.bookingSlots
-      .where("date", ">=", startDate)
-      .where("date", "<=", endDate)
+      .where("date", ">=", firestoreTimestampToDate(startDate))
+      .where("date", "<=", firestoreTimestampToDate(endDate))
       .get()
     const bookingSlotArray = result.docs.map((docs) => {
       return { ...docs.data(), id: docs.id }

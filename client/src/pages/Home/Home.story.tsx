@@ -12,7 +12,7 @@ export default meta
 export const DefaultHomePage = () => {
   return (
     <MemoryRouter initialEntries={["/"]}>
-      <Home />
+      <Home data={[]} />
     </MemoryRouter>
   )
 }

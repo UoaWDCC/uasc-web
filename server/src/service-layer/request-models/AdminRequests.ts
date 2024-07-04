@@ -2,12 +2,12 @@ import { Timestamp } from "firebase-admin/firestore"
 
 export interface MakeDatesAvailableRequestBody {
   /**
-   * Firestore timestamp, ideally with the time information removed (set to midnight)
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
    */
   startDate: Timestamp
 
   /**
-   * Firestore timestamp, ideally with the time information removed (set to midnight)
+   * Firestore timestamp, should represent a UTC date that is set to exactly midnight
    */
   endDate: Timestamp
 
@@ -17,4 +17,23 @@ export interface MakeDatesAvailableRequestBody {
    * @minimum 0 must be positive
    */
   slots?: number
+}
+
+export interface AddCouponRequestBody {
+  /**
+   * The UID of the user to whom the coupon will be added.
+   */
+  uid: string
+
+  /**
+   * The number of the coupon to be added.
+   */
+  quantity: number
+}
+
+export interface DeleteBookingRequest {
+  /**
+   * @bookingId The id of the booking(not booking slot id) that was created
+   */
+  bookingID: string
 }

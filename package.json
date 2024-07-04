@@ -55,7 +55,7 @@
     "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
     "test-client": "jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=client/src",
     "test": "yarn test-client && yarn test-server",
-    "firebase-test": "./node_modules/.bin/firebase emulators:exec --only firestore,auth"
+    "firebase-test": "./node_modules/.bin/firebase emulators:exec --only firestore,auth --project staging"
   },
   "eslintConfig": {
     "extends": [
@@ -70,7 +70,7 @@
     ]
   },
   "volta": {
-    "node": "20.0.0",
+    "node": "20.3.0",
     "yarn": "4.1.1"
   }
 }

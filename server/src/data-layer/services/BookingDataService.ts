@@ -1,10 +1,22 @@
 import { Booking, BookingSlot } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { DocumentDataWithUid } from "data-layer/models/common"
+import { Timestamp } from "firebase-admin/firestore"
 
 export default class BookingDataService {
   public async createBooking(bookingData: Booking) {
     return await FirestoreCollections.bookings.add(bookingData)
+  }
+
+  /**
+   * Fetches a booking based on a given booking ID.
+   *
+   * @param bookingID The booking ID to retrieve.
+   * @returns The booking based on the booking ID.
+   */
+  public async getBookingById(bookingID: string): Promise<Booking> {
+    const result = await FirestoreCollections.bookings.doc(bookingID).get()
+    return result.data()
   }
 
   /**
@@ -30,14 +42,18 @@ export default class BookingDataService {
    * ```
    *
    * @param bookingSlotID The booking slot ID to retrieve all bookings for.
-   * @returns All current bookings associated with this slot.
+   * @returns All current bookings and bookingId associated with this slot.
    */
-  public async getBookingsBySlotId(bookingSlotID: string): Promise<Booking[]> {
+  public async getBookingsBySlotId(
+    bookingSlotID: string
+  ): Promise<Array<DocumentDataWithUid<Booking>>> {
     const result = await FirestoreCollections.bookings
       .where("booking_slot_id", "==", bookingSlotID)
       .get()
-    const bookings = result.docs.map((docs) => docs.data())
-    return bookings
+    const bookingsAndIdArray = result.docs.map((docs) => {
+      return { ...docs.data(), id: docs.id }
+    })
+    return bookingsAndIdArray
   }
 
   /**
@@ -90,16 +106,14 @@ export default class BookingDataService {
    */
   public async getAvailabilityForUser(
     uid: string,
-    datesInBooking: Date[],
+    datesInBooking: Timestamp[],
     bookingSlots: Array<DocumentDataWithUid<BookingSlot>>
   ) {
     const dates = await Promise.all(
-      datesInBooking.map(async (dateToValidate: Date) => {
+      datesInBooking.map(async (dateToValidate: Timestamp) => {
         // booking slot id and max booking slots
         const { id, max_bookings } = bookingSlots.find(
-          (slot) =>
-            new Date(slot.date.seconds * 1000).toDateString() ===
-            dateToValidate.toDateString()
+          (slot) => slot.date.seconds === dateToValidate.seconds
         )
 
         const currentBookingsForSlot = await this.getBookingsBySlotId(id)

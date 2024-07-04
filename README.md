@@ -12,12 +12,12 @@ Project initiated by WDCC in 2023.
 - Kartik Malik
 - Logan Bellingham
 - Aziz Patel
-- Raymond Luo
 - Ray Zhao
 - Jeffery Ji
 - Albert Sun
 - Kunal Bhaskar
-- Miguel
+- Miguel Landingin
+- Ray Xiao
 
 ## 2023 Team Leadership
 

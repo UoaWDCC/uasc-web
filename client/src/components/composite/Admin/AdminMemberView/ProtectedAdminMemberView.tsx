@@ -6,16 +6,18 @@ import {
   usePromoteUserMutation
 } from "services/Admin/AdminMutations"
 import { TableRowOperation } from "components/generic/ReusableTable/TableUtils"
-import AdminUserCreationModal, {
-  AccountType
-} from "./AdminUserCreation/AdminUserCreationModal"
+import { AccountType } from "./AdminUserCreation/AdminUserCreationModal"
 import ModalContainer from "components/generic/ModalContainer/ModalContainer"
-import { useState } from "react"
+import { Suspense, lazy, useState } from "react"
 import { useSignUpUserMutation } from "services/User/UserMutations"
 import queryClient from "services/QueryClient"
 import { sendPasswordResetEmail } from "firebase/auth"
 import { auth } from "firebase"
 import { ReducedUserAdditionalInfo } from "models/User"
+
+const AsyncAdminUserCreationModal = lazy(
+  () => import("./AdminUserCreation/AdminUserCreationModal")
+)
 
 /**
  * Component that handles all the network requests for `AdminMemberView`
@@ -154,12 +156,14 @@ const WrappedAdminMemberView = () => {
         openAddMemberView={() => setShowAddUserModal(true)}
       />
       <ModalContainer isOpen={showAddUserModal}>
-        <AdminUserCreationModal
-          handleClose={() => setShowAddUserModal(false)}
-          userCreationHandler={async ({ email, user }, accountType) => {
-            await userCreationHandler(email, user, accountType)
-          }}
-        />
+        <Suspense>
+          <AsyncAdminUserCreationModal
+            handleClose={() => setShowAddUserModal(false)}
+            userCreationHandler={async ({ email, user }, accountType) => {
+              await userCreationHandler(email, user, accountType)
+            }}
+          />
+        </Suspense>
       </ModalContainer>
     </>
   )

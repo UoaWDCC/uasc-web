@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 interface IBookingInfoProps {
   /**
    * The price to *display* for a "normal booking"
@@ -38,7 +40,11 @@ const BookingInfoComponent = ({
             <strong>bookings@uasc.co.nz</strong>
           </a>
         </h5>
+        {/* TODO: REMOVE THIS PART */}
+        <p>Bookings open - 5th of July </p>
+        <p>Lodge open - 12th of July</p>
       </div>
+
       <Divider />
       <div
         id="bottom"
@@ -55,6 +61,12 @@ const BookingInfoComponent = ({
         <h4>
           Check out time: <strong>10:00am</strong>
         </h4>
+        <h4 className="text-red font-bold italic">
+          You must have a booking to stay at the lodge!
+        </h4>
+        <Link to="/about" className="text-light-blue-100 font-bold italic">
+          Learn about the lodge
+        </Link>
       </div>
     </div>
   )

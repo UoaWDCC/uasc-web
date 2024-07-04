@@ -8,20 +8,28 @@ import {
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
 import {
-  dateToFirestoreTimeStamp,
-  datesToDateRange
+  firestoreTimestampToDate,
+  timestampsInRange
 } from "data-layer/adapters/DateUtils"
 import { UserAdditionalInfo } from "data-layer/models/firebase"
+import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
-import { MakeDatesAvailableRequestBody } from "service-layer/request-models/AdminRequests"
+import {
+  DeleteBookingRequest,
+  AddCouponRequestBody,
+  MakeDatesAvailableRequestBody
+} from "service-layer/request-models/AdminRequests"
 import {
   CreateUserRequestBody,
   DemoteUserRequestBody,
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
-import { BookingSlotUpdateResponse } from "service-layer/response-models/BookingResponse"
+import {
+  BookingDeleteResponse,
+  BookingSlotUpdateResponse
+} from "service-layer/response-models/BookingResponse"
 import { AllUsersResponse } from "service-layer/response-models/UserResponse"
 import {
   Body,
@@ -35,6 +43,8 @@ import {
   Security,
   SuccessResponse
 } from "tsoa"
+import * as console from "console"
+import StripeService from "../../business-layer/services/StripeService"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -50,14 +60,10 @@ export class AdminController extends Controller {
     const { startDate, endDate, slots } = requestBody
     const bookingSlotService = new BookingSlotService()
 
-    const dates = datesToDateRange(
-      new Date(startDate.seconds * 1000),
-      new Date(endDate.seconds * 1000)
-    )
+    const dateTimestamps = timestampsInRange(startDate, endDate)
 
-    const datesToUpdatePromises = dates.map(async (date) => {
+    const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
-        const dateTimestamp = dateToFirestoreTimeStamp(date)
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)
 
@@ -77,7 +83,8 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date ${date.toString()} available`
+          `Something went wrong when trying to make the date
+          ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
       }
@@ -102,14 +109,10 @@ export class AdminController extends Controller {
     const { startDate, endDate } = requestBody
     const bookingSlotService = new BookingSlotService()
 
-    const dates = datesToDateRange(
-      new Date(startDate.seconds * 1000),
-      new Date(endDate.seconds * 1000)
-    )
+    const dateTimestamps = timestampsInRange(startDate, endDate)
 
-    const datesToUpdatePromises = dates.map(async (date) => {
+    const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
-        const dateTimestamp = dateToFirestoreTimeStamp(date)
         const [bookingSlotForDate] =
           await bookingSlotService.getBookingSlotByDate(dateTimestamp)
 
@@ -128,7 +131,8 @@ export class AdminController extends Controller {
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
       } catch (e) {
         console.error(
-          `Something went wrong when trying to make the date ${date.toString()} available`
+          `Something went wrong when trying to make the date
+          ${firestoreTimestampToDate(dateTimestamp).toString()} available`
         )
         return undefined
       }
@@ -147,10 +151,31 @@ export class AdminController extends Controller {
     }
   }
 
+  @SuccessResponse("200", "Booking deleted successfuly")
+  // TODO: Refactor this to be a DELETE request
+  @Post("/bookings/delete")
+  public async removeBooking(
+    @Body() requestBody: DeleteBookingRequest
+  ): Promise<BookingDeleteResponse> {
+    const { bookingID } = requestBody
+    // Validate and check if the booking actually exists
+    const bookingDataService = new BookingDataService()
+    let user_id
+    try {
+      const booking = await bookingDataService.getBookingById(bookingID)
+      user_id = booking.user_id
+    } catch (err) {
+      this.setStatus(404)
+      return { message: "Booking not found with that booking ID." }
+    }
+    // attempt to delete
+    await bookingDataService.deleteBooking(bookingID)
+    return { user_id }
+  }
+
   /**
    *  User Operations
    */
-
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
   @Get("/users")
@@ -306,6 +331,40 @@ export class AdminController extends Controller {
     } catch (e) {
       console.error(e)
       this.setStatus(500) // unknown server error?
+    }
+  }
+
+  @SuccessResponse("200", "Coupon Added")
+  @Post("users/add-coupon")
+  public async addCoupon(
+    @Body() requestBody: AddCouponRequestBody
+  ): Promise<void> {
+    const { uid, quantity } = requestBody
+    const amount = 40 // Hardcoded amount
+    try {
+      const userService = new UserDataService()
+      const stripeService = new StripeService()
+      const user = await userService.getUserData(uid)
+
+      if (!user) {
+        this.setStatus(404)
+        return
+      }
+      if (!user.stripe_id) {
+        this.setStatus(400)
+        return
+      }
+
+      // Add coupon to the user using Stripe ID
+      const couponPromises = Array.from(
+        { length: quantity },
+        async () => await stripeService.addCouponToUser(user.stripe_id, amount)
+      )
+      await Promise.all(couponPromises)
+
+      this.setStatus(200)
+    } catch (e) {
+      this.setStatus(500)
     }
   }
 }

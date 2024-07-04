@@ -50,6 +50,44 @@ const AdminService = {
     })
     if (!response.ok) throw new Error(`Failed to promote ${uid}`)
   },
+  deleteBooking: async function (id: string) {
+    const { response } = await fetchClient.POST("/admin/bookings/delete", {
+      body: {
+        bookingID: id
+      }
+    })
+    if (!response.ok) {
+      throw new Error(`Failed to delete booking with id ${id}`)
+    }
+  },
+  getBookingsBetweenDateRange: async function ({
+    startDate = Timestamp.fromDate(new Date(Date.now())),
+    endDate = Timestamp.fromDate(new Date(Date.now()))
+  }: {
+    startDate?: Timestamp
+    endDate?: Timestamp
+  }) {
+    /**
+     * We can **NOT** have any nanoseconds because it causes weird offset problems
+     */
+    const _startDate = { seconds: startDate.seconds, nanoseconds: 0 }
+    const _endDate = { seconds: endDate.seconds, nanoseconds: 0 }
+
+    const { data, response } = await fetchClient.POST("/bookings/fetch-users", {
+      body: {
+        startDate: _startDate,
+        endDate: _endDate
+      }
+    })
+
+    if (!response.ok)
+      throw new Error(
+        `Failed to fetch bookings between ${startDate} to ${endDate}`
+      )
+
+    return data?.data
+  },
+
   deleteUser: async function ({ uid }: { uid: string }) {
     const { response } = await fetchClient.DELETE("/users/delete-user", {
       body: {
@@ -58,6 +96,7 @@ const AdminService = {
     })
     if (!response.ok) throw new Error(`Failed to delete user ${uid}`)
   },
+
   makeDatesAvailable: async function (
     startDate: Timestamp,
     endDate: Timestamp,
@@ -100,6 +139,34 @@ const AdminService = {
         `Failed to make dates ${startDate.toString()} to ${endDate.toString()} available`
       )
     return data
+  },
+  addUsersToBookingForDateRange: async function ({
+    startDate,
+    endDate,
+    userIds
+  }: {
+    startDate: Timestamp
+    endDate: Timestamp
+    userIds: string[]
+  }) {
+    const { response, data } = await fetchClient.POST(
+      "/bookings/create-bookings",
+      {
+        body: {
+          startDate,
+          endDate,
+          userIds
+        }
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to add the users ${userIds.join(",")} to the date range ${startDate.toString()} to ${endDate.toString()} `
+      )
+    }
+
+    return data?.data
   }
 } as const
 

@@ -1,20 +1,33 @@
 import { useAppData } from "store/Store"
-import { useNavigate } from "react-router-dom"
-
+import { Link, useNavigate } from "react-router-dom"
 import ProfileInformationPanel from "components/generic/ProfileInformationPanel/ProfileInformationPanel"
 import { Footer } from "components/generic/Footer/Footer"
 import ResponsiveBackgroundImage from "components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
 import { useForceRefreshToken } from "hooks/useRefreshedToken"
-import { timestampToDate } from "components/utils/Utils"
-import { useMemo } from "react"
+import { signOut } from "firebase/auth"
+import { auth, fireAnalytics } from "firebase"
+import { DateUtils } from "components/utils/DateUtils"
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from "react"
+import { useSelfDataQuery } from "services/User/UserQueries"
+import { useBookingsForSelfQuery } from "services/Booking/BookingQueries"
+import Table from "components/generic/ReusableTable/Table"
+
+const AsyncEditPersonalPanel = lazy(() => import("./EditPersonalPanel"))
+const AsyncEditAdditionalPanel = lazy(() => import("./EditAdditionalPanel"))
 
 const SignOutButton = () => {
   const navigate = useNavigate()
-  const handleOnclick = () => {
+  const handleOnclick = async () => {
+    await signOut(auth)
     navigate("/login")
   }
-
-  useForceRefreshToken()
 
   return (
     <div
@@ -49,7 +62,7 @@ const Field = ({
   description
 }: {
   subtitle: string
-  description?: string
+  description?: string | JSX.Element
 }) => {
   return (
     <>
@@ -64,8 +77,87 @@ const Field = ({
     </>
   )
 }
+
+type BookingTableColumn = {
+  uid: string
+  /**
+   * A date **string** to display on the table
+   */
+  Date: string
+}
+const defaultBookingTableData: BookingTableColumn[] = [{ uid: "", Date: "" }]
+
+/**
+ * Contains all the logic for fetching the bookings for current user
+ */
+const ProfileBookingsTable = () => {
+  const { data } = useBookingsForSelfQuery()
+
+  const bookingTableData: BookingTableColumn[] = useMemo(() => {
+    if (!data) {
+      return defaultBookingTableData
+    }
+    let dates =
+      data.dates?.map((date) => {
+        return { uid: date, Date: date }
+      }) || bookingTableData
+
+    // We get the dates as a UTC one so its ok to parse like this
+    dates.sort(
+      (a, b) => new Date(a.Date).getTime() - new Date(b.Date).getTime()
+    )
+
+    dates = dates.map((date) => {
+      return { ...date, Date: DateUtils.formattedNzDate(new Date(date.Date)) }
+    })
+
+    return dates
+  }, [data])
+
+  return (
+    <ProfileInformationPanel title="Current bookings">
+      <h5>
+        Head to{" "}
+        <Link to="/bookings" className="text-light-blue-100 font-bold">
+          Bookings
+        </Link>{" "}
+        to make a booking!
+      </h5>
+      <h5>
+        Please email{" "}
+        <a
+          className="text-light-blue-100 font-bold"
+          href="mailto:club.admin@uasc.co.nz"
+        >
+          club.admin@uasc.co.nz
+        </a>{" "}
+        for any alteration requests
+      </h5>
+      <Table data={bookingTableData} />
+    </ProfileInformationPanel>
+  )
+}
+
+type EditPanels = "none" | "personal" | "additional"
+
 export default function Profile() {
-  const [{ currentUserData, currentUser, currentUserClaims }] = useAppData()
+  const [{ currentUser, currentUserClaims }] = useAppData()
+  const { data: currentUserData, isLoading } = useSelfDataQuery()
+  const navigate = useNavigate()
+
+  const [editPanelOpen, setEditPanelOpen] = useState<EditPanels>("none")
+
+  const closePanel = useCallback(() => {
+    setEditPanelOpen("none")
+  }, [])
+
+  useForceRefreshToken()
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login")
+    }
+  }, [currentUser, navigate])
 
   const userMembership = useMemo(() => {
     if (currentUserClaims?.admin) return "Admin"
@@ -74,9 +166,21 @@ export default function Profile() {
   }, [currentUserClaims])
 
   return (
-    <div className="relative min-h-screen">
+    <div className={`relative min-h-screen ${isLoading && "blur-md"}`}>
       <ResponsiveBackgroundImage>
-        <div className="py-8">
+        <Suspense>
+          <AsyncEditPersonalPanel
+            isOpen={editPanelOpen === "personal"}
+            handleClose={closePanel}
+          />
+        </Suspense>
+        <Suspense>
+          <AsyncEditAdditionalPanel
+            isOpen={editPanelOpen === "additional"}
+            handleClose={closePanel}
+          />
+        </Suspense>
+        <div className="max-w-[1100px] py-8">
           <div className="grid-cols grid w-full ">
             <div className="flex flex-col md:flex-row">
               <h2 className="text-dark-blue-100 left-0 top-0 col-span-4 grid italic">{`${currentUserData?.first_name} ${currentUserData?.last_name}`}</h2>
@@ -88,7 +192,10 @@ export default function Profile() {
             <div className="grid w-full gap-4">
               <ProfileInformationPanel
                 title="Personal details"
-                onEdit={() => {}}
+                onEdit={() => {
+                  setEditPanelOpen("personal")
+                  fireAnalytics("screen_view", { screen_name: "edit personal" })
+                }}
               >
                 <div className="grid grid-cols-2 gap-x-16 md:grid-cols-4">
                   <Field
@@ -107,7 +214,7 @@ export default function Profile() {
                     subtitle="Date of birth"
                     description={
                       currentUserData?.date_of_birth &&
-                      `${timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
+                      `${DateUtils.timestampToDate(currentUserData?.date_of_birth).toLocaleDateString("en-NZ")}`
                     }
                   />
                   <Field
@@ -125,7 +232,7 @@ export default function Profile() {
                 </div>
               </ProfileInformationPanel>
               <div className="grid w-full gap-4 md:grid-cols-2 lg:grid-cols-2">
-                <ProfileInformationPanel title="Membership" onEdit={() => {}}>
+                <ProfileInformationPanel title="Membership">
                   <Field
                     subtitle="Membership type"
                     description={userMembership}
@@ -133,15 +240,26 @@ export default function Profile() {
                   <Field
                     subtitle="Valid til"
                     description={
-                      userMembership === "Member"
-                        ? `End of ${new Date().getFullYear()}`
-                        : ""
+                      userMembership === "Member" ? (
+                        `End of ${new Date().getFullYear()}`
+                      ) : userMembership === "Guest" ? (
+                        <Link to="/register" className="text-light-blue-100">
+                          Sign up
+                        </Link>
+                      ) : (
+                        <p className="text-red font-bold">No Expiry Date</p>
+                      )
                     }
                   />
                 </ProfileInformationPanel>
                 <ProfileInformationPanel
                   title="Additional details"
-                  onEdit={() => {}}
+                  onEdit={() => {
+                    setEditPanelOpen("additional")
+                    fireAnalytics("screen_view", {
+                      screen_name: "edit additional"
+                    })
+                  }}
                 >
                   <Field
                     subtitle="Dietary requirements"
@@ -155,19 +273,13 @@ export default function Profile() {
                     })}
                   />
                 </ProfileInformationPanel>
-                <ProfileInformationPanel title="Current bookings">
-                  <div className="border border-black p-4">
-                    Calender component waiting to be implemented
-                  </div>
-                </ProfileInformationPanel>
+                <ProfileBookingsTable />
               </div>
             </div>
           </div>
         </div>
       </ResponsiveBackgroundImage>
-      <div className="absolute bottom-0 w-full">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   )
 }

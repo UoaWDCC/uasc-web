@@ -42,7 +42,7 @@ const AboutMenuItemsFull = () => {
 const AboutMenuItemsMobile = () => {
   return (
     <div className="flex w-full flex-col gap-2 md:hidden">
-      <WrappedTab to="/faq">About</WrappedTab>
+      <WrappedTab to="/about">About</WrappedTab>
       <WrappedTab to="/faq">FAQ</WrappedTab>
       <WrappedTab to="/policy">Policy</WrappedTab>
       <WrappedTab to="/contact">Contact</WrappedTab>
