@@ -4,6 +4,7 @@
     "project": "./tsconfig.json"
   },
   "extends": [
+    "next/core-web-vitals",
     "eslint:recommended",
     "standard",
     "prettier",
