@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-import { CHECK_IN_TIME, CHECK_OUT_TIME } from "utils/Constants"
 
 interface IBookingInfoProps {
   /**
@@ -57,10 +56,10 @@ const BookingInfoComponent = ({
         </p>
         <p>Please read UASC policy below before booking.</p>
         <h4>
-          Check in time: <strong>{CHECK_IN_TIME}</strong>
+          Check in time: <strong>3:00pm</strong>
         </h4>
         <h4>
-          Check out time: <strong>{CHECK_OUT_TIME}</strong>
+          Check out time: <strong>10:00am</strong>
         </h4>
         <h4 className="text-red font-bold italic">
           You must have a booking to stay at the lodge!
