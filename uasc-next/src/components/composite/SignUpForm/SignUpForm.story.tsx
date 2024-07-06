@@ -6,7 +6,6 @@ import { useState } from "react"
 import { PAGE_CONTENT } from "./PageConfig/PageConfig"
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "@/services/QueryClient"
-import { MemoryRouter } from "react-router-dom"
 
 // 👇 This default export determines where your story goes in the story list
 const meta: Meta<typeof SignUpForm> = {
@@ -23,7 +22,6 @@ export default meta
 export const DefaultStory = () => {
   const [currentPage, setCurrentPage] = useState<number>(0)
   return (
-    <MemoryRouter>
       <QueryClientProvider client={queryClient}>
         <SignUpForm
           pages={[
@@ -119,6 +117,5 @@ export const DefaultStory = () => {
           currentPage={currentPage}
         />
       </QueryClientProvider>
-    </MemoryRouter>
   )
 }

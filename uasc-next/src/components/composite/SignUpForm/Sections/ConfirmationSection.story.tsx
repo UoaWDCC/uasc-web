@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react"
 import TestIcon from "@/assets/icons/snowboarder.svg"
 
 import confirmationSection from "./ConfirmationSection"
-import { MemoryRouter } from "react-router-dom"
+import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider/next-13.5"
+
 const meta: Meta<typeof confirmationSection> = {
   component: confirmationSection,
   argTypes: {
@@ -28,9 +29,9 @@ export const ConfirmationSection: Story = {
   },
   decorators: [
     (Story) => (
-      <MemoryRouter>
+      <MemoryRouterProvider>
         <Story />
-      </MemoryRouter>
+      </MemoryRouterProvider>
     )
   ]
 }
