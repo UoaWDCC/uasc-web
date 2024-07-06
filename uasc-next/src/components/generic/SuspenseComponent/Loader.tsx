@@ -1,4 +1,4 @@
-import Gear from  "@/assets/icons/gear-spinner.svg"
+import Gear from "@/assets/icons/gear-spinner.svg"
 import { Footer } from "../Footer/Footer"
 const Loader = () => {
   return (

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import CloseSign from  "@/assets/icons/close_sign.svg"
+import CloseSign from "@/assets/icons/close_sign.svg"
 
 type tagVariants = "primary" | "interactive"
 

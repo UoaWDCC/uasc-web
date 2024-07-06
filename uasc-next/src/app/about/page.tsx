@@ -4,6 +4,12 @@ import ImageLeft from "@/assets/images/lodge.jpg"
 import ImageRight from "@/assets/images/people.jpg"
 import ImageBottom from "@/assets/images/view.jpg"
 import { Footer } from "@/components/generic/Footer/Footer"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "About UASC",
+  description: "Learn about the lodge and UASC"
+}
 
 const About = () => {
   return (

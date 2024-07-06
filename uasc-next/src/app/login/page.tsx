@@ -1,24 +1,15 @@
-"use client"
+import { Metadata } from "next"
+import LoginInner from "./LoginInner"
 
-import LoginForm from "@/components/composite/LoginForm/LoginForm"
-import { loginHandler } from "./utils/Handlers"
-import { fireAnalytics } from "@/firebase"
-import { useRouter } from "next/navigation"
+export const metadata: Metadata = {
+  title: "Login to UASC",
+  description: "Log in to access member only benefits!"
+}
 
 export default function Login() {
-  const router = useRouter()
-
-  const passwordResetHandler = () => {
-    router.push("/login/reset")
-    fireAnalytics("page_view", { page_title: "Password Reset" })
-  }
-
   return (
     <>
-      <LoginForm
-        loginHandler={loginHandler}
-        passwordResetHandler={passwordResetHandler}
-      />
+      <LoginInner />
     </>
   )
 }

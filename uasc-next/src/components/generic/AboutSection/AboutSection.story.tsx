@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import AboutSection from "./AboutSection"
-import ImageLeft from  "@/assets/images/hut.png"
-import ImageRight from  "@/assets/images/MountainBackgroundImage.png"
+import ImageLeft from "@/assets/images/hut.png"
+import ImageRight from "@/assets/images/MountainBackgroundImage.png"
 
 const meta: Meta<typeof AboutSection> = {
   component: AboutSection

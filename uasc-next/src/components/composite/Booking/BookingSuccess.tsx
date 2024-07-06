@@ -7,7 +7,10 @@ import { useCallback, useContext } from "react"
 const BookingSuccess = () => {
   const searchParams = useSearchParams()
   const { forceRefreshBookings } = useContext(BookingContext)
-  const forceRefreshBookingsCallback = useCallback(() => forceRefreshBookings?.(),[forceRefreshBookings])
+  const forceRefreshBookingsCallback = useCallback(
+    () => forceRefreshBookings?.(),
+    [forceRefreshBookings]
+  )
   useUserLoggedInCallback(forceRefreshBookingsCallback)
   const startDate = searchParams.get("startDate") ?? ""
   const endDate = searchParams.get("endDate") ?? ""

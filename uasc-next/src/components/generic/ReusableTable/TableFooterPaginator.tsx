@@ -1,5 +1,5 @@
-import RightArrow from  "@/assets/icons/rightarrow.svg"
-import LeftArrow from  "@/assets/icons/leftarrow.svg"
+import RightArrow from "@/assets/icons/rightarrow.svg"
+import LeftArrow from "@/assets/icons/leftarrow.svg"
 
 interface ITableFooterPaginator {
   maxPages: number
