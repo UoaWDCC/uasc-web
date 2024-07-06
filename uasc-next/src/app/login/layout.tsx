@@ -19,7 +19,7 @@ export default function LoginLayout({
     if (currentUser) {
       router.push("/profile")
     }
-  }, [currentUser])
+  }, [currentUser, router])
 
   return (
     <>

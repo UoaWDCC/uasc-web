@@ -8829,6 +8829,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/stripe-js@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@stripe/stripe-js@npm:4.1.0"
+  checksum: 10c0/68d207ef6e019b04ae9d0ded32353aff11789a93ddcafaa441ac7e919e531dace5dbc549afa6aa24bb57b73404cb3c4f89ac1252d2e5167d25909b21ab67d8b7
+  languageName: node
+  linkType: hard
+
 "@svgr/babel-plugin-add-jsx-attribute@npm:8.0.0":
   version: 8.0.0
   resolution: "@svgr/babel-plugin-add-jsx-attribute@npm:8.0.0"
@@ -14757,7 +14764,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-next@npm:14.2.4":
+"eslint-config-next@npm:^14.2.4":
   version: 14.2.4
   resolution: "eslint-config-next@npm:14.2.4"
   dependencies:
@@ -15098,7 +15105,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8, eslint@npm:^8.57.0":
+"eslint@npm:^8.57.0":
   version: 8.57.0
   resolution: "eslint@npm:8.57.0"
   dependencies:
@@ -20838,10 +20845,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"openapi-fetch@npm:~0.9.2":
+  version: 0.9.8
+  resolution: "openapi-fetch@npm:0.9.8"
+  dependencies:
+    openapi-typescript-helpers: "npm:^0.0.8"
+  checksum: 10c0/a96590c3df4f3e6800003f1128bafd50a01113073f00ea32a6e21e8c1ec38f3dc88141448569e52e791c58088fdbee61ea4fc44b6856cc24da2768fc43fddb82
+  languageName: node
+  linkType: hard
+
 "openapi-typescript-helpers@npm:^0.0.7":
   version: 0.0.7
   resolution: "openapi-typescript-helpers@npm:0.0.7"
   checksum: 10c0/06fee561e8ceee7a1aa0ff000a6a9ebbf77ffa7de40907898410c40da55dfb957ba650d5fd03f22ee68cd3781489009b5fb62b50cce967448de85e1b3d5f9ad1
+  languageName: node
+  linkType: hard
+
+"openapi-typescript-helpers@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "openapi-typescript-helpers@npm:0.0.8"
+  checksum: 10c0/b31a326c67d65f947732e32126f79976ecc67597f911f7ed43ea9ea23b1e2df7a012026327b6e39df5897a70781f9c57f9fcdd86f8a05c0f67ab2b23ee5d708a
   languageName: node
   linkType: hard
 
@@ -25364,22 +25387,26 @@ __metadata:
     "@storybook/nextjs": "npm:^8.1.11"
     "@storybook/react": "npm:^8.1.11"
     "@storybook/test": "npm:^8.1.11"
+    "@stripe/stripe-js": "npm:^4.1.0"
     "@svgr/webpack": "npm:^8.1.0"
     "@tailwindcss/forms": "npm:^0.5.7"
     "@tanstack/react-query": "npm:^5.50.1"
     "@types/node": "npm:^20"
+    "@types/prop-types": "npm:^15"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
-    eslint: "npm:^8"
-    eslint-config-next: "npm:14.2.4"
-    eslint-plugin-storybook: "npm:^0.8.0"
+    "@types/scheduler": "npm:^0"
     firebase: "npm:^10.12.3"
     next: "npm:14.2.4"
     next-router-mock: "npm:^0.9.13"
+    openapi-fetch: "npm:~0.9.2"
     postcss: "npm:^8"
+    prop-types: "npm:^15.8.1"
     react: "npm:^18"
     react-calendar: "npm:^5.0.0"
     react-dom: "npm:^18"
+    react-sweet-state: "npm:^2.7.1"
+    scheduler: "npm:^0.23.2"
     storybook: "npm:^8.1.11"
     tailwindcss: "npm:^3.4.1"
     typescript: "npm:^5"
@@ -25397,6 +25424,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^7.1.0"
     cross-env: "npm:^7.0.3"
     eslint: "npm:^8.57.0"
+    eslint-config-next: "npm:^14.2.4"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-config-standard: "npm:^17.1.0"
     eslint-plugin: "npm:^1.0.1"
@@ -25406,6 +25434,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.0.0"
     eslint-plugin-promise: "npm:^6.1.1"
     eslint-plugin-react: "npm:^7.33.2"
+    eslint-plugin-storybook: "npm:^0.8.0"
     husky: "npm:^9.0.11"
     jest: "npm:^29.7.0"
     lint-staged: "npm:^15.2.2"

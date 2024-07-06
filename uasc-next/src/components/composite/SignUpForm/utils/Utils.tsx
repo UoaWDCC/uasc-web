@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom"
 import {
   ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
@@ -10,11 +9,10 @@ import {
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
-  RouteNames,
   SUCCESS_ROUTE
 } from "./RouteNames"
 import { MembershipTypes } from "@/models/Payment"
-import { usePathname, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useAppData } from "@/store/Store"
 
 export const oneLevelUp = (route: string) => {

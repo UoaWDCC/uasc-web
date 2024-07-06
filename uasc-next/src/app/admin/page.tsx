@@ -8,6 +8,6 @@ export default function AdminPage() {
 
   useEffect(() => {
     router.push("/admin/members")
-  }, [])
+  }, [router])
   return null
 }

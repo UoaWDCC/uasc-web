@@ -2,7 +2,7 @@ import type { Meta } from "@storybook/react"
 
 import PricingSection from "./PricingSection"
 import { pricingBannerContent, pricingNote } from "./utils/Pricing"
-import { HomeProps } from "pages/Home/Home"
+import { HomeProps } from "../HomeComponent"
 
 const meta: Meta<typeof PricingSection> = {
   component: PricingSection

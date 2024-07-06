@@ -28,7 +28,7 @@ const ConfirmationSection = ({
     if (!sessionId) {
       router.push(oneLevelUp(PERSONAL_ROUTE_1))
     }
-  }, [])
+  }, [router, sessionId])
   return (
     <div className="flex max-w-[600px] items-center gap-4 sm:justify-center">
       <div className="flex flex-col gap-1">

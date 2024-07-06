@@ -42,7 +42,10 @@ export const loginHandler = async ({
   } catch (error) {
     let message
     console.error(error)
-    switch (error.code) {
+    switch (
+      (error as { code: (typeof AuthErrorCodes)[keyof typeof AuthErrorCodes] })
+        .code
+    ) {
       case AuthErrorCodes.INVALID_LOGIN_CREDENTIALS:
         message = "Incorrect password or email"
         break

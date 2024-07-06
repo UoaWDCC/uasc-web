@@ -15,5 +15,5 @@ export const useUserLoggedInCallback = (callback: () => void) => {
    */
   useEffect(() => {
     if (loggedIn) callback()
-  }, [loggedIn])
+  }, [loggedIn, callback])
 }

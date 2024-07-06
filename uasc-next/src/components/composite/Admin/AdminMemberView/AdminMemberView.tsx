@@ -137,7 +137,12 @@ export const AdminMemberView = ({
           )
         : oldData
     },
-    [isValidSearchQuery, currentSearchQuery, filteredAccountType]
+    [
+      isValidSearchQuery,
+      currentSearchQuery,
+      filteredAccountType,
+      shouldFilterByAccount
+    ]
   )
 
   useEffect(() => {

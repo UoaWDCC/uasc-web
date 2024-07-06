@@ -9,9 +9,6 @@ import { useRouter } from "next/navigation"
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "@/services/QueryClient"
 
-export const AdminHeading = ({ title }: { title: string }) => (
-  <h2 className="text-dark-blue-100 self-start italic">{title}</h2>
-)
 const AdminLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   const [{ currentUserClaims }] = useAppData()
   const router = useRouter()

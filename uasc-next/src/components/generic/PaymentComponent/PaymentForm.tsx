@@ -1,3 +1,5 @@
+"use client"
+
 import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider
@@ -16,6 +18,7 @@ export const PaymentForm = ({
   return (
     <>
       <EmbeddedCheckoutProvider
+        // @ts-ignore
         stripe={stripePromise}
         options={{
           clientSecret,

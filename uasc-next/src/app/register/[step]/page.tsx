@@ -5,9 +5,7 @@ import {
   PAGINATED_FORM_PAGES
 } from "@/components/composite/SignUpForm/PageConfig/PageConfig"
 import { ProtectedSignUpForm } from "@/components/composite/SignUpForm/SignUpForm"
-import FullPageBackgroundImage from "@/components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 import { fireAnalytics } from "@/firebase"
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom"
 import { useSignUpUserMutation } from "@/services/User/UserMutations"
 import { useSignUpFormData } from "@/store/SignUpForm"
 import { useAppData } from "@/store/Store"

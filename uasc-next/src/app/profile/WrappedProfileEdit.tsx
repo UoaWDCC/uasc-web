@@ -62,7 +62,7 @@ const WrappedProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
     if (isSuccess) {
       handleClose()
     }
-  }, [isSuccess])
+  }, [isSuccess, handleClose])
 
   return (
     <ModalContainer isOpen={isOpen}>

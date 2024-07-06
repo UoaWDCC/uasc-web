@@ -1,5 +1,5 @@
 import AdminSearchBar from "../AdminMemberView/AdminSearchBar"
-import { CombinedUserData } from "models/User"
+import { CombinedUserData } from "@/models/User"
 import Calendar from "@/components/generic/Calendar/Calendar"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import DateRangePicker from "@/components/generic/DateRangePicker/DateRangePicker"
@@ -9,7 +9,7 @@ import LeftArrowButton from "@/assets/icons/leftarrow.svg"
 import Tick from "@/assets/icons/tick.svg"
 import { NEXT_YEAR_FROM_TODAY, TODAY } from "@/utils/Constants"
 import { DateRange, DateUtils } from "@/components/utils/DateUtils"
-import { BookingAvailability } from "models/Booking"
+import { BookingAvailability } from "@/models/Booking"
 import { Timestamp } from "firebase/firestore"
 import { useClickOutside } from "@/components/utils/Utils"
 
@@ -143,7 +143,7 @@ const AdminBookingCreationPopUp = ({
 
   const currentlySelectedUser = useMemo(() => {
     return usersToDisplay.find((user) => user.uid === currentSelectedUserUid)
-  }, [currentSelectedUserUid])
+  }, [currentSelectedUserUid, usersToDisplay])
 
   const UserList = useMemo(
     () => (
@@ -172,7 +172,7 @@ const AdminBookingCreationPopUp = ({
         ))}
       </div>
     ),
-    [usersToDisplay]
+    [usersToDisplay, currentSearchQuery]
   )
 
   const DetailedUserInfoPanel = useMemo(

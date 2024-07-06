@@ -7,7 +7,8 @@ import {
   EventParams,
   getAnalytics,
   logEvent,
-  isSupported
+  isSupported,
+  Analytics
 } from "firebase/analytics"
 import { UserClaims } from "@/models/User"
 import { setToken } from "@/services/OpenApiFetchClient"
@@ -30,8 +31,13 @@ const firebaseConfig: FirebaseOptions = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const db = getFirestore(app)
+let analytics: Analytics | null = null
 
-const analytics = getAnalytics(app)
+isSupported().then((yes) => {
+  if (yes) {
+    analytics = getAnalytics(app)
+  }
+})
 
 // use emulator suite if running locally
 if (process.env.NEXT_PUBLIC_NODE_ENV !== "production") {
@@ -65,11 +71,11 @@ auth.onIdTokenChanged(async (user) => {
   StoreInstance.actions.setCurrentUser(user, claims as UserClaims)
 })
 
-export const fireAnalytics = async (
+export const fireAnalytics = (
   eventName: EventNameString,
   eventParams?: EventParams
 ) => {
-  if (await isSupported()) {
+  if (analytics) {
     logEvent(analytics, eventName as string, eventParams)
   }
 }

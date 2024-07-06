@@ -5,7 +5,6 @@ import HamburgerIcon from "@/assets/icons/hamburger.svg"
 import LoginIndicator from "./utils/LoginIndicator"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 
 export interface INavbarProps {
@@ -45,8 +44,6 @@ const AboutMenuItemsMobile = () => {
     </div>
   )
 }
-
-const navStyle = (active: boolean) => (active ? "text-light-blue-100" : "")
 
 const Navbar = ({
   signInHandler,

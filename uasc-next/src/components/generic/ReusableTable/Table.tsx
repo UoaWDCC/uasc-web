@@ -6,7 +6,7 @@ import {
   TableRowOperationStyle
 } from "./TableUtils"
 import TableFooterPaginator from "./TableFooterPaginator"
-import ThreeDotsVertical from  "@/assets/icons/three-dots-vertical.svg"
+import ThreeDotsVertical from "@/assets/icons/three-dots-vertical.svg"
 import { useClickOutside } from "@/components/utils/Utils"
 
 type TableRowOperations<T extends TableRowOperationStyle> =
@@ -65,13 +65,13 @@ export const OperationButton = <
   uid,
   rowOperations
 }: Pick<ITable<T, S>, "operationType" | "rowOperations"> & T) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+  useClickOutside(menuRef, () => setIsOpen(false))
   if (!rowOperations || !operationType) return null
 
   switch (operationType) {
     case "multiple-operations": {
-      const menuRef = useRef<HTMLDivElement>(null)
-      useClickOutside(menuRef, () => setIsOpen(false))
-      const [isOpen, setIsOpen] = useState<boolean>(false)
       return (
         <div
           ref={menuRef}
@@ -176,7 +176,7 @@ const Table = <
   // calculating offset
   const currentFirstIndex = currentPageIndex * showPerPage
 
-  const dataKeys: string[] = []
+  const dataKeys: string[] = useMemo(() => [], [])
 
   const currentLastIndex = currentFirstIndex + showPerPage
 
@@ -190,7 +190,7 @@ const Table = <
 
   useEffect(() => {
     onPageChange?.(currentPageIndex === totalPages - 1)
-  }, [currentPageIndex])
+  }, [currentPageIndex, onPageChange, totalPages])
 
   // ensures all data keys (columns) are used, regardless of whether some objects are missing keys
   currentDataSlice.forEach((obj) => {

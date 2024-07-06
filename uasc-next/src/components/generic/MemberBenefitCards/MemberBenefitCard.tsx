@@ -1,5 +1,4 @@
 import { SvgImport } from "@/components/utils/types"
-import Image from "next/image"
 type cardVariants = "default"
 
 interface ICardProps {

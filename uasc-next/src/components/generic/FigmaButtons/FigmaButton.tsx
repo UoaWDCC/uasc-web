@@ -1,6 +1,5 @@
 import RightArrowIcon from "@/assets/icons/rightarrow.svg"
 import LeftArrowIcon from "@/assets/icons/leftarrow.svg"
-import Image from "next/image"
 
 type buttonVariants =
   | "default"

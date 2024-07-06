@@ -1,5 +1,4 @@
 import RightArrowIcon from "@/assets/icons/rightarrow.svg"
-import Image from "next/image"
 
 interface ITab {
   stretchesOnSmallScreen?: boolean

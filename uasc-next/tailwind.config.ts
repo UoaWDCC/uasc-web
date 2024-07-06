@@ -10,12 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        "home-ski-image": "url('@/assets/images/homeLandingBackground.png')",
-        "home-about-image": "url('@/assets/images/AboutBackgroundImage.png')",
+        "home-ski-image": "url('/images/homeLandingBackground.png')",
+        "home-about-image": "url('/images/AboutBackgroundImage.png')",
         "mountain-background-image":
-          "url('@/assets/images/MountainBackgroundImage.png')",
-        "book-lodge-image":
-          "url('@/assets/images/BookLodgeBackgroundImage.png')"
+          "url('/images/MountainBackgroundImage.png')",
+        "book-lodge-image": "url('/images/BookLodgeBackgroundImage.png')"
       },
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans]
