@@ -1,18 +1,22 @@
 import type { Meta } from "@storybook/react"
 
-import Register from "./Register"
-import { MemoryRouter } from "react-router-dom"
+import { MemoryRouterProvider } from "next-router-mock/dist/MemoryRouterProvider/next-13.5"
+import { QueryClientProvider } from "@tanstack/react-query"
+import queryClient from "@/services/QueryClient"
+import Step from "./[step]/page"
 
-const meta: Meta<typeof Register> = {
-  component: Register
+const meta: Meta<typeof Step> = {
+  component: Step
 }
 
 export default meta
 
 export const DefaultRegisterPage = () => {
   return (
-    <MemoryRouter initialEntries={["/personal_1"]}>
-      <Register />
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouterProvider>
+        <Step params={{ step: "personal_1" }} />
+      </MemoryRouterProvider>
+    </QueryClientProvider>
   )
 }

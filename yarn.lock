@@ -20287,6 +20287,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"next-router-mock@npm:^0.9.13":
+  version: 0.9.13
+  resolution: "next-router-mock@npm:0.9.13"
+  peerDependencies:
+    next: ">=10.0.0"
+    react: ">=17.0.0"
+  checksum: 10c0/c6b4ee1eb4145a7c126c3c436e124ace5c2ae9e516aa1721487d89a201f7249317b8380649ff76c2b8434d2b87d2c59f6c0d5277ba83851f0f6c2e2dedbfe051
+  languageName: node
+  linkType: hard
+
 "next@npm:14.2.4":
   version: 14.2.4
   resolution: "next@npm:14.2.4"
@@ -25355,6 +25365,7 @@ __metadata:
     "@storybook/react": "npm:^8.1.11"
     "@storybook/test": "npm:^8.1.11"
     "@svgr/webpack": "npm:^8.1.0"
+    "@tailwindcss/forms": "npm:^0.5.7"
     "@tanstack/react-query": "npm:^5.50.1"
     "@types/node": "npm:^20"
     "@types/react": "npm:^18"
@@ -25364,6 +25375,7 @@ __metadata:
     eslint-plugin-storybook: "npm:^0.8.0"
     firebase: "npm:^10.12.3"
     next: "npm:14.2.4"
+    next-router-mock: "npm:^0.9.13"
     postcss: "npm:^8"
     react: "npm:^18"
     react-calendar: "npm:^5.0.0"

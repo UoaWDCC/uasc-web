@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import AdminNavbar from "./AdminNavbar"
 
-import { MemoryRouter } from "react-router-dom"
-
 const meta: Meta<typeof AdminNavbar> = {
   component: AdminNavbar
 }
@@ -14,11 +12,5 @@ export const DefaultAdminNavbar: Story = {
   args: {
     title: "Admin Navbar"
   },
-  decorators: [
-    (Story) => (
-      <MemoryRouter>
-        <Story />
-      </MemoryRouter>
-    )
-  ]
+  decorators: [(Story) => <Story />]
 }

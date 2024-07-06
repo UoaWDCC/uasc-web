@@ -5,7 +5,6 @@ import BellIcon from "@/assets/icons/bell.svg"
 import TickIcon from "@/assets/icons/tick.svg"
 import WarningIcon from "@/assets/icons/warning.svg"
 import XIcon from "@/assets/icons/x.svg"
-import Image from "next/image"
 
 type AlertsInputProp = {
   message: string
@@ -68,7 +67,7 @@ const AlertsComponent = ({ variant, message, isButton }: AlertsInputProp) => {
     return (
       <div className="bg-orange flex h-12 w-full items-center rounded-lg md:justify-between">
         <div className="ml-10 mr-5 h-5 w-5">
-          <Image src={BellIcon} alt="bell icon" className="fill-white" />
+          <BellIcon className="fill-white" />
         </div>
         <span className="xs:text-sm xs:text-center xxs:text-xs xxs:text-center left-20 px-1 uppercase text-white md:absolute md:ml-10">
           {""}

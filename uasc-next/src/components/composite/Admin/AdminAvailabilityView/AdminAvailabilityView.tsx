@@ -1,6 +1,6 @@
 import Calendar from "@/components/generic/Calendar/Calendar"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import { BookingAvailability } from "models/Booking"
+import { BookingAvailability } from "@/models/Booking"
 import { useContext } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "@/components/generic/ReusableTable/Table"

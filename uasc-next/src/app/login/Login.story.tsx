@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
+import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider/next-13.5"
 
-import Login from "./Login"
-import { MemoryRouter } from "react-router-dom"
+import Login from "./page"
 
 const meta: Meta<typeof Login> = {
   component: Login
@@ -13,9 +13,9 @@ type Story = StoryObj<typeof Login>
 export const DefaultLoginPage: Story = {
   decorators: [
     (Story) => (
-      <MemoryRouter initialEntries={[""]}>
+      <MemoryRouterProvider>
         <Story />
-      </MemoryRouter>
+      </MemoryRouterProvider>
     )
   ]
 }
