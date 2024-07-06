@@ -4,6 +4,7 @@
   "description": "Monorepo for the UASC project (by WDCC @ UoA)",
   "private": true,
   "workspaces": [
+    "client",
     "server",
     "uasc-next"
   ],
