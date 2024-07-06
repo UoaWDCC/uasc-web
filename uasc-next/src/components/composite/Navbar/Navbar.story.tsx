@@ -29,9 +29,9 @@ export const LoggedInNavbar: Story = {
 export const LoggedOutNavbar: Story = {
   decorators: [
     (Story) => (
-      <BrowserRouter>
+      <MemoryRouterProvider>
         <Story />
-      </BrowserRouter>
+      </MemoryRouterProvider>
     )
   ],
   args: {
@@ -49,13 +49,13 @@ export const LoginAndSignout = () => {
   }
   return (
     <>
-      <BrowserRouter>
+      <MemoryRouterProvider>
         <Navbar
           signInHandler={signInHandler}
           signOutHandler={signOutHandler}
           isLoggedIn={loggedIn}
         />
-      </BrowserRouter>
+      </MemoryRouterProvider>
     </>
   )
 }
