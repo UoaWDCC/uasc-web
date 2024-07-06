@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^4.1.0",
+    "@stripe/react-stripe-js": "^2.6.2",
     "@tanstack/react-query": "^5.50.1",
     "firebase": "^10.12.3",
     "next": "14.2.4",
