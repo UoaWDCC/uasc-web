@@ -4,7 +4,6 @@
   "description": "Monorepo for the UASC project (by WDCC @ UoA)",
   "private": true,
   "workspaces": [
-    "client",
     "server",
     "uasc-next"
   ],
@@ -52,9 +51,9 @@
     "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
     "postinstall": "husky",
     "lint-and-fix": "eslint . --fix",
-    "dev-client": "yarn workspace client start",
+    "dev-client": "yarn workspace uasc-next dev",
     "dev-server": "yarn workspace server start",
-    "storybook": "yarn workspace client storybook",
+    "storybook": "yarn workspace uasc-next storybook",
     "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
     "test-client": "yarn workspace uasc-next test",
     "test": "yarn test-client && yarn test-server",
@@ -68,9 +67,8 @@
   },
   "jest": {
     "projects": [
-      "<rootDir>/client/jest.config.client.ts",
       "<rootDir>/server/jest.config.server.ts",
-      "<rootDir>/uasc-next/src/jest.config.client.ts"
+      "<rootDir>/uasc-next/src/jest.config.ts"
     ]
   },
   "volta": {
