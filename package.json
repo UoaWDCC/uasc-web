@@ -56,7 +56,7 @@
     "dev-server": "yarn workspace server start",
     "storybook": "yarn workspace client storybook",
     "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
-    "test-client": "jest --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=client/src",
+    "test-client": "jest --setupfiles dotenv/config --passwithnotests --detectopenhandles --forceexit --testpathpattern=uasc-next/src",
     "test": "yarn test-client && yarn test-server",
     "firebase-test": "./node_modules/.bin/firebase emulators:exec --only firestore,auth --project staging"
   },
@@ -69,7 +69,8 @@
   "jest": {
     "projects": [
       "<rootDir>/client/jest.config.client.ts",
-      "<rootDir>/server/jest.config.server.ts"
+      "<rootDir>/server/jest.config.server.ts",
+      "<rootDir>/uasc-next/src/jest.config.client.ts"
     ]
   },
   "volta": {
