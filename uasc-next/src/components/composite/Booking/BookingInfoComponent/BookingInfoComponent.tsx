@@ -1,3 +1,5 @@
+"use client"
+
 import { CHECK_IN_TIME, CHECK_OUT_TIME } from "@/utils/Constants"
 import Link from "next/link"
 

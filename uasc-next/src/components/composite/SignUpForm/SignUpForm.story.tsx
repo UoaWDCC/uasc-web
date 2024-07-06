@@ -22,100 +22,100 @@ export default meta
 export const DefaultStory = () => {
   const [currentPage, setCurrentPage] = useState<number>(0)
   return (
-      <QueryClientProvider client={queryClient}>
-        <SignUpForm
-          pages={[
-            {
-              title: "Personal details",
-              index: 0,
-              onNext: () => {
-                setCurrentPage(1)
-              }
-            },
-            {
-              title: "Personal details",
-              index: 1,
-              onNext: () => {
-                setCurrentPage(2)
-              },
-              onBack: () => {
-                setCurrentPage(0)
-              }
-            },
-            {
-              title: "Contact details",
-              index: 2,
-              onNext: () => {
-                setCurrentPage(3)
-              },
-              onBack: () => {
-                setCurrentPage(1)
-              }
-            },
-            {
-              title: "Additional info",
-              index: 3,
-
-              onNext: () => {
-                setCurrentPage(4)
-              },
-              onBack: () => {
-                setCurrentPage(2)
-              }
-            },
-            {
-              title: "fifth",
-              index: 4,
-              onNext: () => {
-                setCurrentPage(5)
-              },
-              onBack: () => {
-                setCurrentPage(3)
-              }
-            },
-
-            {
-              title: "sixth",
-              index: 5,
-              onNext: () => {
-                setCurrentPage(6)
-              },
-              onBack: () => {
-                setCurrentPage(4)
-              }
-            },
-            {
-              title: "Confirmation",
-              index: 6,
-              onBack: () => {
-                setCurrentPage(5)
-              },
-              onNext: () => {
-                setCurrentPage(7)
-              }
-            },
-            {
-              title: "Account setup",
-              index: 7,
-              onBack: () => {
-                setCurrentPage(6)
-              },
-              onNext: () => {
-                setCurrentPage(8)
-              }
-            },
-
-            {
-              title: "Success Story",
-              index: 8,
-              onBack: () => {
-                setCurrentPage(7)
-              }
+    <QueryClientProvider client={queryClient}>
+      <SignUpForm
+        pages={[
+          {
+            title: "Personal details",
+            index: 0,
+            onNext: () => {
+              setCurrentPage(1)
             }
-          ]}
-          pageContent={PAGE_CONTENT}
-          currentPage={currentPage}
-        />
-      </QueryClientProvider>
+          },
+          {
+            title: "Personal details",
+            index: 1,
+            onNext: () => {
+              setCurrentPage(2)
+            },
+            onBack: () => {
+              setCurrentPage(0)
+            }
+          },
+          {
+            title: "Contact details",
+            index: 2,
+            onNext: () => {
+              setCurrentPage(3)
+            },
+            onBack: () => {
+              setCurrentPage(1)
+            }
+          },
+          {
+            title: "Additional info",
+            index: 3,
+
+            onNext: () => {
+              setCurrentPage(4)
+            },
+            onBack: () => {
+              setCurrentPage(2)
+            }
+          },
+          {
+            title: "fifth",
+            index: 4,
+            onNext: () => {
+              setCurrentPage(5)
+            },
+            onBack: () => {
+              setCurrentPage(3)
+            }
+          },
+
+          {
+            title: "sixth",
+            index: 5,
+            onNext: () => {
+              setCurrentPage(6)
+            },
+            onBack: () => {
+              setCurrentPage(4)
+            }
+          },
+          {
+            title: "Confirmation",
+            index: 6,
+            onBack: () => {
+              setCurrentPage(5)
+            },
+            onNext: () => {
+              setCurrentPage(7)
+            }
+          },
+          {
+            title: "Account setup",
+            index: 7,
+            onBack: () => {
+              setCurrentPage(6)
+            },
+            onNext: () => {
+              setCurrentPage(8)
+            }
+          },
+
+          {
+            title: "Success Story",
+            index: 8,
+            onBack: () => {
+              setCurrentPage(7)
+            }
+          }
+        ]}
+        pageContent={PAGE_CONTENT}
+        currentPage={currentPage}
+      />
+    </QueryClientProvider>
   )
 }

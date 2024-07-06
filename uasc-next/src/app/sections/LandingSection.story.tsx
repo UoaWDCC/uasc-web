@@ -9,7 +9,5 @@ const meta: Meta<typeof LandingSection> = {
 export default meta
 
 export const DefaultLandingSection = () => {
-  return (
-      <LandingSection />
-  )
+  return <LandingSection />
 }
