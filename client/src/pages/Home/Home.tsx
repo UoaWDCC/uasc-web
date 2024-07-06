@@ -3,7 +3,7 @@ import BenefitSection from "./sections/BenefitSection"
 import LandingSection from "./sections/LandingSection"
 import PricingSection from "./sections/PricingSection"
 import { benefits } from "./sections/utils/Benefits"
-import { pricingBannerContent, pricingNote } from "./sections/utils/Pricing"
+import { pricingBannerContent } from "./sections/utils/Pricing"
 import { Footer } from "components/generic/Footer/Footer"
 import { Prices } from "services/AppData/AppDataService"
 
@@ -21,11 +21,7 @@ const Home = ({ data }: HomeProps) => {
         <LandingSection />
         <AboutSection />
         <BenefitSection benefits={benefits} />
-        <PricingSection
-          pricings={data}
-          note={pricingNote}
-          bannerContent={pricingBannerContent}
-        />
+        <PricingSection pricings={data} bannerContent={pricingBannerContent} />
       </div>
       <div className="pt-14">
         <Footer />

@@ -1,6 +1,8 @@
 import { Timestamp } from "firebase-admin/firestore"
 import { LodgePricingTypeValues } from "./StripeProductMetadata"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
+import BookingDataService from "../../data-layer/services/BookingDataService"
+import BookingSlotService from "../../data-layer/services/BookingSlotsService"
 
 // Need to validate the booking date through a startDate and endDate range.
 /**
@@ -90,6 +92,25 @@ const BookingUtils = {
     } else {
       return LodgePricingTypeValues.Normal
     }
+  },
+
+  /**
+   * Checks if the last spot is taken for a specific booking slot
+   * @param bookingSlotId The ID of the booking slot
+   * @returns true if the last spot is taken, false otherwise
+   */
+  isLastSpotTaken: async function (bookingSlotId: string): Promise<boolean> {
+    const bookingDataService = new BookingDataService()
+    const bookingSlotService = new BookingSlotService()
+
+    const bookingSlot =
+      await bookingSlotService.getBookingSlotById(bookingSlotId)
+
+    const bookings = await bookingDataService.getBookingsBySlotId(bookingSlotId)
+    const bookingCount = bookings.length
+
+    const availableSlots = bookingSlot.max_bookings - bookingCount
+    return availableSlots <= 0
   }
 } as const
 

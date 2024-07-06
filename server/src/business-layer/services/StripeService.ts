@@ -20,6 +20,7 @@ import {
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import console from "console"
 import MailService from "./MailService"
+import BookingUtils from "../utils/BookingUtils"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -432,6 +433,12 @@ export default class StripeService {
           stripe_payment_id: session.id,
           user_id: uid
         })
+
+        // Check if the last spot is taken and expire other sessions
+        const isLastSpot = await BookingUtils.isLastSpotTaken(bookingSlotId)
+        if (isLastSpot) {
+          await this.expireOtherCheckoutSessions(bookingSlotId)
+        }
       })
     )
     /**
@@ -449,6 +456,40 @@ export default class StripeService {
       )
     } catch (error) {
       console.error(`Failed to send an email to the user ${uid}`, error)
+    }
+  }
+
+  private async expireOtherCheckoutSessions(
+    bookingSlotId: string
+  ): Promise<void> {
+    try {
+      // Fetch all checkout sessions for the specific booking slot id
+      const sessions = await this.getRecentActiveSessions(
+        CheckoutTypeValues.BOOKING,
+        1440
+      )
+
+      const sessionsToExpire = sessions.filter((session) => {
+        const bookingSlots = JSON.parse(
+          session.metadata[BOOKING_SLOTS_KEY]
+        ) as Array<string>
+        return bookingSlots.includes(bookingSlotId)
+      })
+
+      // Expire each session that matches the booking slot id
+      await Promise.all(
+        sessionsToExpire.map(async (session) => {
+          if (session.id) {
+            await stripe.checkout.sessions.expire(session.id)
+          }
+        })
+      )
+
+      console.log(
+        `[WEBHOOK] Expired ${sessionsToExpire.length} sessions for booking slot ${bookingSlotId}`
+      )
+    } catch (err) {
+      console.error(`[WEBHOOK] Error expiring checkout sessions: ${err}`)
     }
   }
 
