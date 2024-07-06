@@ -34,4 +34,4 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}"
           channelId: live
           projectId: uasc-ceebc
-          entryPoint: client
+          entryPoint: uasc-next
