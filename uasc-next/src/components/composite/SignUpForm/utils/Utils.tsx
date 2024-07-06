@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation"
 import { useAppData } from "@/store/Store"
 
 export const oneLevelUp = (route: string) => {
-  return `/${route}`
+  return `/register/${route}`
 }
 
 export const useCheckRegisterPermissions = (currentPage: PAGES) => {

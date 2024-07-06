@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, useContext } from "react"
+import { ReactNode, useCallback, useContext } from "react"
 import {
   BookingContext,
   BookingContextProvider
@@ -16,9 +16,11 @@ type IBookingLayout = Readonly<{ children: ReactNode }>
 const InnerBookingLayout = ({ children }: IBookingLayout) => {
   const { getExistingSession } = useContext(BookingContext)
 
-  useUserLoggedInCallback(() => {
+  const getExistingSessionCallback = useCallback(() => {
     getExistingSession?.()
-  })
+  }, [getExistingSession])
+
+  useUserLoggedInCallback(getExistingSessionCallback)
 
   return (
     <>
