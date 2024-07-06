@@ -2497,7 +2497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:^7.20.2, @babel/preset-env@npm:^7.24.4, @babel/preset-env@npm:^7.24.7":
+"@babel/preset-env@npm:^7.20.2, @babel/preset-env@npm:^7.24.4":
   version: 7.24.7
   resolution: "@babel/preset-env@npm:7.24.7"
   dependencies:
@@ -8867,6 +8867,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/react-stripe-js@npm:^2.7.3":
+  version: 2.7.3
+  resolution: "@stripe/react-stripe-js@npm:2.7.3"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0 || ^4.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/820923a3abfae68fbe8145efa0f35317634d44f7ada4b8d57f928f10dfa32e768252939ea75f2e166c55aa9035ecaa2d686423216d0bbfb06ba22c3c70fc7771
+  languageName: node
+  linkType: hard
+
 "@stripe/stripe-js@npm:^3.1.0":
   version: 3.1.0
   resolution: "@stripe/stripe-js@npm:3.1.0"
@@ -9125,6 +9138,22 @@ __metadata:
     lz-string: "npm:^1.5.0"
     pretty-format: "npm:^27.0.2"
   checksum: 10c0/81f0e0a510d24e458c3af17777960ed678fb4fe464903ef8ec9ed816c9794fc69a673ea94f87b9e054b181383c51814605451dbf4fd9df93d0d8f24b4859990d
+  languageName: node
+  linkType: hard
+
+"@testing-library/dom@npm:^10.3.1":
+  version: 10.3.1
+  resolution: "@testing-library/dom@npm:10.3.1"
+  dependencies:
+    "@babel/code-frame": "npm:^7.10.4"
+    "@babel/runtime": "npm:^7.12.5"
+    "@types/aria-query": "npm:^5.0.1"
+    aria-query: "npm:5.3.0"
+    chalk: "npm:^4.1.0"
+    dom-accessibility-api: "npm:^0.5.9"
+    lz-string: "npm:^1.5.0"
+    pretty-format: "npm:^27.0.2"
+  checksum: 10c0/e898475cd4932225c2962bf9f94353d7d88462c8912881af8e9866cee714c967b21badb0895ec8626123759cddc6663bc40300b1d1bf789957a603086eda6329
   languageName: node
   linkType: hard
 
@@ -25585,7 +25614,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "uasc-next@workspace:uasc-next"
   dependencies:
-    "@babel/preset-env": "npm:^7.24.7"
     "@chromatic-com/storybook": "npm:1.6.1"
     "@storybook/addon-essentials": "npm:^8.1.11"
     "@storybook/addon-interactions": "npm:^8.1.11"
@@ -25595,10 +25623,12 @@ __metadata:
     "@storybook/nextjs": "npm:^8.1.11"
     "@storybook/react": "npm:^8.1.11"
     "@storybook/test": "npm:^8.1.11"
+    "@stripe/react-stripe-js": "npm:^2.7.3"
     "@stripe/stripe-js": "npm:^4.1.0"
     "@svgr/webpack": "npm:^8.1.0"
     "@tailwindcss/forms": "npm:^0.5.7"
     "@tanstack/react-query": "npm:^5.50.1"
+    "@testing-library/dom": "npm:^10.3.1"
     "@testing-library/jest-dom": "npm:^6.4.6"
     "@testing-library/react": "npm:^16.0.0"
     "@types/node": "npm:^20.14.10"
