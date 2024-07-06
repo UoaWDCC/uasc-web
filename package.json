@@ -68,8 +68,7 @@
   },
   "jest": {
     "projects": [
-      "<rootDir>/server/jest.config.server.ts",
-      "<rootDir>/uasc-next/jest.config.ts"
+      "<rootDir>/server/jest.config.server.ts"
     ]
   },
   "volta": {
