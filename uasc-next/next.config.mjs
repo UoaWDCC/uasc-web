@@ -1,3 +1,4 @@
+const env = process.env.NEXT_CONFIG_ENV || "development"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack(config) {
@@ -17,7 +18,9 @@ const nextConfig = {
         }
       }
     }
-  }
+  },
+  // We want static files that we can deploy to firebase hosting
+  output: env === "staging" ? "export" : undefined
 }
 
 export default nextConfig
