@@ -1,4 +1,7 @@
 const env = process.env.NEXT_CONFIG_ENV || "development"
+
+const generateStatic = env === "staging" || env === "production"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack(config) {
@@ -20,8 +23,13 @@ const nextConfig = {
     }
   },
   // We want static files that we can deploy to firebase hosting
-  output: env === "staging" || env === "production" ? "export" : undefined,
-  trailingSlash: true
+  output: generateStatic ? "export" : undefined,
+  // Need this to allow static site generation to work with firebase hosting
+  trailingSlash: generateStatic,
+  images: {
+    // TODO: remove this and use an image CDN
+    unoptimized: generateStatic
+  }
 }
 
 export default nextConfig
