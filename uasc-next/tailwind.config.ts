@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss"
 import defaultTheme from "tailwindcss/defaultTheme"
 
-const basePath = process.env.DEPLOYMENT_BASE_PATH || ''
+const basePath = process.env.DEPLOYMENT_BASE_PATH || ""
 
 const config: Config = {
   content: [
@@ -14,8 +14,7 @@ const config: Config = {
       backgroundImage: {
         "home-ski-image": `url('${basePath}/images/homeLandingBackground.png')`,
         "home-about-image": `url('${basePath}/images/AboutBackgroundImage.png')`,
-        "mountain-background-image":
-          `url('${basePath}/images/MountainBackgroundImage.png')`,
+        "mountain-background-image": `url('${basePath}/images/MountainBackgroundImage.png')`,
         "book-lodge-image": `url('${basePath}/images/BookLodgeBackgroundImage.png')`
       },
       fontFamily: {
