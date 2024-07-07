@@ -1,23 +1,14 @@
 import "dotenv/config"
-import { _app } from "../index"
 import { cleanFirestore, cleanAuth } from "test-config/TestUtils"
-import supertest from "supertest"
 import UserDataService from "data-layer/services/UserDataService"
 import {
   ADMIN_USER_UID,
   GUEST_USER_UID,
   MEMBER_USER_UID,
   createUserData,
-  createUserWithClaim,
-  deleteUsersFromAuth,
   createUserDataWithStripeId
 } from "./routes.mock"
 
-import {
-  checkoutSessionMock,
-  customerMock,
-  productMock
-} from "test-config/mocks/Stripe.mock"
 import { signupUserMock } from "test-config/mocks/User.mock"
 import AuthService from "business-layer/services/AuthService"
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
@@ -32,102 +23,16 @@ import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
 import * as admin from "firebase-admin"
 import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
-const request = supertest(_app)
 
-/**
- * This needs to be updated as we add more stripe functions...
- */
-jest.mock("stripe", () => {
-  return {
-    __esModule: true,
-    default: jest.fn().mockImplementation(() => {
-      return {
-        customers: {
-          create: () => {
-            return { id: "test" }
-          }
-        },
-        products: {
-          search: () => {
-            return { data: [productMock] }
-          }
-        },
-        checkout: {
-          sessions: {
-            create: () => {
-              return { client_secret: "test" }
-            },
-            list: () => {
-              return {
-                data: [checkoutSessionMock]
-              }
-            }
-          }
-        },
-        webhooks: {
-          constructEvent: () => {
-            return {
-              type: "payment_intent.succeeded",
-              data: {
-                object: {
-                  customer: customerMock
-                }
-              }
-            }
-          }
-        },
-        coupons: {
-          create: jest.fn().mockResolvedValue({
-            id: "mock_coupon_id",
-            amount_off: 4000, // amount off in cents
-            currency: "nzd"
-          })
-        },
-        promotionCodes: {
-          create: jest.fn().mockResolvedValue({
-            id: "mock_promotion_code_id",
-            coupon: "mock_coupon_id",
-            customer: "mock_customer_id"
-          })
-        }
-      }
-    })
-  }
-})
-
-const usersToCreate: string[] = [
-  ADMIN_USER_UID,
-  MEMBER_USER_UID,
-  GUEST_USER_UID
-]
-
-const createUsers = async () => {
-  await Promise.all(
-    usersToCreate.map(async (uid) => {
-      await createUserData(uid)
-    })
-  )
-}
+import {
+  request,
+  createUsers,
+  adminToken,
+  memberToken,
+  guestToken
+} from "./setupTests"
 
 describe("Endpoints", () => {
-  let adminToken: string | undefined
-  let memberToken: string | undefined
-  let guestToken: string | undefined
-
-  beforeEach(async () => {
-    adminToken = await createUserWithClaim(ADMIN_USER_UID, "admin")
-    memberToken = await createUserWithClaim(MEMBER_USER_UID, "member")
-    guestToken = await createUserWithClaim(GUEST_USER_UID)
-  })
-
-  afterEach(async () => {
-    await deleteUsersFromAuth(usersToCreate)
-  })
-
-  afterAll(async () => {
-    _app.close()
-  })
-
   describe("admin/users", () => {
     afterEach(async () => {
       await cleanFirestore()
