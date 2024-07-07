@@ -45,7 +45,7 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
           <Image
             src={imageSrc}
             alt="about page image"
-            className="flex w-full rounded-t-lg"
+            className="hidden w-full rounded-t-lg md:flex"
           />
         </>
         <>
