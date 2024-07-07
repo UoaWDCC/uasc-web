@@ -19,6 +19,10 @@ declare global {
       readonly NEXT_PUBLIC_BACKEND_BASE_URL: string
       /** Stripe Publishable Key */
       readonly NEXT_PUBLIC_ENV_STRIPE_PUBLISHABLE_KEY: string
+      /** Used for deployments  */
+      readonly NEXT_CONFIG_ENV?: "production" | "staging"
+      /** What all paths should be prefixed with */
+      readonly DEPLOYMENT_BASE_PATH?: string
     }
   }
 }
