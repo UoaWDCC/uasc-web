@@ -132,3 +132,16 @@ export function useAddUserToBookingMutation() {
     }
   })
 }
+
+export function useDeleteBookingMutation() {
+  return useMutation({
+    mutationKey: ["delete-booking"],
+    retry: false,
+    mutationFn: AdminService.deleteBooking,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
+      })
+    }
+  })
+}

@@ -3,6 +3,7 @@ import AboutSection from "components/generic/AboutSection/AboutSection"
 import ImageLeft from "assets/images/lodge.jpg"
 import ImageRight from "assets/images/people.jpg"
 import ImageBottom from "assets/images/view.jpg"
+import { Footer } from "components/generic/Footer/Footer"
 
 const About = () => {
   return (
@@ -37,6 +38,7 @@ const About = () => {
           imageSrc={ImageBottom}
         ></AboutSection>
       </div>
+      <Footer />
     </div>
   )
 }

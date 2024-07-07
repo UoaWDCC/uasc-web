@@ -42,7 +42,7 @@ interface IAdminBookingView {
    * ]
    * ```
    */
-  rowOperations?: TableRowOperation[]
+  rowOperation?: [TableRowOperation]
 
   /**
    * used to fetch the data once the last page of the table has been reached
@@ -86,7 +86,7 @@ const AsyncWrappedAdminBookingCreationPopup = lazy(
  */
 export const AdminBookingView = ({
   data,
-  rowOperations,
+  rowOperation,
   dateRange,
   handleDateRangeChange,
   isUpdating
@@ -153,12 +153,13 @@ export const AdminBookingView = ({
             </Button>
           </span>
         </span>
-        <Table<BookingMemberColumnFormat, "multiple-operations">
+        <Table<BookingMemberColumnFormat, "single-operation">
           data={data || [defaultData]}
-          operationType="multiple-operations"
-          rowOperations={rowOperations}
+          operationType="single-operation"
+          rowOperations={rowOperation}
           // Make sure that this is smaller than the amount we fetch in the `AdminService` for better UX
-          showPerPage={15}
+          showPerPage={32}
+          groupSameRows
         />
       </div>
       <ModalContainer isOpen={openAddBookingPopup}>

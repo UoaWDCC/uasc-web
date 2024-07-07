@@ -221,7 +221,7 @@ const models: TsoaRoute.Models = {
         "enums": ["admin","member","guest"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CombinedUserData": {
+    "BookingIdandUserData": {
         "dataType": "refObject",
         "properties": {
             "date_of_birth": {"ref":"FirebaseFirestore.Timestamp","required":true},
@@ -244,6 +244,7 @@ const models: TsoaRoute.Models = {
             "dateJoined": {"dataType":"string"},
             "email": {"dataType":"string","required":true},
             "membership": {"ref":"UserAccountTypes","required":true},
+            "bookingId": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -251,7 +252,7 @@ const models: TsoaRoute.Models = {
     "UsersByDateRangeResponse": {
         "dataType": "refObject",
         "properties": {
-            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"refObject","ref":"CombinedUserData"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
+            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"refObject","ref":"BookingIdandUserData"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
             "error": {"dataType":"string"},
         },
         "additionalProperties": false,
@@ -310,6 +311,33 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "bookingID": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CombinedUserData": {
+        "dataType": "refObject",
+        "properties": {
+            "date_of_birth": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "does_snowboarding": {"dataType":"boolean"},
+            "does_racing": {"dataType":"boolean"},
+            "does_ski": {"dataType":"boolean"},
+            "phone_number": {"dataType":"double","required":true},
+            "gender": {"dataType":"string"},
+            "emergency_contact": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter a name"}}},
+            "first_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your First Name"}}},
+            "last_name": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please enter your Second Name"}}},
+            "dietary_requirements": {"dataType":"string","required":true,"validators":{"isString":{"errorMsg":"Please write your dietary requirements"}}},
+            "ethnicity": {"dataType":"string"},
+            "faculty": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your faculty"}}},
+            "university": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your university"}}},
+            "student_id": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your student ID"}}},
+            "university_year": {"dataType":"string","validators":{"isString":{"errorMsg":"Please enter your year of study"}}},
+            "stripe_id": {"dataType":"string"},
+            "uid": {"dataType":"string","required":true},
+            "dateJoined": {"dataType":"string"},
+            "email": {"dataType":"string","required":true},
+            "membership": {"ref":"UserAccountTypes","required":true},
         },
         "additionalProperties": false,
     },
@@ -382,6 +410,15 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "uid": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AddCouponRequestBody": {
+        "dataType": "refObject",
+        "properties": {
+            "uid": {"dataType":"string","required":true},
+            "quantity": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -1036,6 +1073,37 @@ export function RegisterRoutes(app: Router) {
 
               templateService.apiHandler({
                 methodName: 'demoteUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/users/add-coupon',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.addCoupon)),
+
+            function AdminController_addCoupon(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"AddCouponRequestBody"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new AdminController();
+
+              templateService.apiHandler({
+                methodName: 'addCoupon',
                 controller,
                 response,
                 next,

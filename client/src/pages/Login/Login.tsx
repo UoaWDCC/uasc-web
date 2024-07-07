@@ -6,6 +6,7 @@ import { loginHandler, resetPassword } from "./utils/Handlers"
 import PasswordResetForm from "components/composite/LoginForm/PasswordResetForm/PasswordResetForm"
 import { Footer } from "components/generic/Footer/Footer"
 import { useEffect } from "react"
+import { fireAnalytics } from "firebase"
 
 const Login = () => {
   const [{ currentUser }] = useAppData()
@@ -14,6 +15,7 @@ const Login = () => {
 
   const passwordResetHandler = () => {
     navigate("reset")
+    fireAnalytics("page_view", { page_title: "Password Reset" })
   }
 
   const backToLoginHandler = () => {
@@ -27,32 +29,33 @@ const Login = () => {
   }, [currentUser])
 
   return (
-    <FullPageBackgroundImage>
-      <Routes>
-        <Route
-          index
-          element={
-            <LoginForm
-              loginHandler={loginHandler}
-              passwordResetHandler={passwordResetHandler}
-            />
-          }
-        />
-        <Route
-          path="reset"
-          element={
-            <PasswordResetForm
-              passwordResetHandler={resetPassword}
-              backHandler={backToLoginHandler}
-            />
-          }
-        />
-      </Routes>
-      <Outlet />
-      <span className="absolute bottom-0 w-full">
-        <Footer />
-      </span>
-    </FullPageBackgroundImage>
+    <>
+      <FullPageBackgroundImage>
+        <Routes>
+          <Route
+            index
+            element={
+              <LoginForm
+                loginHandler={loginHandler}
+                passwordResetHandler={passwordResetHandler}
+              />
+            }
+          />
+          <Route
+            path="reset"
+            element={
+              <PasswordResetForm
+                passwordResetHandler={resetPassword}
+                backHandler={backToLoginHandler}
+              />
+            }
+          />
+        </Routes>
+        <Outlet />
+      </FullPageBackgroundImage>
+
+      <Footer />
+    </>
   )
 }
 

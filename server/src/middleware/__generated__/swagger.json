@@ -487,7 +487,7 @@
 				],
 				"type": "string"
 			},
-			"CombinedUserData": {
+			"BookingIdandUserData": {
 				"properties": {
 					"date_of_birth": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
@@ -555,6 +555,9 @@
 					"membership": {
 						"$ref": "#/components/schemas/UserAccountTypes",
 						"description": "What type of account the user has"
+					},
+					"bookingId": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -565,7 +568,8 @@
 					"dietary_requirements",
 					"uid",
 					"email",
-					"membership"
+					"membership",
+					"bookingId"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -578,7 +582,7 @@
 							"properties": {
 								"users": {
 									"items": {
-										"$ref": "#/components/schemas/CombinedUserData"
+										"$ref": "#/components/schemas/BookingIdandUserData"
 									},
 									"type": "array"
 								},
@@ -719,6 +723,89 @@
 				},
 				"required": [
 					"bookingID"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CombinedUserData": {
+				"properties": {
+					"date_of_birth": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+					},
+					"does_snowboarding": {
+						"type": "boolean"
+					},
+					"does_racing": {
+						"type": "boolean"
+					},
+					"does_ski": {
+						"type": "boolean"
+					},
+					"phone_number": {
+						"type": "number",
+						"format": "double"
+					},
+					"gender": {
+						"type": "string"
+					},
+					"emergency_contact": {
+						"type": "string"
+					},
+					"first_name": {
+						"type": "string"
+					},
+					"last_name": {
+						"type": "string"
+					},
+					"dietary_requirements": {
+						"type": "string"
+					},
+					"ethnicity": {
+						"type": "string",
+						"description": "**OPTIONAL** field that the user should have the choice to provide"
+					},
+					"faculty": {
+						"type": "string"
+					},
+					"university": {
+						"type": "string"
+					},
+					"student_id": {
+						"type": "string"
+					},
+					"university_year": {
+						"type": "string"
+					},
+					"stripe_id": {
+						"type": "string",
+						"description": "For identification DO NOT RETURN to users in exposed endpoints"
+					},
+					"uid": {
+						"type": "string",
+						"description": "Firebase identifier of the user *data* based on the firestore document"
+					},
+					"dateJoined": {
+						"type": "string",
+						"description": "Formatted UTC date string of when the account was created"
+					},
+					"email": {
+						"type": "string",
+						"description": "The email the user uses to log in"
+					},
+					"membership": {
+						"$ref": "#/components/schemas/UserAccountTypes",
+						"description": "What type of account the user has"
+					}
+				},
+				"required": [
+					"date_of_birth",
+					"phone_number",
+					"first_name",
+					"last_name",
+					"dietary_requirements",
+					"uid",
+					"email",
+					"membership"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -929,6 +1016,25 @@
 				},
 				"required": [
 					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AddCouponRequestBody": {
+				"properties": {
+					"uid": {
+						"type": "string",
+						"description": "The UID of the user to whom the coupon will be added."
+					},
+					"quantity": {
+						"type": "number",
+						"format": "double",
+						"description": "The number of the coupon to be added."
+					}
+				},
+				"required": [
+					"uid",
+					"quantity"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -1668,6 +1774,34 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/DemoteUserRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/users/add-coupon": {
+			"post": {
+				"operationId": "AddCoupon",
+				"responses": {
+					"200": {
+						"description": "Coupon Added"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AddCouponRequestBody"
 							}
 						}
 					}

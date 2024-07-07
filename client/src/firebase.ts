@@ -2,6 +2,12 @@
 import { initializeApp, type FirebaseOptions } from "firebase/app"
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
 import { ParsedToken, getAuth } from "firebase/auth"
+import {
+  EventNameString,
+  EventParams,
+  getAnalytics,
+  logEvent
+} from "firebase/analytics"
 import { UserClaims } from "models/User"
 import { setToken } from "services/OpenApiFetchClient"
 import { StoreInstance } from "store/Store"
@@ -16,12 +22,14 @@ const firebaseConfig: FirebaseOptions = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 }
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const db = getFirestore(app)
+const analytics = getAnalytics(app)
 
 // use emulator suite if running locally
 if (import.meta.env.VITE_NODE_ENV !== "production") {
@@ -55,4 +63,11 @@ auth.onIdTokenChanged(async (user) => {
   StoreInstance.actions.setCurrentUser(user, claims as UserClaims)
 })
 
-export { auth, db }
+export const fireAnalytics = (
+  eventName: EventNameString,
+  eventParams?: EventParams
+) => {
+  logEvent(analytics, eventName as string, eventParams)
+}
+
+export { auth, db, analytics }

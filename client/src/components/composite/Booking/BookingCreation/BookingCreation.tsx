@@ -6,7 +6,13 @@ import Button from "components/generic/FigmaButtons/FigmaButton"
 import { useEffect, useMemo, useState } from "react"
 
 import { BookingAvailability } from "models/Booking"
-import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
+import {
+  CHECK_IN_TIME,
+  CHECK_OUT_TIME,
+  MS_IN_SECOND,
+  NEXT_YEAR_FROM_TODAY,
+  TODAY
+} from "utils/Constants"
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "components/generic/Checkbox/Checkbox"
 import { DateRange, DateUtils } from "components/utils/DateUtils"
@@ -65,6 +71,36 @@ interface ICreateBookingSection {
 
 const NORMAL_PRICE = 40 as const
 const SPECIAL_PRICE = 60 as const
+
+/**
+ * A notification to the user informing the actual
+ * start and end dates that they will be staying, as opposed to
+ * displaying just the nights.
+ *
+ * Note that this should not change any booking logic
+ */
+const ActualBookingStayRange = ({
+  startDateTime,
+  endDateTime
+}: {
+  /**
+   * a time **string** to display
+   */
+  startDateTime: string
+  /**
+   * a time **string** to display
+   */
+  endDateTime: string
+}) => {
+  return (
+    <h5 className="uppercase">
+      The currently selected stay at the lodge will be from{" "}
+      <strong className="text-dark-blue-100">{startDateTime}</strong> (check in)
+      to <strong className="text-dark-blue-100">{endDateTime}</strong> (check
+      out)
+    </h5>
+  )
+}
 
 export const CreateBookingSection = ({
   bookingSlots = [],
@@ -256,6 +292,12 @@ export const CreateBookingSection = ({
             }}
           />
 
+          <ActualBookingStayRange
+            startDateTime={`${DateUtils.formattedNzDate(currentStartDate)} ${CHECK_IN_TIME}`}
+            // Need to add one day to this because the checkout is the day after the last night
+            endDateTime={`${DateUtils.formattedNzDate(new Date(currentEndDate.getTime() + 24 * 60 * 60 * MS_IN_SECOND))} ${CHECK_OUT_TIME}`}
+          />
+
           <RequirementCheckBoxes
             onValidityChange={(newValid) => {
               setIsValidForCreation(newValid)
@@ -265,6 +307,7 @@ export const CreateBookingSection = ({
           <TextInput
             onChange={(e) => handleAllergyChange?.(e.target.value)}
             label="Please describe your dietary requirements"
+            placeholder="Enter dietary requirements here"
           />
 
           {hasExistingSession ? (
