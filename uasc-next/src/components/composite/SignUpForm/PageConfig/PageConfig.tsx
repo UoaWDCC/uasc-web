@@ -100,9 +100,7 @@ export const PAGINATED_FORM_PAGES = (
     index: PAGES.AccountSetup,
     title: "Account",
     // goes back to one page earlier in history, otherwise does nothing
-    onBack: () => navigateFn(-1),
-    // after setting up the account, the next button is enabled and shows the success section
-    onNext: () => navigateFn(SUCCESS_ROUTE)
+    onBack: () => navigateFn(-1)
   },
   {
     index: PAGES.Success,
