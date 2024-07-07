@@ -10015,6 +10015,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-csv@npm:^1.1.10":
+  version: 1.1.10
+  resolution: "@types/react-csv@npm:1.1.10"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/58d300aacccc70c67d2df538726983b4483f3b446db67687baa0026bd4d562cbb956a47eab49516bbe22b9bf8e9b92d1e28f608361a77b2ffa36825bd9c72295
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:^18":
   version: 18.3.0
   resolution: "@types/react-dom@npm:18.3.0"
@@ -22375,6 +22384,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-csv@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "react-csv@npm:2.2.2"
+  checksum: 10c0/287e7ba2085a32a0e65d7a19b9e063e43f06f75ab6ebc18bb52b518007a1d6ec5f5ce33fc7c4e290e3ea41cfb251657b6e62aadadc8d7ffcef7e53d43bf3eb69
+  languageName: node
+  linkType: hard
+
 "react-docgen-typescript@npm:^2.2.2":
   version: 2.2.2
   resolution: "react-docgen-typescript@npm:2.2.2"
@@ -25536,9 +25552,11 @@ __metadata:
     "@testing-library/dom": "npm:^10.3.1"
     "@testing-library/jest-dom": "npm:^6.4.6"
     "@testing-library/react": "npm:^16.0.0"
+    "@types/jest": "npm:^29.5.12"
     "@types/node": "npm:^20.14.10"
     "@types/prop-types": "npm:^15"
     "@types/react": "npm:^18"
+    "@types/react-csv": "npm:^1.1.10"
     "@types/react-dom": "npm:^18"
     "@types/scheduler": "npm:^0"
     eslint: "npm:~8.57.0"
@@ -25553,6 +25571,7 @@ __metadata:
     prop-types: "npm:^15.8.1"
     react: "npm:^18"
     react-calendar: "npm:^5.0.0"
+    react-csv: "npm:^2.2.2"
     react-dom: "npm:^18"
     react-sweet-state: "npm:^2.7.1"
     scheduler: "npm:^0.23.2"

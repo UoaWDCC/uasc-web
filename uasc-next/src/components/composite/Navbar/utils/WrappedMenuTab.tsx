@@ -5,13 +5,11 @@ import { ReactNode } from "react"
 const WrappedMenuTab = ({
   displayName,
   children,
-  to,
-  subroutes
+  to
 }: {
   displayName: string
   children: ReactNode
   to: string
-  subroutes?: string[]
 }) => {
   const pathname = usePathname()
 
@@ -19,7 +17,8 @@ const WrappedMenuTab = ({
     <Link href={to}>
       <MenuTab
         displayText={displayName}
-        disabled={pathname === to || subroutes?.includes(pathname)}
+        // need to check with/without trailing
+        disabled={pathname === `${to}/` || pathname === to}
       >
         {children}
       </MenuTab>
