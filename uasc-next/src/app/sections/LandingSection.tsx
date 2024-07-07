@@ -2,6 +2,7 @@ import UASCHeader from "@/assets/icons/uascLOGO.svg"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import Facebook from "@/assets/icons/FacebookBlue.svg"
 import Instagram from "@/assets/icons/InstagramBlue.svg"
+import Link from "next/link"
 
 const LandingSection = () => (
   <section>
@@ -24,38 +25,38 @@ const LandingSection = () => (
           </p>
 
           <span>
-            <a
+            <Link
               href="https://www.facebook.com/UoAsnowsports/"
               target="_blank"
               rel="noreferrer"
             >
               <Facebook className="w-14" />
-            </a>
+            </Link>
           </span>
 
           <span>
-            <a
+            <Link
               href="https://www.instagram.com/uasc_nz/"
               target="_blank"
               rel="noreferrer"
             >
               <Instagram className="w-14" />
-            </a>
+            </Link>
           </span>
         </div>
 
         <div className="flex flex-row gap-6">
-          <a href="/register" className="w-full cursor-pointer">
+          <Link href="/register" className="w-full cursor-pointer">
             <Button variant="default-big">Sign up now!</Button>
-          </a>
-          <a href="/Login" className="ml-auto w-full cursor-pointer">
+          </Link>
+          <Link href="/Login" className="ml-auto w-full cursor-pointer">
             <Button variant="inverted-default-big">LOG IN</Button>
-          </a>
+          </Link>
         </div>
       </div>
 
       <h5 className="text-dark-blue-100 bottom-3 my-8 uppercase sm:bottom-9">
-        <a href="#about">Find out more</a>
+        <Link href="#about">Find out more</Link>
       </h5>
     </div>
   </section>
