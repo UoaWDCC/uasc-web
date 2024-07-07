@@ -1,8 +1,8 @@
 import AboutSection from "@/components/generic/AboutSection/AboutSection"
 // import all 4 images
-import ImageLeft from "../../../public/images/lodge.jpg"
-import ImageRight from "../../../public/images/people.jpg"
-import ImageBottom from "../../../public/images/view.jpg"
+import ImageLeft from "public/images/lodge.jpg"
+import ImageRight from "public/images/people.jpg"
+import ImageBottom from "public/images/view.jpg"
 import { Footer } from "@/components/generic/Footer/Footer"
 import { Metadata } from "next"
 
