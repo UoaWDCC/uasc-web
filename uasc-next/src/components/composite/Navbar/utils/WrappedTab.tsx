@@ -16,7 +16,7 @@ export const WrappedTab = ({
   mobileCompatiability = true
 }: IWrappedTab) => {
   const pathname = usePathname()
-  
+
   return (
     <Link
       href={to}
@@ -25,7 +25,8 @@ export const WrappedTab = ({
       <Tab
         stretchesOnSmallScreen={mobileCompatiability}
         aria-label={`link to ${to}`}
-        disabled={pathname && to ? to.includes(pathname): false}
+        // We use trailing slashes so this will better capture the equality
+        disabled={pathname ? pathname === `${to}/` : false}
       >
         {children}
       </Tab>
