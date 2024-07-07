@@ -27,10 +27,7 @@ jobs:
 
       - run: yarn workspaces focus uasc-next && yarn workspace uasc-next build
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD }}"
-          channelId: live
-          projectId: uasc-prod
-          entryPoint: uasc-next
+          folder: uasc-next/out # The folder the action should deploy.
