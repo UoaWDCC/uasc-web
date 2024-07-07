@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss"
 import defaultTheme from "tailwindcss/defaultTheme"
 
-const basePath = process.env.basePath || ''
+const basePath = process.env.DEPLOYMENT_BASE_PATH || ''
 
 const config: Config = {
   content: [

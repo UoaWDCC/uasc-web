@@ -7,9 +7,6 @@ const generateStatic = env === "staging" || env === "production"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: customBasePath,
-  env: {
-    basePath: customBasePath
-  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
