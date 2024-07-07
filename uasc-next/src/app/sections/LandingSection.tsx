@@ -49,7 +49,7 @@ const LandingSection = () => (
           <Link href="/register" className="w-full cursor-pointer">
             <Button variant="default-big">Sign up now!</Button>
           </Link>
-          <Link href="/Login" className="ml-auto w-full cursor-pointer">
+          <Link href="/login" className="ml-auto w-full cursor-pointer">
             <Button variant="inverted-default-big">LOG IN</Button>
           </Link>
         </div>
