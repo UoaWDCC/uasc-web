@@ -25,7 +25,7 @@ export const WrappedTab = ({
       <Tab
         stretchesOnSmallScreen={mobileCompatiability}
         aria-label={`link to ${to}`}
-        disabled={pathname.includes(to)}
+        disabled={pathname && pathname.includes(to)}
       >
         {children}
       </Tab>
