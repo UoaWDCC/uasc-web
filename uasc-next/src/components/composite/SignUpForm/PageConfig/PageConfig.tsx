@@ -19,7 +19,6 @@ import {
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
-  SUCCESS_ROUTE,
   RouteNames
 } from "../utils/RouteNames"
 import {
