@@ -32,7 +32,8 @@ const nextConfig = {
   images: {
     // TODO: remove this and use an image CDN
     unoptimized: generateStatic
-  }
+  },
+  assetPrefix: generateStatic && "./"
 }
 
 export default nextConfig
