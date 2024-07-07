@@ -6,14 +6,12 @@ import { ReactNode } from "react"
 interface IWrappedTab {
   children: ReactNode
   to: string
-  subroutes?: string[]
   mobileCompatiability?: boolean
 }
 
 export const WrappedTab = ({
   children,
   to,
-  subroutes,
   mobileCompatiability = true
 }: IWrappedTab) => {
   const pathname = usePathname()
@@ -26,7 +24,8 @@ export const WrappedTab = ({
       <Tab
         stretchesOnSmallScreen={mobileCompatiability}
         aria-label={`link to ${to}`}
-        disabled={pathname === to || subroutes?.includes(pathname)}
+        // need to check with/without trailing
+        disabled={pathname === `${to}/` || pathname === to}
       >
         {children}
       </Tab>
