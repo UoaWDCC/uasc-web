@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "uasc-prod",
+    "staging": "uasc-ceebc"
+  }
+}
