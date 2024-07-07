@@ -1,9 +1,12 @@
 const env = process.env.NEXT_CONFIG_ENV || "development"
 
+const customBasePath = process.env.DEPLOYMENT_BASE_PATH
+
 const generateStatic = env === "staging" || env === "production"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: customBasePath,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
