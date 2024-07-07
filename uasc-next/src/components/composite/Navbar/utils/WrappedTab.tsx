@@ -13,11 +13,10 @@ interface IWrappedTab {
 export const WrappedTab = ({
   children,
   to,
-  subroutes,
   mobileCompatiability = true
 }: IWrappedTab) => {
   const pathname = usePathname()
-
+  
   return (
     <Link
       href={to}
@@ -26,7 +25,7 @@ export const WrappedTab = ({
       <Tab
         stretchesOnSmallScreen={mobileCompatiability}
         aria-label={`link to ${to}`}
-        disabled={pathname === to || subroutes?.includes(pathname)}
+        disabled={pathname.includes(to)}
       >
         {children}
       </Tab>

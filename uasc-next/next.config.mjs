@@ -22,7 +22,6 @@ const nextConfig = {
   // We want static files that we can deploy to firebase hosting
   output: env === "staging" ? "export" : undefined,
   trailingSlash: true
-  
 }
 
 export default nextConfig
