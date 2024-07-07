@@ -20,7 +20,7 @@ const nextConfig = {
     }
   },
   // We want static files that we can deploy to firebase hosting
-  output: env === "staging" ? "export" : undefined,
+  output: env === "staging" || env === "production" ? "export" : undefined,
   trailingSlash: true
 }
 
