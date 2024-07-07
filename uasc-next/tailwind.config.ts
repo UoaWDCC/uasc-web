@@ -1,6 +1,8 @@
 import type { Config } from "tailwindcss"
 import defaultTheme from "tailwindcss/defaultTheme"
 
+const basePath = process.env.DEPLOYMENT_BASE_PATH || ""
+
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,11 +12,10 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        "home-ski-image": "url('/images/homeLandingBackground.png')",
-        "home-about-image": "url('/images/AboutBackgroundImage.png')",
-        "mountain-background-image":
-          "url('/images/MountainBackgroundImage.png')",
-        "book-lodge-image": "url('/images/BookLodgeBackgroundImage.png')"
+        "home-ski-image": `url('${basePath}/images/homeLandingBackground.png')`,
+        "home-about-image": `url('${basePath}/images/AboutBackgroundImage.png')`,
+        "mountain-background-image": `url('${basePath}/images/MountainBackgroundImage.png')`,
+        "book-lodge-image": `url('${basePath}/images/BookLodgeBackgroundImage.png')`
       },
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans]
