@@ -43,6 +43,7 @@ const WrappedAdminBookingView = () => {
               : ""
             newData.Email = user.email
             newData["Dietary Requirement"] = user.dietary_requirements
+            newData.Emergency = user.emergency_contact
             newData.Membership = user.membership
             return newData
           }) || []
