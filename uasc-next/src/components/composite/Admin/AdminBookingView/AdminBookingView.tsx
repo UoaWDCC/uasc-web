@@ -11,6 +11,9 @@ import { useClickOutside } from "@/components/utils/Utils"
 import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
 import AdminBookingCreationPopUp from "./AdminBookingCreationPopUp"
 
+/**
+ * The format of the columns in the admin booking view.
+ */
 export type BookingMemberColumnFormat = {
   /**
    * The user id, used for adding handlers for each individual table row.
@@ -22,6 +25,7 @@ export type BookingMemberColumnFormat = {
   Emergency?: string
   Email?: string
   "Dietary Requirement"?: string
+  Membership?: string
 }
 
 interface IAdminBookingView {
@@ -67,13 +71,18 @@ interface IAdminBookingView {
   isUpdating?: boolean
 }
 
+/**
+ * Should be updated with an "empty" default value so the table displays
+ * the headers even if the list of data is empty
+ */
 const defaultData = {
   [TABLE_ROW_IDENTIFIER_KEY]: "",
   Date: "",
   Name: "",
   Number: "",
   Email: "",
-  "Dietary Requirement": ""
+  "Dietary Requirement": "",
+  Membership: ""
 }
 
 /**
