@@ -19,6 +19,7 @@ export type BookingMemberColumnFormat = {
   Name?: string
   Number?: string
   Email?: string
+  Emergency?: string
   "Dietary Requirement"?: string
 }
 
