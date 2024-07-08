@@ -6,9 +6,10 @@ import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
 } from "@/components/generic/ReusableTable/TableUtils"
-import { useState, useRef, lazy, Suspense } from "react"
+import { useState, useRef } from "react"
 import { useClickOutside } from "@/components/utils/Utils"
 import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
+import AdminBookingCreationPopUp from "./AdminBookingCreationPopUp"
 
 /**
  * The format of the columns in the admin booking view.
@@ -83,13 +84,6 @@ const defaultData = {
   "Dietary Requirement": "",
   Membership: ""
 }
-
-const AsyncWrappedAdminBookingCreationPopup = lazy(
-  () =>
-    import(
-      "@/components/composite/Admin/AdminBookingView/WrappedAdminBookingCreationPopUp"
-    )
-)
 
 /**
  * @deprecated not for direct use on any pages, use `WrappedAdminBookingView` instead
@@ -173,11 +167,9 @@ export const AdminBookingView = ({
         />
       </div>
       <ModalContainer isOpen={openAddBookingPopup}>
-        <Suspense fallback={<>Loading</>}>
-          <AsyncWrappedAdminBookingCreationPopup
-            handleClose={() => setOpenAddBookingPopup(false)}
-          />
-        </Suspense>
+        <AdminBookingCreationPopUp
+          handleClose={() => setOpenAddBookingPopup(false)}
+        />
       </ModalContainer>
     </>
   )
