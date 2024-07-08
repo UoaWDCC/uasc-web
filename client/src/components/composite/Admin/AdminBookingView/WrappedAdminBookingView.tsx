@@ -30,11 +30,9 @@ const WrappedAdminBookingView = () => {
         newData.Date = DateUtils.formattedNzDate(
           new Date(DateUtils.timestampMilliseconds(date.date))
         )
-        newData.Emergency = user.emergency_contact
         newData.Name = `${user.first_name} ${user.last_name}`
         newData.Number = user.phone_number ? user.phone_number.toString() : ""
         newData.Email = user.email
-
         newData["Dietary Requirement"] = user.dietary_requirements
         return newData
       }) || []
