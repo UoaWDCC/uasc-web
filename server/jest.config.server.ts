@@ -7,5 +7,5 @@ module.exports = {
   moduleDirectories: ["node_modules", "src"],
   setupFiles: ["dotenv/config"],
   testMatch: ["**/*.test.ts"],
-  setupFilesAfterEnv: ["<rootDir>/src/test-config/setupTests.ts"]
+  setupFilesAfterEnv: ["<rootDir>/src/test-config/SetupTests.ts"]
 }
