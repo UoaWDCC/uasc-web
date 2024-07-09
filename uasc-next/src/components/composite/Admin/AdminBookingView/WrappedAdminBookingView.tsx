@@ -20,22 +20,35 @@ const WrappedAdminBookingView = () => {
     Timestamp.fromDate(DateUtils.convertLocalDateToUTCDate(startDate)),
     Timestamp.fromDate(DateUtils.convertLocalDateToUTCDate(endDate))
   )
-  const dataList = data?.flatMap(
-    (date) =>
-      date.users.map((user) => {
-        const newData: BookingMemberColumnFormat = {
-          uid: ""
-        }
-        newData.uid = user.bookingId
-        newData.Date = DateUtils.formattedNzDate(
-          new Date(DateUtils.timestampMilliseconds(date.date))
-        )
-        newData.Name = `${user.first_name} ${user.last_name}`
-        newData.Number = user.phone_number ? user.phone_number.toString() : ""
-        newData.Email = user.email
-        newData["Dietary Requirement"] = user.dietary_requirements
-        return newData
-      }) || []
+  /**
+   * This chooses the fields to display on the booking view table
+   *
+   * Any field additions/deletions require changing `BookingMemberColumnFormat`
+   */
+  const dataList = useMemo(
+    () =>
+      data?.flatMap(
+        (date) =>
+          date.users.map((user) => {
+            const newData: BookingMemberColumnFormat = {
+              uid: ""
+            }
+            newData.uid = user.bookingId
+            newData.Date = DateUtils.formattedNzDate(
+              new Date(DateUtils.timestampMilliseconds(date.date))
+            )
+            newData.Name = `${user.first_name} ${user.last_name}`
+            newData.Number = user.phone_number
+              ? user.phone_number.toString()
+              : ""
+            newData.Email = user.email
+            newData["Dietary Requirement"] = user.dietary_requirements
+            newData.Emergency = user.emergency_contact
+            newData.Membership = user.membership
+            return newData
+          }) || []
+      ),
+    [data]
   )
   const sortedData = useMemo(
     () =>

@@ -8,7 +8,7 @@ import { useForceRefreshToken } from "@/hooks/useRefreshedToken"
 import { signOut } from "firebase/auth"
 import { auth, fireAnalytics } from "@/firebase"
 import { DateUtils } from "@/components/utils/DateUtils"
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useSelfDataQuery } from "@/services/User/UserQueries"
 import { useBookingsForSelfQuery } from "@/services/Booking/BookingQueries"
 import Table from "@/components/generic/ReusableTable/Table"
@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import EditPersonalPanel from "./EditPersonalPanel"
 import EditAdditionalPanel from "./EditAdditionalPanel"
+import Loader from "@/components/generic/SuspenseComponent/Loader"
 
 const SignOutButton = () => {
   const router = useRouter()
@@ -149,33 +150,28 @@ function ProfileInner() {
 
   useForceRefreshToken()
 
-  useEffect(() => {
-    if (!currentUser) {
-      router.push("/login")
-    }
-  }, [currentUser, router])
-
   const userMembership = useMemo(() => {
     if (currentUserClaims?.admin) return "Admin"
     if (currentUserClaims?.member) return "Member"
     return "Guest"
   }, [currentUserClaims])
 
+  if (!currentUser) {
+    router.push("/login")
+    return <Loader />
+  }
+
   return (
     <div className={`relative min-h-screen ${isLoading && "blur-md"}`}>
       <ResponsiveBackgroundImage>
-        <Suspense>
-          <EditPersonalPanel
-            isOpen={editPanelOpen === "personal"}
-            handleClose={closePanel}
-          />
-        </Suspense>
-        <Suspense>
-          <EditAdditionalPanel
-            isOpen={editPanelOpen === "additional"}
-            handleClose={closePanel}
-          />
-        </Suspense>
+        <EditPersonalPanel
+          isOpen={editPanelOpen === "personal"}
+          handleClose={closePanel}
+        />
+        <EditAdditionalPanel
+          isOpen={editPanelOpen === "additional"}
+          handleClose={closePanel}
+        />
         <div className="max-w-[1100px] py-8">
           <div className="grid-cols grid w-full ">
             <div className="flex flex-col md:flex-row">
