@@ -30,7 +30,7 @@ import {
   adminToken,
   memberToken,
   guestToken
-} from "./setupTests"
+} from "../test-config/SetupTests"
 
 describe("Endpoints", () => {
   describe("admin/users", () => {

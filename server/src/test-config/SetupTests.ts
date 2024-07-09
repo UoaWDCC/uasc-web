@@ -1,9 +1,3 @@
-import {
-  checkoutSessionMock,
-  customerMock,
-  productMock
-} from "test-config/mocks/Stripe.mock"
-
 import "dotenv/config"
 import { _app } from "../index"
 import supertest from "supertest"
@@ -14,8 +8,13 @@ import {
   createUserData,
   createUserWithClaim,
   deleteUsersFromAuth
-} from "./routes.mock"
+} from "../middleware/routes.mock"
 
+import {
+  checkoutSessionMock,
+  customerMock,
+  productMock
+} from "./mocks/Stripe.mock"
 /**
  * This needs to be updated as we add more stripe functions...
  */
@@ -95,27 +94,18 @@ let adminToken: string | undefined
 let memberToken: string | undefined
 let guestToken: string | undefined
 
-global.beforeEach(async () => {
+beforeEach(async () => {
   adminToken = await createUserWithClaim(ADMIN_USER_UID, "admin")
   memberToken = await createUserWithClaim(MEMBER_USER_UID, "member")
   guestToken = await createUserWithClaim(GUEST_USER_UID)
 })
-global.afterEach(async () => {
+afterEach(async () => {
   await deleteUsersFromAuth(usersToCreate)
 })
-global.afterAll(async () => {
+afterAll(async () => {
   _app.close()
 })
 
 const request = supertest(_app)
 
-export {
-  // requester
-  request,
-  // methods
-  createUsers,
-  // tokens
-  adminToken,
-  memberToken,
-  guestToken
-}
+export { request, adminToken, memberToken, guestToken, createUsers }
