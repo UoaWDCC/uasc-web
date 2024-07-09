@@ -18,63 +18,65 @@ import {
 /**
  * This needs to be updated as we add more stripe functions...
  */
-jest.mock("stripe", () => {
-  return {
-    __esModule: true,
-    default: jest.fn().mockImplementation(() => {
-      return {
-        customers: {
-          create: () => {
-            return { id: "test" }
-          }
-        },
-        products: {
-          search: () => {
-            return { data: [productMock] }
-          }
-        },
-        checkout: {
-          sessions: {
+const mockStripe = () => {
+  jest.mock("stripe", () => {
+    return {
+      __esModule: true,
+      default: jest.fn().mockImplementation(() => {
+        return {
+          customers: {
             create: () => {
-              return { client_secret: "test" }
-            },
-            list: () => {
-              return {
-                data: [checkoutSessionMock]
-              }
+              return { id: "test" }
             }
-          }
-        },
-        webhooks: {
-          constructEvent: () => {
-            return {
-              type: "payment_intent.succeeded",
-              data: {
-                object: {
-                  customer: customerMock
+          },
+          products: {
+            search: () => {
+              return { data: [productMock] }
+            }
+          },
+          checkout: {
+            sessions: {
+              create: () => {
+                return { client_secret: "test" }
+              },
+              list: () => {
+                return {
+                  data: [checkoutSessionMock]
                 }
               }
             }
+          },
+          webhooks: {
+            constructEvent: () => {
+              return {
+                type: "payment_intent.succeeded",
+                data: {
+                  object: {
+                    customer: customerMock
+                  }
+                }
+              }
+            }
+          },
+          coupons: {
+            create: jest.fn().mockResolvedValue({
+              id: "mock_coupon_id",
+              amount_off: 4000, // amount off in cents
+              currency: "nzd"
+            })
+          },
+          promotionCodes: {
+            create: jest.fn().mockResolvedValue({
+              id: "mock_promotion_code_id",
+              coupon: "mock_coupon_id",
+              customer: "mock_customer_id"
+            })
           }
-        },
-        coupons: {
-          create: jest.fn().mockResolvedValue({
-            id: "mock_coupon_id",
-            amount_off: 4000, // amount off in cents
-            currency: "nzd"
-          })
-        },
-        promotionCodes: {
-          create: jest.fn().mockResolvedValue({
-            id: "mock_promotion_code_id",
-            coupon: "mock_coupon_id",
-            customer: "mock_customer_id"
-          })
         }
-      }
-    })
-  }
-})
+      })
+    }
+  })
+}
 
 const usersToCreate: string[] = [
   ADMIN_USER_UID,
@@ -108,4 +110,4 @@ afterAll(async () => {
 
 const request = supertest(_app)
 
-export { request, adminToken, memberToken, guestToken, createUsers }
+export { request, adminToken, memberToken, guestToken, createUsers, mockStripe }

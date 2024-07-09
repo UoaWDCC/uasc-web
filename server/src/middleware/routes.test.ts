@@ -27,10 +27,13 @@ import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 import {
   request,
   createUsers,
+  mockStripe,
   adminToken,
   memberToken,
   guestToken
 } from "../test-config/SetupTests"
+
+mockStripe()
 
 describe("Endpoints", () => {
   describe("admin/users", () => {
