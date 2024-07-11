@@ -1,9 +1,5 @@
 import AuthService from "business-layer/services/AuthService"
 import {
-  AuthServiceClaims,
-  UserAccountTypes
-} from "business-layer/utils/AuthServiceClaims"
-import {
   DEFAULT_BOOKING_MAX_SLOTS,
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
@@ -49,6 +45,7 @@ import {
 } from "tsoa"
 import * as console from "console"
 import StripeService from "../../business-layer/services/StripeService"
+import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -208,9 +205,9 @@ export class AdminController extends Controller {
         return { uid: data.uid }
       })
 
-      const userAuthData = await new AuthService().bulkRetrieveUsersByUids(
-        uidsToQuery
-      )
+      const authService = new AuthService()
+      const userAuthData =
+        await authService.bulkRetrieveUsersByUids(uidsToQuery)
 
       const combinedUserData = rawUserData.map((userInfo) => {
         const matchingUserRecord = userAuthData.find(
@@ -219,15 +216,8 @@ export class AdminController extends Controller {
 
         const { customClaims, email, metadata } = { ...matchingUserRecord } // to avoid undefined destructuring error
 
-        let membership: UserAccountTypes = UserAccountTypes.GUEST
-
-        if (customClaims) {
-          if (customClaims[AuthServiceClaims.ADMIN]) {
-            membership = UserAccountTypes.ADMIN
-          } else if (customClaims[AuthServiceClaims.MEMBER]) {
-            membership = UserAccountTypes.MEMBER
-          }
-        }
+        const membership: UserAccountTypes =
+          authService.getMembershipType(customClaims)
 
         return {
           email,
@@ -268,16 +258,13 @@ export class AdminController extends Controller {
       const authService = new AuthService()
       const userAuthData = await authService.retrieveUserByUid(uid)
       const { customClaims, email, metadata } = { ...userAuthData }
-
+      const membership: UserAccountTypes =
+        authService.getMembershipType(customClaims)
       this.setStatus(200)
       return {
         data: {
           email,
-          membership: customClaims?.[AuthServiceClaims.ADMIN]
-            ? UserAccountTypes.ADMIN
-            : customClaims?.[AuthServiceClaims.MEMBER]
-              ? UserAccountTypes.MEMBER
-              : UserAccountTypes.GUEST,
+          membership,
           dateJoined: metadata ? metadata.creationTime : undefined,
           ...user
         }
