@@ -64,6 +64,9 @@ export interface paths {
     /** @description User Operations */
     get: operations["GetAllUsers"];
   };
+  "/admin/users/{uid}": {
+    get: operations["GetUser"];
+  };
   "/admin/users/create": {
     put: operations["CreateUser"];
   };
@@ -371,6 +374,11 @@ export interface components {
        */
       nextCursor?: string;
       data?: components["schemas"]["CombinedUserData"][];
+    };
+    GetUserResponse: {
+      error?: string;
+      message?: string;
+      data?: components["schemas"]["CombinedUserData"];
     };
     UserAdditionalInfo: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -719,6 +727,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["AllUsersResponse"];
+        };
+      };
+    };
+  };
+  GetUser: {
+    parameters: {
+      path: {
+        uid: string;
+      };
+    };
+    responses: {
+      /** @description User found */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponse"];
         };
       };
     };
