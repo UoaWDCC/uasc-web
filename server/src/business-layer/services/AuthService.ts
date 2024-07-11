@@ -26,6 +26,16 @@ export default class AuthService {
     }
   }
 
+  public async retrieveUserByUid(uid: string) {
+    try {
+      const user = await auth.getUser(uid)
+      return user
+    } catch (e) {
+      console.error(`Failed to bulk retrieve the uids from Auth`, e)
+      return undefined
+    }
+  }
+
   /**
    * Deletes a user account from the Firebase Authentication Service.
    * @param uid

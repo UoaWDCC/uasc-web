@@ -30,12 +30,16 @@ import {
   BookingDeleteResponse,
   BookingSlotUpdateResponse
 } from "service-layer/response-models/BookingResponse"
-import { AllUsersResponse } from "service-layer/response-models/UserResponse"
+import {
+  AllUsersResponse,
+  GetUserResponse
+} from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
   Get,
   Patch,
+  Path,
   Post,
   Put,
   Query,
@@ -246,6 +250,42 @@ export class AdminController extends Controller {
       console.error("Failed to fetch all users", e)
       this.setStatus(500)
       return { error: "Something went wrong when fetching all users" }
+    }
+  }
+
+  @SuccessResponse("200", "User found")
+  @Get("/users/{uid}")
+  public async getUser(@Path() uid: string): Promise<GetUserResponse> {
+    try {
+      const userService = new UserDataService()
+      const user = await userService.getUserData(uid)
+
+      if (!user) {
+        this.setStatus(404)
+        return { error: "User not found" }
+      }
+
+      const authService = new AuthService()
+      const userAuthData = await authService.retrieveUserByUid(uid)
+      const { customClaims, email, metadata } = { ...userAuthData }
+
+      this.setStatus(200)
+      return {
+        data: {
+          email,
+          membership: customClaims?.[AuthServiceClaims.ADMIN]
+            ? UserAccountTypes.ADMIN
+            : customClaims?.[AuthServiceClaims.MEMBER]
+              ? UserAccountTypes.MEMBER
+              : UserAccountTypes.GUEST,
+          dateJoined: metadata ? metadata.creationTime : undefined,
+          ...user
+        }
+      }
+    } catch (e) {
+      console.error("Failed to fetch user data", e)
+      this.setStatus(500)
+      return { error: "Something went wrong when fetching user data" }
     }
   }
 
