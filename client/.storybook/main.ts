@@ -1,4 +1,5 @@
 import type { StorybookConfig } from "@storybook/nextjs"
+import path from "path"
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.story.@(js|jsx|ts|tsx)", "../src/**/*.story.mdx"],
@@ -7,8 +8,12 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@storybook/addon-interactions"
   ],
+  // https://github.com/storybookjs/storybook/issues/21216#issuecomment-1513894759
   framework: {
-    name: "@storybook/nextjs",
+    name: path.resolve(
+      require.resolve("@storybook/nextjs/preset"),
+      ".."
+    ) as any,
     options: {}
   },
   docs: {
