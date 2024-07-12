@@ -66,5 +66,8 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
+  },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
   }
 }
