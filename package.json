@@ -57,7 +57,7 @@
     "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
     "test-client": "yarn workspace client test",
     "test": "yarn test-client && yarn test-server",
-    "firebase-test": "./node_modules/.bin/firebase emulators:exec --only firestore,auth --project staging"
+    "firebase-test": "firebase emulators:exec --only firestore,auth --project staging"
   },
   "eslintConfig": {
     "extends": [
