@@ -1,5 +1,5 @@
-import { BookingAvailability } from "models/Booking"
-import { MS_IN_SECOND } from "utils/Constants"
+import { BookingAvailability } from "@/models/Booking"
+import { MS_IN_SECOND } from "@/utils/Constants"
 
 export type DateRange = {
   /**

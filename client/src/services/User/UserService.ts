@@ -1,5 +1,5 @@
 import fetchClient from "../OpenApiFetchClient"
-import { ReducedUserAdditionalInfo } from "models/User"
+import { ReducedUserAdditionalInfo } from "@/models/User"
 
 export type SignUpUserBody = {
   email: string

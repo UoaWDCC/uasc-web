@@ -1,8 +1,8 @@
-import { useSignUpFormData } from "store/SignUpForm"
-import Radio from "components/generic/Radio/Radio"
-import TextInput from "components/generic/TextInputComponent/TextInput"
+import { useSignUpFormData } from "@/store/SignUpForm"
+import Radio from "@/components/generic/Radio/Radio"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
 import { Timestamp } from "firebase/firestore"
-import Dropdown from "components/generic/Dropdown/Dropdown"
+import Dropdown from "@/components/generic/Dropdown/Dropdown"
 
 export const PersonalSectionFirst = () => {
   const [{ first_name, last_name, date_of_birth, gender }, { updateFormData }] =

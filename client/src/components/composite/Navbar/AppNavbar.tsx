@@ -1,17 +1,19 @@
-import { useAppData } from "store/Store"
+"use client"
+
+import { useAppData } from "@/store/Store"
 import Navbar from "./Navbar"
-import { auth } from "firebase"
-import { useNavigate } from "react-router-dom"
+import { auth } from "@/firebase"
+import { useRouter } from "next/navigation"
 
 export const AppNavbar = () => {
   const [{ currentUser, currentUserClaims }] = useAppData()
-  const navigate = useNavigate()
+  const router = useRouter()
   const signOut = () => {
     auth.signOut()
-    navigate("/login")
+    router.push("/login")
   }
   const signIn = () => {
-    navigate("/login")
+    router.push("/login")
   }
   return (
     <Navbar

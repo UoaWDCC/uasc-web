@@ -26,7 +26,7 @@ jobs:
       - name: Install volta
         uses: volta-cli/action@v4
 
-      - run: yarn workspaces focus uasc-next && yarn workspace uasc-next build
+      - run: yarn workspaces focus client && yarn workspace client build
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -34,4 +34,4 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}"
           channelId: live
           projectId: uasc-ceebc
-          entryPoint: uasc-next
+          entryPoint: client

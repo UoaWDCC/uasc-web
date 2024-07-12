@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import TestIcon from "assets/icons/bell.svg?react"
+import TestIcon from "@/assets/icons/bell.svg"
 
 import Card from "./MemberBenefitCard"
 const meta: Meta<typeof Card> = {
@@ -23,7 +23,7 @@ export const BenefitCard1: Story = {
   args: {
     variant: "default",
     text: "Book our cozy ski lodge on the Whakapapa skifield",
-    SvgIcon: TestIcon
+    Icon: TestIcon
   }
 }
 
@@ -32,6 +32,6 @@ export const BenefitCard2: Story = {
   args: {
     variant: "default",
     text: "Default Card Variant",
-    SvgIcon: TestIcon
+    Icon: TestIcon
   }
 }

@@ -1,6 +1,6 @@
-import { PAGES } from "components/composite/SignUpForm/utils/RouteNames"
+import { PAGES } from "@/components/composite/SignUpForm/utils/RouteNames"
 import { Timestamp } from "firebase/firestore"
-import { ReducedUserAdditionalInfo } from "models/User"
+import { ReducedUserAdditionalInfo } from "@/models/User"
 import { createStore, Action, createHook } from "react-sweet-state"
 
 type FormValidity = { errorMessage?: string; success: boolean }

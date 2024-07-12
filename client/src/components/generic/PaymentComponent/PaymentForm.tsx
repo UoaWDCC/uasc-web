@@ -1,8 +1,10 @@
+"use client"
+
 import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider
 } from "@stripe/react-stripe-js"
-import { stripePromise } from "services/Stripe"
+import { stripePromise } from "@/services/Stripe"
 
 interface IPaymentFormProps {
   clientSecret: string
@@ -16,6 +18,7 @@ export const PaymentForm = ({
   return (
     <>
       <EmbeddedCheckoutProvider
+        // @ts-ignore
         stripe={stripePromise}
         options={{
           clientSecret,

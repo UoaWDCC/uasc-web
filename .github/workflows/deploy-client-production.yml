@@ -26,9 +26,9 @@ jobs:
       - name: Install volta
         uses: volta-cli/action@v4
 
-      - run: yarn workspaces focus uasc-next && yarn workspace uasc-next build
+      - run: yarn workspaces focus client && yarn workspace client build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: uasc-next/out # The folder the action should deploy.
+          folder: client/out # The folder the action should deploy.

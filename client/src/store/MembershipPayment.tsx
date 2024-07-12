@@ -1,4 +1,4 @@
-import { MembershipTypes } from "models/Payment"
+import { MembershipTypes } from "@/models/Payment"
 import {
   defaultRegistry,
   createStore,

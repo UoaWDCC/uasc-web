@@ -1,5 +1,5 @@
 import { createContext, useState } from "react"
-import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
+import { DEFAULT_BOOKING_AVAILABILITY } from "@/utils/Constants"
 
 interface IDateSelectionContext {
   /**

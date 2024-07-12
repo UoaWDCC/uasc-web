@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { SignUpNotif } from "./SignUpNotif"
-import { MemoryRouter } from "react-router-dom"
+import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider/next-13.5"
 const meta: Meta<typeof SignUpNotif> = {
   component: SignUpNotif
 }
@@ -11,9 +11,9 @@ export const DefaultNotif: Story = {
   tags: ["autodocs"],
   decorators: [
     (Story) => (
-      <MemoryRouter>
+      <MemoryRouterProvider>
         <Story />
-      </MemoryRouter>
+      </MemoryRouterProvider>
     )
   ]
 }

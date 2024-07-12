@@ -1,11 +1,11 @@
 import AdminSearchBar from "./AdminSearchBar"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import Table from "components/generic/ReusableTable/Table"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import Table from "@/components/generic/ReusableTable/Table"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
-} from "components/generic/ReusableTable/TableUtils"
-import { AccountType } from "models/User"
+} from "@/components/generic/ReusableTable/TableUtils"
+import { AccountType } from "@/models/User"
 import { useCallback, useEffect, useState } from "react"
 
 export type MemberColumnFormat = {
@@ -47,9 +47,20 @@ interface IAdminMemberView {
   fetchNextPage?: () => void
 
   /**
+   * There are still more users to fetch
+   */
+  hasNextPage?: boolean
+
+  /**
    * Called when the *add new member* button is clicked
    */
   openAddMemberView?: () => void
+
+  /**
+   * The action that should be performed when the export user data button is clicked
+   */
+  exportUserDataHandler?: () => void
+
   /*
    * Used to indicate if there is currently an operation going on
    */
@@ -88,7 +99,9 @@ export const AdminMemberView = ({
   rowOperations,
   fetchNextPage,
   openAddMemberView,
-  isUpdating
+  exportUserDataHandler,
+  isUpdating,
+  hasNextPage
 }: IAdminMemberView) => {
   /**
    * For use with `AdminSearchBar`
@@ -137,7 +150,12 @@ export const AdminMemberView = ({
           )
         : oldData
     },
-    [isValidSearchQuery, currentSearchQuery, filteredAccountType]
+    [
+      isValidSearchQuery,
+      currentSearchQuery,
+      filteredAccountType,
+      shouldFilterByAccount
+    ]
   )
 
   useEffect(() => {
@@ -152,10 +170,16 @@ export const AdminMemberView = ({
      * We need to *scroll* to the next page of user data as it is assumed
      * that the endpoint for fetching all users is paginated
      */
-    if (isLastPage || isQuerying) {
+    if (isLastPage || isQuerying || hasNextPage) {
       fetchNextPage?.()
     }
-  }, [isLastPage, fetchNextPage, isValidSearchQuery, shouldFilterByAccount])
+  }, [
+    isLastPage,
+    fetchNextPage,
+    isValidSearchQuery,
+    shouldFilterByAccount,
+    hasNextPage
+  ])
 
   const onSeachQueryChangedHandler = (newQuery: string) => {
     setCurrentSearchQuery(newQuery)
@@ -174,9 +198,18 @@ export const AdminMemberView = ({
             {filteredAccountType}
           </Button>
         </span>
-        <Button variant="default-sm" onClick={() => openAddMemberView?.()}>
-          Add New Member
-        </Button>
+        <span className="flex gap-2">
+          <Button variant="default-sm" onClick={() => openAddMemberView?.()}>
+            Add New Member
+          </Button>
+          <Button
+            variant="default-sm"
+            onClick={() => exportUserDataHandler?.()}
+            disabled={hasNextPage}
+          >
+            Export Data
+          </Button>
+        </span>
       </span>
       <Table<MemberColumnFormat, "multiple-operations">
         data={(data && dataFilter(data)) || [defaultData]}

@@ -1,5 +1,5 @@
 import { useState, ReactNode } from "react"
-import TabsComponent from "components/generic/TabsComponent/TabsComponent"
+import TabsComponent from "@/components/generic/TabsComponent/TabsComponent"
 
 const PolicyContainer = ({ children }: { children: ReactNode }) => {
   return <div className="flex flex-col gap-7 px-3">{children}</div>

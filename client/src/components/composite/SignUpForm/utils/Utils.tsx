@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom"
 import {
   ACCOUNT_SETUP_ROUTE,
   ADDITIONAL_ROUTE,
@@ -10,18 +9,59 @@ import {
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
-  RouteNames,
   SUCCESS_ROUTE
 } from "./RouteNames"
-import { MembershipTypes } from "models/Payment"
+import { MembershipTypes } from "@/models/Payment"
+import { useRouter } from "next/navigation"
+import { useAppData } from "@/store/Store"
 
 export const oneLevelUp = (route: string) => {
-  return `../${route}`
+  return `/register/${route}`
 }
 
-export const useCurrentStep = (): PAGES => {
-  const { step } = useParams<{ step: RouteNames }>()
+export const useCheckRegisterPermissions = (currentPage: PAGES) => {
+  const [{ currentUser, currentUserClaims }] = useAppData()
+  const router = useRouter()
+  /**
+   * Note that below our route is one level deeper than /register
+   */
+  switch (currentPage) {
+    case PAGES.Unknown:
+      router.push(oneLevelUp(PERSONAL_ROUTE_1))
+      break
+    case PAGES.PersonalFirst:
+    case PAGES.PersonalSecond:
+    case PAGES.Contact:
+    case PAGES.Additional:
+    case PAGES.ConfirmDetails:
+      if (currentUser) {
+        router.push(oneLevelUp(PAYMENT_INFORMATION_ROUTE))
+      }
+      break
+    case PAGES.PaymentInfo:
+    case PAGES.Payment:
+      if (!currentUser) {
+        router.push(oneLevelUp(PERSONAL_ROUTE_1))
+      }
 
+      // User has already paid for membership
+      if (currentUserClaims?.member) {
+        router.push(oneLevelUp(ACCOUNT_SETUP_ROUTE))
+      }
+      break
+    case PAGES.Confirm:
+      break
+    case PAGES.AccountSetup:
+      if (!currentUser) {
+        router.push(oneLevelUp(PERSONAL_ROUTE_1))
+      }
+      break
+    case PAGES.Success:
+      break
+  }
+}
+
+export const useCurrentStep = (step?: string): PAGES => {
   switch (step) {
     case PERSONAL_ROUTE_1:
       return PAGES.PersonalFirst
