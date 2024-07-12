@@ -1,11 +1,11 @@
-import Dropdown from "components/generic/Dropdown/Dropdown"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import TextInput from "components/generic/TextInputComponent/TextInput"
+import Dropdown from "@/components/generic/Dropdown/Dropdown"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
 import { Timestamp } from "firebase/firestore"
 import { FormEvent, useRef, useState } from "react"
-import { SignUpUserBody } from "services/User/UserService"
-import CloseIcon from "assets/icons/x.svg?react"
-import { useClickOutside } from "components/utils/Utils"
+import { SignUpUserBody } from "@/services/User/UserService"
+import CloseIcon from "@/assets/icons/x.svg"
+import { useClickOutside } from "@/components/utils/Utils"
 
 const GUEST_OPTION = "guest" as const
 const MEMBER_OPTION = "member" as const
@@ -39,6 +39,7 @@ export const AdminUserCreationFormKeys = {
   LAST_NAME: "last name",
   DIETARY_REQUIREMENTS: "dietary requirements",
   PHONE_NUMBER: "phone number",
+  EMERGENCY_CONTACT: "emergency contact",
   DATE_OF_BIRTH: "dob",
   MEMBERSHIP_TYPE: "membership"
 } as const
@@ -95,6 +96,9 @@ const AdminUserCreationModal = ({
         last_name: data.get(AdminUserCreationFormKeys.LAST_NAME) as string,
         dietary_requirements: (data.get(
           AdminUserCreationFormKeys.DIETARY_REQUIREMENTS
+        ) || "") as string,
+        emergency_contact: (data.get(
+          AdminUserCreationFormKeys.EMERGENCY_CONTACT
         ) || "") as string,
         phone_number: Number.parseInt(
           data.get(AdminUserCreationFormKeys.PHONE_NUMBER) as string
@@ -167,6 +171,13 @@ const AdminUserCreationModal = ({
           data-testid={AdminUserCreationFormKeys.PHONE_NUMBER}
           label="Phone Number"
           type="tel"
+          required
+        />
+        <TextInput
+          name={AdminUserCreationFormKeys.EMERGENCY_CONTACT}
+          data-testid={AdminUserCreationFormKeys.EMERGENCY_CONTACT}
+          label="Emergency Contact"
+          type="text"
           required
         />
         <TextInput

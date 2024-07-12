@@ -4,7 +4,7 @@ import { PAGES, PERSONAL_ROUTE_1 } from "./RouteNames"
 
 describe("level up function", () => {
   it("should return the correct path", () => {
-    expect(oneLevelUp("my_route")).toEqual("../my_route")
+    expect(oneLevelUp("my_route")).toEqual("/register/my_route")
   })
 })
 

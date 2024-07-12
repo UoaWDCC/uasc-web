@@ -1,11 +1,10 @@
-import { IPricingBanner } from "components/generic/PricingBanner/PricingBanner"
+import { IPricingBanner } from "@/components/generic/PricingBanner/PricingBanner"
+import { FC, SVGProps } from "react"
 
 /**
- * This is the type of elements that are exported with the `import Icon from 'path/icon.svg?react` syntax
+ * This is the type of elements that are exported with the `import Icon from 'path/icon.svg ` syntax
  */
-export type SvgImport = React.FunctionComponent<
-  React.SVGProps<SVGSVGElement> & { title?: string | undefined }
->
+export type SvgImport = FC<SVGProps<SVGElement>>
 
 /**
  * For use with `MemberBenefitCards`

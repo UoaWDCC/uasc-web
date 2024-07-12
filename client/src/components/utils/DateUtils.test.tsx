@@ -1,4 +1,4 @@
-import { MS_IN_SECOND } from "utils/Constants"
+import { MS_IN_SECOND } from "@/utils/Constants"
 import { DateUtils } from "./DateUtils"
 
 describe("DateUtils", () => {

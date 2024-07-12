@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { Timestamp } from "firebase/firestore"
 import BookingService from "./BookingService"
-import { TODAY, NEXT_YEAR_FROM_TODAY } from "utils/Constants"
+import { TODAY, NEXT_YEAR_FROM_TODAY } from "@/utils/Constants"
 
 export const BOOKING_AVAILABLITY_KEY = "booking-availablity" as const
 export const BOOKINGS_SELF_KEY = "booking-self" as const

@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore"
-import { BookingAvailability } from "models/Booking"
-import fetchClient from "services/OpenApiFetchClient"
+import { BookingAvailability } from "@/models/Booking"
+import fetchClient from "@/services/OpenApiFetchClient"
 
 const BookingService = {
   getBookingAvailability: async function (

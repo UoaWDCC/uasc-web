@@ -1,8 +1,7 @@
-import { PaymentForm } from "components/generic/PaymentComponent/PaymentForm"
-import PricingCard from "components/generic/PricingCard/PricingCard"
+import { PaymentForm } from "@/components/generic/PaymentComponent/PaymentForm"
+import PricingCard from "@/components/generic/PricingCard/PricingCard"
 import { useState } from "react"
-import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { useMembershipClientSecretQuery } from "services/Payment/PaymentQueries"
+import { useMembershipClientSecretQuery } from "@/services/Payment/PaymentQueries"
 import {
   getMembershipTypeConfirmationMessage,
   oneLevelUp
@@ -10,14 +9,16 @@ import {
 import {
   useBankPaymentDetailsQuery,
   useMembershipPricesQuery
-} from "services/AppData/AppDataQueries"
+} from "@/services/AppData/AppDataQueries"
 import { ACCOUNT_SETUP_ROUTE } from "../utils/RouteNames"
-import { useMembershipPaymentDetails } from "store/MembershipPayment"
-import { useAppData } from "store/Store"
+import { useMembershipPaymentDetails } from "@/store/MembershipPayment"
+import { useAppData } from "@/store/Store"
+import { useRouter, useSearchParams } from "next/navigation"
+import Link from "next/link"
 type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
-  const navigate = useNavigate()
+  const router = useRouter()
   const { data: prices } = useMembershipPricesQuery()
   const [{ membershipType }] = useMembershipPaymentDetails()
   const { data: userMembershipDetails } =
@@ -35,7 +36,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
       try {
         await navigator.clipboard.writeText(text!)
       } catch (error) {
-        console.error(error.message)
+        console.error((error as Error).message)
       }
     }
     return (
@@ -95,7 +96,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
       </h5>
       <h5
         className="text-dark-blue-100  cursor-pointer font-bold uppercase"
-        onClick={() => navigate(oneLevelUp(ACCOUNT_SETUP_ROUTE))}
+        onClick={() => router.push(oneLevelUp(ACCOUNT_SETUP_ROUTE))}
       >
         Set up account in meantime
       </h5>
@@ -143,14 +144,13 @@ const CardPaymentSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
 }
 
 export const PaymentSection = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const searchParams = useSearchParams()
   const [wantsBankTransfer, setWantsBankTransfer] = useState<boolean>(
     searchParams.get("bank") === "true"
   )
 
   const _setWantsBankTransfer = (state: boolean) => {
     // keep in URL so if user goes back can return to correct state
-    setSearchParams({ bank: `${state}` })
     setWantsBankTransfer(state)
   }
   return (
@@ -194,7 +194,7 @@ export const PaymentInformationSection = () => {
           <strong>{currentUser?.email}</strong> is incorrect you should{" "}
           <strong>not</strong> proceed with payment and instead first update
           your email by going to{" "}
-          <Link to="/profile">
+          <Link href="/profile">
             <strong className="text-light-blue-100">profile</strong>
           </Link>
         </h5>

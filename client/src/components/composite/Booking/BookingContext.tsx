@@ -1,11 +1,11 @@
-import { fireAnalytics } from "firebase"
+import { fireAnalytics } from "@/firebase"
 import { Timestamp } from "firebase/firestore"
 import { createContext, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { BOOKING_AVAILABLITY_KEY } from "services/Booking/BookingQueries"
-import { useBookingPaymentClientSecretMutation } from "services/Payment/PaymentMutations"
-import queryClient from "services/QueryClient"
-import { useEditSelfMutation } from "services/User/UserMutations"
+import { BOOKING_AVAILABLITY_KEY } from "@/services/Booking/BookingQueries"
+import { useBookingPaymentClientSecretMutation } from "@/services/Payment/PaymentMutations"
+import queryClient from "@/services/QueryClient"
+import { useEditSelfMutation } from "@/services/User/UserMutations"
+import { useRouter } from "next/navigation"
 
 interface IBookingContext {
   /**
@@ -14,7 +14,7 @@ interface IBookingContext {
    */
   handleBookingCreation?: (startDate?: Timestamp, endDate?: Timestamp) => void
   /**
-   * Used to initiate the checkout component for bookings
+   * Used to initiate the checkout :omponent for bookings
    */
   clientSecret?: string
   /**
@@ -55,7 +55,7 @@ export const BookingContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const navigate = useNavigate()
+  const router = useRouter()
   const {
     data: bookingPaymentData,
     mutateAsync,
@@ -68,12 +68,12 @@ export const BookingContextProvider = ({
   const { mutateAsync: updateAllergies } = useEditSelfMutation()
 
   const getExistingSession = async () => {
-    if (bookingPaymentData?.stripeClientSecret) navigate("/bookings/payment")
+    if (bookingPaymentData?.stripeClientSecret) router.push("/bookings/payment")
     await mutateAsync(
       {},
       {
         onSuccess() {
-          navigate("/bookings/payment")
+          router.push("/bookings/payment")
         }
       }
     )
@@ -83,15 +83,15 @@ export const BookingContextProvider = ({
   }
 
   const handleBookingCreation = async (
-    startDate: Timestamp,
-    endDate: Timestamp
+    startDate?: Timestamp,
+    endDate?: Timestamp
   ) => {
     await updateAllergies({ dietary_requirements: allergies })
     await mutateAsync(
       { startDate, endDate },
       {
         onSuccess() {
-          navigate("/bookings/payment")
+          router.push("/bookings/payment")
         }
       }
     )

@@ -1,23 +1,23 @@
-import { useUsersQuery } from "services/Admin/AdminQueries"
+import { useUsersQuery } from "@/services/Admin/AdminQueries"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
 import {
   useDeleteUserMutation,
   useDemoteUserMutation,
   usePromoteUserMutation
-} from "services/Admin/AdminMutations"
-import { TableRowOperation } from "components/generic/ReusableTable/TableUtils"
-import { AccountType } from "./AdminUserCreation/AdminUserCreationModal"
-import ModalContainer from "components/generic/ModalContainer/ModalContainer"
-import { Suspense, lazy, useState } from "react"
-import { useSignUpUserMutation } from "services/User/UserMutations"
-import queryClient from "services/QueryClient"
+} from "@/services/Admin/AdminMutations"
+import { TableRowOperation } from "@/components/generic/ReusableTable/TableUtils"
+import AdminUserCreationModal, {
+  AccountType
+} from "./AdminUserCreation/AdminUserCreationModal"
+import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
+import { useState, useMemo, useRef, useCallback } from "react"
+import { useSignUpUserMutation } from "@/services/User/UserMutations"
+import queryClient from "@/services/QueryClient"
 import { sendPasswordResetEmail } from "firebase/auth"
-import { auth } from "firebase"
-import { ReducedUserAdditionalInfo } from "models/User"
-
-const AsyncAdminUserCreationModal = lazy(
-  () => import("./AdminUserCreation/AdminUserCreationModal")
-)
+import { auth } from "@/firebase"
+import { ReducedUserAdditionalInfo } from "@/models/User"
+import { CSVLink } from "react-csv"
+import { DateUtils } from "@/components/utils/DateUtils"
 
 /**
  * Component that handles all the network requests for `AdminMemberView`
@@ -36,6 +36,13 @@ const WrappedAdminMemberView = () => {
    * The `admin` key is important as we don't want to share cache with the normal sign up
    */
   const { mutateAsync: addNewUser } = useSignUpUserMutation("admin")
+
+  /**
+   * https://stackoverflow.com/a/68066447
+   */
+  const csvLinkRef = useRef<
+    CSVLink & HTMLAnchorElement & { link: HTMLAnchorElement }
+  >(null)
 
   /**
    * @param email the email to be associated with the newly created user
@@ -80,23 +87,50 @@ const WrappedAdminMemberView = () => {
    */
   const [showAddUserModal, setShowAddUserModal] = useState<boolean>(false)
 
+  /**
+   * Kept
+   */
+  const untransformedUsers = useMemo(() => {
+    return (
+      data?.pages.flatMap(
+        (page) =>
+          page.data?.map((data) => {
+            return {
+              ...data,
+              date_of_birth: DateUtils.formattedNzDate(
+                new Date(DateUtils.timestampMilliseconds(data.date_of_birth))
+              )
+            }
+          }) || [] // avoid undefined values in list
+      ) || []
+    )
+  }, [data])
+
   // Need flatmap because of inner map
-  const transformedDataList = data?.pages.flatMap(
-    (page) =>
-      page.data?.map((data) => {
+  const transformedDataList = useMemo(
+    () =>
+      untransformedUsers?.map((user) => {
         const transformedData: MemberColumnFormat = { uid: "" }
-        transformedData.uid = data.uid
-        transformedData.Name = `${data.first_name} ${data.last_name}`
-        transformedData.Email = data.email
-        transformedData["Date Joined"] = data.dateJoined
-        transformedData.Status = data.membership
+        transformedData.uid = user.uid
+        transformedData.Name = `${user.first_name} ${user.last_name}`
+        transformedData.Email = user.email
+        transformedData["Date Joined"] = user.dateJoined
+        transformedData.Status = user.membership
         return transformedData
-      }) || [] // avoid undefined values in list
+      }) || [], // avoid undefined values in list
+    [untransformedUsers]
   )
 
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
   const { mutateAsync: deleteUser, isPending } = useDeleteUserMutation()
+
+  const handleExportUsers = useCallback(() => {
+    if (hasNextPage) {
+      return
+    }
+    csvLinkRef.current?.link?.click()
+  }, [hasNextPage])
 
   /**
    * You should optimistically handle the mutations in `AdminMutations`
@@ -146,24 +180,30 @@ const WrappedAdminMemberView = () => {
 
   return (
     <>
+      <CSVLink
+        className="hidden"
+        filename={"uasc-user-data.csv"}
+        data={untransformedUsers}
+        ref={csvLinkRef}
+      />
       <AdminMemberView
         fetchNextPage={() => {
           !isFetchingNextPage && hasNextPage && fetchNextPage()
         }}
+        hasNextPage={hasNextPage}
+        exportUserDataHandler={handleExportUsers}
         isUpdating={isPending}
         rowOperations={rowOperations}
         data={transformedDataList}
         openAddMemberView={() => setShowAddUserModal(true)}
       />
       <ModalContainer isOpen={showAddUserModal}>
-        <Suspense>
-          <AsyncAdminUserCreationModal
-            handleClose={() => setShowAddUserModal(false)}
-            userCreationHandler={async ({ email, user }, accountType) => {
-              await userCreationHandler(email, user, accountType)
-            }}
-          />
-        </Suspense>
+        <AdminUserCreationModal
+          handleClose={() => setShowAddUserModal(false)}
+          userCreationHandler={async ({ email, user }, accountType) => {
+            await userCreationHandler(email, user, accountType)
+          }}
+        />
       </ModalContainer>
     </>
   )

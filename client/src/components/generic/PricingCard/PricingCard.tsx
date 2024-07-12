@@ -1,4 +1,5 @@
-import tick from "assets/selectedtick.png"
+import tick from "@/assets/selectedtick.png"
+import Image from "next/image"
 interface IPricingCardDefault {
   title: string
   priceString: string
@@ -48,7 +49,8 @@ const PricingCardDefault = ({
           {extraInfo}
         </small>
         {selected && (
-          <img
+          <Image
+            alt="Tick icon"
             src={tick}
             className="ml-auto mr-auto w-12 md:mt-6 md:h-6 md:w-6 lg:mt-6 lg:h-6 lg:w-6"
           />

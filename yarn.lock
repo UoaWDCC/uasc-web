@@ -25531,9 +25531,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uasc-next@workspace:uasc-next":
+"client@workspace:client":
   version: 0.0.0-use.local
-  resolution: "uasc-next@workspace:uasc-next"
+  resolution: "client@workspace:client"
   dependencies:
     "@chromatic-com/storybook": "npm:1.6.1"
     "@storybook/addon-essentials": "npm:^8.1.11"

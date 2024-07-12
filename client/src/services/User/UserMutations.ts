@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
 import UserService from "./UserService"
 import { sendPasswordResetEmail, signInWithCustomToken } from "firebase/auth"
-import { auth } from "firebase"
-import queryClient from "services/QueryClient"
+import { auth } from "@/firebase"
+import queryClient from "@/services/QueryClient"
 import { SELF_DATA_QUERY_KEY } from "./UserQueries"
 
 const SIGN_UP_USER_MUTATION_KEY = "signUpUser" as const

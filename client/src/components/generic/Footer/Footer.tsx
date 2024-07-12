@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom"
+import Link from "next/link"
 
-import Facebook from "assets/icons/facebook.svg?react"
+import Facebook from "@/assets/icons/facebook.svg"
 
-import Instagram from "assets/icons/instagram.svg?react"
+import Instagram from "@/assets/icons/instagram.svg"
 
 const HorizontalDivider = () => (
   <>
@@ -27,40 +27,40 @@ export const Footer = () => {
       >
         <HorizontalDivider />
 
-        <Link to="/login">
+        <Link href="/login">
           <h5 className="uppercase">log in</h5>
         </Link>
 
         <HorizontalDivider />
 
-        <Link to="/register">
+        <Link href="/register">
           <h5 className="uppercase">register</h5>
         </Link>
 
         <HorizontalDivider />
 
-        <Link to="/bookings">
+        <Link href="/bookings">
           <h5 className="uppercase">book the lodge</h5>
         </Link>
 
         <HorizontalDivider />
 
-        <Link to="/about">
+        <Link href="/about">
           <h5 className="uppercase">about</h5>
         </Link>
       </div>
 
       <div className="flex items-center justify-center gap-6 px-4 lg:ml-auto">
         <div className="h-[24px] w-[24px]">
-          <a href="https://www.instagram.com/uasc_nz/" target="blank">
+          <Link href="https://www.instagram.com/uasc_nz/" target="blank">
             <Instagram className="fill-white" />
-          </a>
+          </Link>
         </div>
 
         <div className="h-[24px] w-[24px]">
-          <a href="https://www.facebook.com/UoAsnowsports/" target="blank">
+          <Link href="https://www.facebook.com/UoAsnowsports/" target="blank">
             <Facebook className="fill-white" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>

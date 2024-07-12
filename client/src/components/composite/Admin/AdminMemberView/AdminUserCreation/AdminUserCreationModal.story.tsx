@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 
 import AdminUserCreationModal from "./AdminUserCreationModal"
 import { useState } from "react"
-import ModalContainer from "components/generic/ModalContainer/ModalContainer"
+import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
 
 const meta: Meta<typeof AdminUserCreationModal> = {
   component: AdminUserCreationModal

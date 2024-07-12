@@ -5,8 +5,7 @@
   "private": true,
   "workspaces": [
     "client",
-    "server",
-    "uasc-next"
+    "server"
   ],
   "packageManager": "yarn@4.1.1+sha256.f3cc0eda8e5560e529c7147565b30faa43b4e472d90e8634d7134a37c7f59781",
   "devDependencies": {
@@ -52,11 +51,11 @@
     "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
     "postinstall": "husky",
     "lint-and-fix": "eslint . --fix",
-    "dev-client": "yarn workspace uasc-next dev",
+    "dev-client": "yarn workspace client dev",
     "dev-server": "yarn workspace server start",
-    "storybook": "yarn workspace uasc-next storybook",
+    "storybook": "yarn workspace client storybook",
     "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src\"",
-    "test-client": "yarn workspace uasc-next test",
+    "test-client": "yarn workspace client test",
     "test": "yarn test-client && yarn test-server",
     "firebase-test": "./node_modules/.bin/firebase emulators:exec --only firestore,auth --project staging"
   },
