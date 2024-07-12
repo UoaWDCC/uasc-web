@@ -9054,6 +9054,58 @@ __metadata:
   languageName: node
   linkType: hard
 
+"client@workspace:client":
+  version: 0.0.0-use.local
+  resolution: "client@workspace:client"
+  dependencies:
+    "@chromatic-com/storybook": "npm:1.6.1"
+    "@storybook/addon-essentials": "npm:^8.1.11"
+    "@storybook/addon-interactions": "npm:^8.1.11"
+    "@storybook/addon-links": "npm:^8.1.11"
+    "@storybook/addon-onboarding": "npm:^8.1.11"
+    "@storybook/blocks": "npm:^8.1.11"
+    "@storybook/nextjs": "npm:^8.1.11"
+    "@storybook/react": "npm:^8.1.11"
+    "@storybook/test": "npm:^8.1.11"
+    "@stripe/react-stripe-js": "npm:^2.7.3"
+    "@stripe/stripe-js": "npm:^4.1.0"
+    "@svgr/webpack": "npm:^8.1.0"
+    "@tailwindcss/forms": "npm:^0.5.7"
+    "@tanstack/react-query": "npm:^5.50.1"
+    "@testing-library/dom": "npm:^10.3.1"
+    "@testing-library/jest-dom": "npm:^6.4.6"
+    "@testing-library/react": "npm:^16.0.0"
+    "@types/jest": "npm:^29.5.12"
+    "@types/node": "npm:^20.14.10"
+    "@types/prop-types": "npm:^15"
+    "@types/react": "npm:^18"
+    "@types/react-csv": "npm:^1.1.10"
+    "@types/react-dom": "npm:^18"
+    "@types/scheduler": "npm:^0"
+    eslint: "npm:~8.57.0"
+    firebase: "npm:^10.12.3"
+    jest: "npm:^29.7.0"
+    jest-environment-jsdom: "npm:^29.7.0"
+    next: "npm:14.2.4"
+    next-router-mock: "npm:^0.9.13"
+    openapi-fetch: "npm:~0.9.2"
+    openapi-typescript: "npm:~6.7.4"
+    postcss: "npm:^8"
+    prop-types: "npm:^15.8.1"
+    react: "npm:^18"
+    react-calendar: "npm:^5.0.0"
+    react-csv: "npm:^2.2.2"
+    react-dom: "npm:^18"
+    react-sweet-state: "npm:^2.7.1"
+    scheduler: "npm:^0.23.2"
+    storybook: "npm:^8.1.11"
+    tailwindcss: "npm:^3.4.1"
+    ts-jest: "npm:^29.1.5"
+    ts-node: "npm:^10.9.2"
+    typescript: "npm:^5"
+  languageName: unknown
+  linkType: soft
+
 "cliui@npm:^8.0.1":
   version: 8.0.1
   resolution: "cliui@npm:8.0.1"
@@ -19335,58 +19387,6 @@ __metadata:
   checksum: 10c0/6e51f8b7e6ec55b897b9e56b67e864fe8f44e30f4a14357aad5dc0f7432db2f01efc0522df0b6c36d361c51f2dc3dcac5c832efd96a404cfabf884e915d38828
   languageName: node
   linkType: hard
-
-"uasc-next@workspace:client":
-  version: 0.0.0-use.local
-  resolution: "uasc-next@workspace:client"
-  dependencies:
-    "@chromatic-com/storybook": "npm:1.6.1"
-    "@storybook/addon-essentials": "npm:^8.1.11"
-    "@storybook/addon-interactions": "npm:^8.1.11"
-    "@storybook/addon-links": "npm:^8.1.11"
-    "@storybook/addon-onboarding": "npm:^8.1.11"
-    "@storybook/blocks": "npm:^8.1.11"
-    "@storybook/nextjs": "npm:^8.1.11"
-    "@storybook/react": "npm:^8.1.11"
-    "@storybook/test": "npm:^8.1.11"
-    "@stripe/react-stripe-js": "npm:^2.7.3"
-    "@stripe/stripe-js": "npm:^4.1.0"
-    "@svgr/webpack": "npm:^8.1.0"
-    "@tailwindcss/forms": "npm:^0.5.7"
-    "@tanstack/react-query": "npm:^5.50.1"
-    "@testing-library/dom": "npm:^10.3.1"
-    "@testing-library/jest-dom": "npm:^6.4.6"
-    "@testing-library/react": "npm:^16.0.0"
-    "@types/jest": "npm:^29.5.12"
-    "@types/node": "npm:^20.14.10"
-    "@types/prop-types": "npm:^15"
-    "@types/react": "npm:^18"
-    "@types/react-csv": "npm:^1.1.10"
-    "@types/react-dom": "npm:^18"
-    "@types/scheduler": "npm:^0"
-    eslint: "npm:~8.57.0"
-    firebase: "npm:^10.12.3"
-    jest: "npm:^29.7.0"
-    jest-environment-jsdom: "npm:^29.7.0"
-    next: "npm:14.2.4"
-    next-router-mock: "npm:^0.9.13"
-    openapi-fetch: "npm:~0.9.2"
-    openapi-typescript: "npm:~6.7.4"
-    postcss: "npm:^8"
-    prop-types: "npm:^15.8.1"
-    react: "npm:^18"
-    react-calendar: "npm:^5.0.0"
-    react-csv: "npm:^2.2.2"
-    react-dom: "npm:^18"
-    react-sweet-state: "npm:^2.7.1"
-    scheduler: "npm:^0.23.2"
-    storybook: "npm:^8.1.11"
-    tailwindcss: "npm:^3.4.1"
-    ts-jest: "npm:^29.1.5"
-    ts-node: "npm:^10.9.2"
-    typescript: "npm:^5"
-  languageName: unknown
-  linkType: soft
 
 "uasc-web@workspace:.":
   version: 0.0.0-use.local
