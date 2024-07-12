@@ -224,7 +224,7 @@ const Table = <
           {dataKeys.map((key) => {
             return (
               <td
-                className={`break-all pb-2 pl-4 pt-2 sm:break-keep 
+                className={`break-keep pb-2 pl-4 pt-2 
                     ${groupSameRows && rowClass}`}
                 key={key}
               >
