@@ -8,8 +8,9 @@ import { apiVersion, dataset, projectId } from "../env"
  * @returns
  */
 export const sanityQuery = async <T>(query: string) => {
-  const res = await fetch(
-    `https://${projectId}.api.sanity.io/${apiVersion}/data/query/${dataset}?query=${query}`
-  )
-  return JSON.parse(await res.json()) as T
+  const url =
+    `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(query)}` as const
+  const res = await fetch(url, { method: "GET" })
+
+  return ((await res.json()) as { result: any }).result as T
 }

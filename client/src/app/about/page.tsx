@@ -35,6 +35,7 @@ const About = async () => {
           </div>
         )
       })}
+
       <Footer />
     </div>
   )
