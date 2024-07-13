@@ -10,6 +10,9 @@ interface EventsCardProps {
 type props = EventsCardProps
 
 const EventsCard = ({ date, title, location, content }: props) => {
+  const handleOnClick = () => {
+    console.log("Button has been clicked")
+  }
   const Divider = () => {
     return <div className="bg-gray-3 mb-4 mt-4 h-[1px] w-full"></div>
   }
@@ -26,7 +29,7 @@ const EventsCard = ({ date, title, location, content }: props) => {
         <div className="text-left">{content}</div>
       </div>
       <div className="mx-4 my-8">
-        <Button>Sign Up!</Button>
+        <Button onClick={handleOnClick}>Sign Up!</Button>
       </div>
     </div>
   )
