@@ -1,25 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta } from "@storybook/react"
 // importing button.tsx as the object
 import Button from "./FigmaButton"
 const meta: Meta<typeof Button> = {
   component: Button,
-  argTypes: {
-    variant: {
-      control: { type: "radio" },
-      options: ["default", "alternative", "secondary"]
-    },
-    children: {
-      name: "content"
-    }
-  }
+  argTypes: {}
 }
 
 export default meta
 
-type Story = StoryObj<typeof meta>
-
 /** Default button variant */
-export const defaultButton: Story = {
+export const defaultButton = {
   tags: ["autodocs"],
   args: {
     variant: "default",
@@ -27,7 +17,7 @@ export const defaultButton: Story = {
   }
 }
 
-export const defaultButtonSm: Story = {
+export const defaultButtonSm = {
   tags: ["autodocs"],
   args: {
     variant: "default-sm",
@@ -35,7 +25,7 @@ export const defaultButtonSm: Story = {
   }
 }
 
-export const defaultButtonInvertedSm: Story = {
+export const defaultButtonInvertedSm = {
   tags: ["autodocs"],
   args: {
     variant: "inverted-default-sm",
@@ -43,7 +33,7 @@ export const defaultButtonInvertedSm: Story = {
   }
 }
 
-export const defaultButtonInvertedSt: Story = {
+export const defaultButtonInvertedSt = {
   tags: ["autodocs"],
   args: {
     variant: "inverted-default-st",
@@ -51,7 +41,7 @@ export const defaultButtonInvertedSt: Story = {
   }
 }
 
-export const TertiaryButton: Story = {
+export const TertiaryButton = {
   tags: ["autodocs"],
   args: {
     variant: "tertiary",
@@ -67,7 +57,7 @@ export const progressButtons = () => (
 )
 
 /** Alternative button variant */
-export const alternativeButton: Story = {
+export const alternativeButton = {
   args: {
     variant: "alternative",
     children: "Alternative Button Variant"
@@ -75,14 +65,14 @@ export const alternativeButton: Story = {
 }
 
 /** Secondary button variant */
-export const secondaryButton: Story = {
+export const secondaryButton = {
   args: {
     variant: "secondary",
     children: "Secondary Button Variant"
   }
 }
 
-export const Undefault: Story = {
+export const Undefault = {
   args: {
     variant: "default",
     children: "Disabled default button",
@@ -90,7 +80,7 @@ export const Undefault: Story = {
   }
 }
 
-export const Unalternative: Story = {
+export const Unalternative = {
   args: {
     variant: "alternative",
     children: "Disabled alternative button",
@@ -98,7 +88,7 @@ export const Unalternative: Story = {
   }
 }
 
-export const Unsecondary: Story = {
+export const Unsecondary = {
   args: {
     variant: "secondary",
     children: "Disabled secondary button",
@@ -106,7 +96,7 @@ export const Unsecondary: Story = {
   }
 }
 
-export const comparison: Story = {
+export const comparison = {
   decorators: [
     () => {
       return (

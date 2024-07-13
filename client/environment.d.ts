@@ -23,6 +23,10 @@ declare global {
       readonly NEXT_CONFIG_ENV?: "production" | "staging"
       /** What all paths should be prefixed with */
       readonly DEPLOYMENT_BASE_PATH?: string
+      /** The project to fetch content from in sanity */
+      readonly NEXT_PUBLIC_SANITY_PROJECT_ID: string
+      /** The dataset to use - for local use this should only be set to staging */
+      readonly NEXT_PUBLIC_SANITY_DATASET: "production" | "staging"
     }
   }
 }
