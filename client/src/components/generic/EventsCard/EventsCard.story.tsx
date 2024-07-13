@@ -12,7 +12,7 @@ export const DefaultEventsCard: Story = {
   args: {
     title: "Events Card Story",
     date: "THU 18/7 • 6pm",
-    location: "hell",
+    location: "Shadows Bar - 8 Alfred St, CBD, Auckland",
     content: "FUCK"
   }
 }
