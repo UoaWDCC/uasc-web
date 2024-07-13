@@ -11,7 +11,7 @@ export const AboutItemSchema: SchemaTypeDefinition = {
     }),
     defineField({
       name: "description",
-      type: "string"
+      type: "text"
     }),
     defineField({
       name: "image",
