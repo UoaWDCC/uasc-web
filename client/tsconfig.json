@@ -27,7 +27,8 @@
       "@/*": ["./src/*"],
       "public/*": ["./public/*"]
     },
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "target": "ES2017"
   },
   "include": [
     "svgr.d.ts",
