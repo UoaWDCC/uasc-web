@@ -20,7 +20,7 @@ const EventsCard = ({ date, title, location, content }: props) => {
         <div className="">
           <h3 className="text-dark-blue-100 font-bold">{title}</h3>
         </div>
-        <div>{location}</div>
+        <div className="mt-2">{location}</div>
         <Divider />
 
         <div>{content}</div>
