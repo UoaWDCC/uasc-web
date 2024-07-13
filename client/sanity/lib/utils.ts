@@ -5,7 +5,7 @@ import { apiVersion, dataset, projectId } from "../env"
  * for client in `client\sanity\lib\client.ts` do not work.
  *
  * @param query the [GROQ query](https://www.sanity.io/docs/query-cheat-sheet) to use
- * @returns
+ * @returns the data specified as type T
  */
 export const sanityQuery = async <T>(query: string) => {
   /**
