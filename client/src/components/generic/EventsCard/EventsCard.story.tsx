@@ -10,6 +10,9 @@ type Story = StoryObj<typeof meta>
 export const DefaultEventsCard: Story = {
   tags: ["autodocs"],
   args: {
-    title: "Events Card Story"
+    title: "Events Card Story",
+    date: "13/07",
+    location: "hell",
+    content: "FUCK"
   }
 }
