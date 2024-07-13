@@ -1,9 +1,9 @@
 import Button from "../FigmaButtons/FigmaButton"
 
 interface EventsCardProps {
-  date: string
+  date?: string
   title: string
-  location: string
+  location?: string
   content: React.ReactNode
   onClick: () => void
 }
