@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta } from "@storybook/react"
 // importing button.tsx as the object
 import StepperButton from "./StepperButton"
 const meta: Meta<typeof StepperButton> = {
@@ -16,9 +16,7 @@ const meta: Meta<typeof StepperButton> = {
 
 export default meta
 
-type Story = StoryObj<typeof meta>
-
-export const first: Story = {
+export const first = {
   tags: ["autodocs"],
   args: {
     variant: "first",
@@ -26,7 +24,7 @@ export const first: Story = {
   }
 }
 
-export const normal: Story = {
+export const normal = {
   tags: ["autodocs"],
   args: {
     variant: "normal",
@@ -34,7 +32,7 @@ export const normal: Story = {
   }
 }
 
-export const disabled: Story = {
+export const disabled = {
   tags: ["autodocs"],
   args: {
     variant: "normal",
