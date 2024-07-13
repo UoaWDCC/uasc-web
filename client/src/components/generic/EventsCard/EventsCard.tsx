@@ -7,16 +7,16 @@ interface EventsCardProps {
 
 type props = EventsCardProps
 
-const EventsCard = ({...props}: props) => {
+const EventsCard = ({date, title, location, content}: props) => {
   return <div className="border-1-black h-full w-[760px] border">
     <div className="">
-        {props.date}
+        {date}
     </div>
     <div>
-        <h2>{props.title}</h2>
+        <h2>{title}</h2>
     </div>
-    <div>{props.location}</div>
-    <div>{props.content}</div>
+    <div>{location}</div>
+    <div>{content}</div>
   </div>
 }
 
