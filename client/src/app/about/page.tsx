@@ -20,6 +20,7 @@ const About = async () => {
         About us
       </h2>
       {aboutItems.map((item, index) => {
+        // Even => Left, Odd => Right
         const side = index % 2 === 0 ? "left" : "right"
         return (
           <div className="p-4" key={item._id}>
