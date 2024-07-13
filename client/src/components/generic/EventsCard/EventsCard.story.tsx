@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 import type { Meta, StoryObj } from "@storybook/react"
 
 import EventsCard from "./EventsCard"
@@ -13,6 +14,6 @@ export const DefaultEventsCard: Story = {
     title: "Events Card Story",
     date: "THU 18/7 • 6pm",
     location: "Shadows Bar - 8 Alfred St, CBD, Auckland",
-    content: "FUCK"
+    content: `Get ready to kick off Re-O-Week with a bang!  Join us at Shadows Bar for the ultimate Outdoor Clubs Welcome Party, hosted by UoA Snowsports Club! Whether you're into hiking, biking, skiing, or just having a good time, this is the place to be!`
   }
 }
