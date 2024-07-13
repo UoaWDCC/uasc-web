@@ -1,3 +1,5 @@
+import Button from "../FigmaButtons/FigmaButton"
+
 interface EventsCardProps {
   date: string
   title: string
@@ -21,7 +23,10 @@ const EventsCard = ({ date, title, location, content }: props) => {
         <div className="text-gray-4 mt-2">{location}</div>
         <Divider />
 
-        <div>{content}</div>
+        <div className="text-left">{content}</div>
+      </div>
+      <div className="mx-4 my-8">
+        <Button>Sign Up!</Button>
       </div>
     </div>
   )
