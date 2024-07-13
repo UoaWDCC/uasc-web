@@ -8,7 +8,7 @@ interface EventsCardProps {
 type props = EventsCardProps
 
 const Divider = () => {
-  return <div className="h-1 w-full bg-black"></div>
+  return <div className="bg-gray-3 h-[1px] w-full"></div>
 }
 
 const EventsCard = ({ date, title, location, content }: props) => {
