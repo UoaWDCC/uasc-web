@@ -15,12 +15,11 @@ const EventsCard = ({ date, title, location, content }: props) => {
   return (
     <div className="border-1-black h-full w-[760px] border">
       <div className="m-4">
-        <div className="">{date}</div>
+        <h5 className="font-bold">{date}</h5>
 
-        <div className="">
-          <h3 className="text-dark-blue-100 font-bold">{title}</h3>
-        </div>
-        <div className="mt-2">{location}</div>
+        <h3 className="text-dark-blue-100 mt-1 font-bold">{title}</h3>
+
+        <div className="text-gray-4 mt-2">{location}</div>
         <Divider />
 
         <div>{content}</div>
