@@ -8,6 +8,8 @@ interface IAboutSectionProps {
   imageSrc: string | StaticImageData
 }
 
+const DEFAULT_ABOUT_IMAGE_RES = 1000 as const
+
 type Props = IAboutSectionProps
 
 const TextStyler = ({ title, text }: Omit<Props, "variant" | "imageSrc">) => {
@@ -27,8 +29,8 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
       <div className="grid-col grid w-full md:grid-cols-2 md:gap-4 lg:grid-cols-2 lg:gap-4">
         <Image
           src={imageSrc}
-          width={1000}
-          height={1000}
+          width={DEFAULT_ABOUT_IMAGE_RES}
+          height={DEFAULT_ABOUT_IMAGE_RES}
           alt="about page image"
           className="object-fit: cover relative w-full rounded-t-lg"
         />
@@ -46,8 +48,8 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
           </div>
           <Image
             src={imageSrc}
-            width={1000}
-            height={1000}
+            width={DEFAULT_ABOUT_IMAGE_RES}
+            height={DEFAULT_ABOUT_IMAGE_RES}
             alt="about page image"
             className="hidden w-full rounded-t-lg md:flex"
           />
@@ -55,8 +57,8 @@ const AboutSection = ({ title, text, imageSrc, variant }: Props) => {
         <>
           <Image
             src={imageSrc}
-            width={1000}
-            height={1000}
+            width={DEFAULT_ABOUT_IMAGE_RES}
+            height={DEFAULT_ABOUT_IMAGE_RES}
             alt="about page image"
             className="flex w-full rounded-t-lg md:hidden"
           />
