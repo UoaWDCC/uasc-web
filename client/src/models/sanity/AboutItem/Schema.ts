@@ -7,15 +7,18 @@ export const AboutItemSchema: SchemaTypeDefinition = {
   fields: [
     defineField({
       name: "title",
-      type: "string"
+      type: "string",
+      validation: (Valid) => Valid.required()
     }),
     defineField({
       name: "description",
-      type: "text"
+      type: "text",
+      validation: (Valid) => Valid.required()
     }),
     defineField({
       name: "image",
-      type: "image"
+      type: "image",
+      validation: (Valid) => Valid.required()
     })
   ]
 }
