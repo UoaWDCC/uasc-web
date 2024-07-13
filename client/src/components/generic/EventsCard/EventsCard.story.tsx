@@ -11,7 +11,7 @@ export const DefaultEventsCard: Story = {
   tags: ["autodocs"],
   args: {
     title: "Events Card Story",
-    date: "13/07",
+    date: "THU 18/7 • 6pm",
     location: "hell",
     content: "FUCK"
   }
