@@ -6,6 +6,7 @@ import { apiVersion, dataset, projectId } from "../env"
  *
  * @param query the [GROQ query](https://www.sanity.io/docs/query-cheat-sheet) to use
  * @returns the data specified as type T
+ * @example const movies = await sanityQuery<Movie[]>(`*[_type == "movie"]`)
  */
 export const sanityQuery = async <T>(query: string) => {
   /**
