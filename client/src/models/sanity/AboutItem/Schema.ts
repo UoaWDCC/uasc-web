@@ -1,17 +1,4 @@
-import { defineField, Image, SchemaTypeDefinition } from "sanity"
-
-/**
- * All about items ordered by created
- */
-export const ABOUT_ITEMS_GROQ_QUERY =
-  `*[_type == "about-item"] | order(_createdAt asc)` as const
-
-export type AboutItem = {
-  _id: string
-  title?: string
-  description?: string
-  image?: Image
-}
+import { defineField, SchemaTypeDefinition } from "sanity"
 
 export const AboutItemSchema: SchemaTypeDefinition = {
   name: "about-item",

@@ -3,8 +3,10 @@ import AboutSection from "@/components/generic/AboutSection/AboutSection"
 import { Footer } from "@/components/generic/Footer/Footer"
 import { Metadata } from "next"
 import { client } from "../../../sanity/lib/client"
-import { ABOUT_ITEMS_GROQ_QUERY, AboutItem } from "@/models/sanity/AboutItem"
-import { urlForImage } from "../../../sanity/lib/image"
+import {
+  ABOUT_ITEMS_GROQ_QUERY,
+  AboutItem
+} from "@/models/sanity/AboutItem/Utils"
 
 export const metadata: Metadata = {
   title: "About UASC",
@@ -28,7 +30,7 @@ const About = async () => {
               title={item.title || ""}
               text={item.description || ""}
               variant={side}
-              imageSrc={(item.image && urlForImage(item.image)) || ""}
+              imageSrc={item.imageUrl || ""}
             />
           </div>
         )
