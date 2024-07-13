@@ -2,11 +2,11 @@ import AboutSection from "@/components/generic/AboutSection/AboutSection"
 // import all 4 images
 import { Footer } from "@/components/generic/Footer/Footer"
 import { Metadata } from "next"
-import { client } from "../../../sanity/lib/client"
 import {
   ABOUT_ITEMS_GROQ_QUERY,
   AboutItem
 } from "@/models/sanity/AboutItem/Utils"
+import { sanityQuery } from "../../../sanity/lib/utils"
 
 export const metadata: Metadata = {
   title: "About UASC",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 }
 
 const About = async () => {
-  const aboutItems = await client.fetch<AboutItem[]>(ABOUT_ITEMS_GROQ_QUERY)
+  const aboutItems = await sanityQuery<AboutItem[]>(ABOUT_ITEMS_GROQ_QUERY)
 
   return (
     <div className="flex w-full flex-col gap-4 ">
