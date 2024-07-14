@@ -49,6 +49,8 @@ export const Footer = () => {
           <h5 className="uppercase">about</h5>
         </Link>
 
+        <HorizontalDivider />
+
         <Link href="/contact">
           <h5 className="uppercase">contact</h5>
         </Link>
