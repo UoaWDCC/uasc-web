@@ -1,17 +1,17 @@
 import AdminSearchBar from "../AdminMemberView/AdminSearchBar"
-import { CombinedUserData } from "models/User"
-import Calendar from "components/generic/Calendar/Calendar"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
+import { CombinedUserData } from "@/models/User"
+import Calendar from "@/components/generic/Calendar/Calendar"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import DateRangePicker from "@/components/generic/DateRangePicker/DateRangePicker"
 import { useState, useMemo, useRef } from "react"
-import CloseButton from "assets/icons/x.svg?react"
-import LeftArrowButton from "assets/icons/leftarrow.svg?react"
-import Tick from "assets/icons/tick.svg?react"
-import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
-import { DateRange, DateUtils } from "components/utils/DateUtils"
-import { BookingAvailability } from "models/Booking"
+import CloseButton from "@/assets/icons/x.svg"
+import LeftArrowButton from "@/assets/icons/leftarrow.svg"
+import Tick from "@/assets/icons/tick.svg"
+import { NEXT_YEAR_FROM_TODAY, TODAY } from "@/utils/Constants"
+import { DateRange, DateUtils } from "@/components/utils/DateUtils"
+import { BookingAvailability } from "@/models/Booking"
 import { Timestamp } from "firebase/firestore"
-import { useClickOutside } from "components/utils/Utils"
+import { useClickOutside } from "@/components/utils/Utils"
 
 interface IAdminBookingCreationPopUp {
   /**
@@ -143,7 +143,7 @@ const AdminBookingCreationPopUp = ({
 
   const currentlySelectedUser = useMemo(() => {
     return usersToDisplay.find((user) => user.uid === currentSelectedUserUid)
-  }, [currentSelectedUserUid])
+  }, [currentSelectedUserUid, usersToDisplay])
 
   const UserList = useMemo(
     () => (
@@ -172,7 +172,7 @@ const AdminBookingCreationPopUp = ({
         ))}
       </div>
     ),
-    [usersToDisplay]
+    [usersToDisplay, currentSearchQuery]
   )
 
   const DetailedUserInfoPanel = useMemo(

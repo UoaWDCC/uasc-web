@@ -1,9 +1,9 @@
 // Example copied off https://storybook.js.org/docs/get-started/setup
 import type { Meta, StoryObj } from "@storybook/react"
-import { BrowserRouter } from "react-router-dom"
 
 import Navbar from "./Navbar"
 import { useState } from "react"
+import { MemoryRouterProvider } from "next-router-mock/dist/MemoryRouterProvider/next-13.5"
 
 // 👇 This default export determines where your story goes in the story list
 const meta: Meta<typeof Navbar> = {
@@ -16,9 +16,9 @@ type Story = StoryObj<typeof Navbar>
 export const LoggedInNavbar: Story = {
   decorators: [
     (Story) => (
-      <BrowserRouter>
+      <MemoryRouterProvider>
         <Story />
-      </BrowserRouter>
+      </MemoryRouterProvider>
     )
   ],
   args: {
@@ -29,9 +29,9 @@ export const LoggedInNavbar: Story = {
 export const LoggedOutNavbar: Story = {
   decorators: [
     (Story) => (
-      <BrowserRouter>
+      <MemoryRouterProvider>
         <Story />
-      </BrowserRouter>
+      </MemoryRouterProvider>
     )
   ],
   args: {
@@ -49,13 +49,13 @@ export const LoginAndSignout = () => {
   }
   return (
     <>
-      <BrowserRouter>
+      <MemoryRouterProvider>
         <Navbar
           signInHandler={signInHandler}
           signOutHandler={signOutHandler}
           isLoggedIn={loggedIn}
         />
-      </BrowserRouter>
+      </MemoryRouterProvider>
     </>
   )
 }

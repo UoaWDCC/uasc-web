@@ -1,5 +1,5 @@
-import TextInput from "components/generic/TextInputComponent/TextInput"
-import { debounce } from "components/utils/Utils"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
+import { debounce } from "@/components/utils/Utils"
 
 interface IAdminSearchBar {
   placeholder?: string

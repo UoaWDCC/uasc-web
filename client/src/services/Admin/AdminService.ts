@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore"
-import { UserAdditionalInfo } from "models/User"
-import fetchClient from "services/OpenApiFetchClient"
-import { MEMBER_TABLE_MAX_DATA } from "utils/Constants"
+import { UserAdditionalInfo } from "@/models/User"
+import fetchClient from "@/services/OpenApiFetchClient"
+import { MEMBER_TABLE_MAX_DATA } from "@/utils/Constants"
 
 export type EditUsersBody = {
   uid: string

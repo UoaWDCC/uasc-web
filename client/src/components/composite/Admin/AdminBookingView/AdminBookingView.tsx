@@ -1,15 +1,19 @@
-import Table from "components/generic/ReusableTable/Table"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import CalenderIcon from "assets/icons/calender.svg?react"
-import Calendar from "components/generic/Calendar/Calendar"
+import Table from "@/components/generic/ReusableTable/Table"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import CalenderIcon from "@/assets/icons/calender.svg"
+import Calendar from "@/components/generic/Calendar/Calendar"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
-} from "components/generic/ReusableTable/TableUtils"
-import { useState, useRef, lazy, Suspense } from "react"
-import { useClickOutside } from "components/utils/Utils"
-import ModalContainer from "components/generic/ModalContainer/ModalContainer"
+} from "@/components/generic/ReusableTable/TableUtils"
+import { useState, useRef } from "react"
+import { useClickOutside } from "@/components/utils/Utils"
+import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
+import AdminBookingCreationPopUp from "./AdminBookingCreationPopUp"
 
+/**
+ * The format of the columns in the admin booking view.
+ */
 export type BookingMemberColumnFormat = {
   /**
    * The user id, used for adding handlers for each individual table row.
@@ -18,8 +22,10 @@ export type BookingMemberColumnFormat = {
   Date?: string
   Name?: string
   Number?: string
+  Emergency?: string
   Email?: string
   "Dietary Requirement"?: string
+  Membership?: string
 }
 
 interface IAdminBookingView {
@@ -65,21 +71,19 @@ interface IAdminBookingView {
   isUpdating?: boolean
 }
 
+/**
+ * Should be updated with an "empty" default value so the table displays
+ * the headers even if the list of data is empty
+ */
 const defaultData = {
   [TABLE_ROW_IDENTIFIER_KEY]: "",
   Date: "",
   Name: "",
   Number: "",
   Email: "",
-  "Dietary Requirement": ""
+  "Dietary Requirement": "",
+  Membership: ""
 }
-
-const AsyncWrappedAdminBookingCreationPopup = lazy(
-  () =>
-    import(
-      "components/composite/Admin/AdminBookingView/WrappedAdminBookingCreationPopUp"
-    )
-)
 
 /**
  * @deprecated not for direct use on any pages, use `WrappedAdminBookingView` instead
@@ -110,7 +114,7 @@ export const AdminBookingView = ({
         className={`flex w-full flex-col ${isUpdating ? "brightness-75" : "brightness-100"}`}
       >
         <span className="my-4 flex w-full flex-col items-center justify-center sm:flex-row">
-          <h2 className="text-dark-blue-100 ">Bookings</h2>
+          <h2 className="text-dark-blue-100 italic">Bookings</h2>
           <div className="sm:ml-auto">
             <Button
               variant="default-sm"
@@ -163,11 +167,9 @@ export const AdminBookingView = ({
         />
       </div>
       <ModalContainer isOpen={openAddBookingPopup}>
-        <Suspense fallback={<>Loading</>}>
-          <AsyncWrappedAdminBookingCreationPopup
-            handleClose={() => setOpenAddBookingPopup(false)}
-          />
-        </Suspense>
+        <AdminBookingCreationPopUp
+          handleClose={() => setOpenAddBookingPopup(false)}
+        />
       </ModalContainer>
     </>
   )

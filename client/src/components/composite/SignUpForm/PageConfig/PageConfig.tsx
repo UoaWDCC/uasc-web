@@ -1,4 +1,4 @@
-import { PageProps } from "components/generic/PaginatedForm/PaginatedForm"
+import { PageProps } from "@/components/generic/PaginatedForm/PaginatedForm"
 import {
   PersonalSectionFirst,
   PersonalSectionSecond
@@ -26,7 +26,7 @@ import {
   PaymentInformationSection,
   PaymentSection
 } from "../Sections/PaymentSection"
-import TestIcon from "assets/icons/snowboarder.svg?react"
+import TestIcon from "@/assets/icons/snowboarder.svg"
 import AccountSetupSection from "../Sections/AccountSetupSection"
 
 export const PAGINATED_FORM_PAGES = (

@@ -1,13 +1,13 @@
-import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
+import { useAvailableBookingsQuery } from "@/services/Booking/BookingQueries"
 import AdminAvailabilityView from "./AdminAvailabilityView"
 import {
   useMakeDatesAvailableMutation,
   useMakeDatesUnavailableMutation
-} from "services/Admin/AdminMutations"
+} from "@/services/Admin/AdminMutations"
 import { useContext } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
 import { Timestamp } from "firebase/firestore"
-import { DateUtils } from "components/utils/DateUtils"
+import { DateUtils } from "@/components/utils/DateUtils"
 
 /**
  * This must be wrapped in a `DateSelectionProvider`

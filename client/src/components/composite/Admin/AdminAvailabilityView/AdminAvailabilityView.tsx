@@ -1,13 +1,13 @@
-import Calendar from "components/generic/Calendar/Calendar"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import { BookingAvailability } from "models/Booking"
+import Calendar from "@/components/generic/Calendar/Calendar"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import { BookingAvailability } from "@/models/Booking"
 import { useContext } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
-import Table from "components/generic/ReusableTable/Table"
+import Table from "@/components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
-import TextInput from "components/generic/TextInputComponent/TextInput"
-import { DEFAULT_BOOKING_AVAILABILITY } from "utils/Constants"
-import { DateUtils } from "components/utils/DateUtils"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
+import { DEFAULT_BOOKING_AVAILABILITY } from "@/utils/Constants"
+import { DateUtils } from "@/components/utils/DateUtils"
 /**
  * Reasonable amount of items to display on table
  */

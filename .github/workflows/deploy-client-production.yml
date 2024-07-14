@@ -13,6 +13,8 @@ env:
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{secrets.PROD_MEASUREMENT_ID}}
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{secrets.PROD_STRIPE_PK}}
   DEPLOYMENT_BASE_PATH: ${{secrets.GH_PAGES_BASE_PATH}}
+  NEXT_PUBLIC_SANITY_PROJECT_ID: ${{secrets.PROD_SANITY_PROJECT_ID}}
+  NEXT_PUBLIC_SANITY_DATASET: production
   NEXT_CONFIG_ENV: production
 
 jobs:
@@ -26,9 +28,9 @@ jobs:
       - name: Install volta
         uses: volta-cli/action@v4
 
-      - run: yarn workspaces focus uasc-next && yarn workspace uasc-next build
+      - run: yarn workspaces focus client && yarn workspace client build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: uasc-next/out # The folder the action should deploy.
+          folder: client/out # The folder the action should deploy.

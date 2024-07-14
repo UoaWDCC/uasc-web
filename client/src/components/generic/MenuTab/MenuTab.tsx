@@ -1,6 +1,7 @@
 import { useState } from "react"
-import DownArrow from "assets/icons/downarrow.svg?react"
+import DownArrow from "@/assets/icons/downarrow.svg"
 import MenuList from "../MenuList/MenuList"
+
 interface IMenuTabProps {
   displayText: string
 }

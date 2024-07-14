@@ -1,7 +1,7 @@
-import { PaymentForm } from "components/generic/PaymentComponent/PaymentForm"
+import { PaymentForm } from "@/components/generic/PaymentComponent/PaymentForm"
 import { useContext } from "react"
-import { Navigate } from "react-router-dom"
 import { BookingContext } from "../BookingContext"
+import { useRouter } from "next/navigation"
 
 interface IBookingPayment {
   clientSecret?: string
@@ -9,7 +9,12 @@ interface IBookingPayment {
 
 const BookingPayment = ({ clientSecret }: IBookingPayment) => {
   const { message } = useContext(BookingContext)
-  if (!clientSecret) return <Navigate to="/bookings" />
+  const router = useRouter()
+  if (!clientSecret) {
+    router.push("/bookings")
+    return null
+  }
+
   return (
     <>
       {message && (

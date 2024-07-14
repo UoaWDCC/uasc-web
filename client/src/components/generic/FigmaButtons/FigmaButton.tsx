@@ -1,5 +1,5 @@
-import RightArrowIcon from "assets/icons/rightarrow.svg?react"
-import LeftArrowIcon from "assets/icons/leftarrow.svg?react"
+import RightArrowIcon from "@/assets/icons/rightarrow.svg"
+import LeftArrowIcon from "@/assets/icons/leftarrow.svg"
 
 type buttonVariants =
   | "default"

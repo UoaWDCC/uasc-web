@@ -1,10 +1,11 @@
-import { Link, NavLink, useLocation } from "react-router-dom"
 import WrappedMenuTab from "./utils/WrappedMenuTab"
 import { WrappedTab } from "./utils/WrappedTab"
-import UASCLogo from "assets/logos/UASC-LOGO-White.svg?react"
-import HamburgerIcon from "assets/icons/hamburger.svg?react"
+import UASCLogo from "@/assets/logos/UASC-LOGO-White.svg"
+import HamburgerIcon from "@/assets/icons/hamburger.svg"
 import LoginIndicator from "./utils/LoginIndicator"
 import { useEffect, useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export interface INavbarProps {
   signInHandler: () => void
@@ -15,9 +16,9 @@ export interface INavbarProps {
 
 const Logo = () => {
   return (
-    <Link to="/">
+    <Link href="/">
       <div className="h-[39px] w-[36px]">
-        <UASCLogo className=" fill-light-blue-100" />
+        <UASCLogo className="fill-light-blue-100" />
       </div>
     </Link>
   )
@@ -26,15 +27,9 @@ const Logo = () => {
 const AboutMenuItemsFull = () => {
   return (
     <>
-      <NavLink className={({ isActive }) => navStyle(isActive)} to="/faq">
-        FAQ
-      </NavLink>
-      <NavLink className={({ isActive }) => navStyle(isActive)} to="/policy">
-        Policy
-      </NavLink>
-      <NavLink className={({ isActive }) => navStyle(isActive)} to="/contact">
-        Contact
-      </NavLink>
+      <Link href="/faq">FAQ</Link>
+      <Link href="/policy">Policy</Link>
+      <Link href="/contact">Contact</Link>
     </>
   )
 }
@@ -50,23 +45,22 @@ const AboutMenuItemsMobile = () => {
   )
 }
 
-const navStyle = (active: boolean) => (active ? "text-light-blue-100" : "")
-
 const Navbar = ({
   signInHandler,
   signOutHandler,
   isLoggedIn,
   isAdmin
 }: INavbarProps) => {
-  const location = useLocation()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const pathname = usePathname()
 
   useEffect(() => {
     /**
      * "Close navbar on route change"
      */
     setIsOpen(false)
-  }, [location])
+  }, [pathname])
 
   const _signOutHandler = () => {
     signOutHandler()
@@ -77,7 +71,7 @@ const Navbar = ({
     setIsOpen(false)
   }
   return (
-    <div className="bg-gray-1 navbar-shadow fixed z-[999] flex w-screen px-8 pt-3 md:px-4">
+    <div className="bg-gray-1 navbar-shadow fixed top-0 z-[999] flex w-screen px-8 pt-3 md:px-4">
       <div className="flex w-full">
         <Logo />
         <div
