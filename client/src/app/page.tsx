@@ -1,16 +1,22 @@
 import AppDataService, { Prices } from "@/services/AppData/AppDataService"
 import HomeComponent from "./HomeComponent"
+import { sanityQuery } from "../../sanity/lib/utils"
+import { HOME_PAGE_GROQ_QUERY, HomePage } from "@/models/sanity/HomePage/Utils"
 
 const Home = async () => {
-  let data: Prices[]
+  let pricingData: Prices[]
   try {
-    data = await AppDataService.getMembershipPricingDetails()
+    pricingData = await AppDataService.getMembershipPricingDetails()
   } catch (e) {
-    data = []
+    pricingData = []
   }
+
+  const [content] = await sanityQuery<HomePage[]>(HOME_PAGE_GROQ_QUERY)
+  console.log(content)
+
   return (
     <>
-      <HomeComponent data={data} />
+      <HomeComponent pricingData={pricingData} content={content} />
     </>
   )
 }

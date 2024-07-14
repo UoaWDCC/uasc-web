@@ -4,7 +4,14 @@ import Facebook from "@/assets/icons/FacebookBlue.svg"
 import Instagram from "@/assets/icons/InstagramBlue.svg"
 import Link from "next/link"
 
-const LandingSection = () => (
+interface ILandingSection {
+  headline?: string
+}
+
+const DEFAULT_HEADLINE =
+  "The largest sports club on campus, and the cheapest membership on Mt Ruapehu!"
+
+const LandingSection = ({ headline = DEFAULT_HEADLINE }: ILandingSection) => (
   <section>
     <div
       className="bg-home-ski-image relative flex
@@ -13,15 +20,14 @@ const LandingSection = () => (
          overflow-hidden bg-cover bg-top bg-no-repeat"
     >
       <div className="bg-gray-1 pointer-events-none absolute -z-20 h-screen opacity-90" />
-      <div className="z-10 mx-6 flex flex-col gap-10 text-center lg:gap-20">
+      <div className="z-10 mx-6 flex flex-col gap-10 text-center lg:gap-16">
         <div className="flex w-full">
           <UASCHeader className=" pointer-events-none w-full" />
         </div>
 
         <div className="flex items-center gap-6">
-          <p className="text-dark-blue-100 font-small tracking-tighter md:text-3xl">
-            The largest sports club on campus, and <br /> the cheapest
-            membership on Mt Ruapehu!
+          <p className="text-dark-blue-100 font-small max-w-[520px] tracking-tighter md:text-3xl">
+            {headline}
           </p>
 
           <span>
