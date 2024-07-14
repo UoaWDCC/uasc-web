@@ -12,7 +12,6 @@ env:
   NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.PROD_BACKEND_BASE_URL}}
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{secrets.PROD_MEASUREMENT_ID}}
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{secrets.PROD_STRIPE_PK}}
-  DEPLOYMENT_BASE_PATH: ${{secrets.GH_PAGES_BASE_PATH}}
   NEXT_PUBLIC_SANITY_PROJECT_ID: ${{secrets.PROD_SANITY_PROJECT_ID}}
   NEXT_PUBLIC_SANITY_DATASET: production
   NEXT_CONFIG_ENV: production
@@ -30,7 +29,10 @@ jobs:
 
       - run: yarn workspaces focus client && yarn workspace client build
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          folder: client/out # The folder the action should deploy.
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD }}"
+          channelId: live
+          projectId: uasc-prod
+          entryPoint: client
