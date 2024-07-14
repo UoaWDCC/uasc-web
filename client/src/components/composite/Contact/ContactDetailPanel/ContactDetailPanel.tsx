@@ -8,7 +8,7 @@ export interface IContactDetailPanel {
 
 const ContactDetailPanel = ({ items }: IContactDetailPanel) => {
   return (
-    <div className="flex w-full flex-col gap-2 rounded-md bg-white p-4">
+    <div className="flex w-full flex-col gap-2 rounded-md border border-black bg-white p-4">
       {items.map((item) => {
         return (
           <span key={item.email}>
