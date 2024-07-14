@@ -48,6 +48,12 @@ export const Footer = () => {
         <Link href="/about">
           <h5 className="uppercase">about</h5>
         </Link>
+
+        <HorizontalDivider />
+
+        <Link href="/contact">
+          <h5 className="uppercase">contact</h5>
+        </Link>
       </div>
 
       <div className="flex items-center justify-center gap-6 px-4 lg:ml-auto">

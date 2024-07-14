@@ -43,7 +43,8 @@ export default defineConfig({
             ),
 
             // Regular document types
-            S.documentTypeListItem("about-item").title("About Item")
+            S.documentTypeListItem("about-item").title("About Item"),
+            S.documentTypeListItem("contact-detail").title("Contact Detail")
           ])
     }),
     // Vision is a tool that lets you query your content with GROQ in the studio
