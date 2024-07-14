@@ -10,7 +10,7 @@ import { Prices } from "@/services/AppData/AppDataService"
 
 export type HomeProps = {
   pricingData: Prices[]
-  content: HomePage
+  content?: HomePage
 }
 
 /**
@@ -22,19 +22,19 @@ const HomeComponent = ({ pricingData, content }: HomeProps) => {
       <div>
         <LandingSection />
         <AboutSection
-          title={content.introduction.title}
-          subheading={content.introduction.subheading}
-          description={content.introduction.description}
+          title={content?.introduction.title}
+          subheading={content?.introduction.subheading}
+          description={content?.introduction.description}
         />
         <BenefitSection
           benefits={
-            content.benefitCards?.map((benefit) => {
+            content?.benefitCards?.map((benefit) => {
               return { text: benefit.description, image: benefit.imageUrl }
             }) || benefits
           }
         />
         <PricingSection
-          note={content.pricing?.discount}
+          note={content?.pricing?.discount}
           pricings={pricingData}
           bannerContent={pricingBannerContent}
         />
