@@ -9,5 +9,5 @@ const meta: Meta<typeof HomeComponent> = {
 export default meta
 
 export const DefaultHomePage = () => {
-  return <HomeComponent data={[]} />
+  return <HomeComponent pricingData={[]} />
 }

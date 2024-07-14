@@ -1,4 +1,20 @@
-const AboutSection = () => (
+interface IAboutSection {
+  title?: string
+  description?: string
+  subheading?: string
+}
+
+const DEFAULT_TITLE = "Get ready for the best year of your life!" as const
+const DEFAULT_SUBHEADING =
+  "The University of Auckland Snowsports Club is back again for another banging year, and it's time to lock in your membership for 2024!" as const
+const DEFAULT_DESCRIPTION =
+  "Whether you're new to the club or an old fart coming back for more, we can't wait to see your pretty face for a year of sending and shredding on and off the slopes!" as const
+
+const AboutSection = ({
+  title = DEFAULT_TITLE,
+  subheading = DEFAULT_SUBHEADING,
+  description = DEFAULT_DESCRIPTION
+}: IAboutSection) => (
   <section id="about">
     <div
       className="bg-home-about-image relative
@@ -10,18 +26,10 @@ const AboutSection = () => (
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="bg-gray-1 pointer-events-none absolute -z-20 h-screen w-full opacity-20" />
         <div className="text-dark-blue-100 flex flex-col gap-6 text-center lg:max-w-[450px] lg:text-left">
-          <h2 className="italic">Get ready for the best year of your life!</h2>
+          <h2 className="italic">{title}</h2>
           <div>
-            <h4>
-              The University of Auckland Snowsports Club is back again for
-              another banging year, and it's time to lock in your membership for
-              2024!
-            </h4>
-            <p className="mt-2">
-              Whether you're new to the club or an old fart coming back for
-              more, we can't wait to see your pretty face for a year of sending
-              and shredding on and off the slopes!
-            </p>
+            <h4>{subheading}</h4>
+            <p className="mt-2">{description}</p>
           </div>
         </div>
         <div className="flex justify-center lg:justify-end">

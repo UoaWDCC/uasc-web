@@ -11,7 +11,7 @@ export type SvgImport = FC<SVGProps<SVGElement>>
  */
 export type Benefit = {
   text: string
-  icon?: SvgImport
+  image?: string
 }
 
 /**
