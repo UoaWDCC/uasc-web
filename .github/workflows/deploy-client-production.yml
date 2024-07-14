@@ -30,7 +30,10 @@ jobs:
 
       - run: yarn workspaces focus client && yarn workspace client build
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          folder: client/out # The folder the action should deploy.
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD }}"
+          channelId: live
+          projectId: uasc-prod
+          entryPoint: client
