@@ -11,14 +11,13 @@ const ContactDetailPanel = ({ items }: IContactDetailPanel) => {
     <div className="flex w-full flex-col gap-2 rounded-md bg-white p-4">
       {items.map((item) => {
         return (
-          <>
+          <span key={item.email}>
             <ContactDetail
-              key={item.email}
               title={item.title}
               description={item.description}
               email={item.email}
             />
-          </>
+          </span>
         )
       })}
     </div>
