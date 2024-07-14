@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom"
-import { CHECK_IN_TIME, CHECK_OUT_TIME } from "utils/Constants"
+"use client"
+
+import { CHECK_IN_TIME, CHECK_OUT_TIME } from "@/utils/Constants"
+import Link from "next/link"
 
 interface IBookingInfoProps {
   /**
@@ -14,14 +16,14 @@ interface IBookingInfoProps {
 
 type props = IBookingInfoProps
 
-const Divider = () => <span className="bg-dark-blue-100 my-8 h-[1px] w-full" />
+const Divider = () => <span className="bg-dark-blue-100 my-3 h-[1px] w-full" />
 
 const BookingInfoComponent = ({
   pricePerNight,
   priceSingleFridayOrSaturday
 }: props) => {
   return (
-    <div className="border-gray-3 flex h-full w-full flex-col justify-center rounded border bg-white px-8 py-8 pb-8">
+    <div className="border-gray-3 flex h-full w-full flex-col justify-center rounded border bg-white px-6 py-12 pb-8">
       <div id="top" className="text-dark-blue-100 flex flex-col gap-2">
         <h3 className="flex gap-2">
           ${pricePerNight}
@@ -65,7 +67,7 @@ const BookingInfoComponent = ({
         <h4 className="text-red font-bold italic">
           You must have a booking to stay at the lodge!
         </h4>
-        <Link to="/about" className="text-light-blue-100 font-bold italic">
+        <Link href="/about" className="text-light-blue-100 font-bold italic">
           Learn about the lodge
         </Link>
       </div>

@@ -1,9 +1,9 @@
-import MenuList from "components/generic/MenuList/MenuList"
-import ProfileIcon from "assets/icons/profile.svg?react"
-import { NavLink } from "react-router-dom"
+import MenuList from "@/components/generic/MenuList/MenuList"
+import ProfileIcon from "@/assets/icons/profile.svg"
 import { INavbarProps } from "../Navbar"
 import { useRef, useState } from "react"
-import { useClickOutside } from "components/utils/Utils"
+import { useClickOutside } from "@/components/utils/Utils"
+import Link from "next/link"
 
 const ProfileButton = ({
   signOutHandler,
@@ -29,29 +29,29 @@ const ProfileButton = ({
         <span className="w-min-[150%] absolute right-0 top-[calc(100%+13px)]">
           <MenuList anchor="right">
             {isAdmin && (
-              <NavLink
+              <Link
                 data-testid="admin-link"
                 className="text-nowrap"
-                to="/admin"
+                href="/admin"
               >
                 Admin
-              </NavLink>
+              </Link>
             )}
-            <NavLink
+            <Link
               data-testid="profile-link"
               className="text-nowrap"
-              to="/profile"
+              href="/profile"
             >
               Profile
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               data-testid="sign-out-link"
               className="text-nowrap"
-              to="/login"
+              href="/login"
               onClick={signOutHandler}
             >
               Log Out
-            </NavLink>
+            </Link>
           </MenuList>
         </span>
       )}

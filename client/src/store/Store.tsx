@@ -1,5 +1,5 @@
 import { User } from "firebase/auth"
-import { UserClaims } from "models/User"
+import { UserClaims } from "@/models/User"
 import {
   defaultRegistry,
   createStore,

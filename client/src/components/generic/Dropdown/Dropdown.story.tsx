@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>
 
 type DropdownProps = React.SelectHTMLAttributes<HTMLSelectElement>
 
-export const defaultDropdown: Story = (args: DropdownProps) => {
+export const DefaultDropdown: Story = (args: DropdownProps) => {
   const [selectedValue, setSelectedValue] = React.useState<string>("")
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -37,6 +37,6 @@ export const defaultDropdown: Story = (args: DropdownProps) => {
   )
 }
 
-defaultDropdown.args = {
+DefaultDropdown.args = {
   value: "defaultOption"
 }

@@ -32,6 +32,9 @@ describe("AdminUserCreationModal", () => {
         target: { value: "Vegan" }
       }
     )
+    fireEvent.change(getByTestId(AdminUserCreationFormKeys.EMERGENCY_CONTACT), {
+      target: { value: "John 69" }
+    })
     fireEvent.change(getByTestId(AdminUserCreationFormKeys.PHONE_NUMBER), {
       target: { value: "1234567890" }
     })
@@ -52,6 +55,7 @@ describe("AdminUserCreationModal", () => {
           date_of_birth: Timestamp.fromMillis(0),
           first_name: "John",
           last_name: "Doe",
+          emergency_contact: "John 69",
           dietary_requirements: "Vegan",
           phone_number: 1234567890
         }

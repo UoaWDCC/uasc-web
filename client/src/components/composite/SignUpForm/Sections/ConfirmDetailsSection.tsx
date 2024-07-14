@@ -1,5 +1,5 @@
-import { useSignUpFormData } from "store/SignUpForm"
-import ConfirmDetailsForm from "components/generic/ConfirmDetailsForm/ConfirmDetailsForm"
+import { useSignUpFormData } from "@/store/SignUpForm"
+import ConfirmDetailsForm from "@/components/generic/ConfirmDetailsForm/ConfirmDetailsForm"
 
 const MyText = ({ text = "N/A" }: { text?: string }) => {
   return <p className="mb-5">{text}</p>

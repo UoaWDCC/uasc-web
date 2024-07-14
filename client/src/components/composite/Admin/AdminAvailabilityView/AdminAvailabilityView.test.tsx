@@ -3,7 +3,7 @@ import {
   CondensedBookingInfoColumn,
   formatBookingSlotsForAvailabilityView
 } from "./AdminAvailabilityView"
-import { MS_IN_SECOND } from "utils/Constants"
+import { MS_IN_SECOND } from "@/utils/Constants"
 
 describe("tableData", () => {
   it("should return the correct data when startDate and endDate are provided", () => {

@@ -1,4 +1,4 @@
-import Button from "components/generic/FigmaButtons/FigmaButton"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { INavbarProps } from "../Navbar"
 import ProfileButton from "./ProfileButton"
 import { WrappedTab } from "./WrappedTab"

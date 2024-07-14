@@ -1,2 +1,2 @@
-export default "SvgrURL"
+export default "SvgrURL" as const
 export const ReactComponent = "div"

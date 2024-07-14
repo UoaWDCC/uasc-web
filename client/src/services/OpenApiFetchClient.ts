@@ -1,5 +1,5 @@
 import createClient, { Middleware } from "openapi-fetch"
-import type { paths } from "models/__generated__/schema"
+import type { paths } from "@/models/__generated__/schema"
 
 let accessToken: string | undefined
 
@@ -17,7 +17,7 @@ const authMiddleware: Middleware = {
 }
 
 const fetchClient = createClient<paths>({
-  baseUrl: import.meta.env.VITE_BACKEND_BASE_URL
+  baseUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 })
 
 fetchClient.use(authMiddleware)
