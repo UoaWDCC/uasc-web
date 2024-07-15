@@ -624,4 +624,51 @@ describe("AdminController endpoint tests", () => {
       expect(response.status).toEqual(401)
     })
   })
+  describe("/admin/users/:uid", () => {
+    afterEach(async () => {
+      await cleanFirestore()
+      await cleanAuth()
+    })
+
+    it("Should get user data for admin", async () => {
+      await createUsers()
+      const response = await request
+        .get(`/admin/users/${MEMBER_USER_UID}`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+
+      expect(response.status).toEqual(200)
+      expect(response.body.data.uid).toEqual(MEMBER_USER_UID)
+    })
+
+    it("Should return 404 if user not found", async () => {
+      const response = await request
+        .get(`/admin/users/someRandomUser`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+
+      expect(response.status).toEqual(404)
+      expect(response.body.error).toEqual("User not found")
+    })
+
+    it("Should not allow members to get individual user data", async () => {
+      await createUsers()
+      const response = await request
+        .get(`/admin/users/${MEMBER_USER_UID}`)
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+
+      expect(response.status).toEqual(401)
+    })
+
+    it("Should not allow guests to get individual user data", async () => {
+      await createUsers()
+      const response = await request
+        .get(`/admin/users/${MEMBER_USER_UID}`)
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send({})
+
+      expect(response.status).toEqual(401)
+    })
+  })
 })
