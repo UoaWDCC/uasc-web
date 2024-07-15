@@ -6,6 +6,6 @@ module.exports = {
   modulePaths: ["<rootDir>"],
   moduleDirectories: ["node_modules", "src"],
   setupFiles: ["dotenv/config"],
-  testMatch: ["**/*.test.ts"],
-  testPathIgnorePatterns: ["<rootDir>/src/middleware"]
+  testMatch: ["<rootDir>/src/middleware/**/*.test.ts"],
+  setupFilesAfterEnv: ["<rootDir>/src/middleware/routes.setup.ts"]
 }
