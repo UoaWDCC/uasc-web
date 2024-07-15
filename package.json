@@ -54,9 +54,8 @@
     "dev-client": "yarn workspace client dev",
     "dev-server": "yarn workspace server start",
     "storybook": "yarn workspace client storybook",
-    "jest-with-setup": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src/middleware\"",
-    "test-endpoints": "yarn jest-with-setup --config=server/jest.config.endpoints.ts",
-    "test-server": "yarn jest-with-setup --config=server/jest.config.server.ts",
+    "test-endpoints": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src/middleware --config=server/jest.config.endpoints.ts\"",
+    "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src --config=server/jest.config.server.ts\"",
     "test-client": "yarn workspace client test",
     "test": "yarn test-client && yarn test-server && yarn test-endpoints",
     "firebase-test": "firebase emulators:exec --only firestore,auth --project staging"
