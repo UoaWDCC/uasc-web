@@ -832,6 +832,21 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"GetUserResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/CombinedUserData"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UserAdditionalInfo": {
 				"properties": {
 					"date_of_birth": {
@@ -1663,6 +1678,40 @@
 						"schema": {
 							"format": "double",
 							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/admin/users/{uid}": {
+			"get": {
+				"operationId": "GetUser",
+				"responses": {
+					"200": {
+						"description": "User found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetUserResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "uid",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]
