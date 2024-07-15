@@ -41,7 +41,10 @@ const fallbackData: Prices[] = [
 const AppDataService = {
   getBankPaymentDetails: async function () {
     // TODO: Dynamically fetch and make sure there is appropriate fallback
-    const data = { email: "uasc@gmail.com", bankAccount: "unknown" }
+    const data = {
+      email: "club.admin@uasc.co.nz",
+      bankAccount: "06-0103-0176295-00"
+    }
     return data
   },
   getMembershipPricingDetails: async function (): Promise<Prices[]> {
