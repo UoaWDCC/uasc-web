@@ -1,0 +1,15 @@
+name: Deploy the Stable Build of Client for UASC
+
+on:
+  workflow_dispatch:
+  # schedules this to run 30 minutes
+  schedule:
+    - cron: "30 * * * *"
+
+jobs:
+  Deploy-Stable:
+    runs-on: ubuntu-latest
+    environment: Client Production
+
+    steps:
+      - run: gh workflow run 'Deploy Production Build of Client for UASC' --ref stable

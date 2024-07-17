@@ -1,10 +1,6 @@
 name: Deploy Production Build of Client for UASC
 
-on:
-  workflow_dispatch:
-  # schedules this to run every day, at 00:00 UTC
-  schedule:
-    - cron: "0 0 * * *"
+on: [workflow_dispatch]
 
 env:
   NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
