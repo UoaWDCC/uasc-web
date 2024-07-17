@@ -15,6 +15,7 @@ import {
   customerMock,
   productMock
 } from "../test-config/mocks/Stripe.mock"
+import { cleanAuth, cleanFirestore } from "test-config/TestUtils"
 /**
  * This needs to be updated as we add more stripe functions...
  */
@@ -98,9 +99,12 @@ beforeEach(async () => {
   adminToken = await createUserWithClaim(ADMIN_USER_UID, "admin")
   memberToken = await createUserWithClaim(MEMBER_USER_UID, "member")
   guestToken = await createUserWithClaim(GUEST_USER_UID)
+  await createUsers()
 })
 afterEach(async () => {
   await deleteUsersFromAuth(usersToCreate)
+  await cleanFirestore()
+  await cleanAuth()
 })
 afterAll(async () => {
   _app.close()
@@ -108,4 +112,4 @@ afterAll(async () => {
 
 const request = supertest(_app)
 
-export { request, adminToken, memberToken, guestToken, createUsers }
+export { request, adminToken, memberToken, guestToken }

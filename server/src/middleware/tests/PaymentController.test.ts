@@ -1,22 +1,8 @@
-import { cleanFirestore } from "test-config/TestUtils"
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
-import {
-  request,
-  createUsers,
-  adminToken,
-  memberToken,
-  guestToken
-} from "../routes.setup"
-import { GUEST_USER_UID, createUserData } from "../routes.mock"
+import { request, adminToken, memberToken, guestToken } from "../routes.setup"
 
 describe("PaymentController endpoint tests", () => {
   describe("/payments", () => {
-    beforeEach(async () => {
-      await createUsers()
-    })
-    afterEach(async () => {
-      await cleanFirestore()
-    })
     describe("/booking", () => {
       // rest of functionality is handled in other unit tests
       it("should only let members call the endpoint", async () => {
@@ -47,7 +33,6 @@ describe("PaymentController endpoint tests", () => {
       })
 
       it("should let guests/admins to try create sessions", async () => {
-        createUserData(GUEST_USER_UID)
         let res = await request
           .post("/payment/membership")
           .set("Authorization", `Bearer ${guestToken}`)

@@ -1,23 +1,9 @@
 import * as admin from "firebase-admin"
 import UserDataService from "data-layer/services/UserDataService"
-import { cleanFirestore } from "test-config/TestUtils"
-import {
-  ADMIN_USER_UID,
-  GUEST_USER_UID,
-  MEMBER_USER_UID,
-  createUserData
-} from "../routes.mock"
+import { ADMIN_USER_UID, GUEST_USER_UID, MEMBER_USER_UID } from "../routes.mock"
 import { request, adminToken, memberToken } from "../routes.setup"
 
 describe("UserController endpoint tests", () => {
-  beforeEach(async () => {
-    await createUserData(ADMIN_USER_UID)
-    await createUserData(MEMBER_USER_UID)
-    await createUserData(GUEST_USER_UID)
-  })
-  afterEach(async () => {
-    await cleanFirestore()
-  })
   describe("/users/edit-self", () => {
     it("should edit the users information", async () => {
       const res = await request

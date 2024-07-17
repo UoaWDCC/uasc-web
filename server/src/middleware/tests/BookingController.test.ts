@@ -1,32 +1,12 @@
-import {
-  request,
-  memberToken,
-  guestToken,
-  createUsers,
-  adminToken
-} from "../routes.setup"
-import {
-  ADMIN_USER_UID,
-  GUEST_USER_UID,
-  MEMBER_USER_UID,
-  createUserData
-} from "../routes.mock"
+import { request, memberToken, guestToken, adminToken } from "../routes.setup"
+import { GUEST_USER_UID, MEMBER_USER_UID } from "../routes.mock"
 import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import BookingDataService from "data-layer/services/BookingDataService"
-import { cleanFirestore } from "test-config/TestUtils"
 import { Timestamp } from "firebase-admin/firestore"
 
 describe("BookingController endpoint tests", () => {
   describe("/bookings", () => {
-    beforeEach(async () => {
-      await createUserData(ADMIN_USER_UID)
-      await createUserData(MEMBER_USER_UID)
-      await createUserData(GUEST_USER_UID)
-    })
-    afterEach(async () => {
-      await cleanFirestore()
-    })
     it("should return all available dates between input dates", async () => {
       const bookingDataService = new BookingDataService()
       const bookingSlotService = new BookingSlotService()
@@ -283,14 +263,6 @@ describe("BookingController endpoint tests", () => {
     })
   })
   describe("/bookings/fetch-users", () => {
-    beforeEach(async () => {
-      await createUsers()
-    })
-
-    afterEach(async () => {
-      await cleanFirestore()
-    })
-
     it("should return users with bookings (and their corresponding bookingIds) within the date range", async () => {
       const bookingSlotService = new BookingSlotService()
       const bookingDataService = new BookingDataService()
@@ -410,14 +382,6 @@ describe("BookingController endpoint tests", () => {
   })
 
   describe("/bookings/create-bookings", () => {
-    beforeEach(async () => {
-      await createUsers()
-    })
-
-    afterEach(async () => {
-      await cleanFirestore()
-    })
-
     it("should create bookings for userIds within the date range", async () => {
       const bookingSlotService = new BookingSlotService()
 
