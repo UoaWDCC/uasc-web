@@ -308,6 +308,7 @@ describe("AdminController endpoint tests", () => {
       )
       expect(dates).toHaveLength(1)
       expect(dates[0].max_bookings).toBeGreaterThan(0)
+      expect(dates[0].description).toEqual("my test")
       expect(removeUnderscoresFromTimestamp(dates[0].date)).toEqual(startDate)
     })
   })
@@ -430,9 +431,11 @@ describe("AdminController endpoint tests", () => {
 
       expect(dates).toHaveLength(2)
       expect(dates[0].max_bookings).toBeLessThanOrEqual(0)
+      expect(dates[0].description).toEqual("my test")
       expect(removeUnderscoresFromTimestamp(dates[0].date)).toEqual(startDate)
 
       expect(dates[1].max_bookings).toBeLessThanOrEqual(0)
+      expect(dates[1].description).toEqual("skipped a date")
       expect(removeUnderscoresFromTimestamp(dates[1].date)).toEqual(leapDate)
     })
   })
