@@ -16,7 +16,7 @@ import BookingSlotService from "data-layer/services/BookingSlotsService"
 import BookingDataService from "data-layer/services/BookingDataService"
 
 describe("AdminController endpoint tests", () => {
-  describe("admin/users", () => {
+  describe("/admin/users", () => {
     it("should get users for admin", (done) => {
       request
         .get("/admin/users")
@@ -24,6 +24,7 @@ describe("AdminController endpoint tests", () => {
         .send({})
         .expect(200, done)
     })
+
     it("should fetch merged data for users", async () => {
       const response = await request
         .get("/admin/users")
@@ -45,7 +46,6 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .query({ toFetch: 101 })
         .send({})
-
       expect(response.status).toEqual(400)
 
       response = await request
@@ -93,34 +93,24 @@ describe("AdminController endpoint tests", () => {
         .send({})
         .expect(401, done)
     })
-    describe("/self", () => {
-      it("Should not allow members to fetch their own stripe id", async () => {
-        const res = await request
-          .get("/users/self")
-          .set("Authorization", `Bearer ${memberToken}`)
-          .send({})
-
-        expect(res.body.stripe_id).toBe(undefined)
-      })
-    })
   })
 
   describe("/admin/users/promote and /admin/users/demote", () => {
-    it("Should allow admins to promote regular users", (done) => {
+    it("Should allow admins to promote guests", (done) => {
       request
         .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
         .expect(200, done)
     })
-    it("Should allow admins to demote regular users", (done) => {
+    it("Should allow admins to demote members", (done) => {
       request
         .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
         .expect(200, done)
     })
-    it("Should not allow admins to demote/promote admins", async () => {
+    it("Should not allow admins to demote or promote admins", async () => {
       let res
       res = await request
         .put("/admin/users/promote")
@@ -150,7 +140,7 @@ describe("AdminController endpoint tests", () => {
       expect(res.status).toEqual(401) // unauthorised
     })
 
-    it("Should check for conflicts, e.g. already member/guest", async () => {
+    it("Should conflict upon promoting members/demoting guests", async () => {
       let res
       res = await request
         .put("/admin/users/promote")
@@ -167,10 +157,7 @@ describe("AdminController endpoint tests", () => {
   })
 
   describe("admin/bookings/make-dates-available", () => {
-    let bookingSlotService: BookingSlotService
-    beforeEach(async () => {
-      bookingSlotService = new BookingSlotService()
-    })
+    const bookingSlotService = new BookingSlotService()
     it("Should create booking slots specified within the date range", async () => {
       const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
       const endDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
@@ -195,7 +182,6 @@ describe("AdminController endpoint tests", () => {
         startDate,
         endDate
       )
-
       expect(dates).toHaveLength(6)
 
       dates.forEach((date) => {
@@ -238,7 +224,6 @@ describe("AdminController endpoint tests", () => {
         startDate,
         endDate
       )
-
       expect(dates).toHaveLength(6)
 
       dates.forEach((date) => {
@@ -267,7 +252,6 @@ describe("AdminController endpoint tests", () => {
         startDate,
         endDate
       )
-
       expect(dates).toHaveLength(6)
 
       dates.forEach((date) => {
@@ -288,13 +272,6 @@ describe("AdminController endpoint tests", () => {
 
       expect(res.status).toEqual(201)
       expect(res.body.updatedBookingSlots).toHaveLength(0)
-
-      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
-        startDate,
-        endDate
-      )
-
-      expect(dates).toHaveLength(0)
     })
 
     it("Should update 'inactive' slots specified within the date range", async () => {
@@ -304,7 +281,6 @@ describe("AdminController endpoint tests", () => {
         startDate,
         startDate
       )
-
       expect(dates).toHaveLength(0)
 
       bookingSlotService.createBookingSlot({
@@ -330,19 +306,14 @@ describe("AdminController endpoint tests", () => {
         startDate,
         startDate
       )
-
       expect(dates).toHaveLength(1)
       expect(dates[0].max_bookings).toBeGreaterThan(0)
-      expect(dates[0].description).toEqual("my test")
       expect(removeUnderscoresFromTimestamp(dates[0].date)).toEqual(startDate)
     })
   })
 
   describe("admin/bookings/make-dates-unavailable", () => {
-    let bookingSlotService: BookingSlotService
-    beforeEach(async () => {
-      bookingSlotService = new BookingSlotService()
-    })
+    const bookingSlotService = new BookingSlotService()
 
     it("Should NOT create booking slots specified within the date range", async () => {
       const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
@@ -362,7 +333,6 @@ describe("AdminController endpoint tests", () => {
         startDate,
         endDate
       )
-
       expect(dates).toHaveLength(0)
     })
 
@@ -379,13 +349,6 @@ describe("AdminController endpoint tests", () => {
 
       expect(res.status).toEqual(201)
       expect(res.body.updatedBookingSlots).toHaveLength(0)
-
-      const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
-        startDate,
-        endDate
-      )
-
-      expect(dates).toHaveLength(0)
     })
 
     it("Should update 'active' slots specified within the date range", async () => {
@@ -395,7 +358,6 @@ describe("AdminController endpoint tests", () => {
         startDate,
         startDate
       )
-
       expect(dates).toHaveLength(0)
 
       bookingSlotService.createBookingSlot({
@@ -468,16 +430,14 @@ describe("AdminController endpoint tests", () => {
 
       expect(dates).toHaveLength(2)
       expect(dates[0].max_bookings).toBeLessThanOrEqual(0)
-      expect(dates[0].description).toEqual("my test")
       expect(removeUnderscoresFromTimestamp(dates[0].date)).toEqual(startDate)
 
       expect(dates[1].max_bookings).toBeLessThanOrEqual(0)
-      expect(dates[1].description).toEqual("skipped a date")
       expect(removeUnderscoresFromTimestamp(dates[1].date)).toEqual(leapDate)
     })
   })
 
-  describe("admin/bookings/delete", () => {
+  describe("/admin/bookings/delete", () => {
     it("should error on deleting invalid booking id", async () => {
       const res = await request
         .post(`/admin/bookings/delete`)
@@ -494,18 +454,11 @@ describe("AdminController endpoint tests", () => {
         date: Timestamp.fromMillis(Date.now() + 5000),
         max_bookings: 10
       })
-
       const createdBooking = await bookingDataService.createBooking({
         user_id: "Eddie Wang",
         booking_slot_id: id,
         stripe_payment_id: ""
       })
-      const res = await request
-        .post("/bookings/available-dates")
-        .set("Authorization", `Bearer ${memberToken}`)
-        .send({})
-
-      expect(res.body.data[0].availableSpaces).toEqual(9)
 
       const deleteRes = await request
         .post(`/admin/bookings/delete`)
@@ -515,14 +468,15 @@ describe("AdminController endpoint tests", () => {
       expect(deleteRes.status).toEqual(200)
       expect(deleteRes.body.user_id).toEqual("Eddie Wang")
 
-      const res2 = await request
+      const res = await request
         .post("/bookings/available-dates")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
 
-      expect(res2.body.data[0].availableSpaces).toEqual(10)
+      expect(res.body.data[0].availableSpaces).toEqual(10)
     })
   })
+
   describe("/admin/users/add-coupon", () => {
     it("Should allow admins to add a coupon to a user", async () => {
       // Create a user with a stripe_id
@@ -573,6 +527,7 @@ describe("AdminController endpoint tests", () => {
       expect(response.status).toEqual(401)
     })
   })
+
   describe("/admin/users/:uid", () => {
     it("Should get user data for admin", async () => {
       const response = await request

@@ -4,6 +4,16 @@ import { ADMIN_USER_UID, GUEST_USER_UID, MEMBER_USER_UID } from "../routes.mock"
 import { request, adminToken, memberToken } from "../routes.setup"
 
 describe("UserController endpoint tests", () => {
+  describe("/users/self", () => {
+    it("Should not allow members to fetch their own stripe id", async () => {
+      const res = await request
+        .get("/users/self")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+
+      expect(res.body.stripe_id).toBe(undefined)
+    })
+  })
   describe("/users/edit-self", () => {
     it("should edit the users information", async () => {
       const res = await request
