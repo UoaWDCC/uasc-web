@@ -2,9 +2,9 @@ name: Deploy the Stable Build of Client for UASC
 
 on:
   workflow_dispatch:
-  # schedules this to run every day, at 00:00 UTC
+  # schedules this to run 30 minutes
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "30 * * * *"
 
 jobs:
   Deploy-Stable:
