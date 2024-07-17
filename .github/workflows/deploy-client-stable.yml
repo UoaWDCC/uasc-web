@@ -9,7 +9,7 @@ on:
 jobs:
   Deploy-Stable:
     runs-on: ubuntu-latest
-    environment: Client Stable
+    environment: Client Production
 
     steps:
       - run: gh workflow run 'Deploy Production Build of Client for UASC' --ref stable
