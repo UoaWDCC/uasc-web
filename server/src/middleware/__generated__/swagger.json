@@ -1830,7 +1830,7 @@
 			}
 		},
 		"/admin/users/demote-all": {
-			"delete": {
+			"patch": {
 				"operationId": "DemoteAllUsers",
 				"responses": {
 					"200": {

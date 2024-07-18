@@ -33,7 +33,6 @@ import {
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Patch,
   Path,
@@ -364,7 +363,7 @@ export class AdminController extends Controller {
   }
 
   @SuccessResponse("200", "Demoted all non-admin users")
-  @Delete("/users/demote-all")
+  @Patch("/users/demote-all")
   public async demoteAllUsers(): Promise<void> {
     const authService = new AuthService()
     let allUsers: UserRecord[] = await authService.getAllUsers()

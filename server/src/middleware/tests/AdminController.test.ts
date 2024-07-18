@@ -164,7 +164,7 @@ describe("AdminController endpoint tests", () => {
 
     it("Should not demote admin users", async () => {
       const res = await request
-        .delete("/admin/users/demote-all")
+        .patch("/admin/users/demote-all")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
       expect(res.status).toEqual(200)
@@ -179,7 +179,7 @@ describe("AdminController endpoint tests", () => {
         await createUserWithClaim(`${i}`, UserAccountTypes.MEMBER)
       }
       const res = await request
-        .delete("/admin/users/demote-all")
+        .patch("/admin/users/demote-all")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 

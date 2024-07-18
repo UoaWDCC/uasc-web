@@ -80,7 +80,7 @@ export interface paths {
     put: operations["DemoteUser"];
   };
   "/admin/users/demote-all": {
-    delete: operations["DemoteAllUsers"];
+    patch: operations["DemoteAllUsers"];
   };
   "/admin/users/add-coupon": {
     post: operations["AddCoupon"];
