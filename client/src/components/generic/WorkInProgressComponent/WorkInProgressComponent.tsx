@@ -1,5 +1,10 @@
+import Lock from "@/assets/icons/lock.svg"
 const WorkInProgressComponent = () => {
-  return <div>Under Construction</div>
+  return (
+    <div>
+      <Lock />
+    </div>
+  )
 }
 
 export default WorkInProgressComponent
