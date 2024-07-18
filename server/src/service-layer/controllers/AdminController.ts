@@ -33,6 +33,7 @@ import {
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Patch,
   Path,
@@ -46,6 +47,7 @@ import {
 import * as console from "console"
 import StripeService from "../../business-layer/services/StripeService"
 import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
+import { UserRecord } from "firebase-admin/auth"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -358,6 +360,26 @@ export class AdminController extends Controller {
     } catch (e) {
       console.error(e)
       this.setStatus(500) // unknown server error?
+    }
+  }
+
+  @SuccessResponse("200", "Demoted all non-admin users")
+  @Delete("/users/demote-all")
+  public async demoteAllUsers(): Promise<void> {
+    const authService = new AuthService()
+    let allUsers: UserRecord[] = await authService.getAllUsers()
+    allUsers = allUsers.filter(
+      (user) => !user.customClaims.admin && user.customClaims.member
+    )
+    const demotePromises = await Promise.all(
+      allUsers.map((user) => {
+        return authService.setCustomUserClaim(user.uid, null)
+      })
+    )
+    if (demotePromises) {
+      this.setStatus(200)
+    } else {
+      this.setStatus(500)
     }
   }
 

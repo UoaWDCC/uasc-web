@@ -4,7 +4,8 @@ import {
   ADMIN_USER_UID,
   GUEST_USER_UID,
   MEMBER_USER_UID,
-  createUserDataWithStripeId
+  createUserDataWithStripeId,
+  createUserWithClaim
 } from "../routes.mock"
 import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
@@ -14,6 +15,8 @@ import {
 } from "data-layer/adapters/DateUtils"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import BookingDataService from "data-layer/services/BookingDataService"
+import AuthService from "business-layer/services/AuthService"
+import { UserRecord } from "firebase-admin/auth"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -153,6 +156,38 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
       expect(res.status).toEqual(409) // conflict
+    })
+  })
+
+  describe("admin/users/demote-all", () => {
+    const authService = new AuthService()
+
+    it("Should not demote admin users", async () => {
+      const res = await request
+        .delete("/admin/users/demote-all")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+      expect(res.status).toEqual(200)
+
+      const { admin } = await authService.getCustomerUserClaim(ADMIN_USER_UID)
+      expect(admin).toEqual(true)
+    })
+    it("Should demote all members", async () => {
+      // Note that this isn't testing on creating over a thousand members
+      // as it would be too slow
+      for (let i = 0; i < 5; i++) {
+        await createUserWithClaim(`${i}`, UserAccountTypes.MEMBER)
+      }
+      const res = await request
+        .delete("/admin/users/demote-all")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+
+      expect(res.status).toEqual(200)
+      const allUsers: UserRecord[] = await authService.getAllUsers()
+      expect(
+        allUsers.some((user) => user.customClaims?.member === true)
+      ).toEqual(false)
     })
   })
 

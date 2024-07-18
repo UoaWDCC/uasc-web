@@ -79,6 +79,9 @@ export interface paths {
   "/admin/users/demote": {
     put: operations["DemoteUser"];
   };
+  "/admin/users/demote-all": {
+    delete: operations["DemoteAllUsers"];
+  };
   "/admin/users/add-coupon": {
     post: operations["AddCoupon"];
   };
@@ -793,6 +796,14 @@ export interface operations {
     };
     responses: {
       /** @description Demoted user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  DemoteAllUsers: {
+    responses: {
+      /** @description Demoted all non-admin users */
       200: {
         content: never;
       };
