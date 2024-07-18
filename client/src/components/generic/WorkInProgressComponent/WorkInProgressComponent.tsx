@@ -9,7 +9,7 @@ const WorkInProgressComponent = ({ pageName }: props) => {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       <Lock className="fill-dark-blue-100" />
-      <h2 className="italic">{pageName} Unavailable</h2>
+      <h2 className="italic">{pageName} Page Unavailable</h2>
       <Link
         href="https://www.facebook.com/UoAsnowsports"
         className="text-light-blue-100 hover:underline"

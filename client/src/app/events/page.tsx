@@ -2,7 +2,7 @@ import WorkInProgressComponent from "@/components/generic/WorkInProgressComponen
 const Events = () => {
   return (
     <div className="fixed flex h-screen w-full items-center justify-center">
-      <WorkInProgressComponent />
+      <WorkInProgressComponent pageName="Events" />
     </div>
   )
 }
