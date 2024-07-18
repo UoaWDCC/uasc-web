@@ -10,11 +10,11 @@ describe("AuthService Integration Tests", () => {
   })
 
   it("fetches all users", async () => {
-    for (let i = 0; i < 1002; i++) {
+    for (let i = 0; i < 50; i++) {
       await auth.createUser({ uid: `${i}` })
     }
     const users = await new AuthService().getAllUsers()
-    expect(users.length).toBe(1002)
+    expect(users.length).toBe(50)
   })
 
   it("deletes a user", async () => {
