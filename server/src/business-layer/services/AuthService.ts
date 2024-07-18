@@ -1,6 +1,9 @@
 import { UserRecord } from "firebase-admin/auth"
 import { auth } from "business-layer/security/Firebase"
-import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
+import {
+  AuthServiceClaims,
+  UserAccountTypes
+} from "business-layer/utils/AuthServiceClaims"
 
 type UidArray = {
   uid: string
@@ -20,6 +23,16 @@ export default class AuthService {
     try {
       const { users } = await auth.getUsers(uids)
       return users
+    } catch (e) {
+      console.error(`Failed to bulk retrieve the uids from Auth`, e)
+      return undefined
+    }
+  }
+
+  public async retrieveUserByUid(uid: string) {
+    try {
+      const user = await auth.getUser(uid)
+      return user
     } catch (e) {
       console.error(`Failed to bulk retrieve the uids from Auth`, e)
       return undefined
@@ -107,5 +120,18 @@ export default class AuthService {
       throw err
     }
     return userRecord.customClaims
+  }
+
+  /**
+   * Determines the user membership based on custom claims.
+   * @param customClaims - The custom claims of the user.
+   * @returns The user account type.
+   */
+  public getMembershipType(customClaims: { [key: string]: any }) {
+    return customClaims?.[AuthServiceClaims.ADMIN]
+      ? UserAccountTypes.ADMIN
+      : customClaims?.[AuthServiceClaims.MEMBER]
+        ? UserAccountTypes.MEMBER
+        : UserAccountTypes.GUEST
   }
 }

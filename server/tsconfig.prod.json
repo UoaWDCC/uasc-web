@@ -4,5 +4,11 @@
     "types": ["node"]
   },
   "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.ts", "**/*.mock.ts", "src/test-config", "tooling/**/*"]
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.mock.ts",
+    "src/test-config",
+    "tooling/**/*",
+    "**/*.setup.ts"
+  ]
 }

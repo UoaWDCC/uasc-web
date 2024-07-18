@@ -1,10 +1,10 @@
 name: Deploy Production Build of Client for UASC
 
-on:
+on: 
   workflow_dispatch:
-  # schedules this to run every day, at 00:00 UTC
+  # schedules this to run 30 minutes
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "30 * * * *"
 
 env:
   NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
@@ -26,7 +26,9 @@ jobs:
     environment: Client Production
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          ref: stable
 
       - name: Install volta
         uses: volta-cli/action@v4

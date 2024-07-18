@@ -1,9 +1,5 @@
 import AuthService from "business-layer/services/AuthService"
 import {
-  AuthServiceClaims,
-  UserAccountTypes
-} from "business-layer/utils/AuthServiceClaims"
-import {
   DEFAULT_BOOKING_MAX_SLOTS,
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
@@ -30,12 +26,16 @@ import {
   BookingDeleteResponse,
   BookingSlotUpdateResponse
 } from "service-layer/response-models/BookingResponse"
-import { AllUsersResponse } from "service-layer/response-models/UserResponse"
+import {
+  AllUsersResponse,
+  GetUserResponse
+} from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
   Get,
   Patch,
+  Path,
   Post,
   Put,
   Query,
@@ -45,6 +45,7 @@ import {
 } from "tsoa"
 import * as console from "console"
 import StripeService from "../../business-layer/services/StripeService"
+import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -204,9 +205,9 @@ export class AdminController extends Controller {
         return { uid: data.uid }
       })
 
-      const userAuthData = await new AuthService().bulkRetrieveUsersByUids(
-        uidsToQuery
-      )
+      const authService = new AuthService()
+      const userAuthData =
+        await authService.bulkRetrieveUsersByUids(uidsToQuery)
 
       const combinedUserData = rawUserData.map((userInfo) => {
         const matchingUserRecord = userAuthData.find(
@@ -215,15 +216,8 @@ export class AdminController extends Controller {
 
         const { customClaims, email, metadata } = { ...matchingUserRecord } // to avoid undefined destructuring error
 
-        let membership: UserAccountTypes = UserAccountTypes.GUEST
-
-        if (customClaims) {
-          if (customClaims[AuthServiceClaims.ADMIN]) {
-            membership = UserAccountTypes.ADMIN
-          } else if (customClaims[AuthServiceClaims.MEMBER]) {
-            membership = UserAccountTypes.MEMBER
-          }
-        }
+        const membership: UserAccountTypes =
+          authService.getMembershipType(customClaims)
 
         return {
           email,
@@ -246,6 +240,39 @@ export class AdminController extends Controller {
       console.error("Failed to fetch all users", e)
       this.setStatus(500)
       return { error: "Something went wrong when fetching all users" }
+    }
+  }
+
+  @SuccessResponse("200", "User found")
+  @Get("/users/{uid}")
+  public async getUser(@Path() uid: string): Promise<GetUserResponse> {
+    try {
+      const userService = new UserDataService()
+      const user = await userService.getUserData(uid)
+
+      if (!user) {
+        this.setStatus(404)
+        return { error: "User not found" }
+      }
+
+      const authService = new AuthService()
+      const userAuthData = await authService.retrieveUserByUid(uid)
+      const { customClaims, email, metadata } = { ...userAuthData }
+      const membership: UserAccountTypes =
+        authService.getMembershipType(customClaims)
+      this.setStatus(200)
+      return {
+        data: {
+          email,
+          membership,
+          dateJoined: metadata ? metadata.creationTime : undefined,
+          ...user
+        }
+      }
+    } catch (e) {
+      console.error("Failed to fetch user data", e)
+      this.setStatus(500)
+      return { error: "Something went wrong when fetching user data" }
     }
   }
 

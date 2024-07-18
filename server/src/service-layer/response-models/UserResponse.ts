@@ -30,3 +30,7 @@ export interface AllUsersResponse
 export interface BookingIdandUserData extends CombinedUserData {
   bookingId: string
 }
+
+export interface GetUserResponse extends CommonResponse {
+  data?: CombinedUserData
+}
