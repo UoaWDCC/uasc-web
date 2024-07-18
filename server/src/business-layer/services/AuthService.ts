@@ -12,16 +12,17 @@ type UidArray = {
 export default class AuthService {
   /**
    * Fetches all users from the Firebase Auth.
+   * @param maxPagintion The maximum number of users to fetch per page.
    * @returns An array of all users.
    */
-  public async getAllUsers(): Promise<UserRecord[]> {
+  public async getAllUsers(maxPagintion: number = 1000): Promise<UserRecord[]> {
     const allUsers: UserRecord[] = []
 
     let pageToken: string
     let response: ListUsersResult
 
     do {
-      response = await auth.listUsers(1000, pageToken)
+      response = await auth.listUsers(maxPagintion, pageToken)
       allUsers.push(...response.users)
       pageToken = response.pageToken
     } while (response.pageToken)

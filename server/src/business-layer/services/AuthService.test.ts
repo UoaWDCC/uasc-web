@@ -13,7 +13,8 @@ describe("AuthService Integration Tests", () => {
     for (let i = 0; i < 50; i++) {
       await auth.createUser({ uid: `${i}` })
     }
-    const users = await new AuthService().getAllUsers()
+    // Used to test if the pagination works, maximum fetches 25 users and loops
+    const users = await new AuthService().getAllUsers(25)
     expect(users.length).toBe(50)
   })
 
