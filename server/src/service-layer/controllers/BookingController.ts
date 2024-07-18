@@ -32,10 +32,7 @@ import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
 import * as console from "console"
 import AuthService from "../../business-layer/services/AuthService"
-import {
-  AuthServiceClaims,
-  UserAccountTypes
-} from "../../business-layer/utils/AuthServiceClaims"
+import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import {
   BOOKING_SLOTS_KEY,
   CheckoutTypeValues
@@ -309,17 +306,10 @@ export class BookingController extends Controller {
         const combinedUsers: CombinedUserData[] = users.map((user) => {
           const authUser = authUsers.find((auth) => auth.uid === user.uid)
 
-          let membership: UserAccountTypes = UserAccountTypes.GUEST
-
           const customClaims = authUser?.customClaims
 
-          if (customClaims) {
-            if (customClaims[AuthServiceClaims.ADMIN]) {
-              membership = UserAccountTypes.ADMIN
-            } else if (customClaims[AuthServiceClaims.MEMBER]) {
-              membership = UserAccountTypes.MEMBER
-            }
-          }
+          const membership: UserAccountTypes =
+            authService.getMembershipType(customClaims)
 
           return {
             ...user,
