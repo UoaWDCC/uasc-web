@@ -1,7 +1,7 @@
 import WorkInProgressComponent from "@/components/generic/WorkInProgressComponent/WorkInProgressComponent"
 const Events = () => {
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="fixed flex h-screen w-full items-center justify-center">
       <WorkInProgressComponent />
     </div>
   )
