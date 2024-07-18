@@ -54,7 +54,8 @@ const actions = {
       }
 
       const validateContactSection = (invalidFields: string[]) => {
-        const { email, confirmEmail, phone_number } = getState()
+        const { email, confirmEmail, phone_number, emergency_contact } =
+          getState()
         const validRegex =
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
@@ -66,6 +67,13 @@ const actions = {
         }
         if (phone_number.toString().length < 6) {
           invalidFields.push("Phone Number")
+        }
+        const emergencyContactFields = emergency_contact?.split(",")
+        if (
+          emergencyContactFields?.length !== 3 ||
+          emergencyContactFields.some((field) => field === "")
+        ) {
+          invalidFields.push("Emergency Contact")
         }
       }
 
