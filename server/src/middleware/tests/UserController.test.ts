@@ -1,50 +1,37 @@
 import * as admin from "firebase-admin"
 import UserDataService from "data-layer/services/UserDataService"
-import { cleanFirestore } from "test-config/TestUtils"
-import {
-  ADMIN_USER_UID,
-  GUEST_USER_UID,
-  MEMBER_USER_UID,
-  createUserData
-} from "../routes.mock"
+import { ADMIN_USER_UID, GUEST_USER_UID, MEMBER_USER_UID } from "../routes.mock"
 import { request, adminToken, memberToken } from "../routes.setup"
 
 describe("UserController endpoint tests", () => {
-  describe("/users/edit-self", () => {
-    beforeEach(async () => {
-      await createUserData(ADMIN_USER_UID)
-      await createUserData(MEMBER_USER_UID)
-      await createUserData(GUEST_USER_UID)
-    })
+  describe("/users/self", () => {
+    it("Should not allow members to fetch their own stripe id", async () => {
+      const res = await request
+        .get("/users/self")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
 
-    afterEach(async () => {
-      await cleanFirestore()
+      expect(res.body.stripe_id).toBe(undefined)
     })
+  })
+  describe("/users/edit-self", () => {
     it("should edit the users information", async () => {
       const res = await request
         .patch("/users/edit-self")
         .set("Authorization", `Bearer ${adminToken}`)
-        .send({ updatedInformation: { gender: "male" } })
+        .send({
+          updatedInformation: {
+            gender: "male",
+            does_ski: true,
+            university_year: "4th"
+          }
+        })
 
       expect(res.status).toEqual(200) // success
       const updatedUser = await new UserDataService().getUserData(
         ADMIN_USER_UID
       )
       expect(updatedUser.gender).toEqual("male")
-    })
-
-    it("should edit the user information for multiple attributes", async () => {
-      const res = await request
-        .patch("/users/edit-self")
-        .set("Authorization", `Bearer ${memberToken}`)
-        .send({
-          updatedInformation: { does_ski: true, university_year: "4th" }
-        })
-
-      expect(res.status).toEqual(200) // success
-      const updatedUser = await new UserDataService().getUserData(
-        MEMBER_USER_UID
-      )
       expect(updatedUser.does_ski).toEqual(true)
       expect(updatedUser.university_year).toEqual("4th")
     })
@@ -83,16 +70,6 @@ describe("UserController endpoint tests", () => {
   })
 
   describe("/users/delete-user", () => {
-    beforeEach(async () => {
-      await createUserData(ADMIN_USER_UID)
-      await createUserData(MEMBER_USER_UID)
-      await createUserData(GUEST_USER_UID)
-    })
-
-    afterEach(async () => {
-      await cleanFirestore()
-    })
-
     it("should delete the user", async () => {
       const res = await request
         .delete("/users/delete-user")
