@@ -1,9 +1,8 @@
-import Link from "next/link"
+import WorkInProgressComponent from "@/components/generic/WorkInProgressComponent/WorkInProgressComponent"
 const Events = () => {
   return (
     <div className="flex w-full items-center justify-center">
-      events page
-      <Link href="www.google.com">FaceBook</Link>
+      <WorkInProgressComponent />
     </div>
   )
 }
