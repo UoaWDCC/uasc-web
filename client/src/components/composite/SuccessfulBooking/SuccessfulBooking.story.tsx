@@ -15,3 +15,10 @@ export const defaultSuccessfulBooking: Story = {
     endDate: "Thursday, April 18th 2024"
   }
 }
+
+export const formattedSuccessfulBooking: Story = {
+  args: {
+    startDate: "12/04/2024",
+    endDate: "15/05/2025"
+  }
+}
