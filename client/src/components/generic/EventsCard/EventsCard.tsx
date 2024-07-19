@@ -1,6 +1,6 @@
 import Button from "../FigmaButtons/FigmaButton"
 
-interface EventsCardProps {
+export interface EventsCardProps {
   date?: string
   title: string
   location?: string

@@ -1,5 +1,6 @@
 // 4 props: 3 string, 1 image
-
+import { EventsCardProps } from "../EventsCard/EventsCard"
+type props = EventsCardProps
 const EventsCardPreview = () => {
   return (
     <div className="border-gray-3 flex w-full items-center justify-center border p-14">
