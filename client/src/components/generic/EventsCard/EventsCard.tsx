@@ -1,12 +1,13 @@
 import Button from "../FigmaButtons/FigmaButton"
-
+/**
+ * Props for event card
+ */
 export interface EventsCardProps {
   date?: string
   title: string
   location?: string
   content: React.ReactNode
   onClick: () => void
-  previewOnClick: () => void
 }
 
 type props = EventsCardProps
