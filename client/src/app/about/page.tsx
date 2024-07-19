@@ -19,8 +19,8 @@ const About = async () => {
   return (
     <>
       <div className="flex w-full flex-col items-center justify-center">
-        <div className="flex max-w-[1100px] flex-col">
-          <h2 className="text-dark-blue-100 mt-8 pl-4 text-center italic lg:text-left">
+        <div className="mb-4 flex max-w-[1100px] flex-col">
+          <h2 className="text-dark-blue-100 my-8 text-center italic">
             About us
           </h2>
           {aboutItems.map((item, index) => {
@@ -36,7 +36,7 @@ const About = async () => {
                 />
                 {
                   // Don't need divider for last row
-                  index !== aboutItems.length && (
+                  index < aboutItems.length - 1 && (
                     <div className="bg-gray-2 my-11 h-[1px] w-full" />
                   )
                 }
