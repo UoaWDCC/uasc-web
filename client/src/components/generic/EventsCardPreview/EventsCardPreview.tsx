@@ -3,12 +3,13 @@ import { EventsCardProps } from "../EventsCard/EventsCard"
 import Arrow from "@/assets/icons/rightarrow.svg"
 
 type props = EventsCardProps
-const ViewButton = () => {
+type ViewButtonProps = {
+  previewOnClick: () => void
+}
+const ViewButton = ({ previewOnClick }: ViewButtonProps) => {
   return (
     <button
-      onClick={() => {
-        console.log("The button is clicked")
-      }}
+      onClick={previewOnClick}
       className="flex items-center justify-center gap-4 text-nowrap p-2"
     >
       <h5 className="text-dark-blue-100  group text-lg font-bold uppercase">
@@ -18,7 +19,12 @@ const ViewButton = () => {
     </button>
   )
 }
-const EventsCardPreview = ({ date, title, location }: props) => {
+const EventsCardPreview = ({
+  date,
+  title,
+  location,
+  previewOnClick
+}: props) => {
   return (
     <div className="border-gray-3 flex w-full items-center justify-center gap-8 rounded-md border px-10 py-12">
       <div className="border-gray-3 border px-20 py-11">
@@ -31,7 +37,7 @@ const EventsCardPreview = ({ date, title, location }: props) => {
         </div>
         <p className="text-gray-4 pt-1 text-lg">{location}</p>
       </div>
-      <ViewButton />
+      <ViewButton previewOnClick={previewOnClick} />
     </div>
   )
 }

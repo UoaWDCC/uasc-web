@@ -6,6 +6,7 @@ export interface EventsCardProps {
   location?: string
   content: React.ReactNode
   onClick: () => void
+  previewOnClick: () => void
 }
 
 type props = EventsCardProps
