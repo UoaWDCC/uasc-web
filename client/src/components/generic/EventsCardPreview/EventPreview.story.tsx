@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
-import EventsCardPreview from "./EventsCardPreview"
+import EventsCardPreview from "./EventPreview"
 const meta: Meta<typeof EventsCardPreview> = {
   component: EventsCardPreview
 }
