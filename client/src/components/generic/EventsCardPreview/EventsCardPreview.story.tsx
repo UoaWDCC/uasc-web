@@ -9,5 +9,9 @@ type Story = StoryObj<typeof meta>
 
 export const DefaultEventsCardPreview: Story = {
   tags: ["autodocs"],
-  args: {}
+  args: {
+    title: "Outdoor Clubs Welcome Party",
+    date: "THU 18/7 • 6pm",
+    location: "Shadows Bar"
+  }
 }
