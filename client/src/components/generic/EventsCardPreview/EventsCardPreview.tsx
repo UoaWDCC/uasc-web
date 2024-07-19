@@ -9,10 +9,10 @@ const EventsCardPreview = ({ date, title, location }: props) => {
       </div>
       <div className="mb-4 mr-auto flex flex-col gap-2">
         <div>
-          <h5>{date}</h5>
-          <h2>{title}</h2>
+          <h5 className="font-bold">{date}</h5>
+          <h2 className="text-dark-blue-100">{title}</h2>
         </div>
-        <p className="">{location}</p>
+        <p className="text-gray-4">{location}</p>
       </div>
     </div>
   )
