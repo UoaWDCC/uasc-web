@@ -19,7 +19,7 @@ const About = async () => {
   return (
     <>
       <div className="flex w-full flex-col items-center justify-center">
-        <div className="flex max-w-[1100px] flex-col gap-4">
+        <div className="flex max-w-[1100px] flex-col">
           <h2 className="text-dark-blue-100 mt-8 pl-4 text-center italic lg:text-left">
             About us
           </h2>
@@ -27,13 +27,19 @@ const About = async () => {
             // Even => Left, Odd => Right
             const side = index % 2 === 0 ? "left" : "right"
             return (
-              <div className="p-4" key={item._id}>
+              <div key={item._id}>
                 <AboutSection
                   title={item.title || ""}
                   text={item.description || ""}
                   variant={side}
                   imageSrc={item.imageUrl || ""}
                 />
+                {
+                  // Don't need divider for last row
+                  index !== aboutItems.length && (
+                    <div className="bg-gray-2 my-11 h-[1px] w-full" />
+                  )
+                }
               </div>
             )
           })}
