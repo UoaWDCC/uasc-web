@@ -68,11 +68,7 @@ const actions = {
         if (phone_number.toString().length < 6) {
           invalidFields.push("Phone Number")
         }
-        const emergencyContactFields = emergency_contact?.split(",")
-        if (
-          emergencyContactFields?.length !== 3 ||
-          emergencyContactFields.some((field) => field === "")
-        ) {
+        if (emergency_contact === "") {
           invalidFields.push("Emergency Contact")
         }
       }
