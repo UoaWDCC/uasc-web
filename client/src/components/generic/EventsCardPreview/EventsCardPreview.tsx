@@ -29,7 +29,7 @@ const EventsCardPreview = ({ date, title, location }: props) => {
           <h5 className="font-bold">{date}</h5>
           <h2 className="text-dark-blue-100">{title}</h2>
         </div>
-        <p className="text-gray-4">{location}</p>
+        <p className="text-gray-4 text-lg">{location}</p>
       </div>
       <ViewButton />
     </div>
