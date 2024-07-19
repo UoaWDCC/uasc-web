@@ -97,8 +97,6 @@ export class BookingController extends Controller {
 
       await Promise.all(bookingPromises)
 
-      console.log(responseData)
-
       this.setStatus(200)
 
       /**
@@ -195,7 +193,6 @@ export class BookingController extends Controller {
           startDate,
           endDate
         )
-      console.log("found bookingslots: ", bookingSlots)
 
       const bookingSlotsToQuery = bookingSlots.map((bookingSlot) => {
         const { description, date, max_bookings, id } = bookingSlot
@@ -334,8 +331,6 @@ export class BookingController extends Controller {
       })
 
       await Promise.all(bookingPromises)
-
-      console.log(responseData)
 
       this.setStatus(200)
 
