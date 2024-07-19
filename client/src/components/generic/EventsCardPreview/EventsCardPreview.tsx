@@ -7,10 +7,12 @@ const EventsCardPreview = ({ date, title, location }: props) => {
       <div className="border-gray-3 border px-20 py-11">
         <p>image</p>
       </div>
-      <div className="mb-8 mr-auto flex flex-col">
-        <h5>{date}</h5>
-        <h2>{title}</h2>
-        <p>{location}</p>
+      <div className="mb-4 mr-auto flex flex-col gap-2">
+        <div>
+          <h5>{date}</h5>
+          <h2>{title}</h2>
+        </div>
+        <p className="">{location}</p>
       </div>
     </div>
   )
