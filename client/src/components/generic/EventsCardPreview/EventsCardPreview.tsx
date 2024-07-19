@@ -5,8 +5,13 @@ import Arrow from "@/assets/icons/rightarrow.svg"
 type props = EventsCardProps
 const ViewButton = () => {
   return (
-    <button className="flex-col items-center justify-center gap-4 text-nowrap md:flex">
-      <h5 className="text-dark-blue-100 text-lg font-bold uppercase">
+    <button
+      onClick={() => {
+        console.log("The button is clicked")
+      }}
+      className="flex items-center justify-center gap-4 text-nowrap p-2"
+    >
+      <h5 className="text-dark-blue-100  group text-lg font-bold uppercase">
         view more
       </h5>
       <Arrow className="fill-dark-blue-100 h-6 w-6" />
