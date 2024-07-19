@@ -17,27 +17,36 @@ const About = async () => {
   const aboutItems = await sanityQuery<AboutItem[]>(ABOUT_ITEMS_GROQ_QUERY)
 
   return (
-    <div className="flex w-full flex-col gap-4 ">
-      <h2 className="text-dark-blue-100 mt-8 pl-4 text-center italic lg:text-left">
-        About us
-      </h2>
-      {aboutItems.map((item, index) => {
-        // Even => Left, Odd => Right
-        const side = index % 2 === 0 ? "left" : "right"
-        return (
-          <div className="p-4" key={item._id}>
-            <AboutSection
-              title={item.title || ""}
-              text={item.description || ""}
-              variant={side}
-              imageSrc={item.imageUrl || ""}
-            />
-          </div>
-        )
-      })}
-
-      <Footer />
-    </div>
+    <>
+      <div className="flex w-full flex-col items-center justify-center">
+        <div className="mb-4 flex max-w-[1100px] flex-col">
+          <h2 className="text-dark-blue-100 my-8 text-center italic">
+            About us
+          </h2>
+          {aboutItems.map((item, index) => {
+            // Even => Left, Odd => Right
+            const side = index % 2 === 0 ? "left" : "right"
+            return (
+              <div key={item._id}>
+                <AboutSection
+                  title={item.title || ""}
+                  text={item.description || ""}
+                  variant={side}
+                  imageSrc={item.imageUrl || ""}
+                />
+                {
+                  // Don't need divider for last row
+                  index < aboutItems.length - 1 && (
+                    <div className="bg-gray-2 my-11 h-[1px] w-full" />
+                  )
+                }
+              </div>
+            )
+          })}
+        </div>
+        <Footer />
+      </div>
+    </>
   )
 }
 
