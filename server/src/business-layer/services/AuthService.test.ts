@@ -9,6 +9,15 @@ describe("AuthService Integration Tests", () => {
     await cleanAuth()
   })
 
+  it("fetches all users", async () => {
+    for (let i = 0; i < 50; i++) {
+      await auth.createUser({ uid: `${i}` })
+    }
+    // Used to test if the pagination works, maximum fetches 25 users and loops
+    const users = await new AuthService().getAllUsers(25)
+    expect(users.length).toBe(50)
+  })
+
   it("deletes a user", async () => {
     await auth.createUser({ uid: "test" })
     new AuthService().deleteUser("test")

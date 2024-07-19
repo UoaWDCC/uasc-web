@@ -1,4 +1,4 @@
-import { UserRecord } from "firebase-admin/auth"
+import { ListUsersResult, UserRecord } from "firebase-admin/auth"
 import { auth } from "business-layer/security/Firebase"
 import {
   AuthServiceClaims,
@@ -10,6 +10,26 @@ type UidArray = {
 }[]
 
 export default class AuthService {
+  /**
+   * Fetches all users from the Firebase Auth.
+   * @param maxPagintion The maximum number of users to fetch per page.
+   * @returns An array of all users.
+   */
+  public async getAllUsers(maxPagintion: number = 1000): Promise<UserRecord[]> {
+    const allUsers: UserRecord[] = []
+
+    let pageToken: string
+    let response: ListUsersResult
+
+    do {
+      response = await auth.listUsers(maxPagintion, pageToken)
+      allUsers.push(...response.users)
+      pageToken = response.pageToken
+    } while (response.pageToken)
+
+    return allUsers
+  }
+
   /**
    * Fetches up to **100** users based on an array of uid identifiers
    *
