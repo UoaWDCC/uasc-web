@@ -1,10 +1,34 @@
 import Button from "../FigmaButtons/FigmaButton"
-
-interface EventsCardProps {
+/**
+ * Props for event card
+ */
+export interface EventsCardProps {
+  /**
+   * The date of the event as a string.
+   * @example "THU 18/7 • 6pm"
+   */
   date?: string
+
+  /**
+   * The title of the event as a string
+   * @example "I am sigma"
+   */
   title: string
+
+  /**
+   * The location of the event as a string
+   * @example "Basement"
+   */
   location?: string
+
+  /**
+   * The content of the event as a react node
+   */
   content: React.ReactNode
+
+  /**
+   * The function when the button on the card / preview card is clicked
+   */
   onClick: () => void
 }
 
