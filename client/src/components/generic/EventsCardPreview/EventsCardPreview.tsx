@@ -1,13 +1,15 @@
 // 4 props: 3 string, 1 image
 import { EventsCardProps } from "../EventsCard/EventsCard"
 import Arrow from "@/assets/icons/rightarrow.svg"
-import Button from "../FigmaButtons/FigmaButton"
+
 type props = EventsCardProps
 const ViewButton = () => {
   return (
-    <button className="flex">
-      <h5>view more</h5>
-      <Arrow className="fill-dark-blue-100" />
+    <button className="flex-col items-center justify-center gap-4 text-nowrap md:flex">
+      <h5 className="text-dark-blue-100 text-lg font-bold uppercase">
+        view more
+      </h5>
+      <Arrow className="fill-dark-blue-100 h-6 w-6" />
     </button>
   )
 }
@@ -24,7 +26,6 @@ const EventsCardPreview = ({ date, title, location }: props) => {
         </div>
         <p className="text-gray-4">{location}</p>
       </div>
-      <Button variant="progress-default">view more</Button>
       <ViewButton />
     </div>
   )
