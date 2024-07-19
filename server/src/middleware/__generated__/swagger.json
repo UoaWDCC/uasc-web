@@ -1829,6 +1829,24 @@
 				}
 			}
 		},
+		"/admin/users/demote-all": {
+			"patch": {
+				"operationId": "DemoteAllUsers",
+				"responses": {
+					"200": {
+						"description": "Demoted all non-admin users"
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/admin/users/add-coupon": {
 			"post": {
 				"operationId": "AddCoupon",
