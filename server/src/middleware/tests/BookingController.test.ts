@@ -283,7 +283,6 @@ describe("BookingController endpoint tests", () => {
           startDate,
           endDate
         })
-      console.log(res.body.data[1])
 
       expect(res.status).toEqual(200)
       expect(res.body.data).toHaveLength(2)
