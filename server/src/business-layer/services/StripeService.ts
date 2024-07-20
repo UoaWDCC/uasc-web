@@ -286,7 +286,8 @@ export default class StripeService {
     metadata: Record<string, string>,
     customer_id: string,
     expires_after_mins: number = 31,
-    custom_text?: Stripe.Checkout.SessionCreateParams.CustomText
+    custom_text?: Stripe.Checkout.SessionCreateParams.CustomText,
+    allow_promotion_codes: boolean = false
   ) {
     const session = await stripe.checkout.sessions.create({
       // consumer changeable
@@ -300,7 +301,8 @@ export default class StripeService {
       mode: "payment",
       currency: "NZD",
       expires_at: dateNowSecs() + expires_after_mins * ONE_MINUTE_S,
-      custom_text
+      custom_text,
+      allow_promotion_codes
     })
     return session.client_secret
   }
