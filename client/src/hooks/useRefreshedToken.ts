@@ -1,4 +1,4 @@
-import { useAppData } from "store/Store"
+import { useAppData } from "@/store/Store"
 import { useUserLoggedInCallback } from "./useUserLoggedInCallback"
 
 /**

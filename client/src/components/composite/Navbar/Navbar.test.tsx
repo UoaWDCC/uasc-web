@@ -1,7 +1,6 @@
 import { useState } from "react"
 import Navbar, { INavbarProps } from "./Navbar"
 import { act, render, screen } from "@testing-library/react"
-import { BrowserRouter } from "react-router-dom"
 
 const TestNavbar = ({
   defaultState,
@@ -18,13 +17,11 @@ const TestNavbar = ({
     setIsSignedIn(true)
   }
   return (
-    <BrowserRouter>
-      <Navbar
-        signInHandler={signIn}
-        signOutHandler={signOut}
-        isLoggedIn={isSignedIn}
-      />
-    </BrowserRouter>
+    <Navbar
+      signInHandler={signIn}
+      signOutHandler={signOut}
+      isLoggedIn={isSignedIn}
+    />
   )
 }
 

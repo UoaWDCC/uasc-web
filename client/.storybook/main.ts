@@ -1,28 +1,47 @@
-import type { StorybookConfig } from "@storybook/react-vite"
+import type { StorybookConfig } from "@storybook/nextjs"
+import path from "path"
 
-import { join, dirname } from "path"
-
-/**
- * This function is used to resolve the absolute path of a package.
- * It is needed in projects that use Yarn PnP or are set up within a monorepo.
- */
-function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, "package.json")))
-}
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.story.@(js|jsx|mjs|ts|tsx)"],
+  stories: ["../src/**/*.story.@(js|jsx|ts|tsx)", "../src/**/*.story.mdx"],
   addons: [
-    getAbsolutePath("@storybook/addon-links"),
-    getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("@storybook/addon-onboarding"),
-    getAbsolutePath("@storybook/addon-interactions")
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions"
   ],
+  // https://github.com/storybookjs/storybook/issues/21216#issuecomment-1513894759
   framework: {
-    name: getAbsolutePath("@storybook/react-vite"),
+    name: path.resolve(
+      require.resolve("@storybook/nextjs/preset"),
+      ".."
+    ) as any,
     options: {}
   },
   docs: {
     autodocs: "tag"
+  },
+  staticDirs: [{ from: "../public", to: "/public" }],
+  core: {
+    builder: "@storybook/builder-webpack5"
+  },
+  webpackFinal: async (config) => {
+    const imageRule = config.module?.rules?.find((rule) => {
+      const test = (rule as { test: RegExp }).test
+
+      if (!test) {
+        return false
+      }
+
+      return test.test(".svg")
+    }) as { [key: string]: any }
+
+    imageRule.exclude = /\.svg$/
+
+    config.module?.rules?.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"]
+    })
+
+    return config
   }
 }
 export default config

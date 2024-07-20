@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom"
+"use client"
+
+import { CHECK_IN_TIME, CHECK_OUT_TIME } from "@/utils/Constants"
+import Link from "next/link"
 
 interface IBookingInfoProps {
   /**
@@ -13,14 +16,14 @@ interface IBookingInfoProps {
 
 type props = IBookingInfoProps
 
-const Divider = () => <span className="bg-dark-blue-100 my-8 h-[1px] w-full" />
+const Divider = () => <span className="bg-dark-blue-100 my-3 h-[1px] w-full" />
 
 const BookingInfoComponent = ({
   pricePerNight,
   priceSingleFridayOrSaturday
 }: props) => {
   return (
-    <div className="border-gray-3 flex h-full w-full flex-col justify-center rounded border bg-white px-8 py-8 pb-8">
+    <div className="border-gray-3 flex h-full w-full flex-col justify-center rounded border bg-white px-6 py-12 pb-8">
       <div id="top" className="text-dark-blue-100 flex flex-col gap-2">
         <h3 className="flex gap-2">
           ${pricePerNight}
@@ -40,7 +43,11 @@ const BookingInfoComponent = ({
             <strong>bookings@uasc.co.nz</strong>
           </a>
         </h5>
+        {/* TODO: REMOVE THIS PART */}
+        <p>Bookings open - 5th of July </p>
+        <p>Lodge open - 12th of July</p>
       </div>
+
       <Divider />
       <div
         id="bottom"
@@ -52,15 +59,15 @@ const BookingInfoComponent = ({
         </p>
         <p>Please read UASC policy below before booking.</p>
         <h4>
-          Check in time: <strong>3:00pm</strong>
+          Check in time: <strong>{CHECK_IN_TIME}</strong>
         </h4>
         <h4>
-          Check out time: <strong>10:00am</strong>
+          Check out time: <strong>{CHECK_OUT_TIME}</strong>
         </h4>
         <h4 className="text-red font-bold italic">
           You must have a booking to stay at the lodge!
         </h4>
-        <Link to="/about" className="text-light-blue-100 font-bold italic">
+        <Link href="/about" className="text-light-blue-100 font-bold italic">
           Learn about the lodge
         </Link>
       </div>

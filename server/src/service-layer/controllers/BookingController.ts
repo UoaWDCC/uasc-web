@@ -24,15 +24,15 @@ import {
   Request
 } from "tsoa"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
-import { CombinedUserData } from "../response-models/UserResponse"
+import {
+  BookingIdandUserData,
+  CombinedUserData
+} from "../response-models/UserResponse"
 import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
 import * as console from "console"
 import AuthService from "../../business-layer/services/AuthService"
-import {
-  AuthServiceClaims,
-  UserAccountTypes
-} from "../../business-layer/utils/AuthServiceClaims"
+import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import {
   BOOKING_SLOTS_KEY,
   CheckoutTypeValues
@@ -96,8 +96,6 @@ export class BookingController extends Controller {
       })
 
       await Promise.all(bookingPromises)
-
-      console.log(responseData)
 
       this.setStatus(200)
 
@@ -195,7 +193,6 @@ export class BookingController extends Controller {
           startDate,
           endDate
         )
-      console.log("found bookingslots: ", bookingSlots)
 
       const bookingSlotsToQuery = bookingSlots.map((bookingSlot) => {
         const { description, date, max_bookings, id } = bookingSlot
@@ -281,7 +278,7 @@ export class BookingController extends Controller {
       /** The response data array */
       const responseData: Array<{
         date: Timestamp
-        users: CombinedUserData[]
+        users: BookingIdandUserData[]
       }> = []
 
       /** Iterating through each booking slot */
@@ -289,7 +286,7 @@ export class BookingController extends Controller {
         /** Getting the bookings for the current slot */
         const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
 
-        /** Extracting the user IDs from the bookings */
+        /** Extracting the user from the bookings */
         const userIds = bookings.map((booking) => booking.user_id)
 
         if (userIds.length === 0) {
@@ -306,17 +303,10 @@ export class BookingController extends Controller {
         const combinedUsers: CombinedUserData[] = users.map((user) => {
           const authUser = authUsers.find((auth) => auth.uid === user.uid)
 
-          let membership: UserAccountTypes = UserAccountTypes.GUEST
-
           const customClaims = authUser?.customClaims
 
-          if (customClaims) {
-            if (customClaims[AuthServiceClaims.ADMIN]) {
-              membership = UserAccountTypes.ADMIN
-            } else if (customClaims[AuthServiceClaims.MEMBER]) {
-              membership = UserAccountTypes.MEMBER
-            }
-          }
+          const membership: UserAccountTypes =
+            authService.getMembershipType(customClaims)
 
           return {
             ...user,
@@ -328,13 +318,19 @@ export class BookingController extends Controller {
         /** Adding the date and users to the response data array */
         responseData.push({
           date: slot.date,
-          users: combinedUsers
+          // Mapping the users to include the booking ID
+          users: combinedUsers.map((user) => ({
+            ...user,
+            bookingId: bookings.find(
+              (booking) =>
+                booking.user_id === user.uid &&
+                booking.booking_slot_id === slot.id
+            )?.id
+          }))
         })
       })
 
       await Promise.all(bookingPromises)
-
-      console.log(responseData)
 
       this.setStatus(200)
 

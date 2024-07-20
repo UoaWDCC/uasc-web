@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
 import { Footer } from "./Footer"
-import { MemoryRouter } from "react-router-dom"
+import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider/next-13.5"
 
 const meta: Meta<typeof Footer> = {
   component: Footer
@@ -13,9 +13,9 @@ export const DefaultFooter: Story = {
   tags: ["autodocs"],
   decorators: [
     (Story) => (
-      <MemoryRouter>
+      <MemoryRouterProvider>
         <Story />
-      </MemoryRouter>
+      </MemoryRouterProvider>
     )
   ]
 }

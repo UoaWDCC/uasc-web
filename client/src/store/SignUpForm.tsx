@@ -1,6 +1,6 @@
-import { PAGES } from "components/composite/SignUpForm/utils/RouteNames"
+import { PAGES } from "@/components/composite/SignUpForm/utils/RouteNames"
 import { Timestamp } from "firebase/firestore"
-import { ReducedUserAdditionalInfo } from "models/User"
+import { ReducedUserAdditionalInfo } from "@/models/User"
 import { createStore, Action, createHook } from "react-sweet-state"
 
 type FormValidity = { errorMessage?: string; success: boolean }
@@ -54,7 +54,8 @@ const actions = {
       }
 
       const validateContactSection = (invalidFields: string[]) => {
-        const { email, confirmEmail, phone_number } = getState()
+        const { email, confirmEmail, phone_number, emergency_contact } =
+          getState()
         const validRegex =
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
@@ -66,6 +67,9 @@ const actions = {
         }
         if (phone_number.toString().length < 6) {
           invalidFields.push("Phone Number")
+        }
+        if (emergency_contact === "") {
+          invalidFields.push("Emergency Contact")
         }
       }
 

@@ -1,5 +1,5 @@
-import { BookingAvailability } from "models/Booking"
-import { MS_IN_SECOND } from "utils/Constants"
+import { BookingAvailability } from "@/models/Booking"
+import { MS_IN_SECOND } from "@/utils/Constants"
 
 export type DateRange = {
   /**
@@ -131,6 +131,26 @@ export const DateUtils = {
    */
   formattedNzDate: (date: Date): string => date.toLocaleDateString("en-NZ"),
 
+  /**
+   * Gets the ms since unix epoch from a nz date
+   *
+   * @param nzDate a string formatted with the format `DD/MM/YYYY`
+   * @returns the amount of milliseconds for that date
+   */
+  nzDateStringToMillis: (nzDate: string): number => {
+    const parts = nzDate.split("/")
+
+    if (parts.length !== 3) {
+      console.error("Invalid date given. Must be in format DD/MM/YYYY")
+      return 0
+    }
+    // Format
+    return new Date(
+      Number.parseInt(parts[2]),
+      Number.parseInt(parts[1]) - 1, // Months are 0 indexed
+      Number.parseInt(parts[0])
+    ).getTime()
+  },
   /**
    * @param date the date to put into format for input
    * @returns the date string for date input to parse

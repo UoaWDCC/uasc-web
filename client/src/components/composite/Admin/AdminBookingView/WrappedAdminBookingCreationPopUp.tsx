@@ -1,8 +1,8 @@
-import { useUsersQuery } from "services/Admin/AdminQueries"
+import { useUsersQuery } from "@/services/Admin/AdminQueries"
 import AdminBookingCreationPopUp from "./AdminBookingCreationPopUp"
 import { useEffect, useMemo } from "react"
-import { useAvailableBookingsQuery } from "services/Booking/BookingQueries"
-import { useAddUserToBookingMutation } from "services/Admin/AdminMutations"
+import { useAvailableBookingsQuery } from "@/services/Booking/BookingQueries"
+import { useAddUserToBookingMutation } from "@/services/Admin/AdminMutations"
 
 interface IWrappedAdminBookingCreationPopUp {
   handleClose: () => void

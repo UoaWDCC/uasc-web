@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import Link from "next/link"
 
 type SuccessfulBookingProps = {
   startDate?: string
@@ -23,7 +23,7 @@ const SuccessfulBooking = ({ startDate, endDate }: SuccessfulBookingProps) => {
         </h4>
         <div className="mb-2 flex justify-center">
           <button className="text-dark-blue-100 border-dark-blue-100 hover:bg-dark-blue-100 rounded-md border bg-white p-2 text-sm font-bold hover:scale-105 hover:text-white">
-            <Link to="/bookings">Back to Bookings</Link>
+            <Link href="/bookings">Back to Bookings</Link>
           </button>
         </div>
       </div>

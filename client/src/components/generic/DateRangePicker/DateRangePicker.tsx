@@ -1,5 +1,5 @@
 import TextInput from "../TextInputComponent/TextInput"
-import LongRightArrow from "assets/icons/long_right_arrow.svg?react"
+import LongRightArrow from "@/assets/icons/long_right_arrow.svg"
 
 interface IDateRangePicker {
   /**

@@ -64,6 +64,9 @@ export interface paths {
     /** @description User Operations */
     get: operations["GetAllUsers"];
   };
+  "/admin/users/{uid}": {
+    get: operations["GetUser"];
+  };
   "/admin/users/create": {
     put: operations["CreateUser"];
   };
@@ -75,6 +78,12 @@ export interface paths {
   };
   "/admin/users/demote": {
     put: operations["DemoteUser"];
+  };
+  "/admin/users/demote-all": {
+    patch: operations["DemoteAllUsers"];
+  };
+  "/admin/users/add-coupon": {
+    post: operations["AddCoupon"];
   };
 }
 
@@ -250,7 +259,7 @@ export interface components {
     };
     /** @enum {string} */
     UserAccountTypes: "admin" | "member" | "guest";
-    CombinedUserData: {
+    BookingIdandUserData: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_snowboarding?: boolean;
       does_racing?: boolean;
@@ -278,11 +287,12 @@ export interface components {
       email: string;
       /** @description What type of account the user has */
       membership: components["schemas"]["UserAccountTypes"];
+      bookingId: string;
     };
     /** @description Represents the response structure for fetching users by date range. */
     UsersByDateRangeResponse: {
       data?: {
-          users: components["schemas"]["CombinedUserData"][];
+          users: components["schemas"]["BookingIdandUserData"][];
           date: components["schemas"]["FirebaseFirestore.Timestamp"];
         }[];
       error?: string;
@@ -327,6 +337,35 @@ export interface components {
     DeleteBookingRequest: {
       bookingID: string;
     };
+    CombinedUserData: {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      /** Format: double */
+      phone_number: number;
+      gender?: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      university_year?: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+      /** @description Firebase identifier of the user *data* based on the firestore document */
+      uid: string;
+      /** @description Formatted UTC date string of when the account was created */
+      dateJoined?: string;
+      /** @description The email the user uses to log in */
+      email: string;
+      /** @description What type of account the user has */
+      membership: components["schemas"]["UserAccountTypes"];
+    };
     AllUsersResponse: {
       error?: string;
       message?: string;
@@ -338,6 +377,11 @@ export interface components {
        */
       nextCursor?: string;
       data?: components["schemas"]["CombinedUserData"][];
+    };
+    GetUserResponse: {
+      error?: string;
+      message?: string;
+      data?: components["schemas"]["CombinedUserData"];
     };
     UserAdditionalInfo: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -397,6 +441,15 @@ export interface components {
     };
     DemoteUserRequestBody: {
       uid: string;
+    };
+    AddCouponRequestBody: {
+      /** @description The UID of the user to whom the coupon will be added. */
+      uid: string;
+      /**
+       * Format: double
+       * @description The number of the coupon to be added.
+       */
+      quantity: number;
     };
   };
   responses: {
@@ -681,6 +734,21 @@ export interface operations {
       };
     };
   };
+  GetUser: {
+    parameters: {
+      path: {
+        uid: string;
+      };
+    };
+    responses: {
+      /** @description User found */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponse"];
+        };
+      };
+    };
+  };
   CreateUser: {
     requestBody: {
       content: {
@@ -728,6 +796,27 @@ export interface operations {
     };
     responses: {
       /** @description Demoted user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  DemoteAllUsers: {
+    responses: {
+      /** @description Demoted all non-admin users */
+      200: {
+        content: never;
+      };
+    };
+  };
+  AddCoupon: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddCouponRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Coupon Added */
       200: {
         content: never;
       };

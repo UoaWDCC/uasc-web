@@ -1,15 +1,21 @@
-import Calendar from "components/generic/Calendar/Calendar"
+import Calendar from "@/components/generic/Calendar/Calendar"
 import BookingInfoComponent from "../BookingInfoComponent/BookingInfoComponent"
-import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
-import TextInput from "components/generic/TextInputComponent/TextInput"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import { useEffect, useMemo, useState } from "react"
+import DateRangePicker from "@/components/generic/DateRangePicker/DateRangePicker"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
-import { BookingAvailability } from "models/Booking"
-import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
+import { BookingAvailability } from "@/models/Booking"
+import {
+  CHECK_IN_TIME,
+  CHECK_OUT_TIME,
+  MS_IN_SECOND,
+  NEXT_YEAR_FROM_TODAY,
+  TODAY
+} from "@/utils/Constants"
 import { Timestamp } from "firebase/firestore"
-import Checkbox from "components/generic/Checkbox/Checkbox"
-import { DateRange, DateUtils } from "components/utils/DateUtils"
+import Checkbox from "@/components/generic/Checkbox/Checkbox"
+import { DateRange, DateUtils } from "@/components/utils/DateUtils"
 
 /*
  * Swaps around dates if invalid
@@ -66,6 +72,36 @@ interface ICreateBookingSection {
 const NORMAL_PRICE = 40 as const
 const SPECIAL_PRICE = 60 as const
 
+/**
+ * A notification to the user informing the actual
+ * start and end dates that they will be staying, as opposed to
+ * displaying just the nights.
+ *
+ * Note that this should not change any booking logic
+ */
+const ActualBookingStayRange = ({
+  startDateTime,
+  endDateTime
+}: {
+  /**
+   * a time **string** to display
+   */
+  startDateTime: string
+  /**
+   * a time **string** to display
+   */
+  endDateTime: string
+}) => {
+  return (
+    <h5 className="uppercase">
+      The currently selected stay at the lodge will be from{" "}
+      <strong className="text-dark-blue-100">{startDateTime}</strong> (check in)
+      to <strong className="text-dark-blue-100">{endDateTime}</strong> (check
+      out)
+    </h5>
+  )
+}
+
 export const CreateBookingSection = ({
   bookingSlots = [],
   handleBookingCreation,
@@ -93,28 +129,31 @@ export const CreateBookingSection = ({
    * @param startDate the first date of the range
    * @param endDate the last date of the range
    */
-  const checkValidRange = (startDate: Date, endDate: Date) => {
-    const dateArray = DateUtils.datesToDateRange(startDate, endDate)
-    if (dateArray.length > 10) {
-      alert("You may only book up to 10 days max.")
-      return false
-    }
-    if (
-      dateArray.some(
-        (date) =>
-          disabledDates.some((disabledDate) =>
-            DateUtils.dateEqualToTimestamp(date, disabledDate.date)
-          ) ||
-          !bookingSlots.some((slot) =>
-            DateUtils.dateEqualToTimestamp(date, slot.date)
-          )
-      )
-    ) {
-      alert("Invalid date range, some dates are unavailable")
-      return false
-    }
-    return true
-  }
+  const checkValidRange = useCallback(
+    (startDate: Date, endDate: Date) => {
+      const dateArray = DateUtils.datesToDateRange(startDate, endDate)
+      if (dateArray.length > 10) {
+        alert("You may only book up to 10 days max.")
+        return false
+      }
+      if (
+        dateArray.some(
+          (date) =>
+            disabledDates.some((disabledDate) =>
+              DateUtils.dateEqualToTimestamp(date, disabledDate.date)
+            ) ||
+            !bookingSlots.some((slot) =>
+              DateUtils.dateEqualToTimestamp(date, slot.date)
+            )
+        )
+      ) {
+        alert("Invalid date range, some dates are unavailable")
+        return false
+      }
+      return true
+    },
+    [bookingSlots, disabledDates]
+  )
 
   /**
    * Used when the user wants to confirm their choice of dates and is ready to pay
@@ -151,7 +190,14 @@ export const CreateBookingSection = ({
         Proceed to Payment
       </Button>
     )
-  }, [currentStartDate, currentEndDate, isValidForCreation, isPending])
+  }, [
+    currentStartDate,
+    currentEndDate,
+    isValidForCreation,
+    isPending,
+    checkValidRange,
+    handleBookingCreation
+  ])
 
   /**
    *  a string to be shown to the user about the price for their date selection
@@ -256,6 +302,12 @@ export const CreateBookingSection = ({
             }}
           />
 
+          <ActualBookingStayRange
+            startDateTime={`${DateUtils.formattedNzDate(currentStartDate)} ${CHECK_IN_TIME}`}
+            // Need to add one day to this because the checkout is the day after the last night
+            endDateTime={`${DateUtils.formattedNzDate(new Date(currentEndDate.getTime() + 24 * 60 * 60 * MS_IN_SECOND))} ${CHECK_OUT_TIME}`}
+          />
+
           <RequirementCheckBoxes
             onValidityChange={(newValid) => {
               setIsValidForCreation(newValid)
@@ -303,7 +355,7 @@ export const RequirementCheckBoxes = ({
     onValidityChange(
       !!acceptedRequirements.nightPolicy && !!acceptedRequirements.bookingPolicy
     )
-  }, [acceptedRequirements])
+  }, [acceptedRequirements, onValidityChange])
 
   return (
     <span className="mb-3 flex w-full flex-col gap-1">

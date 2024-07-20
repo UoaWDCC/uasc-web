@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore"
-import { MembershipTypes } from "models/Payment"
-import fetchClient from "services/OpenApiFetchClient"
-import { UnavailableBookingError } from "services/Utils/Errors"
+import { MembershipTypes } from "@/models/Payment"
+import fetchClient from "@/services/OpenApiFetchClient"
+import { UnavailableBookingError } from "@/services/Utils/Errors"
 
 const PaymentService = {
   getMembershipPaymentClientSecret: async function (

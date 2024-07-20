@@ -1,9 +1,5 @@
 import AuthService from "business-layer/services/AuthService"
 import {
-  AuthServiceClaims,
-  UserAccountTypes
-} from "business-layer/utils/AuthServiceClaims"
-import {
   DEFAULT_BOOKING_MAX_SLOTS,
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
@@ -17,6 +13,7 @@ import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
 import {
   DeleteBookingRequest,
+  AddCouponRequestBody,
   MakeDatesAvailableRequestBody
 } from "service-layer/request-models/AdminRequests"
 import {
@@ -29,12 +26,16 @@ import {
   BookingDeleteResponse,
   BookingSlotUpdateResponse
 } from "service-layer/response-models/BookingResponse"
-import { AllUsersResponse } from "service-layer/response-models/UserResponse"
+import {
+  AllUsersResponse,
+  GetUserResponse
+} from "service-layer/response-models/UserResponse"
 import {
   Body,
   Controller,
   Get,
   Patch,
+  Path,
   Post,
   Put,
   Query,
@@ -42,6 +43,10 @@ import {
   Security,
   SuccessResponse
 } from "tsoa"
+import * as console from "console"
+import StripeService from "../../business-layer/services/StripeService"
+import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
+import { UserRecord } from "firebase-admin/auth"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -149,6 +154,7 @@ export class AdminController extends Controller {
   }
 
   @SuccessResponse("200", "Booking deleted successfuly")
+  // TODO: Refactor this to be a DELETE request
   @Post("/bookings/delete")
   public async removeBooking(
     @Body() requestBody: DeleteBookingRequest
@@ -200,9 +206,9 @@ export class AdminController extends Controller {
         return { uid: data.uid }
       })
 
-      const userAuthData = await new AuthService().bulkRetrieveUsersByUids(
-        uidsToQuery
-      )
+      const authService = new AuthService()
+      const userAuthData =
+        await authService.bulkRetrieveUsersByUids(uidsToQuery)
 
       const combinedUserData = rawUserData.map((userInfo) => {
         const matchingUserRecord = userAuthData.find(
@@ -211,15 +217,8 @@ export class AdminController extends Controller {
 
         const { customClaims, email, metadata } = { ...matchingUserRecord } // to avoid undefined destructuring error
 
-        let membership: UserAccountTypes = UserAccountTypes.GUEST
-
-        if (customClaims) {
-          if (customClaims[AuthServiceClaims.ADMIN]) {
-            membership = UserAccountTypes.ADMIN
-          } else if (customClaims[AuthServiceClaims.MEMBER]) {
-            membership = UserAccountTypes.MEMBER
-          }
-        }
+        const membership: UserAccountTypes =
+          authService.getMembershipType(customClaims)
 
         return {
           email,
@@ -242,6 +241,39 @@ export class AdminController extends Controller {
       console.error("Failed to fetch all users", e)
       this.setStatus(500)
       return { error: "Something went wrong when fetching all users" }
+    }
+  }
+
+  @SuccessResponse("200", "User found")
+  @Get("/users/{uid}")
+  public async getUser(@Path() uid: string): Promise<GetUserResponse> {
+    try {
+      const userService = new UserDataService()
+      const user = await userService.getUserData(uid)
+
+      if (!user) {
+        this.setStatus(404)
+        return { error: "User not found" }
+      }
+
+      const authService = new AuthService()
+      const userAuthData = await authService.retrieveUserByUid(uid)
+      const { customClaims, email, metadata } = { ...userAuthData }
+      const membership: UserAccountTypes =
+        authService.getMembershipType(customClaims)
+      this.setStatus(200)
+      return {
+        data: {
+          email,
+          membership,
+          dateJoined: metadata ? metadata.creationTime : undefined,
+          ...user
+        }
+      }
+    } catch (e) {
+      console.error("Failed to fetch user data", e)
+      this.setStatus(500)
+      return { error: "Something went wrong when fetching user data" }
     }
   }
 
@@ -327,6 +359,60 @@ export class AdminController extends Controller {
     } catch (e) {
       console.error(e)
       this.setStatus(500) // unknown server error?
+    }
+  }
+
+  @SuccessResponse("200", "Demoted all non-admin users")
+  @Patch("/users/demote-all")
+  public async demoteAllUsers(): Promise<void> {
+    const authService = new AuthService()
+    let allUsers: UserRecord[] = await authService.getAllUsers()
+    allUsers = allUsers.filter(
+      (user) => !user.customClaims.admin && user.customClaims.member
+    )
+    const demotePromises = await Promise.all(
+      allUsers.map((user) => {
+        return authService.setCustomUserClaim(user.uid, null)
+      })
+    )
+    if (demotePromises) {
+      this.setStatus(200)
+    } else {
+      this.setStatus(500)
+    }
+  }
+
+  @SuccessResponse("200", "Coupon Added")
+  @Post("users/add-coupon")
+  public async addCoupon(
+    @Body() requestBody: AddCouponRequestBody
+  ): Promise<void> {
+    const { uid, quantity } = requestBody
+    const amount = 40 // Hardcoded amount
+    try {
+      const userService = new UserDataService()
+      const stripeService = new StripeService()
+      const user = await userService.getUserData(uid)
+
+      if (!user) {
+        this.setStatus(404)
+        return
+      }
+      if (!user.stripe_id) {
+        this.setStatus(400)
+        return
+      }
+
+      // Add coupon to the user using Stripe ID
+      const couponPromises = Array.from(
+        { length: quantity },
+        async () => await stripeService.addCouponToUser(user.stripe_id, amount)
+      )
+      await Promise.all(couponPromises)
+
+      this.setStatus(200)
+    } catch (e) {
+      this.setStatus(500)
     }
   }
 }

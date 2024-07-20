@@ -1,22 +1,36 @@
 # syntax = docker/dockerfile:1
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20
-FROM node:${NODE_VERSION}-slim as base
+FROM debian:stable-slim as base
 
 LABEL fly_launch_runtime="Node.js"
 
 # Node.js app lives here
 WORKDIR /app
 
-# Set production environment
-RUN corepack enable
+# curl and ca-certificates are needed for volta installation
+RUN apt-get update \
+  && apt-get install -y \
+  curl \
+  ca-certificates \
+  --no-install-recommends
+
+# bash will load volta() function via .bashrc 
+# using $VOLTA_HOME/load.sh
+SHELL ["/bin/bash", "-c"]
+
+# since we're starting non-interactive shell, 
+# we wil need to tell bash to load .bashrc manually
+ENV BASH_ENV ~/.bashrc
+# needed by volta() function
+ENV VOLTA_HOME /root/.volta
+# make sure packages managed by volta will be in PATH
+ENV PATH $VOLTA_HOME/bin:$PATH
+
+# install volta
+RUN curl https://get.volta.sh | bash
+RUN volta install node
 
 # Throw-away build stage to reduce size of final image
 FROM base as install 
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
 # Install node modules
 COPY --link package.json yarn.lock .yarnrc.yml tsconfig.json ./

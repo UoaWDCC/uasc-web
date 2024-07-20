@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react"
-import TextInput from "components/generic/TextInputComponent/TextInput"
-import Button from "components/generic/FigmaButtons/FigmaButton"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { HandlerResponse } from "../LoginForm"
 
 type MessageTypes = {

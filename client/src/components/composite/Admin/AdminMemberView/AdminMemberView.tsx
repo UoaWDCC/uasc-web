@@ -1,11 +1,12 @@
 import AdminSearchBar from "./AdminSearchBar"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import Table from "components/generic/ReusableTable/Table"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import Table from "@/components/generic/ReusableTable/Table"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowOperation
-} from "components/generic/ReusableTable/TableUtils"
-import { useEffect, useState } from "react"
+} from "@/components/generic/ReusableTable/TableUtils"
+import { AccountType } from "@/models/User"
+import { useCallback, useEffect, useState } from "react"
 
 export type MemberColumnFormat = {
   /**
@@ -46,9 +47,20 @@ interface IAdminMemberView {
   fetchNextPage?: () => void
 
   /**
+   * There are still more users to fetch
+   */
+  hasNextPage?: boolean
+
+  /**
    * Called when the *add new member* button is clicked
    */
   openAddMemberView?: () => void
+
+  /**
+   * The action that should be performed when the export user data button is clicked
+   */
+  exportUserDataHandler?: () => void
+
   /*
    * Used to indicate if there is currently an operation going on
    */
@@ -68,6 +80,8 @@ const defaultData = {
 
 const ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH = 2 as const
 
+type AccountTypeFilter = AccountType | "all"
+
 /**
  * The view to be displayed on the `admin` route when the admin wants to:
  * - Add new users
@@ -85,33 +99,87 @@ export const AdminMemberView = ({
   rowOperations,
   fetchNextPage,
   openAddMemberView,
-  isUpdating
+  exportUserDataHandler,
+  isUpdating,
+  hasNextPage
 }: IAdminMemberView) => {
   /**
    * For use with `AdminSearchBar`
    */
   const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("")
+
+  const [filteredAccountType, setFilteredAccountType] =
+    useState<AccountTypeFilter>("all")
+
+  /**
+   * Sets the current role filter to the next one.
+   * Note that the sequence should repeat circularly
+   */
+  const nextAccountFilter = useCallback(() => {
+    switch (filteredAccountType) {
+      case "admin":
+        setFilteredAccountType("member")
+        return
+      case "member":
+        setFilteredAccountType("guest")
+        return
+      case "guest":
+        setFilteredAccountType("all")
+        return
+      case "all":
+        setFilteredAccountType("admin")
+    }
+  }, [filteredAccountType])
+
   const [isLastPage, setIsLastPage] = useState<boolean>(false)
   const isValidSearchQuery =
     currentSearchQuery.length > ADMIN_MEMBER_VIEW_MIN_SEARCH_QUERY_LENGTH
-  const dataFilter = (oldData: MemberColumnFormat[]) =>
-    isValidSearchQuery
-      ? oldData.filter(
-          (item) =>
-            item.Email?.toLowerCase().includes(currentSearchQuery) ||
-            item.Name?.toLowerCase().includes(currentSearchQuery)
-        )
-      : oldData
+
+  const shouldFilterByAccount = filteredAccountType !== "all"
+
+  const dataFilter = useCallback(
+    (oldData: MemberColumnFormat[]) => {
+      return isValidSearchQuery || shouldFilterByAccount
+        ? oldData.filter(
+            (item) =>
+              (isValidSearchQuery &&
+                (item.Email?.toLowerCase().includes(currentSearchQuery) ||
+                  item.Name?.toLowerCase().includes(currentSearchQuery))) ||
+              (shouldFilterByAccount &&
+                filteredAccountType === item.Status?.toLowerCase())
+          )
+        : oldData
+    },
+    [
+      isValidSearchQuery,
+      currentSearchQuery,
+      filteredAccountType,
+      shouldFilterByAccount
+    ]
+  )
 
   useEffect(() => {
+    /**
+     * If the user is currently trying to search for a user using some filters
+     * we need to make sure that the whole list is given to them to search from
+     *
+     * need to update this when new filters are added
+     */
+    const isQuerying = isValidSearchQuery || shouldFilterByAccount
     /**
      * We need to *scroll* to the next page of user data as it is assumed
      * that the endpoint for fetching all users is paginated
      */
-    if (isLastPage || isValidSearchQuery) {
+    if (isLastPage || isQuerying || hasNextPage) {
       fetchNextPage?.()
     }
-  }, [isLastPage, fetchNextPage, isValidSearchQuery])
+  }, [
+    isLastPage,
+    fetchNextPage,
+    isValidSearchQuery,
+    shouldFilterByAccount,
+    hasNextPage
+  ])
 
   const onSeachQueryChangedHandler = (newQuery: string) => {
     setCurrentSearchQuery(newQuery)
@@ -123,11 +191,25 @@ export const AdminMemberView = ({
       <span className="mb-4 mt-6 flex w-full justify-between">
         <span className="flex gap-5">
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
-          <Button variant="inverted-default-sm">Filter</Button>
+          <Button
+            variant="inverted-default-sm"
+            onClick={() => nextAccountFilter()}
+          >
+            {filteredAccountType}
+          </Button>
         </span>
-        <Button variant="default-sm" onClick={() => openAddMemberView?.()}>
-          Add New Member
-        </Button>
+        <span className="flex gap-2">
+          <Button variant="default-sm" onClick={() => openAddMemberView?.()}>
+            Add New Member
+          </Button>
+          <Button
+            variant="default-sm"
+            onClick={() => exportUserDataHandler?.()}
+            disabled={hasNextPage}
+          >
+            Export Data
+          </Button>
+        </span>
       </span>
       <Table<MemberColumnFormat, "multiple-operations">
         data={(data && dataFilter(data)) || [defaultData]}

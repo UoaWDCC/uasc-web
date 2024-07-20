@@ -2,10 +2,20 @@ import { auth } from "business-layer/security/Firebase"
 import AuthService from "./AuthService"
 import { UserRecord } from "firebase-admin/auth"
 import { cleanAuth } from "test-config/TestUtils"
+import { AuthServiceClaims, UserAccountTypes } from "../utils/AuthServiceClaims"
 
 describe("AuthService Integration Tests", () => {
   afterEach(async () => {
     await cleanAuth()
+  })
+
+  it("fetches all users", async () => {
+    for (let i = 0; i < 50; i++) {
+      await auth.createUser({ uid: `${i}` })
+    }
+    // Used to test if the pagination works, maximum fetches 25 users and loops
+    const users = await new AuthService().getAllUsers(25)
+    expect(users.length).toBe(50)
   })
 
   it("deletes a user", async () => {
@@ -100,5 +110,26 @@ describe("AuthService Integration Tests", () => {
     const result = await authService.bulkRetrieveUsersByUids(uidsToQuery)
 
     expect(result.length).toEqual(5)
+  })
+
+  it("returns admin membership for admin claims", async () => {
+    const authService: AuthService = new AuthService()
+    const customClaims = { [AuthServiceClaims.ADMIN]: true }
+    const membership = authService.getMembershipType(customClaims)
+    expect(membership).toEqual(UserAccountTypes.ADMIN)
+  })
+
+  it("returns member membership for member claims", async () => {
+    const authService: AuthService = new AuthService()
+    const customClaims = { [AuthServiceClaims.MEMBER]: true }
+    const membership = authService.getMembershipType(customClaims)
+    expect(membership).toEqual(UserAccountTypes.MEMBER)
+  })
+
+  it("returns guest membership for no claims", async () => {
+    const authService: AuthService = new AuthService()
+    const customClaims = {}
+    const membership = authService.getMembershipType(customClaims)
+    expect(membership).toEqual(UserAccountTypes.GUEST)
   })
 })

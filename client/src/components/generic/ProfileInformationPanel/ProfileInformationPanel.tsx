@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import EditIcon from "assets/icons/edit.svg?react"
+import EditIcon from "@/assets/icons/edit.svg"
 interface IProfileInformationPanel {
   title: string // The title field
   children?: ReactNode

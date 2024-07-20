@@ -1,4 +1,4 @@
-import { MS_IN_SECOND } from "utils/Constants"
+import { MS_IN_SECOND } from "@/utils/Constants"
 import { DateUtils } from "./DateUtils"
 
 describe("DateUtils", () => {
@@ -70,6 +70,16 @@ describe("DateUtils", () => {
       const localDate = new Date("2024-01-01T00:00:00")
       const utcDate = new Date(Date.UTC(2024, 0, 1))
       expect(DateUtils.convertLocalDateToUTCDate(localDate)).toEqual(utcDate)
+    })
+  })
+
+  describe("nzDateStringToMillis", () => {
+    it("should get the correct time", () => {
+      const date = new Date(69696969)
+      const nzDateString = DateUtils.formattedNzDate(date)
+      expect(
+        new Date(DateUtils.nzDateStringToMillis(nzDateString)).toDateString()
+      ).toEqual(date.toDateString())
     })
   })
 })

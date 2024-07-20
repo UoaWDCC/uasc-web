@@ -1,8 +1,10 @@
+"use client"
+
 import { useState } from "react"
-import BellIcon from "assets/icons/bell.svg?react"
-import TickIcon from "assets/icons/tick.svg?react"
-import WarningIcon from "assets/icons/warning.svg?react"
-import XIcon from "assets/icons/x.svg?react"
+import BellIcon from "@/assets/icons/bell.svg"
+import TickIcon from "@/assets/icons/tick.svg"
+import WarningIcon from "@/assets/icons/warning.svg"
+import XIcon from "@/assets/icons/x.svg"
 
 type AlertsInputProp = {
   message: string

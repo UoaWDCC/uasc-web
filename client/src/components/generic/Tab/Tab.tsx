@@ -1,4 +1,4 @@
-import RightArrowIcon from "assets/icons/rightarrow.svg?react"
+import RightArrowIcon from "@/assets/icons/rightarrow.svg"
 
 interface ITab {
   stretchesOnSmallScreen?: boolean

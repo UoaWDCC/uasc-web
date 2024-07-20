@@ -9,5 +9,6 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const DefaultCreateBookingPage: Story = {
+  decorators: [(Story) => <Story />],
   args: {}
 }
