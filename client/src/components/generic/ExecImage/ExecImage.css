@@ -1,0 +1,63 @@
+.exec-image-container {
+    position: relative;
+    display: flex;
+    width: 163px;
+    height: 163px;
+    overflow: hidden;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.exec-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
+
+.exec-image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(40, 61, 135, 0.8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.exec-image-container.hovered::before {
+    opacity: 1;
+}
+
+.exec-image-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.exec-image-title {
+    color: #FFF;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Inter, serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 14px;
+    letter-spacing: 0.72px;
+    text-transform: uppercase;
+}
+
+.exec-image-name {
+    color: #FFF;
+    text-align: center;
+    font-family: Inter, serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+}
