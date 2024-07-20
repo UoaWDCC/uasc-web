@@ -446,7 +446,8 @@ export class PaymentController extends Controller {
           submit: {
             message: `By clicking Pay you agree to booking the nights from ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
           }
-        }
+        },
+        true
       )
       this.setStatus(200)
       return {
