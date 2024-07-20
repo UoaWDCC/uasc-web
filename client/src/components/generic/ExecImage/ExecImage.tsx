@@ -1,34 +1,40 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
-import './ExecImage.css';
+import React, { useState } from "react"
+import Image from "next/image"
+import "./ExecImage.css"
 
 export interface ExecImageProps {
-  src: string;
-  alt: string;
-  title: string;
-  name: string;
+  src: string
+  alt: string
+  title: string
+  name: string
 }
 
 const ExecImage: React.FC<ExecImageProps> = ({ src, alt, title, name }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false)
 
   const handleTouchStart = () => {
-    setIsHovered(true);
-  };
+    setIsHovered(true)
+  }
 
   const handleTouchEnd = () => {
-    setIsHovered(false);
-  };
+    setIsHovered(false)
+  }
 
   return (
     <div
-      className={`exec-image-container ${isHovered ? 'hovered' : ''}`}
+      className={`exec-image-container ${isHovered ? "hovered" : ""}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <Image src={src} alt={alt} width={163} height={163} className="exec-image" />
+      <Image
+        src={src}
+        alt={alt}
+        width={163}
+        height={163}
+        className="exec-image"
+      />
       {isHovered && (
         <div className="exec-image-overlay">
           <p className="exec-image-title">{title}</p>
@@ -36,7 +42,7 @@ const ExecImage: React.FC<ExecImageProps> = ({ src, alt, title, name }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ExecImage;
+export default ExecImage
