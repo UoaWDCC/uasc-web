@@ -22,6 +22,11 @@ import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 
 @Route("users")
 export class UsersController extends Controller {
+  /**
+   * Fetches users additional info based on their uid.
+   * @param request - Takes a UserRecord and uses the UID to fetch the user's additional info
+   * @returns The additionalInfo of the user
+   */
   @SuccessResponse("200", "Fetched self data")
   @Security("jwt")
   @Get("self")
@@ -40,6 +45,12 @@ export class UsersController extends Controller {
     return data
   }
 
+  /**
+   * Edits the user's additional info based on their uid.
+   * @param request - Takes a UserRecord and uses the UID to edit the user's additional info
+   * @param requestBody - The updated user additional info, note that the stripe_id is omitted.
+   * @returns void
+   */
   @SuccessResponse("200", "Successful edit")
   @Security("jwt")
   @Patch("edit-self")
@@ -59,6 +70,11 @@ export class UsersController extends Controller {
     }
   }
 
+  /**
+   * Deletes a user based on their uid. This requires an admin JWT token.
+   * @param requestBody - The uid of the user to be deleted.
+   * @returns void
+   */
   @SuccessResponse("200", "Deleted user")
   @Security("jwt", ["admin"])
   @Delete("delete-user")
