@@ -13,7 +13,7 @@ const config: Config = {
         "home-ski-image": `url('/images/homeLandingBackground.png')`,
         "home-about-image": `url('/images/AboutBackgroundImage.png')`,
         "mountain-background-image": `url('/images/MountainBackgroundImage.png')`,
-        "book-lodge-image": `url('$/images/BookLodgeBackgroundImage.png')`
+        "book-lodge-image": `url('/images/BookLodgeBackgroundImage.png')`
       },
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans]
