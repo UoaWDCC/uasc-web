@@ -1255,14 +1255,17 @@
 						}
 					}
 				},
+				"description": "Signs up a user and creates a user record in the database. Also creates a JWT token for the user in AuthService.",
 				"security": [],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The user's email and their user additional info",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserSignupBody"
+								"$ref": "#/components/schemas/UserSignupBody",
+								"description": "- The user's email and their user additional info"
 							}
 						}
 					}
