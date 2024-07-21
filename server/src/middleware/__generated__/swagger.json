@@ -1146,6 +1146,7 @@
 						}
 					}
 				},
+				"description": "Fetches users additional info based on their uid.",
 				"security": [
 					{
 						"jwt": []
@@ -1162,6 +1163,7 @@
 						"description": "Successful edit"
 					}
 				},
+				"description": "Edits the user's additional info based on their uid.",
 				"security": [
 					{
 						"jwt": []
@@ -1169,11 +1171,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The updated user additional info, note that the stripe_id is omitted.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/EditSelfRequestBody"
+								"$ref": "#/components/schemas/EditSelfRequestBody",
+								"description": "- The updated user additional info, note that the stripe_id is omitted."
 							}
 						}
 					}
@@ -1200,6 +1204,7 @@
 						}
 					}
 				},
+				"description": "Deletes a user based on their uid. This requires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1209,11 +1214,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The uid of the user to be deleted.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/DeleteUserRequestBody"
+								"$ref": "#/components/schemas/DeleteUserRequestBody",
+								"description": "- The uid of the user to be deleted."
 							}
 						}
 					}
@@ -1228,6 +1235,7 @@
 						"description": "Webhook post received"
 					}
 				},
+				"description": "Webhook endpoint for Stripe events.\nThis single endpoint is setup in the Stripe developer config to handle various events.",
 				"security": [],
 				"parameters": []
 			}
