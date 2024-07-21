@@ -105,25 +105,6 @@ export default class StripeService {
   }
 
   /**
-   * Checks for processing payments from a user. Used to avoid
-   * users from double paying after completing a checkout session for membership payments.
-   *
-   * @warning This assumes that users won't be paying for membership right after booking
-   *
-   * @param customerId `stripe_id` from the firebase document
-   */
-  public async hasProcessingPaymentIntent(customerId: string) {
-    const { data } = await stripe.paymentIntents.list({
-      customer: customerId
-    })
-    const hasProcessingPaymentIntent = !!data.find(
-      (intent) => intent.status === "processing"
-    )
-
-    return hasProcessingPaymentIntent
-  }
-
-  /**
    *
    * Checks for processing payments from a user. Used to avoid
    * users from double paying after completing a checkout session for membership payments.
