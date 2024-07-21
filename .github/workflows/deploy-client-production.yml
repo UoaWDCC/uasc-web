@@ -19,6 +19,7 @@ env:
   NEXT_PUBLIC_SANITY_PROJECT_ID: ${{secrets.PROD_SANITY_PROJECT_ID}}
   NEXT_PUBLIC_SANITY_DATASET: production
   NEXT_CONFIG_ENV: production
+  FRONTEND_BASE_URL: ${{secrets.PROD_FRONTEND_URL}}
 
 jobs:
   Deploy-Client:
