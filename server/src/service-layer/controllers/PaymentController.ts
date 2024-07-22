@@ -173,14 +173,13 @@ export class PaymentController extends Controller {
           }
         }
         /**
-         * See if user has pending payment or has recently paid -> if user didn't have a stripe id that means
+         * See if user has recently paid -> if user didn't have a stripe id that means
          * they couldn't have a completed session
          */
         if (
-          (await stripeService.hasRecentlyCompletedCheckoutSession(
+          await stripeService.hasRecentlyCompletedCheckoutSession(
             stripeCustomerId
-          )) ||
-          (await stripeService.hasProcessingPaymentIntent(stripeCustomerId))
+          )
         ) {
           this.setStatus(409)
           return {
