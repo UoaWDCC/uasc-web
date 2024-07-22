@@ -1586,11 +1586,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The start and end date of the range and the number of slots to add.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/MakeDatesAvailableRequestBody"
+								"$ref": "#/components/schemas/MakeDatesAvailableRequestBody",
+								"description": "- The start and end date of the range and the number of slots to add."
 							}
 						}
 					}
@@ -1612,6 +1614,7 @@
 						}
 					}
 				},
+				"description": "Decreases availability count to 0 for all booking slots in a date range.",
 				"security": [
 					{
 						"jwt": [
@@ -1621,11 +1624,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The start and end date of the range, the number of slots is omitted as we're decreases all slots to 0.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Omit_MakeDatesAvailableRequestBody.slots_"
+								"$ref": "#/components/schemas/Omit_MakeDatesAvailableRequestBody.slots_",
+								"description": "- The start and end date of the range, the number of slots is omitted as we're decreases all slots to 0."
 							}
 						}
 					}
@@ -1647,6 +1652,7 @@
 						}
 					}
 				},
+				"description": "Delete a users booking by booking ID.",
 				"security": [
 					{
 						"jwt": [
@@ -1656,11 +1662,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The booking ID to delete.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/DeleteBookingRequest"
+								"$ref": "#/components/schemas/DeleteBookingRequest",
+								"description": "- The booking ID to delete."
 							}
 						}
 					}
@@ -1692,6 +1700,7 @@
 				],
 				"parameters": [
 					{
+						"description": "- The cursor to start fetching users from. Essentially a pagination token.",
 						"in": "query",
 						"name": "cursor",
 						"required": false,
@@ -1700,6 +1709,7 @@
 						}
 					},
 					{
+						"description": "- The number of users to fetch. Defaults to 100. Is also a maximum of 100 users per fetch",
 						"in": "query",
 						"name": "toFetch",
 						"required": false,
@@ -1726,6 +1736,7 @@
 						}
 					}
 				},
+				"description": "Get a user by their UID.\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1735,6 +1746,7 @@
 				],
 				"parameters": [
 					{
+						"description": "- The UID of the user to fetch.",
 						"in": "path",
 						"name": "uid",
 						"required": true,
@@ -1753,6 +1765,7 @@
 						"description": "Created"
 					}
 				},
+				"description": "Adds a new user to the database with their UID and user data.\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1762,11 +1775,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The user data to create and their UID.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateUserRequestBody"
+								"$ref": "#/components/schemas/CreateUserRequestBody",
+								"description": "- The user data to create and their UID."
 							}
 						}
 					}
@@ -1781,6 +1796,7 @@
 						"description": "Edited"
 					}
 				},
+				"description": "Edits a list of users with updated user additional info.\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1790,11 +1806,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The list of users to edit and their updated information.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/EditUsersRequestBody"
+								"$ref": "#/components/schemas/EditUsersRequestBody",
+								"description": "- The list of users to edit and their updated information."
 							}
 						}
 					}
@@ -1809,6 +1827,7 @@
 						"description": "Promoted user"
 					}
 				},
+				"description": "Promotes a user to a member. This returns a conflict when the user is already a member.\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1818,11 +1837,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The UID of the user to promote.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/PromoteUserRequestBody"
+								"$ref": "#/components/schemas/PromoteUserRequestBody",
+								"description": "- The UID of the user to promote."
 							}
 						}
 					}
@@ -1837,6 +1858,7 @@
 						"description": "Demoted user"
 					}
 				},
+				"description": "Demotes a member to a guest. This returns a conflict when the user is already a guest.\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1846,11 +1868,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The UID of the user to demote.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/DemoteUserRequestBody"
+								"$ref": "#/components/schemas/DemoteUserRequestBody",
+								"description": "- The UID of the user to demote."
 							}
 						}
 					}
@@ -1865,6 +1889,7 @@
 						"description": "Demoted all non-admin users"
 					}
 				},
+				"description": "Demotes all non-admin users to guests. This is used to purge all membership statuses at the end of a billing cycle.\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1883,6 +1908,7 @@
 						"description": "Coupon Added"
 					}
 				},
+				"description": "Adds a coupon to a user's stripe id.\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1892,11 +1918,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The UID of the user to add the coupon to and the quantity of coupons to add.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/AddCouponRequestBody"
+								"$ref": "#/components/schemas/AddCouponRequestBody",
+								"description": "- The UID of the user to add the coupon to and the quantity of coupons to add."
 							}
 						}
 					}

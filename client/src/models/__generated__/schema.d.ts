@@ -72,9 +72,11 @@ export interface paths {
     post: operations["MakeDateAvailable"];
   };
   "/admin/bookings/make-dates-unavailable": {
+    /** @description Decreases availability count to 0 for all booking slots in a date range. */
     post: operations["MakeDateUnavailable"];
   };
   "/admin/bookings/delete": {
+    /** @description Delete a users booking by booking ID. */
     post: operations["RemoveBooking"];
   };
   "/admin/users": {
@@ -82,24 +84,52 @@ export interface paths {
     get: operations["GetAllUsers"];
   };
   "/admin/users/{uid}": {
+    /**
+     * @description Get a user by their UID.
+     * Requires an admin JWT token.
+     */
     get: operations["GetUser"];
   };
   "/admin/users/create": {
+    /**
+     * @description Adds a new user to the database with their UID and user data.
+     * Requires an admin JWT token.
+     */
     put: operations["CreateUser"];
   };
   "/admin/users/bulk-edit": {
+    /**
+     * @description Edits a list of users with updated user additional info.
+     * Requires an admin JWT token.
+     */
     patch: operations["EditUsers"];
   };
   "/admin/users/promote": {
+    /**
+     * @description Promotes a user to a member. This returns a conflict when the user is already a member.
+     * Requires an admin JWT token.
+     */
     put: operations["PromoteUser"];
   };
   "/admin/users/demote": {
+    /**
+     * @description Demotes a member to a guest. This returns a conflict when the user is already a guest.
+     * Requires an admin JWT token.
+     */
     put: operations["DemoteUser"];
   };
   "/admin/users/demote-all": {
+    /**
+     * @description Demotes all non-admin users to guests. This is used to purge all membership statuses at the end of a billing cycle.
+     * Requires an admin JWT token.
+     */
     patch: operations["DemoteAllUsers"];
   };
   "/admin/users/add-coupon": {
+    /**
+     * @description Adds a coupon to a user's stripe id.
+     * Requires an admin JWT token.
+     */
     post: operations["AddCoupon"];
   };
 }
@@ -716,6 +746,7 @@ export interface operations {
   };
   /** @description Booking Operations */
   MakeDateAvailable: {
+    /** @description - The start and end date of the range and the number of slots to add. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["MakeDatesAvailableRequestBody"];
@@ -730,7 +761,9 @@ export interface operations {
       };
     };
   };
+  /** @description Decreases availability count to 0 for all booking slots in a date range. */
   MakeDateUnavailable: {
+    /** @description - The start and end date of the range, the number of slots is omitted as we're decreases all slots to 0. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["Omit_MakeDatesAvailableRequestBody.slots_"];
@@ -745,7 +778,9 @@ export interface operations {
       };
     };
   };
+  /** @description Delete a users booking by booking ID. */
   RemoveBooking: {
+    /** @description - The booking ID to delete. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["DeleteBookingRequest"];
@@ -764,7 +799,9 @@ export interface operations {
   GetAllUsers: {
     parameters: {
       query?: {
+        /** @description - The cursor to start fetching users from. Essentially a pagination token. */
         cursor?: string;
+        /** @description - The number of users to fetch. Defaults to 100. Is also a maximum of 100 users per fetch */
         toFetch?: number;
       };
     };
@@ -777,9 +814,14 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Get a user by their UID.
+   * Requires an admin JWT token.
+   */
   GetUser: {
     parameters: {
       path: {
+        /** @description - The UID of the user to fetch. */
         uid: string;
       };
     };
@@ -792,7 +834,12 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Adds a new user to the database with their UID and user data.
+   * Requires an admin JWT token.
+   */
   CreateUser: {
+    /** @description - The user data to create and their UID. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateUserRequestBody"];
@@ -805,7 +852,12 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Edits a list of users with updated user additional info.
+   * Requires an admin JWT token.
+   */
   EditUsers: {
+    /** @description - The list of users to edit and their updated information. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["EditUsersRequestBody"];
@@ -818,7 +870,12 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Promotes a user to a member. This returns a conflict when the user is already a member.
+   * Requires an admin JWT token.
+   */
   PromoteUser: {
+    /** @description - The UID of the user to promote. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["PromoteUserRequestBody"];
@@ -831,7 +888,12 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Demotes a member to a guest. This returns a conflict when the user is already a guest.
+   * Requires an admin JWT token.
+   */
   DemoteUser: {
+    /** @description - The UID of the user to demote. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["DemoteUserRequestBody"];
@@ -844,6 +906,10 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Demotes all non-admin users to guests. This is used to purge all membership statuses at the end of a billing cycle.
+   * Requires an admin JWT token.
+   */
   DemoteAllUsers: {
     responses: {
       /** @description Demoted all non-admin users */
@@ -852,7 +918,12 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Adds a coupon to a user's stripe id.
+   * Requires an admin JWT token.
+   */
   AddCoupon: {
+    /** @description - The UID of the user to add the coupon to and the quantity of coupons to add. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["AddCouponRequestBody"];
