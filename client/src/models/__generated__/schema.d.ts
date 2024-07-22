@@ -6,27 +6,38 @@
 
 export interface paths {
   "/users/self": {
+    /** @description Fetches users additional info based on their uid. */
     get: operations["GetSelf"];
   };
   "/users/edit-self": {
+    /** @description Edits the user's additional info based on their uid. */
     patch: operations["EditSelf"];
   };
   "/users/delete-user": {
+    /** @description Deletes a user based on their uid. This requires an admin JWT token. */
     delete: operations["DeleteUser"];
   };
   "/webhook": {
+    /**
+     * @description Webhook endpoint for Stripe events.
+     * This single endpoint is setup in the Stripe developer config to handle various events.
+     */
     post: operations["ReceiveWebhook"];
   };
   "/signup": {
+    /** @description Signs up a user and creates a user record in the database. Also creates a JWT token for the user in AuthService. */
     post: operations["Signup"];
   };
   "/payment/membership_prices": {
+    /** @description Fetches the prices of the membership products from Stripe. */
     get: operations["GetMembershipPrices"];
   };
   "/payment/checkout_status": {
+    /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
     get: operations["GetCheckoutSessionDetails"];
   };
   "/payment/membership": {
+    /** @description Creates a checkout session for membership payment. */
     post: operations["GetMembershipPayment"];
   };
   "/payment/booking": {
@@ -469,6 +480,7 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** @description Fetches users additional info based on their uid. */
   GetSelf: {
     responses: {
       /** @description Fetched self data */
@@ -498,7 +510,9 @@ export interface operations {
       };
     };
   };
+  /** @description Edits the user's additional info based on their uid. */
   EditSelf: {
+    /** @description - The updated user additional info, note that the stripe_id is omitted. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["EditSelfRequestBody"];
@@ -511,7 +525,9 @@ export interface operations {
       };
     };
   };
+  /** @description Deletes a user based on their uid. This requires an admin JWT token. */
   DeleteUser: {
+    /** @description - The uid of the user to be deleted. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["DeleteUserRequestBody"];
@@ -526,6 +542,10 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Webhook endpoint for Stripe events.
+   * This single endpoint is setup in the Stripe developer config to handle various events.
+   */
   ReceiveWebhook: {
     responses: {
       /** @description Webhook post received */
@@ -534,7 +554,9 @@ export interface operations {
       };
     };
   };
+  /** @description Signs up a user and creates a user record in the database. Also creates a JWT token for the user in AuthService. */
   Signup: {
+    /** @description - The user's email and their user additional info. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["UserSignupBody"];
@@ -549,9 +571,10 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches the prices of the membership products from Stripe. */
   GetMembershipPrices: {
     responses: {
-      /** @description Ok */
+      /** @description The prices of the membership products. */
       200: {
         content: {
           "application/json": components["schemas"]["MembershipStripeProductResponse"];
@@ -559,9 +582,11 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
   GetCheckoutSessionDetails: {
     parameters: {
       query: {
+        /** @description The id of the stripe checkout session to fetch. */
         sessionId: string;
       };
     };
@@ -580,7 +605,9 @@ export interface operations {
       };
     };
   };
+  /** @description Creates a checkout session for membership payment. */
   GetMembershipPayment: {
+    /** @description The request body containing the membership type. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["UserPaymentRequestModel"];
@@ -601,6 +628,7 @@ export interface operations {
    * the last 30 minutes (the minimum period stripe has to persist a session for)
    */
   GetBookingPayment: {
+    /** @description The request body containing the date ranges for the booking. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["UserBookingRequestingModel"];

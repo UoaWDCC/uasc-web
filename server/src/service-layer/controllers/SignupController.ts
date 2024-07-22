@@ -10,8 +10,8 @@ import { parseFirebaseError } from "business-layer/utils/FirebaseErrorParser"
 export class UserSignup extends Controller {
   /**
    * Signs up a user and creates a user record in the database. Also creates a JWT token for the user in AuthService.
-   * @param requestBody - The user's email and their user additional info
-   * @returns The JWT token and the user's UID
+   * @param requestBody - The user's email and their user additional info.
+   * @returns The JWT token and the user's UID.
    */
   @Post()
   @SuccessResponse(200, "Signup successful")

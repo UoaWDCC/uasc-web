@@ -1259,13 +1259,13 @@
 				"security": [],
 				"parameters": [],
 				"requestBody": {
-					"description": "- The user's email and their user additional info",
+					"description": "- The user's email and their user additional info.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserSignupBody",
-								"description": "- The user's email and their user additional info"
+								"description": "- The user's email and their user additional info."
 							}
 						}
 					}
@@ -1277,7 +1277,7 @@
 				"operationId": "GetMembershipPrices",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "The prices of the membership products.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -1287,6 +1287,7 @@
 						}
 					}
 				},
+				"description": "Fetches the prices of the membership products from Stripe.",
 				"security": [],
 				"parameters": []
 			}
@@ -1327,6 +1328,7 @@
 						}
 					}
 				},
+				"description": "Fetches the details of a checkout session based on a stripe checkout session id.",
 				"security": [
 					{
 						"jwt": []
@@ -1334,6 +1336,7 @@
 				],
 				"parameters": [
 					{
+						"description": "The id of the stripe checkout session to fetch.",
 						"in": "query",
 						"name": "sessionId",
 						"required": true,
@@ -1359,6 +1362,7 @@
 						}
 					}
 				},
+				"description": "Creates a checkout session for membership payment.",
 				"security": [
 					{
 						"jwt": []
@@ -1366,11 +1370,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "The request body containing the membership type.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserPaymentRequestModel"
+								"$ref": "#/components/schemas/UserPaymentRequestModel",
+								"description": "The request body containing the membership type."
 							}
 						}
 					}
@@ -1402,11 +1408,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "The request body containing the date ranges for the booking.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserBookingRequestingModel"
+								"$ref": "#/components/schemas/UserBookingRequestingModel",
+								"description": "The request body containing the date ranges for the booking."
 							}
 						}
 					}

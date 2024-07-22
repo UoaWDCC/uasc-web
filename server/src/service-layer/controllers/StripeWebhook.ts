@@ -15,7 +15,7 @@ export class StripeWebhook extends Controller {
    * Webhook endpoint for Stripe events.
    * This single endpoint is setup in the Stripe developer config to handle various events.
    * @param request - The raw request that's passed from Stripe.
-   * @returns void
+   * @returns void.
    */
   @Post()
   @SuccessResponse(200, "Webhook post received")
