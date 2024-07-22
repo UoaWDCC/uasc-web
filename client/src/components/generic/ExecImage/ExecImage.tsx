@@ -18,7 +18,7 @@ const ExecImage: React.FC<ExecImageProps> = ({ src, alt, title, name }) => {
         height={163}
         className="h-full w-full object-cover transition-opacity duration-300"
       />
-      <div className="absolute left-0 top-0 h-full w-full bg-dark-blue-100 opacity-0 transition-opacity duration-300 group-hover:opacity-80"></div>
+      <div className="bg-dark-blue-100 absolute left-0 top-0 h-full w-full opacity-0 transition-opacity duration-300 group-hover:opacity-80"></div>
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <p className="text-[12px] font-bold uppercase tracking-wider text-white">
           {title}
