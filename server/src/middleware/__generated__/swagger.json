@@ -1436,6 +1436,7 @@
 						}
 					}
 				},
+				"description": "An admin method to create bookings for a list of users within a date range.",
 				"security": [
 					{
 						"jwt": [
@@ -1445,11 +1446,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The date range and list of user ids to create bookings for.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateBookingsRequestModel"
+								"$ref": "#/components/schemas/CreateBookingsRequestModel",
+								"description": "- The date range and list of user ids to create bookings for."
 							}
 						}
 					}
@@ -1471,6 +1474,7 @@
 						}
 					}
 				},
+				"description": "Fetches all bookings for a user based on their UID.",
 				"security": [
 					{
 						"jwt": [
@@ -1496,6 +1500,7 @@
 						}
 					}
 				},
+				"description": "Fetches all available booking dates within a date range.",
 				"security": [
 					{
 						"jwt": [
@@ -1505,11 +1510,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The date range to check for available booking slots.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/AvailableDatesRequestModel"
+								"$ref": "#/components/schemas/AvailableDatesRequestModel",
+								"description": "- The date range to check for available booking slots."
 							}
 						}
 					}
@@ -1531,7 +1538,7 @@
 						}
 					}
 				},
-				"description": "This method fetches users based on a booking date range.",
+				"description": "This method fetches users based on a booking date range.\nThis method requires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1541,11 +1548,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The date range to check for user bookings.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/BookingsByDateRangeRequestModel"
+								"$ref": "#/components/schemas/BookingsByDateRangeRequestModel",
+								"description": "- The date range to check for user bookings."
 							}
 						}
 					}

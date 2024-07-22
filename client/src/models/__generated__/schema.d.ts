@@ -49,16 +49,22 @@ export interface paths {
     post: operations["GetBookingPayment"];
   };
   "/bookings/create-bookings": {
+    /** @description An admin method to create bookings for a list of users within a date range. */
     post: operations["CreateBookings"];
   };
   "/bookings": {
+    /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
   };
   "/bookings/available-dates": {
+    /** @description Fetches all available booking dates within a date range. */
     post: operations["GetAvailableDates"];
   };
   "/bookings/fetch-users": {
-    /** @description This method fetches users based on a booking date range. */
+    /**
+     * @description This method fetches users based on a booking date range.
+     * This method requires an admin JWT token.
+     */
     post: operations["FetchUsersByBookingDateRange"];
   };
   "/admin/bookings/make-dates-available": {
@@ -643,7 +649,9 @@ export interface operations {
       };
     };
   };
+  /** @description An admin method to create bookings for a list of users within a date range. */
   CreateBookings: {
+    /** @description - The date range and list of user ids to create bookings for. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateBookingsRequestModel"];
@@ -658,6 +666,7 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches all bookings for a user based on their UID. */
   GetAllBookings: {
     responses: {
       /** @description Found bookings */
@@ -668,7 +677,9 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches all available booking dates within a date range. */
   GetAvailableDates: {
+    /** @description - The date range to check for available booking slots. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["AvailableDatesRequestModel"];
@@ -683,8 +694,12 @@ export interface operations {
       };
     };
   };
-  /** @description This method fetches users based on a booking date range. */
+  /**
+   * @description This method fetches users based on a booking date range.
+   * This method requires an admin JWT token.
+   */
   FetchUsersByBookingDateRange: {
+    /** @description - The date range to check for user bookings. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["BookingsByDateRangeRequestModel"];
