@@ -165,7 +165,9 @@ export const CreateBookingSection = ({
         variant="default"
         onClick={() => {
           if (!isValidForCreation) {
-            alert("Please check all the required acknowledgements")
+            alert(
+              "Please check all the required acknowledgements and enter your dietary requirements"
+            )
             return
           }
           if (
@@ -312,12 +314,7 @@ export const CreateBookingSection = ({
             onValidityChange={(newValid) => {
               setIsValidForCreation(newValid)
             }}
-          />
-
-          <TextInput
-            onChange={(e) => handleAllergyChange?.(e.target.value)}
-            label="Please describe your dietary requirements"
-            placeholder="Enter dietary requirements here"
+            handleAllergyChange={handleAllergyChange}
           />
 
           {hasExistingSession ? (
@@ -338,47 +335,78 @@ interface IRequirementCheckBoxes {
    * @param newValid if the current state of the checkboxes is valid
    */
   onValidityChange: (newValid: boolean) => void
+
+  /**
+   * @param newAllergies
+   */
+  handleAllergyChange?: (newAllergies: string) => void
 }
+
+/**
+ * To allow users to enter "no"
+ */
+const DIETARY_REQUIREMENTS_MIN_LENGTH = 2 as const
 
 /**
  * Provides a way to see if the user has agreed to all required policy
  * @deprecated only for internal use in `BookingCreation`, exported for testing purposes
  */
 export const RequirementCheckBoxes = ({
-  onValidityChange
+  onValidityChange,
+  handleAllergyChange
 }: IRequirementCheckBoxes) => {
   const [acceptedRequirements, setAcceptedRequirements] = useState<{
     nightPolicy?: boolean
     bookingPolicy?: boolean
+    dietaryRequirements?: boolean
   }>({})
   useEffect(() => {
     onValidityChange(
-      !!acceptedRequirements.nightPolicy && !!acceptedRequirements.bookingPolicy
+      !!acceptedRequirements.nightPolicy &&
+        !!acceptedRequirements.bookingPolicy &&
+        !!acceptedRequirements.dietaryRequirements
     )
   }, [acceptedRequirements, onValidityChange])
 
   return (
-    <span className="mb-3 flex w-full flex-col gap-1">
-      <Checkbox
-        data-testid="agreed-to-night-policy-checkbox"
+    <>
+      <span className="mb-3 flex w-full flex-col gap-1">
+        <Checkbox
+          data-testid="agreed-to-night-policy-checkbox"
+          onChange={(e) => {
+            setAcceptedRequirements({
+              ...acceptedRequirements,
+              nightPolicy: e.target.checked
+            })
+          }}
+          label="I understand that each date corresponds to one night's stay"
+        />
+        <Checkbox
+          data-testid="agreed-to-general-policy-checkbox"
+          label="I have read and acknowledged the booking policy"
+          onChange={(e) => {
+            setAcceptedRequirements({
+              ...acceptedRequirements,
+              bookingPolicy: e.target.checked
+            })
+          }}
+        />
+      </span>
+
+      <TextInput
         onChange={(e) => {
+          handleAllergyChange?.(e.target.value)
+
           setAcceptedRequirements({
             ...acceptedRequirements,
-            nightPolicy: e.target.checked
+            dietaryRequirements:
+              e.target.value.length >= DIETARY_REQUIREMENTS_MIN_LENGTH
           })
         }}
-        label="I understand that each date corresponds to one night's stay"
+        data-testid="dietary-requirements-input"
+        label="Please describe your dietary requirements"
+        placeholder="Enter dietary requirements here"
       />
-      <Checkbox
-        data-testid="agreed-to-general-policy-checkbox"
-        label="I have read and acknowledged the booking policy"
-        onChange={(e) => {
-          setAcceptedRequirements({
-            ...acceptedRequirements,
-            bookingPolicy: e.target.checked
-          })
-        }}
-      />
-    </span>
+    </>
   )
 }
