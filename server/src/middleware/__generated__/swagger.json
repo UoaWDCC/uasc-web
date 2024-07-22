@@ -1146,6 +1146,7 @@
 						}
 					}
 				},
+				"description": "Fetches users additional info based on their uid.",
 				"security": [
 					{
 						"jwt": []
@@ -1162,6 +1163,7 @@
 						"description": "Successful edit"
 					}
 				},
+				"description": "Edits the user's additional info based on their uid.",
 				"security": [
 					{
 						"jwt": []
@@ -1169,11 +1171,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The updated user additional info, note that the stripe_id is omitted.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/EditSelfRequestBody"
+								"$ref": "#/components/schemas/EditSelfRequestBody",
+								"description": "- The updated user additional info, note that the stripe_id is omitted."
 							}
 						}
 					}
@@ -1200,6 +1204,7 @@
 						}
 					}
 				},
+				"description": "Deletes a user based on their uid. This requires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1209,11 +1214,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The uid of the user to be deleted.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/DeleteUserRequestBody"
+								"$ref": "#/components/schemas/DeleteUserRequestBody",
+								"description": "- The uid of the user to be deleted."
 							}
 						}
 					}
@@ -1228,6 +1235,7 @@
 						"description": "Webhook post received"
 					}
 				},
+				"description": "Webhook endpoint for Stripe events.\nThis single endpoint is setup in the Stripe developer config to handle various events.",
 				"security": [],
 				"parameters": []
 			}
@@ -1247,14 +1255,17 @@
 						}
 					}
 				},
+				"description": "Signs up a user and creates a user record in the database. Also creates a JWT token for the user in AuthService.",
 				"security": [],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The user's email and their user additional info.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserSignupBody"
+								"$ref": "#/components/schemas/UserSignupBody",
+								"description": "- The user's email and their user additional info."
 							}
 						}
 					}
@@ -1266,7 +1277,7 @@
 				"operationId": "GetMembershipPrices",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "The prices of the membership products.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -1276,6 +1287,7 @@
 						}
 					}
 				},
+				"description": "Fetches the prices of the membership products from Stripe.",
 				"security": [],
 				"parameters": []
 			}
@@ -1316,6 +1328,7 @@
 						}
 					}
 				},
+				"description": "Fetches the details of a checkout session based on a stripe checkout session id.",
 				"security": [
 					{
 						"jwt": []
@@ -1323,6 +1336,7 @@
 				],
 				"parameters": [
 					{
+						"description": "The id of the stripe checkout session to fetch.",
 						"in": "query",
 						"name": "sessionId",
 						"required": true,
@@ -1348,6 +1362,7 @@
 						}
 					}
 				},
+				"description": "Creates a checkout session for membership payment.",
 				"security": [
 					{
 						"jwt": []
@@ -1355,11 +1370,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "The request body containing the membership type.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserPaymentRequestModel"
+								"$ref": "#/components/schemas/UserPaymentRequestModel",
+								"description": "The request body containing the membership type."
 							}
 						}
 					}
@@ -1391,11 +1408,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "The request body containing the date ranges for the booking.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserBookingRequestingModel"
+								"$ref": "#/components/schemas/UserBookingRequestingModel",
+								"description": "The request body containing the date ranges for the booking."
 							}
 						}
 					}
@@ -1417,6 +1436,7 @@
 						}
 					}
 				},
+				"description": "An admin method to create bookings for a list of users within a date range.",
 				"security": [
 					{
 						"jwt": [
@@ -1426,11 +1446,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The date range and list of user ids to create bookings for.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateBookingsRequestModel"
+								"$ref": "#/components/schemas/CreateBookingsRequestModel",
+								"description": "- The date range and list of user ids to create bookings for."
 							}
 						}
 					}
@@ -1452,6 +1474,7 @@
 						}
 					}
 				},
+				"description": "Fetches all bookings for a user based on their UID.",
 				"security": [
 					{
 						"jwt": [
@@ -1477,6 +1500,7 @@
 						}
 					}
 				},
+				"description": "Fetches all available booking dates within a date range.",
 				"security": [
 					{
 						"jwt": [
@@ -1486,11 +1510,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The date range to check for available booking slots.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/AvailableDatesRequestModel"
+								"$ref": "#/components/schemas/AvailableDatesRequestModel",
+								"description": "- The date range to check for available booking slots."
 							}
 						}
 					}
@@ -1512,7 +1538,7 @@
 						}
 					}
 				},
-				"description": "This method fetches users based on a booking date range.",
+				"description": "This method fetches users based on a booking date range.\nThis method requires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1522,11 +1548,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "- The date range to check for user bookings.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/BookingsByDateRangeRequestModel"
+								"$ref": "#/components/schemas/BookingsByDateRangeRequestModel",
+								"description": "- The date range to check for user bookings."
 							}
 						}
 					}
