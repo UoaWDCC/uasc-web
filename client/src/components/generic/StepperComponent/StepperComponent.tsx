@@ -1,13 +1,31 @@
 import StepperButton from "../StepperButtons/StepperButton"
 
 export type StepProps = {
+  /**
+   * The display name of the step
+   *
+   * @example "Confirm"
+   */
   name: string
+  /**
+   * The current value from a set of `enum`s that determines which step should
+   * be highlighted on the stepper
+   */
   index: number
+  /**
+   * Handler for if a button is clicked
+   */
   onClick?: () => void
 }
 
 interface IStepperProps {
+  /**
+   * An `enum` value that defines what step should be active
+   */
   currentStep: number
+  /**
+   * @example steps={["Details", "Confirmation"]}
+   */
   steps: StepProps[]
 }
 

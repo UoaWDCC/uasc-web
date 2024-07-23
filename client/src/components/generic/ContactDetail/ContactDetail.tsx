@@ -1,6 +1,21 @@
 export interface IContactDetail {
+  /**
+   * The main description of the contact
+   *
+   * @example "Admin"
+   */
   title: string
+  /**
+   * The extended description of the contact
+   *
+   * @example "For all payment issues and queries"
+   */
   description?: string
+  /**
+   * The email that is associated with the contact
+   *
+   * @example "mail@mail.com"
+   */
   email?: string
 }
 

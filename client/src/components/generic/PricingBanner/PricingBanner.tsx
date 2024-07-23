@@ -1,6 +1,15 @@
 export interface IPricingBanner {
+  /**
+   * @example "Great nightly rates"
+   */
   headline: string
+  /**
+   * @example "$40 per night"
+   */
   priceInformation: string
+  /**
+   * @example "*$60 for a single saturday"
+   */
   disclaimer?: string
 }
 const PricingBanner = ({
