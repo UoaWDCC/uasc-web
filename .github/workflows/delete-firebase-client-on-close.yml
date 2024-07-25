@@ -13,7 +13,7 @@ jobs:
       - name: Get short pull request title
         id: get-short-pr
         run: |
-          echo "pr=$(echo ${{github.head_ref}} | cut -c 1-20)" >> $GITHUB_OUTPUT"
+          echo "pr=$(echo ${{github.head_ref}} | cut -c 1-20)" >> $GITHUB_OUTPUT
 
       - uses: actions/checkout@v3
 
