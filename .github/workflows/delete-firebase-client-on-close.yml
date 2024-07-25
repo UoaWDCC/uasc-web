@@ -13,7 +13,9 @@ jobs:
 
       - uses: w9jds/firebase-action@v12.4.0
         with:
-          args: hosting:channel:delete ${{ github.head_ref }} --force
+          # as we didn't specify a specific channel id, firebase-action defaults
+          # with using pr<ticket number>-<ticket reference substringed to 20 chars>
+          args: hosting:channel:delete pr${{ github.event.pull_request.number }}-${{ github.head_ref:0:20 }} --force
         env:
           # The Firebase service account key
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}
