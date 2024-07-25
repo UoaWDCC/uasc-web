@@ -1,0 +1,20 @@
+name: Delete firebase channel upon PR close
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete_firebase_channel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: w9jds/firebase-action@v12.4.0
+        with:
+          args: hosting:channel:delete ${{ github.head_ref }} --force
+        env:
+          # The Firebase service account key
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}
+          PROJECT_ID: uasc-ceebc
