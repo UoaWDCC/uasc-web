@@ -9,7 +9,7 @@ import {
 import { useState, useRef } from "react"
 import { useClickOutside } from "@/components/utils/Utils"
 import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
-import AdminBookingCreationPopUp from "./AdminBookingCreationPopUp"
+import WrappedAdminBookingCreationPopUp from "./WrappedAdminBookingCreationPopUp"
 
 /**
  * The format of the columns in the admin booking view.
@@ -167,7 +167,7 @@ export const AdminBookingView = ({
         />
       </div>
       <ModalContainer isOpen={openAddBookingPopup}>
-        <AdminBookingCreationPopUp
+        <WrappedAdminBookingCreationPopUp
           handleClose={() => setOpenAddBookingPopup(false)}
         />
       </ModalContainer>
