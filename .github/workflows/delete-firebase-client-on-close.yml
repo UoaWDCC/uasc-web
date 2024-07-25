@@ -9,11 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # Substring workaround by using shell method
+      - name: Get short pull request title
+        id: get-short-pr
+        run: |
+          echo "pr=$(echo ${{github.head_ref}} | cut -c 1-20)" >> $GITHUB_OUTPUT"
+
       - uses: actions/checkout@v3
 
       - uses: w9jds/firebase-action@v12.4.0
         with:
-          args: hosting:channel:delete ${{ github.head_ref }} --force
+          # as we didn't specify a specific channel id, firebase-action defaults
+          # with using pr<ticket number>-<ticket reference substringed to 20 chars>
+          args: hosting:channel:delete pr${{ github.event.pull_request.number }}-${{ steps.get-short-pr.outputs.pr }} --force
         env:
           # The Firebase service account key
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}
