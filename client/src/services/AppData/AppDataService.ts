@@ -49,6 +49,13 @@ const AppDataService = {
   },
   getMembershipPricingDetails: async function (): Promise<Prices[]> {
     try {
+      const membershipOrder = {
+        uoa_student: 1,
+        non_uoa_student: 2,
+        returning_member: 3,
+        new_non_student: 4
+      }
+
       const { data } = await fetchClient.GET("/payment/membership_prices")
 
       if (data && data.data) {
@@ -81,6 +88,11 @@ const AppDataService = {
               extraInfo: data.description
             }
           })
+
+        transformedData.sort(
+          (a, b) => membershipOrder[a.name] - membershipOrder[b.name]
+        )
+
         return transformedData
       }
     } catch (e) {
