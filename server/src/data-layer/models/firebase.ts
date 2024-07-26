@@ -138,6 +138,7 @@ export interface EventSlot {
   title: string
   /**
    * An optional description for this event
+   * This should be in markdown
    * @example Come join your friends in this exciting UASC event and race!
    */
   description?: string
@@ -150,11 +151,15 @@ export interface EventSlot {
    */
   location: string
   /**
-   * The start date and end date of this event.
-   * Note that this date is UTC time.
-   * Use the same start and end date to show that its a 1 day event.
+   * The start date of the event.
+   * Note that this date is in UTC time.
+   * Use the same start and end day to show that its a 1 day event.
    */
   start_date: Timestamp
+  /**
+   * The end date of the event.
+   * Note that this date is in UTC time.
+   */
   end_date: Timestamp
   /**
    * Max number of attendees at this event, left as optional for uncapped
