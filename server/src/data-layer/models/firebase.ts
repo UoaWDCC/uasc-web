@@ -129,3 +129,21 @@ export interface BookingChange {
   new_check_in: Timestamp // New check-in timestamp
   new_check_out: Timestamp // New check-out timestamp
 }
+
+export interface EventSlot {
+  /**
+   * The titel of this event
+   * @example Snowboarding race!
+   */
+  title: string
+  /**
+   * An optional description for this event
+   * @example Come join your friends in this exciting UASC event and race!
+   */
+  description?: string
+  /**
+   * Max number of attendees at this event, left as optional for uncapped
+   * @example 30
+   */
+  max_occupancy?: number
+}
