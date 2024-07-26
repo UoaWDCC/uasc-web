@@ -132,7 +132,7 @@ export interface BookingChange {
 
 export interface EventSlot {
   /**
-   * The titel of this event
+   * The title of this event
    * @example Snowboarding race!
    */
   title: string
@@ -141,6 +141,21 @@ export interface EventSlot {
    * @example Come join your friends in this exciting UASC event and race!
    */
   description?: string
+  /**
+   * The link for the image to display on the event page (essentially a thumbnail)
+   */
+  image_url?: string
+  /**
+   * The location of this event
+   */
+  location: string
+  /**
+   * The start date and end date of this event.
+   * Note that this date is UTC time.
+   * Use the same start and end date to show that its a 1 day event.
+   */
+  start_date: Timestamp
+  end_date: Timestamp
   /**
    * Max number of attendees at this event, left as optional for uncapped
    * @example 30
