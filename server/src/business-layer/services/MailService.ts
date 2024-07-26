@@ -4,6 +4,10 @@ import { compileFile } from "pug"
 
 const TEMPLATE_BASE_PATH = path.join(__dirname, "..", "templates")
 
+const BOOKING_CONFIRMATION_TEMPLATE = compileFile(
+  `${TEMPLATE_BASE_PATH}/BookingConfirmation.pug`
+)
+
 const transporter = NodeMailer.createTransport({
   service: "Gmail",
   host: "smtp.gmail.com",
@@ -30,15 +34,11 @@ export default class MailService {
     startDateString: string,
     endDateString: string
   ) {
-    const compiledFunction = compileFile(
-      `${TEMPLATE_BASE_PATH}/BookingConfirmation.pug`
-    )
-
     const info = await transporter.sendMail({
       from: '"UASC Bookings"',
       to: recipientEmail,
       subject: `Your booking from ${startDateString} to ${endDateString}`,
-      html: compiledFunction({
+      html: BOOKING_CONFIRMATION_TEMPLATE({
         name: recipientName,
         startDate: startDateString,
         endDate: endDateString
