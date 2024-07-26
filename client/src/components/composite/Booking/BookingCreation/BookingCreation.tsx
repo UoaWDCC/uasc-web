@@ -1,15 +1,21 @@
-import Calendar from "components/generic/Calendar/Calendar"
+import Calendar from "@/components/generic/Calendar/Calendar"
 import BookingInfoComponent from "../BookingInfoComponent/BookingInfoComponent"
-import DateRangePicker from "components/generic/DateRangePicker/DateRangePicker"
-import TextInput from "components/generic/TextInputComponent/TextInput"
-import Button from "components/generic/FigmaButtons/FigmaButton"
-import { useEffect, useMemo, useState } from "react"
+import DateRangePicker from "@/components/generic/DateRangePicker/DateRangePicker"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
-import { BookingAvailability } from "models/Booking"
-import { NEXT_YEAR_FROM_TODAY, TODAY } from "utils/Constants"
+import { BookingAvailability } from "@/models/Booking"
+import {
+  CHECK_IN_TIME,
+  CHECK_OUT_TIME,
+  MS_IN_SECOND,
+  NEXT_YEAR_FROM_TODAY,
+  TODAY
+} from "@/utils/Constants"
 import { Timestamp } from "firebase/firestore"
-import Checkbox from "components/generic/Checkbox/Checkbox"
-import { DateRange, DateUtils } from "components/utils/DateUtils"
+import Checkbox from "@/components/generic/Checkbox/Checkbox"
+import { DateRange, DateUtils } from "@/components/utils/DateUtils"
 
 /*
  * Swaps around dates if invalid
@@ -66,6 +72,36 @@ interface ICreateBookingSection {
 const NORMAL_PRICE = 40 as const
 const SPECIAL_PRICE = 60 as const
 
+/**
+ * A notification to the user informing the actual
+ * start and end dates that they will be staying, as opposed to
+ * displaying just the nights.
+ *
+ * Note that this should not change any booking logic
+ */
+const ActualBookingStayRange = ({
+  startDateTime,
+  endDateTime
+}: {
+  /**
+   * a time **string** to display
+   */
+  startDateTime: string
+  /**
+   * a time **string** to display
+   */
+  endDateTime: string
+}) => {
+  return (
+    <h5 className="uppercase">
+      The currently selected stay at the lodge will be from{" "}
+      <strong className="text-dark-blue-100">{startDateTime}</strong> (check in)
+      to <strong className="text-dark-blue-100">{endDateTime}</strong> (check
+      out)
+    </h5>
+  )
+}
+
 export const CreateBookingSection = ({
   bookingSlots = [],
   handleBookingCreation,
@@ -93,28 +129,31 @@ export const CreateBookingSection = ({
    * @param startDate the first date of the range
    * @param endDate the last date of the range
    */
-  const checkValidRange = (startDate: Date, endDate: Date) => {
-    const dateArray = DateUtils.datesToDateRange(startDate, endDate)
-    if (dateArray.length > 10) {
-      alert("You may only book up to 10 days max.")
-      return false
-    }
-    if (
-      dateArray.some(
-        (date) =>
-          disabledDates.some((disabledDate) =>
-            DateUtils.dateEqualToTimestamp(date, disabledDate.date)
-          ) ||
-          !bookingSlots.some((slot) =>
-            DateUtils.dateEqualToTimestamp(date, slot.date)
-          )
-      )
-    ) {
-      alert("Invalid date range, some dates are unavailable")
-      return false
-    }
-    return true
-  }
+  const checkValidRange = useCallback(
+    (startDate: Date, endDate: Date) => {
+      const dateArray = DateUtils.datesToDateRange(startDate, endDate)
+      if (dateArray.length > 10) {
+        alert("You may only book up to 10 days max.")
+        return false
+      }
+      if (
+        dateArray.some(
+          (date) =>
+            disabledDates.some((disabledDate) =>
+              DateUtils.dateEqualToTimestamp(date, disabledDate.date)
+            ) ||
+            !bookingSlots.some((slot) =>
+              DateUtils.dateEqualToTimestamp(date, slot.date)
+            )
+        )
+      ) {
+        alert("Invalid date range, some dates are unavailable")
+        return false
+      }
+      return true
+    },
+    [bookingSlots, disabledDates]
+  )
 
   /**
    * Used when the user wants to confirm their choice of dates and is ready to pay
@@ -126,7 +165,9 @@ export const CreateBookingSection = ({
         variant="default"
         onClick={() => {
           if (!isValidForCreation) {
-            alert("Please check all the required acknowledgements")
+            alert(
+              "Please check all the required acknowledgements and enter your dietary requirements"
+            )
             return
           }
           if (
@@ -151,7 +192,14 @@ export const CreateBookingSection = ({
         Proceed to Payment
       </Button>
     )
-  }, [currentStartDate, currentEndDate, isValidForCreation, isPending])
+  }, [
+    currentStartDate,
+    currentEndDate,
+    isValidForCreation,
+    isPending,
+    checkValidRange,
+    handleBookingCreation
+  ])
 
   /**
    *  a string to be shown to the user about the price for their date selection
@@ -256,16 +304,17 @@ export const CreateBookingSection = ({
             }}
           />
 
+          <ActualBookingStayRange
+            startDateTime={`${DateUtils.formattedNzDate(currentStartDate)} ${CHECK_IN_TIME}`}
+            // Need to add one day to this because the checkout is the day after the last night
+            endDateTime={`${DateUtils.formattedNzDate(new Date(currentEndDate.getTime() + 24 * 60 * 60 * MS_IN_SECOND))} ${CHECK_OUT_TIME}`}
+          />
+
           <RequirementCheckBoxes
             onValidityChange={(newValid) => {
               setIsValidForCreation(newValid)
             }}
-          />
-
-          <TextInput
-            onChange={(e) => handleAllergyChange?.(e.target.value)}
-            label="Please describe your dietary requirements"
-            placeholder="Enter dietary requirements here"
+            handleAllergyChange={handleAllergyChange}
           />
 
           {hasExistingSession ? (
@@ -286,47 +335,78 @@ interface IRequirementCheckBoxes {
    * @param newValid if the current state of the checkboxes is valid
    */
   onValidityChange: (newValid: boolean) => void
+
+  /**
+   * @param newAllergies
+   */
+  handleAllergyChange?: (newAllergies: string) => void
 }
+
+/**
+ * To allow users to enter "no"
+ */
+const DIETARY_REQUIREMENTS_MIN_LENGTH = 2 as const
 
 /**
  * Provides a way to see if the user has agreed to all required policy
  * @deprecated only for internal use in `BookingCreation`, exported for testing purposes
  */
 export const RequirementCheckBoxes = ({
-  onValidityChange
+  onValidityChange,
+  handleAllergyChange
 }: IRequirementCheckBoxes) => {
   const [acceptedRequirements, setAcceptedRequirements] = useState<{
     nightPolicy?: boolean
     bookingPolicy?: boolean
+    dietaryRequirements?: boolean
   }>({})
   useEffect(() => {
     onValidityChange(
-      !!acceptedRequirements.nightPolicy && !!acceptedRequirements.bookingPolicy
+      !!acceptedRequirements.nightPolicy &&
+        !!acceptedRequirements.bookingPolicy &&
+        !!acceptedRequirements.dietaryRequirements
     )
-  }, [acceptedRequirements])
+  }, [acceptedRequirements, onValidityChange])
 
   return (
-    <span className="mb-3 flex w-full flex-col gap-1">
-      <Checkbox
-        data-testid="agreed-to-night-policy-checkbox"
+    <>
+      <span className="mb-3 flex w-full flex-col gap-1">
+        <Checkbox
+          data-testid="agreed-to-night-policy-checkbox"
+          onChange={(e) => {
+            setAcceptedRequirements({
+              ...acceptedRequirements,
+              nightPolicy: e.target.checked
+            })
+          }}
+          label="I understand that each date corresponds to one night's stay"
+        />
+        <Checkbox
+          data-testid="agreed-to-general-policy-checkbox"
+          label="I have read and acknowledged the booking policy"
+          onChange={(e) => {
+            setAcceptedRequirements({
+              ...acceptedRequirements,
+              bookingPolicy: e.target.checked
+            })
+          }}
+        />
+      </span>
+
+      <TextInput
         onChange={(e) => {
+          handleAllergyChange?.(e.target.value)
+
           setAcceptedRequirements({
             ...acceptedRequirements,
-            nightPolicy: e.target.checked
+            dietaryRequirements:
+              e.target.value.length >= DIETARY_REQUIREMENTS_MIN_LENGTH
           })
         }}
-        label="I understand that each date corresponds to one night's stay"
+        data-testid="dietary-requirements-input"
+        label="Please describe your dietary requirements"
+        placeholder="Enter dietary requirements here"
       />
-      <Checkbox
-        data-testid="agreed-to-general-policy-checkbox"
-        label="I have read and acknowledged the booking policy"
-        onChange={(e) => {
-          setAcceptedRequirements({
-            ...acceptedRequirements,
-            bookingPolicy: e.target.checked
-          })
-        }}
-      />
-    </span>
+    </>
   )
 }

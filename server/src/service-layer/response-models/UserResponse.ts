@@ -26,3 +26,11 @@ export interface AllUsersResponse
     CursorPaginatedResponse {
   data?: CombinedUserData[]
 }
+
+export interface BookingIdandUserData extends CombinedUserData {
+  bookingId: string
+}
+
+export interface GetUserResponse extends CommonResponse {
+  data?: CombinedUserData
+}

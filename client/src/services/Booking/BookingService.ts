@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore"
-import { BookingAvailability } from "models/Booking"
-import fetchClient from "services/OpenApiFetchClient"
+import { BookingAvailability } from "@/models/Booking"
+import fetchClient from "@/services/OpenApiFetchClient"
 
 const BookingService = {
   getBookingAvailability: async function (
@@ -17,6 +17,15 @@ const BookingService = {
       throw new Error("Error getting booking availability")
 
     return data.data
+  },
+  getSelfBookings: async function () {
+    const { data, response } = await fetchClient.GET("/bookings")
+
+    if (!response.ok) {
+      throw new Error("Failed to get bookings for current user")
+    }
+
+    return data
   }
 } as const
 

@@ -42,14 +42,18 @@ export default class BookingDataService {
    * ```
    *
    * @param bookingSlotID The booking slot ID to retrieve all bookings for.
-   * @returns All current bookings associated with this slot.
+   * @returns All current bookings and bookingId associated with this slot.
    */
-  public async getBookingsBySlotId(bookingSlotID: string): Promise<Booking[]> {
+  public async getBookingsBySlotId(
+    bookingSlotID: string
+  ): Promise<Array<DocumentDataWithUid<Booking>>> {
     const result = await FirestoreCollections.bookings
       .where("booking_slot_id", "==", bookingSlotID)
       .get()
-    const bookings = result.docs.map((docs) => docs.data())
-    return bookings
+    const bookingsAndIdArray = result.docs.map((docs) => {
+      return { ...docs.data(), id: docs.id }
+    })
+    return bookingsAndIdArray
   }
 
   /**

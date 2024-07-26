@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { useRouter } from "next/navigation"
 import Button from "../FigmaButtons/FigmaButton"
 
 interface ISignUpNotif {
@@ -6,12 +6,12 @@ interface ISignUpNotif {
 }
 
 export const SignUpNotif = ({ signedIn }: ISignUpNotif) => {
-  const navigate = useNavigate()
+  const router = useRouter()
   function goToRegister() {
-    navigate("/register")
+    router.push("/register")
   }
   function goToLogin() {
-    navigate("/login")
+    router.push("/login")
   }
 
   return (

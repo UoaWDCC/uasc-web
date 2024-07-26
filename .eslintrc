@@ -32,6 +32,7 @@
   },
   "ignorePatterns": [
     "dist",
+    "out",
     "node_modules",
     "examples",
     "scripts",

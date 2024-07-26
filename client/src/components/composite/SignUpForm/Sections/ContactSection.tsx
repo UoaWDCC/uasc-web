@@ -1,5 +1,5 @@
-import { useSignUpFormData } from "store/SignUpForm"
-import TextInput from "components/generic/TextInputComponent/TextInput"
+import { useSignUpFormData } from "@/store/SignUpForm"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
 
 export const ContactSection = () => {
   const [

@@ -24,15 +24,15 @@ import {
   Request
 } from "tsoa"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
-import { CombinedUserData } from "../response-models/UserResponse"
+import {
+  BookingIdandUserData,
+  CombinedUserData
+} from "../response-models/UserResponse"
 import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
 import * as console from "console"
 import AuthService from "../../business-layer/services/AuthService"
-import {
-  AuthServiceClaims,
-  UserAccountTypes
-} from "../../business-layer/utils/AuthServiceClaims"
+import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import {
   BOOKING_SLOTS_KEY,
   CheckoutTypeValues
@@ -42,6 +42,11 @@ import BookingUtils from "business-layer/utils/BookingUtils"
 
 @Route("bookings")
 export class BookingController extends Controller {
+  /**
+   * An admin method to create bookings for a list of users within a date range.
+   * @param requestBody - The date range and list of user ids to create bookings for.
+   * @returns A list of users and timestamps that were successfully added to the booking slots.
+   */
   @SuccessResponse("200", "Bookings successfully created")
   @Security("jwt", ["admin"])
   @Post("create-bookings")
@@ -97,8 +102,6 @@ export class BookingController extends Controller {
 
       await Promise.all(bookingPromises)
 
-      console.log(responseData)
-
       this.setStatus(200)
 
       /**
@@ -116,6 +119,11 @@ export class BookingController extends Controller {
     }
   }
 
+  /**
+   * Fetches all bookings for a user based on their UID.
+   * @param request - The request object that includes the UserRecord.
+   * @returns A list of booking string dates.
+   */
   @SuccessResponse("200", "Found bookings")
   @Security("jwt", ["member"])
   @Get()
@@ -153,6 +161,11 @@ export class BookingController extends Controller {
     }
   }
 
+  /**
+   * Fetches all available booking dates within a date range.
+   * @param requestBody - The date range to check for available booking slots.
+   * @returns A list of available booking dates in an array of strings.
+   */
   @SuccessResponse("200", "Availabilities found")
   @Security("jwt", ["member"])
   @Post("available-dates")
@@ -195,7 +208,6 @@ export class BookingController extends Controller {
           startDate,
           endDate
         )
-      console.log("found bookingslots: ", bookingSlots)
 
       const bookingSlotsToQuery = bookingSlots.map((bookingSlot) => {
         const { description, date, max_bookings, id } = bookingSlot
@@ -255,6 +267,9 @@ export class BookingController extends Controller {
 
   /**
    * This method fetches users based on a booking date range.
+   * This method requires an admin JWT token.
+   * @param requestBody - The date range to check for user bookings.
+   * @returns A list of users data, booking ids and booking timestamps.
    */
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
@@ -281,7 +296,7 @@ export class BookingController extends Controller {
       /** The response data array */
       const responseData: Array<{
         date: Timestamp
-        users: CombinedUserData[]
+        users: BookingIdandUserData[]
       }> = []
 
       /** Iterating through each booking slot */
@@ -289,7 +304,7 @@ export class BookingController extends Controller {
         /** Getting the bookings for the current slot */
         const bookings = await bookingDataService.getBookingsBySlotId(slot.id)
 
-        /** Extracting the user IDs from the bookings */
+        /** Extracting the user from the bookings */
         const userIds = bookings.map((booking) => booking.user_id)
 
         if (userIds.length === 0) {
@@ -306,17 +321,10 @@ export class BookingController extends Controller {
         const combinedUsers: CombinedUserData[] = users.map((user) => {
           const authUser = authUsers.find((auth) => auth.uid === user.uid)
 
-          let membership: UserAccountTypes = UserAccountTypes.GUEST
-
           const customClaims = authUser?.customClaims
 
-          if (customClaims) {
-            if (customClaims[AuthServiceClaims.ADMIN]) {
-              membership = UserAccountTypes.ADMIN
-            } else if (customClaims[AuthServiceClaims.MEMBER]) {
-              membership = UserAccountTypes.MEMBER
-            }
-          }
+          const membership: UserAccountTypes =
+            authService.getMembershipType(customClaims)
 
           return {
             ...user,
@@ -328,13 +336,19 @@ export class BookingController extends Controller {
         /** Adding the date and users to the response data array */
         responseData.push({
           date: slot.date,
-          users: combinedUsers
+          // Mapping the users to include the booking ID
+          users: combinedUsers.map((user) => ({
+            ...user,
+            bookingId: bookings.find(
+              (booking) =>
+                booking.user_id === user.uid &&
+                booking.booking_slot_id === slot.id
+            )?.id
+          }))
         })
       })
 
       await Promise.all(bookingPromises)
-
-      console.log(responseData)
 
       this.setStatus(200)
 

@@ -115,7 +115,6 @@ describe("UserService integration tests", () => {
     await userService.createUserData("testUser3", userInfoMock2)
 
     const users = await userService.getUsersByIds([TEST_UID_1, "testUser3"])
-    console.log(users)
 
     expect(users.length).toEqual(2)
   })

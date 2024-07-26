@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
 import Tab from "./Tab"
-import { BrowserRouter, NavLink } from "react-router-dom"
+import { MemoryRouterProvider } from "next-router-mock/dist/MemoryRouterProvider/next-13.5"
+import Link from "next/link"
 
 const meta: Meta<typeof Tab> = {
   component: Tab
@@ -29,11 +30,11 @@ export const TabWrappedInLink: Story = {
   },
   decorators: [
     (Story) => (
-      <BrowserRouter>
-        <NavLink to="">
+      <MemoryRouterProvider>
+        <Link href="">
           <Story />
-        </NavLink>
-      </BrowserRouter>
+        </Link>
+      </MemoryRouterProvider>
     )
   ]
 }

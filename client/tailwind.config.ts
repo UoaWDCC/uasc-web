@@ -1,17 +1,19 @@
 import type { Config } from "tailwindcss"
 import defaultTheme from "tailwindcss/defaultTheme"
 
-export default {
-  important: true,
-  content: ["./src/**/*.tsx"],
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}"
+  ],
   theme: {
     extend: {
       backgroundImage: {
-        "home-ski-image": "url('$assets/images/homeLandingBackground.png')",
-        "home-about-image": "url('$assets/images/AboutBackgroundImage.png')",
-        "mountain-background-image":
-          "url('$assets/images/MountainBackgroundImage.png')",
-        "book-lodge-image": "url('$assets/images/BookLodgeBackgroundImage.png')"
+        "home-ski-image": `url('/images/homeLandingBackground.png')`,
+        "home-about-image": `url('/images/AboutBackgroundImage.png')`,
+        "mountain-background-image": `url('/images/MountainBackgroundImage.png')`,
+        "book-lodge-image": `url('/images/BookLodgeBackgroundImage.png')`
       },
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans]
@@ -101,4 +103,5 @@ export default {
     }
   },
   plugins: [require("@tailwindcss/forms")]
-} satisfies Config
+}
+export default config

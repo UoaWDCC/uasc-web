@@ -1,28 +1,28 @@
-import MenuTab from "components/generic/MenuTab/MenuTab"
+import MenuTab from "@/components/generic/MenuTab/MenuTab"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
-import { NavLink, useLocation } from "react-router-dom"
 const WrappedMenuTab = ({
   displayName,
   children,
-  to,
-  subroutes
+  to
 }: {
   displayName: string
   children: ReactNode
   to: string
-  subroutes?: string[]
 }) => {
-  const { pathname } = useLocation()
+  const pathname = usePathname()
 
   return (
-    <NavLink to={to} state={{ to }}>
+    <Link href={to}>
       <MenuTab
         displayText={displayName}
-        disabled={pathname === to || subroutes?.includes(pathname)}
+        // need to check with/without trailing
+        disabled={pathname === `${to}/` || pathname === to}
       >
         {children}
       </MenuTab>
-    </NavLink>
+    </Link>
   )
 }
 export default WrappedMenuTab

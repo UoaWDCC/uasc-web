@@ -1,9 +1,10 @@
+import { useRouter } from "next/navigation"
 import { WrappedTab } from "../../Navbar/utils/WrappedTab"
-import { useNavigate } from "react-router-dom"
 const Exit = () => {
-  const navigate = useNavigate()
+  const router = useRouter()
+
   const handleOnclick = () => {
-    navigate("/login")
+    router.push("/login")
   }
   return (
     <button onClick={handleOnclick}>

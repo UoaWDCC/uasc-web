@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore"
-import { UserAdditionalInfo } from "models/User"
-import fetchClient from "services/OpenApiFetchClient"
-import { MEMBER_TABLE_MAX_DATA } from "utils/Constants"
+import { UserAdditionalInfo } from "@/models/User"
+import fetchClient from "@/services/OpenApiFetchClient"
+import { MEMBER_TABLE_MAX_DATA } from "@/utils/Constants"
 
 export type EditUsersBody = {
   uid: string
@@ -50,7 +50,16 @@ const AdminService = {
     })
     if (!response.ok) throw new Error(`Failed to promote ${uid}`)
   },
-
+  deleteBooking: async function (id: string) {
+    const { response } = await fetchClient.POST("/admin/bookings/delete", {
+      body: {
+        bookingID: id
+      }
+    })
+    if (!response.ok) {
+      throw new Error(`Failed to delete booking with id ${id}`)
+    }
+  },
   getBookingsBetweenDateRange: async function ({
     startDate = Timestamp.fromDate(new Date(Date.now())),
     endDate = Timestamp.fromDate(new Date(Date.now()))

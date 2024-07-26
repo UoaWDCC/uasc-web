@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { PaymentInformationSection } from "./PaymentSection"
 import { QueryClientProvider } from "@tanstack/react-query"
-import queryClient from "services/QueryClient"
+import queryClient from "@/services/QueryClient"
 const meta: Meta<typeof PaymentInformationSection> = {
   component: PaymentInformationSection
 }

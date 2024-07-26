@@ -6,27 +6,38 @@
 
 export interface paths {
   "/users/self": {
+    /** @description Fetches users additional info based on their uid. */
     get: operations["GetSelf"];
   };
   "/users/edit-self": {
+    /** @description Edits the user's additional info based on their uid. */
     patch: operations["EditSelf"];
   };
   "/users/delete-user": {
+    /** @description Deletes a user based on their uid. This requires an admin JWT token. */
     delete: operations["DeleteUser"];
   };
   "/webhook": {
+    /**
+     * @description Webhook endpoint for Stripe events.
+     * This single endpoint is setup in the Stripe developer config to handle various events.
+     */
     post: operations["ReceiveWebhook"];
   };
   "/signup": {
+    /** @description Signs up a user and creates a user record in the database. Also creates a JWT token for the user in AuthService. */
     post: operations["Signup"];
   };
   "/payment/membership_prices": {
+    /** @description Fetches the prices of the membership products from Stripe. */
     get: operations["GetMembershipPrices"];
   };
   "/payment/checkout_status": {
+    /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
     get: operations["GetCheckoutSessionDetails"];
   };
   "/payment/membership": {
+    /** @description Creates a checkout session for membership payment. */
     post: operations["GetMembershipPayment"];
   };
   "/payment/booking": {
@@ -38,16 +49,22 @@ export interface paths {
     post: operations["GetBookingPayment"];
   };
   "/bookings/create-bookings": {
+    /** @description An admin method to create bookings for a list of users within a date range. */
     post: operations["CreateBookings"];
   };
   "/bookings": {
+    /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
   };
   "/bookings/available-dates": {
+    /** @description Fetches all available booking dates within a date range. */
     post: operations["GetAvailableDates"];
   };
   "/bookings/fetch-users": {
-    /** @description This method fetches users based on a booking date range. */
+    /**
+     * @description This method fetches users based on a booking date range.
+     * This method requires an admin JWT token.
+     */
     post: operations["FetchUsersByBookingDateRange"];
   };
   "/admin/bookings/make-dates-available": {
@@ -55,26 +72,65 @@ export interface paths {
     post: operations["MakeDateAvailable"];
   };
   "/admin/bookings/make-dates-unavailable": {
+    /** @description Decreases availability count to 0 for all booking slots in a date range. */
     post: operations["MakeDateUnavailable"];
   };
   "/admin/bookings/delete": {
+    /** @description Delete a users booking by booking ID. */
     post: operations["RemoveBooking"];
   };
   "/admin/users": {
     /** @description User Operations */
     get: operations["GetAllUsers"];
   };
+  "/admin/users/{uid}": {
+    /**
+     * @description Get a user by their UID.
+     * Requires an admin JWT token.
+     */
+    get: operations["GetUser"];
+  };
   "/admin/users/create": {
+    /**
+     * @description Adds a new user to the database with their UID and user data.
+     * Requires an admin JWT token.
+     */
     put: operations["CreateUser"];
   };
   "/admin/users/bulk-edit": {
+    /**
+     * @description Edits a list of users with updated user additional info.
+     * Requires an admin JWT token.
+     */
     patch: operations["EditUsers"];
   };
   "/admin/users/promote": {
+    /**
+     * @description Promotes a user to a member. This returns a conflict when the user is already a member.
+     * Requires an admin JWT token.
+     */
     put: operations["PromoteUser"];
   };
   "/admin/users/demote": {
+    /**
+     * @description Demotes a member to a guest. This returns a conflict when the user is already a guest.
+     * Requires an admin JWT token.
+     */
     put: operations["DemoteUser"];
+  };
+  "/admin/users/demote-all": {
+    /**
+     * @description Demotes all non-admin users to guests. This is used to purge all membership statuses at the end of a billing cycle.
+     * Requires an admin JWT token.
+     */
+    patch: operations["DemoteAllUsers"];
+  };
+  "/admin/users/add-coupon": {
+    /**
+     * @description Adds a coupon to a user's stripe id.
+     * Requires an admin JWT token.
+     */
+    post: operations["AddCoupon"];
   };
 }
 
@@ -250,7 +306,7 @@ export interface components {
     };
     /** @enum {string} */
     UserAccountTypes: "admin" | "member" | "guest";
-    CombinedUserData: {
+    BookingIdandUserData: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
       does_snowboarding?: boolean;
       does_racing?: boolean;
@@ -278,11 +334,12 @@ export interface components {
       email: string;
       /** @description What type of account the user has */
       membership: components["schemas"]["UserAccountTypes"];
+      bookingId: string;
     };
     /** @description Represents the response structure for fetching users by date range. */
     UsersByDateRangeResponse: {
       data?: {
-          users: components["schemas"]["CombinedUserData"][];
+          users: components["schemas"]["BookingIdandUserData"][];
           date: components["schemas"]["FirebaseFirestore.Timestamp"];
         }[];
       error?: string;
@@ -327,6 +384,35 @@ export interface components {
     DeleteBookingRequest: {
       bookingID: string;
     };
+    CombinedUserData: {
+      date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
+      does_snowboarding?: boolean;
+      does_racing?: boolean;
+      does_ski?: boolean;
+      /** Format: double */
+      phone_number: number;
+      gender?: string;
+      emergency_contact?: string;
+      first_name: string;
+      last_name: string;
+      dietary_requirements: string;
+      /** @description **OPTIONAL** field that the user should have the choice to provide */
+      ethnicity?: string;
+      faculty?: string;
+      university?: string;
+      student_id?: string;
+      university_year?: string;
+      /** @description For identification DO NOT RETURN to users in exposed endpoints */
+      stripe_id?: string;
+      /** @description Firebase identifier of the user *data* based on the firestore document */
+      uid: string;
+      /** @description Formatted UTC date string of when the account was created */
+      dateJoined?: string;
+      /** @description The email the user uses to log in */
+      email: string;
+      /** @description What type of account the user has */
+      membership: components["schemas"]["UserAccountTypes"];
+    };
     AllUsersResponse: {
       error?: string;
       message?: string;
@@ -338,6 +424,11 @@ export interface components {
        */
       nextCursor?: string;
       data?: components["schemas"]["CombinedUserData"][];
+    };
+    GetUserResponse: {
+      error?: string;
+      message?: string;
+      data?: components["schemas"]["CombinedUserData"];
     };
     UserAdditionalInfo: {
       date_of_birth: components["schemas"]["FirebaseFirestore.Timestamp"];
@@ -398,6 +489,15 @@ export interface components {
     DemoteUserRequestBody: {
       uid: string;
     };
+    AddCouponRequestBody: {
+      /** @description The UID of the user to whom the coupon will be added. */
+      uid: string;
+      /**
+       * Format: double
+       * @description The number of the coupon to be added.
+       */
+      quantity: number;
+    };
   };
   responses: {
   };
@@ -416,6 +516,7 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** @description Fetches users additional info based on their uid. */
   GetSelf: {
     responses: {
       /** @description Fetched self data */
@@ -445,7 +546,9 @@ export interface operations {
       };
     };
   };
+  /** @description Edits the user's additional info based on their uid. */
   EditSelf: {
+    /** @description - The updated user additional info, note that the stripe_id is omitted. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["EditSelfRequestBody"];
@@ -458,7 +561,9 @@ export interface operations {
       };
     };
   };
+  /** @description Deletes a user based on their uid. This requires an admin JWT token. */
   DeleteUser: {
+    /** @description - The uid of the user to be deleted. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["DeleteUserRequestBody"];
@@ -473,6 +578,10 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Webhook endpoint for Stripe events.
+   * This single endpoint is setup in the Stripe developer config to handle various events.
+   */
   ReceiveWebhook: {
     responses: {
       /** @description Webhook post received */
@@ -481,7 +590,9 @@ export interface operations {
       };
     };
   };
+  /** @description Signs up a user and creates a user record in the database. Also creates a JWT token for the user in AuthService. */
   Signup: {
+    /** @description - The user's email and their user additional info. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["UserSignupBody"];
@@ -496,9 +607,10 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches the prices of the membership products from Stripe. */
   GetMembershipPrices: {
     responses: {
-      /** @description Ok */
+      /** @description The prices of the membership products. */
       200: {
         content: {
           "application/json": components["schemas"]["MembershipStripeProductResponse"];
@@ -506,9 +618,11 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
   GetCheckoutSessionDetails: {
     parameters: {
       query: {
+        /** @description The id of the stripe checkout session to fetch. */
         sessionId: string;
       };
     };
@@ -527,7 +641,9 @@ export interface operations {
       };
     };
   };
+  /** @description Creates a checkout session for membership payment. */
   GetMembershipPayment: {
+    /** @description The request body containing the membership type. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["UserPaymentRequestModel"];
@@ -548,6 +664,7 @@ export interface operations {
    * the last 30 minutes (the minimum period stripe has to persist a session for)
    */
   GetBookingPayment: {
+    /** @description The request body containing the date ranges for the booking. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["UserBookingRequestingModel"];
@@ -562,7 +679,9 @@ export interface operations {
       };
     };
   };
+  /** @description An admin method to create bookings for a list of users within a date range. */
   CreateBookings: {
+    /** @description - The date range and list of user ids to create bookings for. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateBookingsRequestModel"];
@@ -577,6 +696,7 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches all bookings for a user based on their UID. */
   GetAllBookings: {
     responses: {
       /** @description Found bookings */
@@ -587,7 +707,9 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches all available booking dates within a date range. */
   GetAvailableDates: {
+    /** @description - The date range to check for available booking slots. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["AvailableDatesRequestModel"];
@@ -602,8 +724,12 @@ export interface operations {
       };
     };
   };
-  /** @description This method fetches users based on a booking date range. */
+  /**
+   * @description This method fetches users based on a booking date range.
+   * This method requires an admin JWT token.
+   */
   FetchUsersByBookingDateRange: {
+    /** @description - The date range to check for user bookings. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["BookingsByDateRangeRequestModel"];
@@ -620,6 +746,7 @@ export interface operations {
   };
   /** @description Booking Operations */
   MakeDateAvailable: {
+    /** @description - The start and end date of the range and the number of slots to add. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["MakeDatesAvailableRequestBody"];
@@ -634,7 +761,9 @@ export interface operations {
       };
     };
   };
+  /** @description Decreases availability count to 0 for all booking slots in a date range. */
   MakeDateUnavailable: {
+    /** @description - The start and end date of the range, the number of slots is omitted as we're decreases all slots to 0. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["Omit_MakeDatesAvailableRequestBody.slots_"];
@@ -649,7 +778,9 @@ export interface operations {
       };
     };
   };
+  /** @description Delete a users booking by booking ID. */
   RemoveBooking: {
+    /** @description - The booking ID to delete. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["DeleteBookingRequest"];
@@ -668,7 +799,9 @@ export interface operations {
   GetAllUsers: {
     parameters: {
       query?: {
+        /** @description - The cursor to start fetching users from. Essentially a pagination token. */
         cursor?: string;
+        /** @description - The number of users to fetch. Defaults to 100. Is also a maximum of 100 users per fetch */
         toFetch?: number;
       };
     };
@@ -681,7 +814,32 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Get a user by their UID.
+   * Requires an admin JWT token.
+   */
+  GetUser: {
+    parameters: {
+      path: {
+        /** @description - The UID of the user to fetch. */
+        uid: string;
+      };
+    };
+    responses: {
+      /** @description User found */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponse"];
+        };
+      };
+    };
+  };
+  /**
+   * @description Adds a new user to the database with their UID and user data.
+   * Requires an admin JWT token.
+   */
   CreateUser: {
+    /** @description - The user data to create and their UID. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateUserRequestBody"];
@@ -694,7 +852,12 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Edits a list of users with updated user additional info.
+   * Requires an admin JWT token.
+   */
   EditUsers: {
+    /** @description - The list of users to edit and their updated information. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["EditUsersRequestBody"];
@@ -707,7 +870,12 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Promotes a user to a member. This returns a conflict when the user is already a member.
+   * Requires an admin JWT token.
+   */
   PromoteUser: {
+    /** @description - The UID of the user to promote. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["PromoteUserRequestBody"];
@@ -720,7 +888,12 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Demotes a member to a guest. This returns a conflict when the user is already a guest.
+   * Requires an admin JWT token.
+   */
   DemoteUser: {
+    /** @description - The UID of the user to demote. */
     requestBody: {
       content: {
         "application/json": components["schemas"]["DemoteUserRequestBody"];
@@ -728,6 +901,36 @@ export interface operations {
     };
     responses: {
       /** @description Demoted user */
+      200: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * @description Demotes all non-admin users to guests. This is used to purge all membership statuses at the end of a billing cycle.
+   * Requires an admin JWT token.
+   */
+  DemoteAllUsers: {
+    responses: {
+      /** @description Demoted all non-admin users */
+      200: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * @description Adds a coupon to a user's stripe id.
+   * Requires an admin JWT token.
+   */
+  AddCoupon: {
+    /** @description - The UID of the user to add the coupon to and the quantity of coupons to add. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddCouponRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Coupon Added */
       200: {
         content: never;
       };

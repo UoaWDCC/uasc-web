@@ -1,7 +1,7 @@
-import { useSignUpFormData } from "store/SignUpForm"
-import Dropdown from "components/generic/Dropdown/Dropdown"
-import TextInput from "components/generic/TextInputComponent/TextInput"
-import ExcitementSlider from "components/generic/ExcitmentSlider/ExcitementSlider"
+import { useSignUpFormData } from "@/store/SignUpForm"
+import Dropdown from "@/components/generic/Dropdown/Dropdown"
+import TextInput from "@/components/generic/TextInputComponent/TextInput"
+import ExcitementSlider from "@/components/generic/ExcitmentSlider/ExcitementSlider"
 
 enum SportOptions {
   SKIER = "Skier",

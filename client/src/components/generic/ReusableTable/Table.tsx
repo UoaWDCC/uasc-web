@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   TableRowObjectWithIdentifier,
@@ -6,8 +6,8 @@ import {
   TableRowOperationStyle
 } from "./TableUtils"
 import TableFooterPaginator from "./TableFooterPaginator"
-import ThreeDotsVertical from "assets/icons/three-dots-vertical.svg?react"
-import { useClickOutside } from "components/utils/Utils"
+import ThreeDotsVertical from "@/assets/icons/three-dots-vertical.svg"
+import { useClickOutside } from "@/components/utils/Utils"
 
 type TableRowOperations<T extends TableRowOperationStyle> =
   T extends "multiple-operations"
@@ -41,6 +41,17 @@ interface ITable<
    * @example // {operationName: "Delete User", (identifier: string) => {deleteUserWithUid(identifier)}}
    */
   rowOperations?: TableRowOperations<S>
+
+  /**
+   * Colour codes the rows based on grouping the first column.
+   *
+   * i.e for a first group of dates ranging [27/10/2002, 28/10/2002, 30/10/2002]
+   *
+   * 27/10/2002 - unhighlighed
+   * 28/10/2002 - highlighted
+   * 30/10/2002 - unhighlighed
+   */
+  groupSameRows?: boolean
 }
 
 /**
@@ -54,13 +65,13 @@ export const OperationButton = <
   uid,
   rowOperations
 }: Pick<ITable<T, S>, "operationType" | "rowOperations"> & T) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+  useClickOutside(menuRef, () => setIsOpen(false))
   if (!rowOperations || !operationType) return null
 
   switch (operationType) {
     case "multiple-operations": {
-      const menuRef = useRef<HTMLDivElement>(null)
-      useClickOutside(menuRef, () => setIsOpen(false))
-      const [isOpen, setIsOpen] = useState<boolean>(false)
       return (
         <div
           ref={menuRef}
@@ -102,6 +113,7 @@ export const OperationButton = <
         <div className="flex h-full items-center px-2">
           <h5
             data-testid="single-operation-button"
+            className="text-red cursor-pointer font-bold"
             onClick={() => rowOperations && rowOperations[0]?.handler(uid)}
           >
             X
@@ -141,7 +153,8 @@ const Table = <
   showPerPage = 15,
   operationType = "none",
   rowOperations,
-  onPageChange
+  onPageChange,
+  groupSameRows = false
 }: ITable<T & TableRowObjectWithIdentifier, S>) => {
   // Needs to be zero-indexed
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0)
@@ -163,7 +176,7 @@ const Table = <
   // calculating offset
   const currentFirstIndex = currentPageIndex * showPerPage
 
-  const dataKeys: string[] = []
+  const dataKeys: string[] = useMemo(() => [], [])
 
   const currentLastIndex = currentFirstIndex + showPerPage
 
@@ -177,7 +190,7 @@ const Table = <
 
   useEffect(() => {
     onPageChange?.(currentPageIndex === totalPages - 1)
-  }, [currentPageIndex])
+  }, [currentPageIndex, onPageChange, totalPages])
 
   // ensures all data keys (columns) are used, regardless of whether some objects are missing keys
   currentDataSlice.forEach((obj) => {
@@ -185,6 +198,49 @@ const Table = <
       (key) => !dataKeys.includes(key) && key !== "uid" && dataKeys.push(key)
     )
   })
+
+  /**
+   * Displays the content of the table (i.e everything underneath the headers)
+   */
+  const TableData = useMemo(() => {
+    let currentGroup = 0
+    let lastKey: keyof T | null = null
+
+    return currentDataSlice.map((obj, index) => {
+      // Check if the key has changed
+      if (lastKey !== null && obj[dataKeys[0]] !== lastKey) {
+        // If the key has changed, increment the current group
+        currentGroup++
+      }
+      // Update the last key
+      lastKey = obj[dataKeys[0]]
+
+      // Check if its an even or odd group
+      const rowClass =
+        currentGroup % 2 === 0 ? "" : "text-dark-blue-100 font-bold"
+
+      return (
+        <tr key={index} className="">
+          {dataKeys.map((key) => {
+            return (
+              <td
+                className={`break-keep pb-2 pl-4 pt-2 
+                    ${groupSameRows && rowClass}`}
+                key={key}
+              >
+                {obj[key] || ""}
+              </td>
+            )
+          })}
+          <OperationButton
+            operationType={operationType}
+            rowOperations={rowOperations}
+            uid={obj[TABLE_ROW_IDENTIFIER_KEY]}
+          />
+        </tr>
+      )
+    })
+  }, [operationType, rowOperations, dataKeys, currentDataSlice, groupSameRows])
 
   return (
     <div className="border-gray-3 h-full w-full  overflow-y-visible rounded-t-sm border bg-white">
@@ -201,25 +257,7 @@ const Table = <
             ))}
           </tr>
         </thead>
-        <tbody className="">
-          {currentDataSlice.map((obj, index) => (
-            <tr key={index} className="">
-              {dataKeys.map((key) => (
-                <td
-                  className="break-all pb-2 pl-4 pt-2 sm:break-keep"
-                  key={key}
-                >
-                  {obj[key] || ""}
-                </td>
-              ))}
-              <OperationButton
-                operationType={operationType}
-                rowOperations={rowOperations}
-                uid={obj[TABLE_ROW_IDENTIFIER_KEY]}
-              />
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{TableData}</tbody>
       </table>
       <div
         className="border-b-gray-3 text-gray-3 flex h-11 items-center 

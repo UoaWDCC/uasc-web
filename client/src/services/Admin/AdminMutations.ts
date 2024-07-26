@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query"
 import AdminService from "./AdminService"
 import { Timestamp } from "firebase/firestore"
-import queryClient from "services/QueryClient"
-import { BOOKING_AVAILABLITY_KEY } from "services/Booking/BookingQueries"
+import queryClient from "@/services/QueryClient"
+import { BOOKING_AVAILABLITY_KEY } from "@/services/Booking/BookingQueries"
 import {
   ALL_BOOKINGS_BETWEEN_RANGE_QUERY,
   ALL_USERS_QUERY
 } from "./AdminQueries"
-import { CombinedUserData } from "models/User"
+import { CombinedUserData } from "@/models/User"
 import { replaceUserInPage } from "./AdminUtils"
 
 export function usePromoteUserMutation() {
@@ -125,6 +125,19 @@ export function useAddUserToBookingMutation() {
     mutationKey: ["add-users-to-booking"],
     retry: false,
     mutationFn: AdminService.addUsersToBookingForDateRange,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
+      })
+    }
+  })
+}
+
+export function useDeleteBookingMutation() {
+  return useMutation({
+    mutationKey: ["delete-booking"],
+    retry: false,
+    mutationFn: AdminService.deleteBooking,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
