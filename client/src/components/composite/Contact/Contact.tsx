@@ -15,12 +15,11 @@ const Contact = ({ items }: IContact) => {
           <ContactDetailPanel items={items} />
           <div className="w-full">
             <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3090.3296850757993!2d175.5528169760526!3d-39.235387071653925!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6d6b01d610042f1d%3A0x1071f4930186b3c0!2sUniversity%20of%20Auckland%20Snowsports%20Club!5e0!3m2!1sen!2snz!4v1722071878514!5m2!1sen!2snz"
               width="100%"
-              height="400"
-              src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Bruce%20Road,%20Manawat%C5%AB-Whanganui%203989+(My%20Business%20Name)&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-            >
-              <a href="https://www.gps.ie/">gps systems</a>
-            </iframe>
+              height="450"
+              loading="lazy"
+            ></iframe>
           </div>
         </div>
       </FullPageBackgroundImage>
