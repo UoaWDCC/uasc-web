@@ -3,7 +3,18 @@
 import React, { useState } from "react"
 
 interface ExcitementSliderProps {
+  /**
+   * The lowest value the slider should go to
+   *
+   * @example -69
+   */
   min: number
+
+  /**
+   * The lowest value the slider should go to
+   *
+   * @example 69
+   */
   max: number
 }
 

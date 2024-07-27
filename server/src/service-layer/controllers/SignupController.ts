@@ -8,9 +8,13 @@ import { parseFirebaseError } from "business-layer/utils/FirebaseErrorParser"
 
 @Route("signup")
 export class UserSignup extends Controller {
+  /**
+   * Signs up a user and creates a user record in the database. Also creates a JWT token for the user in AuthService.
+   * @param requestBody - The user's email and their user additional info.
+   * @returns The JWT token and the user's UID.
+   */
   @Post()
   @SuccessResponse(200, "Signup successful")
-  // return a JWT token at the end
   public async signup(
     @Body() requestBody: UserSignupBody
   ): Promise<UserSignupResponse> {

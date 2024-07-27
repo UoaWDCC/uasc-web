@@ -46,6 +46,10 @@ import BookingUtils from "business-layer/utils/BookingUtils"
 
 @Route("payment")
 export class PaymentController extends Controller {
+  /**
+   * Fetches the prices of the membership products from Stripe.
+   * @returns The prices of the membership products.
+   */
   @Get("membership_prices")
   public async getMembershipPrices(): Promise<MembershipStripeProductResponse> {
     const stripeService = new StripeService()
@@ -103,6 +107,11 @@ export class PaymentController extends Controller {
     }
   }
 
+  /**
+   * Fetches the details of a checkout session based on a stripe checkout session id.
+   * @param sessionId The id of the stripe checkout session to fetch.
+   * @returns The details of the checkout session.
+   */
   @SuccessResponse("200", "Session Fetched")
   @Security("jwt")
   @Get("checkout_status")
@@ -124,6 +133,12 @@ export class PaymentController extends Controller {
     }
   }
 
+  /**
+   * Creates a checkout session for membership payment.
+   * @param request The user's record, this endpoint extracts the uid and customClaims to check for membership status.
+   * @param requestBody The request body containing the membership type.
+   * @returns The client secret of the checkout session and membership type.
+   */
   @SuccessResponse("200", "Session created")
   @Security("jwt")
   @Post("membership")
@@ -173,14 +188,13 @@ export class PaymentController extends Controller {
           }
         }
         /**
-         * See if user has pending payment or has recently paid -> if user didn't have a stripe id that means
+         * See if user has recently paid -> if user didn't have a stripe id that means
          * they couldn't have a completed session
          */
         if (
-          (await stripeService.hasRecentlyCompletedCheckoutSession(
+          await stripeService.hasRecentlyCompletedCheckoutSession(
             stripeCustomerId
-          )) ||
-          (await stripeService.hasProcessingPaymentIntent(stripeCustomerId))
+          )
         ) {
           this.setStatus(409)
           return {
@@ -250,6 +264,9 @@ export class PaymentController extends Controller {
    * Creates a new booking session for the date ranges passed in,
    * will return any existing sessions if they have been started in
    * the last 30 minutes (the minimum period stripe has to persist a session for)
+   * @param request The user's record, the uid is used from this to identify the user.
+   * @param requestBody The request body containing the date ranges for the booking.
+   * @returns The client secret of the checkout session.
    */
   @SuccessResponse("200", "Created booking checkout session")
   @Security("jwt", ["member"])

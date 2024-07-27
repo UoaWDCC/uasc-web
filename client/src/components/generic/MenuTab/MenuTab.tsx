@@ -3,6 +3,11 @@ import DownArrow from "@/assets/icons/downarrow.svg"
 import MenuList from "../MenuList/MenuList"
 
 interface IMenuTabProps {
+  /**
+   * What should be shown for the text on the tab
+   *
+   * @example "Home"
+   */
   displayText: string
 }
 type props = IMenuTabProps & React.ButtonHTMLAttributes<HTMLButtonElement>

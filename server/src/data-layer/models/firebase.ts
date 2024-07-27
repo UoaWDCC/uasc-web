@@ -129,3 +129,41 @@ export interface BookingChange {
   new_check_in: Timestamp // New check-in timestamp
   new_check_out: Timestamp // New check-out timestamp
 }
+
+export interface EventSlot {
+  /**
+   * The title of this event
+   * @example Snowboarding race!
+   */
+  title: string
+  /**
+   * An optional description for this event
+   * This should be in markdown
+   * @example Come join your friends in this exciting UASC event and race!
+   */
+  description?: string
+  /**
+   * The link for the image to display on the event page (essentially a thumbnail)
+   */
+  image_url?: string
+  /**
+   * The location of this event
+   */
+  location: string
+  /**
+   * The start date of the event.
+   * Note that this date is in UTC time.
+   * Use the same start and end day to show that its a 1 day event.
+   */
+  start_date: Timestamp
+  /**
+   * The end date of the event.
+   * Note that this date is in UTC time.
+   */
+  end_date: Timestamp
+  /**
+   * Max number of attendees at this event, left as optional for uncapped
+   * @example 30
+   */
+  max_occupancy?: number
+}

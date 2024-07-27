@@ -50,8 +50,19 @@ describe("RequirementCheckBoxes", () => {
       "agreed-to-general-policy-checkbox"
     )
 
+    const dietaryRequirementsInput = getByTestId("dietary-requirements-input")
+
     fireEvent.click(nightPolicyCheckbox)
     fireEvent.click(bookingPolicyCheckbox)
+    fireEvent.change(dietaryRequirementsInput, {
+      target: { value: "i" }
+    })
+
+    expect(mockOnValidityChange).toHaveBeenCalledWith(false)
+
+    fireEvent.change(dietaryRequirementsInput, {
+      target: { value: "i3" }
+    })
 
     expect(mockOnValidityChange).toHaveBeenCalledWith(true)
   })
@@ -67,7 +78,13 @@ describe("RequirementCheckBoxes", () => {
       "agreed-to-general-policy-checkbox"
     )
 
+    const dietaryRequirementsInput = getByTestId("dietary-requirements-input")
+
     fireEvent.click(nightPolicyCheckbox)
+
+    fireEvent.change(dietaryRequirementsInput, {
+      target: { value: "ii" }
+    })
 
     expect(mockOnValidityChange).toHaveBeenCalledWith(false)
 

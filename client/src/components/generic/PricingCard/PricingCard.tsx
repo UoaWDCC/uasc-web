@@ -1,9 +1,23 @@
 import tick from "@/assets/selectedtick.png"
 import Image from "next/image"
 interface IPricingCardDefault {
+  /**
+   * @example "UoA Member"
+   */
   title: string
+  /**
+   * The **pre-formatted** string indicating the price of the item
+   *
+   * @example "$60"
+   */
   priceString: string
+  /**
+   * @example "was $60 before!"
+   */
   extraInfo?: string
+  /**
+   * If the card has been clicked on
+   */
   selected?: boolean
   onClick?: () => void
 }

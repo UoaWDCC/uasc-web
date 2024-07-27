@@ -42,6 +42,11 @@ import BookingUtils from "business-layer/utils/BookingUtils"
 
 @Route("bookings")
 export class BookingController extends Controller {
+  /**
+   * An admin method to create bookings for a list of users within a date range.
+   * @param requestBody - The date range and list of user ids to create bookings for.
+   * @returns A list of users and timestamps that were successfully added to the booking slots.
+   */
   @SuccessResponse("200", "Bookings successfully created")
   @Security("jwt", ["admin"])
   @Post("create-bookings")
@@ -114,6 +119,11 @@ export class BookingController extends Controller {
     }
   }
 
+  /**
+   * Fetches all bookings for a user based on their UID.
+   * @param request - The request object that includes the UserRecord.
+   * @returns A list of booking string dates.
+   */
   @SuccessResponse("200", "Found bookings")
   @Security("jwt", ["member"])
   @Get()
@@ -151,6 +161,11 @@ export class BookingController extends Controller {
     }
   }
 
+  /**
+   * Fetches all available booking dates within a date range.
+   * @param requestBody - The date range to check for available booking slots.
+   * @returns A list of available booking dates in an array of strings.
+   */
   @SuccessResponse("200", "Availabilities found")
   @Security("jwt", ["member"])
   @Post("available-dates")
@@ -252,6 +267,9 @@ export class BookingController extends Controller {
 
   /**
    * This method fetches users based on a booking date range.
+   * This method requires an admin JWT token.
+   * @param requestBody - The date range to check for user bookings.
+   * @returns A list of users data, booking ids and booking timestamps.
    */
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])

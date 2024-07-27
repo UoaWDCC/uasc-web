@@ -54,6 +54,12 @@ export class AdminController extends Controller {
   /**
    * Booking Operations
    */
+
+  /**
+   * Increases availability count for bookings slots in a date range.
+   * @param requestBody - The start and end date of the range and the number of slots to add.
+   * @returns An updated list of booking timestamps and their corresponding booking slot IDs.
+   */
   @SuccessResponse("201", "Slot made available")
   @Post("/bookings/make-dates-available")
   public async makeDateAvailable(
@@ -103,6 +109,11 @@ export class AdminController extends Controller {
     }
   }
 
+  /**
+   * Decreases availability count to 0 for all booking slots in a date range.
+   * @param requestBody - The start and end date of the range, the number of slots is omitted as we're decreases all slots to 0.
+   * @returns An updated list of booking timestamps and their corresponding booking slot IDs.
+   */
   @SuccessResponse("201", "Slot made unavailable")
   @Post("/bookings/make-dates-unavailable")
   public async makeDateUnavailable(
@@ -153,6 +164,11 @@ export class AdminController extends Controller {
     }
   }
 
+  /**
+   * Delete a users booking by booking ID.
+   * @param requestBody - The booking ID to delete.
+   * @returns The user ID of the user who made the booking.
+   */
   @SuccessResponse("200", "Booking deleted successfuly")
   // TODO: Refactor this to be a DELETE request
   @Post("/bookings/delete")
@@ -177,6 +193,14 @@ export class AdminController extends Controller {
 
   /**
    *  User Operations
+   */
+
+  /**
+   * Get all users in the system.
+   * Requires an admin JWT token.
+   * @param cursor - The cursor to start fetching users from. Essentially a pagination token.
+   * @param toFetch - The number of users to fetch. Defaults to 100. Is also a maximum of 100 users per fetch
+   * @returns The list of users that were fetched.
    */
   @SuccessResponse("200", "Users found")
   @Security("jwt", ["admin"])
@@ -244,6 +268,12 @@ export class AdminController extends Controller {
     }
   }
 
+  /**
+   * Get a user by their UID.
+   * Requires an admin JWT token.
+   * @param uid - The UID of the user to fetch.
+   * @returns The user data of the user with the given UID.
+   */
   @SuccessResponse("200", "User found")
   @Get("/users/{uid}")
   public async getUser(@Path() uid: string): Promise<GetUserResponse> {
@@ -277,6 +307,12 @@ export class AdminController extends Controller {
     }
   }
 
+  /**
+   * Adds a new user to the database with their UID and user data.
+   * Requires an admin JWT token.
+   * @param requestBody - The user data to create and their UID.
+   * @returns void.
+   */
   @SuccessResponse("200", "Created")
   @Put("/users/create")
   public async createUser(
@@ -291,6 +327,12 @@ export class AdminController extends Controller {
     this.setStatus(200)
   }
 
+  /**
+   * Edits a list of users with updated user additional info.
+   * Requires an admin JWT token.
+   * @param requestBody - The list of users to edit and their updated information.
+   * @returns void.
+   */
   @SuccessResponse("200", "Edited")
   @Patch("/users/bulk-edit")
   public async editUsers(
@@ -306,7 +348,12 @@ export class AdminController extends Controller {
     this.setStatus(200)
   }
 
-  // ticket 202 - endpoint to demote/promote users
+  /**
+   * Promotes a user to a member. This returns a conflict when the user is already a member.
+   * Requires an admin JWT token.
+   * @param requestBody - The UID of the user to promote.
+   * @returns void.
+   */
   @SuccessResponse("200", "Promoted user")
   @Put("/users/promote")
   // set user membership to "member"
@@ -335,6 +382,12 @@ export class AdminController extends Controller {
     }
   }
 
+  /**
+   * Demotes a member to a guest. This returns a conflict when the user is already a guest.
+   * Requires an admin JWT token.
+   * @param requestBody - The UID of the user to demote.
+   * @returns void.
+   */
   @SuccessResponse("200", "Demoted user")
   @Put("/users/demote")
   // set user membership type to `undefined`
@@ -362,6 +415,11 @@ export class AdminController extends Controller {
     }
   }
 
+  /**
+   * Demotes all non-admin users to guests. This is used to purge all membership statuses at the end of a billing cycle.
+   * Requires an admin JWT token.
+   * @returns void.
+   */
   @SuccessResponse("200", "Demoted all non-admin users")
   @Patch("/users/demote-all")
   public async demoteAllUsers(): Promise<void> {
@@ -382,6 +440,12 @@ export class AdminController extends Controller {
     }
   }
 
+  /**
+   * Adds a coupon to a user's stripe id.
+   * Requires an admin JWT token.
+   * @param requestBody - The UID of the user to add the coupon to and the quantity of coupons to add.
+   * @returns void.
+   */
   @SuccessResponse("200", "Coupon Added")
   @Post("users/add-coupon")
   public async addCoupon(
