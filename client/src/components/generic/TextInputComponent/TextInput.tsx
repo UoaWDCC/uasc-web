@@ -2,6 +2,11 @@ import React from "react"
 
 type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   variant?: "success" | "error"
+  /**
+   * The description of the text box
+   *
+   * @example "First Name"
+   */
   label?: string
   description?: string
 }
