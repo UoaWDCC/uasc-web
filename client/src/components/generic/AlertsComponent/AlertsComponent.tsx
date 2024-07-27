@@ -7,8 +7,18 @@ import WarningIcon from "@/assets/icons/warning.svg"
 import XIcon from "@/assets/icons/x.svg"
 
 type AlertsInputProp = {
+  /**
+   * What should be displayed to the user inside the alert
+   */
   message: string
+  /**
+   * Controls what the styling of the alert will be
+   */
   variant?: "success" | "notification" | "error"
+  /**
+   * If there should be an embedded button into the alert to allow
+   * for the user to close it
+   */
   isButton?: boolean
 }
 

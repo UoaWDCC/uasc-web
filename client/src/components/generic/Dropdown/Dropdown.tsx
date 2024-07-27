@@ -1,7 +1,17 @@
 import React from "react"
 
 type DropdownProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
+  /**
+   * The main text that appears above the dropdown
+   *
+   * @example "Favourite sport"
+   */
   label?: string
+  /**
+   * The subheading of the textbox, i.e if the label was "Favourite sport":
+   *
+   * @example "Only include ones you have played in the last year"
+   */
   description?: string
 }
 

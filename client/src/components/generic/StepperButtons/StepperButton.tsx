@@ -1,6 +1,10 @@
 type buttonVariants = "normal" | "first"
 interface IStepperButtonProps {
   children?: React.ReactNode
+  /**
+   * `normal` or `first`. The `first` is special as it does not have the
+   * pointed edges.
+   */
   variant?: buttonVariants
 }
 
@@ -32,6 +36,9 @@ const First = ({
   )
 }
 
+/**
+ * Used for displaying the navigation status of a paginated form
+ */
 const StepperButton = ({
   children,
   variant,

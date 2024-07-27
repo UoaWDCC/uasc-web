@@ -5,27 +5,66 @@ import AlertsComponent from "../AlertsComponent/AlertsComponent"
 import { FormEvent, useState } from "react"
 
 export type HandlerResponse = {
+  /**
+   * If the setup worked
+   */
   success: boolean
+  /**
+   * *Custom* message to display to the user on successful signup
+   */
   successMessage?: string
   error?: {
+    /**
+     * The reason for the sign up failing
+     */
     message: string
   }
 }
 
 type MessageTypes = {
+  /**
+   * Message to display on successful signup
+   */
   success?: string
+  /**
+   * Message to display on failed signup
+   */
   error?: string
+  /**
+   * Misc messages
+   */
   other?: string
 }
 
 type FormState = {
+  /**
+   * The password that the user enters (wants to change their password to)
+   */
   firstPassword: string
+
+  /**
+   * The *confirm* password that the user enters, which should be checked
+   * against `firstPassword`
+   */
   secondPassword: string
 }
 
 interface IPasswordSetupForm {
-  passwordSetUpHandler?: (firstPassword: string) => Promise<HandlerResponse>
+  /**
+   * Called when the user requests a password change. Should return a
+   * promise with the results of the attempted password change
+   *
+   * @param password the *confirmed* password that the user wants to use
+   * as the new password
+   */
+  passwordSetUpHandler?: (password: string) => Promise<HandlerResponse>
+  /**
+   * A react `ref`
+   */
   formRef?: React.RefObject<HTMLFormElement>
+  /**
+   * Callback to use if the password setup was successful
+   */
   successHandler?: () => void
 }
 
