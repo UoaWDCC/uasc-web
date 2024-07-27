@@ -167,3 +167,27 @@ export interface EventSlot {
    */
   max_occupancy?: number
 }
+
+export interface EventReservation {
+  /**
+   * The first name of the user who made this event reservation
+   */
+  first_name: string
+  /**
+   * The last name of the user who made this event reservation
+   */
+  last_name: string
+  /**
+   * The email of the user who made this even reservation
+   */
+  email: string
+  /**
+   * Boolean to check if the user is a member
+   * @example true
+   */
+  is_member: boolean
+  /**
+   * A link from EventReservation -> EventSlot
+   */
+  event_slot: string
+}
