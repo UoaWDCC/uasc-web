@@ -1,4 +1,12 @@
 import * as NodeMailer from "nodemailer"
+import path from "path"
+import { compileFile } from "pug"
+
+const TEMPLATE_BASE_PATH = path.join(__dirname, "..", "templates")
+
+const BOOKING_CONFIRMATION_TEMPLATE = compileFile(
+  `${TEMPLATE_BASE_PATH}/BookingConfirmation.pug`
+)
 
 const transporter = NodeMailer.createTransport({
   service: "Gmail",
@@ -16,9 +24,13 @@ export default class MailService {
    * Sends an email to the user confirming their booking was made and specifying the dates
    *
    * @param recipientEmail the email for which the confirmation should be sent
+   * @param recipientName the **full** name of the intended recipient
+   * @param startDateString the pre-formatted date **string** of the *first* **night** in the user's booking
+   * @param endDateString the pre-formatted date **string** of the *last* **night** in the user's booking
    */
   public async sendBookingConfirmationEmail(
     recipientEmail: string,
+    recipientName: string,
     startDateString: string,
     endDateString: string
   ) {
@@ -26,10 +38,11 @@ export default class MailService {
       from: '"UASC Bookings"',
       to: recipientEmail,
       subject: `Your booking from ${startDateString} to ${endDateString}`,
-      html: `<p>
-        Your booking from <strong>${startDateString}</strong> to <strong>${endDateString}</strong> has been confirmed. 
-        Please email <a href="mailto:club.admin@uasc.co.nz">club.admin@uasc.co.nz</a> for any queries
-      </p>`
+      html: BOOKING_CONFIRMATION_TEMPLATE({
+        name: recipientName,
+        startDate: startDateString,
+        endDate: endDateString
+      })
     })
 
     console.log("Booking confirmation email sent: %s", info.messageId)

@@ -431,9 +431,13 @@ export default class StripeService {
       const [userAuthData] = await new AuthService().bulkRetrieveUsersByUids([
         { uid }
       ])
+      const { first_name, last_name } = await new UserDataService().getUserData(
+        uid
+      )
 
       await new MailService().sendBookingConfirmationEmail(
         userAuthData.email,
+        `${first_name} ${last_name}`,
         session.metadata[START_DATE],
         session.metadata[END_DATE]
       )
