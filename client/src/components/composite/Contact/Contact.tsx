@@ -13,7 +13,7 @@ const Contact = ({ items }: IContact) => {
       min-w-full flex-col items-center bg-cover bg-top bg-no-repeat md:px-8"
       >
         <div className="bg-gray-1 pointer-events-none absolute -z-30 h-full w-full opacity-70" />
-        <div className="z-20 flex w-full flex-col items-center gap-4 pb-8 pt-16">
+        <div className="z-20 flex w-full max-w-[800px] flex-col items-center gap-4 pb-8 pt-16">
           <h2 className="text-dark-blue-100 mr-auto italic">Contact Us</h2>
           <ContactDetailPanel items={items} />
           <div className="mb-4 mt-4 w-full">
