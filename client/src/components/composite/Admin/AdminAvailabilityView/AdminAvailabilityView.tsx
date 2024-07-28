@@ -1,12 +1,12 @@
 import Calendar from "@/components/generic/Calendar/Calendar"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { BookingAvailability } from "@/models/Booking"
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { DateSelectionContext } from "./DateSelectionContext"
 import Table from "@/components/generic/ReusableTable/Table"
 import { Timestamp } from "firebase/firestore"
 import TextInput from "@/components/generic/TextInputComponent/TextInput"
-import { DEFAULT_BOOKING_AVAILABILITY } from "@/utils/Constants"
+import { DEFAULT_BOOKING_AVAILABILITY, MS_IN_SECOND } from "@/utils/Constants"
 import { DateUtils } from "@/components/utils/DateUtils"
 /**
  * Reasonable amount of items to display on table
@@ -63,13 +63,17 @@ export const formatBookingSlotsForAvailabilityView = (
   return slots
     .filter(
       (slot) =>
-        slot.date.seconds >= startDate.seconds &&
-        slot.date.seconds <= endDate.seconds
+        DateUtils.timestampMilliseconds(slot.date) >=
+          startDate.seconds * MS_IN_SECOND &&
+        DateUtils.timestampMilliseconds(slot.date) <=
+          endDate.seconds * MS_IN_SECOND
     )
     .map((slot) => {
       return {
         uid: slot.id,
-        Date: DateUtils.timestampToDate(slot.date).toDateString(),
+        Date: new Date(
+          DateUtils.timestampMilliseconds(slot.date)
+        ).toDateString(),
         "Max Bookings": slot.maxBookings.toString(),
         "Available Spaces": slot.availableSpaces.toString()
       }
@@ -105,15 +109,19 @@ const AdminAvailabilityView = ({
     setSlotQty
   } = useContext(DateSelectionContext)
 
-  const dateRangeDefined = startDate && endDate
+  const dateRangeDefined = !!(startDate && endDate)
 
-  const tableData: CondensedBookingInfoColumn[] = dateRangeDefined
-    ? formatBookingSlotsForAvailabilityView(
-        Timestamp.fromDate(startDate),
-        Timestamp.fromDate(endDate),
-        slots
-      )
-    : [CONDENSED_BOOKING_INFO_DEFAULT_DATA]
+  const tableData: CondensedBookingInfoColumn[] = useMemo(
+    () =>
+      dateRangeDefined
+        ? formatBookingSlotsForAvailabilityView(
+            Timestamp.fromDate(startDate),
+            Timestamp.fromDate(endDate),
+            slots
+          )
+        : [CONDENSED_BOOKING_INFO_DEFAULT_DATA],
+    [startDate, endDate, dateRangeDefined, slots]
+  )
 
   const formattedDateRanges = formatDateRangeForDialog(startDate, endDate)
 
