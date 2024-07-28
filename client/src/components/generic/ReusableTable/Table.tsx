@@ -36,6 +36,8 @@ interface ITable<
    * **Optional** callback for when a row is clicked.
    *
    * @param uid the identifier for the row, typically an id associated with a user
+   * @example
+   * onRowClick={(uid) => openEditPanelForUid(uid)}
    */
   onRowClick?: (uid: string) => void
   /**
