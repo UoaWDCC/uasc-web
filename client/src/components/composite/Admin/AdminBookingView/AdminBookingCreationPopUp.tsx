@@ -42,6 +42,11 @@ interface IAdminBookingCreationPopUp {
    * Users to display during a search
    */
   users?: CombinedUserData[]
+
+  /**
+   * If not all users have yet been loaded into the app
+   */
+  isLoading?: boolean
 }
 
 enum FlowStages {
@@ -60,7 +65,8 @@ const AdminBookingCreationPopUp = ({
   bookingCreationHandler,
   bookingSlots = [],
   users = [],
-  isPending
+  isPending,
+  isLoading
 }: IAdminBookingCreationPopUp) => {
   const containerRef = useRef<HTMLDivElement>(null)
   useClickOutside(containerRef, () => handleClose?.())
@@ -132,8 +138,9 @@ const AdminBookingCreationPopUp = ({
       return users.filter(
         (user) =>
           (user.email.toLowerCase().includes(currentSearchQuery) ||
-            user.first_name.toLowerCase().includes(currentSearchQuery) ||
-            user.last_name.toLowerCase().includes(currentSearchQuery)) &&
+            `${user.first_name.trim()} ${user.last_name.trim()}`
+              .toLowerCase()
+              .includes(currentSearchQuery)) &&
           user.membership !== "admin"
       )
     } else {
@@ -148,12 +155,12 @@ const AdminBookingCreationPopUp = ({
   const UserList = useMemo(
     () => (
       <div
-        className={`border-gray-3 rounded-md border ${!currentSearchQuery && "border-none"} `}
+        className={`border-gray-3 rounded-md border ${!currentSearchQuery && "border-none"} p-2`}
       >
         {usersToDisplay.map((user) => (
           <div
             key={user.uid}
-            className="flex w-full p-2"
+            className="flex w-full cursor-pointer py-2"
             onClick={() => handleSelectUser(user.uid)}
           >
             <p>
@@ -170,9 +177,15 @@ const AdminBookingCreationPopUp = ({
             </p>
           </div>
         ))}
+        {isLoading ? (
+          <p>Loading More...</p>
+        ) : (
+          usersToDisplay.length === 0 &&
+          currentSearchQuery && <p>No results found for {currentSearchQuery}</p>
+        )}
       </div>
     ),
-    [usersToDisplay, currentSearchQuery]
+    [usersToDisplay, currentSearchQuery, isLoading]
   )
 
   const DetailedUserInfoPanel = useMemo(
