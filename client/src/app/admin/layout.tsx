@@ -5,17 +5,14 @@ import AdminNavbar from "@/components/composite/Admin/AdminNavbar/AdminNavbar"
 import { useAppData } from "@/store/Store"
 import { AdminBookingViewProvider } from "@/components/composite/Admin/AdminBookingView/AdminBookingViewContext"
 import { ReactNode } from "react"
-import { useRouter } from "next/navigation"
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "@/services/QueryClient"
 import Loader from "@/components/generic/SuspenseComponent/Loader"
 
 const AdminLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   const [{ currentUserClaims }] = useAppData()
-  const router = useRouter()
 
   if (!currentUserClaims?.admin) {
-    router.push("/")
     return <Loader />
   }
 
