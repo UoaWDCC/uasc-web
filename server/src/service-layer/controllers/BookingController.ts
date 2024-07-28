@@ -78,8 +78,12 @@ export class BookingController extends Controller {
         let userIds = [...requestBody.userIds]
         /** For every slotid add a booking for that id only if user doesn't already have a booking */
         const userIdsPromises = userIds.map(async (userId) => {
+          const existingBookingsForUser =
+            await bookingDataService.getBookingsByUserId(userId)
           if (
-            (await bookingDataService.getBookingsByUserId(userId)).length !== 0
+            existingBookingsForUser.some(
+              (booking) => booking.booking_slot_id === slot.id
+            )
           ) {
             userIds = userIds.filter((id) => id !== userId) // Remove user from list if they already have a booking
           } else {

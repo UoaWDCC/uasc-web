@@ -2,9 +2,15 @@ import { useRouter } from "next/navigation"
 import Button from "../FigmaButtons/FigmaButton"
 
 interface ISignUpNotif {
+  /**
+   * If there is a currently signed in user which determines the view to be shown
+   */
   signedIn?: boolean
 }
 
+/**
+ * For use in the bookings page when a non-signed in/guest member tries to view
+ */
 export const SignUpNotif = ({ signedIn }: ISignUpNotif) => {
   const router = useRouter()
   function goToRegister() {

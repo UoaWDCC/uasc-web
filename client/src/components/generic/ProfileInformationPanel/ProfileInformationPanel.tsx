@@ -1,9 +1,20 @@
 import { ReactNode } from "react"
 import EditIcon from "@/assets/icons/edit.svg"
 interface IProfileInformationPanel {
-  title: string // The title field
+  /**
+   * The main heading of the panel
+   */
+  title: string
   children?: ReactNode
-  onEdit?: () => void // The edit button
+  /**
+   *  Handler to be called when the user requests an edit for their profile
+   *
+   * @example
+   * () => {
+   *    openEditPanel()
+   * }
+   */
+  onEdit?: () => void
 }
 
 const ProfileInformationPanel = ({

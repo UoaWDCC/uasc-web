@@ -1,4 +1,7 @@
 interface ICheckboxProps {
+  /**
+   * The text that appears for the checkbox
+   */
   label: string
 }
 

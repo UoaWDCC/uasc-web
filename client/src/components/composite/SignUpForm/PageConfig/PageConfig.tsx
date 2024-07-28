@@ -19,7 +19,6 @@ import {
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
-  SUCCESS_ROUTE,
   RouteNames
 } from "../utils/RouteNames"
 import {
@@ -100,9 +99,7 @@ export const PAGINATED_FORM_PAGES = (
     index: PAGES.AccountSetup,
     title: "Account",
     // goes back to one page earlier in history, otherwise does nothing
-    onBack: () => navigateFn(-1),
-    // after setting up the account, the next button is enabled and shows the success section
-    onNext: () => navigateFn(SUCCESS_ROUTE)
+    onBack: () => navigateFn(-1)
   },
   {
     index: PAGES.Success,
