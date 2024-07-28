@@ -441,7 +441,7 @@ describe("BookingController endpoint tests", () => {
         ).length
       ).toEqual(1)
 
-      const newEndDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+      const newEndDate = dateToFirestoreTimeStamp(new Date("01/01/2024"))
 
       res = await request
         .post("/bookings/create-bookings")
