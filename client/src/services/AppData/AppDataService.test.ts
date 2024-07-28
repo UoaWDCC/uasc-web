@@ -1,6 +1,6 @@
 import { MembershipTypes } from "@/models/Payment"
 
-const membershipOrder = {
+const membershipOrder: { [key in MembershipTypes]: number } = {
   uoa_student: 1,
   non_uoa_student: 2,
   returning_member: 3,
