@@ -18,6 +18,7 @@ Project initiated by WDCC in 2023.
 - Kunal Bhaskar
 - Miguel Landingin
 - Ray Xiao
+- Troy Mackenzie-Smee
 
 ## 2023 Team Leadership
 
