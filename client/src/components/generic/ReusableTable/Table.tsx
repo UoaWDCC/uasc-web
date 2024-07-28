@@ -33,6 +33,12 @@ interface ITable<
    */
   onPageChange?: (isLastPage: boolean) => void
   /**
+   * **Optional** callback for when a row is clicked.
+   *
+   * @param uid the identifier for the row, typically an id associated with a user
+   */
+  onRowClick?: (uid: string) => void
+  /**
    * decides if clicking on the row options will give multiple options or a single one
    */
   operationType?: TableRowOperationStyle
@@ -154,6 +160,7 @@ const Table = <
   operationType = "none",
   rowOperations,
   onPageChange,
+  onRowClick,
   groupSameRows = false
 }: ITable<T & TableRowObjectWithIdentifier, S>) => {
   // Needs to be zero-indexed
@@ -220,12 +227,15 @@ const Table = <
         currentGroup % 2 === 0 ? "" : "text-dark-blue-100 font-bold"
 
       return (
-        <tr key={index} className="">
+        <tr key={index}>
           {dataKeys.map((key) => {
             return (
               <td
+                onClick={() => {
+                  onRowClick?.(obj[TABLE_ROW_IDENTIFIER_KEY])
+                }}
                 className={`break-keep pb-2 pl-4 pt-2 
-                    ${groupSameRows && rowClass}`}
+                    ${groupSameRows && rowClass} ${!!onRowClick && "cursor-pointer"}`}
                 key={key}
               >
                 {obj[key] || ""}
@@ -240,7 +250,14 @@ const Table = <
         </tr>
       )
     })
-  }, [operationType, rowOperations, dataKeys, currentDataSlice, groupSameRows])
+  }, [
+    operationType,
+    rowOperations,
+    dataKeys,
+    currentDataSlice,
+    groupSameRows,
+    onRowClick
+  ])
 
   return (
     <div className="border-gray-3 h-full w-full  overflow-y-visible rounded-t-sm border bg-white">

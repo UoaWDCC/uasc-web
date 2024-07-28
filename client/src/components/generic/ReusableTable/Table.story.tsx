@@ -13,9 +13,10 @@ type Story = StoryObj<typeof Table>
 export const FullTable: Story = {
   decorators: [(Story) => <Story />],
   args: {
+    onRowClick: (id) => console.log("table row clicked", id),
     data: [
       {
-        uid: "",
+        uid: "John",
         Name: "John Doe",
         Email: "john.doe@example.com",
         Status: "Member",
@@ -23,7 +24,7 @@ export const FullTable: Story = {
         "Date Joined": "12-7-22"
       },
       {
-        uid: "",
+        uid: "Straight Zhao",
         Name: "Ray Zhao",
         Email: "ray.zhao@example.com",
         Status: "Superior Controller",
@@ -31,7 +32,7 @@ export const FullTable: Story = {
         "Date Joined": "12-7-22"
       },
       {
-        uid: "",
+        uid: "Doeshin",
         Name: "Johnathan Doeshin",
         Email: "jondoe@gmail.com",
         Status: "Member",
@@ -134,6 +135,7 @@ export const MultipleOperations = () => {
       <p>Last deleted id: {deleteMessage}</p>
       <Table<(typeof data)[0], "multiple-operations">
         data={data}
+        onRowClick={() => alert("Row Callback")}
         operationType="multiple-operations"
         rowOperations={[
           {
