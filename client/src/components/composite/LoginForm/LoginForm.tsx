@@ -135,9 +135,7 @@ const LoginForm = ({
             Login
           </Button>
           <Link href="/register" className="flex">
-            <Button variant="inverted-default-sm">
-              Register
-            </Button>
+            <Button variant="inverted-default-sm">Register</Button>
           </Link>
         </span>
         <div className="mt-6 uppercase">
