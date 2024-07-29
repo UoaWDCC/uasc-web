@@ -4,6 +4,7 @@ import {
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
 import {
+  UTCDateToDdMmYyyy,
   firestoreTimestampToDate,
   timestampsInRange
 } from "data-layer/adapters/DateUtils"
@@ -50,6 +51,7 @@ import StripeService from "../../business-layer/services/StripeService"
 import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import { UserRecord } from "firebase-admin/auth"
 import { Timestamp } from "firebase-admin/firestore"
+import MailService from "business-layer/services/MailService"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -221,6 +223,42 @@ export class AdminController extends Controller {
       await Promise.all(bookingPromises)
 
       this.setStatus(200)
+      /**
+       * Send confirmation using MailService so that admins do not need to manually
+       * followup on manual bookings.
+       */
+      const mailService = new MailService()
+
+      try {
+        const { first_name, last_name } =
+          await new UserDataService().getUserData(userId)
+        const [userAuthData] = await new AuthService().bulkRetrieveUsersByUids([
+          { uid: userId }
+        ])
+        /**
+         * Used for formatted display to user
+         */
+        const BOOKING_START_DATE = UTCDateToDdMmYyyy(
+          new Date(firestoreTimestampToDate(startDate))
+        )
+        const BOOKING_END_DATE = UTCDateToDdMmYyyy(
+          new Date(firestoreTimestampToDate(endDate))
+        )
+        mailService.sendBookingConfirmationEmail(
+          userAuthData.email,
+          `${first_name} ${last_name}`,
+          BOOKING_START_DATE,
+          BOOKING_END_DATE
+        )
+      } catch (e) {
+        console.error(
+          `Was unable to send a confirmation email for manual booking`
+        )
+        return {
+          data: responseData.filter((data) => !!data),
+          error: `Was unable to send a confirmation email for manual booking`
+        }
+      }
 
       /**
        * Returning the response data
