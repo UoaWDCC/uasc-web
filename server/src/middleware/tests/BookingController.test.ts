@@ -402,13 +402,18 @@ describe("BookingController endpoint tests", () => {
         max_bookings: 10
       })
 
+      await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("01/01/2024")),
+        max_bookings: 10
+      })
+
       await bookingDataService.createBooking({
         user_id: MEMBER_USER_UID,
         booking_slot_id: slot1.id,
         stripe_payment_id: ""
       })
 
-      const res = await request
+      let res = await request
         .post("/bookings/create-bookings")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
@@ -426,6 +431,35 @@ describe("BookingController endpoint tests", () => {
           ])
         })
       ])
+
+      expect(
+        (
+          await bookingSlotService.getBookingSlotsBetweenDateRange(
+            startDate,
+            endDate
+          )
+        ).length
+      ).toEqual(1)
+
+      const newEndDate = dateToFirestoreTimeStamp(new Date("01/01/2024"))
+
+      res = await request
+        .post("/bookings/create-bookings")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          newEndDate,
+          userIds: [MEMBER_USER_UID]
+        })
+
+      expect(
+        (
+          await bookingSlotService.getBookingSlotsBetweenDateRange(
+            startDate,
+            newEndDate
+          )
+        ).length
+      ).toEqual(2)
     })
   })
 })

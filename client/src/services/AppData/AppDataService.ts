@@ -38,6 +38,20 @@ const fallbackData: Prices[] = [
     priceString: "$95"
   }
 ]
+
+const membershipOrder = {
+  uoa_student: 1,
+  non_uoa_student: 2,
+  returning_member: 3,
+  new_non_student: 4
+}
+
+const sortMembershipPrices = (prices: Prices[]): Prices[] => {
+  return prices.sort(
+    (a, b) => membershipOrder[a.name] - membershipOrder[b.name]
+  )
+}
+
 const AppDataService = {
   getBankPaymentDetails: async function () {
     // TODO: Dynamically fetch and make sure there is appropriate fallback
@@ -81,7 +95,8 @@ const AppDataService = {
               extraInfo: data.description
             }
           })
-        return transformedData
+
+        return sortMembershipPrices(transformedData)
       }
     } catch (e) {
       console.error(
