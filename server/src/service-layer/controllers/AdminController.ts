@@ -17,12 +17,14 @@ import {
   MakeDatesAvailableRequestBody
 } from "service-layer/request-models/AdminRequests"
 import {
+  CreateBookingsRequestModel,
   CreateUserRequestBody,
   DemoteUserRequestBody,
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import {
+  BookingCreateResponse,
   BookingDeleteResponse,
   BookingSlotUpdateResponse
 } from "service-layer/response-models/BookingResponse"
@@ -161,6 +163,72 @@ export class AdminController extends Controller {
       this.setStatus(500)
       console.error(`An error occurred when making dates unavailable: ${e}`)
       return { error: "Something went wrong when making dates unavailable" }
+    }
+  }
+
+  /**
+   * An admin method to create bookings for a list of users within a date range.
+   * @param requestBody - The date range and list of user ids to create bookings for.
+   * @returns A list of users and timestamps that were successfully added to the booking slots.
+   */
+  @SuccessResponse("200", "Bookings successfully created")
+  @Post("/bookings/create")
+  public async createBookings(
+    @Body() requestBody: CreateBookingsRequestModel
+  ): Promise<BookingCreateResponse> {
+    try {
+      const { startDate, endDate, userId } = requestBody
+
+      /** Creating instances of the required services */
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      // Query to get all booking slots within date range
+      const bookingSlots =
+        await bookingSlotService.getBookingSlotsBetweenDateRange(
+          startDate,
+          endDate
+        )
+
+      /** Iterating through each booking slot */
+      const bookingPromises = bookingSlots.map(async (slot) => {
+        /** For every slotid add a booking for that id only if user doesn't already have a booking */
+        const existingBooking =
+          await bookingDataService.getBookingsByUserId(userId)
+        if (
+          !existingBooking.some(
+            (booking) => booking.booking_slot_id === slot.id
+          )
+        ) {
+          await bookingDataService.createBooking({
+            user_id: userId,
+            booking_slot_id: slot.id,
+            stripe_payment_id: "manual_entry"
+          })
+        }
+      })
+
+      await Promise.all(bookingPromises)
+
+      this.setStatus(200)
+
+      /**
+       * Returning the response data
+       *
+       * The filter is required to not include data that is null
+       * because of the early return in the map
+       */
+      return {
+        data: {
+          bookedDates: bookingSlots.map((slot) => slot.date),
+          user: userId
+        }
+      }
+    } catch (e) {
+      console.error("Error in getBookingsByDateRange:", e)
+      this.setStatus(500)
+
+      return { error: "Something went wrong" }
     }
   }
 
