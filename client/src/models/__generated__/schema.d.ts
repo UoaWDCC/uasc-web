@@ -361,11 +361,11 @@ export interface components {
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
     /** @description Represents the response structure for fetching user ids by date range. */
-    BookingCreateResponse: {
+    UIdssByDateRangeResponse: {
       data?: {
-        user: string;
-        bookedDates: components["schemas"]["FirebaseFirestore.Timestamp"][];
-      };
+          users: string[];
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
       error?: string;
     };
     CreateBookingsRequestModel: {
@@ -773,7 +773,7 @@ export interface operations {
       /** @description Bookings successfully created */
       200: {
         content: {
-          "application/json": components["schemas"]["BookingCreateResponse"];
+          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
         };
       };
     };

@@ -24,7 +24,7 @@ import {
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import {
-  BookingCreateResponse,
+  UIdssByDateRangeResponse,
   BookingDeleteResponse,
   BookingSlotUpdateResponse
 } from "service-layer/response-models/BookingResponse"
@@ -49,6 +49,7 @@ import * as console from "console"
 import StripeService from "../../business-layer/services/StripeService"
 import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import { UserRecord } from "firebase-admin/auth"
+import { Timestamp } from "firebase-admin/firestore"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -175,9 +176,14 @@ export class AdminController extends Controller {
   @Post("/bookings/create")
   public async createBookings(
     @Body() requestBody: CreateBookingsRequestModel
-  ): Promise<BookingCreateResponse> {
+  ): Promise<UIdssByDateRangeResponse> {
     try {
       const { startDate, endDate, userId } = requestBody
+
+      const responseData: Array<{
+        date: Timestamp
+        users: string[]
+      }> = []
 
       /** Creating instances of the required services */
       const bookingSlotService = new BookingSlotService()
@@ -206,6 +212,10 @@ export class AdminController extends Controller {
             stripe_payment_id: "manual_entry"
           })
         }
+        responseData.push({
+          date: slot.date,
+          users: [userId]
+        })
       })
 
       await Promise.all(bookingPromises)
@@ -218,12 +228,7 @@ export class AdminController extends Controller {
        * The filter is required to not include data that is null
        * because of the early return in the map
        */
-      return {
-        data: {
-          bookedDates: bookingSlots.map((slot) => slot.date),
-          user: userId
-        }
-      }
+      return { data: responseData.filter((data) => !!data) }
     } catch (e) {
       console.error("Error in getBookingsByDateRange:", e)
       this.setStatus(500)

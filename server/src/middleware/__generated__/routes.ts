@@ -278,10 +278,10 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "BookingCreateResponse": {
+    "UIdssByDateRangeResponse": {
         "dataType": "refObject",
         "properties": {
-            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"user":{"dataType":"string","required":true},"bookedDates":{"dataType":"array","array":{"dataType":"refObject","ref":"FirebaseFirestore.Timestamp"},"required":true}}},
+            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"string"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
             "error": {"dataType":"string"},
         },
         "additionalProperties": false,
