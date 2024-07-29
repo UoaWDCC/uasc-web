@@ -50,9 +50,7 @@ RegisterRoutes(app)
 const port = process.env.PORT || 8000
 
 const _app = app.listen(port, () => {
-  console.log(
-    `UASC backend server listening on port ${port}. http://localhost:${port}`
-  )
+  console.log(`UASC backend server listening on port ${port}.`)
 })
 
 // So we can use for testing
