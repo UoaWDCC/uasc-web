@@ -21,8 +21,11 @@ export interface UsersByDateRangeResponse {
 /**
  * Represents the response structure for fetching user ids by date range.
  */
-export interface UIdssByDateRangeResponse {
-  data?: Array<{ date: Timestamp; users: string[] }>
+export interface BookingCreateResponse {
+  data?: {
+    bookedDates: Timestamp[]
+    user: string
+  }
   error?: string
 }
 

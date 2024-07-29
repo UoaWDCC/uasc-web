@@ -327,7 +327,7 @@ describe("BookingController endpoint tests", () => {
   })
 
   describe("/bookings/create-bookings", () => {
-    it("should create bookings for userIds within the date range", async () => {
+    it("should create bookings a user within the date range", async () => {
       const bookingSlotService = new BookingSlotService()
 
       const startDate = dateToFirestoreTimeStamp(new Date("01/01/2022"))
@@ -355,7 +355,7 @@ describe("BookingController endpoint tests", () => {
         .send({
           startDate,
           endDate,
-          userIds: [GUEST_USER_UID, MEMBER_USER_UID]
+          userId: MEMBER_USER_UID
         })
 
       expect(res.status).toEqual(200)
@@ -364,11 +364,6 @@ describe("BookingController endpoint tests", () => {
         expect.objectContaining({
           users: expect.arrayContaining([
             expect.objectContaining({ uid: MEMBER_USER_UID })
-          ])
-        }),
-        expect.objectContaining({
-          users: expect.arrayContaining([
-            expect.objectContaining({ uid: GUEST_USER_UID })
           ])
         })
       ])
@@ -384,7 +379,7 @@ describe("BookingController endpoint tests", () => {
         .send({
           startDate,
           endDate,
-          userIds: []
+          userId: undefined
         })
 
       expect(res.status).toEqual(401)
@@ -419,7 +414,7 @@ describe("BookingController endpoint tests", () => {
         .send({
           startDate,
           endDate,
-          userIds: [MEMBER_USER_UID]
+          userId: MEMBER_USER_UID
         })
 
       expect(res.status).toEqual(200)
@@ -449,7 +444,7 @@ describe("BookingController endpoint tests", () => {
         .send({
           startDate,
           newEndDate,
-          userIds: [MEMBER_USER_UID]
+          userId: MEMBER_USER_UID
         })
 
       expect(

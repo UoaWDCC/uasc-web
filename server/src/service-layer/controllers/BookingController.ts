@@ -10,7 +10,7 @@ import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import {
   AllUserBookingSlotsResponse,
-  UIdssByDateRangeResponse
+  BookingCreateResponse
 } from "service-layer/response-models/BookingResponse"
 import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import {
@@ -52,9 +52,9 @@ export class BookingController extends Controller {
   @Post("create-bookings")
   public async createBookings(
     @Body() requestBody: CreateBookingsRequestModel
-  ): Promise<UIdssByDateRangeResponse> {
+  ): Promise<BookingCreateResponse> {
     try {
-      const { startDate, endDate } = requestBody
+      const { startDate, endDate, userId } = requestBody
 
       /** Creating instances of the required services */
       const bookingSlotService = new BookingSlotService()
@@ -67,41 +67,22 @@ export class BookingController extends Controller {
           endDate
         )
 
-      /** The response data array */
-      const responseData: Array<{
-        date: Timestamp
-        users: string[]
-      }> = []
-
       /** Iterating through each booking slot */
       const bookingPromises = bookingSlots.map(async (slot) => {
-        let userIds = [...requestBody.userIds]
         /** For every slotid add a booking for that id only if user doesn't already have a booking */
-        const userIdsPromises = userIds.map(async (userId) => {
-          const existingBookingsForUser =
-            await bookingDataService.getBookingsByUserId(userId)
-          if (
-            existingBookingsForUser.some(
-              (booking) => booking.booking_slot_id === slot.id
-            )
-          ) {
-            userIds = userIds.filter((id) => id !== userId) // Remove user from list if they already have a booking
-          } else {
-            await bookingDataService.createBooking({
-              user_id: userId,
-              booking_slot_id: slot.id,
-              stripe_payment_id: "manual_entry"
-            })
-          }
-        })
-
-        /** List of usersIds successfully added */
-        responseData.push({
-          date: slot.date,
-          users: userIds
-        })
-
-        await Promise.all(userIdsPromises)
+        const existingBooking =
+          await bookingDataService.getBookingsByUserId(userId)
+        if (
+          !existingBooking.some(
+            (booking) => booking.booking_slot_id === slot.id
+          )
+        ) {
+          await bookingDataService.createBooking({
+            user_id: userId,
+            booking_slot_id: slot.id,
+            stripe_payment_id: "manual_entry"
+          })
+        }
       })
 
       await Promise.all(bookingPromises)
@@ -114,7 +95,12 @@ export class BookingController extends Controller {
        * The filter is required to not include data that is null
        * because of the early return in the map
        */
-      return { data: responseData.filter((data) => !!data) }
+      return {
+        data: {
+          bookedDates: bookingSlots.map((slot) => slot.date),
+          user: userId
+        }
+      }
     } catch (e) {
       console.error("Error in getBookingsByDateRange:", e)
       this.setStatus(500)

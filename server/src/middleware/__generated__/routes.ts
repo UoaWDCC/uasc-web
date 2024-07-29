@@ -163,10 +163,10 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UIdssByDateRangeResponse": {
+    "BookingCreateResponse": {
         "dataType": "refObject",
         "properties": {
-            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"string"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
+            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"user":{"dataType":"string","required":true},"bookedDates":{"dataType":"array","array":{"dataType":"refObject","ref":"FirebaseFirestore.Timestamp"},"required":true}}},
             "error": {"dataType":"string"},
         },
         "additionalProperties": false,
@@ -177,7 +177,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "userIds": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "userId": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },

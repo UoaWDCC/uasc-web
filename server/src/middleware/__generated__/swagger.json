@@ -344,29 +344,26 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"UIdssByDateRangeResponse": {
+			"BookingCreateResponse": {
 				"description": "Represents the response structure for fetching user ids by date range.",
 				"properties": {
 					"data": {
-						"items": {
-							"properties": {
-								"users": {
-									"items": {
-										"type": "string"
-									},
-									"type": "array"
-								},
-								"date": {
-									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
-								}
+						"properties": {
+							"user": {
+								"type": "string"
 							},
-							"required": [
-								"users",
-								"date"
-							],
-							"type": "object"
+							"bookedDates": {
+								"items": {
+									"$ref": "#/components/schemas/FirebaseFirestore.Timestamp"
+								},
+								"type": "array"
+							}
 						},
-						"type": "array"
+						"required": [
+							"user",
+							"bookedDates"
+						],
+						"type": "object"
 					},
 					"error": {
 						"type": "string"
@@ -385,18 +382,15 @@
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
 						"description": "Firestore timestamp, should represent a UTC date that is set to exactly midnight"
 					},
-					"userIds": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array",
+					"userId": {
+						"type": "string",
 						"description": "List of users to add to the bookings between date range"
 					}
 				},
 				"required": [
 					"startDate",
 					"endDate",
-					"userIds"
+					"userId"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -1430,7 +1424,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UIdssByDateRangeResponse"
+									"$ref": "#/components/schemas/BookingCreateResponse"
 								}
 							}
 						}

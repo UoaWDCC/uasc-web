@@ -264,11 +264,11 @@ export interface components {
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
     /** @description Represents the response structure for fetching user ids by date range. */
-    UIdssByDateRangeResponse: {
+    BookingCreateResponse: {
       data?: {
-          users: string[];
-          date: components["schemas"]["FirebaseFirestore.Timestamp"];
-        }[];
+        user: string;
+        bookedDates: components["schemas"]["FirebaseFirestore.Timestamp"][];
+      };
       error?: string;
     };
     CreateBookingsRequestModel: {
@@ -277,7 +277,7 @@ export interface components {
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
       /** @description List of users to add to the bookings between date range */
-      userIds: string[];
+      userId: string;
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -691,7 +691,7 @@ export interface operations {
       /** @description Bookings successfully created */
       200: {
         content: {
-          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
+          "application/json": components["schemas"]["BookingCreateResponse"];
         };
       };
     };
