@@ -134,9 +134,11 @@ const LoginForm = ({
           >
             Login
           </Button>
-          <Button variant="inverted-default-sm">
-            <Link href="/register">Register</Link>
-          </Button>
+          <Link href="/register" className="flex">
+            <Button variant="inverted-default-sm">
+              Register
+            </Button>
+          </Link>
         </span>
         <div className="mt-6 uppercase">
           {messages.success && (
