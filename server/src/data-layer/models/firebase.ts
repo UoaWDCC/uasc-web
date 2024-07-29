@@ -186,9 +186,4 @@ export interface Event {
    * @example 30
    */
   max_occupancy?: number
-  /**
-   * Subcollection of EventReservation interface.
-   * Holds the members that made a reservation to this event
-   */
-  reservations: EventReservation[]
 }
