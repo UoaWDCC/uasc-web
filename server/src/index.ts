@@ -42,7 +42,7 @@ app.use("/api-docs", swaggerUi.serve, async (_req: Request, res: Response) => {
   }
 })
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World From the Typescript Server!")
+  res.send("UASC backend server is up!")
 })
 
 RegisterRoutes(app)
@@ -50,7 +50,7 @@ RegisterRoutes(app)
 const port = process.env.PORT || 8000
 
 const _app = app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`UASC backend server listening on port ${port}.`)
 })
 
 // So we can use for testing
