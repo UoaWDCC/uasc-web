@@ -19,6 +19,14 @@ import { cleanAuth, cleanFirestore } from "test-config/TestUtils"
 /**
  * This needs to be updated as we add more stripe functions...
  */
+jest.mock("nodemailer", () => ({
+  createTransport: jest.fn().mockImplementation(() => ({
+    sendMail: () => {
+      return { messageId: "test" }
+    }
+  }))
+}))
+
 jest.mock("stripe", () => {
   return {
     __esModule: true,
