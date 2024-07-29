@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react"
 import TextInput from "@/components/generic/TextInputComponent/TextInput"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import Link from "next/link"
 
 export type LoginHandlerArgs = {
   email: string
@@ -124,14 +125,19 @@ const LoginForm = ({
         >
           Forgot your password?
         </h5>
-        <Button
-          data-testid="login-button"
-          type="submit"
-          disabled={isLoading || loginSuccessful}
-          variant="default-sm"
-        >
-          Login
-        </Button>
+        <span className="flex gap-2">
+          <Button
+            data-testid="login-button"
+            type="submit"
+            disabled={isLoading || loginSuccessful}
+            variant="default-sm"
+          >
+            Login
+          </Button>
+          <Button variant="inverted-default-sm">
+            <Link href="/register">Register</Link>
+          </Button>
+        </span>
         <div className="mt-6 uppercase">
           {messages.success && (
             <h5 className="font-bold">{messages.success}</h5>
