@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { ExpressTemplateService, TsoaRoute, fetchMiddlewares } from '@tsoa/runtime';
+import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UsersController } from './../../service-layer/controllers/UserController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -13,8 +13,8 @@ import { PaymentController } from './../../service-layer/controllers/PaymentCont
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { BookingController } from './../../service-layer/controllers/BookingController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { expressAuthentication } from './../../business-layer/security/Authentication';
 import { AdminController } from './../../service-layer/controllers/AdminController';
+import { expressAuthentication } from './../../business-layer/security/Authentication';
 // @ts-ignore - no great way to install types from subpackage
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 
@@ -163,6 +163,25 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UIdssByDateRangeResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"string"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
+            "error": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateBookingsRequestModel": {
+        "dataType": "refObject",
+        "properties": {
+            "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "userIds": {"dataType":"array","array":{"dataType":"string"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AllUserBookingSlotsResponse": {
         "dataType": "refObject",
         "properties": {
@@ -276,25 +295,6 @@ const models: TsoaRoute.Models = {
     "Omit_MakeDatesAvailableRequestBody.slots_": {
         "dataType": "refAlias",
         "type": {"ref":"Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UIdssByDateRangeResponse": {
-        "dataType": "refObject",
-        "properties": {
-            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"string"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
-            "error": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CreateBookingsRequestModel": {
-        "dataType": "refObject",
-        "properties": {
-            "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "userId": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "BookingDeleteResponse": {
@@ -438,24 +438,17 @@ const templateService = new ExpressTemplateService(models, {"noImplicitAdditiona
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-
-
-
 export function RegisterRoutes(app: Router) {
-
     // ###########################################################################################################
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-
-
-    
         app.get('/users/self',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(UsersController)),
             ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.getSelf)),
 
-            async function UsersController_getSelf(request: ExRequest, response: ExResponse, next: any) {
+            function UsersController_getSelf(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
@@ -468,7 +461,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UsersController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getSelf',
                 controller,
                 response,
@@ -486,7 +479,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UsersController)),
             ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.editSelf)),
 
-            async function UsersController_editSelf(request: ExRequest, response: ExResponse, next: any) {
+            function UsersController_editSelf(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"EditSelfRequestBody"},
@@ -500,7 +493,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UsersController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'editSelf',
                 controller,
                 response,
@@ -518,7 +511,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UsersController)),
             ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.deleteUser)),
 
-            async function UsersController_deleteUser(request: ExRequest, response: ExResponse, next: any) {
+            function UsersController_deleteUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DeleteUserRequestBody"},
             };
@@ -531,7 +524,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UsersController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'deleteUser',
                 controller,
                 response,
@@ -548,7 +541,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(StripeWebhook)),
             ...(fetchMiddlewares<RequestHandler>(StripeWebhook.prototype.receiveWebhook)),
 
-            async function StripeWebhook_receiveWebhook(request: ExRequest, response: ExResponse, next: any) {
+            function StripeWebhook_receiveWebhook(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
@@ -561,7 +554,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new StripeWebhook();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'receiveWebhook',
                 controller,
                 response,
@@ -578,7 +571,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UserSignup)),
             ...(fetchMiddlewares<RequestHandler>(UserSignup.prototype.signup)),
 
-            async function UserSignup_signup(request: ExRequest, response: ExResponse, next: any) {
+            function UserSignup_signup(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserSignupBody"},
             };
@@ -591,7 +584,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserSignup();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'signup',
                 controller,
                 response,
@@ -608,7 +601,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(PaymentController)),
             ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getMembershipPrices)),
 
-            async function PaymentController_getMembershipPrices(request: ExRequest, response: ExResponse, next: any) {
+            function PaymentController_getMembershipPrices(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
             };
 
@@ -620,7 +613,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new PaymentController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getMembershipPrices',
                 controller,
                 response,
@@ -638,7 +631,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(PaymentController)),
             ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getCheckoutSessionDetails)),
 
-            async function PaymentController_getCheckoutSessionDetails(request: ExRequest, response: ExResponse, next: any) {
+            function PaymentController_getCheckoutSessionDetails(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     sessionId: {"in":"query","name":"sessionId","required":true,"dataType":"string"},
             };
@@ -651,7 +644,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new PaymentController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getCheckoutSessionDetails',
                 controller,
                 response,
@@ -669,7 +662,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(PaymentController)),
             ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getMembershipPayment)),
 
-            async function PaymentController_getMembershipPayment(request: ExRequest, response: ExResponse, next: any) {
+            function PaymentController_getMembershipPayment(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserPaymentRequestModel"},
@@ -683,7 +676,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new PaymentController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getMembershipPayment',
                 controller,
                 response,
@@ -701,7 +694,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(PaymentController)),
             ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getBookingPayment)),
 
-            async function PaymentController_getBookingPayment(request: ExRequest, response: ExResponse, next: any) {
+            function PaymentController_getBookingPayment(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserBookingRequestingModel"},
@@ -715,8 +708,39 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new PaymentController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getBookingPayment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/bookings/create-bookings',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(BookingController)),
+            ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.createBookings)),
+
+            function BookingController_createBookings(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateBookingsRequestModel"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new BookingController();
+
+              templateService.apiHandler({
+                methodName: 'createBookings',
                 controller,
                 response,
                 next,
@@ -733,7 +757,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(BookingController)),
             ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAllBookings)),
 
-            async function BookingController_getAllBookings(request: ExRequest, response: ExResponse, next: any) {
+            function BookingController_getAllBookings(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
@@ -746,7 +770,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new BookingController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getAllBookings',
                 controller,
                 response,
@@ -764,7 +788,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(BookingController)),
             ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAvailableDates)),
 
-            async function BookingController_getAvailableDates(request: ExRequest, response: ExResponse, next: any) {
+            function BookingController_getAvailableDates(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"AvailableDatesRequestModel"},
             };
@@ -777,7 +801,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new BookingController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getAvailableDates',
                 controller,
                 response,
@@ -795,7 +819,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(BookingController)),
             ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.fetchUsersByBookingDateRange)),
 
-            async function BookingController_fetchUsersByBookingDateRange(request: ExRequest, response: ExResponse, next: any) {
+            function BookingController_fetchUsersByBookingDateRange(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"BookingsByDateRangeRequestModel"},
             };
@@ -808,7 +832,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new BookingController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'fetchUsersByBookingDateRange',
                 controller,
                 response,
@@ -826,7 +850,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateAvailable)),
 
-            async function AdminController_makeDateAvailable(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_makeDateAvailable(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"MakeDatesAvailableRequestBody"},
             };
@@ -839,7 +863,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'makeDateAvailable',
                 controller,
                 response,
@@ -857,7 +881,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateUnavailable)),
 
-            async function AdminController_makeDateUnavailable(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_makeDateUnavailable(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Omit_MakeDatesAvailableRequestBody.slots_"},
             };
@@ -870,7 +894,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'makeDateUnavailable',
                 controller,
                 response,
@@ -883,43 +907,12 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/admin/bookings/create',
-            authenticateMiddleware([{"jwt":["admin"]}]),
-            ...(fetchMiddlewares<RequestHandler>(AdminController)),
-            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.createBookings)),
-
-            function AdminController_createBookings(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateBookingsRequestModel"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new AdminController();
-
-              templateService.apiHandler({
-                methodName: 'createBookings',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: 200,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/admin/bookings/delete',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.removeBooking)),
 
-            async function AdminController_removeBooking(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_removeBooking(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DeleteBookingRequest"},
             };
@@ -932,7 +925,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'removeBooking',
                 controller,
                 response,
@@ -950,7 +943,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getAllUsers)),
 
-            async function AdminController_getAllUsers(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_getAllUsers(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     cursor: {"in":"query","name":"cursor","dataType":"string"},
                     toFetch: {"in":"query","name":"toFetch","dataType":"double"},
@@ -964,7 +957,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getAllUsers',
                 controller,
                 response,
@@ -982,7 +975,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getUser)),
 
-            async function AdminController_getUser(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_getUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     uid: {"in":"path","name":"uid","required":true,"dataType":"string"},
             };
@@ -995,7 +988,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'getUser',
                 controller,
                 response,
@@ -1013,7 +1006,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.createUser)),
 
-            async function AdminController_createUser(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_createUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateUserRequestBody"},
             };
@@ -1026,7 +1019,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'createUser',
                 controller,
                 response,
@@ -1044,7 +1037,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.editUsers)),
 
-            async function AdminController_editUsers(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_editUsers(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"EditUsersRequestBody"},
             };
@@ -1057,7 +1050,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'editUsers',
                 controller,
                 response,
@@ -1075,7 +1068,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.promoteUser)),
 
-            async function AdminController_promoteUser(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_promoteUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"PromoteUserRequestBody"},
             };
@@ -1088,7 +1081,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'promoteUser',
                 controller,
                 response,
@@ -1106,7 +1099,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.demoteUser)),
 
-            async function AdminController_demoteUser(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_demoteUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DemoteUserRequestBody"},
             };
@@ -1119,7 +1112,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'demoteUser',
                 controller,
                 response,
@@ -1137,7 +1130,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.demoteAllUsers)),
 
-            async function AdminController_demoteAllUsers(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_demoteAllUsers(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
             };
 
@@ -1149,7 +1142,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'demoteAllUsers',
                 controller,
                 response,
@@ -1167,7 +1160,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.addCoupon)),
 
-            async function AdminController_addCoupon(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_addCoupon(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"AddCouponRequestBody"},
             };
@@ -1180,7 +1173,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new AdminController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'addCoupon',
                 controller,
                 response,
