@@ -127,7 +127,7 @@ export function useAddUserToBookingMutation() {
     mutationFn: AdminService.addUsersToBookingForDateRange,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
+        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY, BOOKING_AVAILABLITY_KEY]
       })
     }
   })
