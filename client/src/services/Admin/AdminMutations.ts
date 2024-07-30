@@ -127,7 +127,11 @@ export function useAddUserToBookingMutation() {
     mutationFn: AdminService.addUsersToBookingForDateRange,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY, BOOKING_AVAILABLITY_KEY]
+        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: [BOOKING_AVAILABLITY_KEY]
       })
     }
   })
@@ -140,7 +144,11 @@ export function useDeleteBookingMutation() {
     mutationFn: AdminService.deleteBooking,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY, BOOKING_AVAILABLITY_KEY]
+        queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: [BOOKING_AVAILABLITY_KEY]
       })
     }
   })
