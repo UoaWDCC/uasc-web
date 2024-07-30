@@ -48,10 +48,6 @@ export interface paths {
      */
     post: operations["GetBookingPayment"];
   };
-  "/bookings/create-bookings": {
-    /** @description An admin method to create bookings for a list of users within a date range. */
-    post: operations["CreateBookings"];
-  };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
@@ -74,6 +70,10 @@ export interface paths {
   "/admin/bookings/make-dates-unavailable": {
     /** @description Decreases availability count to 0 for all booking slots in a date range. */
     post: operations["MakeDateUnavailable"];
+  };
+  "/admin/bookings/create": {
+    /** @description An admin method to create bookings for a list of users within a date range. */
+    post: operations["CreateBookings"];
   };
   "/admin/bookings/delete": {
     /** @description Delete a users booking by booking ID. */
@@ -263,22 +263,6 @@ export interface components {
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
-    /** @description Represents the response structure for fetching user ids by date range. */
-    UIdssByDateRangeResponse: {
-      data?: {
-          users: string[];
-          date: components["schemas"]["FirebaseFirestore.Timestamp"];
-        }[];
-      error?: string;
-    };
-    CreateBookingsRequestModel: {
-      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
-      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
-      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description List of users to add to the bookings between date range */
-      userIds: string[];
-    };
     AllUserBookingSlotsResponse: {
       error?: string;
       message?: string;
@@ -376,6 +360,22 @@ export interface components {
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
+    /** @description Represents the response structure for fetching user ids by date range. */
+    UIdssByDateRangeResponse: {
+      data?: {
+          users: string[];
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
+      error?: string;
+    };
+    CreateBookingsRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description List of users to add to the bookings between date range */
+      userId: string;
+    };
     BookingDeleteResponse: {
       error?: string;
       message?: string;
@@ -679,23 +679,6 @@ export interface operations {
       };
     };
   };
-  /** @description An admin method to create bookings for a list of users within a date range. */
-  CreateBookings: {
-    /** @description - The date range and list of user ids to create bookings for. */
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateBookingsRequestModel"];
-      };
-    };
-    responses: {
-      /** @description Bookings successfully created */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
-        };
-      };
-    };
-  };
   /** @description Fetches all bookings for a user based on their UID. */
   GetAllBookings: {
     responses: {
@@ -774,6 +757,23 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["BookingSlotUpdateResponse"];
+        };
+      };
+    };
+  };
+  /** @description An admin method to create bookings for a list of users within a date range. */
+  CreateBookings: {
+    /** @description - The date range and list of user ids to create bookings for. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateBookingsRequestModel"];
+      };
+    };
+    responses: {
+      /** @description Bookings successfully created */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
         };
       };
     };

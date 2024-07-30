@@ -4,6 +4,7 @@ import {
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
 import {
+  UTCDateToDdMmYyyy,
   firestoreTimestampToDate,
   timestampsInRange
 } from "data-layer/adapters/DateUtils"
@@ -17,12 +18,14 @@ import {
   MakeDatesAvailableRequestBody
 } from "service-layer/request-models/AdminRequests"
 import {
+  CreateBookingsRequestModel,
   CreateUserRequestBody,
   DemoteUserRequestBody,
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import {
+  UIdssByDateRangeResponse,
   BookingDeleteResponse,
   BookingSlotUpdateResponse
 } from "service-layer/response-models/BookingResponse"
@@ -47,6 +50,8 @@ import * as console from "console"
 import StripeService from "../../business-layer/services/StripeService"
 import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import { UserRecord } from "firebase-admin/auth"
+import { Timestamp } from "firebase-admin/firestore"
+import MailService from "business-layer/services/MailService"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -161,6 +166,112 @@ export class AdminController extends Controller {
       this.setStatus(500)
       console.error(`An error occurred when making dates unavailable: ${e}`)
       return { error: "Something went wrong when making dates unavailable" }
+    }
+  }
+
+  /**
+   * An admin method to create bookings for a list of users within a date range.
+   * @param requestBody - The date range and list of user ids to create bookings for.
+   * @returns A list of users and timestamps that were successfully added to the booking slots.
+   */
+  @SuccessResponse("200", "Bookings successfully created")
+  @Post("/bookings/create")
+  public async createBookings(
+    @Body() requestBody: CreateBookingsRequestModel
+  ): Promise<UIdssByDateRangeResponse> {
+    try {
+      const { startDate, endDate, userId } = requestBody
+
+      const responseData: Array<{
+        date: Timestamp
+        users: string[]
+      }> = []
+
+      /** Creating instances of the required services */
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      // Query to get all booking slots within date range
+      const bookingSlots =
+        await bookingSlotService.getBookingSlotsBetweenDateRange(
+          startDate,
+          endDate
+        )
+
+      /** Iterating through each booking slot */
+      const bookingPromises = bookingSlots.map(async (slot) => {
+        /** For every slotid add a booking for that id only if user doesn't already have a booking */
+        const existingBooking =
+          await bookingDataService.getBookingsByUserId(userId)
+        if (
+          !existingBooking.some(
+            (booking) => booking.booking_slot_id === slot.id
+          )
+        ) {
+          await bookingDataService.createBooking({
+            user_id: userId,
+            booking_slot_id: slot.id,
+            stripe_payment_id: "manual_entry"
+          })
+        }
+        responseData.push({
+          date: slot.date,
+          users: [userId]
+        })
+      })
+
+      await Promise.all(bookingPromises)
+
+      this.setStatus(200)
+      /**
+       * Send confirmation using MailService so that admins do not need to manually
+       * followup on manual bookings.
+       */
+      const mailService = new MailService()
+
+      try {
+        const { first_name, last_name } =
+          await new UserDataService().getUserData(userId)
+        const [userAuthData] = await new AuthService().bulkRetrieveUsersByUids([
+          { uid: userId }
+        ])
+        /**
+         * Used for formatted display to user
+         */
+        const BOOKING_START_DATE = UTCDateToDdMmYyyy(
+          new Date(firestoreTimestampToDate(startDate))
+        )
+        const BOOKING_END_DATE = UTCDateToDdMmYyyy(
+          new Date(firestoreTimestampToDate(endDate))
+        )
+        mailService.sendBookingConfirmationEmail(
+          userAuthData.email,
+          `${first_name} ${last_name}`,
+          BOOKING_START_DATE,
+          BOOKING_END_DATE
+        )
+      } catch (e) {
+        console.error(
+          `Was unable to send a confirmation email for manual booking`
+        )
+        return {
+          data: responseData.filter((data) => !!data),
+          error: `Was unable to send a confirmation email for manual booking`
+        }
+      }
+
+      /**
+       * Returning the response data
+       *
+       * The filter is required to not include data that is null
+       * because of the early return in the map
+       */
+      return { data: responseData.filter((data) => !!data) }
+    } catch (e) {
+      console.error("Error in getBookingsByDateRange:", e)
+      this.setStatus(500)
+
+      return { error: "Something went wrong" }
     }
   }
 
