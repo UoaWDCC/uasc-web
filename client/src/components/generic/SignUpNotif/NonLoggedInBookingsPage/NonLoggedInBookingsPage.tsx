@@ -1,4 +1,4 @@
-import LockIcon from "assets/icons/lock.svg?react"
+import LockIcon from "client\src\assets\icons\Lock.svg"
 
 const NonLoggedInBookingsPage = () => {
   return (
