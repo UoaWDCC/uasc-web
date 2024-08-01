@@ -149,6 +149,10 @@ const BookingUtils = {
     // Add one day
     date.setDate(date.getDate() + 1)
 
+    if (isNaN(date.getTime()) || year < 2000) {
+      throw new Error("Invalid date")
+    }
+
     // Format the new date back to dd/mm/yyyy
     const newDay = String(date.getDate()).padStart(2, "0")
     const newMonth = String(date.getMonth() + 1).padStart(2, "0")
