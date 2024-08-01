@@ -52,6 +52,10 @@ import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import { UserRecord } from "firebase-admin/auth"
 import { Timestamp } from "firebase-admin/firestore"
 import MailService from "business-layer/services/MailService"
+import BookingUtils, {
+  CHECK_IN_TIME,
+  CHECK_OUT_TIME
+} from "business-layer/utils/BookingUtils"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -247,8 +251,8 @@ export class AdminController extends Controller {
         mailService.sendBookingConfirmationEmail(
           userAuthData.email,
           `${first_name} ${last_name}`,
-          BOOKING_START_DATE,
-          BOOKING_END_DATE
+          `${BOOKING_START_DATE} ${CHECK_IN_TIME} (check in)`,
+          `${BookingUtils.addOneDay(BOOKING_END_DATE)} ${CHECK_OUT_TIME} (check out)`
         )
       } catch (e) {
         console.error(
