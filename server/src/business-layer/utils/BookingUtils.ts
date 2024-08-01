@@ -17,8 +17,8 @@ _earliestDate.setUTCHours(0, 0, 0, 0)
 export const _latestDate = new Date(_earliestDate)
 _latestDate.setFullYear(_earliestDate.getFullYear() + 1)
 
-export const CHECK_IN_TIME = "3:00 pm" as const
-export const CHECK_OUT_TIME = "11:00 am" as const
+export const CHECK_IN_TIME = "11:00 am" as const
+export const CHECK_OUT_TIME = "10:00 am" as const
 
 const BookingUtils = {
   /**
