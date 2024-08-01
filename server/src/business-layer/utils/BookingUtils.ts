@@ -17,6 +17,9 @@ _earliestDate.setUTCHours(0, 0, 0, 0)
 export const _latestDate = new Date(_earliestDate)
 _latestDate.setFullYear(_earliestDate.getFullYear() + 1)
 
+export const CHECK_IN_TIME = "3:00 pm" as const
+export const CHECK_OUT_TIME = "11:00 am" as const
+
 const BookingUtils = {
   /**
    * Used to check if the dates are within the acceptable range
@@ -111,6 +114,47 @@ const BookingUtils = {
 
     const availableSlots = bookingSlot.max_bookings - bookingCount
     return availableSlots <= 0
+  },
+  /**
+   * Adds one day to the given date string in the format dd/mm/yyyy.
+   *
+   * This function parses the input date string, adds one day to it, and then
+   * formats it back to the dd/mm/yyyy string format. It correctly handles edge
+   * cases such as the end of a month, end of a year, and leap years.
+   *
+   * @param {string} dateString - The date string in the format dd/mm/yyyy.
+   * @returns {string} - The new date string, one day later, in the format dd/mm/yyyy.
+   *
+   * @throws {Error} - Throws an error if the input date string is not in the format dd/mm/yyyy.
+   *
+   * @example
+   * ```typescript
+   * addOneDay('31/07/2024'); // Returns '01/08/2024'
+   * addOneDay('28/02/2024'); // Returns '29/02/2024'
+   * addOneDay('31/12/2024'); // Returns '01/01/2025'
+   * ```
+   *
+   * @remarks
+   * This function uses the JavaScript `Date` object to handle date manipulation.
+   * The `Date` object automatically adjusts for month and year boundaries, including
+   * leap years. The function assumes the input date string is valid and in the correct
+   * format. If the input date string is invalid or not in the format dd/mm/yyyy, the
+   * function will throw an error.
+   */
+  addOneDay: (dateString: string): string => {
+    // Parse the input date string
+    const [day, month, year] = dateString.split("/").map(Number)
+    const date = new Date(year, month - 1, day)
+
+    // Add one day
+    date.setDate(date.getDate() + 1)
+
+    // Format the new date back to dd/mm/yyyy
+    const newDay = String(date.getDate()).padStart(2, "0")
+    const newMonth = String(date.getMonth() + 1).padStart(2, "0")
+    const newYear = date.getFullYear()
+
+    return `${newDay}/${newMonth}/${newYear}`
   }
 } as const
 

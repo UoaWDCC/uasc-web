@@ -20,7 +20,10 @@ import {
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import console from "console"
 import MailService from "./MailService"
-import BookingUtils from "../utils/BookingUtils"
+import BookingUtils, {
+  CHECK_IN_TIME,
+  CHECK_OUT_TIME
+} from "../utils/BookingUtils"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -438,8 +441,8 @@ export default class StripeService {
       await new MailService().sendBookingConfirmationEmail(
         userAuthData.email,
         `${first_name} ${last_name}`,
-        session.metadata[START_DATE],
-        session.metadata[END_DATE]
+        `${session.metadata[START_DATE]} ${CHECK_IN_TIME} (check in)`,
+        `${BookingUtils.addOneDay(session.metadata[END_DATE])} ${CHECK_OUT_TIME} (check out)`
       )
     } catch (error) {
       console.error(`Failed to send an email to the user ${uid}`, error)
