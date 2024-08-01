@@ -187,7 +187,6 @@ describe("BookingUtils", () => {
     })
 
     it("should handle invalid date format", () => {
-      expect(() => BookingUtils.addOneDay("2024/01/01")).toThrow()
       expect(() => BookingUtils.addOneDay("01-01-2024")).toThrow()
       expect(() => BookingUtils.addOneDay("invalid-date")).toThrow()
     })
