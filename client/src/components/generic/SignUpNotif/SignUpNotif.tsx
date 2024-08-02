@@ -22,30 +22,26 @@ export const SignUpNotif = ({ signedIn }: ISignUpNotif) => {
   }
 
   return (
-    <div className="bg-gray-1 absolute inset-0 flex h-screen w-full justify-center overflow-hidden bg-opacity-70 px-4 py-2">
-      <div className="border-gray-3 mt-12 h-fit rounded-md border-2 bg-white p-5">
-        <div className="flex items-center justify-center">
-          <LockIcon />
-        </div>
-        <h2 className="xxs:mb-5 mb-10 mt-5 text-center font-bold text-black">
-          Sorry!
-        </h2>
-        <h4 className="text-center text-black">
-          Bookings are only available for UASC members.
-        </h4>
-        <h4 className="xxs:mb-5 mb-10 mt-1 text-center text-black">
-          Please sign up or wait until your membership payment has been
-          processed.
-        </h4>
-        <div className="mb-2 flex justify-center">
-          <span className="flex w-full max-w-80 gap-2">
-            {!signedIn && <Button onClick={() => goToLogin()}>Log in</Button>}
-            <Button onClick={() => goToRegister()}>
-              {signedIn ? "Join Now" : "Sign up"}
-            </Button>
-          </span>
-        </div>
+    <div
+      className="border-gray-3 flex max-h-[402px] max-w-[570px] flex-col items-center justify-center 
+    gap-4 rounded-md border bg-white py-8 text-black"
+    >
+      <div>
+        <LockIcon />
       </div>
+      <h2 className="text-center italic"> Sorry!</h2>
+      <h4 className="max-h-[87px] max-w-[407px] text-center">
+        Bookings are only available for UASC members.
+      </h4>
+      <h4 className="max-h-[87px] max-w-[407px] text-center">
+        Please sign up or wait until your membership payment has been processed.
+      </h4>
+      <span className="mt-2 flex w-full max-w-80 gap-2">
+        {!signedIn && <Button onClick={() => goToLogin()}>Log in</Button>}
+        <Button onClick={() => goToRegister()}>
+          {signedIn ? "Join Now" : "Sign up"}
+        </Button>
+      </span>
     </div>
   )
 }
