@@ -1,3 +1,4 @@
+import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 import db from "data-layer/adapters/FirestoreCollections"
 import {
   DocumentDataWithUid,
@@ -9,6 +10,7 @@ import {
   BookingDeletedEvent,
   BookingHistoryEvent
 } from "data-layer/models/firebase"
+import { Timestamp } from "firebase-admin/firestore"
 
 class BookingHistoryService {
   /**
@@ -41,6 +43,27 @@ class BookingHistoryService {
     event: BookingAvailabilityChangeEvent
   ) {
     return await db.bookingHistory.add(event)
+  }
+
+  /**
+   * Returns all history events whose timestamps fall between the given timestamps
+   *
+   * @param startDate the first date to return history events for
+   * @param endDate the last date to return history events for
+   * @returns a list of all events that fall between the specified date range
+   */
+  public async getAllHistoryBetweenDateRange(
+    startDate: Timestamp,
+    endDate: Timestamp
+  ): Promise<DocumentDataWithUid<BookingHistoryEvent>[]> {
+    const res = await db.bookingHistory
+      .where("timestamp", ">=", firestoreTimestampToDate(startDate))
+      .where("timestamp", "<=", firestoreTimestampToDate(endDate))
+      .get()
+
+    return res.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id }
+    })
   }
 
   /**
