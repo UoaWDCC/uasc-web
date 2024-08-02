@@ -2,9 +2,7 @@
 import "dotenv/config"
 import {
   Booking,
-  BookingAddedEvent,
-  BookingAvailabilityChangeEvent,
-  BookingDeletedEvent,
+  BookingHistoryEvent,
   BookingSlot,
   UserAdditionalInfo
 } from "data-layer/models/firebase"
@@ -33,9 +31,7 @@ const db = {
   users: firestore.collection<UserAdditionalInfo>("users"),
   bookings: firestore.collection<Booking>("bookings"),
   bookingSlots: firestore.collection<BookingSlot>("booking_slots"),
-  bookingHistory: firestore.collection<
-    BookingAddedEvent | BookingDeletedEvent | BookingAvailabilityChangeEvent
-  >("booking_history")
+  bookingHistory: firestore.collection<BookingHistoryEvent>("booking_history")
 } as const
 
 export default db
