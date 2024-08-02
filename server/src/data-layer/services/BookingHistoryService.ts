@@ -17,7 +17,7 @@ class BookingHistoryService {
    * Stores a manual deletion of a booking (by admin) into the booking history collection
    *
    * @param event the required parameters defined by {@link BookingDeletedEvent}
-   * @returns the created document
+   * @returns the created document reference
    */
   public async addBookingDeletedEvent(event: BookingDeletedEvent) {
     return await db.bookingHistory.add(event)
@@ -27,7 +27,7 @@ class BookingHistoryService {
    * Stores a manual creation of a booking (by admin) into the booking history collection
    *
    * @param event the required parameters defined by {@link BookingAddedEvent}
-   * @returns the created document
+   * @returns the created document reference
    */
   public async addBookingAddedEvent(event: BookingAddedEvent) {
     return await db.bookingHistory.add(event)
@@ -37,7 +37,7 @@ class BookingHistoryService {
    * Stores a modification to the booking availability into the booking history collection
    *
    * @param event the required parameters defined by {@link BookingAvailabilityChangeEvent}
-   * @returns the created document
+   * @returns the created document reference
    */
   public async addAvailibilityChangeEvent(
     event: BookingAvailabilityChangeEvent
@@ -74,7 +74,7 @@ class BookingHistoryService {
    * @returns the page of booking history items and a cursor pointing to the
    * last `id` to use for pagination
    */
-  public async getAllHistory(
+  public async getLatestHistory(
     limit: number = 100,
     startAfter?: FirebaseFirestore.DocumentSnapshot<
       BookingHistoryEvent,
