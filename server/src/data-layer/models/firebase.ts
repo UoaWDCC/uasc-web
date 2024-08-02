@@ -232,6 +232,7 @@ export interface BookingAddedEvent extends BookingHistory {
    * The id corresponding to the user who had a **manually** added booking
    */
   uid: string
+  event_type: "added_user_to_booking"
 }
 
 /**
@@ -244,6 +245,7 @@ export interface BookingDeletedEvent extends BookingHistory {
    * The id corresponding to the user who had a **manually** deleted booking
    */
   uid: string
+  event_type: "removed_user_from_booking"
 }
 
 /**
@@ -262,4 +264,13 @@ export interface BookingAvailabilityChangeEvent extends BookingHistory {
    * the `change` would be **32 - 16 = 16**
    */
   change: number
+  event_type: "changed_date_availability"
 }
+
+/**
+ * Helper type to specify the possible datastruces for the booking history
+ */
+export type BookingHistoryEvent =
+  | BookingAddedEvent
+  | BookingDeletedEvent
+  | BookingAvailabilityChangeEvent
