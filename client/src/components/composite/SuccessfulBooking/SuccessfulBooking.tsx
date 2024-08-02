@@ -8,7 +8,7 @@ type SuccessfulBookingProps = {
 const SuccessfulBooking = ({ startDate, endDate }: SuccessfulBookingProps) => {
   return (
     <>
-      <div className="border-gray-3 h-auto w-full rounded-md border-2 bg-white py-5">
+      <div className="flex flex-col items-start border-gray-3 h-auto w-full rounded-md border-2 bg-white py-2 px-8">
         <h3 className="text-dark-blue-100 xxs:mb-5 mb-10 mt-5 text-center font-bold">
           Your lodge booking has been confirmed!
         </h3>
