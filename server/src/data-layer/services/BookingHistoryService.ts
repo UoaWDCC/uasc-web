@@ -15,31 +15,32 @@ class BookingHistoryService {
    * Stores a manual deletion of a booking (by admin) into the booking history collection
    *
    * @param event the required parameters defined by {@link BookingDeletedEvent}
+   * @returns the created document
    */
-  public async addBookingDeletedEvent(
-    event: BookingDeletedEvent
-  ): Promise<void> {
-    await db.bookingHistory.add(event)
+  public async addBookingDeletedEvent(event: BookingDeletedEvent) {
+    return await db.bookingHistory.add(event)
   }
 
   /**
    * Stores a manual creation of a booking (by admin) into the booking history collection
    *
    * @param event the required parameters defined by {@link BookingAddedEvent}
+   * @returns the created document
    */
-  public async addBookingAddedEvent(event: BookingAddedEvent): Promise<void> {
-    await db.bookingHistory.add(event)
+  public async addBookingAddedEvent(event: BookingAddedEvent) {
+    return await db.bookingHistory.add(event)
   }
 
   /**
    * Stores a modification to the booking availability into the booking history collection
    *
    * @param event the required parameters defined by {@link BookingAvailabilityChangeEvent}
+   * @returns the created document
    */
   public async addAvailibilityChangeEvent(
     event: BookingAvailabilityChangeEvent
-  ): Promise<void> {
-    await db.bookingHistory.add(event)
+  ) {
+    return await db.bookingHistory.add(event)
   }
 
   /**
