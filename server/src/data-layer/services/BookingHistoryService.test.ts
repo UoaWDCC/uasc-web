@@ -1,0 +1,1 @@
+describe("BookingHistoryService integration tests", () => {})

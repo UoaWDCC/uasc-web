@@ -16,7 +16,9 @@ class BookingHistoryService {
    *
    * @param event the required parameters defined by {@link BookingDeletedEvent}
    */
-  public async addBookingDeletedEvent(event: BookingDeletedEvent) {
+  public async addBookingDeletedEvent(
+    event: BookingDeletedEvent
+  ): Promise<void> {
     await db.bookingHistory.add(event)
   }
 
@@ -25,7 +27,7 @@ class BookingHistoryService {
    *
    * @param event the required parameters defined by {@link BookingAddedEvent}
    */
-  public async addBookingAddedEvent(event: BookingAddedEvent) {
+  public async addBookingAddedEvent(event: BookingAddedEvent): Promise<void> {
     await db.bookingHistory.add(event)
   }
 
@@ -36,7 +38,7 @@ class BookingHistoryService {
    */
   public async addAvailibilityChangeEvent(
     event: BookingAvailabilityChangeEvent
-  ) {
+  ): Promise<void> {
     await db.bookingHistory.add(event)
   }
 
