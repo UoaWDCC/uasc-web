@@ -56,6 +56,7 @@ import BookingUtils, {
   CHECK_IN_TIME,
   CHECK_OUT_TIME
 } from "business-layer/utils/BookingUtils"
+import BookingHistoryService from "data-layer/services/BookingHistoryService"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -109,6 +110,18 @@ export class AdminController extends Controller {
 
     try {
       const bookingSlotIds = await Promise.all(datesToUpdatePromises)
+
+      /**
+       * Log that there was a positive change in availability for a date range
+       */
+      await new BookingHistoryService().addAvailibilityChangeEvent({
+        timestamp: Timestamp.now(),
+        start_date: startDate,
+        end_date: endDate,
+        event_type: "changed_date_availability",
+        change: slots || DEFAULT_BOOKING_MAX_SLOTS
+      })
+
       this.setStatus(201)
       return { updatedBookingSlots: bookingSlotIds }
     } catch (e) {
@@ -132,7 +145,7 @@ export class AdminController extends Controller {
     const bookingSlotService = new BookingSlotService()
 
     const dateTimestamps = timestampsInRange(startDate, endDate)
-
+    let change = 0
     const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
         const [bookingSlotForDate] =
@@ -145,6 +158,8 @@ export class AdminController extends Controller {
 
         // Was available
         if (bookingSlotForDate.max_bookings > EMPTY_BOOKING_SLOTS) {
+          // TODO: change to proper functionality (i.e not completely make it empty)
+          change = bookingSlotForDate.max_bookings - EMPTY_BOOKING_SLOTS
           await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
             max_bookings: EMPTY_BOOKING_SLOTS
           })
@@ -162,6 +177,18 @@ export class AdminController extends Controller {
 
     try {
       const bookingSlotIds = await Promise.all(datesToUpdatePromises)
+
+      /**
+       * Log the dates being made unavailable
+       */
+      await new BookingHistoryService().addAvailibilityChangeEvent({
+        timestamp: Timestamp.now(),
+        start_date: startDate,
+        end_date: endDate,
+        event_type: "changed_date_availability",
+        change
+      })
+
       this.setStatus(201)
       return {
         updatedBookingSlots: bookingSlotIds.filter((id) => !!id) // No way to "skip" with map
@@ -225,6 +252,17 @@ export class AdminController extends Controller {
       })
 
       await Promise.all(bookingPromises)
+
+      /**
+       * Log that the user has been added to the date range
+       */
+      await new BookingHistoryService().addBookingAddedEvent({
+        timestamp: Timestamp.now(),
+        start_date: startDate,
+        end_date: endDate,
+        event_type: "added_user_to_booking",
+        uid: userId
+      })
 
       this.setStatus(200)
       /**
@@ -294,15 +332,33 @@ export class AdminController extends Controller {
     // Validate and check if the booking actually exists
     const bookingDataService = new BookingDataService()
     let user_id
+    let booking_slot_id
     try {
       const booking = await bookingDataService.getBookingById(bookingID)
       user_id = booking.user_id
+      booking_slot_id = booking.booking_slot_id
     } catch (err) {
       this.setStatus(404)
       return { message: "Booking not found with that booking ID." }
     }
     // attempt to delete
     await bookingDataService.deleteBooking(bookingID)
+
+    const { date } = await new BookingSlotService().getBookingSlotById(
+      booking_slot_id
+    )
+
+    /**
+     * Log that a user was removed from an booking for a date
+     */
+    await new BookingHistoryService().addBookingDeletedEvent({
+      timestamp: Timestamp.now(),
+      uid: user_id,
+      start_date: date,
+      end_date: date,
+      event_type: "removed_user_from_booking"
+    })
+
     return { user_id }
   }
 
