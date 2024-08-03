@@ -6,7 +6,7 @@ export type DocumentDataWithUid<T> = T & {
 }
 
 /**
- * Utility type to determine
+ * Utility type for functions that return cursor-based pages
  */
 export type PaginatedFirebaseResponse<T> = {
   /**
