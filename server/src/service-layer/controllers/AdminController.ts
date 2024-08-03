@@ -119,7 +119,7 @@ export class AdminController extends Controller {
         start_date: startDate,
         end_date: endDate,
         event_type: "changed_date_availability",
-        change: slots
+        change: slots || DEFAULT_BOOKING_MAX_SLOTS
       })
 
       this.setStatus(201)
