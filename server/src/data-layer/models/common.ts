@@ -4,3 +4,17 @@ export type DocumentDataWithUid<T> = T & {
    */
   id: string
 }
+
+/**
+ * Utility type for functions that return cursor-based pages
+ */
+export type PaginatedFirebaseResponse<T> = {
+  /**
+   * The current "page" of data returned from querying
+   */
+  data: T[]
+  /**
+   * The cursor of the next page, is `undefined` if no such cursor exists
+   */
+  nextCursor?: string
+}
