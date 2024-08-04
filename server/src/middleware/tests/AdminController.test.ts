@@ -17,6 +17,7 @@ import BookingSlotService from "data-layer/services/BookingSlotsService"
 import BookingDataService from "data-layer/services/BookingDataService"
 import AuthService from "business-layer/services/AuthService"
 import { UserRecord } from "firebase-admin/auth"
+import BookingHistoryService from "data-layer/services/BookingHistoryService"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -735,6 +736,73 @@ describe("AdminController endpoint tests", () => {
         .send({})
 
       expect(response.status).toEqual(401)
+    })
+  })
+  describe("/admin/bookings/history", () => {
+    it("should be scoped to admins only", async () => {
+      let res = await request
+        .post("/admin/bookings/history")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({ limit: 1 })
+      expect(res.status).toEqual(401)
+
+      res = await request
+        .post("/admin/bookings/history")
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send({ limit: 1 })
+      expect(res.status).toEqual(401)
+
+      res = await request.post("/admin/bookings/history").send({ limit: 1 })
+      expect(res.status).toEqual(401)
+    })
+
+    it("should be able to fetch the latest X bookings", async () => {
+      const bookingHistoryService = new BookingHistoryService()
+
+      const startDate = dateToFirestoreTimeStamp(new Date(2002, 10, 8))
+      const endDate = dateToFirestoreTimeStamp(new Date(2002, 10, 10))
+
+      bookingHistoryService.addBookingDeletedEvent({
+        uid: "user-removed-from-booking",
+        start_date: startDate as Timestamp,
+        end_date: endDate as Timestamp,
+        event_type: "removed_user_from_booking",
+        timestamp: Timestamp.now()
+      })
+
+      bookingHistoryService.addBookingDeletedEvent({
+        uid: "user-removed-from-booking",
+        start_date: startDate as Timestamp,
+        end_date: endDate as Timestamp,
+        event_type: "removed_user_from_booking",
+        timestamp: Timestamp.now()
+      })
+
+      let res = await request
+        .post("/admin/bookings/history")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ limit: 1 })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.historyEvents).toHaveLength(1)
+
+      /**
+       * Pagination Test
+       */
+      res = await request
+        .post("/admin/bookings/history")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ limit: 100, cursor: res.body.nextCursor })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.historyEvents).toHaveLength(1)
+
+      res = await request
+        .post("/admin/bookings/history")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ limit: 2 })
+
+      expect(res.body.historyEvents).toHaveLength(2)
     })
   })
 })

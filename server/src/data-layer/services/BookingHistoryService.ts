@@ -12,6 +12,8 @@ import {
 } from "data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 
+const DEFAULT_PAGINATION_AMOUNT = 100 as const
+
 class BookingHistoryService {
   /**
    * Stores a manual deletion of a booking (by admin) into the booking history collection
@@ -69,13 +71,13 @@ class BookingHistoryService {
   /**
    * Fetches the **latest** page of booking history events.
    *
-   * @param limit how many history events to fetch, defaults to `100`
+   * @param limit how many history events to fetch, defaults to {@link DEFAULT_PAGINATION_AMOUNT}
    * @param startAfter the firebase document snapshot to paginate from
    * @returns the page of booking history items and a cursor pointing to the
    * last `id` to use for pagination
    */
   public async getLatestHistory(
-    limit: number = 100,
+    limit: number = DEFAULT_PAGINATION_AMOUNT,
     startAfter?: FirebaseFirestore.DocumentSnapshot<
       BookingHistoryEvent,
       FirebaseFirestore.DocumentData
@@ -98,6 +100,10 @@ class BookingHistoryService {
       data: historyPage,
       nextCursor: res.docs[res.docs.length - 1]?.id || undefined
     }
+  }
+
+  public async getBookingHistoryEventSnapshot(id: string) {
+    return await db.bookingHistory.doc(id).get()
   }
 }
 

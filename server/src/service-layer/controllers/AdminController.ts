@@ -15,7 +15,8 @@ import UserDataService from "data-layer/services/UserDataService"
 import {
   DeleteBookingRequest,
   AddCouponRequestBody,
-  MakeDatesAvailableRequestBody
+  MakeDatesAvailableRequestBody,
+  FetchLatestBookingEventRequest
 } from "service-layer/request-models/AdminRequests"
 import {
   CreateBookingsRequestModel,
@@ -57,6 +58,7 @@ import BookingUtils, {
   CHECK_OUT_TIME
 } from "business-layer/utils/BookingUtils"
 import BookingHistoryService from "data-layer/services/BookingHistoryService"
+import { FetchLatestBookingHistoryEventResponse } from "service-layer/response-models/AdminResponse"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -648,6 +650,47 @@ export class AdminController extends Controller {
       this.setStatus(200)
     } catch (e) {
       this.setStatus(500)
+    }
+  }
+
+  /**
+   * Fetches the **latest** booking history events (uses cursor-based pagination)
+   *
+   * @param requestBody - contains the pagination variables
+   * @returns the list of latest history events
+   */
+  @SuccessResponse("200", "History Events Fetched")
+  @Post("bookings/history")
+  public async getLatestHistory(
+    @Body() requestBody: FetchLatestBookingEventRequest
+  ): Promise<FetchLatestBookingHistoryEventResponse> {
+    const { limit, cursor } = requestBody
+
+    try {
+      const bookingHistoryService = new BookingHistoryService()
+
+      let snapshot
+      if (cursor) {
+        snapshot =
+          await bookingHistoryService.getBookingHistoryEventSnapshot(cursor)
+      }
+
+      const { data, nextCursor } = await bookingHistoryService.getLatestHistory(
+        limit,
+        snapshot
+      )
+
+      this.setStatus(200)
+      return {
+        historyEvents: data,
+        nextCursor
+      }
+    } catch (e) {
+      this.setStatus(500)
+      console.error("Failed to fetch the latest booking history", e)
+      return {
+        error: "Unable to fetch the booking history"
+      }
     }
   }
 }
