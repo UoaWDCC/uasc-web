@@ -167,6 +167,31 @@ const AdminService = {
     }
 
     return data?.data
+  },
+  getBookingHistory: async function ({
+    pageParam,
+    limit = 200
+  }: {
+    pageParam?: string
+    limit?: number
+  }) {
+    const { response, data } = await fetchClient.GET(
+      "/admin/bookings/history",
+      {
+        params: {
+          query: {
+            limit,
+            cursor: pageParam
+          }
+        }
+      }
+    )
+
+    if (!response.ok || !data) {
+      throw new Error(`Failed to fetch ${limit} of the latest booking items`)
+    }
+
+    return data
   }
 } as const
 

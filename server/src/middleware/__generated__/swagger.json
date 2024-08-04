@@ -1201,25 +1201,6 @@
 				},
 				"type": "object",
 				"additionalProperties": false
-			},
-			"FetchLatestBookingEventRequest": {
-				"properties": {
-					"limit": {
-						"type": "number",
-						"format": "double",
-						"maximum": 500,
-						"minimum": 1
-					},
-					"cursor": {
-						"type": "string",
-						"description": "The id of the cursor to continue paginating from"
-					}
-				},
-				"required": [
-					"limit"
-				],
-				"type": "object",
-				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -2099,7 +2080,7 @@
 			}
 		},
 		"/admin/bookings/history": {
-			"post": {
+			"get": {
 				"operationId": "GetLatestHistory",
 				"responses": {
 					"200": {
@@ -2121,19 +2102,25 @@
 						]
 					}
 				],
-				"parameters": [],
-				"requestBody": {
-					"description": "- contains the pagination variables",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/FetchLatestBookingEventRequest",
-								"description": "- contains the pagination variables"
-							}
+				"parameters": [
+					{
+						"in": "query",
+						"name": "limit",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "cursor",
+						"required": false,
+						"schema": {
+							"type": "string"
 						}
 					}
-				}
+				]
 			}
 		}
 	},

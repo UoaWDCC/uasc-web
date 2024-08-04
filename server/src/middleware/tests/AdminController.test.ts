@@ -741,18 +741,19 @@ describe("AdminController endpoint tests", () => {
   describe("/admin/bookings/history", () => {
     it("should be scoped to admins only", async () => {
       let res = await request
-        .post("/admin/bookings/history")
+        .get(`/admin/bookings/history?limit=100`)
         .set("Authorization", `Bearer ${memberToken}`)
-        .send({ limit: 1 })
+        .send({})
       expect(res.status).toEqual(401)
 
       res = await request
-        .post("/admin/bookings/history")
+        .get(`/admin/bookings/history?limit=100`)
         .set("Authorization", `Bearer ${guestToken}`)
-        .send({ limit: 1 })
+        .send({})
       expect(res.status).toEqual(401)
 
-      res = await request.post("/admin/bookings/history").send({ limit: 1 })
+      res = await request.get(`/admin/bookings/history?limit=100`).send({})
+
       expect(res.status).toEqual(401)
     })
 
@@ -779,9 +780,9 @@ describe("AdminController endpoint tests", () => {
       })
 
       let res = await request
-        .post("/admin/bookings/history")
+        .get(`/admin/bookings/history?limit=1`)
         .set("Authorization", `Bearer ${adminToken}`)
-        .send({ limit: 1 })
+        .send({})
 
       expect(res.status).toEqual(200)
       expect(res.body.historyEvents).toHaveLength(1)
@@ -790,17 +791,17 @@ describe("AdminController endpoint tests", () => {
        * Pagination Test
        */
       res = await request
-        .post("/admin/bookings/history")
+        .get(`/admin/bookings/history?limit=100&cursor=${res.body.nextCursor}`)
         .set("Authorization", `Bearer ${adminToken}`)
-        .send({ limit: 100, cursor: res.body.nextCursor })
+        .send({})
 
       expect(res.status).toEqual(200)
       expect(res.body.historyEvents).toHaveLength(1)
 
       res = await request
-        .post("/admin/bookings/history")
+        .get(`/admin/bookings/history?limit=2`)
         .set("Authorization", `Bearer ${adminToken}`)
-        .send({ limit: 2 })
+        .send({})
 
       expect(res.body.historyEvents).toHaveLength(2)
     })

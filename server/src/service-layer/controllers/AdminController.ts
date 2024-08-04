@@ -161,7 +161,7 @@ export class AdminController extends Controller {
         // Was available
         if (bookingSlotForDate.max_bookings > EMPTY_BOOKING_SLOTS) {
           // TODO: change to proper functionality (i.e not completely make it empty)
-          change = bookingSlotForDate.max_bookings - EMPTY_BOOKING_SLOTS
+          change = EMPTY_BOOKING_SLOTS - bookingSlotForDate.max_bookings
           await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
             max_bookings: EMPTY_BOOKING_SLOTS
           })
@@ -660,12 +660,11 @@ export class AdminController extends Controller {
    * @returns the list of latest history events
    */
   @SuccessResponse("200", "History Events Fetched")
-  @Post("bookings/history")
+  @Get("bookings/history")
   public async getLatestHistory(
-    @Body() requestBody: FetchLatestBookingEventRequest
+    @Query() limit: FetchLatestBookingEventRequest["limit"],
+    @Query() cursor?: FetchLatestBookingEventRequest["cursor"]
   ): Promise<FetchLatestBookingHistoryEventResponse> {
-    const { limit, cursor } = requestBody
-
     try {
       const bookingHistoryService = new BookingHistoryService()
 
