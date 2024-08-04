@@ -1050,6 +1050,176 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"BookingAddedEvent": {
+				"description": "Event used to track a user being **manually** added to a booking (only possible via admin view)",
+				"properties": {
+					"timestamp": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The time which the booking operation was performed. MUST be in UTC format"
+					},
+					"start_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The start of the operated on date range"
+					},
+					"end_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The end of the operated on date range"
+					},
+					"event_type": {
+						"type": "string",
+						"enum": [
+							"added_user_to_booking"
+						],
+						"nullable": false,
+						"description": "The type of event that the admin performed, used for parsing on the front-end\n\nEach of these are associated with the following:\n\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
+					},
+					"uid": {
+						"type": "string",
+						"description": "The id corresponding to the user who had a **manually** added booking"
+					}
+				},
+				"required": [
+					"timestamp",
+					"start_date",
+					"end_date",
+					"event_type",
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingDeletedEvent": {
+				"description": "Event used to track the removal of a user from a date range (only possible via admin view)",
+				"properties": {
+					"timestamp": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The time which the booking operation was performed. MUST be in UTC format"
+					},
+					"start_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The start of the operated on date range"
+					},
+					"end_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The end of the operated on date range"
+					},
+					"event_type": {
+						"type": "string",
+						"enum": [
+							"removed_user_from_booking"
+						],
+						"nullable": false,
+						"description": "The type of event that the admin performed, used for parsing on the front-end\n\nEach of these are associated with the following:\n\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
+					},
+					"uid": {
+						"type": "string",
+						"description": "The id corresponding to the user who had a **manually** deleted booking"
+					}
+				},
+				"required": [
+					"timestamp",
+					"start_date",
+					"end_date",
+					"event_type",
+					"uid"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingAvailabilityChangeEvent": {
+				"description": "Event used to track the history of the availability of dates changing",
+				"properties": {
+					"timestamp": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The time which the booking operation was performed. MUST be in UTC format"
+					},
+					"start_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The start of the operated on date range"
+					},
+					"end_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The end of the operated on date range"
+					},
+					"event_type": {
+						"type": "string",
+						"enum": [
+							"changed_date_availability"
+						],
+						"nullable": false,
+						"description": "The type of event that the admin performed, used for parsing on the front-end\n\nEach of these are associated with the following:\n\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
+					},
+					"change": {
+						"type": "number",
+						"format": "double",
+						"description": "The **signed** difference between the newly available slots and the previously available slots.\n\nFor example, if the original available slots was 32, and the availability was set to 0,\nthe `change` in the slots needs to be **0 - 32 = -32**\n\nAnd vice versa, if the original available slots was 16, and the availability was set to 32,\nthe `change` would be **32 - 16 = 16**"
+					}
+				},
+				"required": [
+					"timestamp",
+					"start_date",
+					"end_date",
+					"event_type",
+					"change"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingHistoryEvent": {
+				"anyOf": [
+					{
+						"$ref": "#/components/schemas/BookingAddedEvent"
+					},
+					{
+						"$ref": "#/components/schemas/BookingDeletedEvent"
+					},
+					{
+						"$ref": "#/components/schemas/BookingAvailabilityChangeEvent"
+					}
+				],
+				"description": "Helper type to specify the possible datastruces for the booking history"
+			},
+			"FetchLatestBookingHistoryEventResponse": {
+				"properties": {
+					"nextCursor": {
+						"type": "string",
+						"description": "Needed for firestore operations which do not support offset\nbased pagination\n\n**Will be undefined in case of last page**"
+					},
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"historyEvents": {
+						"items": {
+							"$ref": "#/components/schemas/BookingHistoryEvent"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FetchLatestBookingEventRequest": {
+				"properties": {
+					"limit": {
+						"type": "number",
+						"format": "double",
+						"maximum": 500,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string",
+						"description": "The id of the cursor to continue paginating from"
+					}
+				},
+				"required": [
+					"limit"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -1922,6 +2092,44 @@
 							"schema": {
 								"$ref": "#/components/schemas/AddCouponRequestBody",
 								"description": "- The UID of the user to add the coupon to and the quantity of coupons to add."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/bookings/history": {
+			"post": {
+				"operationId": "GetLatestHistory",
+				"responses": {
+					"200": {
+						"description": "History Events Fetched",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FetchLatestBookingHistoryEventResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Fetches the **latest** booking history events (uses cursor-based pagination)",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "- contains the pagination variables",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/FetchLatestBookingEventRequest",
+								"description": "- contains the pagination variables"
 							}
 						}
 					}

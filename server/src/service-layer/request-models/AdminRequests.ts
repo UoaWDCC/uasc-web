@@ -37,3 +37,17 @@ export interface DeleteBookingRequest {
    */
   bookingID: string
 }
+
+export interface FetchLatestBookingEventRequest {
+  /**
+   * @isNumber Please enter a number
+   * @maximum 500 please select a smaller limit (max 500)
+   * @minimum 1 please choose a positive, non-zero limit
+   */
+  limit: number
+
+  /**
+   * The id of the cursor to continue paginating from
+   */
+  cursor?: string
+}
