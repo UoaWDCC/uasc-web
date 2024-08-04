@@ -780,9 +780,9 @@ describe("AdminController endpoint tests", () => {
       })
 
       let res = await request
-        .get(`/admin/bookings/history?limit=100`)
+        .get(`/admin/bookings/history?limit=1`)
         .set("Authorization", `Bearer ${adminToken}`)
-        .send({ limit: 1 })
+        .send({})
 
       expect(res.status).toEqual(200)
       expect(res.body.historyEvents).toHaveLength(1)
