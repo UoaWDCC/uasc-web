@@ -134,7 +134,7 @@ export interface paths {
   };
   "/admin/bookings/history": {
     /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
-    post: operations["GetLatestHistory"];
+    get: operations["GetLatestHistory"];
   };
 }
 
@@ -591,12 +591,6 @@ export interface components {
       message?: string;
       historyEvents?: components["schemas"]["BookingHistoryEvent"][];
     };
-    FetchLatestBookingEventRequest: {
-      /** Format: double */
-      limit: number;
-      /** @description The id of the cursor to continue paginating from */
-      cursor?: string;
-    };
   };
   responses: {
   };
@@ -1037,10 +1031,10 @@ export interface operations {
   };
   /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
   GetLatestHistory: {
-    /** @description - contains the pagination variables */
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["FetchLatestBookingEventRequest"];
+    parameters: {
+      query: {
+        limit: number;
+        cursor?: string;
       };
     };
     responses: {

@@ -660,12 +660,11 @@ export class AdminController extends Controller {
    * @returns the list of latest history events
    */
   @SuccessResponse("200", "History Events Fetched")
-  @Post("bookings/history")
+  @Get("bookings/history")
   public async getLatestHistory(
-    @Body() requestBody: FetchLatestBookingEventRequest
+    @Query() limit: FetchLatestBookingEventRequest["limit"],
+    @Query() cursor?: FetchLatestBookingEventRequest["cursor"]
   ): Promise<FetchLatestBookingHistoryEventResponse> {
-    const { limit, cursor } = requestBody
-
     try {
       const bookingHistoryService = new BookingHistoryService()
 

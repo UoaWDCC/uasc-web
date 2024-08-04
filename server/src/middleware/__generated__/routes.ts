@@ -485,15 +485,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "FetchLatestBookingEventRequest": {
-        "dataType": "refObject",
-        "properties": {
-            "limit": {"dataType":"double","required":true,"validators":{"maximum":{"errorMsg":"please select a smaller limit (max 500)","value":500},"minimum":{"errorMsg":"please choose a positive, non-zero limit","value":1}}},
-            "cursor": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const templateService = new ExpressTemplateService(models, {"noImplicitAdditionalProperties":"throw-on-extras","bodyCoercion":true});
 
@@ -1247,14 +1238,15 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/admin/bookings/history',
+        app.get('/admin/bookings/history',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getLatestHistory)),
 
             function AdminController_getLatestHistory(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"FetchLatestBookingEventRequest"},
+                    limit: {"in":"query","name":"limit","required":true,"dataType":"double"},
+                    cursor: {"in":"query","name":"cursor","dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
