@@ -15,7 +15,7 @@ const bookingAdditionItem: BookingHistoryEvent = {
   timestamp: Timestamp.fromMillis(69),
   start_date: Timestamp.now(),
   end_date: Timestamp.now(),
-  uid: "69696969"
+  uid: "jack sun"
 }
 
 const bookingDeletionItem: BookingHistoryEvent = {
@@ -23,7 +23,7 @@ const bookingDeletionItem: BookingHistoryEvent = {
   timestamp: Timestamp.fromMillis(69),
   start_date: Timestamp.now(),
   end_date: Timestamp.now(),
-  uid: "69696969"
+  uid: "stephen zhang"
 }
 
 const availabilityChangeItem: BookingHistoryEvent = {
@@ -36,13 +36,15 @@ const availabilityChangeItem: BookingHistoryEvent = {
 
 export const AdditionItem: Story = {
   args: {
-    item: bookingAdditionItem
+    item: bookingAdditionItem,
+    name: "stephen zhang"
   }
 }
 
 export const DeletionItem: Story = {
   args: {
-    item: bookingDeletionItem
+    item: bookingDeletionItem,
+    name: "Jack sun"
   }
 }
 

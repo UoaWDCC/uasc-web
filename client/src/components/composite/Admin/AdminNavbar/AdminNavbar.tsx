@@ -30,6 +30,9 @@ const AdminNavbar = () => {
           <WrappedTab mobileCompatiability={false} to="/admin/availability">
             availability
           </WrappedTab>
+          <WrappedTab mobileCompatiability={false} to="/admin/booking-history">
+            history
+          </WrappedTab>
         </div>
         <div className="ml-auto pr-4">
           <Exit />

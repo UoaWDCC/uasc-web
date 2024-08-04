@@ -3,24 +3,58 @@ import { BookingHistoryEvent } from "@/models/History"
 import { useMemo } from "react"
 
 interface IAdminBookingHistoryItem {
+  /**
+   * The event that is to be parsed and displayed in list view
+   */
   item: BookingHistoryEvent
+  /**
+   * The name of the user associated with the event (**NOT** the admin performing it)
+   */
+  name?: string
+  /**
+   * The email of the user associated with the event (**NOT** the admin performing it)
+   */
+  email?: string
 }
 
-const AdminBookingHistoryItem = ({ item }: IAdminBookingHistoryItem) => {
+const AdminBookingHistoryItem = ({
+  item,
+  name,
+  email
+}: IAdminBookingHistoryItem) => {
+  /**
+   * Used for parsing the history event and presenting it
+   */
   const InnerContent = useMemo(() => {
+    const UserInformation = () => {
+      return (
+        <h5 className="border-dark-blue-100 w-fit border-2 px-3">
+          User: <strong>{name}</strong> | Email: <strong>{email}</strong>
+        </h5>
+      )
+    }
     const SharedContent = () => {
       return (
         <>
-          <p>{DateUtils.timestampToDate(item.timestamp).toString()}</p>
           <p>
-            from{" "}
-            {DateUtils.formattedNzDate(
-              DateUtils.timestampToDate(item.start_date)
-            )}
-            to
-            {DateUtils.formattedNzDate(
-              DateUtils.timestampToDate(item.end_date)
-            )}
+            At{" "}
+            <strong>
+              {new Date(
+                DateUtils.timestampMilliseconds(item.timestamp)
+              ).toLocaleString()}
+            </strong>{" "}
+            for the date range{" "}
+            <strong>
+              {DateUtils.formattedNzDate(
+                new Date(DateUtils.timestampMilliseconds(item.start_date))
+              )}
+            </strong>{" "}
+            to{" "}
+            <strong>
+              {DateUtils.formattedNzDate(
+                new Date(DateUtils.timestampMilliseconds(item.end_date))
+              )}
+            </strong>
           </p>
         </>
       )
@@ -28,29 +62,44 @@ const AdminBookingHistoryItem = ({ item }: IAdminBookingHistoryItem) => {
     switch (item.event_type) {
       case "added_user_to_booking":
         return (
-          <div className="flex gap-2">
-            <p>Manually added on</p> <SharedContent /> <p>For {item.uid}</p>
-          </div>
+          <>
+            <h5 className="font-bold uppercase underline">Added to booking</h5>
+            <UserInformation />
+            <SharedContent />
+          </>
         )
       case "removed_user_from_booking":
         return (
-          <div className="flex gap-2">
-            <p>Booking deletion on </p> <SharedContent /> <p>For {item.uid}</p>
-          </div>
+          <>
+            <h5 className="font-bold uppercase underline">
+              Removed from booking
+            </h5>
+            <UserInformation />
+            <SharedContent />
+          </>
         )
       case "changed_date_availability":
         return (
-          <div className="flex gap-2">
-            <p>Availability change on </p> <SharedContent />
-            <p>For {item.change} slots</p>
-          </div>
+          <>
+            <h5 className="font-bold uppercase underline">
+              Availability Changed
+            </h5>
+            <div className="flex gap-1">
+              <SharedContent />
+              <p>
+                for <strong>{item.change}</strong> slots
+              </p>
+            </div>
+          </>
         )
     }
-  }, [item])
+  }, [item, name, email])
 
   return (
     <>
-      <div className="flex w-full bg-white p-4">{InnerContent}</div>
+      <div className="border-gray-3 flex w-full flex-col gap-1 rounded-md border bg-white p-4">
+        {InnerContent}
+      </div>
     </>
   )
 }
