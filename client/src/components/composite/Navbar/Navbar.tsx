@@ -86,7 +86,7 @@ const Navbar = ({
           </span>
           <AboutMenuItemsMobile />
           <Link
-            href="https://www.facebook.com/UoAsnowsports/"
+            href="https://www.instagram.com/uasc_nz/"
             target="_blank"
             className="text-dark-blue-100 -mr-4 hidden pb-2.5 md:inline-block"
           >
