@@ -1,6 +1,17 @@
 import { ReactNode } from "react"
 
 interface IMenuListProps {
+  /**
+   * Which side the children should start,
+   *
+   * e.g for `left`:
+   *
+   * /-start here--------------/
+   *
+   * e.g for `right`:
+   *
+   * /------------start here--/
+   */
   anchor?: "left" | "right"
   children?: ReactNode
 }

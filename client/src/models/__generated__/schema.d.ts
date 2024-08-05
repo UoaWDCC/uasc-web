@@ -48,10 +48,6 @@ export interface paths {
      */
     post: operations["GetBookingPayment"];
   };
-  "/bookings/create-bookings": {
-    /** @description An admin method to create bookings for a list of users within a date range. */
-    post: operations["CreateBookings"];
-  };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
@@ -74,6 +70,10 @@ export interface paths {
   "/admin/bookings/make-dates-unavailable": {
     /** @description Decreases availability count to 0 for all booking slots in a date range. */
     post: operations["MakeDateUnavailable"];
+  };
+  "/admin/bookings/create": {
+    /** @description An admin method to create bookings for a list of users within a date range. */
+    post: operations["CreateBookings"];
   };
   "/admin/bookings/delete": {
     /** @description Delete a users booking by booking ID. */
@@ -131,6 +131,10 @@ export interface paths {
      * Requires an admin JWT token.
      */
     post: operations["AddCoupon"];
+  };
+  "/admin/bookings/history": {
+    /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
+    get: operations["GetLatestHistory"];
   };
 }
 
@@ -263,22 +267,6 @@ export interface components {
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
-    /** @description Represents the response structure for fetching user ids by date range. */
-    UIdssByDateRangeResponse: {
-      data?: {
-          users: string[];
-          date: components["schemas"]["FirebaseFirestore.Timestamp"];
-        }[];
-      error?: string;
-    };
-    CreateBookingsRequestModel: {
-      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
-      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
-      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description List of users to add to the bookings between date range */
-      userIds: string[];
-    };
     AllUserBookingSlotsResponse: {
       error?: string;
       message?: string;
@@ -376,6 +364,22 @@ export interface components {
     };
     /** @description Construct a type with the properties of T except for those in type K. */
     "Omit_MakeDatesAvailableRequestBody.slots_": components["schemas"]["Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__"];
+    /** @description Represents the response structure for fetching user ids by date range. */
+    UIdssByDateRangeResponse: {
+      data?: {
+          users: string[];
+          date: components["schemas"]["FirebaseFirestore.Timestamp"];
+        }[];
+      error?: string;
+    };
+    CreateBookingsRequestModel: {
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      startDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
+      endDate: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description List of users to add to the bookings between date range */
+      userId: string;
+    };
     BookingDeleteResponse: {
       error?: string;
       message?: string;
@@ -497,6 +501,95 @@ export interface components {
        * @description The number of the coupon to be added.
        */
       quantity: number;
+    };
+    /** @description Event used to track a user being **manually** added to a booking (only possible via admin view) */
+    BookingAddedEvent: {
+      /** @description The time which the booking operation was performed. MUST be in UTC format */
+      timestamp: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The start of the operated on date range */
+      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The end of the operated on date range */
+      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The type of event that the admin performed, used for parsing on the front-end
+       *
+       * Each of these are associated with the following:
+       *
+       * - `"added_user_to_booking"`: {@link BookingAddedEvent}
+       * - `"removed_user_from_booking"`: {@link BookingDeletedEvent}
+       * - `"changed_date_availability"`: {@link BookingAvailabilityChangeEvent}
+       * @enum {string}
+       */
+      event_type: "added_user_to_booking";
+      /** @description The id corresponding to the user who had a **manually** added booking */
+      uid: string;
+    };
+    /** @description Event used to track the removal of a user from a date range (only possible via admin view) */
+    BookingDeletedEvent: {
+      /** @description The time which the booking operation was performed. MUST be in UTC format */
+      timestamp: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The start of the operated on date range */
+      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The end of the operated on date range */
+      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The type of event that the admin performed, used for parsing on the front-end
+       *
+       * Each of these are associated with the following:
+       *
+       * - `"added_user_to_booking"`: {@link BookingAddedEvent}
+       * - `"removed_user_from_booking"`: {@link BookingDeletedEvent}
+       * - `"changed_date_availability"`: {@link BookingAvailabilityChangeEvent}
+       * @enum {string}
+       */
+      event_type: "removed_user_from_booking";
+      /** @description The id corresponding to the user who had a **manually** deleted booking */
+      uid: string;
+    };
+    /** @description Event used to track the history of the availability of dates changing */
+    BookingAvailabilityChangeEvent: {
+      /** @description The time which the booking operation was performed. MUST be in UTC format */
+      timestamp: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The start of the operated on date range */
+      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The end of the operated on date range */
+      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The type of event that the admin performed, used for parsing on the front-end
+       *
+       * Each of these are associated with the following:
+       *
+       * - `"added_user_to_booking"`: {@link BookingAddedEvent}
+       * - `"removed_user_from_booking"`: {@link BookingDeletedEvent}
+       * - `"changed_date_availability"`: {@link BookingAvailabilityChangeEvent}
+       * @enum {string}
+       */
+      event_type: "changed_date_availability";
+      /**
+       * Format: double
+       * @description The **signed** difference between the newly available slots and the previously available slots.
+       *
+       * For example, if the original available slots was 32, and the availability was set to 0,
+       * the `change` in the slots needs to be **0 - 32 = -32**
+       *
+       * And vice versa, if the original available slots was 16, and the availability was set to 32,
+       * the `change` would be **32 - 16 = 16**
+       */
+      change: number;
+    };
+    /** @description Helper type to specify the possible datastruces for the booking history */
+    BookingHistoryEvent: components["schemas"]["BookingAddedEvent"] | components["schemas"]["BookingDeletedEvent"] | components["schemas"]["BookingAvailabilityChangeEvent"];
+    FetchLatestBookingHistoryEventResponse: {
+      /**
+       * @description Needed for firestore operations which do not support offset
+       * based pagination
+       *
+       * **Will be undefined in case of last page**
+       */
+      nextCursor?: string;
+      error?: string;
+      message?: string;
+      historyEvents?: components["schemas"]["BookingHistoryEvent"][];
     };
   };
   responses: {
@@ -679,23 +772,6 @@ export interface operations {
       };
     };
   };
-  /** @description An admin method to create bookings for a list of users within a date range. */
-  CreateBookings: {
-    /** @description - The date range and list of user ids to create bookings for. */
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateBookingsRequestModel"];
-      };
-    };
-    responses: {
-      /** @description Bookings successfully created */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
-        };
-      };
-    };
-  };
   /** @description Fetches all bookings for a user based on their UID. */
   GetAllBookings: {
     responses: {
@@ -774,6 +850,23 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["BookingSlotUpdateResponse"];
+        };
+      };
+    };
+  };
+  /** @description An admin method to create bookings for a list of users within a date range. */
+  CreateBookings: {
+    /** @description - The date range and list of user ids to create bookings for. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateBookingsRequestModel"];
+      };
+    };
+    responses: {
+      /** @description Bookings successfully created */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UIdssByDateRangeResponse"];
         };
       };
     };
@@ -933,6 +1026,23 @@ export interface operations {
       /** @description Coupon Added */
       200: {
         content: never;
+      };
+    };
+  };
+  /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
+  GetLatestHistory: {
+    parameters: {
+      query: {
+        limit: number;
+        cursor?: string;
+      };
+    };
+    responses: {
+      /** @description History Events Fetched */
+      200: {
+        content: {
+          "application/json": components["schemas"]["FetchLatestBookingHistoryEventResponse"];
+        };
       };
     };
   };

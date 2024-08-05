@@ -82,5 +82,5 @@ export interface CreateBookingsRequestModel
   /**
    * List of users to add to the bookings between date range
    */
-  userIds: string[]
+  userId: string
 }

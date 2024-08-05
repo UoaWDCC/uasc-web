@@ -42,6 +42,15 @@ export default defineConfig({
               S.document().schemaType("home-page").documentId("home-page")
             ),
 
+            S.listItem()
+              .title("Lodge Information")
+              .id("lodge-information")
+              .child(
+                S.document()
+                  .schemaType("lodge-information")
+                  .documentId("lodge-information")
+              ),
+
             // Regular document types
             S.documentTypeListItem("about-item").title("About Item"),
             S.documentTypeListItem("contact-detail").title("Contact Detail"),

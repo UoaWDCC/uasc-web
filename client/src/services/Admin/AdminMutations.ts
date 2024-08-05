@@ -5,7 +5,8 @@ import queryClient from "@/services/QueryClient"
 import { BOOKING_AVAILABLITY_KEY } from "@/services/Booking/BookingQueries"
 import {
   ALL_BOOKINGS_BETWEEN_RANGE_QUERY,
-  ALL_USERS_QUERY
+  ALL_USERS_QUERY,
+  BOOKING_HISTORY_QUERY
 } from "./AdminQueries"
 import { CombinedUserData } from "@/models/User"
 import { replaceUserInPage } from "./AdminUtils"
@@ -93,6 +94,10 @@ export function useMakeDatesAvailableMutation(
     retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [BOOKING_AVAILABLITY_KEY] })
+
+      queryClient.invalidateQueries({
+        queryKey: [BOOKING_HISTORY_QUERY]
+      })
     }
   })
 }
@@ -116,6 +121,10 @@ export function useMakeDatesUnavailableMutation(
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [BOOKING_AVAILABLITY_KEY] })
+
+      queryClient.invalidateQueries({
+        queryKey: [BOOKING_HISTORY_QUERY]
+      })
     }
   })
 }
@@ -129,6 +138,14 @@ export function useAddUserToBookingMutation() {
       queryClient.invalidateQueries({
         queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
       })
+
+      queryClient.invalidateQueries({
+        queryKey: [BOOKING_HISTORY_QUERY]
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: [BOOKING_AVAILABLITY_KEY]
+      })
     }
   })
 }
@@ -141,6 +158,14 @@ export function useDeleteBookingMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [ALL_BOOKINGS_BETWEEN_RANGE_QUERY]
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: [BOOKING_HISTORY_QUERY]
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: [BOOKING_AVAILABLITY_KEY]
       })
     }
   })

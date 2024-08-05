@@ -17,6 +17,7 @@ import BookingSlotService from "data-layer/services/BookingSlotsService"
 import BookingDataService from "data-layer/services/BookingDataService"
 import AuthService from "business-layer/services/AuthService"
 import { UserRecord } from "firebase-admin/auth"
+import BookingHistoryService from "data-layer/services/BookingHistoryService"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -475,6 +476,138 @@ describe("AdminController endpoint tests", () => {
     })
   })
 
+  describe("/admin/bookings/create", () => {
+    it("should create bookings a user within the date range", async () => {
+      const bookingSlotService = new BookingSlotService()
+
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2022"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+
+      await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("02/01/2023")),
+        max_bookings: 10
+      })
+
+      await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("03/01/2023")),
+        max_bookings: 10
+      })
+
+      // Important test case, don't return dates with no bookings
+      await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("01/01/2023")),
+        max_bookings: 10
+      })
+
+      const res = await request
+        .post("/admin/bookings/create")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate,
+          userId: MEMBER_USER_UID
+        })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toHaveLength(3)
+      expect.arrayContaining([
+        expect.objectContaining({
+          users: expect.arrayContaining([
+            expect.objectContaining({ uid: MEMBER_USER_UID })
+          ])
+        })
+      ])
+    })
+
+    it("should return unauthorized error for non-admin users", async () => {
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2023"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+
+      const res = await request
+        .post("/admin/bookings/create")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          startDate,
+          endDate,
+          userId: undefined
+        })
+
+      expect(res.status).toEqual(401)
+    })
+
+    it("Shouldn't duplicate members in the same slot", async () => {
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      const startDate = dateToFirestoreTimeStamp(new Date("01/01/2022"))
+      const endDate = dateToFirestoreTimeStamp(new Date("12/31/2023"))
+
+      const slot1 = await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("02/01/2023")),
+        max_bookings: 10
+      })
+
+      await bookingSlotService.createBookingSlot({
+        date: dateToFirestoreTimeStamp(new Date("01/01/2024")),
+        max_bookings: 10
+      })
+
+      await bookingDataService.createBooking({
+        user_id: MEMBER_USER_UID,
+        booking_slot_id: slot1.id,
+        stripe_payment_id: ""
+      })
+
+      let res = await request
+        .post("/admin/bookings/create")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          endDate,
+          userId: MEMBER_USER_UID
+        })
+
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toHaveLength(1)
+      expect.arrayContaining([
+        expect.objectContaining({
+          users: expect.arrayContaining([
+            expect.objectContaining({ uid: MEMBER_USER_UID })
+          ])
+        })
+      ])
+
+      expect(
+        (
+          await bookingSlotService.getBookingSlotsBetweenDateRange(
+            startDate,
+            endDate
+          )
+        ).length
+      ).toEqual(1)
+
+      const newEndDate = dateToFirestoreTimeStamp(new Date("01/01/2024"))
+
+      res = await request
+        .post("/admin/bookings/create")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          startDate,
+          newEndDate,
+          userId: MEMBER_USER_UID
+        })
+
+      expect(
+        (
+          await bookingSlotService.getBookingSlotsBetweenDateRange(
+            startDate,
+            newEndDate
+          )
+        ).length
+      ).toEqual(2)
+    })
+  })
+
   describe("/admin/bookings/delete", () => {
     it("should error on deleting invalid booking id", async () => {
       const res = await request
@@ -603,6 +736,74 @@ describe("AdminController endpoint tests", () => {
         .send({})
 
       expect(response.status).toEqual(401)
+    })
+  })
+  describe("/admin/bookings/history", () => {
+    it("should be scoped to admins only", async () => {
+      let res = await request
+        .get(`/admin/bookings/history?limit=100`)
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({})
+      expect(res.status).toEqual(401)
+
+      res = await request
+        .get(`/admin/bookings/history?limit=100`)
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send({})
+      expect(res.status).toEqual(401)
+
+      res = await request.get(`/admin/bookings/history?limit=100`).send({})
+
+      expect(res.status).toEqual(401)
+    })
+
+    it("should be able to fetch the latest X bookings", async () => {
+      const bookingHistoryService = new BookingHistoryService()
+
+      const startDate = dateToFirestoreTimeStamp(new Date(2002, 10, 8))
+      const endDate = dateToFirestoreTimeStamp(new Date(2002, 10, 10))
+
+      bookingHistoryService.addBookingDeletedEvent({
+        uid: "user-removed-from-booking",
+        start_date: startDate as Timestamp,
+        end_date: endDate as Timestamp,
+        event_type: "removed_user_from_booking",
+        timestamp: Timestamp.now()
+      })
+
+      bookingHistoryService.addBookingDeletedEvent({
+        uid: "user-removed-from-booking",
+        start_date: startDate as Timestamp,
+        end_date: endDate as Timestamp,
+        event_type: "removed_user_from_booking",
+        timestamp: Timestamp.now()
+      })
+
+      let res = await request
+        .get(`/admin/bookings/history?limit=1`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+
+      expect(res.status).toEqual(200)
+      expect(res.body.historyEvents).toHaveLength(1)
+
+      /**
+       * Pagination Test
+       */
+      res = await request
+        .get(`/admin/bookings/history?limit=100&cursor=${res.body.nextCursor}`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+
+      expect(res.status).toEqual(200)
+      expect(res.body.historyEvents).toHaveLength(1)
+
+      res = await request
+        .get(`/admin/bookings/history?limit=2`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({})
+
+      expect(res.body.historyEvents).toHaveLength(2)
     })
   })
 })

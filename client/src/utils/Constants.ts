@@ -17,6 +17,6 @@ let NEXT_YEAR_FROM_TODAY = new Date(
 NEXT_YEAR_FROM_TODAY = new Date(NEXT_YEAR_FROM_TODAY.toDateString())
 
 const CHECK_OUT_TIME = "10:00am" as const
-const CHECK_IN_TIME = "3:00pm" as const
+const CHECK_IN_TIME = "11:00am" as const
 
 export { TODAY, NEXT_YEAR_FROM_TODAY, CHECK_IN_TIME, CHECK_OUT_TIME }

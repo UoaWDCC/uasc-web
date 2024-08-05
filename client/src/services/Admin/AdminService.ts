@@ -143,30 +143,55 @@ const AdminService = {
   addUsersToBookingForDateRange: async function ({
     startDate,
     endDate,
-    userIds
+    userId
   }: {
     startDate: Timestamp
     endDate: Timestamp
-    userIds: string[]
+    userId: string
   }) {
     const { response, data } = await fetchClient.POST(
-      "/bookings/create-bookings",
+      "/admin/bookings/create",
       {
         body: {
           startDate,
           endDate,
-          userIds
+          userId
         }
       }
     )
 
     if (!response.ok) {
       throw new Error(
-        `Failed to add the users ${userIds.join(",")} to the date range ${startDate.toString()} to ${endDate.toString()} `
+        `Failed to add the user, ${userId} to the date range ${startDate.toString()} to ${endDate.toString()} `
       )
     }
 
     return data?.data
+  },
+  getBookingHistory: async function ({
+    pageParam,
+    limit = 200
+  }: {
+    pageParam?: string
+    limit?: number
+  }) {
+    const { response, data } = await fetchClient.GET(
+      "/admin/bookings/history",
+      {
+        params: {
+          query: {
+            limit,
+            cursor: pageParam
+          }
+        }
+      }
+    )
+
+    if (!response.ok || !data) {
+      throw new Error(`Failed to fetch ${limit} of the latest booking items`)
+    }
+
+    return data
   }
 } as const
 

@@ -4,6 +4,7 @@ import {
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
 import {
+  UTCDateToDdMmYyyy,
   firestoreTimestampToDate,
   timestampsInRange
 } from "data-layer/adapters/DateUtils"
@@ -14,15 +15,18 @@ import UserDataService from "data-layer/services/UserDataService"
 import {
   DeleteBookingRequest,
   AddCouponRequestBody,
-  MakeDatesAvailableRequestBody
+  MakeDatesAvailableRequestBody,
+  FetchLatestBookingEventRequest
 } from "service-layer/request-models/AdminRequests"
 import {
+  CreateBookingsRequestModel,
   CreateUserRequestBody,
   DemoteUserRequestBody,
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
 import {
+  UIdssByDateRangeResponse,
   BookingDeleteResponse,
   BookingSlotUpdateResponse
 } from "service-layer/response-models/BookingResponse"
@@ -47,6 +51,14 @@ import * as console from "console"
 import StripeService from "../../business-layer/services/StripeService"
 import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import { UserRecord } from "firebase-admin/auth"
+import { Timestamp } from "firebase-admin/firestore"
+import MailService from "business-layer/services/MailService"
+import BookingUtils, {
+  CHECK_IN_TIME,
+  CHECK_OUT_TIME
+} from "business-layer/utils/BookingUtils"
+import BookingHistoryService from "data-layer/services/BookingHistoryService"
+import { FetchLatestBookingHistoryEventResponse } from "service-layer/response-models/AdminResponse"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -100,6 +112,18 @@ export class AdminController extends Controller {
 
     try {
       const bookingSlotIds = await Promise.all(datesToUpdatePromises)
+
+      /**
+       * Log that there was a positive change in availability for a date range
+       */
+      await new BookingHistoryService().addAvailibilityChangeEvent({
+        timestamp: Timestamp.now(),
+        start_date: startDate,
+        end_date: endDate,
+        event_type: "changed_date_availability",
+        change: slots || DEFAULT_BOOKING_MAX_SLOTS
+      })
+
       this.setStatus(201)
       return { updatedBookingSlots: bookingSlotIds }
     } catch (e) {
@@ -123,7 +147,7 @@ export class AdminController extends Controller {
     const bookingSlotService = new BookingSlotService()
 
     const dateTimestamps = timestampsInRange(startDate, endDate)
-
+    let change = 0
     const datesToUpdatePromises = dateTimestamps.map(async (dateTimestamp) => {
       try {
         const [bookingSlotForDate] =
@@ -136,6 +160,8 @@ export class AdminController extends Controller {
 
         // Was available
         if (bookingSlotForDate.max_bookings > EMPTY_BOOKING_SLOTS) {
+          // TODO: change to proper functionality (i.e not completely make it empty)
+          change = EMPTY_BOOKING_SLOTS - bookingSlotForDate.max_bookings
           await bookingSlotService.updateBookingSlot(bookingSlotForDate.id, {
             max_bookings: EMPTY_BOOKING_SLOTS
           })
@@ -153,6 +179,18 @@ export class AdminController extends Controller {
 
     try {
       const bookingSlotIds = await Promise.all(datesToUpdatePromises)
+
+      /**
+       * Log the dates being made unavailable
+       */
+      await new BookingHistoryService().addAvailibilityChangeEvent({
+        timestamp: Timestamp.now(),
+        start_date: startDate,
+        end_date: endDate,
+        event_type: "changed_date_availability",
+        change
+      })
+
       this.setStatus(201)
       return {
         updatedBookingSlots: bookingSlotIds.filter((id) => !!id) // No way to "skip" with map
@@ -161,6 +199,123 @@ export class AdminController extends Controller {
       this.setStatus(500)
       console.error(`An error occurred when making dates unavailable: ${e}`)
       return { error: "Something went wrong when making dates unavailable" }
+    }
+  }
+
+  /**
+   * An admin method to create bookings for a list of users within a date range.
+   * @param requestBody - The date range and list of user ids to create bookings for.
+   * @returns A list of users and timestamps that were successfully added to the booking slots.
+   */
+  @SuccessResponse("200", "Bookings successfully created")
+  @Post("/bookings/create")
+  public async createBookings(
+    @Body() requestBody: CreateBookingsRequestModel
+  ): Promise<UIdssByDateRangeResponse> {
+    try {
+      const { startDate, endDate, userId } = requestBody
+
+      const responseData: Array<{
+        date: Timestamp
+        users: string[]
+      }> = []
+
+      /** Creating instances of the required services */
+      const bookingSlotService = new BookingSlotService()
+      const bookingDataService = new BookingDataService()
+
+      // Query to get all booking slots within date range
+      const bookingSlots =
+        await bookingSlotService.getBookingSlotsBetweenDateRange(
+          startDate,
+          endDate
+        )
+
+      /** Iterating through each booking slot */
+      const bookingPromises = bookingSlots.map(async (slot) => {
+        /** For every slotid add a booking for that id only if user doesn't already have a booking */
+        const existingBooking =
+          await bookingDataService.getBookingsByUserId(userId)
+        if (
+          !existingBooking.some(
+            (booking) => booking.booking_slot_id === slot.id
+          )
+        ) {
+          await bookingDataService.createBooking({
+            user_id: userId,
+            booking_slot_id: slot.id,
+            stripe_payment_id: "manual_entry"
+          })
+        }
+        responseData.push({
+          date: slot.date,
+          users: [userId]
+        })
+      })
+
+      await Promise.all(bookingPromises)
+
+      /**
+       * Log that the user has been added to the date range
+       */
+      await new BookingHistoryService().addBookingAddedEvent({
+        timestamp: Timestamp.now(),
+        start_date: startDate,
+        end_date: endDate,
+        event_type: "added_user_to_booking",
+        uid: userId
+      })
+
+      this.setStatus(200)
+      /**
+       * Send confirmation using MailService so that admins do not need to manually
+       * followup on manual bookings.
+       */
+      const mailService = new MailService()
+
+      try {
+        const { first_name, last_name } =
+          await new UserDataService().getUserData(userId)
+        const [userAuthData] = await new AuthService().bulkRetrieveUsersByUids([
+          { uid: userId }
+        ])
+        /**
+         * Used for formatted display to user
+         */
+        const BOOKING_START_DATE = UTCDateToDdMmYyyy(
+          new Date(firestoreTimestampToDate(startDate))
+        )
+        const BOOKING_END_DATE = UTCDateToDdMmYyyy(
+          new Date(firestoreTimestampToDate(endDate))
+        )
+        mailService.sendBookingConfirmationEmail(
+          userAuthData.email,
+          `${first_name} ${last_name}`,
+          `${BOOKING_START_DATE} ${CHECK_IN_TIME} (check in)`,
+          `${BookingUtils.addOneDay(BOOKING_END_DATE)} ${CHECK_OUT_TIME} (check out)`
+        )
+      } catch (e) {
+        console.error(
+          `Was unable to send a confirmation email for manual booking`
+        )
+        return {
+          data: responseData.filter((data) => !!data),
+          error: `Was unable to send a confirmation email for manual booking`
+        }
+      }
+
+      /**
+       * Returning the response data
+       *
+       * The filter is required to not include data that is null
+       * because of the early return in the map
+       */
+      return { data: responseData.filter((data) => !!data) }
+    } catch (e) {
+      console.error("Error in getBookingsByDateRange:", e)
+      this.setStatus(500)
+
+      return { error: "Something went wrong" }
     }
   }
 
@@ -179,15 +334,33 @@ export class AdminController extends Controller {
     // Validate and check if the booking actually exists
     const bookingDataService = new BookingDataService()
     let user_id
+    let booking_slot_id
     try {
       const booking = await bookingDataService.getBookingById(bookingID)
       user_id = booking.user_id
+      booking_slot_id = booking.booking_slot_id
     } catch (err) {
       this.setStatus(404)
       return { message: "Booking not found with that booking ID." }
     }
     // attempt to delete
     await bookingDataService.deleteBooking(bookingID)
+
+    const { date } = await new BookingSlotService().getBookingSlotById(
+      booking_slot_id
+    )
+
+    /**
+     * Log that a user was removed from an booking for a date
+     */
+    await new BookingHistoryService().addBookingDeletedEvent({
+      timestamp: Timestamp.now(),
+      uid: user_id,
+      start_date: date,
+      end_date: date,
+      event_type: "removed_user_from_booking"
+    })
+
     return { user_id }
   }
 
@@ -477,6 +650,46 @@ export class AdminController extends Controller {
       this.setStatus(200)
     } catch (e) {
       this.setStatus(500)
+    }
+  }
+
+  /**
+   * Fetches the **latest** booking history events (uses cursor-based pagination)
+   *
+   * @param requestBody - contains the pagination variables
+   * @returns the list of latest history events
+   */
+  @SuccessResponse("200", "History Events Fetched")
+  @Get("bookings/history")
+  public async getLatestHistory(
+    @Query() limit: FetchLatestBookingEventRequest["limit"],
+    @Query() cursor?: FetchLatestBookingEventRequest["cursor"]
+  ): Promise<FetchLatestBookingHistoryEventResponse> {
+    try {
+      const bookingHistoryService = new BookingHistoryService()
+
+      let snapshot
+      if (cursor) {
+        snapshot =
+          await bookingHistoryService.getBookingHistoryEventSnapshot(cursor)
+      }
+
+      const { data, nextCursor } = await bookingHistoryService.getLatestHistory(
+        limit,
+        snapshot
+      )
+
+      this.setStatus(200)
+      return {
+        historyEvents: data,
+        nextCursor
+      }
+    } catch (e) {
+      this.setStatus(500)
+      console.error("Failed to fetch the latest booking history", e)
+      return {
+        error: "Unable to fetch the booking history"
+      }
     }
   }
 }

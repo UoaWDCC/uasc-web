@@ -163,25 +163,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UIdssByDateRangeResponse": {
-        "dataType": "refObject",
-        "properties": {
-            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"string"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
-            "error": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CreateBookingsRequestModel": {
-        "dataType": "refObject",
-        "properties": {
-            "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "userIds": {"dataType":"array","array":{"dataType":"string"},"required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AllUserBookingSlotsResponse": {
         "dataType": "refObject",
         "properties": {
@@ -295,6 +276,25 @@ const models: TsoaRoute.Models = {
     "Omit_MakeDatesAvailableRequestBody.slots_": {
         "dataType": "refAlias",
         "type": {"ref":"Pick_MakeDatesAvailableRequestBody.Exclude_keyofMakeDatesAvailableRequestBody.slots__","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UIdssByDateRangeResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "data": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"string"},"required":true},"date":{"ref":"FirebaseFirestore.Timestamp","required":true}}}},
+            "error": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateBookingsRequestModel": {
+        "dataType": "refObject",
+        "properties": {
+            "startDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "endDate": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "userId": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "BookingDeleteResponse": {
@@ -429,6 +429,58 @@ const models: TsoaRoute.Models = {
         "properties": {
             "uid": {"dataType":"string","required":true},
             "quantity": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "BookingAddedEvent": {
+        "dataType": "refObject",
+        "properties": {
+            "timestamp": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "end_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "event_type": {"dataType":"enum","enums":["added_user_to_booking"],"required":true},
+            "uid": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "BookingDeletedEvent": {
+        "dataType": "refObject",
+        "properties": {
+            "timestamp": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "end_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "event_type": {"dataType":"enum","enums":["removed_user_from_booking"],"required":true},
+            "uid": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "BookingAvailabilityChangeEvent": {
+        "dataType": "refObject",
+        "properties": {
+            "timestamp": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "end_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "event_type": {"dataType":"enum","enums":["changed_date_availability"],"required":true},
+            "change": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "BookingHistoryEvent": {
+        "dataType": "refAlias",
+        "type": {"dataType":"union","subSchemas":[{"ref":"BookingAddedEvent"},{"ref":"BookingDeletedEvent"},{"ref":"BookingAvailabilityChangeEvent"}],"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "FetchLatestBookingHistoryEventResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "nextCursor": {"dataType":"string"},
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "historyEvents": {"dataType":"array","array":{"dataType":"refAlias","ref":"BookingHistoryEvent"}},
         },
         "additionalProperties": false,
     },
@@ -721,37 +773,6 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/bookings/create-bookings',
-            authenticateMiddleware([{"jwt":["admin"]}]),
-            ...(fetchMiddlewares<RequestHandler>(BookingController)),
-            ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.createBookings)),
-
-            function BookingController_createBookings(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateBookingsRequestModel"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new BookingController();
-
-              templateService.apiHandler({
-                methodName: 'createBookings',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: 200,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/bookings',
             authenticateMiddleware([{"jwt":["member"]}]),
             ...(fetchMiddlewares<RequestHandler>(BookingController)),
@@ -901,6 +922,37 @@ export function RegisterRoutes(app: Router) {
                 next,
                 validatedArgs,
                 successStatus: 201,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/bookings/create',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.createBookings)),
+
+            function AdminController_createBookings(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateBookingsRequestModel"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new AdminController();
+
+              templateService.apiHandler({
+                methodName: 'createBookings',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -1175,6 +1227,38 @@ export function RegisterRoutes(app: Router) {
 
               templateService.apiHandler({
                 methodName: 'addCoupon',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/admin/bookings/history',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getLatestHistory)),
+
+            function AdminController_getLatestHistory(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    limit: {"in":"query","name":"limit","required":true,"dataType":"double"},
+                    cursor: {"in":"query","name":"cursor","dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new AdminController();
+
+              templateService.apiHandler({
+                methodName: 'getLatestHistory',
                 controller,
                 response,
                 next,
