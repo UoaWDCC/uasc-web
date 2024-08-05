@@ -2,6 +2,11 @@ import Link from "next/link"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 
 const LodgeInfoComponent = () => {
+  const handleBookLodgeClick = () => {
+    // Your onClick logic here
+    console.log("Book The Lodge button clicked")
+  }
+
   return (
     <div className="border-gray-3 flex h-full w-full flex-col justify-center rounded border bg-white px-6 py-12 pb-8">
       <div className="text-dark-blue-100 flex flex-col gap-4 lg:justify-center">
@@ -31,7 +36,9 @@ const LodgeInfoComponent = () => {
         </div>
         <div className="flex justify-center pt-3">
           <Link href="/booking">
-            <Button variant="default-sm">Book The Lodge</Button>
+            <Button variant="default-sm" onClick={handleBookLodgeClick}>
+              Book The Lodge
+            </Button>
           </Link>
         </div>
       </div>
