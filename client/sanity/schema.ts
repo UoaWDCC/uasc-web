@@ -7,6 +7,12 @@ import { CommitteeMemberSchema } from "@/models/sanity/CommitteeMembers/Schema"
 import { LifeMemberSchema } from "@/models/sanity/LifeMembers/Schema"
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [AboutItemSchema, HomePageSchema, ContactDetailSchema, LodgeInfoSchema, CommitteeMemberSchema,
-    LifeMemberSchema]
+  types: [
+    AboutItemSchema,
+    HomePageSchema,
+    ContactDetailSchema,
+    LodgeInfoSchema,
+    CommitteeMemberSchema,
+    LifeMemberSchema
+  ]
 }

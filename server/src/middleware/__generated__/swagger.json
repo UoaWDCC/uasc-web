@@ -817,7 +817,7 @@
 					},
 					"nextCursor": {
 						"type": "string",
-						"description": "Needed for firestore operations which do not support offset\nbased pagination\n\n**Will be undefined in case of last page**"
+						"description": "Needed for firestore operations which do not support offset\r\nbased pagination\r\n\r\n**Will be undefined in case of last page**"
 					},
 					"data": {
 						"items": {
@@ -1072,7 +1072,7 @@
 							"added_user_to_booking"
 						],
 						"nullable": false,
-						"description": "The type of event that the admin performed, used for parsing on the front-end\n\nEach of these are associated with the following:\n\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
+						"description": "The type of event that the admin performed, used for parsing on the front-end\r\n\r\nEach of these are associated with the following:\r\n\r\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\r\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\r\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
 					},
 					"uid": {
 						"type": "string",
@@ -1110,7 +1110,7 @@
 							"removed_user_from_booking"
 						],
 						"nullable": false,
-						"description": "The type of event that the admin performed, used for parsing on the front-end\n\nEach of these are associated with the following:\n\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
+						"description": "The type of event that the admin performed, used for parsing on the front-end\r\n\r\nEach of these are associated with the following:\r\n\r\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\r\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\r\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
 					},
 					"uid": {
 						"type": "string",
@@ -1148,12 +1148,12 @@
 							"changed_date_availability"
 						],
 						"nullable": false,
-						"description": "The type of event that the admin performed, used for parsing on the front-end\n\nEach of these are associated with the following:\n\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
+						"description": "The type of event that the admin performed, used for parsing on the front-end\r\n\r\nEach of these are associated with the following:\r\n\r\n- `\"added_user_to_booking\"`: {@link BookingAddedEvent}\r\n- `\"removed_user_from_booking\"`: {@link BookingDeletedEvent}\r\n- `\"changed_date_availability\"`: {@link BookingAvailabilityChangeEvent}"
 					},
 					"change": {
 						"type": "number",
 						"format": "double",
-						"description": "The **signed** difference between the newly available slots and the previously available slots.\n\nFor example, if the original available slots was 32, and the availability was set to 0,\nthe `change` in the slots needs to be **0 - 32 = -32**\n\nAnd vice versa, if the original available slots was 16, and the availability was set to 32,\nthe `change` would be **32 - 16 = 16**"
+						"description": "The **signed** difference between the newly available slots and the previously available slots.\r\n\r\nFor example, if the original available slots was 32, and the availability was set to 0,\r\nthe `change` in the slots needs to be **0 - 32 = -32**\r\n\r\nAnd vice versa, if the original available slots was 16, and the availability was set to 32,\r\nthe `change` would be **32 - 16 = 16**"
 					}
 				},
 				"required": [
@@ -1184,7 +1184,7 @@
 				"properties": {
 					"nextCursor": {
 						"type": "string",
-						"description": "Needed for firestore operations which do not support offset\nbased pagination\n\n**Will be undefined in case of last page**"
+						"description": "Needed for firestore operations which do not support offset\r\nbased pagination\r\n\r\n**Will be undefined in case of last page**"
 					},
 					"error": {
 						"type": "string"
@@ -1383,7 +1383,7 @@
 						"description": "Webhook post received"
 					}
 				},
-				"description": "Webhook endpoint for Stripe events.\nThis single endpoint is setup in the Stripe developer config to handle various events.",
+				"description": "Webhook endpoint for Stripe events.\r\nThis single endpoint is setup in the Stripe developer config to handle various events.",
 				"security": [],
 				"parameters": []
 			}
@@ -1546,7 +1546,7 @@
 						}
 					}
 				},
-				"description": "Creates a new booking session for the date ranges passed in,\nwill return any existing sessions if they have been started in\nthe last 30 minutes (the minimum period stripe has to persist a session for)",
+				"description": "Creates a new booking session for the date ranges passed in,\r\nwill return any existing sessions if they have been started in\r\nthe last 30 minutes (the minimum period stripe has to persist a session for)",
 				"security": [
 					{
 						"jwt": [
@@ -1648,7 +1648,7 @@
 						}
 					}
 				},
-				"description": "This method fetches users based on a booking date range.\nThis method requires an admin JWT token.",
+				"description": "This method fetches users based on a booking date range.\r\nThis method requires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1884,7 +1884,7 @@
 						}
 					}
 				},
-				"description": "Get a user by their UID.\nRequires an admin JWT token.",
+				"description": "Get a user by their UID.\r\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1913,7 +1913,7 @@
 						"description": "Created"
 					}
 				},
-				"description": "Adds a new user to the database with their UID and user data.\nRequires an admin JWT token.",
+				"description": "Adds a new user to the database with their UID and user data.\r\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1944,7 +1944,7 @@
 						"description": "Edited"
 					}
 				},
-				"description": "Edits a list of users with updated user additional info.\nRequires an admin JWT token.",
+				"description": "Edits a list of users with updated user additional info.\r\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -1975,7 +1975,7 @@
 						"description": "Promoted user"
 					}
 				},
-				"description": "Promotes a user to a member. This returns a conflict when the user is already a member.\nRequires an admin JWT token.",
+				"description": "Promotes a user to a member. This returns a conflict when the user is already a member.\r\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -2006,7 +2006,7 @@
 						"description": "Demoted user"
 					}
 				},
-				"description": "Demotes a member to a guest. This returns a conflict when the user is already a guest.\nRequires an admin JWT token.",
+				"description": "Demotes a member to a guest. This returns a conflict when the user is already a guest.\r\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -2037,7 +2037,7 @@
 						"description": "Demoted all non-admin users"
 					}
 				},
-				"description": "Demotes all non-admin users to guests. This is used to purge all membership statuses at the end of a billing cycle.\nRequires an admin JWT token.",
+				"description": "Demotes all non-admin users to guests. This is used to purge all membership statuses at the end of a billing cycle.\r\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
@@ -2056,7 +2056,7 @@
 						"description": "Coupon Added"
 					}
 				},
-				"description": "Adds a coupon to a user's stripe id.\nRequires an admin JWT token.",
+				"description": "Adds a coupon to a user's stripe id.\r\nRequires an admin JWT token.",
 				"security": [
 					{
 						"jwt": [
