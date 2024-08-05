@@ -10,7 +10,7 @@ export interface ExecImageProps {
 
 const ExecImage: React.FC<ExecImageProps> = ({ src, alt, title, name }) => {
   return (
-    <div className="group relative flex h-[163px] w-[163px] flex-shrink-0 overflow-hidden rounded-[4px]">
+    <div className="aspect-w-{1} aspect-h-{1} group relative flex w-[100%] flex-shrink-0 overflow-hidden rounded-[4px]">
       <Image
         src={src}
         alt={alt}
