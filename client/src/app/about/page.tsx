@@ -77,17 +77,6 @@ const About = async () => {
           <h2 className="text-dark-blue-100 my-8 text-center italic">
             Life Members
           </h2>
-          {/* <div className="flex flex-wrap justify-center gap-6"> */}
-          {/*  {lifeMembers.map((member) => ( */}
-          {/*    <div */}
-          {/*      key={member._id} */}
-          {/*      className="relative flex rounded-[4px] flex-shrink-0 group"> */}
-          {/*      <div className=""> */}
-          {/*        <p className="text-black">{member.name}</p> */}
-          {/*      </div> */}
-          {/*    </div> */}
-          {/*  ))} */}
-          {/* </div> */}
           <div className="mx-auto flex w-[80%] flex-wrap justify-center gap-4">
             {lifeMembers.map((member) => (
               <div
