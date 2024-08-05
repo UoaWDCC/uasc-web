@@ -1,3 +1,4 @@
+import ChevronDown from "@/assets/icons/downarrow.svg"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import Link from "next/link"
 import UASCLogo from "./utils/UASCLogo"
@@ -35,9 +36,10 @@ const LandingSection = () => (
         </div>
       </div>
 
-      <h5 className="my-8 uppercase text-white drop-shadow-md">
-        <Link href="#about">Find out more</Link>
-      </h5>
+      <Link href="#about" className="mb-8 flex flex-col items-center gap-y-2">
+        <h5 className="uppercase text-white drop-shadow-md">Find out more</h5>
+        <ChevronDown className="size-3 fill-white" />
+      </Link>
     </div>
   </section>
 )
