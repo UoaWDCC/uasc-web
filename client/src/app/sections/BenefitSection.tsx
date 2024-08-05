@@ -22,7 +22,7 @@ const BenefitSection = ({ benefits }: IBenefitSection) => (
                 fill
                 className="-z-10 size-full object-cover"
               />
-              <span className="bg-light-blue-100 absolute -top-6 w-fit max-w-[80%] p-4 text-lg font-bold text-white sm:-left-6">
+              <span className="bg-light-blue-100 absolute -top-6 w-fit max-w-[80%] px-6 py-4 text-lg font-bold text-white sm:-left-6">
                 {text}
               </span>
             </div>

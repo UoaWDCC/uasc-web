@@ -22,7 +22,7 @@ const LandingSection = () => (
       <div className="flex w-full max-w-96 flex-1 flex-col justify-center gap-y-12 px-6 text-center lg:gap-16">
         <div className="flex flex-col items-center sm:gap-y-2">
           <UASCLogo className="size-40 text-white drop-shadow-md sm:size-56 lg:size-80" />
-          <p className="text-lg font-extrabold text-white drop-shadow-md sm:text-2xl lg:text-3xl">
+          <p className="text-lg font-semibold text-white drop-shadow-md sm:text-2xl lg:text-3xl">
             UNIVERSITY OF AUCKLAND SNOWSPORTS CLUB
           </p>
         </div>

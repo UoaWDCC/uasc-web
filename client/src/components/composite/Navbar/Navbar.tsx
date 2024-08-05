@@ -85,9 +85,13 @@ const Navbar = ({
             </WrappedMenuTab>
           </span>
           <AboutMenuItemsMobile />
-          <span className="text-dark-blue-100 -mr-4 hidden pb-2.5 md:inline-block">
+          <Link
+            href="https://www.facebook.com/UoAsnowsports/"
+            target="_blank"
+            className="text-dark-blue-100 -mr-4 hidden pb-2.5 md:inline-block"
+          >
             <InstagramLink className="size-7" />
-          </span>
+          </Link>
           <LoginIndicator
             isAdmin={isAdmin}
             isLoggedIn={isLoggedIn}
