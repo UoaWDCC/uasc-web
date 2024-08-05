@@ -7,6 +7,15 @@ import {
   AboutItem
 } from "@/models/sanity/AboutItem/Utils"
 import { sanityQuery } from "../../../sanity/lib/utils"
+import {
+  COMMITTEE_MEMBERS_GROQ_QUERY,
+  CommitteeMembers
+} from "@/models/sanity/CommitteeMembers/Utils"
+import {
+  LIFE_MEMBERS_GROQ_QUERY,
+  LifeMembers
+} from "@/models/sanity/LifeMembers/Utils"
+import ExecImage from "@/components/generic/ExecImage/ExecImage"
 
 export const metadata: Metadata = {
   title: "About UASC",
@@ -15,6 +24,10 @@ export const metadata: Metadata = {
 
 const About = async () => {
   const aboutItems = await sanityQuery<AboutItem[]>(ABOUT_ITEMS_GROQ_QUERY)
+  const committeeMembers = await sanityQuery<CommitteeMembers[]>(
+    COMMITTEE_MEMBERS_GROQ_QUERY
+  )
+  const lifeMembers = await sanityQuery<LifeMembers[]>(LIFE_MEMBERS_GROQ_QUERY)
 
   return (
     <>
@@ -43,6 +56,48 @@ const About = async () => {
               </div>
             )
           })}
+          <h2 className="text-dark-blue-100 my-8 text-center italic">
+            Committee Members
+          </h2>
+          <div className="mx-auto flex w-[80%] flex-wrap  justify-center gap-4">
+            {committeeMembers.map((member) => (
+              <div
+                key={member._id}
+                className="flex-shrink-1 group relative mb-4 flex w-1/3 items-center justify-center overflow-hidden px-2 sm:w-1/4 md:w-1/5 lg:w-1/6"
+              >
+                <ExecImage
+                  src={member.imageUrl || ""}
+                  alt={member.name || ""}
+                  title={member.title || ""}
+                  name={member.name || ""}
+                />
+              </div>
+            ))}
+          </div>
+          <h2 className="text-dark-blue-100 my-8 text-center italic">
+            Life Members
+          </h2>
+          {/* <div className="flex flex-wrap justify-center gap-6"> */}
+          {/*  {lifeMembers.map((member) => ( */}
+          {/*    <div */}
+          {/*      key={member._id} */}
+          {/*      className="relative flex rounded-[4px] flex-shrink-0 group"> */}
+          {/*      <div className=""> */}
+          {/*        <p className="text-black">{member.name}</p> */}
+          {/*      </div> */}
+          {/*    </div> */}
+          {/*  ))} */}
+          {/* </div> */}
+          <div className="mx-auto flex w-[80%] flex-wrap justify-center gap-4">
+            {lifeMembers.map((member) => (
+              <div
+                key={member._id}
+                className="group relative mb-4 flex w-[150px] flex-shrink-0 items-center  justify-center overflow-hidden px-2 sm:w-1/2 md:w-1/3 lg:w-1/5"
+              >
+                <p className="text-black">{member.name}</p>
+              </div>
+            ))}
+          </div>
         </div>
         <Footer />
       </div>
