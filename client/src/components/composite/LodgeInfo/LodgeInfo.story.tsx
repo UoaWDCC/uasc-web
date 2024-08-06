@@ -1,17 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import LodgeInfoComponent from "./LodgeInfoComponent"
+import LodgeInfo from "./LodgeInfo"
 
-const meta: Meta<typeof LodgeInfoComponent> = {
-  component: LodgeInfoComponent
+const meta: Meta<typeof LodgeInfo> = {
+  component: LodgeInfo
 }
 
 export default meta
 
-type Story = StoryObj<typeof LodgeInfoComponent>
+type Story = StoryObj<typeof LodgeInfo>
 
 export const Default: Story = {
   args: {
     handleBookLodgeClick: () => console.log(""),
+    images: [
+      "https://via.placeholder.com/400x400?text=Image+1",
+      "https://via.placeholder.com/400x400?text=I+SUPPORT+LGBT",
+      "https://via.placeholder.com/400x400?text=Image+3",
+      "https://via.placeholder.com/400x400?text=Image+4"
+    ],
     children: (
       <>
         <div className="flex flex-col gap-4">

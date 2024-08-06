@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react"
 import LodgeInfoGallery from "./LodgeInfoGallery"
 
 const meta: Meta<typeof LodgeInfoGallery> = {
-  title: "Components/LodgeInfoGallery",
   component: LodgeInfoGallery
 }
 
