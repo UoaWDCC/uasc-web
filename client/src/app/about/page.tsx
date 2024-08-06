@@ -6,7 +6,10 @@ import {
   ABOUT_ITEMS_GROQ_QUERY,
   AboutItem
 } from "@/models/sanity/AboutItem/Utils"
-import { sanityQuery } from "../../../sanity/lib/utils"
+import {
+  autoFormatSanityImageSrc,
+  sanityQuery
+} from "../../../sanity/lib/utils"
 import {
   COMMITTEE_MEMBERS_GROQ_QUERY,
   CommitteeMembers
@@ -45,7 +48,9 @@ const About = async () => {
                   title={item.title || ""}
                   text={item.description || ""}
                   variant={side}
-                  imageSrc={item.imageUrl || ""}
+                  imageSrc={
+                    item.imageUrl ? autoFormatSanityImageSrc(item.imageUrl) : ""
+                  }
                 />
                 {
                   // Don't need divider for last row
@@ -66,7 +71,11 @@ const About = async () => {
                 className="flex-shrink-1 group relative mb-4 flex w-1/3 items-center justify-center overflow-hidden px-2 sm:w-1/4 md:w-1/5 lg:w-1/6"
               >
                 <ExecImage
-                  src={member.imageUrl || ""}
+                  src={
+                    member.imageUrl
+                      ? autoFormatSanityImageSrc(member.imageUrl)
+                      : ""
+                  }
                   alt={member.name || ""}
                   title={member.title || ""}
                   name={member.name || ""}

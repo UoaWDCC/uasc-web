@@ -21,3 +21,11 @@ export const sanityQuery = async <T>(query: string) => {
 
   return ((await res.json()) as { result: any }).result as T
 }
+
+/**
+ * @param url the original sanity image URL **without** any query params attached
+ *
+ * @returns a image `src` with the `format=auto` query appended
+ */
+export const autoFormatSanityImageSrc = (url: string) =>
+  `${url}?format=auto` as const
