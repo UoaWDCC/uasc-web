@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 interface IAboutSection {
   title?: string
   description?: string
@@ -21,7 +23,7 @@ const AboutSection = ({
          z-0  flex min-h-screen
          flex-col  items-center justify-center
          overflow-hidden bg-cover
-         bg-top bg-no-repeat px-1 py-8 lg:min-h-fit lg:py-28"
+         bg-top bg-no-repeat px-4 py-8 lg:min-h-fit lg:py-28"
     >
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="bg-gray-1 pointer-events-none absolute -z-20 h-screen w-full opacity-20" />
@@ -41,6 +43,27 @@ const AboutSection = ({
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           ></iframe>
+        </div>
+        <div className="col-span-2 hidden flex-row justify-center gap-x-4 sm:flex">
+          <Link href="/register" className="w-60 cursor-pointer">
+            <button
+              className="border-dark-blue-100 text-dark-blue-100 hover:bg-dark-blue-100 flex
+              w-full flex-col items-center rounded-md bg-white py-3 font-sans font-bold uppercase
+              enabled:border enabled:hover:text-white disabled:bg-gray-400 md:py-4 md:text-2xl"
+            >
+              Sign up now!
+            </button>
+          </Link>
+          <Link href="/login" className="w-60 cursor-pointer">
+            <button
+              className="bg-dark-blue-100 enabled:hover:text-dark-blue-100 border-dark-blue-100 disabled:bg-dark-blue-60
+              flex w-full flex-col items-center rounded-md py-3 font-sans
+              font-bold uppercase text-white hover:bg-white enabled:border
+              md:py-4 md:text-2xl"
+            >
+              LOG IN
+            </button>
+          </Link>
         </div>
       </div>
     </div>

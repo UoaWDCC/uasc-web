@@ -22,8 +22,8 @@ const PricingBanner = ({
   bg-gray-1 flex flex-col items-center justify-center gap-2 rounded-md border px-8
    py-7 lg:flex-row lg:gap-7"
   >
-    <h2 className="italic">{headline}</h2>
-    <h1 className="italic">{priceInformation}</h1>
+    <h2 className="flex-none italic">{headline}</h2>
+    <h1 className="flex-none italic">{priceInformation}</h1>
     <h5 className="uppercase">{disclaimer}</h5>
   </div>
 )

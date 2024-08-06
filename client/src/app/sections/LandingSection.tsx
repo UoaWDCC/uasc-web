@@ -1,69 +1,49 @@
-import UASCHeader from "@/assets/icons/uascLOGO.svg"
+import ChevronDown from "@/assets/icons/downarrow.svg"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import Facebook from "@/assets/icons/FacebookBlue.svg"
-import Instagram from "@/assets/icons/InstagramBlue.svg"
 import Link from "next/link"
+import UASCLogo from "./utils/UASCLogo"
 
-interface ILandingSection {
-  headline?: string
-}
-
-const DEFAULT_HEADLINE =
-  "The largest sports club on campus, and the cheapest membership on Mt Ruapehu!"
-
-const LandingSection = ({ headline = DEFAULT_HEADLINE }: ILandingSection) => (
+const LandingSection = () => (
   <section>
     <div
-      className="bg-home-ski-image relative flex
-         min-h-screen flex-col
-         items-center justify-center
-         overflow-hidden bg-cover bg-top bg-no-repeat"
+      className="relative isolate
+         flex min-h-[calc(100vh-51px)]
+         flex-col items-center
+         justify-center overflow-hidden"
     >
-      <div className="bg-gray-1 pointer-events-none absolute -z-20 h-screen opacity-90" />
-      <div className="z-10 mx-6 flex flex-col gap-10 text-center lg:gap-16">
-        <div className="flex w-full">
-          <UASCHeader className=" pointer-events-none w-full" />
-        </div>
+      <div className="pointer-events-none absolute -z-10 h-full w-full brightness-[0.6]">
+        <div className="absolute inset-0 backdrop-blur-sm" />
+        <video
+          src="/videos/hero-background.webm"
+          autoPlay
+          muted
+          loop
+          poster="/images/landing-video-placeholder.webp"
+          className="h-full w-full object-cover"
+        />
+      </div>
 
-        <div className="flex items-center gap-6">
-          <p className="text-dark-blue-100 font-small max-w-[520px] tracking-tighter md:text-3xl">
-            {headline}
+      <div className="flex w-full max-w-96 flex-1 flex-col justify-center gap-y-12 px-6 text-center lg:gap-16">
+        <div className="flex flex-col items-center sm:gap-y-2">
+          <UASCLogo className="size-40 text-white drop-shadow-md sm:size-56 lg:size-80" />
+          <p className="text-lg font-semibold text-white drop-shadow-md sm:text-2xl lg:text-3xl">
+            UNIVERSITY OF AUCKLAND SNOWSPORTS CLUB
           </p>
-
-          <span>
-            <Link
-              href="https://www.facebook.com/UoAsnowsports/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Facebook className="w-14" />
-            </Link>
-          </span>
-
-          <span>
-            <Link
-              href="https://www.instagram.com/uasc_nz/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Instagram className="w-14" />
-            </Link>
-          </span>
         </div>
-
-        <div className="flex flex-row gap-6">
+        <div className="flex flex-row gap-x-4 sm:hidden">
           <Link href="/register" className="w-full cursor-pointer">
-            <Button variant="default-big">Sign up now!</Button>
+            <Button variant="inverted-default-big">Sign up now!</Button>
           </Link>
-          <Link href="/login" className="ml-auto w-full cursor-pointer">
-            <Button variant="inverted-default-big">LOG IN</Button>
+          <Link href="/login" className="w-full cursor-pointer">
+            <Button variant="default-big">LOG IN</Button>
           </Link>
         </div>
       </div>
 
-      <h5 className="text-dark-blue-100 bottom-3 my-8 uppercase sm:bottom-9">
-        <Link href="#about">Find out more</Link>
-      </h5>
+      <Link href="#about" className="mb-8 flex flex-col items-center gap-y-2">
+        <h5 className="uppercase text-white drop-shadow-md">Find out more</h5>
+        <ChevronDown className="size-3 fill-white" />
+      </Link>
     </div>
   </section>
 )
