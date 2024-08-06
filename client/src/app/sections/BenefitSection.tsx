@@ -2,7 +2,7 @@ import { Benefit } from "@/components/utils/types"
 import Image from "next/image"
 import HomeSectionHeading from "./utils/HomeSectionHeading"
 import HomeSectionWrapper from "./utils/HomeSectionWrapper"
-import { autoFormatSanityImageSrc } from "../../../sanity/lib/utils"
+import { SanityImageUrl } from "../../../sanity/lib/utils"
 
 interface IBenefitSection {
   benefits: Benefit[]
@@ -18,7 +18,14 @@ const BenefitSection = ({ benefits }: IBenefitSection) => (
           return (
             <div key={text} className="relative isolate h-64 w-full">
               <Image
-                src={image ? autoFormatSanityImageSrc(image) : ""}
+                src={
+                  image
+                    ? new SanityImageUrl(image)
+                        .autoFormat()
+                        .width(1000)
+                        .toString()
+                    : ""
+                }
                 alt={text}
                 fill
                 className="-z-10 size-full object-cover"

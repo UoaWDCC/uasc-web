@@ -6,10 +6,7 @@ import {
   ABOUT_ITEMS_GROQ_QUERY,
   AboutItem
 } from "@/models/sanity/AboutItem/Utils"
-import {
-  autoFormatSanityImageSrc,
-  sanityQuery
-} from "../../../sanity/lib/utils"
+import { SanityImageUrl, sanityQuery } from "../../../sanity/lib/utils"
 import {
   COMMITTEE_MEMBERS_GROQ_QUERY,
   CommitteeMembers
@@ -49,7 +46,12 @@ const About = async () => {
                   text={item.description || ""}
                   variant={side}
                   imageSrc={
-                    item.imageUrl ? autoFormatSanityImageSrc(item.imageUrl) : ""
+                    item.imageUrl
+                      ? new SanityImageUrl(item.imageUrl)
+                          .autoFormat()
+                          .width(1000)
+                          .toString()
+                      : ""
                   }
                 />
                 {
@@ -73,7 +75,10 @@ const About = async () => {
                 <ExecImage
                   src={
                     member.imageUrl
-                      ? autoFormatSanityImageSrc(member.imageUrl)
+                      ? new SanityImageUrl(member.imageUrl)
+                          .autoFormat()
+                          .width(300)
+                          .toString()
                       : ""
                   }
                   alt={member.name || ""}

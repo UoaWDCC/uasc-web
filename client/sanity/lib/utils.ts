@@ -23,12 +23,60 @@ export const sanityQuery = async <T>(query: string) => {
 }
 
 /**
- * @param url the original sanity image URL **without** any query params attached
- *
- * @returns a image `src` with the `format=auto` query appended
+ * Class representing a URL for a Sanity image with various utility methods
+ * to manipulate the URL by appending query parameters.
  */
-export const autoFormatSanityImageSrc = (url: string) => {
-  const newUrl = new URL(url)
-  newUrl.searchParams.append("auto", "format")
-  return newUrl.toString()
+export class SanityImageUrl {
+  private url: URL
+
+  /**
+   * Creates an instance of SanityImageUrl.
+   *
+   * @param url - The original Sanity image URL **without** any query parameters attached.
+   * @throws {TypeError} If the provided URL is invalid.
+   */
+  constructor(url: string) {
+    this.url = new URL(url)
+  }
+
+  /**
+   * Appends the `auto=format` query parameter to the URL.
+   *
+   * This is used to [get the image in webp form](https://www.sanity.io/answers/optimizing-image-file-sizes-in-studio-and-using-url-parameters-for-width-and-format-)
+   *
+   * **Note:** This method **must** only be called once.
+   */
+  public autoFormat() {
+    this.url.searchParams.append("auto", "format")
+    return this
+  }
+
+  /**
+   * Appends the height query parameter to the URL.
+   *
+   * @param h - The height in pixels to set the image to.
+   */
+  public height(h: number) {
+    this.url.searchParams.append("h", h.toString())
+    return this
+  }
+
+  /**
+   * Appends the height query parameter to the URL.
+   *
+   * @param h - The height in pixels to set the image to.
+   */
+  public width(w: number) {
+    this.url.searchParams.append("w", w.toString())
+    return this
+  }
+
+  /**
+   * Returns the string representation of the URL, including any modifications made.
+   *
+   * @returns {string} The modified URL as a string.
+   */
+  public toString(): string {
+    return this.url.toString()
+  }
 }
