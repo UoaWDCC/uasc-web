@@ -1,11 +1,12 @@
-import WrappedMenuTab from "./utils/WrappedMenuTab"
-import { WrappedTab } from "./utils/WrappedTab"
-import UASCLogo from "@/assets/logos/UASC-LOGO-White.svg"
 import HamburgerIcon from "@/assets/icons/hamburger.svg"
-import LoginIndicator from "./utils/LoginIndicator"
-import { useEffect, useState } from "react"
+import UASCLogo from "@/assets/logos/UASC-LOGO-White.svg"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
+import InstagramLink from "./utils/InstagramLink"
+import LoginIndicator from "./utils/LoginIndicator"
+import WrappedMenuTab from "./utils/WrappedMenuTab"
+import { WrappedTab } from "./utils/WrappedTab"
 
 export interface INavbarProps {
   signInHandler: () => void
@@ -84,6 +85,13 @@ const Navbar = ({
             </WrappedMenuTab>
           </span>
           <AboutMenuItemsMobile />
+          <Link
+            href="https://www.instagram.com/uasc_nz/"
+            target="_blank"
+            className="text-dark-blue-100 -mr-4 hidden pb-2.5 md:inline-block"
+          >
+            <InstagramLink className="size-7" />
+          </Link>
           <LoginIndicator
             isAdmin={isAdmin}
             isLoggedIn={isLoggedIn}
@@ -91,10 +99,9 @@ const Navbar = ({
             signInHandler={_signInHandler}
           />
         </div>
-
         <div
-          className={`ml-auto block h-[20px] w-[24px] cursor-pointer md:hidden
-          ${isOpen ? "stroke-light-blue-100" : "stroke-black"} " pt-[5px]`}
+          className={`ml-auto flex h-[20px] w-[24px] cursor-pointer gap-x-4 pt-[5px] md:hidden
+            ${isOpen ? "stroke-light-blue-100" : "stroke-black"}`}
           onClick={() => setIsOpen(!isOpen)}
         >
           <HamburgerIcon />

@@ -132,6 +132,10 @@ export interface paths {
      */
     post: operations["AddCoupon"];
   };
+  "/admin/bookings/history": {
+    /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
+    get: operations["GetLatestHistory"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -497,6 +501,95 @@ export interface components {
        * @description The number of the coupon to be added.
        */
       quantity: number;
+    };
+    /** @description Event used to track a user being **manually** added to a booking (only possible via admin view) */
+    BookingAddedEvent: {
+      /** @description The time which the booking operation was performed. MUST be in UTC format */
+      timestamp: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The start of the operated on date range */
+      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The end of the operated on date range */
+      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The type of event that the admin performed, used for parsing on the front-end
+       *
+       * Each of these are associated with the following:
+       *
+       * - `"added_user_to_booking"`: {@link BookingAddedEvent}
+       * - `"removed_user_from_booking"`: {@link BookingDeletedEvent}
+       * - `"changed_date_availability"`: {@link BookingAvailabilityChangeEvent}
+       * @enum {string}
+       */
+      event_type: "added_user_to_booking";
+      /** @description The id corresponding to the user who had a **manually** added booking */
+      uid: string;
+    };
+    /** @description Event used to track the removal of a user from a date range (only possible via admin view) */
+    BookingDeletedEvent: {
+      /** @description The time which the booking operation was performed. MUST be in UTC format */
+      timestamp: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The start of the operated on date range */
+      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The end of the operated on date range */
+      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The type of event that the admin performed, used for parsing on the front-end
+       *
+       * Each of these are associated with the following:
+       *
+       * - `"added_user_to_booking"`: {@link BookingAddedEvent}
+       * - `"removed_user_from_booking"`: {@link BookingDeletedEvent}
+       * - `"changed_date_availability"`: {@link BookingAvailabilityChangeEvent}
+       * @enum {string}
+       */
+      event_type: "removed_user_from_booking";
+      /** @description The id corresponding to the user who had a **manually** deleted booking */
+      uid: string;
+    };
+    /** @description Event used to track the history of the availability of dates changing */
+    BookingAvailabilityChangeEvent: {
+      /** @description The time which the booking operation was performed. MUST be in UTC format */
+      timestamp: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The start of the operated on date range */
+      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description The end of the operated on date range */
+      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The type of event that the admin performed, used for parsing on the front-end
+       *
+       * Each of these are associated with the following:
+       *
+       * - `"added_user_to_booking"`: {@link BookingAddedEvent}
+       * - `"removed_user_from_booking"`: {@link BookingDeletedEvent}
+       * - `"changed_date_availability"`: {@link BookingAvailabilityChangeEvent}
+       * @enum {string}
+       */
+      event_type: "changed_date_availability";
+      /**
+       * Format: double
+       * @description The **signed** difference between the newly available slots and the previously available slots.
+       *
+       * For example, if the original available slots was 32, and the availability was set to 0,
+       * the `change` in the slots needs to be **0 - 32 = -32**
+       *
+       * And vice versa, if the original available slots was 16, and the availability was set to 32,
+       * the `change` would be **32 - 16 = 16**
+       */
+      change: number;
+    };
+    /** @description Helper type to specify the possible datastruces for the booking history */
+    BookingHistoryEvent: components["schemas"]["BookingAddedEvent"] | components["schemas"]["BookingDeletedEvent"] | components["schemas"]["BookingAvailabilityChangeEvent"];
+    FetchLatestBookingHistoryEventResponse: {
+      /**
+       * @description Needed for firestore operations which do not support offset
+       * based pagination
+       *
+       * **Will be undefined in case of last page**
+       */
+      nextCursor?: string;
+      error?: string;
+      message?: string;
+      historyEvents?: components["schemas"]["BookingHistoryEvent"][];
     };
   };
   responses: {
@@ -933,6 +1026,23 @@ export interface operations {
       /** @description Coupon Added */
       200: {
         content: never;
+      };
+    };
+  };
+  /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
+  GetLatestHistory: {
+    parameters: {
+      query: {
+        limit: number;
+        cursor?: string;
+      };
+    };
+    responses: {
+      /** @description History Events Fetched */
+      200: {
+        content: {
+          "application/json": components["schemas"]["FetchLatestBookingHistoryEventResponse"];
+        };
       };
     };
   };
