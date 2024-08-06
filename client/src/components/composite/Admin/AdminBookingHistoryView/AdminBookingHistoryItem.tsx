@@ -1,3 +1,4 @@
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { DateUtils } from "@/components/utils/DateUtils"
 import { BookingHistoryEvent } from "@/models/History"
 import { useMemo } from "react"
@@ -15,12 +16,19 @@ interface IAdminBookingHistoryItem {
    * The email of the user associated with the event (**NOT** the admin performing it)
    */
   email?: string
+
+  /**
+   * Callback to use after clicking the undo button. No parsing of the event type will be done
+   * for the handler - it should be predetermined.
+   */
+  undoHandler?: () => void
 }
 
 const AdminBookingHistoryItem = ({
   item,
   name,
-  email
+  email,
+  undoHandler
 }: IAdminBookingHistoryItem) => {
   /**
    * Used for parsing the history event and presenting it
@@ -99,6 +107,15 @@ const AdminBookingHistoryItem = ({
     <>
       <div className="border-gray-3 flex w-full flex-col gap-1 rounded-md border bg-white p-4">
         {InnerContent}
+        {undoHandler && (
+          <Button
+            variant="inverted-default-sm"
+            className="mt-2"
+            onClick={undoHandler}
+          >
+            Undo
+          </Button>
+        )}
       </div>
     </>
   )

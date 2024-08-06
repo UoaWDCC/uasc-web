@@ -37,19 +37,22 @@ const availabilityChangeItem: BookingHistoryEvent = {
 export const AdditionItem: Story = {
   args: {
     item: bookingAdditionItem,
-    name: "stephen zhang"
+    name: "stephen zhang",
+    undoHandler: () => {}
   }
 }
 
 export const DeletionItem: Story = {
   args: {
     item: bookingDeletionItem,
-    name: "Jack sun"
+    name: "Jack sun",
+    undoHandler: () => {}
   }
 }
 
 export const AvailabilityChangeItem: Story = {
   args: {
-    item: availabilityChangeItem
+    item: availabilityChangeItem,
+    undoHandler: () => {}
   }
 }
