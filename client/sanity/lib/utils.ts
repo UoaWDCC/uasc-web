@@ -28,4 +28,4 @@ export const sanityQuery = async <T>(query: string) => {
  * @returns a image `src` with the `format=auto` query appended
  */
 export const autoFormatSanityImageSrc = (url: string) =>
-  `${url}?format=auto` as const
+  `${url}?auto=format` as const
