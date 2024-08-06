@@ -12,6 +12,7 @@ import { DateRange, DateUtils } from "@/components/utils/DateUtils"
 import { BookingAvailability } from "@/models/Booking"
 import { Timestamp } from "firebase/firestore"
 import { useClickOutside } from "@/components/utils/Utils"
+import Messages from "@/services/Utils/Messages"
 
 interface IAdminBookingCreationPopUp {
   /**
@@ -383,9 +384,14 @@ const AdminBookingCreationPopUp = ({
                   ) &&
                   currentSelectedUserUid
                 ) {
-                  confirm(`Are you sure you want to add 
-                    ${currentlySelectedUser?.first_name} ${currentlySelectedUser?.last_name} 
-                    to the dates ${selectedDateRange.startDate.toDateString()} - ${selectedDateRange.endDate.toDateString()}`) &&
+                  confirm(
+                    Messages.addUserToBooking(
+                      currentlySelectedUser?.first_name,
+                      currentlySelectedUser?.last_name,
+                      selectedDateRange.startDate.toDateString(),
+                      selectedDateRange.endDate.toDateString()
+                    )
+                  ) &&
                     bookingCreationHandler?.(
                       Timestamp.fromDate(
                         DateUtils.convertLocalDateToUTCDate(currentStartDate)
