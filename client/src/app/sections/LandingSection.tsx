@@ -16,6 +16,7 @@ const LandingSection = () => (
         <video
           src="/videos/hero-background.webm"
           autoPlay
+          playsInline
           muted
           loop
           poster="/images/landing-video-placeholder.webp"
