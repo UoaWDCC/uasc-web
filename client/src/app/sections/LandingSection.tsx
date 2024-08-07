@@ -11,16 +11,19 @@ const LandingSection = () => (
          flex-col items-center
          justify-center overflow-hidden"
     >
-      <div className="pointer-events-none absolute -z-10 h-full w-full brightness-[0.6]">
-        <div className="absolute inset-0 backdrop-blur-sm" />
+      <div className="pointer-events-none absolute -z-10 h-full w-full brightness-[0.5]">
+        <div className="absolute inset-0" />
         <video
-          src="/videos/hero-background.webm"
           autoPlay
           muted
+          playsInline
           loop
           poster="/images/landing-video-placeholder.webp"
           className="h-full w-full object-cover"
-        />
+        >
+          <source src="/videos/hero-background.mp4" type="video/mp4" />
+          <source src="/videos/hero-background.webm" type="video/webm" />
+        </video>
       </div>
 
       <div className="flex w-full max-w-96 flex-1 flex-col justify-center gap-y-12 px-6 text-center lg:gap-16">
