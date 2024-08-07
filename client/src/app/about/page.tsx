@@ -17,6 +17,8 @@ import {
 } from "@/models/sanity/LifeMembers/Utils"
 import ExecImage from "@/components/generic/ExecImage/ExecImage"
 
+// asds
+
 export const metadata: Metadata = {
   title: "About UASC",
   description: "Learn about the lodge and UASC"
