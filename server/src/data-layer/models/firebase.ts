@@ -187,3 +187,90 @@ export interface Event {
    */
   max_occupancy?: number
 }
+
+/**
+ * Base type to be able to log events that admins perform on booking related resources in the admin view
+ */
+interface BookingHistory {
+  /**
+   * The time which the booking operation was performed. MUST be in UTC format
+   */
+  timestamp: Timestamp
+
+  /**
+   * The start of the operated on date range
+   */
+  start_date: Timestamp
+
+  /**
+   * The end of the operated on date range
+   */
+  end_date: Timestamp
+
+  /**
+   * The type of event that the admin performed, used for parsing on the front-end
+   *
+   * Each of these are associated with the following:
+   *
+   * - `"added_user_to_booking"`: {@link BookingAddedEvent}
+   * - `"removed_user_from_booking"`: {@link BookingDeletedEvent}
+   * - `"changed_date_availability"`: {@link BookingAvailabilityChangeEvent}
+   */
+  event_type:
+    | "added_user_to_booking"
+    | "removed_user_from_booking"
+    | "changed_date_availability"
+}
+
+/**
+ * Event used to track a user being **manually** added to a booking (only possible via admin view)
+ *
+ * @extends BookingHistory {@link BookingHistory}
+ */
+export interface BookingAddedEvent extends BookingHistory {
+  /**
+   * The id corresponding to the user who had a **manually** added booking
+   */
+  uid: string
+  event_type: "added_user_to_booking"
+}
+
+/**
+ * Event used to track the removal of a user from a date range (only possible via admin view)
+ *
+ * @extends BookingHistory {@link BookingHistory}
+ */
+export interface BookingDeletedEvent extends BookingHistory {
+  /**
+   * The id corresponding to the user who had a **manually** deleted booking
+   */
+  uid: string
+  event_type: "removed_user_from_booking"
+}
+
+/**
+ * Event used to track the history of the availability of dates changing
+ *
+ * @extends BookingHistory {@link BookingHistory}
+ */
+export interface BookingAvailabilityChangeEvent extends BookingHistory {
+  /**
+   * The **signed** difference between the newly available slots and the previously available slots.
+   *
+   * For example, if the original available slots was 32, and the availability was set to 0,
+   * the `change` in the slots needs to be **0 - 32 = -32**
+   *
+   * And vice versa, if the original available slots was 16, and the availability was set to 32,
+   * the `change` would be **32 - 16 = 16**
+   */
+  change: number
+  event_type: "changed_date_availability"
+}
+
+/**
+ * Helper type to specify the possible datastruces for the booking history
+ */
+export type BookingHistoryEvent =
+  | BookingAddedEvent
+  | BookingDeletedEvent
+  | BookingAvailabilityChangeEvent

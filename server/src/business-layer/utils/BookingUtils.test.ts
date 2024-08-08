@@ -159,4 +159,37 @@ describe("BookingUtils", () => {
       expect(result).toBe(false)
     })
   })
+  describe("BookingUtils.addOneDay", () => {
+    it("should add one day to a regular date", () => {
+      expect(BookingUtils.addOneDay("01/08/2024")).toBe("02/08/2024")
+    })
+
+    it("should handle end of month", () => {
+      expect(BookingUtils.addOneDay("31/07/2024")).toBe("01/08/2024")
+    })
+
+    it("should handle end of year", () => {
+      expect(BookingUtils.addOneDay("31/12/2024")).toBe("01/01/2025")
+    })
+
+    it("should handle leap year", () => {
+      expect(BookingUtils.addOneDay("28/02/2024")).toBe("29/02/2024")
+      expect(BookingUtils.addOneDay("29/02/2024")).toBe("01/03/2024")
+    })
+
+    it("should handle non-leap year", () => {
+      expect(BookingUtils.addOneDay("28/02/2023")).toBe("01/03/2023")
+    })
+
+    it("should handle single digit day and month", () => {
+      expect(BookingUtils.addOneDay("01/01/2024")).toBe("02/01/2024")
+      expect(BookingUtils.addOneDay("09/09/2024")).toBe("10/09/2024")
+    })
+
+    it("should handle invalid date format", () => {
+      expect(() => BookingUtils.addOneDay("2024/01/01")).toThrow()
+      expect(() => BookingUtils.addOneDay("01-01-2024")).toThrow()
+      expect(() => BookingUtils.addOneDay("invalid-date")).toThrow()
+    })
+  })
 })
