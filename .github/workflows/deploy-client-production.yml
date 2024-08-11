@@ -2,7 +2,7 @@ name: Deploy Production Build of Client for UASC
 
 on: 
   workflow_dispatch:
-  # schedules this to run 30 minutes
+  # schedules this to run every 30 minutes
   schedule:
     - cron: "30 * * * *"
 
@@ -36,10 +36,11 @@ jobs:
 
       - run: yarn workspaces focus client && yarn workspace client build
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Publish to cloudflare
+        uses: cloudflare/pages-action@v1
         with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD }}"
-          channelId: live
-          projectId: uasc-prod
-          entryPoint: client
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: uasc 
+          directory: client/out 
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
