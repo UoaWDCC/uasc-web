@@ -19,9 +19,8 @@ env:
   FRONTEND_BASE_URL: ${{secrets.PROD_FRONTEND_URL}}
 
 jobs:
-  Deploy-Client:
+  Cloudflare-Deploy:
     runs-on: ubuntu-latest
-    environment: Client Production
 
     steps:
       - uses: actions/checkout@v4
