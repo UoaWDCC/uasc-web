@@ -1,7 +1,5 @@
 name: Deploy Production Build of Client for UASC
-
-on: 
-  pull_request
+"on": pull_request
 
 env:
   NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
