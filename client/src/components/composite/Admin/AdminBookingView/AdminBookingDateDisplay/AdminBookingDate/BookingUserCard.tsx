@@ -10,20 +10,25 @@ interface IBookingUserCard {
 const BookingUserCard = ({ index, user, handleDelete }: IBookingUserCard) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
-    <div key={user.uid} className="border-gray-3 border bg-white px-4 py-2">
+    <div
+      key={user.uid}
+      className="border-gray-3 w-full border bg-white px-4 py-2"
+    >
       <div
-        className="flex cursor-pointer items-center gap-5"
+        className="flex w-full cursor-pointer items-center gap-5"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="flex flex-col">
-          <p className="underline">
-            <strong>{`#${index}`}</strong> {user.first_name} {user.last_name}
-          </p>
-          <h5>{user.membership}</h5>
-        </span>
-        <div className="flex flex-col">
-          <h5 className="font-bold uppercase">Dietary Reqs</h5>
-          <p>{user.dietary_requirements}</p>
+        <div className="flex flex-col gap-2">
+          <span className="flex flex-col">
+            <p className="underline">
+              <strong>{`#${index}`}</strong> {user.first_name} {user.last_name}
+            </p>
+            <h5>{user.membership}</h5>
+          </span>
+          <div className="border-dark-blue-100 flex w-full flex-col rounded-sm border px-2">
+            <h5 className="font-bold uppercase">Dietary Reqs</h5>
+            <p>{user.dietary_requirements}</p>
+          </div>
         </div>
         <h5
           className="text-red ml-auto cursor-pointer font-bold"

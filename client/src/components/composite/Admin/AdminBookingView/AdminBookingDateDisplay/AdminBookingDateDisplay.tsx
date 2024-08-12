@@ -19,7 +19,7 @@ const AdminBookingDateDisplay = ({ dates }: IAdminBookingDateDisplay) => {
     <div className="flex gap-2">
       {dates.map((date) => {
         return (
-          <span key={date.dateString} className="min-w-[300px]">
+          <span key={date.dateString} className="min-w-[340px]">
             <AdminBookingDate
               dateString={date.dateString}
               dayName={date.dayName}

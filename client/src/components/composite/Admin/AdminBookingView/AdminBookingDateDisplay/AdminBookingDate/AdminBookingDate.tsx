@@ -39,7 +39,7 @@ const AdminBookingDate = ({
   return (
     <div className="border-gray-3 flex h-fit w-full flex-col gap-2 border bg-white p-2">
       {dayName && <h5 className="font-bold uppercase underline">{dayName}</h5>}
-      <h2 className="text-dark-blue-100 sticky italic">{dateString}</h2>
+      <h2 className="text-dark-blue-100 italic">{dateString}</h2>
       <h5 className="font-bold uppercase">{users.length} Bookings</h5>
       <h5 className="uppercase opacity-75">
         Tap on user to toggle information
