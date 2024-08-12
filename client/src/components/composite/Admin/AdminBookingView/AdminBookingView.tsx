@@ -1,15 +1,13 @@
-import Table from "@/components/generic/ReusableTable/Table"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import CalenderIcon from "@/assets/icons/calender.svg"
 import Calendar from "@/components/generic/Calendar/Calendar"
-import {
-  TABLE_ROW_IDENTIFIER_KEY,
-  TableRowOperation
-} from "@/components/generic/ReusableTable/TableUtils"
+import { TableRowOperation } from "@/components/generic/ReusableTable/TableUtils"
 import { useState, useRef } from "react"
 import { useClickOutside } from "@/components/utils/Utils"
 import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
 import WrappedAdminBookingCreationPopUp from "./WrappedAdminBookingCreationPopUp"
+import AdminBookingDateDisplay from "./AdminBookingDateDisplay/AdminBookingDateDisplay"
+import { IAdminBookingDate } from "./AdminBookingDateDisplay/AdminBookingDate/AdminBookingDate"
 
 /**
  * The format of the columns in the admin booking view.
@@ -34,7 +32,7 @@ interface IAdminBookingView {
    *
    * @example // {Name: "Jon", Phone: "111"} will display `Name` before `Phone`
    */
-  data?: BookingMemberColumnFormat[]
+  data?: IAdminBookingDate[]
 
   /**
    *
@@ -75,22 +73,12 @@ interface IAdminBookingView {
  * Should be updated with an "empty" default value so the table displays
  * the headers even if the list of data is empty
  */
-const defaultData = {
-  [TABLE_ROW_IDENTIFIER_KEY]: "",
-  Date: "",
-  Name: "",
-  Number: "",
-  Email: "",
-  "Dietary Requirement": "",
-  Membership: ""
-}
 
 /**
  * @deprecated not for direct use on any pages, use `WrappedAdminBookingView` instead
  */
 export const AdminBookingView = ({
-  data,
-  rowOperation,
+  data = [],
   dateRange,
   handleDateRangeChange,
   isUpdating
@@ -149,7 +137,7 @@ export const AdminBookingView = ({
             ) : null}
             <Button variant="inverted-default-st" onClick={onClickHandler}>
               <span className="flex items-center justify-center gap-2 ">
-                pick date
+                pick date{" "}
                 <span className="h-[22px] w-[22px] ">
                   <CalenderIcon className="fill-dark-blue-100 group-hover:fill-white" />
                 </span>
@@ -157,14 +145,9 @@ export const AdminBookingView = ({
             </Button>
           </span>
         </span>
-        <Table<BookingMemberColumnFormat, "single-operation">
-          data={data || [defaultData]}
-          operationType="single-operation"
-          rowOperations={rowOperation}
-          // Make sure that this is smaller than the amount we fetch in the `AdminService` for better UX
-          showPerPage={32}
-          groupSameRows
-        />
+        <span className="mt-2 overflow-x-auto">
+          <AdminBookingDateDisplay dates={data} />
+        </span>
       </div>
       <ModalContainer isOpen={openAddBookingPopup}>
         <WrappedAdminBookingCreationPopUp

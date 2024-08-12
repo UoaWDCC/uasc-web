@@ -1,20 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import AdminBookingView from "./AdminBookingView"
+import AdminBookingDateDisplay from "./AdminBookingDateDisplay"
+import { Timestamp } from "firebase/firestore"
 import {
   BookingInfo,
   IAdminBookingDate
-} from "./AdminBookingDateDisplay/AdminBookingDate/AdminBookingDate"
-import { Timestamp } from "firebase/firestore"
+} from "./AdminBookingDate/AdminBookingDate"
 
-const meta: Meta<typeof AdminBookingView> = {
-  component: AdminBookingView
+const meta: Meta<typeof AdminBookingDateDisplay> = {
+  component: AdminBookingDateDisplay
 }
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 const mockUser: BookingInfo = {
-  bookingId: "23132al",
+  bookingId: "2323",
   uid: "1",
   first_name: "Straight",
   last_name: "Zhao",
@@ -41,12 +41,8 @@ for (let i = 1; i < 30; ++i) {
   })
 }
 
-export const DefaultAdminBookingView: Story = {
+export const DefaultAdminBookingDateDisplay: Story = {
   args: {
-    data: mockDatesArray,
-    dateRange: {
-      startDate: new Date("6969-10-10"),
-      endDate: new Date("9696-10-01")
-    }
+    dates: mockDatesArray
   }
 }

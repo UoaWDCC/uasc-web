@@ -1,0 +1,53 @@
+import { useState } from "react"
+import { BookingInfo } from "./AdminBookingDate"
+
+interface IBookingUserCard {
+  index: number
+  user: Readonly<BookingInfo>
+  handleDelete?: (id: string) => void
+}
+
+const BookingUserCard = ({ index, user, handleDelete }: IBookingUserCard) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  return (
+    <div key={user.uid} className="border-gray-3 border bg-white px-4 py-2">
+      <div
+        className="flex cursor-pointer items-center gap-5"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="flex flex-col">
+          <p className="underline">
+            <strong>{`#${index}`}</strong> {user.first_name} {user.last_name}
+          </p>
+          <h5>{user.membership}</h5>
+        </span>
+        <div className="flex flex-col">
+          <h5 className="font-bold uppercase">Dietary Reqs</h5>
+          <p>{user.dietary_requirements}</p>
+        </div>
+        <h5
+          className="text-red ml-auto cursor-pointer font-bold"
+          onClick={() => handleDelete?.(user.bookingId)}
+        >
+          X
+        </h5>
+      </div>
+      {isOpen && (
+        <div className="flex flex-col">
+          <div className="mb-2 mt-4 w-full border" />
+          <h5>
+            <strong>Email:</strong> {user.email}
+          </h5>
+          <h5>
+            <strong>Phone Number:</strong> {user.phone_number}
+          </h5>
+          <h5>
+            <strong>Emergency Contact:</strong> {user.emergency_contact}
+          </h5>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default BookingUserCard
