@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import AdminBookingDate from "./AdminBookingDate"
-import { CombinedUserData } from "@/models/User"
+import AdminBookingDate, { BookingInfo } from "./AdminBookingDate"
 import { Timestamp } from "firebase/firestore"
 
 const meta: Meta<typeof AdminBookingDate> = {
@@ -10,7 +9,8 @@ const meta: Meta<typeof AdminBookingDate> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const mockData: CombinedUserData = {
+const mockData: BookingInfo = {
+  bookingId: "djs",
   uid: "1",
   first_name: "Straight",
   last_name: "Zhao",
@@ -21,7 +21,7 @@ const mockData: CombinedUserData = {
   membership: "guest"
 }
 
-const mockDataArray: CombinedUserData[] = []
+const mockDataArray: BookingInfo[] = []
 
 for (let i = 0; i < 100; ++i) {
   mockDataArray.push(mockData)
