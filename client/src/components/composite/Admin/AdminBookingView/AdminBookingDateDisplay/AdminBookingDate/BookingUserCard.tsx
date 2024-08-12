@@ -9,6 +9,7 @@ interface IBookingUserCard {
 
 const BookingUserCard = ({ index, user, handleDelete }: IBookingUserCard) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const hasDietaryRequirements = user.dietary_requirements.trim().length > 0
   return (
     <div
       key={user.uid}
@@ -25,10 +26,12 @@ const BookingUserCard = ({ index, user, handleDelete }: IBookingUserCard) => {
             </p>
             <h5>{user.membership}</h5>
           </span>
-          <div className="border-dark-blue-100 flex w-full flex-col rounded-sm border px-2">
-            <h5 className="font-bold uppercase">Dietary Reqs</h5>
-            <p>{user.dietary_requirements}</p>
-          </div>
+          {hasDietaryRequirements && (
+            <div className="border-dark-blue-100 flex w-full flex-col rounded-sm border px-2">
+              <h5 className="font-bold uppercase">Dietary Reqs</h5>
+              <p>{user.dietary_requirements}</p>
+            </div>
+          )}
         </div>
         <h5
           className="text-red ml-auto cursor-pointer font-bold"
