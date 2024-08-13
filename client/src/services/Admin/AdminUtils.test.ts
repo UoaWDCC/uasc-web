@@ -1,4 +1,4 @@
-import { replaceUserInPage } from "./AdminUtils"
+import { compareStrings, replaceUserInPage } from "./AdminUtils"
 
 global.structuredClone = (val) => JSON.parse(JSON.stringify(val))
 
@@ -32,5 +32,19 @@ describe("replaceUserInPage", () => {
 
     // Should not mutate original array
     expect(originalUserDataPages).not.toEqual(updatedUserDataPages)
+  })
+})
+
+describe("compareStrings", () => {
+  it("should return a negative value if a is alphabetically less than b", () => {
+    expect(compareStrings("abc", "abd")).toBeLessThan(0)
+  })
+
+  it("should return a positive value if a is alphabetically more than b", () => {
+    expect(compareStrings("abddd", "aaddd")).toBeGreaterThan(0)
+  })
+
+  it("should return 0 for equal strings", () => {
+    expect(compareStrings("abbb", "abbb")).toEqual(0)
   })
 })

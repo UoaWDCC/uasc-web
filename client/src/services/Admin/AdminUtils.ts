@@ -28,3 +28,28 @@ export function replaceUserInPage<T extends keyof CombinedUserData>(
   })
   return updatedUserDataPages
 }
+
+/**
+ * Determines the order for strings when using the `sort` methods on an array
+ *
+ * @param a the first string to compare against
+ * @param b the second string to compare against
+ *
+ * @returns a **negative** number if `a` comes _before_ `b` alphabetically
+ * @returns a **positive** number if `a` comes _after_ `b` alphabetically
+ * @returns `0` if `a` and `b` are equal strings
+ */
+export function compareStrings(a: string, b: string) {
+  for (let i = 0; i < Math.min(a.length, b.length); ++i) {
+    const charCodeA = a.charCodeAt(i)
+    const charCodeB = b.charCodeAt(i)
+
+    const difference = charCodeA - charCodeB
+
+    if (difference !== 0) {
+      return difference
+    }
+  }
+
+  return 0
+}

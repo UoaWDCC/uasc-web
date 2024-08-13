@@ -4,16 +4,19 @@ import AdminBookingDate, {
 
 export interface IAdminBookingDateDisplay {
   /**
-   * The list of dates to be displayed to user
+   * The list of dates to be displayed to user, of type {@link IAdminBookingDate}
    */
   dates: IAdminBookingDate[]
 
   /**
-   * Callback to remove the booking with specified `id` from a booking date
+   * Callback to remove the booking with specified **booking** `id` from a booking date
    */
-  handleDelete?: (id: string) => void
+  handleDelete?: (bookingId: string) => void
 }
 
+/**
+ * Component for handling the rendering of multiple {@link AdminBookingDate} components
+ */
 const AdminBookingDateDisplay = ({ dates }: IAdminBookingDateDisplay) => {
   return (
     <div className="flex gap-2">
