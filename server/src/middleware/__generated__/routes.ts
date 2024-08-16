@@ -490,786 +490,793 @@ const templateService = new ExpressTemplateService(models, {"noImplicitAdditiona
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
+
+
+
 export function RegisterRoutes(app: Router) {
+
     // ###########################################################################################################
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-    app.get('/users/self',
-      authenticateMiddleware([{"jwt":[]}]),
-      ...(fetchMiddlewares<RequestHandler>(UsersController)),
-      ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.getSelf)),
 
-      function UsersController_getSelf(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              request: {"in":"request","name":"request","required":true,"dataType":"object"},
-          };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    
+        app.get('/users/self',
+            authenticateMiddleware([{"jwt":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(UsersController)),
+            ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.getSelf)),
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            async function UsersController_getSelf(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
 
-              const controller = new UsersController();
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-              templateService.apiHandler({
-                  methodName: 'getSelf',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new UsersController();
+
+              await templateService.apiHandler({
+                methodName: 'getSelf',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.patch('/users/edit-self',
-      authenticateMiddleware([{"jwt":[]}]),
-      ...(fetchMiddlewares<RequestHandler>(UsersController)),
-      ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.editSelf)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.patch('/users/edit-self',
+            authenticateMiddleware([{"jwt":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(UsersController)),
+            ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.editSelf)),
 
-      function UsersController_editSelf(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              request: {"in":"request","name":"request","required":true,"dataType":"object"},
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"EditSelfRequestBody"},
-          };
+            async function UsersController_editSelf(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"EditSelfRequestBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new UsersController();
+                const controller = new UsersController();
 
-              templateService.apiHandler({
-                  methodName: 'editSelf',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'editSelf',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/users/delete-user',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(UsersController)),
-      ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.deleteUser)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/users/delete-user',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(UsersController)),
+            ...(fetchMiddlewares<RequestHandler>(UsersController.prototype.deleteUser)),
 
-      function UsersController_deleteUser(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DeleteUserRequestBody"},
-          };
+            async function UsersController_deleteUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DeleteUserRequestBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new UsersController();
+                const controller = new UsersController();
 
-              templateService.apiHandler({
-                  methodName: 'deleteUser',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'deleteUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/webhook',
-      ...(fetchMiddlewares<RequestHandler>(StripeWebhook)),
-      ...(fetchMiddlewares<RequestHandler>(StripeWebhook.prototype.receiveWebhook)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/webhook',
+            ...(fetchMiddlewares<RequestHandler>(StripeWebhook)),
+            ...(fetchMiddlewares<RequestHandler>(StripeWebhook.prototype.receiveWebhook)),
 
-      function StripeWebhook_receiveWebhook(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              request: {"in":"request","name":"request","required":true,"dataType":"object"},
-          };
+            async function StripeWebhook_receiveWebhook(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new StripeWebhook();
+                const controller = new StripeWebhook();
 
-              templateService.apiHandler({
-                  methodName: 'receiveWebhook',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'receiveWebhook',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/signup',
-      ...(fetchMiddlewares<RequestHandler>(UserSignup)),
-      ...(fetchMiddlewares<RequestHandler>(UserSignup.prototype.signup)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/signup',
+            ...(fetchMiddlewares<RequestHandler>(UserSignup)),
+            ...(fetchMiddlewares<RequestHandler>(UserSignup.prototype.signup)),
 
-      function UserSignup_signup(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserSignupBody"},
-          };
+            async function UserSignup_signup(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserSignupBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new UserSignup();
+                const controller = new UserSignup();
 
-              templateService.apiHandler({
-                  methodName: 'signup',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'signup',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/payment/membership_prices',
-      ...(fetchMiddlewares<RequestHandler>(PaymentController)),
-      ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getMembershipPrices)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/payment/membership_prices',
+            ...(fetchMiddlewares<RequestHandler>(PaymentController)),
+            ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getMembershipPrices)),
 
-      function PaymentController_getMembershipPrices(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-          };
+            async function PaymentController_getMembershipPrices(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new PaymentController();
+                const controller = new PaymentController();
 
-              templateService.apiHandler({
-                  methodName: 'getMembershipPrices',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: undefined,
+              await templateService.apiHandler({
+                methodName: 'getMembershipPrices',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/payment/checkout_status',
-      authenticateMiddleware([{"jwt":[]}]),
-      ...(fetchMiddlewares<RequestHandler>(PaymentController)),
-      ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getCheckoutSessionDetails)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/payment/checkout_status',
+            authenticateMiddleware([{"jwt":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(PaymentController)),
+            ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getCheckoutSessionDetails)),
 
-      function PaymentController_getCheckoutSessionDetails(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              sessionId: {"in":"query","name":"sessionId","required":true,"dataType":"string"},
-          };
+            async function PaymentController_getCheckoutSessionDetails(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    sessionId: {"in":"query","name":"sessionId","required":true,"dataType":"string"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new PaymentController();
+                const controller = new PaymentController();
 
-              templateService.apiHandler({
-                  methodName: 'getCheckoutSessionDetails',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'getCheckoutSessionDetails',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/payment/membership',
-      authenticateMiddleware([{"jwt":[]}]),
-      ...(fetchMiddlewares<RequestHandler>(PaymentController)),
-      ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getMembershipPayment)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/payment/membership',
+            authenticateMiddleware([{"jwt":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(PaymentController)),
+            ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getMembershipPayment)),
 
-      function PaymentController_getMembershipPayment(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              request: {"in":"request","name":"request","required":true,"dataType":"object"},
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserPaymentRequestModel"},
-          };
+            async function PaymentController_getMembershipPayment(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserPaymentRequestModel"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new PaymentController();
+                const controller = new PaymentController();
 
-              templateService.apiHandler({
-                  methodName: 'getMembershipPayment',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'getMembershipPayment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/payment/booking',
-      authenticateMiddleware([{"jwt":["member"]}]),
-      ...(fetchMiddlewares<RequestHandler>(PaymentController)),
-      ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getBookingPayment)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/payment/booking',
+            authenticateMiddleware([{"jwt":["member"]}]),
+            ...(fetchMiddlewares<RequestHandler>(PaymentController)),
+            ...(fetchMiddlewares<RequestHandler>(PaymentController.prototype.getBookingPayment)),
 
-      function PaymentController_getBookingPayment(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              request: {"in":"request","name":"request","required":true,"dataType":"object"},
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserBookingRequestingModel"},
-          };
+            async function PaymentController_getBookingPayment(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UserBookingRequestingModel"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new PaymentController();
+                const controller = new PaymentController();
 
-              templateService.apiHandler({
-                  methodName: 'getBookingPayment',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'getBookingPayment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/bookings',
-      authenticateMiddleware([{"jwt":["member"]}]),
-      ...(fetchMiddlewares<RequestHandler>(BookingController)),
-      ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAllBookings)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/bookings',
+            authenticateMiddleware([{"jwt":["member"]}]),
+            ...(fetchMiddlewares<RequestHandler>(BookingController)),
+            ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAllBookings)),
 
-      function BookingController_getAllBookings(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              request: {"in":"request","name":"request","required":true,"dataType":"object"},
-          };
+            async function BookingController_getAllBookings(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new BookingController();
+                const controller = new BookingController();
 
-              templateService.apiHandler({
-                  methodName: 'getAllBookings',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'getAllBookings',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/bookings/available-dates',
-      authenticateMiddleware([{"jwt":["member"]}]),
-      ...(fetchMiddlewares<RequestHandler>(BookingController)),
-      ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAvailableDates)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/bookings/available-dates',
+            authenticateMiddleware([{"jwt":["member"]}]),
+            ...(fetchMiddlewares<RequestHandler>(BookingController)),
+            ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.getAvailableDates)),
 
-      function BookingController_getAvailableDates(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"AvailableDatesRequestModel"},
-          };
+            async function BookingController_getAvailableDates(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"AvailableDatesRequestModel"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new BookingController();
+                const controller = new BookingController();
 
-              templateService.apiHandler({
-                  methodName: 'getAvailableDates',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'getAvailableDates',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/bookings/fetch-users',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(BookingController)),
-      ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.fetchUsersByBookingDateRange)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/bookings/fetch-users',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(BookingController)),
+            ...(fetchMiddlewares<RequestHandler>(BookingController.prototype.fetchUsersByBookingDateRange)),
 
-      function BookingController_fetchUsersByBookingDateRange(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"BookingsByDateRangeRequestModel"},
-          };
+            async function BookingController_fetchUsersByBookingDateRange(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"BookingsByDateRangeRequestModel"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new BookingController();
+                const controller = new BookingController();
 
-              templateService.apiHandler({
-                  methodName: 'fetchUsersByBookingDateRange',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'fetchUsersByBookingDateRange',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/admin/bookings/make-dates-available',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateAvailable)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/bookings/make-dates-available',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateAvailable)),
 
-      function AdminController_makeDateAvailable(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"MakeDatesAvailableRequestBody"},
-          };
+            async function AdminController_makeDateAvailable(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"MakeDatesAvailableRequestBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'makeDateAvailable',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 201,
+              await templateService.apiHandler({
+                methodName: 'makeDateAvailable',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 201,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/admin/bookings/make-dates-unavailable',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateUnavailable)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/bookings/make-dates-unavailable',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.makeDateUnavailable)),
 
-      function AdminController_makeDateUnavailable(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Omit_MakeDatesAvailableRequestBody.slots_"},
-          };
+            async function AdminController_makeDateUnavailable(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Omit_MakeDatesAvailableRequestBody.slots_"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'makeDateUnavailable',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 201,
+              await templateService.apiHandler({
+                methodName: 'makeDateUnavailable',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 201,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/admin/bookings/create',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.createBookings)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/bookings/create',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.createBookings)),
 
-      function AdminController_createBookings(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateBookingsRequestModel"},
-          };
+            async function AdminController_createBookings(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateBookingsRequestModel"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'createBookings',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'createBookings',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/admin/bookings/delete',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.removeBooking)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/bookings/delete',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.removeBooking)),
 
-      function AdminController_removeBooking(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DeleteBookingRequest"},
-          };
+            async function AdminController_removeBooking(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DeleteBookingRequest"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'removeBooking',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'removeBooking',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/admin/users',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getAllUsers)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/admin/users',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getAllUsers)),
 
-      function AdminController_getAllUsers(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              cursor: {"in":"query","name":"cursor","dataType":"string"},
-              toFetch: {"in":"query","name":"toFetch","dataType":"double"},
-          };
+            async function AdminController_getAllUsers(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    cursor: {"in":"query","name":"cursor","dataType":"string"},
+                    toFetch: {"in":"query","name":"toFetch","dataType":"double"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'getAllUsers',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'getAllUsers',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/admin/users/:uid',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getUser)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/admin/users/:uid',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getUser)),
 
-      function AdminController_getUser(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              uid: {"in":"path","name":"uid","required":true,"dataType":"string"},
-          };
+            async function AdminController_getUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    uid: {"in":"path","name":"uid","required":true,"dataType":"string"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'getUser',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'getUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/admin/users/create',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.createUser)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/admin/users/create',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.createUser)),
 
-      function AdminController_createUser(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateUserRequestBody"},
-          };
+            async function AdminController_createUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateUserRequestBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'createUser',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'createUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.patch('/admin/users/bulk-edit',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.editUsers)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.patch('/admin/users/bulk-edit',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.editUsers)),
 
-      function AdminController_editUsers(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"EditUsersRequestBody"},
-          };
+            async function AdminController_editUsers(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"EditUsersRequestBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'editUsers',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'editUsers',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/admin/users/promote',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.promoteUser)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/admin/users/promote',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.promoteUser)),
 
-      function AdminController_promoteUser(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"PromoteUserRequestBody"},
-          };
+            async function AdminController_promoteUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"PromoteUserRequestBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'promoteUser',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'promoteUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/admin/users/demote',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.demoteUser)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/admin/users/demote',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.demoteUser)),
 
-      function AdminController_demoteUser(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DemoteUserRequestBody"},
-          };
+            async function AdminController_demoteUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"DemoteUserRequestBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'demoteUser',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'demoteUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.patch('/admin/users/demote-all',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.demoteAllUsers)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.patch('/admin/users/demote-all',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.demoteAllUsers)),
 
-      function AdminController_demoteAllUsers(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-          };
+            async function AdminController_demoteAllUsers(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'demoteAllUsers',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'demoteAllUsers',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/admin/users/add-coupon',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.addCoupon)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/users/add-coupon',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.addCoupon)),
 
-      function AdminController_addCoupon(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              requestBody: {"in":"body","name":"requestBody","required":true,"ref":"AddCouponRequestBody"},
-          };
+            async function AdminController_addCoupon(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"AddCouponRequestBody"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'addCoupon',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'addCoupon',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/admin/bookings/history',
-      authenticateMiddleware([{"jwt":["admin"]}]),
-      ...(fetchMiddlewares<RequestHandler>(AdminController)),
-      ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getLatestHistory)),
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/admin/bookings/history',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getLatestHistory)),
 
-      function AdminController_getLatestHistory(request: ExRequest, response: ExResponse, next: any) {
-          const args: Record<string, TsoaRoute.ParameterSchema> = {
-              limit: {"in":"query","name":"limit","required":true,"dataType":"double"},
-              cursor: {"in":"query","name":"cursor","dataType":"string"},
-          };
+            async function AdminController_getLatestHistory(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    limit: {"in":"query","name":"limit","required":true,"dataType":"double"},
+                    cursor: {"in":"query","name":"cursor","dataType":"string"},
+            };
 
-          // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-          let validatedArgs: any[] = [];
-          try {
-              validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-              const controller = new AdminController();
+                const controller = new AdminController();
 
-              templateService.apiHandler({
-                  methodName: 'getLatestHistory',
-                  controller,
-                  response,
-                  next,
-                  validatedArgs,
-                  successStatus: 200,
+              await templateService.apiHandler({
+                methodName: 'getLatestHistory',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
               });
-          } catch (err) {
-              return next(err);
-          }
-      });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
@@ -1297,20 +1304,20 @@ export function RegisterRoutes(app: Router) {
 
                     for (const name in secMethod) {
                         secMethodAndPromises.push(
-                          expressAuthenticationRecasted(request, name, secMethod[name], response)
-                            .catch(pushAndRethrow)
+                            expressAuthenticationRecasted(request, name, secMethod[name], response)
+                                .catch(pushAndRethrow)
                         );
                     }
 
                     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
                     secMethodOrPromises.push(Promise.all(secMethodAndPromises)
-                      .then(users => { return users[0]; }));
+                        .then(users => { return users[0]; }));
                 } else {
                     for (const name in secMethod) {
                         secMethodOrPromises.push(
-                          expressAuthenticationRecasted(request, name, secMethod[name], response)
-                            .catch(pushAndRethrow)
+                            expressAuthenticationRecasted(request, name, secMethod[name], response)
+                                .catch(pushAndRethrow)
                         );
                     }
                 }
