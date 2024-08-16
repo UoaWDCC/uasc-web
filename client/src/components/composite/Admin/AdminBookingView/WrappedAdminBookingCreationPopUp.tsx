@@ -27,6 +27,7 @@ const WrappedAdminBookingCreationPopUp = ({
         isLoading={stillLoadingUsers}
         bookingCreationHandler={async (startDate, endDate, uid) => {
           await handleAddUserToBooking({ startDate, endDate, userId: uid })
+          alert("Booking added successfully!")
         }}
       />
     </span>
