@@ -15,18 +15,18 @@ const BookingPage = async () => {
    * We assume there will be only one based on the way {@link LodgeInformation}
    * is set up in sanity
    */
-  const lodgeInfoSingleton = lodgeInfo[0]
+  const lodgeInfoSingleton: LodgeInformation | undefined = lodgeInfo[0]
 
   const RenderedContent = () => {
     return (
-      lodgeInfoSingleton.information && (
+      lodgeInfoSingleton?.information && (
         <PortableText value={lodgeInfoSingleton.information} />
       )
     )
   }
 
   const processedImages =
-    lodgeInfoSingleton.imageUrls?.map((item) =>
+    lodgeInfoSingleton?.imageUrls?.map((item) =>
       item.url
         ? new SanityImageUrl(item.url).autoFormat().width(700).toString()
         : ""
