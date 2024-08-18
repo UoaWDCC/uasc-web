@@ -10909,6 +10909,7 @@ __metadata:
   resolution: "client@workspace:client"
   dependencies:
     "@chromatic-com/storybook": "npm:1.6.1"
+    "@portabletext/react": "npm:^3.1.0"
     "@sanity/image-url": "npm:1"
     "@sanity/vision": "npm:3"
     "@storybook/addon-essentials": "npm:^8.1.11"
