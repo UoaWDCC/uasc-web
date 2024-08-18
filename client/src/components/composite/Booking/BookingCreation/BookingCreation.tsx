@@ -40,7 +40,7 @@ export const handleDateRangeInputChange = (
   }
 }
 
-interface ICreateBookingSection {
+export interface ICreateBookingSection {
   /**
    * The "unfiltered" booking slots for processing
    */

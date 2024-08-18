@@ -18,6 +18,9 @@ type props = IBookingInfoProps
 
 const Divider = () => <span className="bg-dark-blue-100 my-3 h-[1px] w-full" />
 
+/**
+ * Do **not** confuse with `LodgfeInfoComponent` which is used for display on the `/bookings` route
+ */
 const BookingInfoComponent = ({
   pricePerNight,
   priceSingleFridayOrSaturday

@@ -1,11 +1,14 @@
-"use client"
+import BookingInformationAndCreation from "@/components/composite/Booking/BookingInformationAndCreation/BookingInformationAndCreation"
+import { sanityQuery } from "../../../sanity/lib/utils"
+import { LODGE_INFORMATION_GROQ_QUERY } from "@/models/sanity/LodgeInfo/Utils"
 
-import { ProtectedCreateBookingSection } from "@/components/composite/Booking/BookingCreation/ProtectedCreateBookingSection"
+const BookingPage = async () => {
+  const lodgeInfo = await sanityQuery(LODGE_INFORMATION_GROQ_QUERY)
+  console.log(lodgeInfo)
 
-const BookingPage = () => {
   return (
     <>
-      <ProtectedCreateBookingSection />
+      <BookingInformationAndCreation enableNetworkRequests />
     </>
   )
 }
