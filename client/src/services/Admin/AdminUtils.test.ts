@@ -47,4 +47,38 @@ describe("compareStrings", () => {
   it("should return 0 for equal strings", () => {
     expect(compareStrings("abbb", "abbb")).toEqual(0)
   })
+
+  it("should handle empty strings correctly", () => {
+    expect(compareStrings("", "a")).toBeLessThan(0)
+    expect(compareStrings("a", "")).toBeGreaterThan(0)
+    expect(compareStrings("", "")).toEqual(0)
+  })
+
+  it("should handle strings with different cases", () => {
+    expect(compareStrings("abc", "ABC")).toBeGreaterThan(0) // Assuming case-sensitive comparison
+    expect(compareStrings("ABC", "abc")).toBeLessThan(0) // Assuming case-sensitive comparison
+  })
+
+  it("should handle strings with special characters", () => {
+    expect(compareStrings("abc!", "abc")).toBeGreaterThan(0)
+    expect(compareStrings("abc", "abc!")).toBeLessThan(0)
+    expect(compareStrings("abc!", "abc!")).toEqual(0)
+  })
+
+  it("should handle strings with numbers", () => {
+    expect(compareStrings("abc1", "abc2")).toBeLessThan(0)
+    expect(compareStrings("abc2", "abc1")).toBeGreaterThan(0)
+    expect(compareStrings("abc1", "abc1")).toEqual(0)
+  })
+
+  it("should handle strings with spaces", () => {
+    expect(compareStrings("abc ", "abc")).toBeGreaterThan(0)
+    expect(compareStrings("abc", "abc ")).toBeLessThan(0)
+    expect(compareStrings("abc ", "abc ")).toEqual(0)
+  })
+
+  it("should handle strings with different lengths", () => {
+    expect(compareStrings("abc", "abcd")).toBeLessThan(0)
+    expect(compareStrings("abcd", "abc")).toBeGreaterThan(0)
+  })
 })

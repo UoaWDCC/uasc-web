@@ -40,16 +40,11 @@ export function replaceUserInPage<T extends keyof CombinedUserData>(
  * @returns `0` if `a` and `b` are equal strings
  */
 export function compareStrings(a: string, b: string) {
-  for (let i = 0; i < Math.min(a.length, b.length); ++i) {
-    const charCodeA = a.charCodeAt(i)
-    const charCodeB = b.charCodeAt(i)
-
-    const difference = charCodeA - charCodeB
-
-    if (difference !== 0) {
-      return difference
-    }
+  if (a < b) {
+    return -1
+  } else if (a > b) {
+    return 1
+  } else {
+    return 0
   }
-
-  return 0
 }
