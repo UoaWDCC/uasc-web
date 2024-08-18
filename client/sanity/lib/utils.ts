@@ -62,9 +62,9 @@ export class SanityImageUrl {
   }
 
   /**
-   * Appends the height query parameter to the URL.
+   * Appends the width query parameter to the URL.
    *
-   * @param h - The height in pixels to set the image to.
+   * @param w - width height in pixels to set the image to.
    */
   public width(w: number) {
     this.url.searchParams.append("w", w.toString())

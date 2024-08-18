@@ -7,7 +7,7 @@ import {
   ICreateBookingSection
 } from "../BookingCreation/BookingCreation"
 import { ProtectedCreateBookingSection } from "../BookingCreation/ProtectedCreateBookingSection"
-import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
 /**
  * Utility type determining what should be displayed to the user in {@link BookingInformationAndCreation}
