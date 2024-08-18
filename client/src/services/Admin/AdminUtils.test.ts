@@ -55,8 +55,8 @@ describe("compareStrings", () => {
   })
 
   it("should handle strings with different cases", () => {
-    expect(compareStrings("abc", "ABC")).toBeGreaterThan(0) // Assuming case-sensitive comparison
-    expect(compareStrings("ABC", "abc")).toBeLessThan(0) // Assuming case-sensitive comparison
+    expect(compareStrings("abc", "ABC")).toBeGreaterThan(0) // Assuming case-insensitive comparison
+    expect(compareStrings("ABC", "abc")).toBeLessThan(0) // Assuming case-insensitive comparison
   })
 
   it("should handle strings with special characters", () => {

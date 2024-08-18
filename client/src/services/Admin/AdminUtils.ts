@@ -32,6 +32,8 @@ export function replaceUserInPage<T extends keyof CombinedUserData>(
 /**
  * Determines the order for strings when using the `sort` methods on an array
  *
+ * **This is a case sensitive operation**
+ *
  * @param a the first string to compare against
  * @param b the second string to compare against
  *

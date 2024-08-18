@@ -44,7 +44,10 @@ const WrappedAdminBookingView = () => {
          * i.e _Alex_ comes before _John
          */
         const sortedUsers = date.users.sort((a, b) =>
-          compareStrings(a.first_name, b.first_name)
+          compareStrings(
+            a.first_name.trim().toLowerCase(),
+            b.first_name.trim().toLowerCase()
+          )
         )
 
         return {
