@@ -2,9 +2,21 @@ import { useState } from "react"
 import { BookingInfo } from "./AdminBookingDate"
 
 interface IBookingUserCard {
+  /**
+   * The order of the user on the list, preferabally enumerated from a 1-index sequence
+   */
   index: number
+  /**
+   * User with the fields specified by utility type {@link BookingInfo}
+   */
   user: Readonly<BookingInfo>
-  handleDelete?: (id: string) => void
+
+  /**
+   * Callback when the delete button for the user's booking is clicked
+   *
+   * @param bookingId the associated **Booking** id for the user
+   */
+  handleDelete?: (bookingId: string) => void
 }
 
 const BookingUserCard = ({ index, user, handleDelete }: IBookingUserCard) => {
