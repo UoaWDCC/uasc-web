@@ -15,7 +15,9 @@ const BookingPage = async () => {
    * We assume there will be only one based on the way {@link LodgeInformation}
    * is set up in sanity
    */
-  const lodgeInfoSingleton: LodgeInformation | undefined = lodgeInfo[0]
+  const lodgeInfoSingleton: LodgeInformation | undefined =
+    // However this can only be a singleton if the list is non-empty
+    lodgeInfo.length > 0 ? lodgeInfo[0] : undefined
 
   const RenderedContent = () => {
     return (
