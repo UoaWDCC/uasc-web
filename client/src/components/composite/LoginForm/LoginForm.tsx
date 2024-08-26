@@ -57,6 +57,7 @@ const LoginForm = ({
     if (isLoading || !loginHandler) return
     try {
       setIsLoading(true)
+      alert("Logging In...")
       const { success, error } = await loginHandler({
         email: formData.email,
         password: formData.password
@@ -67,7 +68,6 @@ const LoginForm = ({
         setLoginSuccessful(true)
         setMessages({ success: "Logged In" })
         if (successHandler !== undefined) successHandler()
-        alert("Logged In!")
       } else {
         setLoginSuccessful(false)
         // We want the messages to be overwritten
