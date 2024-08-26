@@ -67,6 +67,7 @@ const LoginForm = ({
         setLoginSuccessful(true)
         setMessages({ success: "Logged In" })
         if (successHandler !== undefined) successHandler()
+        alert("Logged In!")
       } else {
         setLoginSuccessful(false)
         // We want the messages to be overwritten
