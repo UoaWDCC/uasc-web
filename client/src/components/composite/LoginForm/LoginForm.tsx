@@ -139,7 +139,9 @@ const LoginForm = ({
             <Button variant="inverted-default-sm">Register</Button>
           </Link>
         </span>
-        {isLoading ? <p className="text-dark-blue-100">Logging in...</p> : null}
+        {isLoading ? (
+          <p className="text-dark-blue-100 absolute mt-4">Logging in...</p>
+        ) : null}
         <div className="mt-6 uppercase">
           {messages.success && (
             <h5 className="font-bold">{messages.success}</h5>
