@@ -134,7 +134,9 @@ const LoginForm = ({
           >
             Login
           </Button>
-          {isLoading ? <p className="">Logging in...</p> : null}
+          {isLoading ? (
+            <p className="text-dark-blue-100 mt-1">Logging in...</p>
+          ) : null}
           <Link href="/register" className="flex">
             <Button variant="inverted-default-sm">Register</Button>
           </Link>
