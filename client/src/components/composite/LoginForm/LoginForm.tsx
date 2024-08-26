@@ -57,7 +57,6 @@ const LoginForm = ({
     if (isLoading || !loginHandler) return
     try {
       setIsLoading(true)
-      alert("Logging In...")
       const { success, error } = await loginHandler({
         email: formData.email,
         password: formData.password
@@ -135,6 +134,7 @@ const LoginForm = ({
           >
             Login
           </Button>
+          {isLoading ? <p className="">Logging in...</p> : null}
           <Link href="/register" className="flex">
             <Button variant="inverted-default-sm">Register</Button>
           </Link>
