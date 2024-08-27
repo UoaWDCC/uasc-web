@@ -140,7 +140,7 @@ const LoginForm = ({
           </Link>
         </span>
         {isLoading ? (
-          <p className="text-dark-blue-100 absolute mt-4">Logging in...</p>
+          <p className="text-dark-blue-100 mt-4">Logging in...</p>
         ) : null}
         <div className="mt-6 uppercase">
           {messages.success && (
