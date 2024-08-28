@@ -1,6 +1,6 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
-import { DocumentDataWithUid } from "data-layer/models/common"
 import { Event } from "data-layer/models/firebase"
+import { Timestamp } from "firebase-admin/firestore"
 
 class EventService {
   /**
@@ -10,7 +10,15 @@ class EventService {
    * @returns the created document reference
    */
   public async createEvent(event: Event) {
-    return await FirestoreCollections.events.add(event)
+    return await FirestoreCollections.events.add({
+      ...event,
+      start_date: Timestamp.fromMillis(
+        event.start_date.seconds * 1000 + event.start_date.nanoseconds / 1000000
+      ), // Need to do this because firestore does not like "raw" {seconds, nanoseconds}
+      end_date: Timestamp.fromMillis(
+        event.end_date.seconds * 1000 + event.end_date.nanoseconds / 1000000
+      ) // Need to do this because firestore does not like "raw" {seconds, nanoseconds}
+    })
   }
 
   /**
@@ -19,12 +27,10 @@ class EventService {
    * @param eventId the ID of the event document
    * @returns the event document and their id
    */
-  public async getEventById(
-    eventId: string
-  ): Promise<DocumentDataWithUid<Event>> {
+  public async getEventById(eventId: string): Promise<Event> {
     const result = await FirestoreCollections.events.doc(eventId).get()
 
-    return { ...result.data(), id: result.id }
+    return result.data()
   }
 
   /**

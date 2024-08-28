@@ -1,0 +1,76 @@
+import { cleanFirestore } from "test-config/TestUtils"
+import EventService from "./EventService"
+import {
+  dateToFirestoreTimeStamp,
+  removeUnderscoresFromTimestamp
+} from "data-layer/adapters/DateUtils"
+import { Event } from "data-layer/models/firebase"
+import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
+
+const eventService = new EventService()
+
+const startDate = dateToFirestoreTimeStamp(new Date(2024, 1, 1))
+const endDate = dateToFirestoreTimeStamp(new Date(2024, 1, 2))
+
+const event1: Event = {
+  title: "UASC new event",
+  description: "Grand opening of the website.",
+  location: "Virtual pizza event",
+  start_date: startDate,
+  end_date: endDate
+}
+
+describe("EventService integration tests", () => {
+  afterEach(async () => {
+    await cleanFirestore()
+  })
+
+  it("Should be able to add an event", async () => {
+    const newEvent = await eventService.createEvent(event1)
+
+    const fetchedEvent = await FirestoreCollections.events
+      .doc(newEvent.id)
+      .get()
+
+    const data = fetchedEvent.data()
+
+    expect({
+      ...data,
+      end_date: removeUnderscoresFromTimestamp(data.end_date),
+      start_date: removeUnderscoresFromTimestamp(data.start_date)
+    }).toEqual(event1)
+  })
+
+  it("Should be able to get an event", async () => {
+    const newEvent = await eventService.createEvent(event1)
+
+    const fetchedEvent = await eventService.getEventById(newEvent.id)
+
+    expect({
+      ...fetchedEvent,
+      end_date: removeUnderscoresFromTimestamp(fetchedEvent.end_date),
+      start_date: removeUnderscoresFromTimestamp(fetchedEvent.start_date)
+    }).toEqual(event1)
+  })
+
+  it("Should be able to update an event", async () => {
+    const newEvent = await eventService.createEvent(event1)
+
+    await eventService.updateEvent(newEvent.id, {
+      title: "Wow pizza???"
+    })
+
+    const fetchedEvent = await eventService.getEventById(newEvent.id)
+
+    expect(fetchedEvent.title).toBe("Wow pizza???")
+  })
+
+  it("Should be able to delete an event", async () => {
+    const newEvent = await eventService.createEvent(event1)
+    await eventService.deleteEvent(newEvent.id)
+
+    const fetchedEvent = await eventService.getEventById(newEvent.id)
+
+    expect(fetchedEvent).toBe(undefined)
+  })
+})
