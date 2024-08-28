@@ -2,7 +2,7 @@ import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import CalenderIcon from "@/assets/icons/calender.svg"
 import Calendar from "@/components/generic/Calendar/Calendar"
 import { TableRowOperation } from "@/components/generic/ReusableTable/TableUtils"
-import { useState, useRef } from "react"
+import { useState, useRef, useMemo } from "react"
 import { useClickOutside } from "@/components/utils/Utils"
 import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
 import WrappedAdminBookingCreationPopUp from "./WrappedAdminBookingCreationPopUp"
@@ -88,6 +88,12 @@ export const AdminBookingView = ({
 
   const [openAddBookingPopup, setOpenAddBookingPopup] = useState<boolean>(false)
 
+  // Expensive computation to find how many users total are booked in for the rang
+  const totalBookingsForRange = useMemo(
+    () => data.flatMap((date) => date.users).length,
+    [data]
+  )
+
   // Add handler for when the Pick Date button is clicked
   const onClickHandler = () => {
     setDisplayedCalendar(!displayedCalendar)
@@ -115,7 +121,8 @@ export const AdminBookingView = ({
         <span className="border-gray-3 flex h-fit w-full flex-col items-center border bg-white px-2 py-1 sm:flex-row">
           <h4 className="text-dark-blue-100">
             {dateRange.startDate.toDateString()} -{" "}
-            {dateRange.endDate.toDateString()}
+            {dateRange.endDate.toDateString()} (
+            <strong>{totalBookingsForRange}</strong> Bookings)
           </h4>
           <span className="relative z-50 flex max-h-[40px] sm:ml-auto">
             {displayedCalendar ? (
