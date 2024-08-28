@@ -4,6 +4,7 @@ import {
   Booking,
   BookingHistoryEvent,
   BookingSlot,
+  Event,
   UserAdditionalInfo
 } from "data-layer/models/firebase"
 import { admin } from "business-layer/security/Firebase"
@@ -31,7 +32,8 @@ const db = {
   users: firestore.collection<UserAdditionalInfo>("users"),
   bookings: firestore.collection<Booking>("bookings"),
   bookingSlots: firestore.collection<BookingSlot>("booking_slots"),
-  bookingHistory: firestore.collection<BookingHistoryEvent>("booking_history")
+  bookingHistory: firestore.collection<BookingHistoryEvent>("booking_history"),
+  events: firestore.collection<Event>("events")
 } as const
 
 export default db
