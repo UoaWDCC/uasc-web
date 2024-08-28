@@ -18,6 +18,12 @@ export interface ILodgeInfo {
   handleBookLodgeClick?: () => void
 }
 
+/**
+ * Component displaying information about the lodge before the user makes a booking
+ *
+ * Use case - if someone new to the club wants to know what the lodge is, or are unsure about
+ * how to prepare/find more information
+ */
 const LodgeInfo = ({
   children,
   imageSrcs,
