@@ -7,6 +7,9 @@ import { CreateBookingSection } from "./BookingCreation"
 import { useContext, useEffect } from "react"
 import { BookingContext } from "../BookingContext"
 
+/**
+ * @deprecated not for direct consumption on pages, use `BookingInformationAndCreation` instead
+ */
 export const ProtectedCreateBookingSection = () => {
   const [{ currentUser, currentUserClaims }] = useAppData()
 

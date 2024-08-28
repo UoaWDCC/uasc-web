@@ -82,7 +82,7 @@ const PricingCardHome = ({
 }: IPricingCardHome) => (
   <div
     className="border-light-blue-100 text-light-blue-100 bg-gray-1 relative flex 
-    items-center justify-center gap-3 rounded-md border px-7 py-5 md:flex-col md:items-start lg:flex-col"
+    items-center justify-center gap-5 rounded-md border px-7 pb-12 pt-5 md:flex-col md:items-start lg:flex-col"
   >
     <h3 className="font-bold">{title} </h3>
     <div className="md:hidden lg:hidden">
