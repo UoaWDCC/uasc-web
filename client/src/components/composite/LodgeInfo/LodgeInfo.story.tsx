@@ -12,7 +12,7 @@ type Story = StoryObj<typeof LodgeInfo>
 export const Default: Story = {
   args: {
     handleBookLodgeClick: () => console.log(""),
-    images: [
+    imageSrcs: [
       "https://via.placeholder.com/400x400?text=Image+1",
       "https://via.placeholder.com/400x400?text=I+SUPPORT+LGBT",
       "https://via.placeholder.com/400x400?text=Image+3",

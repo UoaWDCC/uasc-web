@@ -9,17 +9,17 @@ interface ILodgeInfoGallery {
    * @example
    * ['https://image-url-1.com', 'https://image-url-2.com', 'https://image-url-3.com']
    */
-  imageUrls: string[]
+  imageSrcs: string[]
 }
 
 /**
  * Simple photo gallery that displays images in a single row (can be scrolled horizontally)
  */
-const LodgeInfoGallery = ({ imageUrls = [] }: ILodgeInfoGallery) => {
+const LodgeInfoGallery = ({ imageSrcs = [] }: ILodgeInfoGallery) => {
   return (
     <>
       <div className="flex space-x-4 overflow-x-auto p-2">
-        {imageUrls.map((url, index) => (
+        {imageSrcs.map((url, index) => (
           <div key={index} className="flex-shrink-0">
             <Image
               src={url}

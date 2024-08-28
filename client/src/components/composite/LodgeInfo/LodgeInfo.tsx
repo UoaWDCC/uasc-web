@@ -11,14 +11,18 @@ export interface ILodgeInfo {
   /**
    * List of image srcs
    */
-  images?: string[]
+  imageSrcs?: string[]
   /**
    * Handler to be called once the user clicks the call to action
    */
   handleBookLodgeClick?: () => void
 }
 
-const LodgeInfo = ({ children, images, handleBookLodgeClick }: ILodgeInfo) => {
+const LodgeInfo = ({
+  children,
+  imageSrcs,
+  handleBookLodgeClick
+}: ILodgeInfo) => {
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex justify-center pt-3">
@@ -36,7 +40,7 @@ const LodgeInfo = ({ children, images, handleBookLodgeClick }: ILodgeInfo) => {
         </div>
 
         <div>
-          <LodgeInfoGallery imageUrls={images || []}></LodgeInfoGallery>
+          <LodgeInfoGallery imageSrcs={imageSrcs || []}></LodgeInfoGallery>
         </div>
       </div>
     </div>
