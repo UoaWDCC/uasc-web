@@ -121,8 +121,8 @@ export const AdminBookingView = ({
         <span className="border-gray-3 flex h-fit w-full flex-col items-center border bg-white px-2 py-1 sm:flex-row">
           <h4 className="text-dark-blue-100">
             {dateRange.startDate.toDateString()} -{" "}
-            {dateRange.endDate.toDateString()} ({totalBookingsForRange}{" "}
-            Bookings)
+            {dateRange.endDate.toDateString()} (
+            <strong>{totalBookingsForRange}</strong> Bookings)
           </h4>
           <span className="relative z-50 flex max-h-[40px] sm:ml-auto">
             {displayedCalendar ? (
