@@ -23,19 +23,20 @@ const LodgeInfo = ({ children, images, handleBookLodgeClick }: ILodgeInfo) => {
     <div className="flex w-full flex-col gap-2">
       <div className="flex justify-center pt-3">
         <Button variant="default" onClick={handleBookLodgeClick}>
-          Book The Lodge
+          Skip Information
         </Button>
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <LodgeInfoGallery images={images || []}></LodgeInfoGallery>
-        </div>
+      <div className="grid grid-cols-1 gap-4">
         <div>
           <LodgeInfoComponent
             handleBookLodgeClick={() => handleBookLodgeClick?.()}
           >
             {children}
           </LodgeInfoComponent>
+        </div>
+
+        <div>
+          <LodgeInfoGallery imageUrls={images || []}></LodgeInfoGallery>
         </div>
       </div>
     </div>

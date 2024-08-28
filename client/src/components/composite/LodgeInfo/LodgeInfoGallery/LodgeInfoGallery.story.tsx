@@ -11,7 +11,7 @@ type Story = StoryObj<typeof LodgeInfoGallery>
 
 export const Default: Story = {
   args: {
-    images: [
+    imageUrls: [
       "https://via.placeholder.com/400x400?text=Image+1",
       "https://via.placeholder.com/400x400?text=Image+2",
       "https://via.placeholder.com/400x400?text=Image+3",
@@ -23,14 +23,14 @@ export const Default: Story = {
 
 export const SingleImage: Story = {
   args: {
-    images: ["https://via.placeholder.com/400x400?text=Single+Image"]
+    imageUrls: ["https://via.placeholder.com/400x400?text=Single+Image"]
   },
   tags: ["autodocs"]
 }
 
 export const NoImages: Story = {
   args: {
-    images: []
+    imageUrls: []
   },
   tags: ["autodocs"]
 }
