@@ -40,7 +40,7 @@ const BookingPage = async () => {
         enableNetworkRequests
         lodgeInfoProps={{
           children: <RenderedContent />,
-          images: processedImages
+          imageSrcs: processedImages
         }}
       />
     </>
