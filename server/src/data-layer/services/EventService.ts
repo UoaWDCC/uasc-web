@@ -1,4 +1,5 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
+import FirestoreSubcollections from "data-layer/adapters/FirestoreSubcollections"
 import { Event, EventReservation } from "data-layer/models/firebase"
 
 class EventService {
@@ -55,10 +56,7 @@ class EventService {
    * @returns the created reservation document reference
    */
   public async addReservation(eventId: string, reservation: EventReservation) {
-    const reservationRef = FirestoreCollections.events
-      .doc(eventId)
-      .collection("reservations") // subject to place as a constant somewhere
-    return await reservationRef.add(reservation)
+    return await FirestoreSubcollections.reservations(eventId).add(reservation)
   }
 
   /**
@@ -69,9 +67,7 @@ class EventService {
    * @returns the reservation document
    */
   public async getReservation(eventId: string, reservationId: string) {
-    const result = await FirestoreCollections.events
-      .doc(eventId)
-      .collection("reservations") // subject to place as a constant somewhere
+    const result = await FirestoreSubcollections.reservations(eventId)
       .doc(reservationId)
       .get()
 
@@ -90,9 +86,7 @@ class EventService {
     reservationId: string,
     updatedReservation: Partial<EventReservation>
   ) {
-    return await FirestoreCollections.events
-      .doc(eventId)
-      .collection("reservations") // subject to place as a constant somewhere
+    return await FirestoreSubcollections.reservations(eventId)
       .doc(reservationId)
       .update(updatedReservation)
   }
@@ -104,9 +98,7 @@ class EventService {
    * @param reservationId the ID of the reservation document
    */
   public async deleteReservation(eventId: string, reservationId: string) {
-    return await FirestoreCollections.events
-      .doc(eventId)
-      .collection("reservations") // subject to place as a constant somewhere
+    return await FirestoreSubcollections.reservations(eventId)
       .doc(reservationId)
       .delete()
   }
