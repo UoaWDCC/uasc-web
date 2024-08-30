@@ -1,6 +1,5 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { Event, EventReservation } from "data-layer/models/firebase"
-import { Timestamp } from "firebase-admin/firestore"
 
 class EventService {
   /**
@@ -10,15 +9,7 @@ class EventService {
    * @returns the created document reference
    */
   public async createEvent(event: Event) {
-    return await FirestoreCollections.events.add({
-      ...event,
-      start_date: Timestamp.fromMillis(
-        event.start_date.seconds * 1000 + event.start_date.nanoseconds / 1000000
-      ), // Need to do this because firestore does not like "raw" {seconds, nanoseconds}
-      end_date: Timestamp.fromMillis(
-        event.end_date.seconds * 1000 + event.end_date.nanoseconds / 1000000
-      ) // Need to do this because firestore does not like "raw" {seconds, nanoseconds}
-    })
+    return await FirestoreCollections.events.add(event)
   }
 
   /**
