@@ -1,5 +1,5 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
-import { Event } from "data-layer/models/firebase"
+import { Event, EventReservation } from "data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 
 class EventService {
@@ -50,6 +50,74 @@ class EventService {
    */
   public async deleteEvent(eventId: string) {
     return await FirestoreCollections.events.doc(eventId).delete()
+  }
+
+  /**
+   * Event reservation collection methods
+   */
+
+  /**
+   * Adds a reservation to an event.
+   *
+   * @param eventId the ID of the event document
+   * @param reservation the new EventReservation to add
+   * @returns the created reservation document reference
+   */
+  public async addReservation(eventId: string, reservation: EventReservation) {
+    const reservationRef = FirestoreCollections.events
+      .doc(eventId)
+      .collection("reservations") // subject to place as a constant somewhere
+    return await reservationRef.add(reservation)
+  }
+
+  /**
+   * Gets an existing reservation document by ID.
+   *
+   * @param eventId the ID of the event document
+   * @param reservationId the ID of the reservation document
+   * @returns the reservation document
+   */
+  public async getReservation(eventId: string, reservationId: string) {
+    const result = await FirestoreCollections.events
+      .doc(eventId)
+      .collection("reservations") // subject to place as a constant somewhere
+      .doc(reservationId)
+      .get()
+
+    return result.data()
+  }
+
+  /**
+   * Updates an existing reservation document by ID with new EventReservation data.
+   *
+   * @param eventId the ID of the event document
+   * @param reservationId the ID of the reservation document
+   * @param updatedReservation the new EventReservation data to update
+   */
+  public async updateReservation(
+    eventId: string,
+    reservationId: string,
+    updatedReservation: Partial<EventReservation>
+  ) {
+    return await FirestoreCollections.events
+      .doc(eventId)
+      .collection("reservations") // subject to place as a constant somewhere
+      .doc(reservationId)
+      .update(updatedReservation)
+  }
+
+  /**
+   * Deletes a reservation from an event.
+   *
+   * @param eventId the ID of the event document
+   * @param reservationId the ID of the reservation document
+   */
+  public async deleteReservation(eventId: string, reservationId: string) {
+    return await FirestoreCollections.events
+      .doc(eventId)
+      .collection("reservations") // subject to place as a constant somewhere
+      .doc(reservationId)
+      .delete()
   }
 }
 
