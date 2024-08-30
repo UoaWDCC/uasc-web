@@ -4,7 +4,7 @@ import {
   dateToFirestoreTimeStamp,
   removeUnderscoresFromTimestamp
 } from "data-layer/adapters/DateUtils"
-import { Event } from "data-layer/models/firebase"
+import { Event, EventReservation } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 
 const eventService = new EventService()
@@ -18,6 +18,13 @@ const event1: Event = {
   location: "Virtual pizza event",
   start_date: startDate,
   end_date: endDate
+}
+
+const reservation1: EventReservation = {
+  first_name: "John",
+  last_name: "Appleseed",
+  email: "test@gmail.com",
+  is_member: true
 }
 
 describe("EventService integration tests", () => {
@@ -72,5 +79,77 @@ describe("EventService integration tests", () => {
     const fetchedEvent = await eventService.getEventById(newEvent.id)
 
     expect(fetchedEvent).toBe(undefined)
+  })
+
+  /**
+   * Event reservation nested collection methods
+   */
+  describe("EventReservation integration tests", () => {
+    it("Should be able to add a event reservation", async () => {
+      const newEvent = await eventService.createEvent(event1)
+
+      const reservation = await eventService.addReservation(
+        newEvent.id,
+        reservation1
+      )
+      const fetchedReservation = await FirestoreCollections.events
+        .doc(newEvent.id)
+        .collection("reservations") // subject to place as a constant somewhere
+        .doc(reservation.id)
+        .get()
+      expect(fetchedReservation.data()).toEqual(reservation1)
+    })
+
+    it("Should be able to get an event reservation", async () => {
+      const newEvent = await eventService.createEvent(event1)
+      const reservation = await eventService.addReservation(
+        newEvent.id,
+        reservation1
+      )
+      const fetchedReservation = await eventService.getReservation(
+        newEvent.id,
+        reservation.id
+      )
+      expect(fetchedReservation).toEqual(reservation1)
+    })
+
+    it("Should be able to update an event reservation", async () => {
+      const newEvent = await eventService.createEvent(event1)
+
+      const reservation = await eventService.addReservation(
+        newEvent.id,
+        reservation1
+      )
+
+      await eventService.updateReservation(newEvent.id, reservation.id, {
+        first_name: "Jan"
+      })
+
+      const fetchedReservation = await FirestoreCollections.events
+        .doc(newEvent.id)
+        .collection("reservations") // subject to place as a constant somewhere
+        .doc(reservation.id)
+        .get()
+
+      expect(fetchedReservation.data().first_name).toBe("Jan")
+    })
+
+    it("Should be able to delete an event reservation", async () => {
+      const newEvent = await eventService.createEvent(event1)
+
+      const reservation = await eventService.addReservation(
+        newEvent.id,
+        reservation1
+      )
+
+      await eventService.deleteReservation(newEvent.id, reservation.id)
+
+      const fetchedReservation = await FirestoreCollections.events
+        .doc(newEvent.id)
+        .collection("reservations") // subject to place as a constant somewhere
+        .doc(reservation.id)
+        .get()
+      expect(fetchedReservation.data()).toBe(undefined)
+    })
   })
 })
