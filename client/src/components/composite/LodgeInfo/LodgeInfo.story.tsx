@@ -12,7 +12,7 @@ type Story = StoryObj<typeof LodgeInfo>
 export const Default: Story = {
   args: {
     handleBookLodgeClick: () => console.log(""),
-    images: [
+    imageSrcs: [
       "https://via.placeholder.com/400x400?text=Image+1",
       "https://via.placeholder.com/400x400?text=I+SUPPORT+LGBT",
       "https://via.placeholder.com/400x400?text=Image+3",
@@ -21,6 +21,10 @@ export const Default: Story = {
     children: (
       <>
         <div className="flex flex-col gap-4">
+          <h2>
+            Visit for the Whakapapa Ski field status, lift, food and retail
+            status and status of other activities.
+          </h2>
           <p>
             The UASC Lodge is located in the Whakapapa Ski field and is just a
             3-5 min walk from the bottom of the Sky Waka Gondola, meaning you
