@@ -37,10 +37,16 @@ class EventService {
 
   /**
    * Deletes an existing event document by ID.
+   * Also deletes all reservation docs when deleting an event.
    *
    * @param eventId the ID of the event document
    */
   public async deleteEvent(eventId: string) {
+    // Need to delete subcollections under this first
+    const snapshot = await FirestoreSubcollections.reservations(eventId).get()
+    const deletePromises = snapshot.docs.map((doc) => doc.ref.delete())
+    await Promise.all(deletePromises)
+    // Delete main collection doc after deleting reservations
     return await FirestoreCollections.events.doc(eventId).delete()
   }
 

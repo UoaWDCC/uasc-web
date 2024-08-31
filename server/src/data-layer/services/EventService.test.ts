@@ -19,12 +19,25 @@ const event1: Event = {
   start_date: startDate,
   end_date: endDate
 }
+const event2: Event = {
+  title: "Snowboard racing",
+  description: "Race and see who's the fastest!",
+  location: "Snowsport club",
+  start_date: startDate,
+  end_date: endDate
+}
 
 const reservation1: EventReservation = {
   first_name: "John",
   last_name: "Appleseed",
   email: "test@gmail.com",
   is_member: true
+}
+const reservation2: EventReservation = {
+  first_name: "Jane",
+  last_name: "Pearseed",
+  email: "test2@gmail.com",
+  is_member: false
 }
 
 describe("EventService integration tests", () => {
@@ -79,6 +92,58 @@ describe("EventService integration tests", () => {
     const fetchedEvent = await eventService.getEventById(newEvent.id)
 
     expect(fetchedEvent).toBe(undefined)
+  })
+
+  it("Should delete an event and also all reservations", async () => {
+    const newEvent = await eventService.createEvent(event1)
+    const newReservation1 = await eventService.addReservation(
+      newEvent.id,
+      reservation1
+    )
+    const newReservation2 = await eventService.addReservation(
+      newEvent.id,
+      reservation2
+    )
+
+    await eventService.deleteEvent(newEvent.id)
+
+    const fetchedReservation1 = await eventService.getReservation(
+      newEvent.id,
+      newReservation1.id
+    )
+    expect(fetchedReservation1).toBe(undefined)
+    const fetchedReservation2 = await eventService.getReservation(
+      newEvent.id,
+      newReservation2.id
+    )
+    expect(fetchedReservation2).toBe(undefined)
+  })
+
+  it("Should not delete other reservations when deleting an event document", async () => {
+    const newEvent = await eventService.createEvent(event1)
+    await eventService.addReservation(newEvent.id, reservation1)
+    await eventService.addReservation(newEvent.id, reservation2)
+    const newEvent2 = await eventService.createEvent(event2)
+    const newReservation3 = await eventService.addReservation(
+      newEvent2.id,
+      reservation1
+    )
+    const newReservation4 = await eventService.addReservation(
+      newEvent2.id,
+      reservation2
+    )
+
+    await eventService.deleteEvent(newEvent.id)
+    const fetchedReservation3 = await eventService.getReservation(
+      newEvent2.id,
+      newReservation3.id
+    )
+    expect(fetchedReservation3).toEqual(reservation1)
+    const fetchedReservation4 = await eventService.getReservation(
+      newEvent2.id,
+      newReservation4.id
+    )
+    expect(fetchedReservation4).toEqual(reservation2)
   })
 
   /**
