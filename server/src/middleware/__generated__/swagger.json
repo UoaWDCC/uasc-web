@@ -344,6 +344,82 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"EventSignupResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"properties": {
+							"email": {
+								"type": "string"
+							},
+							"last_name": {
+								"type": "string"
+							},
+							"first_name": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"email",
+							"last_name",
+							"first_name"
+						],
+						"type": "object"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EventReservation": {
+				"properties": {
+					"first_name": {
+						"type": "string",
+						"description": "The first name of the user who made this event reservation"
+					},
+					"last_name": {
+						"type": "string",
+						"description": "The last name of the user who made this event reservation"
+					},
+					"email": {
+						"type": "string",
+						"description": "The email of the user who made this even reservation"
+					},
+					"is_member": {
+						"type": "boolean",
+						"description": "Boolean to check if the user is a member",
+						"example": true
+					}
+				},
+				"required": [
+					"first_name",
+					"last_name",
+					"email",
+					"is_member"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EventSignupBody": {
+				"properties": {
+					"event_id": {
+						"type": "string"
+					},
+					"reservation": {
+						"$ref": "#/components/schemas/EventReservation"
+					}
+				},
+				"required": [
+					"event_id",
+					"reservation"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AllUserBookingSlotsResponse": {
 				"properties": {
 					"error": {
@@ -1563,6 +1639,40 @@
 							"schema": {
 								"$ref": "#/components/schemas/UserBookingRequestingModel",
 								"description": "The request body containing the date ranges for the booking."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/events/signup": {
+			"post": {
+				"operationId": "EventSignup",
+				"responses": {
+					"200": {
+						"description": "Successfully signed up for Event",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/EventSignupResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Signs up for an event",
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/EventSignupBody"
 							}
 						}
 					}

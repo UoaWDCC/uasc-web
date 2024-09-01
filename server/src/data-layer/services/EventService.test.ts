@@ -107,12 +107,12 @@ describe("EventService integration tests", () => {
 
     await eventService.deleteEvent(newEvent.id)
 
-    const fetchedReservation1 = await eventService.getReservation(
+    const fetchedReservation1 = await eventService.getReservationById(
       newEvent.id,
       newReservation1.id
     )
     expect(fetchedReservation1).toBe(undefined)
-    const fetchedReservation2 = await eventService.getReservation(
+    const fetchedReservation2 = await eventService.getReservationById(
       newEvent.id,
       newReservation2.id
     )
@@ -134,12 +134,12 @@ describe("EventService integration tests", () => {
     )
 
     await eventService.deleteEvent(newEvent.id)
-    const fetchedReservation3 = await eventService.getReservation(
+    const fetchedReservation3 = await eventService.getReservationById(
       newEvent2.id,
       newReservation3.id
     )
     expect(fetchedReservation3).toEqual(reservation1)
-    const fetchedReservation4 = await eventService.getReservation(
+    const fetchedReservation4 = await eventService.getReservationById(
       newEvent2.id,
       newReservation4.id
     )
@@ -171,11 +171,21 @@ describe("EventService integration tests", () => {
         newEvent.id,
         reservation1
       )
-      const fetchedReservation = await eventService.getReservation(
+      const fetchedReservation = await eventService.getReservationById(
         newEvent.id,
         reservation.id
       )
       expect(fetchedReservation).toEqual(reservation1)
+    })
+
+    it("Should get all event reservations", async () => {
+      const newEvent = await eventService.createEvent(event1)
+      await eventService.addReservation(newEvent.id, reservation1)
+      await eventService.addReservation(newEvent.id, reservation2)
+      const reservations = await eventService.getAllReservations(newEvent.id)
+      expect(reservations.length).toBe(2)
+      expect(reservations).toContainEqual(reservation1)
+      expect(reservations).toContainEqual(reservation2)
     })
 
     it("Should be able to update an event reservation", async () => {

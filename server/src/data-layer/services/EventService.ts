@@ -72,12 +72,22 @@ class EventService {
    * @param reservationId the ID of the reservation document
    * @returns the reservation document
    */
-  public async getReservation(eventId: string, reservationId: string) {
+  public async getReservationById(eventId: string, reservationId: string) {
     const result = await FirestoreSubcollections.reservations(eventId)
       .doc(reservationId)
       .get()
 
     return result.data()
+  }
+
+  /**
+   * Gets all reservations for an event.
+   * @param eventId the ID of the event document
+   * @returns an array of all the event reservation documents
+   */
+  public async getAllReservations(eventId: string) {
+    const result = await FirestoreSubcollections.reservations(eventId).get()
+    return result.docs.map((doc) => doc.data())
   }
 
   /**
