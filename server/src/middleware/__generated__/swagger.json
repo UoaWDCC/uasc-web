@@ -1661,11 +1661,7 @@
 					}
 				},
 				"description": "Signs up for an event",
-				"security": [
-					{
-						"jwt": []
-					}
-				],
+				"security": [],
 				"parameters": [],
 				"requestBody": {
 					"required": true,

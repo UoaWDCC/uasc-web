@@ -1,7 +1,7 @@
 import EventService from "data-layer/services/EventService"
 import { EventSignupBody } from "service-layer/request-models/EventRequests"
 import { EventSignupResponse } from "service-layer/response-models/EventResponse"
-import { Body, Controller, Post, Route, Security, SuccessResponse } from "tsoa"
+import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
 
 @Route("events")
 export class EventController extends Controller {
@@ -9,7 +9,6 @@ export class EventController extends Controller {
    * Signs up for an event
    */
   @SuccessResponse("200", "Successfully signed up for Event")
-  @Security("jwt")
   @Post("signup")
   public async eventSignup(
     @Body() requestBody: EventSignupBody
@@ -24,7 +23,10 @@ export class EventController extends Controller {
     }
     // Check if the event is full
     const reservations = await eventService.getAllReservations(event_id)
-    if (reservations.length >= fetchedEvent.max_occupancy) {
+    if (
+      fetchedEvent.max_occupancy !== undefined &&
+      reservations.length >= fetchedEvent.max_occupancy
+    ) {
       this.setStatus(400)
       return { error: "Maximum event occupancy reached." }
     }
