@@ -24,7 +24,7 @@ export class EventController extends Controller {
     // Check if the event is full
     const reservations = await eventService.getAllReservations(event_id)
     if (
-      !!fetchedEvent.max_occupancy &&
+      fetchedEvent.max_occupancy !== undefined &&
       reservations.length >= fetchedEvent.max_occupancy
     ) {
       this.setStatus(400)
