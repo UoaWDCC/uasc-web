@@ -1,6 +1,6 @@
 import EventsCard from "@/components/generic/EventsCard/EventsCard"
-
-const eventsList = [
+import { EventsCardProps } from "@/components/generic/EventsCard/EventsCard"
+const eventsList: EventsCardProps[] = [
   { date: "f", title: "cock", location: "w", content: "fu", onClick: () => {} },
   {
     date: "f",
