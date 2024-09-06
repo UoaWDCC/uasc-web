@@ -26,7 +26,20 @@ const eventsList = [
 ]
 
 const EventsPage = () => {
-  return <div></div>
+  return (
+    <div>
+      {eventsList.map((event) => (
+        <EventsCard
+          date={event.date}
+          title={event.title}
+          location={event.location}
+          content={event.content}
+          onClick={event.onClick}
+          key={event.content}
+        />
+      ))}
+    </div>
+  )
 }
 
 export default EventsPage
