@@ -8,6 +8,37 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const DefaultEventsPage: Story = {
-  events: {},
+  args: {
+    events: [
+      {
+        date: "f",
+        title: "cock",
+        location: "w",
+        content: "fu",
+        onClick: () => {}
+      },
+      {
+        date: "f",
+        title: "cock",
+        location: "w",
+        content: "gay",
+        onClick: () => {}
+      },
+      {
+        date: "f",
+        title: "cock",
+        location: "w",
+        content: "ray",
+        onClick: () => {}
+      },
+      {
+        date: "f",
+        title: "cock",
+        location: "w",
+        content: "league",
+        onClick: () => {}
+      }
+    ]
+  },
   tags: ["autodocs"]
 }
