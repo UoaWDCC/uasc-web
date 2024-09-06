@@ -27,7 +27,11 @@ const eventsList: EventsCardProps[] = [
   }
 ]
 
-const EventsPage = () => {
+interface IEventsPage {
+  eventsList: EventsCardProps[]
+}
+
+const EventsPage = ({ eventsList }: IEventsPage) => {
   return (
     <div>
       {eventsList.map((event) => (
