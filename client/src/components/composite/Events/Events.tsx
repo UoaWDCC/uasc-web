@@ -2,31 +2,6 @@ import EventsCard, {
   EventsCardProps
 } from "@/components/generic/EventsCard/EventsCard"
 
-const events: EventsCardProps[] = [
-  { date: "f", title: "cock", location: "w", content: "fu", onClick: () => {} },
-  {
-    date: "f",
-    title: "cock",
-    location: "w",
-    content: "gay",
-    onClick: () => {}
-  },
-  {
-    date: "f",
-    title: "cock",
-    location: "w",
-    content: "ray",
-    onClick: () => {}
-  },
-  {
-    date: "f",
-    title: "cock",
-    location: "w",
-    content: "league",
-    onClick: () => {}
-  }
-]
-
 interface IEventsPage {
   events: EventsCardProps[]
 }
