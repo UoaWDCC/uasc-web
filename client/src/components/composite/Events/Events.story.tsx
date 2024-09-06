@@ -11,10 +11,10 @@ export const DefaultEventsPage: Story = {
   args: {
     events: [
       {
-        date: "f",
+        date: "sigma",
         title: "cock",
-        location: "w",
-        content: "fu",
+        location: "skibidi",
+        content: "real",
         onClick: () => {}
       },
       {
