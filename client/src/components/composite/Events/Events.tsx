@@ -2,7 +2,7 @@ import EventsCard, {
   EventsCardProps
 } from "@/components/generic/EventsCard/EventsCard"
 
-const eventsList: EventsCardProps[] = [
+const events: EventsCardProps[] = [
   { date: "f", title: "cock", location: "w", content: "fu", onClick: () => {} },
   {
     date: "f",
@@ -28,13 +28,13 @@ const eventsList: EventsCardProps[] = [
 ]
 
 interface IEventsPage {
-  eventsList: EventsCardProps[]
+  events: EventsCardProps[]
 }
 
-const EventsPage = ({ eventsList }: IEventsPage) => {
+const EventsPage = ({ events }: IEventsPage) => {
   return (
     <div>
-      {eventsList.map((event) => (
+      {events.map((event) => (
         <EventsCard
           date={event.date}
           title={event.title}
