@@ -1,70 +1,78 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import TabsComponent from "@/components/generic/TabsComponent/TabsComponent"
 import { PortableText } from "@portabletext/react"
 import { POLICIES_GROQ_QUERY, Policies } from "@/models/sanity/Policies/Utils"
 import { sanityQuery } from "../../../../sanity/lib/utils"
 
-export const BookingPolicyContent = async () => {
-  const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
+import PropTypes from "prop-types"
 
-  /**
-   * We assume there will be only one based on the way {@link Policies} is set up in sanity
-   *
-   */
-  const policiesSingleton: Policies | undefined =
-    policies.length > 0 ? policies[2] : undefined
-
-  const LodgeBookingsPolicies = () => {
-    return (
-      policiesSingleton?.information && (
-        <PortableText value={policiesSingleton.information} />
-      )
+export const BookingPolicyContent = ({
+  policiesSingleton
+}: {
+  policiesSingleton: Policies | undefined
+}) => {
+  return (
+    policiesSingleton?.information && (
+      <PortableText value={policiesSingleton.information} />
     )
-  }
-
-  return <LodgeBookingsPolicies />
+  )
 }
 
-export const CancellationPolicyContent = async () => {
-  const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
-
-  /**
-   * We assume there will be only one based on the way {@link Policies} is set up in sanity
-   *
-   */
-  const policiesSingleton: Policies | undefined =
-    policies.length > 0 ? policies[0] : undefined
-
-  const CancellationPolicies = () => {
-    return (
-      policiesSingleton?.information && (
-        <PortableText value={policiesSingleton.information} />
-      )
-    )
-  }
-
-  return <CancellationPolicies />
+BookingPolicyContent.propTypes = {
+  policiesSingleton: PropTypes.shape({
+    information: PropTypes.array
+  })
 }
 
-export const BehaviourPolicyContent = async () => {
-  const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
+export const LodgeBookingsPolicyContent = () => {
+  const [policiesSingleton, setPoliciesSingleton] = useState<
+    Policies | undefined
+  >(undefined)
 
-  /**
-   * We assume there will be only one based on the way {@link Policies} is set up in sanity
-   *
-   */
-  const policiesSingleton: Policies | undefined =
-    policies.length > 0 ? policies[1] : undefined
+  useEffect(() => {
+    const fetchPolicies = async () => {
+      const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
+      setPoliciesSingleton(policies.length > 0 ? policies[2] : undefined)
+    }
 
-  const BehaviourPolicies = () => {
-    return (
-      policiesSingleton?.information && (
-        <PortableText value={policiesSingleton.information} />
-      )
-    )
-  }
+    fetchPolicies()
+  }, [])
 
-  return <BehaviourPolicies />
+  return <BookingPolicyContent policiesSingleton={policiesSingleton} />
+}
+
+export const CancellationPolicyContent = () => {
+  const [policiesSingleton, setPoliciesSingleton] = useState<
+    Policies | undefined
+  >(undefined)
+
+  useEffect(() => {
+    const fetchPolicies = async () => {
+      const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
+      setPoliciesSingleton(policies.length > 0 ? policies[0] : undefined)
+    }
+
+    fetchPolicies()
+  }, [])
+
+  return <BookingPolicyContent policiesSingleton={policiesSingleton} />
+}
+
+export const BehaviourPolicyContent = () => {
+  const [policiesSingleton, setPoliciesSingleton] = useState<
+    Policies | undefined
+  >(undefined)
+
+  useEffect(() => {
+    const fetchPolicies = async () => {
+      const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
+      setPoliciesSingleton(policies.length > 0 ? policies[1] : undefined)
+    }
+
+    fetchPolicies()
+  }, [])
+
+  return <BookingPolicyContent policiesSingleton={policiesSingleton} />
 }
 
 enum PolicyPage {
@@ -75,7 +83,7 @@ enum PolicyPage {
 const exampleHeadings = [
   {
     title: "LODGE BOOKINGS",
-    content: <BookingPolicyContent />,
+    content: <LodgeBookingsPolicyContent />,
     index: PolicyPage.ONE
   },
   {
