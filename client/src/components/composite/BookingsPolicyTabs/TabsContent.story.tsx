@@ -2,6 +2,7 @@ import type { Meta } from "@storybook/react"
 import {
   BehaviourPolicyContent,
   BookingPolicyContent,
+  CancellationPolicyContent,
   PolicyTabs
 } from "./TabsContent"
 
@@ -19,7 +20,7 @@ export const BookingPolicyStory = () => {
 }
 
 export const CancellationPolicyStory = () => {
-  return <CancellationPolicyStory />
+  return <CancellationPolicyContent />
 }
 
 export const BehaviourPolicyStory = () => {
