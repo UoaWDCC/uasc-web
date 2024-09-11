@@ -48,6 +48,10 @@ export interface paths {
      */
     post: operations["GetBookingPayment"];
   };
+  "/events/signup": {
+    /** @description Signs up for an event */
+    post: operations["EventSignup"];
+  };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
@@ -266,6 +270,32 @@ export interface components {
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
+    };
+    EventSignupResponse: {
+      error?: string;
+      message?: string;
+      data?: {
+        email: string;
+        last_name: string;
+        first_name: string;
+      };
+    };
+    EventReservation: {
+      /** @description The first name of the user who made this event reservation */
+      first_name: string;
+      /** @description The last name of the user who made this event reservation */
+      last_name: string;
+      /** @description The email of the user who made this even reservation */
+      email: string;
+      /**
+       * @description Boolean to check if the user is a member
+       * @example true
+       */
+      is_member: boolean;
+    };
+    EventSignupBody: {
+      event_id: string;
+      reservation: components["schemas"]["EventReservation"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -768,6 +798,22 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["BookingPaymentResponse"];
+        };
+      };
+    };
+  };
+  /** @description Signs up for an event */
+  EventSignup: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EventSignupBody"];
+      };
+    };
+    responses: {
+      /** @description Successfully signed up for Event */
+      200: {
+        content: {
+          "application/json": components["schemas"]["EventSignupResponse"];
         };
       };
     };
