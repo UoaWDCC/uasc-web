@@ -272,57 +272,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"LodgePricingTypeValues": {
-				"enum": [
-					"single_friday_or_saturday",
-					"normal"
-				],
-				"type": "string"
-			},
-			"LodgeStripeProductResponse": {
-				"properties": {
-					"error": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"data": {
-						"items": {
-							"properties": {
-								"originalPrice": {
-									"type": "string"
-								},
-								"displayPrice": {
-									"type": "string"
-								},
-								"discount": {
-									"type": "boolean"
-								},
-								"description": {
-									"type": "string"
-								},
-								"name": {
-									"$ref": "#/components/schemas/LodgePricingTypeValues"
-								},
-								"productId": {
-									"type": "string"
-								}
-							},
-							"required": [
-								"displayPrice",
-								"discount",
-								"name",
-								"productId"
-							],
-							"type": "object"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"stripe.Stripe.Checkout.Session.Status": {
 				"type": "string",
 				"enum": [
@@ -1563,26 +1512,6 @@
 					}
 				},
 				"description": "Fetches the prices of the membership products from Stripe.",
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/payment/lodge_prices": {
-			"get": {
-				"operationId": "GetLodgePrices",
-				"responses": {
-					"200": {
-						"description": "The prices of the lodge products.",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/LodgeStripeProductResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Fetches the prices of the lodge products from Stripe.",
 				"security": [],
 				"parameters": []
 			}

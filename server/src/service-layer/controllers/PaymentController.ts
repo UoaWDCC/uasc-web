@@ -10,8 +10,7 @@ import {
 import {
   MembershipTypeValues,
   MEMBERSHIP_TYPE_KEY,
-  LODGE_PRICING_TYPE_KEY,
-  LodgePricingTypeValues
+  LODGE_PRICING_TYPE_KEY
 } from "business-layer/utils/StripeProductMetadata"
 import {
   UTCDateToDdMmYyyy,
@@ -28,7 +27,6 @@ import {
 } from "service-layer/request-models/UserRequests"
 import {
   BookingPaymentResponse,
-  LodgeStripeProductResponse,
   MembershipPaymentResponse,
   MembershipStripeProductResponse
 } from "service-layer/response-models/PaymentResponse"
@@ -101,58 +99,6 @@ export class PaymentController extends Controller {
         }
       })
 
-      return { data: productsValues }
-    } catch (error) {
-      console.error(error)
-      this.setStatus(500)
-      return { error: "Error fetching active Stripe products" }
-    }
-  }
-
-  /**
-   * Fetches the prices of the lodge products from Stripe.
-   * @returns The prices of the lodge products.
-   */
-  @Get("lodge_prices")
-  public async getLodgePrices(): Promise<LodgeStripeProductResponse> {
-    const stripeService = new StripeService()
-    try {
-      const lodgeProducts = await stripeService.getActiveLodgeProducts()
-      // Maps the products to the required response type MembershipStripeProductResponse in PaymentResponse
-
-      const productsValues = lodgeProducts.map((product) => {
-        // Checks the membership type of the product
-        const lodgeType = product.metadata[
-          LODGE_PRICING_TYPE_KEY
-        ] as LodgePricingTypeValues
-
-        let name: LodgePricingTypeValues
-
-        switch (lodgeType) {
-          case LodgePricingTypeValues.SingleFridayOrSaturday: {
-            name = LodgePricingTypeValues.SingleFridayOrSaturday
-            break
-          }
-          case LodgePricingTypeValues.Normal: {
-            name = LodgePricingTypeValues.Normal
-            break
-          }
-        }
-
-        return {
-          productId: product.id,
-          name,
-          description: product.description,
-          discount: product.metadata.discount === "true",
-          displayPrice: (
-            Number(
-              (product.default_price as Stripe.Price).unit_amount_decimal
-            ) / 100
-          ).toString(),
-          originalPrice: product.metadata.original_price
-        }
-      })
-      this.setStatus(200)
       return { data: productsValues }
     } catch (error) {
       console.error(error)
