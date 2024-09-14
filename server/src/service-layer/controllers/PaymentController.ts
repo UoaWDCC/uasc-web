@@ -117,7 +117,7 @@ export class PaymentController extends Controller {
   public async getLodgePrices(): Promise<LodgeStripeProductResponse> {
     const stripeService = new StripeService()
     try {
-      const lodgeProducts = await stripeService.getActiveMembershipProducts()
+      const lodgeProducts = await stripeService.getActiveLodgeProducts()
       // Maps the products to the required response type MembershipStripeProductResponse in PaymentResponse
 
       const productsValues = lodgeProducts.map((product) => {

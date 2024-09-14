@@ -1,4 +1,5 @@
 import {
+  LODGE_PRICING_TYPE_KEY,
   MEMBERSHIP_PRODUCT_TYPE_KEY,
   ProductTypeValues,
   USER_FIREBASE_EMAIL_KEY,
@@ -387,10 +388,8 @@ export default class StripeService {
         expand: ["data.default_price"]
       })
       // Filter products with the required metadata
-      const lodgeProducts = products.data.filter(
-        (product) =>
-          product.metadata[MEMBERSHIP_PRODUCT_TYPE_KEY] ===
-          ProductTypeValues.BOOKING
+      const lodgeProducts = products.data.filter((product) =>
+        Object.keys(product.metadata).includes(LODGE_PRICING_TYPE_KEY)
       )
       return lodgeProducts
     } catch (error) {
