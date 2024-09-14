@@ -27,6 +27,13 @@ const event2: Event = {
   start_date: startDate,
   end_date: endDate
 }
+const now = new Date(Date.now())
+const futureEvent: Event = {
+  title: "Scheduled event",
+  location: "Future event",
+  start_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1)),
+  end_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1))
+}
 
 const reservation1: EventReservation = {
   first_name: "John",
@@ -79,21 +86,12 @@ describe("EventService integration tests", () => {
     await eventService.createEvent(event1)
     await eventService.createEvent(event2)
     // Create a future event
-    const now = new Date(Date.now())
-    const scheduledEvent: Event = {
-      title: "Scheduled event",
-      location: "Future event",
-      start_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1)),
-      end_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1))
-    }
-    await eventService.createEvent(scheduledEvent)
+    const newEvent = await eventService.createEvent(futureEvent)
 
     const futureEvents = await eventService.getActiveEvents()
 
     expect(futureEvents.length).toBe(1)
-    expect({
-      ...futureEvents[0]
-    }).toEqual(scheduledEvent)
+    expect(futureEvents).toEqual([{ ...futureEvent, id: newEvent.id }])
   })
 
   it("Should be able to update an event", async () => {
@@ -199,6 +197,19 @@ describe("EventService integration tests", () => {
         reservation.id
       )
       expect(fetchedReservation).toEqual(reservation1)
+    })
+
+    it("Should get the total count of active event reservations", async () => {
+      // An older event shouldn't be counted.
+      const oldEvent = await eventService.createEvent(event1)
+      await eventService.addReservation(oldEvent.id, reservation1)
+      // Should only count reservations for future events
+      const newEvent = await eventService.createEvent(futureEvent)
+      await eventService.addReservation(newEvent.id, reservation1)
+      await eventService.addReservation(newEvent.id, reservation2)
+
+      const count = await eventService.getActiveReservationsCount()
+      expect(count).toBe(2)
     })
 
     it("Should get all event reservations", async () => {
