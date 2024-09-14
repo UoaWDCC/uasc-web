@@ -32,6 +32,10 @@ export interface paths {
     /** @description Fetches the prices of the membership products from Stripe. */
     get: operations["GetMembershipPrices"];
   };
+  "/payment/lodge_prices": {
+    /** @description Fetches the prices of the lodge products from Stripe. */
+    get: operations["GetLodgePrices"];
+  };
   "/payment/checkout_status": {
     /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
     get: operations["GetCheckoutSessionDetails"];
@@ -242,6 +246,20 @@ export interface components {
           discount: boolean;
           description?: string;
           name: components["schemas"]["MembershipTypeValues"];
+          productId: string;
+        }[];
+    };
+    /** @enum {string} */
+    LodgePricingTypeValues: "single_friday_or_saturday" | "normal";
+    LodgeStripeProductResponse: {
+      error?: string;
+      message?: string;
+      data?: {
+          originalPrice?: string;
+          displayPrice: string;
+          discount: boolean;
+          description?: string;
+          name: components["schemas"]["LodgePricingTypeValues"];
           productId: string;
         }[];
     };
@@ -737,6 +755,17 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["MembershipStripeProductResponse"];
+        };
+      };
+    };
+  };
+  /** @description Fetches the prices of the lodge products from Stripe. */
+  GetLodgePrices: {
+    responses: {
+      /** @description The prices of the lodge products. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LodgeStripeProductResponse"];
         };
       };
     };
