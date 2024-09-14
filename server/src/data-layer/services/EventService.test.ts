@@ -6,6 +6,7 @@ import {
 } from "data-layer/adapters/DateUtils"
 import { Event, EventReservation } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
+import { Timestamp } from "firebase-admin/firestore"
 
 const eventService = new EventService()
 
@@ -71,6 +72,28 @@ describe("EventService integration tests", () => {
       end_date: removeUnderscoresFromTimestamp(fetchedEvent.end_date),
       start_date: removeUnderscoresFromTimestamp(fetchedEvent.start_date)
     }).toEqual(event1)
+  })
+
+  it("Should be able to get current existing events", async () => {
+    // Create past events
+    await eventService.createEvent(event1)
+    await eventService.createEvent(event2)
+    // Create a future event
+    const now = new Date(Date.now())
+    const scheduledEvent: Event = {
+      title: "Scheduled event",
+      location: "Future event",
+      start_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1)),
+      end_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1))
+    }
+    await eventService.createEvent(scheduledEvent)
+
+    const futureEvents = await eventService.getActiveEvents()
+
+    expect(futureEvents.length).toBe(1)
+    expect({
+      ...futureEvents[0]
+    }).toEqual(scheduledEvent)
   })
 
   it("Should be able to update an event", async () => {
