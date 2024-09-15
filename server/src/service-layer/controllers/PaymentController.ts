@@ -118,37 +118,29 @@ export class PaymentController extends Controller {
     const stripeService = new StripeService()
     try {
       const lodgeProducts = await stripeService.getActiveLodgeProducts()
-      // Maps the products to the required response type MembershipStripeProductResponse in PaymentResponse
-
+      // Maps the products to the required response type LodgeStripeProductResponse in PaymentResponse
       const productsValues = lodgeProducts.map((product) => {
-        // Checks the membership type of the product
+        // Checks the lodge type of the product
         const lodgeType = product.metadata[
           LODGE_PRICING_TYPE_KEY
         ] as LodgePricingTypeValues
 
-        let name: LodgePricingTypeValues
-
-        switch (lodgeType) {
-          case LodgePricingTypeValues.SingleFridayOrSaturday: {
-            name = LodgePricingTypeValues.SingleFridayOrSaturday
-            break
-          }
-          case LodgePricingTypeValues.Normal: {
-            name = LodgePricingTypeValues.Normal
-            break
-          }
-        }
-
         return {
+          // The stripe product id
           productId: product.id,
-          name,
+          // The lodge booking type
+          name: lodgeType,
+          // The product description
           description: product.description,
+          // A boolean value if there is a lodge booking discount
           discount: product.metadata.discount === "true",
+          // The price of the lodge booking
           displayPrice: (
             Number(
               (product.default_price as Stripe.Price).unit_amount_decimal
             ) / 100
           ).toString(),
+          // The original price of the lodge booking
           originalPrice: product.metadata.original_price
         }
       })
