@@ -56,6 +56,9 @@ export interface paths {
     /** @description Signs up for an event */
     post: operations["EventSignup"];
   };
+  "/events/reservations/stream": {
+    get: operations["StreamSignupCounts"];
+  };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
@@ -844,6 +847,14 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["EventSignupResponse"];
         };
+      };
+    };
+  };
+  StreamSignupCounts: {
+    responses: {
+      /** @description No content */
+      204: {
+        content: never;
       };
     };
   };

@@ -1,7 +1,16 @@
 import EventService from "data-layer/services/EventService"
 import { EventSignupBody } from "service-layer/request-models/EventRequests"
 import { EventSignupResponse } from "service-layer/response-models/EventResponse"
-import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
+import {
+  Get,
+  Body,
+  Controller,
+  Post,
+  Route,
+  Request,
+  SuccessResponse
+} from "tsoa"
+import express from "express"
 
 @Route("events")
 export class EventController extends Controller {
@@ -57,5 +66,30 @@ export class EventController extends Controller {
       this.setStatus(500)
       return { error: "Failed to sign up for event." }
     }
+  }
+
+  @Get("/reservations/stream")
+  public async streamSignupCounts(
+    @Request() req: express.Request
+  ): Promise<void> {
+    // Set the required headers for SSE
+    req.res.setHeader("Cache-Control", "no-cache")
+    req.res.setHeader("Content-Type", "text/event-stream")
+    req.res.setHeader("Access-Control-Allow-Origin", "*")
+    req.res.setHeader("Connection", "keep-alive")
+    req.res.flushHeaders()
+
+    const eventService = new EventService()
+    // Create something that updates every second
+    const interValID = setInterval(async () => {
+      const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
+      req.res?.write(`${signupCount}\n`) // res.write() instead of res.send()
+    }, 1000)
+
+    // If the connection drops, stop sending events
+    req.res?.on("close", () => {
+      clearInterval(interValID) // Clear the loop
+      req.res?.end()
+    })
   }
 }

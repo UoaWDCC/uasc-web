@@ -1746,6 +1746,18 @@
 				}
 			}
 		},
+		"/events/reservations/stream": {
+			"get": {
+				"operationId": "StreamSignupCounts",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/bookings": {
 			"get": {
 				"operationId": "GetAllBookings",
