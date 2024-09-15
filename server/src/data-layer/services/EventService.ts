@@ -27,16 +27,16 @@ class EventService {
   }
 
   /**
-   * Fetches all events that have a start date in the future.
-   * Note that "active" means any event that is still upcoming, or "ready" to signup.
+   * Fetches all events that have a end_date in the future.
+   * Note that "active" means any event that haven't ended yet.
    *
-   * @returns a list of events that have a start_date that is later to the current date.
+   * @returns a list of events that have a end_date that is later to the current date.
    */
   public async getActiveEvents(): Promise<DocumentDataWithUid<Event>[]> {
     const now = new Date(Date.now())
 
     const result = await FirestoreCollections.events
-      .where("start_date", ">=", now)
+      .where("end_date", ">", now) // Only get events that have not ended
       .get()
 
     return result.docs.map((doc) => {

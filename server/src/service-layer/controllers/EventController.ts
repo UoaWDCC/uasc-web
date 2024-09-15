@@ -69,7 +69,7 @@ export class EventController extends Controller {
   }
 
   /**
-   * Streams the current signup count for events.
+   * Streams the signup count for active events signups.
    * Note that when testing this on swagger, the connection will remain open.
    */
   @Get("/reservations/stream")
