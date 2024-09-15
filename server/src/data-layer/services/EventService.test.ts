@@ -6,6 +6,7 @@ import {
 } from "data-layer/adapters/DateUtils"
 import { Event, EventReservation } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
+import { Timestamp } from "firebase-admin/firestore"
 
 const eventService = new EventService()
 
@@ -25,6 +26,13 @@ const event2: Event = {
   location: "Snowsport club",
   start_date: startDate,
   end_date: endDate
+}
+const now = new Date(Date.now())
+const futureEvent: Event = {
+  title: "Scheduled event",
+  location: "Future event",
+  start_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1)),
+  end_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1))
 }
 
 const reservation1: EventReservation = {
@@ -71,6 +79,19 @@ describe("EventService integration tests", () => {
       end_date: removeUnderscoresFromTimestamp(fetchedEvent.end_date),
       start_date: removeUnderscoresFromTimestamp(fetchedEvent.start_date)
     }).toEqual(event1)
+  })
+
+  it("Should be able to get current existing events", async () => {
+    // Create past events
+    await eventService.createEvent(event1)
+    await eventService.createEvent(event2)
+    // Create a future event
+    const newEvent = await eventService.createEvent(futureEvent)
+
+    const futureEvents = await eventService.getActiveEvents()
+
+    expect(futureEvents.length).toBe(1)
+    expect(futureEvents).toEqual([{ ...futureEvent, id: newEvent.id }])
   })
 
   it("Should be able to update an event", async () => {
@@ -176,6 +197,19 @@ describe("EventService integration tests", () => {
         reservation.id
       )
       expect(fetchedReservation).toEqual(reservation1)
+    })
+
+    it("Should get the total count of active event reservations", async () => {
+      // An older event shouldn't be counted.
+      const oldEvent = await eventService.createEvent(event1)
+      await eventService.addReservation(oldEvent.id, reservation1)
+      // Should only count reservations for future events
+      const newEvent = await eventService.createEvent(futureEvent)
+      await eventService.addReservation(newEvent.id, reservation1)
+      await eventService.addReservation(newEvent.id, reservation2)
+
+      const count = await eventService.getActiveReservationsCount()
+      expect(count).toBe(2)
     })
 
     it("Should get all event reservations", async () => {

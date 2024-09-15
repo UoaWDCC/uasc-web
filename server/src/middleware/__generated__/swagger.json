@@ -1746,6 +1746,19 @@
 				}
 			}
 		},
+		"/events/reservations/stream": {
+			"get": {
+				"operationId": "StreamSignupCounts",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Streams the signup count for active events signups.\nNote that when testing this on swagger, the connection will remain open.",
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/bookings": {
 			"get": {
 				"operationId": "GetAllBookings",
