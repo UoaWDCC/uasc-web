@@ -1,7 +1,18 @@
 import EventService from "data-layer/services/EventService"
 import { EventSignupBody } from "service-layer/request-models/EventRequests"
-import { EventSignupResponse } from "service-layer/response-models/EventResponse"
-import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
+import {
+  EventSignupResponse,
+  GetAllEventsResponse
+} from "service-layer/response-models/EventResponse"
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Route,
+  SuccessResponse
+} from "tsoa"
 
 @Route("events")
 export class EventController extends Controller {
@@ -56,6 +67,29 @@ export class EventController extends Controller {
     } catch (e) {
       this.setStatus(500)
       return { error: "Failed to sign up for event." }
+    }
+  }
+
+  @Get()
+  @SuccessResponse("200", "Successfully fetched all events")
+  public async getAllEvents(
+    @Query() limit: number = 20,
+    @Query() cursor?: string
+  ): Promise<GetAllEventsResponse> {
+    try {
+      const eventService = new EventService()
+
+      let snapshot
+      if (cursor) {
+        snapshot = await eventService.getEventSnapshot(cursor)
+      }
+
+      const res = await eventService.getAllEvents(limit, snapshot)
+      return { nextCursor: res.nextCursor, data: res.events }
+    } catch (e) {
+      return {
+        error: "Something went wrong when fetching all events, please try again"
+      }
     }
   }
 }

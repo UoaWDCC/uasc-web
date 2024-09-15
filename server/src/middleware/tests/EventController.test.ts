@@ -1,13 +1,29 @@
 import EventService from "data-layer/services/EventService"
 import { request } from "../routes.setup"
 import { Event, EventReservation } from "../../data-layer/models/firebase"
-import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
+import { Timestamp } from "firebase-admin/firestore"
 
-const startDate = dateToFirestoreTimeStamp(new Date(2024, 1, 1))
-const endDate = dateToFirestoreTimeStamp(new Date(2024, 1, 2))
+const earlierStartDate = Timestamp.fromDate(new Date(2023, 1, 1))
+const startDate = Timestamp.fromDate(new Date(2024, 1, 1))
+const endDate = Timestamp.fromDate(new Date(2024, 1, 2))
+/**
+ * Event with the earlier start date
+ */
 const event1: Event = {
   title: "UASC New event",
   location: "UASC",
+  physical_start_date: startDate,
+  start_date: earlierStartDate,
+  end_date: earlierStartDate
+}
+
+/**
+ * Event witht the later start date
+ */
+const event2: Event = {
+  title: "Straight Zhao",
+  location: "UASC",
+  physical_start_date: startDate,
   start_date: startDate,
   end_date: endDate
 }
@@ -20,6 +36,29 @@ const reservation1: EventReservation = {
 
 describe("EventController endpoint tests", () => {
   const eventService = new EventService()
+
+  describe("GET /events", () => {
+    it("should fetch all events based on cursor", async () => {
+      const { id: id1 } = await eventService.createEvent(event1)
+      const { id: id2 } = await eventService.createEvent(event2)
+
+      let res = await request.get("/events").query({ limit: 1 }).send()
+
+      expect(res.body.data).toHaveLength(1)
+      expect(res.body.data).not.toContainEqual({ ...event1, id: id1 })
+      expect(res.body.data).toContainEqual({ ...event2, id: id2 })
+
+      res = await request
+        .get("/events")
+        .query({ cursor: res.body.nextCursor, limit: 1 })
+        .send()
+
+      expect(res.body.data).toHaveLength(1)
+      expect(res.body.data).toContainEqual({ ...event1, id: id1 })
+      expect(res.body.data).not.toContainEqual({ ...event2, id: id2 })
+    })
+  })
+
   describe("/events/signup", () => {
     it("should return 404 if the event does not exist", async () => {
       const res = await request.post("/events/signup").send({

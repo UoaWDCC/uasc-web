@@ -59,6 +59,8 @@ import BookingUtils, {
 } from "business-layer/utils/BookingUtils"
 import BookingHistoryService from "data-layer/services/BookingHistoryService"
 import { FetchLatestBookingHistoryEventResponse } from "service-layer/response-models/AdminResponse"
+import { CreateEventBody } from "service-layer/request-models/EventRequests"
+import EventService from "data-layer/services/EventService"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -690,6 +692,22 @@ export class AdminController extends Controller {
       return {
         error: "Unable to fetch the booking history"
       }
+    }
+  }
+
+  /**
+   * Endpoint for admin to create a new event
+   */
+  @SuccessResponse("201", "Created Event")
+  @Post("events/create")
+  public async createNewEvent(@Body() body: CreateEventBody) {
+    try {
+      const eventService = new EventService()
+      await eventService.createEvent(body.data)
+
+      this.setStatus(201)
+    } catch {
+      this.setStatus(500)
     }
   }
 }

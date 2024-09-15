@@ -195,6 +195,31 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Event": {
+        "dataType": "refObject",
+        "properties": {
+            "title": {"dataType":"string","required":true},
+            "description": {"dataType":"string"},
+            "image_url": {"dataType":"string"},
+            "location": {"dataType":"string","required":true},
+            "start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "end_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "max_occupancy": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GetAllEventsResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "nextCursor": {"dataType":"string"},
+            "data": {"dataType":"array","array":{"dataType":"refObject","ref":"Event"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AllUserBookingSlotsResponse": {
         "dataType": "refObject",
         "properties": {
@@ -517,6 +542,14 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateEventBody": {
+        "dataType": "refObject",
+        "properties": {
+            "data": {"ref":"Event","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const templateService = new ExpressTemplateService(models, {"noImplicitAdditionalProperties":"throw-on-extras","bodyCoercion":true});
 
@@ -824,6 +857,37 @@ export function RegisterRoutes(app: Router) {
 
               templateService.apiHandler({
                 methodName: 'eventSignup',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/events',
+            ...(fetchMiddlewares<RequestHandler>(EventController)),
+            ...(fetchMiddlewares<RequestHandler>(EventController.prototype.getAllEvents)),
+
+            function EventController_getAllEvents(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    limit: {"default":20,"in":"query","name":"limit","dataType":"double"},
+                    cursor: {"in":"query","name":"cursor","dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new EventController();
+
+              templateService.apiHandler({
+                methodName: 'getAllEvents',
                 controller,
                 response,
                 next,
@@ -1326,6 +1390,37 @@ export function RegisterRoutes(app: Router) {
                 next,
                 validatedArgs,
                 successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/admin/events/create',
+            authenticateMiddleware([{"jwt":["admin"]}]),
+            ...(fetchMiddlewares<RequestHandler>(AdminController)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.createNewEvent)),
+
+            function AdminController_createNewEvent(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    body: {"in":"body","name":"body","required":true,"ref":"CreateEventBody"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new AdminController();
+
+              templateService.apiHandler({
+                methodName: 'createNewEvent',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 201,
               });
             } catch (err) {
                 return next(err);

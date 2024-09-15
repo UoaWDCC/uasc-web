@@ -420,6 +420,70 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"Event": {
+				"properties": {
+					"title": {
+						"type": "string",
+						"description": "The title of this event"
+					},
+					"description": {
+						"type": "string",
+						"description": "An optional description for this event\nThis should be in markdown"
+					},
+					"image_url": {
+						"type": "string",
+						"description": "The link for the image to display on the event page (essentially a thumbnail)"
+					},
+					"location": {
+						"type": "string",
+						"description": "The location of this event"
+					},
+					"start_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The start date of the event.\nNote that this date is in UTC time.\nUse the same start and end day to show that its a 1 day event."
+					},
+					"end_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The end date of the event.\nNote that this date is in UTC time."
+					},
+					"max_occupancy": {
+						"type": "number",
+						"format": "double",
+						"description": "Max number of attendees at this event, left as optional for uncapped",
+						"example": 30
+					}
+				},
+				"required": [
+					"title",
+					"location",
+					"start_date",
+					"end_date"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetAllEventsResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"nextCursor": {
+						"type": "string",
+						"description": "Needed for firestore operations which do not support offset\nbased pagination\n\n**Will be undefined in case of last page**"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/Event"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AllUserBookingSlotsResponse": {
 				"properties": {
 					"error": {
@@ -1277,6 +1341,18 @@
 				},
 				"type": "object",
 				"additionalProperties": false
+			},
+			"CreateEventBody": {
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/Event"
+					}
+				},
+				"required": [
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -1673,6 +1749,44 @@
 						}
 					}
 				}
+			}
+		},
+		"/events": {
+			"get": {
+				"operationId": "GetAllEvents",
+				"responses": {
+					"200": {
+						"description": "Successfully fetched all events",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetAllEventsResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 20,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "cursor",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/bookings": {
@@ -2227,6 +2341,35 @@
 						}
 					}
 				]
+			}
+		},
+		"/admin/events/create": {
+			"post": {
+				"operationId": "CreateNewEvent",
+				"responses": {
+					"201": {
+						"description": "Created Event"
+					}
+				},
+				"description": "Endpoint for admin to create a new event",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateEventBody"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

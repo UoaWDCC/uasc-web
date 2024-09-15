@@ -118,6 +118,46 @@ class EventService {
       .doc(reservationId)
       .delete()
   }
+
+  public async getEventSnapshot(id: string) {
+    return await FirestoreCollections.events.doc(id).get()
+  }
+
+  /**
+   * Returns a list of the latest events. Note that "latest" means events with the latest start date.
+   *
+   * @param limit how many events to fetch
+   * @param startAfter snapshot of document which was the last cursor - should
+   * fetch using the helper defined as {@link getEventSnapshot}
+   * @returns an object providing the id of the next snapshot and list of events
+   */
+  public async getAllEvents(
+    limit: number,
+    startAfter?: FirebaseFirestore.DocumentSnapshot<
+      Event,
+      FirebaseFirestore.DocumentData
+    >
+  ) {
+    let query = FirestoreCollections.events
+      // Start at the largest (latest) date
+      .orderBy("start_date", "desc")
+      .limit(limit)
+
+    if (startAfter) {
+      query = query.startAfter(startAfter)
+    }
+
+    const res = await query.get()
+
+    const events = res.docs.map((event) => {
+      return { ...event.data(), id: event.id }
+    })
+
+    return {
+      events,
+      nextCursor: res.docs[res.docs.length - 1]?.id || undefined
+    }
+  }
 }
 
 export default EventService

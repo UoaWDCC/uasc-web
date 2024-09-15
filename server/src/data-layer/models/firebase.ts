@@ -176,11 +176,23 @@ export interface Event {
    * Use the same start and end day to show that its a 1 day event.
    */
   start_date: Timestamp
+
   /**
    * The end date of the event.
    * Note that this date is in UTC time.
    */
   end_date: Timestamp
+
+  /**
+   * Event start date for the event, **NOT** the signups, refer to {@link start_date} for signup start
+   */
+  physical_start_date: Timestamp
+
+  /**
+   * Event end time for the event. **NOT** the signups, refer to {@link end_date} for signup end
+   */
+  physical_end_date?: Timestamp
+
   /**
    * Max number of attendees at this event, left as optional for uncapped
    * @example 30

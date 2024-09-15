@@ -52,6 +52,9 @@ export interface paths {
     /** @description Signs up for an event */
     post: operations["EventSignup"];
   };
+  "/events": {
+    get: operations["GetAllEvents"];
+  };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
@@ -139,6 +142,10 @@ export interface paths {
   "/admin/bookings/history": {
     /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
     get: operations["GetLatestHistory"];
+  };
+  "/admin/events/create": {
+    /** @description Endpoint for admin to create a new event */
+    post: operations["CreateNewEvent"];
   };
 }
 
@@ -296,6 +303,48 @@ export interface components {
     EventSignupBody: {
       event_id: string;
       reservation: components["schemas"]["EventReservation"];
+    };
+    Event: {
+      /** @description The title of this event */
+      title: string;
+      /**
+       * @description An optional description for this event
+       * This should be in markdown
+       */
+      description?: string;
+      /** @description The link for the image to display on the event page (essentially a thumbnail) */
+      image_url?: string;
+      /** @description The location of this event */
+      location: string;
+      /**
+       * @description The start date of the event.
+       * Note that this date is in UTC time.
+       * Use the same start and end day to show that its a 1 day event.
+       */
+      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The end date of the event.
+       * Note that this date is in UTC time.
+       */
+      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * Format: double
+       * @description Max number of attendees at this event, left as optional for uncapped
+       * @example 30
+       */
+      max_occupancy?: number;
+    };
+    GetAllEventsResponse: {
+      error?: string;
+      message?: string;
+      /**
+       * @description Needed for firestore operations which do not support offset
+       * based pagination
+       *
+       * **Will be undefined in case of last page**
+       */
+      nextCursor?: string;
+      data?: components["schemas"]["Event"][];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -621,6 +670,9 @@ export interface components {
       message?: string;
       historyEvents?: components["schemas"]["BookingHistoryEvent"][];
     };
+    CreateEventBody: {
+      data: components["schemas"]["Event"];
+    };
   };
   responses: {
   };
@@ -814,6 +866,22 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["EventSignupResponse"];
+        };
+      };
+    };
+  };
+  GetAllEvents: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
+      };
+    };
+    responses: {
+      /** @description Successfully fetched all events */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAllEventsResponse"];
         };
       };
     };
@@ -1089,6 +1157,20 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["FetchLatestBookingHistoryEventResponse"];
         };
+      };
+    };
+  };
+  /** @description Endpoint for admin to create a new event */
+  CreateNewEvent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateEventBody"];
+      };
+    };
+    responses: {
+      /** @description Created Event */
+      201: {
+        content: never;
       };
     };
   };
