@@ -68,6 +68,10 @@ export class EventController extends Controller {
     }
   }
 
+  /**
+   * Streams the current signup count for events.
+   * Note that when testing this on swagger, the connection will remain open.
+   */
   @Get("/reservations/stream")
   public async streamSignupCounts(
     @Request() req: express.Request
@@ -78,13 +82,22 @@ export class EventController extends Controller {
     req.res.setHeader("Access-Control-Allow-Origin", "*")
     req.res.setHeader("Connection", "keep-alive")
     req.res.flushHeaders()
-
     const eventService = new EventService()
-    // Create something that updates every second
+
+    const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
+    req.res.write(
+      `data: ${JSON.stringify({ reservation_count: signupCount })}\n\n`
+    )
+
+    // Create something that updates every 5 seconds
     const interValID = setInterval(async () => {
       const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
-      req.res?.write(`${signupCount}\n`) // res.write() instead of res.send()
-    }, 1000)
+      // NOTE: We use double new line because SSE requires this to indicate we're ready for the next event
+      // We also need the data: to indicate data payload
+      req.res.write(
+        `data: ${JSON.stringify({ reservation_count: signupCount })}\n\n`
+      ) // res.write() instead of res.send()
+    }, 5000)
 
     // If the connection drops, stop sending events
     req.res?.on("close", () => {

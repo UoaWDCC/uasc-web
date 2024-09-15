@@ -57,6 +57,10 @@ export interface paths {
     post: operations["EventSignup"];
   };
   "/events/reservations/stream": {
+    /**
+     * @description Streams the current signup count for events.
+     * Note that when testing this on swagger, the connection will remain open.
+     */
     get: operations["StreamSignupCounts"];
   };
   "/bookings": {
@@ -850,6 +854,10 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Streams the current signup count for events.
+   * Note that when testing this on swagger, the connection will remain open.
+   */
   StreamSignupCounts: {
     responses: {
       /** @description No content */
