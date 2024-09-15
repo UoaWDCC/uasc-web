@@ -1754,7 +1754,7 @@
 						"description": "No content"
 					}
 				},
-				"description": "Streams the current signup count for events.\nNote that when testing this on swagger, the connection will remain open.",
+				"description": "Streams the signup count for active events signups.\nNote that when testing this on swagger, the connection will remain open.",
 				"security": [],
 				"parameters": []
 			}
