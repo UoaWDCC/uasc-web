@@ -2,6 +2,7 @@ import EventService from "data-layer/services/EventService"
 import { request } from "../routes.setup"
 import { Event, EventReservation } from "../../data-layer/models/firebase"
 import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
+import { Timestamp } from "firebase-admin/firestore"
 
 const startDate = dateToFirestoreTimeStamp(new Date(2024, 1, 1))
 const endDate = dateToFirestoreTimeStamp(new Date(2024, 1, 2))
@@ -11,7 +12,7 @@ const event1: Event = {
   start_date: startDate,
   end_date: endDate
 }
-const reservation1: EventReservation = {
+const reservation1: Omit<EventReservation, "timestamp"> = {
   first_name: "John",
   last_name: "Doe",
   email: "test@email.com",
@@ -44,7 +45,10 @@ describe("EventController endpoint tests", () => {
 
     it("should return 400 if already signed up to event", async () => {
       const event = await eventService.createEvent(event1)
-      await eventService.addReservation(event.id, reservation1)
+      await eventService.addReservation(event.id, {
+        ...reservation1,
+        timestamp: Timestamp.now()
+      })
       const res = await request.post("/events/signup").send({
         event_id: event.id,
         reservation: reservation1
