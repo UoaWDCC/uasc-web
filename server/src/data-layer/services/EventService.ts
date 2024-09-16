@@ -140,7 +140,7 @@ class EventService {
   ) {
     let query = FirestoreCollections.events
       // Start at the largest (latest) date
-      .orderBy("start_date", "desc")
+      .orderBy("physical_start_date", "desc")
       .limit(limit)
 
     if (startAfter) {
