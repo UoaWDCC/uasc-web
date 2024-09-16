@@ -15,6 +15,7 @@ import {
   SuccessResponse
 } from "tsoa"
 import express from "express"
+import { Timestamp } from "firebase-admin/firestore"
 
 @Route("events")
 export class EventController extends Controller {
@@ -56,7 +57,10 @@ export class EventController extends Controller {
     }
     // Sign up the user
     try {
-      await eventService.addReservation(event_id, reservation)
+      await eventService.addReservation(event_id, {
+        ...reservation,
+        timestamp: Timestamp.now()
+      })
       this.setStatus(200)
       return {
         message: "Successfully signed up for event.",

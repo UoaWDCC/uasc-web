@@ -190,22 +190,21 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "EventReservation": {
-        "dataType": "refObject",
-        "properties": {
-            "first_name": {"dataType":"string","required":true},
-            "last_name": {"dataType":"string","required":true},
-            "email": {"dataType":"string","required":true},
-            "is_member": {"dataType":"boolean","required":true},
-        },
-        "additionalProperties": false,
+    "Pick_EventReservation.Exclude_keyofEventReservation.timestamp__": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"first_name":{"dataType":"string","required":true},"last_name":{"dataType":"string","required":true},"email":{"dataType":"string","required":true},"is_member":{"dataType":"boolean","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Omit_EventReservation.timestamp_": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_EventReservation.Exclude_keyofEventReservation.timestamp__","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "EventSignupBody": {
         "dataType": "refObject",
         "properties": {
             "event_id": {"dataType":"string","required":true},
-            "reservation": {"ref":"EventReservation","required":true},
+            "reservation": {"ref":"Omit_EventReservation.timestamp_","required":true},
         },
         "additionalProperties": false,
     },
