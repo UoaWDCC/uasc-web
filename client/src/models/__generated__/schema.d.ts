@@ -32,6 +32,10 @@ export interface paths {
     /** @description Fetches the prices of the membership products from Stripe. */
     get: operations["GetMembershipPrices"];
   };
+  "/payment/lodge_prices": {
+    /** @description Fetches the prices of the lodge products from Stripe. */
+    get: operations["GetLodgePrices"];
+  };
   "/payment/checkout_status": {
     /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
     get: operations["GetCheckoutSessionDetails"];
@@ -54,6 +58,13 @@ export interface paths {
   };
   "/events": {
     get: operations["GetAllEvents"];
+  };
+  "/events/reservations/stream": {
+    /**
+     * @description Streams the signup count for active events signups.
+     * Note that when testing this on swagger, the connection will remain open.
+     */
+    get: operations["StreamSignupCounts"];
   };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
@@ -253,6 +264,20 @@ export interface components {
         }[];
     };
     /** @enum {string} */
+    LodgePricingTypeValues: "single_friday_or_saturday" | "normal";
+    LodgeStripeProductResponse: {
+      error?: string;
+      message?: string;
+      data?: {
+          originalPrice?: string;
+          displayPrice: string;
+          discount: boolean;
+          description?: string;
+          name: components["schemas"]["LodgePricingTypeValues"];
+          productId: string;
+        }[];
+    };
+    /** @enum {string} */
     "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";
     /** @description Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format. */
     "stripe.Stripe.Metadata": {
@@ -317,19 +342,26 @@ export interface components {
       /** @description The location of this event */
       location: string;
       /**
-       * @description The start date of the event.
+       * @description The signup period start date.
        * Note that this date is in UTC time.
-       * Use the same start and end day to show that its a 1 day event.
+       * Use the same start and end date to indicate a 1 day signup period.
        */
       start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
-       * @description The end date of the event.
+       * @description The signup period end date.
        * Note that this date is in UTC time.
        */
       end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Event start date for the event, **NOT** the signups, refer to {@link start_date} for signup start */
+      /**
+       * @description Event start date for the event i.e the day members should meet at shads,
+       * **NOT** the signups, refer to {@link start_date} for signup start
+       */
       physical_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
-      /** @description Event end time for the event. **NOT** the signups, refer to {@link end_date} for signup end */
+      /**
+       * @description Event end time for the event i.e the last day members will be at the lodge,
+       * is optionial in case of one day events. **NOT** the signups, refer to
+       * {@link end_date} for signup end date
+       */
       physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * Format: double
@@ -797,6 +829,17 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches the prices of the lodge products from Stripe. */
+  GetLodgePrices: {
+    responses: {
+      /** @description The prices of the lodge products. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LodgeStripeProductResponse"];
+        };
+      };
+    };
+  };
   /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
   GetCheckoutSessionDetails: {
     parameters: {
@@ -887,6 +930,18 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["GetAllEventsResponse"];
         };
+      };
+    };
+  };
+  /**
+   * @description Streams the signup count for active events signups.
+   * Note that when testing this on swagger, the connection will remain open.
+   */
+  StreamSignupCounts: {
+    responses: {
+      /** @description No content */
+      204: {
+        content: never;
       };
     };
   };

@@ -171,14 +171,14 @@ export interface Event {
    */
   location: string
   /**
-   * The start date of the event.
+   * The signup period start date.
    * Note that this date is in UTC time.
-   * Use the same start and end day to show that its a 1 day event.
+   * Use the same start and end date to indicate a 1 day signup period.
    */
   start_date: Timestamp
 
   /**
-   * The end date of the event.
+   * The signup period end date.
    * Note that this date is in UTC time.
    */
   end_date: Timestamp

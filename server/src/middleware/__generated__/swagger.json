@@ -272,6 +272,57 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"LodgePricingTypeValues": {
+				"enum": [
+					"single_friday_or_saturday",
+					"normal"
+				],
+				"type": "string"
+			},
+			"LodgeStripeProductResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"properties": {
+								"originalPrice": {
+									"type": "string"
+								},
+								"displayPrice": {
+									"type": "string"
+								},
+								"discount": {
+									"type": "boolean"
+								},
+								"description": {
+									"type": "string"
+								},
+								"name": {
+									"$ref": "#/components/schemas/LodgePricingTypeValues"
+								},
+								"productId": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"displayPrice",
+								"discount",
+								"name",
+								"productId"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"stripe.Stripe.Checkout.Session.Status": {
 				"type": "string",
 				"enum": [
@@ -440,19 +491,19 @@
 					},
 					"start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "The start date of the event.\nNote that this date is in UTC time.\nUse the same start and end day to show that its a 1 day event."
+						"description": "The signup period start date.\nNote that this date is in UTC time.\nUse the same start and end date to indicate a 1 day signup period."
 					},
 					"end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "The end date of the event.\nNote that this date is in UTC time."
+						"description": "The signup period end date.\nNote that this date is in UTC time."
 					},
 					"physical_start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event start date for the event, **NOT** the signups, refer to {@link start_date} for signup start"
+						"description": "Event start date for the event i.e the day members should meet at shads,\n**NOT** the signups, refer to {@link start_date} for signup start"
 					},
 					"physical_end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event end time for the event. **NOT** the signups, refer to {@link end_date} for signup end"
+						"description": "Event end time for the event i.e the last day members will be at the lodge,\nis optionial in case of one day events. **NOT** the signups, refer to\n{@link end_date} for signup end date"
 					},
 					"max_occupancy": {
 						"type": "number",
@@ -1601,6 +1652,26 @@
 				"parameters": []
 			}
 		},
+		"/payment/lodge_prices": {
+			"get": {
+				"operationId": "GetLodgePrices",
+				"responses": {
+					"200": {
+						"description": "The prices of the lodge products.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LodgeStripeProductResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Fetches the prices of the lodge products from Stripe.",
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/payment/checkout_status": {
 			"get": {
 				"operationId": "GetCheckoutSessionDetails",
@@ -1796,6 +1867,19 @@
 						}
 					}
 				]
+			}
+		},
+		"/events/reservations/stream": {
+			"get": {
+				"operationId": "StreamSignupCounts",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Streams the signup count for active events signups.\nNote that when testing this on swagger, the connection will remain open.",
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/bookings": {

@@ -11,8 +11,10 @@ import {
   Post,
   Query,
   Route,
+  Request,
   SuccessResponse
 } from "tsoa"
+import express from "express"
 
 @Route("events")
 export class EventController extends Controller {
@@ -91,5 +93,43 @@ export class EventController extends Controller {
         error: "Something went wrong when fetching all events, please try again"
       }
     }
+  }
+
+  /**
+   * Streams the signup count for active events signups.
+   * Note that when testing this on swagger, the connection will remain open.
+   */
+  @Get("/reservations/stream")
+  public async streamSignupCounts(
+    @Request() req: express.Request
+  ): Promise<void> {
+    // Set the required headers for SSE
+    req.res.setHeader("Cache-Control", "no-cache")
+    req.res.setHeader("Content-Type", "text/event-stream")
+    req.res.setHeader("Access-Control-Allow-Origin", "*")
+    req.res.setHeader("Connection", "keep-alive")
+    req.res.flushHeaders()
+    const eventService = new EventService()
+
+    const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
+    req.res.write(
+      `data: ${JSON.stringify({ reservation_count: signupCount })}\n\n`
+    )
+
+    // Create something that updates every 5 seconds
+    const interValID = setInterval(async () => {
+      const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
+      // NOTE: We use double new line because SSE requires this to indicate we're ready for the next event
+      // We also need the data: to indicate data payload
+      req.res.write(
+        `data: ${JSON.stringify({ reservation_count: signupCount })}\n\n`
+      ) // res.write() instead of res.send()
+    }, 5000)
+
+    // If the connection drops, stop sending events
+    req.res?.on("close", () => {
+      clearInterval(interValID) // Clear the loop
+      req.res?.end()
+    })
   }
 }

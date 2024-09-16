@@ -1,5 +1,6 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import FirestoreSubcollections from "data-layer/adapters/FirestoreSubcollections"
+import { DocumentDataWithUid } from "data-layer/models/common"
 import { Event, EventReservation } from "data-layer/models/firebase"
 
 class EventService {
@@ -23,6 +24,24 @@ class EventService {
     const result = await FirestoreCollections.events.doc(eventId).get()
 
     return result.data()
+  }
+
+  /**
+   * Fetches all events that have a end_date in the future.
+   * Note that "active" means any event that haven't ended yet.
+   *
+   * @returns a list of events that have a end_date that is later to the current date.
+   */
+  public async getActiveEvents(): Promise<DocumentDataWithUid<Event>[]> {
+    const now = new Date(Date.now())
+
+    const result = await FirestoreCollections.events
+      .where("end_date", ">", now) // Only get events that have not ended
+      .get()
+
+    return result.docs.map((doc) => {
+      return { ...(doc.data() as Event), id: doc.id }
+    })
   }
 
   /**
@@ -72,7 +91,10 @@ class EventService {
    * @param reservationId the ID of the reservation document
    * @returns the reservation document
    */
-  public async getReservationById(eventId: string, reservationId: string) {
+  public async getReservationById(
+    eventId: string,
+    reservationId: string
+  ): Promise<EventReservation> {
     const result = await FirestoreSubcollections.reservations(eventId)
       .doc(reservationId)
       .get()
@@ -85,9 +107,27 @@ class EventService {
    * @param eventId the ID of the event document
    * @returns an array of all the event reservation documents
    */
-  public async getAllReservations(eventId: string) {
+  public async getAllReservations(
+    eventId: string
+  ): Promise<EventReservation[]> {
     const result = await FirestoreSubcollections.reservations(eventId).get()
     return result.docs.map((doc) => doc.data())
+  }
+
+  /**
+   * Used for the SSE feature to display the total number of active event reservations.
+   * @returns the total number of active event reservations
+   */
+  public async getActiveReservationsCount(): Promise<number> {
+    const currentEvents = await this.getActiveEvents()
+    let total = 0
+    await Promise.all(
+      currentEvents.map(async (event) => {
+        const eventReservations = await this.getAllReservations(event.id)
+        total += eventReservations.length
+      })
+    )
+    return total
   }
 
   /**
