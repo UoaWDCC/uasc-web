@@ -158,7 +158,7 @@ export interface paths {
     /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
     get: operations["GetLatestHistory"];
   };
-  "/admin/events/create": {
+  "/admin/events": {
     /** @description Endpoint for admin to create a new event */
     post: operations["CreateNewEvent"];
   };

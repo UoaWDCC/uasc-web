@@ -699,7 +699,7 @@ export class AdminController extends Controller {
    * Endpoint for admin to create a new event
    */
   @SuccessResponse("201", "Created Event")
-  @Post("events/create")
+  @Post("events")
   public async createNewEvent(@Body() body: CreateEventBody) {
     try {
       const eventService = new EventService()

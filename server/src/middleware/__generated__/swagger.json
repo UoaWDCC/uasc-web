@@ -2441,7 +2441,7 @@
 				]
 			}
 		},
-		"/admin/events/create": {
+		"/admin/events": {
 			"post": {
 				"operationId": "CreateNewEvent",
 				"responses": {

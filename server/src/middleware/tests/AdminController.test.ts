@@ -809,7 +809,7 @@ describe("AdminController endpoint tests", () => {
     })
   })
 
-  describe("/admin/events/create", () => {
+  describe("/admin/events", () => {
     const event1: Event = {
       title: "UASC New event",
       physical_start_date: dateToFirestoreTimeStamp(new Date()),
@@ -820,7 +820,7 @@ describe("AdminController endpoint tests", () => {
 
     it("should let admins create an event", async () => {
       const res = await request
-        .post("/admin/events/create")
+        .post("/admin/events")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ data: event1 })
 
