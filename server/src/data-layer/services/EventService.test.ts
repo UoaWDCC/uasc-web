@@ -16,6 +16,7 @@ const event1: Event = {
   title: "UASC new event",
   description: "Grand opening of the website.",
   location: "Virtual pizza event",
+  physical_start_date: startDate,
   start_date: startDate,
   end_date: endDate
 }
@@ -23,6 +24,7 @@ const event2: Event = {
   title: "Snowboard racing",
   description: "Race and see who's the fastest!",
   location: "Snowsport club",
+  physical_start_date: startDate,
   start_date: startDate,
   end_date: endDate
 }
