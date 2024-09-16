@@ -159,6 +159,11 @@ class EventService {
       .delete()
   }
 
+  /**
+   * Utility method for getting the snapshot of a document
+   *
+   * @param id the document id of the event to check, likely coming from a pagination cursor
+   */
   public async getEventSnapshot(id: string) {
     return await FirestoreCollections.events.doc(id).get()
   }
