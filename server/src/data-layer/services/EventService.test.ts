@@ -13,6 +13,8 @@ const eventService = new EventService()
 const startDate = dateToFirestoreTimeStamp(new Date(2024, 1, 1))
 const endDate = dateToFirestoreTimeStamp(new Date(2024, 1, 2))
 
+const laterStartDate = dateToFirestoreTimeStamp(new Date(2024, 2, 2))
+
 const event1: Event = {
   title: "UASC new event",
   description: "Grand opening of the website.",
@@ -56,6 +58,33 @@ const reservation2: EventReservation = {
 describe("EventService integration tests", () => {
   afterEach(async () => {
     await cleanFirestore()
+  })
+
+  it("Should be able to fetch the latest X events (based on when the event actually starts), descending", async () => {
+    const { id: idEarly } = await eventService.createEvent(event1)
+    const { id: idLater } = await eventService.createEvent({
+      ...event1,
+      physical_start_date: laterStartDate
+    })
+
+    const page1Events = await eventService.getAllEvents(1)
+    expect(page1Events.events).toHaveLength(1)
+    expect(
+      page1Events.events.some((event) => event.id === idLater)
+    ).toBeTruthy()
+
+    expect(page1Events.nextCursor).toBeDefined()
+
+    let snapshot
+    if (page1Events.nextCursor) {
+      snapshot = await eventService.getEventSnapshot(page1Events.nextCursor)
+    }
+
+    const page2Events = await eventService.getAllEvents(1, snapshot)
+    expect(page2Events.events).toHaveLength(1)
+    expect(
+      page2Events.events.some((event) => event.id === idEarly)
+    ).toBeTruthy()
   })
 
   it("Should be able to add an event", async () => {
