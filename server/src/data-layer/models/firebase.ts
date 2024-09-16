@@ -148,6 +148,10 @@ export interface EventReservation {
    * @example true
    */
   is_member: boolean
+  /**
+   * This is the timestamp of when the reservation was made
+   */
+  timestamp: Timestamp
 }
 
 export interface Event {

@@ -10,22 +10,24 @@ import { Timestamp } from "firebase-admin/firestore"
 
 const eventService = new EventService()
 
-const startDate = dateToFirestoreTimeStamp(new Date(2024, 1, 1))
-const endDate = dateToFirestoreTimeStamp(new Date(2024, 1, 2))
+const startDate = new Date(2024, 1, 1)
+const endDate = new Date(2024, 1, 2)
+const startTimestamp = dateToFirestoreTimeStamp(startDate)
+const endTimestamp = dateToFirestoreTimeStamp(endDate)
 
 const event1: Event = {
   title: "UASC new event",
   description: "Grand opening of the website.",
   location: "Virtual pizza event",
-  start_date: startDate,
-  end_date: endDate
+  start_date: startTimestamp,
+  end_date: endTimestamp
 }
 const event2: Event = {
   title: "Snowboard racing",
   description: "Race and see who's the fastest!",
   location: "Snowsport club",
-  start_date: startDate,
-  end_date: endDate
+  start_date: startTimestamp,
+  end_date: endTimestamp
 }
 const now = new Date(Date.now())
 const futureEvent: Event = {
@@ -39,13 +41,15 @@ const reservation1: EventReservation = {
   first_name: "John",
   last_name: "Appleseed",
   email: "test@gmail.com",
-  is_member: true
+  is_member: true,
+  timestamp: Timestamp.fromDate(startDate)
 }
 const reservation2: EventReservation = {
   first_name: "Jane",
   last_name: "Pearseed",
   email: "test2@gmail.com",
-  is_member: false
+  is_member: false,
+  timestamp: Timestamp.fromDate(startDate)
 }
 
 describe("EventService integration tests", () => {

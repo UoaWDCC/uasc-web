@@ -305,7 +305,8 @@ export interface components {
         first_name: string;
       };
     };
-    EventReservation: {
+    /** @description From T, pick a set of properties whose keys are in the union K */
+    "Pick_EventReservation.Exclude_keyofEventReservation.timestamp__": {
       /** @description The first name of the user who made this event reservation */
       first_name: string;
       /** @description The last name of the user who made this event reservation */
@@ -318,9 +319,11 @@ export interface components {
        */
       is_member: boolean;
     };
+    /** @description Construct a type with the properties of T except for those in type K. */
+    "Omit_EventReservation.timestamp_": components["schemas"]["Pick_EventReservation.Exclude_keyofEventReservation.timestamp__"];
     EventSignupBody: {
       event_id: string;
-      reservation: components["schemas"]["EventReservation"];
+      reservation: components["schemas"]["Omit_EventReservation.timestamp_"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
