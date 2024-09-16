@@ -72,6 +72,10 @@ export class EventController extends Controller {
     }
   }
 
+  /**
+   * Fetches latest events starting from the event with the latest starting date
+   * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+   */
   @Get()
   @SuccessResponse("200", "Successfully fetched all events")
   public async getAllEvents(

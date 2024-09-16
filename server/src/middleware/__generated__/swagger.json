@@ -1846,6 +1846,7 @@
 						}
 					}
 				},
+				"description": "Fetches latest events starting from the event with the latest starting date\n(**NOT** the signup open date) based on limit. Is paginated with a cursor",
 				"security": [],
 				"parameters": [
 					{

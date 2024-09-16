@@ -57,6 +57,10 @@ export interface paths {
     post: operations["EventSignup"];
   };
   "/events": {
+    /**
+     * @description Fetches latest events starting from the event with the latest starting date
+     * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+     */
     get: operations["GetAllEvents"];
   };
   "/events/reservations/stream": {
@@ -917,6 +921,10 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description Fetches latest events starting from the event with the latest starting date
+   * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+   */
   GetAllEvents: {
     parameters: {
       query?: {
