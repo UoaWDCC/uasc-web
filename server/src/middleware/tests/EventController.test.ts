@@ -12,7 +12,7 @@ const endDate = Timestamp.fromDate(new Date(2024, 1, 2))
 const event1: Event = {
   title: "UASC New event",
   location: "UASC",
-  physical_start_date: startDate,
+  physical_start_date: earlierStartDate,
   start_date: earlierStartDate,
   end_date: earlierStartDate
 }
@@ -44,9 +44,13 @@ describe("EventController endpoint tests", () => {
 
       let res = await request.get("/events").query({ limit: 1 }).send()
 
+      /**
+       * We should first fetch the events starting later...
+       */
       expect(res.body.data).toHaveLength(1)
       expect(res.body.data).not.toContainEqual({ ...event1, id: id1 })
       expect(res.body.data).toContainEqual({ ...event2, id: id2 })
+      expect(res.status).toEqual(200)
 
       res = await request
         .get("/events")
@@ -56,6 +60,7 @@ describe("EventController endpoint tests", () => {
       expect(res.body.data).toHaveLength(1)
       expect(res.body.data).toContainEqual({ ...event1, id: id1 })
       expect(res.body.data).not.toContainEqual({ ...event2, id: id2 })
+      expect(res.status).toEqual(200)
     })
   })
 

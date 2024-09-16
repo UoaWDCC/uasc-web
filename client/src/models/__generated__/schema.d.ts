@@ -327,6 +327,10 @@ export interface components {
        * Note that this date is in UTC time.
        */
       end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Event start date for the event, **NOT** the signups, refer to {@link start_date} for signup start */
+      physical_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /** @description Event end time for the event. **NOT** the signups, refer to {@link end_date} for signup end */
+      physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * Format: double
        * @description Max number of attendees at this event, left as optional for uncapped

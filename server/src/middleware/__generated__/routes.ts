@@ -204,6 +204,8 @@ const models: TsoaRoute.Models = {
             "location": {"dataType":"string","required":true},
             "start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "end_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "physical_start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "physical_end_date": {"ref":"FirebaseFirestore.Timestamp"},
             "max_occupancy": {"dataType":"double"},
         },
         "additionalProperties": false,

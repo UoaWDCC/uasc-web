@@ -446,6 +446,14 @@
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
 						"description": "The end date of the event.\nNote that this date is in UTC time."
 					},
+					"physical_start_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Event start date for the event, **NOT** the signups, refer to {@link start_date} for signup start"
+					},
+					"physical_end_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Event end time for the event. **NOT** the signups, refer to {@link end_date} for signup end"
+					},
 					"max_occupancy": {
 						"type": "number",
 						"format": "double",
@@ -457,7 +465,8 @@
 					"title",
 					"location",
 					"start_date",
-					"end_date"
+					"end_date",
+					"physical_start_date"
 				],
 				"type": "object",
 				"additionalProperties": false

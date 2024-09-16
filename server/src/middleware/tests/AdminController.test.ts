@@ -826,7 +826,8 @@ describe("AdminController endpoint tests", () => {
 
       expect(res.status).toEqual(201)
 
-      expect(await new EventService().getAllEvents(1)).toHaveLength(1)
+      // There should not be more than 1, even if we request more
+      expect((await new EventService().getAllEvents(69)).events).toHaveLength(1)
     })
   })
 })
