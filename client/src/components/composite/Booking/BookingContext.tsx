@@ -5,6 +5,7 @@ import { BOOKING_AVAILABLITY_KEY } from "@/services/Booking/BookingQueries"
 import { useBookingPaymentClientSecretMutation } from "@/services/Payment/PaymentMutations"
 import queryClient from "@/services/QueryClient"
 import { useEditSelfMutation } from "@/services/User/UserMutations"
+import { Policies } from "@/models/sanity/Policies/Utils"
 import { useRouter } from "next/navigation"
 
 interface IBookingContext {
@@ -43,6 +44,16 @@ interface IBookingContext {
    * Parsed message describing problems arising from a network call
    */
   errorMessage?: string
+
+  /**
+   * Booking Policy Items fetched from Sanity
+   */
+  policies?: Policies[]
+
+  /**
+   * Setter function for the booking policies
+   */
+  setPolicies?: (newPolicies: Policies[]) => void
 }
 
 /**
@@ -62,6 +73,8 @@ export const BookingContextProvider = ({
     isPending,
     error
   } = useBookingPaymentClientSecretMutation()
+
+  const [policies, setPolicies] = useState<Policies[]>([])
 
   const [allergies, setAllergies] = useState<string>("")
 
@@ -108,6 +121,8 @@ export const BookingContextProvider = ({
         isPending,
         setAllergies,
         forceRefreshBookings,
+        policies,
+        setPolicies,
         errorMessage:
           error?.name === "UnavailableBookingError" ? error?.message : undefined
       }}

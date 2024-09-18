@@ -1,108 +1,49 @@
-import { useState, useEffect } from "react"
+"use client"
+
+import React, { useState } from "react"
 import TabsComponent from "@/components/generic/TabsComponent/TabsComponent"
-import { PortableText } from "@portabletext/react"
-import { POLICIES_GROQ_QUERY, Policies } from "@/models/sanity/Policies/Utils"
-import { sanityQuery } from "../../../../sanity/lib/utils"
-
-import PropTypes from "prop-types"
-
-export const BookingPolicyContent = ({
-  policiesSingleton
-}: {
-  policiesSingleton: Policies | undefined
-}) => {
-  return (
-    policiesSingleton?.information && (
-      <PortableText value={policiesSingleton.information} />
-    )
-  )
-}
-
-BookingPolicyContent.propTypes = {
-  policiesSingleton: PropTypes.shape({
-    information: PropTypes.array
-  })
-}
-
-export const LodgeBookingsPolicyContent = () => {
-  const [policiesSingleton, setPoliciesSingleton] = useState<
-    Policies | undefined
-  >(undefined)
-
-  useEffect(() => {
-    const fetchPolicies = async () => {
-      const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
-      setPoliciesSingleton(policies.length > 0 ? policies[2] : undefined)
-    }
-
-    fetchPolicies()
-  }, [])
-
-  return <BookingPolicyContent policiesSingleton={policiesSingleton} />
-}
-
-export const CancellationPolicyContent = () => {
-  const [policiesSingleton, setPoliciesSingleton] = useState<
-    Policies | undefined
-  >(undefined)
-
-  useEffect(() => {
-    const fetchPolicies = async () => {
-      const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
-      setPoliciesSingleton(policies.length > 0 ? policies[0] : undefined)
-    }
-
-    fetchPolicies()
-  }, [])
-
-  return <BookingPolicyContent policiesSingleton={policiesSingleton} />
-}
-
-export const BehaviourPolicyContent = () => {
-  const [policiesSingleton, setPoliciesSingleton] = useState<
-    Policies | undefined
-  >(undefined)
-
-  useEffect(() => {
-    const fetchPolicies = async () => {
-      const policies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
-      setPoliciesSingleton(policies.length > 0 ? policies[1] : undefined)
-    }
-
-    fetchPolicies()
-  }, [])
-
-  return <BookingPolicyContent policiesSingleton={policiesSingleton} />
-}
 
 enum PolicyPage {
   ONE,
   TWO,
   THREE
 }
+
+export interface PoliciesInfo {
+  /**
+   * **Pre-formatted** content that should be displayed to the user
+   */
+  policiesArray?: JSX.Element[]
+}
+
 const exampleHeadings = [
   {
     title: "LODGE BOOKINGS",
-    content: <LodgeBookingsPolicyContent />,
+    content: "This is the content for the first tab",
     index: PolicyPage.ONE
   },
   {
     title: "CANCELLATION",
-    content: <CancellationPolicyContent />,
     index: PolicyPage.TWO
   },
   {
     title: "BEHAVIOUR",
-    content: <BehaviourPolicyContent />,
     index: PolicyPage.THREE
   }
 ]
 
-export const PolicyTabs = () => {
+export const PolicyTabs = ({ policiesArray }: PoliciesInfo) => {
   const [index, setIndex] = useState<PolicyPage>(PolicyPage.ONE)
+
+  // Map children to the corresponding tabs
+  const tabsWithContent = exampleHeadings.map((heading, idx) => ({
+    ...heading,
+    content: policiesArray?.[idx] || <div>No content available</div>
+  }))
+
   return (
     <TabsComponent
-      tabs={exampleHeadings}
+      tabs={tabsWithContent}
       selectedIndex={index}
       setCurrentIndex={setIndex}
     />
