@@ -148,6 +148,10 @@ export interface EventReservation {
    * @example true
    */
   is_member: boolean
+  /**
+   * This is the timestamp of when the reservation was made
+   */
+  timestamp: Timestamp
 }
 
 export interface Event {
@@ -171,16 +175,31 @@ export interface Event {
    */
   location: string
   /**
-   * The start date of the event.
+   * The signup period start date.
    * Note that this date is in UTC time.
-   * Use the same start and end day to show that its a 1 day event.
+   * Use the same start and end date to indicate a 1 day signup period.
    */
   start_date: Timestamp
+
   /**
-   * The end date of the event.
+   * The signup period end date.
    * Note that this date is in UTC time.
    */
   end_date: Timestamp
+
+  /**
+   * Event start date for the event i.e the day members should meet at shads,
+   * **NOT** the signups, refer to {@link start_date} for signup start
+   */
+  physical_start_date: Timestamp
+
+  /**
+   * Event end time for the event i.e the last day members will be at the lodge,
+   * is optionial in case of one day events. **NOT** the signups, refer to
+   * {@link end_date} for signup end date
+   */
+  physical_end_date?: Timestamp
+
   /**
    * Max number of attendees at this event, left as optional for uncapped
    * @example 30

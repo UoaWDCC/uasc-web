@@ -32,6 +32,10 @@ export interface paths {
     /** @description Fetches the prices of the membership products from Stripe. */
     get: operations["GetMembershipPrices"];
   };
+  "/payment/lodge_prices": {
+    /** @description Fetches the prices of the lodge products from Stripe. */
+    get: operations["GetLodgePrices"];
+  };
   "/payment/checkout_status": {
     /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
     get: operations["GetCheckoutSessionDetails"];
@@ -51,6 +55,20 @@ export interface paths {
   "/events/signup": {
     /** @description Signs up for an event */
     post: operations["EventSignup"];
+  };
+  "/events": {
+    /**
+     * @description Fetches latest events starting from the event with the latest starting date
+     * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+     */
+    get: operations["GetAllEvents"];
+  };
+  "/events/reservations/stream": {
+    /**
+     * @description Streams the signup count for active events signups.
+     * Note that when testing this on swagger, the connection will remain open.
+     */
+    get: operations["StreamSignupCounts"];
   };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
@@ -139,6 +157,10 @@ export interface paths {
   "/admin/bookings/history": {
     /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
     get: operations["GetLatestHistory"];
+  };
+  "/admin/events": {
+    /** @description Endpoint for admin to create a new event */
+    post: operations["CreateNewEvent"];
   };
 }
 
@@ -246,6 +268,20 @@ export interface components {
         }[];
     };
     /** @enum {string} */
+    LodgePricingTypeValues: "single_friday_or_saturday" | "normal";
+    LodgeStripeProductResponse: {
+      error?: string;
+      message?: string;
+      data?: {
+          originalPrice?: string;
+          displayPrice: string;
+          discount: boolean;
+          description?: string;
+          name: components["schemas"]["LodgePricingTypeValues"];
+          productId: string;
+        }[];
+    };
+    /** @enum {string} */
     "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";
     /** @description Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format. */
     "stripe.Stripe.Metadata": {
@@ -280,7 +316,8 @@ export interface components {
         first_name: string;
       };
     };
-    EventReservation: {
+    /** @description From T, pick a set of properties whose keys are in the union K */
+    "Pick_EventReservation.Exclude_keyofEventReservation.timestamp__": {
       /** @description The first name of the user who made this event reservation */
       first_name: string;
       /** @description The last name of the user who made this event reservation */
@@ -293,9 +330,64 @@ export interface components {
        */
       is_member: boolean;
     };
+    /** @description Construct a type with the properties of T except for those in type K. */
+    "Omit_EventReservation.timestamp_": components["schemas"]["Pick_EventReservation.Exclude_keyofEventReservation.timestamp__"];
     EventSignupBody: {
       event_id: string;
-      reservation: components["schemas"]["EventReservation"];
+      reservation: components["schemas"]["Omit_EventReservation.timestamp_"];
+    };
+    Event: {
+      /** @description The title of this event */
+      title: string;
+      /**
+       * @description An optional description for this event
+       * This should be in markdown
+       */
+      description?: string;
+      /** @description The link for the image to display on the event page (essentially a thumbnail) */
+      image_url?: string;
+      /** @description The location of this event */
+      location: string;
+      /**
+       * @description The signup period start date.
+       * Note that this date is in UTC time.
+       * Use the same start and end date to indicate a 1 day signup period.
+       */
+      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The signup period end date.
+       * Note that this date is in UTC time.
+       */
+      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description Event start date for the event i.e the day members should meet at shads,
+       * **NOT** the signups, refer to {@link start_date} for signup start
+       */
+      physical_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description Event end time for the event i.e the last day members will be at the lodge,
+       * is optionial in case of one day events. **NOT** the signups, refer to
+       * {@link end_date} for signup end date
+       */
+      physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * Format: double
+       * @description Max number of attendees at this event, left as optional for uncapped
+       * @example 30
+       */
+      max_occupancy?: number;
+    };
+    GetAllEventsResponse: {
+      error?: string;
+      message?: string;
+      /**
+       * @description Needed for firestore operations which do not support offset
+       * based pagination
+       *
+       * **Will be undefined in case of last page**
+       */
+      nextCursor?: string;
+      data?: components["schemas"]["Event"][];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -621,6 +713,9 @@ export interface components {
       message?: string;
       historyEvents?: components["schemas"]["BookingHistoryEvent"][];
     };
+    CreateEventBody: {
+      data: components["schemas"]["Event"];
+    };
   };
   responses: {
   };
@@ -741,6 +836,17 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches the prices of the lodge products from Stripe. */
+  GetLodgePrices: {
+    responses: {
+      /** @description The prices of the lodge products. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LodgeStripeProductResponse"];
+        };
+      };
+    };
+  };
   /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
   GetCheckoutSessionDetails: {
     parameters: {
@@ -815,6 +921,38 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["EventSignupResponse"];
         };
+      };
+    };
+  };
+  /**
+   * @description Fetches latest events starting from the event with the latest starting date
+   * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+   */
+  GetAllEvents: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
+      };
+    };
+    responses: {
+      /** @description Successfully fetched all events */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAllEventsResponse"];
+        };
+      };
+    };
+  };
+  /**
+   * @description Streams the signup count for active events signups.
+   * Note that when testing this on swagger, the connection will remain open.
+   */
+  StreamSignupCounts: {
+    responses: {
+      /** @description No content */
+      204: {
+        content: never;
       };
     };
   };
@@ -1089,6 +1227,20 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["FetchLatestBookingHistoryEventResponse"];
         };
+      };
+    };
+  };
+  /** @description Endpoint for admin to create a new event */
+  CreateNewEvent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateEventBody"];
+      };
+    };
+    responses: {
+      /** @description Created Event */
+      201: {
+        content: never;
       };
     };
   };
