@@ -10,7 +10,8 @@ import {
 import {
   MembershipTypeValues,
   MEMBERSHIP_TYPE_KEY,
-  LODGE_PRICING_TYPE_KEY
+  LODGE_PRICING_TYPE_KEY,
+  LodgePricingTypeValues
 } from "business-layer/utils/StripeProductMetadata"
 import {
   UTCDateToDdMmYyyy,
@@ -27,6 +28,7 @@ import {
 } from "service-layer/request-models/UserRequests"
 import {
   BookingPaymentResponse,
+  LodgeStripeProductResponse,
   MembershipPaymentResponse,
   MembershipStripeProductResponse
 } from "service-layer/response-models/PaymentResponse"
@@ -99,6 +101,50 @@ export class PaymentController extends Controller {
         }
       })
 
+      return { data: productsValues }
+    } catch (error) {
+      console.error(error)
+      this.setStatus(500)
+      return { error: "Error fetching active Stripe products" }
+    }
+  }
+
+  /**
+   * Fetches the prices of the lodge products from Stripe.
+   * @returns The prices of the lodge products.
+   */
+  @Get("lodge_prices")
+  public async getLodgePrices(): Promise<LodgeStripeProductResponse> {
+    const stripeService = new StripeService()
+    try {
+      const lodgeProducts = await stripeService.getActiveLodgeProducts()
+      // Maps the products to the required response type LodgeStripeProductResponse in PaymentResponse
+      const productsValues = lodgeProducts.map((product) => {
+        // Checks the lodge type of the product
+        const lodgeType = product.metadata[
+          LODGE_PRICING_TYPE_KEY
+        ] as LodgePricingTypeValues
+
+        return {
+          // The stripe product id
+          productId: product.id,
+          // The lodge booking type
+          name: lodgeType,
+          // The product description
+          description: product.description,
+          // A boolean value if there is a lodge booking discount
+          discount: product.metadata.discount === "true",
+          // The price of the lodge booking
+          displayPrice: (
+            Number(
+              (product.default_price as Stripe.Price).unit_amount_decimal
+            ) / 100
+          ).toString(),
+          // The original price of the lodge booking
+          originalPrice: product.metadata.original_price
+        }
+      })
+      this.setStatus(200)
       return { data: productsValues }
     } catch (error) {
       console.error(error)

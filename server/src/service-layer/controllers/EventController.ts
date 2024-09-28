@@ -1,7 +1,21 @@
 import EventService from "data-layer/services/EventService"
 import { EventSignupBody } from "service-layer/request-models/EventRequests"
-import { EventSignupResponse } from "service-layer/response-models/EventResponse"
-import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
+import {
+  EventSignupResponse,
+  GetAllEventsResponse
+} from "service-layer/response-models/EventResponse"
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Route,
+  Request,
+  SuccessResponse
+} from "tsoa"
+import express from "express"
+import { Timestamp } from "firebase-admin/firestore"
 
 @Route("events")
 export class EventController extends Controller {
@@ -43,7 +57,10 @@ export class EventController extends Controller {
     }
     // Sign up the user
     try {
-      await eventService.addReservation(event_id, reservation)
+      await eventService.addReservation(event_id, {
+        ...reservation,
+        timestamp: Timestamp.now()
+      })
       this.setStatus(200)
       return {
         message: "Successfully signed up for event.",
@@ -57,5 +74,70 @@ export class EventController extends Controller {
       this.setStatus(500)
       return { error: "Failed to sign up for event." }
     }
+  }
+
+  /**
+   * Fetches latest events starting from the event with the latest starting date
+   * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+   */
+  @Get()
+  @SuccessResponse("200", "Successfully fetched all events")
+  public async getAllEvents(
+    @Query() limit: number = 20,
+    @Query() cursor?: string
+  ): Promise<GetAllEventsResponse> {
+    try {
+      const eventService = new EventService()
+
+      let snapshot
+      if (cursor) {
+        snapshot = await eventService.getEventSnapshot(cursor)
+      }
+
+      const res = await eventService.getAllEvents(limit, snapshot)
+      return { nextCursor: res.nextCursor, data: res.events }
+    } catch (e) {
+      return {
+        error: "Something went wrong when fetching all events, please try again"
+      }
+    }
+  }
+
+  /**
+   * Streams the signup count for active events signups.
+   * Note that when testing this on swagger, the connection will remain open.
+   */
+  @Get("/reservations/stream")
+  public async streamSignupCounts(
+    @Request() req: express.Request
+  ): Promise<void> {
+    // Set the required headers for SSE
+    req.res.setHeader("Cache-Control", "no-cache")
+    req.res.setHeader("Content-Type", "text/event-stream")
+    req.res.setHeader("Access-Control-Allow-Origin", "*")
+    req.res.setHeader("Connection", "keep-alive")
+    req.res.flushHeaders()
+    const eventService = new EventService()
+
+    const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
+    req.res.write(
+      `data: ${JSON.stringify({ reservation_count: signupCount })}\n\n`
+    )
+
+    // Create something that updates every 5 seconds
+    const interValID = setInterval(async () => {
+      const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
+      // NOTE: We use double new line because SSE requires this to indicate we're ready for the next event
+      // We also need the data: to indicate data payload
+      req.res.write(
+        `data: ${JSON.stringify({ reservation_count: signupCount })}\n\n`
+      ) // res.write() instead of res.send()
+    }, 5000)
+
+    // If the connection drops, stop sending events
+    req.res?.on("close", () => {
+      clearInterval(interValID) // Clear the loop
+      req.res?.end()
+    })
   }
 }
