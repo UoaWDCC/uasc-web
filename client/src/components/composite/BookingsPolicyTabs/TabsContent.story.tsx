@@ -7,7 +7,5 @@ const meta: Meta = {
 
 export default meta
 export const DefaultPolicyTabs = () => {
-  return <PolicyTabs/>
+  return <PolicyTabs />
 }
-
-
