@@ -1,44 +1,60 @@
 "use client"
 
 import React, { useState } from "react"
-import TabsComponent from "@/components/generic/TabsComponent/TabsComponent"
+import TabsComponent, {
+  Tab
+} from "@/components/generic/TabsComponent/TabsComponent"
+import { PortableText, PortableTextBlock } from "next-sanity"
 
 enum PolicyPage {
-  ONE,
-  TWO,
-  THREE
+  LODGE_BOOKINGS = 0, // Start from 0 for better indexing
+  CANCELLATION = 1,
+  BEHAVIOUR = 2
 }
 
 export interface PoliciesInfo {
   /**
    * **Pre-formatted** content that should be displayed to the user
    */
-  policiesArray?: JSX.Element[]
+  policiesArray?: {
+    order?: number
+    title: string
+    information?: PortableTextBlock[]
+  }[]
 }
 
 const exampleHeadings = [
   {
     title: "LODGE BOOKINGS",
-    content: "This is the content for the first tab",
-    index: PolicyPage.ONE
+    order: PolicyPage.LODGE_BOOKINGS
   },
   {
     title: "CANCELLATION",
-    index: PolicyPage.TWO
+    order: PolicyPage.CANCELLATION
   },
   {
     title: "BEHAVIOUR",
-    index: PolicyPage.THREE
+    order: PolicyPage.BEHAVIOUR
   }
 ]
 
 export const PolicyTabs = ({ policiesArray }: PoliciesInfo) => {
-  const [index, setIndex] = useState<PolicyPage>(PolicyPage.ONE)
+  const [index, setIndex] = useState<PolicyPage>(PolicyPage.LODGE_BOOKINGS)
 
-  // Map children to the corresponding tabs
-  const tabsWithContent = exampleHeadings.map((heading, idx) => ({
-    ...heading,
-    content: policiesArray?.[idx] || <div>No content available</div>
+  // Sort policies based on their order
+  const sortedPolicies = (policiesArray || []).sort((a, b) => {
+    return (a.order ?? Number.MAX_VALUE) - (b.order ?? Number.MAX_VALUE)
+  })
+
+  // Map children (policies) to the corresponding tabs
+  const tabsWithContent: Tab[] = sortedPolicies.map((policy) => ({
+    order: policy.order !== undefined ? policy.order : Number.MAX_VALUE,
+    title: policy.title || exampleHeadings[policy.order || 0].title,
+    content: policy.information ? (
+      <PortableText value={policy.information} />
+    ) : (
+      <div>No content available</div>
+    )
   }))
 
   return (

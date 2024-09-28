@@ -10,7 +10,6 @@ import { PolicyTabs } from "@/components/composite/BookingsPolicyTabs/TabsConten
 import { Footer } from "@/components/generic/Footer/Footer"
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "@/services/QueryClient"
-import { PortableText } from "next-sanity"
 
 type IBookingLayout = Readonly<{
   children: ReactNode
@@ -29,15 +28,11 @@ const InnerBookingLayout = ({ children }: IBookingLayout) => {
   useUserLoggedInCallback(getExistingSessionCallback)
 
   const PoliciesContent = policies
-    ? policies
-        .slice(0, 3)
-        .map((policy, index) =>
-          policy.information ? (
-            <PortableText key={index} value={policy.information} />
-          ) : (
-            <></>
-          )
-        )
+    ? policies.slice(0, 3).map((policy) => ({
+        order: policy.order || 0, // Ensure order is a number
+        title: policy.title || "Untitled", // Ensure title is a string
+        information: policy.information || [] // Make sure information is an array of PortableTextBlocks
+      }))
     : []
 
   return (

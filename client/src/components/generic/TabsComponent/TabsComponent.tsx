@@ -3,10 +3,10 @@ import Button from "../FigmaButtons/FigmaButton"
 /**
  * General format of a tab
  */
-type Tab = {
+export type Tab = {
+  order: number
   title: string
   content: JSX.Element
-  index: number
 }
 
 interface ITabsComponentProps {
@@ -35,6 +35,16 @@ const TabsComponent = ({
   selectedIndex,
   setCurrentIndex
 }: ITabsComponentProps) => {
+  // Check if tabs is an array and has elements
+  if (!Array.isArray(tabs) || tabs.length === 0) {
+    return <div>No tabs available</div>
+  }
+
+  // Check if selectedIndex is within the bounds of the tabs array
+  if (selectedIndex < 0 || selectedIndex >= tabs.length) {
+    return <div>Selected tab is out of bounds</div>
+  }
+
   return (
     <>
       <div className="bg-dark-blue-60 relative flex h-full w-full flex-col items-center py-[78px]">
@@ -42,18 +52,19 @@ const TabsComponent = ({
           {tabs.map((tab) => (
             <>
               <Button
+                key={tab.order} // Add a key prop to each Button
                 variant="tertiary"
-                onClick={() => setCurrentIndex(tab.index)}
-                disabled={tab.index === selectedIndex}
+                onClick={() => setCurrentIndex(tab.order)}
+                disabled={tab.order === selectedIndex}
               >
                 {" "}
-                {tab.title}{" "}
+                {tab.title}
               </Button>
             </>
           ))}
         </div>
         <div className="flex max-w-[800px] flex-col items-center px-2 text-white">
-          {tabs[selectedIndex].content}
+          {tabs[selectedIndex]?.content || <div>No content available</div>}
         </div>
       </div>
     </>
