@@ -13,9 +13,7 @@ import queryClient from "@/services/QueryClient"
 
 type IBookingLayout = Readonly<{
   children: ReactNode
-  policyInfoProps: Omit<React.ReactNode, "handbookBookLodgeClick"> & {
-    children?: React.ReactNode
-  }
+  policyInfoProps: ReactNode
 }>
 
 const InnerBookingLayout = ({ children }: IBookingLayout) => {
