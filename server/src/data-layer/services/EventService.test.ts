@@ -246,8 +246,8 @@ describe("EventService integration tests", () => {
       await eventService.addReservation(newEvent.id, reservation1)
       await eventService.addReservation(newEvent.id, reservation2)
 
-      const count = await eventService.getActiveReservationsCount()
-      expect(count).toBe(2)
+      const eventCounts = await eventService.getActiveReservationsCount()
+      expect(eventCounts).toStrictEqual({ [newEvent.id]: 2 })
     })
 
     it("Should get all event reservations", async () => {
