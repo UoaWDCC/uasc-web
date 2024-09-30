@@ -162,6 +162,10 @@ export interface paths {
     /** @description Endpoint for admin to create a new event */
     post: operations["CreateNewEvent"];
   };
+  "/admin/events/{id}": {
+    /** @description Endpoint for admints to edit an event. */
+    patch: operations["EditEvent"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -716,6 +720,48 @@ export interface components {
     CreateEventBody: {
       data: components["schemas"]["Event"];
     };
+    /** @description Make all properties in T optional */
+    Partial_Event_: {
+      /** @description The title of this event */
+      title?: string;
+      /**
+       * @description An optional description for this event
+       * This should be in markdown
+       */
+      description?: string;
+      /** @description The link for the image to display on the event page (essentially a thumbnail) */
+      image_url?: string;
+      /** @description The location of this event */
+      location?: string;
+      /**
+       * @description The signup period start date.
+       * Note that this date is in UTC time.
+       * Use the same start and end date to indicate a 1 day signup period.
+       */
+      start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The signup period end date.
+       * Note that this date is in UTC time.
+       */
+      end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description Event start date for the event i.e the day members should meet at shads,
+       * **NOT** the signups, refer to {@link start_date} for signup start
+       */
+      physical_start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description Event end time for the event i.e the last day members will be at the lodge,
+       * is optionial in case of one day events. **NOT** the signups, refer to
+       * {@link end_date} for signup end date
+       */
+      physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * Format: double
+       * @description Max number of attendees at this event, left as optional for uncapped
+       * @example 30
+       */
+      max_occupancy?: number;
+    };
   };
   responses: {
   };
@@ -1240,6 +1286,25 @@ export interface operations {
     responses: {
       /** @description Created Event */
       201: {
+        content: never;
+      };
+    };
+  };
+  /** @description Endpoint for admints to edit an event. */
+  EditEvent: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Partial_Event_"];
+      };
+    };
+    responses: {
+      /** @description Successfully edited the event! */
+      200: {
         content: never;
       };
     };

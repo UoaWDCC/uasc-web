@@ -8,7 +8,7 @@ import {
   firestoreTimestampToDate,
   timestampsInRange
 } from "data-layer/adapters/DateUtils"
-import { UserAdditionalInfo } from "data-layer/models/firebase"
+import { UserAdditionalInfo, Event } from "data-layer/models/firebase"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
@@ -709,5 +709,27 @@ export class AdminController extends Controller {
     } catch {
       this.setStatus(500)
     }
+  }
+
+  /**
+   * Endpoint for admints to edit an event.
+   */
+  @SuccessResponse("200", "Successfully edited the event!")
+  @Patch("events/{id}")
+  public async editEvent(
+    @Path() id: string,
+    @Body() requestBody: Partial<Event>
+  ) {
+    const eventService = new EventService()
+    const fetchedEvent = await eventService.getEventById(id)
+    if (!fetchedEvent) {
+      this.setStatus(404)
+    }
+    try {
+      eventService.updateEvent(id, requestBody)
+    } catch (e) {
+      this.setStatus(500)
+    }
+    this.setStatus(200)
   }
 }
