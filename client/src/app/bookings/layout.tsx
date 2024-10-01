@@ -13,7 +13,7 @@ import queryClient from "@/services/QueryClient"
 
 type IBookingLayout = Readonly<{
   children: ReactNode
-  policyInfoProps: ReactNode
+  // policyInfoProps: ReactNode
 }>
 
 const InnerBookingLayout = ({ children }: IBookingLayout) => {
@@ -54,16 +54,11 @@ const InnerBookingLayout = ({ children }: IBookingLayout) => {
   )
 }
 
-export default function BookingLayout({
-  children,
-  policyInfoProps
-}: IBookingLayout) {
+export default function BookingLayout({ children }: IBookingLayout) {
   return (
     <QueryClientProvider client={queryClient}>
       <BookingContextProvider>
-        <InnerBookingLayout policyInfoProps={policyInfoProps}>
-          {children}
-        </InnerBookingLayout>
+        <InnerBookingLayout>{children}</InnerBookingLayout>
       </BookingContextProvider>
     </QueryClientProvider>
   )
