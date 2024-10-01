@@ -1,7 +1,6 @@
 import type { Meta } from "@storybook/react"
-import TabsComponent from "./TabsComponent"
+import TabsComponent, { Tab } from "./TabsComponent"
 import { useState } from "react"
-import { Tab } from "@/components/generic/TabsComponent/TabsComponent"
 
 const meta: Meta<typeof TabsComponent> = {
   component: TabsComponent,
