@@ -703,8 +703,27 @@ export class AdminController extends Controller {
   public async createNewEvent(@Body() body: CreateEventBody) {
     try {
       const eventService = new EventService()
-      await eventService.createEvent(body.data)
-
+      await eventService.createEvent({
+        ...body.data,
+        start_date: new Timestamp(
+          body.data.start_date.seconds,
+          body.data.start_date.nanoseconds
+        ),
+        end_date: new Timestamp(
+          body.data.end_date.seconds,
+          body.data.end_date.nanoseconds
+        ),
+        physical_start_date: new Timestamp(
+          body.data.physical_start_date.seconds,
+          body.data.physical_start_date.nanoseconds
+        ),
+        ...(body.data.physical_end_date && {
+          physical_end_date: new Timestamp(
+            body.data.physical_end_date.seconds,
+            body.data.physical_end_date.nanoseconds
+          )
+        })
+      })
       this.setStatus(201)
     } catch {
       this.setStatus(500)
