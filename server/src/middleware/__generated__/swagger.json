@@ -1417,6 +1417,50 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"Partial_Event_": {
+				"properties": {
+					"title": {
+						"type": "string",
+						"description": "The title of this event"
+					},
+					"description": {
+						"type": "string",
+						"description": "An optional description for this event\nThis should be in markdown"
+					},
+					"image_url": {
+						"type": "string",
+						"description": "The link for the image to display on the event page (essentially a thumbnail)"
+					},
+					"location": {
+						"type": "string",
+						"description": "The location of this event"
+					},
+					"start_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The signup period start date.\nNote that this date is in UTC time.\nUse the same start and end date to indicate a 1 day signup period."
+					},
+					"end_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "The signup period end date.\nNote that this date is in UTC time."
+					},
+					"physical_start_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Event start date for the event i.e the day members should meet at shads,\n**NOT** the signups, refer to {@link start_date} for signup start"
+					},
+					"physical_end_date": {
+						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
+						"description": "Event end time for the event i.e the last day members will be at the lodge,\nis optionial in case of one day events. **NOT** the signups, refer to\n{@link end_date} for signup end date"
+					},
+					"max_occupancy": {
+						"type": "number",
+						"format": "double",
+						"description": "Max number of attendees at this event, left as optional for uncapped",
+						"example": 30
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
 			}
 		},
 		"securitySchemes": {
@@ -2464,6 +2508,44 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/CreateEventBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/events/{id}": {
+			"patch": {
+				"operationId": "EditEvent",
+				"responses": {
+					"200": {
+						"description": "Successfully edited the event!"
+					}
+				},
+				"description": "Endpoint for admints to edit an event.",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_Event_"
 							}
 						}
 					}
