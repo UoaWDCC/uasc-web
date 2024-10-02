@@ -8,6 +8,10 @@ import { useEditSelfMutation } from "@/services/User/UserMutations"
 import { Policies } from "@/models/sanity/Policies/Utils"
 import { useRouter } from "next/navigation"
 
+export type PolicyWithTextBlocks = Omit<Policies, "information"> & {
+  information: JSX.Element
+}
+
 interface IBookingContext {
   /**
    * @param startDate **UTC Midnight** date to request the session for
@@ -48,12 +52,12 @@ interface IBookingContext {
   /**
    * Booking Policy Items fetched from Sanity
    */
-  policies?: Policies[]
+  policies?: PolicyWithTextBlocks[]
 
   /**
    * Setter function for the booking policies
    */
-  setPolicies?: (newPolicies: Policies[]) => void
+  setPolicies?: (newPolicies: PolicyWithTextBlocks[]) => void
 }
 
 /**
@@ -74,7 +78,7 @@ export const BookingContextProvider = ({
     error
   } = useBookingPaymentClientSecretMutation()
 
-  const [policies, setPolicies] = useState<Policies[]>([])
+  const [policies, setPolicies] = useState<PolicyWithTextBlocks[]>([])
 
   const [allergies, setAllergies] = useState<string>("")
 

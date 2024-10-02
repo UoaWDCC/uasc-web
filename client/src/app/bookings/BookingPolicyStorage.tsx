@@ -1,10 +1,16 @@
 "use client"
 
-import { BookingContext } from "@/components/composite/Booking/BookingContext"
+import {
+  BookingContext,
+  PolicyWithTextBlocks
+} from "@/components/composite/Booking/BookingContext"
 import { useContext, useEffect } from "react"
-import { Policies } from "@/models/sanity/Policies/Utils"
 
-const BookingPolicyStorage = ({ policies }: { policies: Policies[] }) => {
+const BookingPolicyStorage = ({
+  policies
+}: {
+  policies: PolicyWithTextBlocks[]
+}) => {
   const { setPolicies } = useContext(BookingContext)
   useEffect(() => {
     setPolicies?.(policies)

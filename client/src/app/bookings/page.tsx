@@ -7,6 +7,7 @@ import {
 import { PortableText } from "@portabletext/react"
 import { Policies, POLICIES_GROQ_QUERY } from "@/models/sanity/Policies/Utils"
 import BookingPolicyStorage from "./BookingPolicyStorage"
+import { PolicyWithTextBlocks } from "@/components/composite/Booking/BookingContext"
 
 const BookingPage = async () => {
   const lodgeInfo = await sanityQuery<LodgeInformation[]>(
@@ -37,10 +38,18 @@ const BookingPage = async () => {
     ) || []
 
   const fetchedPolicies = await sanityQuery<Policies[]>(POLICIES_GROQ_QUERY)
-
   /** We assume there will be only one based on the way {@link Policies } is set up in sanity */
   // If list isn't empty, assign all policies to the variable
-  const policies = fetchedPolicies.length > 0 ? fetchedPolicies : []
+  const policies: PolicyWithTextBlocks[] = fetchedPolicies.map((policy) => {
+    return {
+      ...policy,
+      information: policy.information ? (
+        <PortableText value={policy.information} />
+      ) : (
+        <></>
+      )
+    }
+  })
 
   return (
     <>

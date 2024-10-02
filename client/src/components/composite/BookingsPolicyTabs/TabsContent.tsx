@@ -1,10 +1,8 @@
 "use client"
 
 import React, { useState } from "react"
-import TabsComponent, {
-  Tab
-} from "@/components/generic/TabsComponent/TabsComponent"
-import { PortableText, PortableTextBlock } from "next-sanity"
+import TabsComponent from "@/components/generic/TabsComponent/TabsComponent"
+import { PolicyWithTextBlocks } from "../Booking/BookingContext"
 
 enum PolicyPage {
   LODGE_BOOKINGS = 0, // Start from 0 for better indexing
@@ -16,11 +14,7 @@ export interface PoliciesInfo {
   /**
    * **Pre-formatted** content that should be displayed to the user
    */
-  policiesArray?: {
-    order?: number
-    title: string
-    information?: PortableTextBlock[]
-  }[]
+  policiesArray?: PolicyWithTextBlocks[]
 }
 
 const exampleHeadings = [
@@ -47,11 +41,11 @@ export const PolicyTabs = ({ policiesArray }: PoliciesInfo) => {
   })
 
   // Map children (policies) to the corresponding tabs
-  const tabsWithContent: Tab[] = sortedPolicies.map((policy) => ({
+  const tabsWithContent = sortedPolicies.map((policy) => ({
     order: policy.order !== undefined ? policy.order : Number.MAX_VALUE,
     title: policy.title || exampleHeadings[policy.order || 0].title,
     content: policy.information ? (
-      <PortableText value={policy.information} />
+      policy.information
     ) : (
       <div>No content available</div>
     )
