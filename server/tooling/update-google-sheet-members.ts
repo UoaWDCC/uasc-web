@@ -15,8 +15,12 @@ async function fetchUsers(token: string, cursor?: string): Promise<any> {
       }
     }
   )
-  const data = await res.json()
-  return data
+  if (res.status === 200) {
+    const data = await res.json()
+    return data
+  } else {
+    throw new Error(`Failed to fetch users, status: ${res.status}`)
+  }
 }
 
 async function getAllUsers(token: string): Promise<any[]> {
@@ -35,7 +39,11 @@ if (args.length === 0) {
 } else {
   const token = args[0]
 
-  getAllUsers(token).then(async (allUsers: any) => {
-    console.log(allUsers)
-  })
+  getAllUsers(token)
+    .then(async (allUsers: any) => {
+      console.log(allUsers)
+    })
+    .catch((e) => {
+      console.error(e)
+    })
 }

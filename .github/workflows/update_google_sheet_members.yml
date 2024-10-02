@@ -1,0 +1,34 @@
+name: Update the google sheet with members
+
+on:
+  workflow_dispatch:
+  # schedule:
+  # Updates every 00:00 every day
+  # - cron: "0 0 * * *"
+
+env:
+  NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.VITE_BACKEND_BASE_URL}}
+
+jobs:
+  update_google_sheet_members:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: stable
+
+      - name: Install volta
+        uses: volta-cli/action@v4
+
+      - name: Get admin jwt token
+        id: get-admin-jwt
+        run: |
+          token_output=`yarn workspace server run token`
+          IFS=$'\n' read -d "\034" -r -a splitted <<<"${token_output}\034"
+          echo "jwt_token=$(echo ${splitted[2]})" >> $GITHUB_OUTPUT
+
+      - name: Update google sheet members with script
+        run: |
+          yarn workspace server update-google-sheet-members ${{ steps.get-admin-jwt.outputs.jwt_token }}
