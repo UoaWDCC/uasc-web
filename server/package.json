@@ -46,6 +46,7 @@
     "serve": "node --es-module-specifier-resolution=node dist/index.js",
     "token": "ts-node ./tooling/login-prod.ts",
     "timestamp": "ts-node ./tooling/timestamp-conversion.ts",
-    "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json"
+    "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json",
+    "update-google-sheet-members": "ts-node ./tooling/update-google-sheet-members.ts"
   }
 }
