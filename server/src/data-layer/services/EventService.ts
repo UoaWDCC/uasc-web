@@ -116,18 +116,18 @@ class EventService {
 
   /**
    * Used for the SSE feature to display the total number of active event reservations.
-   * @returns the total number of active event reservations
+   * @returns a record of all the event ids and their event count
    */
-  public async getActiveReservationsCount(): Promise<number> {
+  public async getActiveReservationsCount(): Promise<Record<string, number>> {
     const currentEvents = await this.getActiveEvents()
-    let total = 0
+    const output: Record<string, number> = {}
     await Promise.all(
       currentEvents.map(async (event) => {
         const eventReservations = await this.getAllReservations(event.id)
-        total += eventReservations.length
+        output[`${event.id}`] = eventReservations.length
       })
     )
-    return total
+    return output
   }
 
   /**

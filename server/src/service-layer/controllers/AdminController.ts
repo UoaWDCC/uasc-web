@@ -8,7 +8,7 @@ import {
   firestoreTimestampToDate,
   timestampsInRange
 } from "data-layer/adapters/DateUtils"
-import { UserAdditionalInfo } from "data-layer/models/firebase"
+import { UserAdditionalInfo, Event } from "data-layer/models/firebase"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
@@ -703,11 +703,52 @@ export class AdminController extends Controller {
   public async createNewEvent(@Body() body: CreateEventBody) {
     try {
       const eventService = new EventService()
-      await eventService.createEvent(body.data)
-
+      await eventService.createEvent({
+        ...body.data,
+        start_date: new Timestamp(
+          body.data.start_date.seconds,
+          body.data.start_date.nanoseconds
+        ),
+        end_date: new Timestamp(
+          body.data.end_date.seconds,
+          body.data.end_date.nanoseconds
+        ),
+        physical_start_date: new Timestamp(
+          body.data.physical_start_date.seconds,
+          body.data.physical_start_date.nanoseconds
+        ),
+        ...(body.data.physical_end_date && {
+          physical_end_date: new Timestamp(
+            body.data.physical_end_date.seconds,
+            body.data.physical_end_date.nanoseconds
+          )
+        })
+      })
       this.setStatus(201)
     } catch {
       this.setStatus(500)
     }
+  }
+
+  /**
+   * Endpoint for admints to edit an event.
+   */
+  @SuccessResponse("200", "Successfully edited the event!")
+  @Patch("events/{id}")
+  public async editEvent(
+    @Path() id: string,
+    @Body() requestBody: Partial<Event>
+  ) {
+    const eventService = new EventService()
+    const fetchedEvent = await eventService.getEventById(id)
+    if (!fetchedEvent) {
+      this.setStatus(404)
+    }
+    try {
+      eventService.updateEvent(id, requestBody)
+    } catch (e) {
+      this.setStatus(500)
+    }
+    this.setStatus(200)
   }
 }

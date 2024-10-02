@@ -119,19 +119,16 @@ export class EventController extends Controller {
     req.res.flushHeaders()
     const eventService = new EventService()
 
-    const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
-    req.res.write(
-      `data: ${JSON.stringify({ reservation_count: signupCount })}\n\n`
-    )
+    const signupRecord: Record<string, number> =
+      await eventService.getActiveReservationsCount() // Fetch the current signup count
+    req.res.write(`data: ${JSON.stringify(signupRecord)}\n\n`)
 
-    // Create something that updates every 5 seconds
     const interValID = setInterval(async () => {
-      const signupCount = await eventService.getActiveReservationsCount() // Fetch the current signup count
+      const signupRecord: Record<string, number> =
+        await eventService.getActiveReservationsCount()
       // NOTE: We use double new line because SSE requires this to indicate we're ready for the next event
       // We also need the data: to indicate data payload
-      req.res.write(
-        `data: ${JSON.stringify({ reservation_count: signupCount })}\n\n`
-      ) // res.write() instead of res.send()
+      req.res.write(`data: ${JSON.stringify(signupRecord)}\n\n`) // res.write() instead of res.send()
     }, 5000)
 
     // If the connection drops, stop sending events

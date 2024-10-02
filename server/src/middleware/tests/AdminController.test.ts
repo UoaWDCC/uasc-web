@@ -817,6 +817,7 @@ describe("AdminController endpoint tests", () => {
       start_date: dateToFirestoreTimeStamp(new Date()),
       end_date: dateToFirestoreTimeStamp(new Date())
     }
+    const eventService = new EventService()
 
     it("should let admins create an event", async () => {
       const res = await request
@@ -827,7 +828,18 @@ describe("AdminController endpoint tests", () => {
       expect(res.status).toEqual(201)
 
       // There should not be more than 1, even if we request more
-      expect((await new EventService().getAllEvents(69)).events).toHaveLength(1)
+      expect((await eventService.getAllEvents(69)).events).toHaveLength(1)
+    })
+    it("should let admins edit an event", async () => {
+      const newEvent = await eventService.createEvent(event1)
+      const res = await request
+        .patch("/admin/events/" + newEvent.id)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ title: "Cool event!", location: "UoA" } as Partial<Event>)
+      expect(res.status).toEqual(200)
+      const fetchedEvent = await eventService.getEventById(newEvent.id)
+      expect(fetchedEvent.title).toEqual("Cool event!")
+      expect(fetchedEvent.location).toEqual("UoA")
     })
   })
 })
