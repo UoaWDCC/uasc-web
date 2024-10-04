@@ -14,3 +14,7 @@ export interface GetAllEventsResponse
     CursorPaginatedResponse {
   data?: Event[]
 }
+
+export interface GetEventResponse extends CommonResponse {
+  data?: Event
+}

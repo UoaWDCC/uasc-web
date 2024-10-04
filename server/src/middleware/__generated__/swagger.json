@@ -548,6 +548,21 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"GetEventResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/Event"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AllUserBookingSlotsResponse": {
 				"properties": {
 					"error": {
@@ -1929,6 +1944,34 @@
 				"description": "Streams the signup count for active events signups.\nNote that when testing this on swagger, the connection will remain open.",
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/events/{id}": {
+			"get": {
+				"operationId": "GetEventById",
+				"responses": {
+					"200": {
+						"description": "Successfully fetched all events",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetEventResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/bookings": {
