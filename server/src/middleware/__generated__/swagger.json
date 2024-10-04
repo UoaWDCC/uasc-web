@@ -483,7 +483,7 @@
 					},
 					"description": {
 						"type": "string",
-						"description": "An optional description for this event\nThis should be in markdown"
+						"description": "An optional description for this event\r\nThis should be in markdown"
 					},
 					"image_url": {
 						"type": "string",
@@ -495,19 +495,19 @@
 					},
 					"start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "The signup period start date.\nNote that this date is in UTC time.\nUse the same start and end date to indicate a 1 day signup period."
+						"description": "The signup period start date.\r\nNote that this date is in UTC time.\r\nUse the same start and end date to indicate a 1 day signup period."
 					},
 					"end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "The signup period end date.\nNote that this date is in UTC time."
+						"description": "The signup period end date.\r\nNote that this date is in UTC time."
 					},
 					"physical_start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event start date for the event i.e the day members should meet at shads,\n**NOT** the signups, refer to {@link start_date} for signup start"
+						"description": "Event start date for the event i.e the day members should meet at shads,\r\n**NOT** the signups, refer to {@link start_date} for signup start"
 					},
 					"physical_end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event end time for the event i.e the last day members will be at the lodge,\nis optionial in case of one day events. **NOT** the signups, refer to\n{@link end_date} for signup end date"
+						"description": "Event end time for the event i.e the last day members will be at the lodge,\r\nis optionial in case of one day events. **NOT** the signups, refer to\r\n{@link end_date} for signup end date"
 					},
 					"max_occupancy": {
 						"type": "number",
@@ -536,7 +536,7 @@
 					},
 					"nextCursor": {
 						"type": "string",
-						"description": "Needed for firestore operations which do not support offset\nbased pagination\n\n**Will be undefined in case of last page**"
+						"description": "Needed for firestore operations which do not support offset\r\nbased pagination\r\n\r\n**Will be undefined in case of last page**"
 					},
 					"data": {
 						"items": {
@@ -1426,7 +1426,7 @@
 					},
 					"description": {
 						"type": "string",
-						"description": "An optional description for this event\nThis should be in markdown"
+						"description": "An optional description for this event\r\nThis should be in markdown"
 					},
 					"image_url": {
 						"type": "string",
@@ -1438,19 +1438,19 @@
 					},
 					"start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "The signup period start date.\nNote that this date is in UTC time.\nUse the same start and end date to indicate a 1 day signup period."
+						"description": "The signup period start date.\r\nNote that this date is in UTC time.\r\nUse the same start and end date to indicate a 1 day signup period."
 					},
 					"end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "The signup period end date.\nNote that this date is in UTC time."
+						"description": "The signup period end date.\r\nNote that this date is in UTC time."
 					},
 					"physical_start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event start date for the event i.e the day members should meet at shads,\n**NOT** the signups, refer to {@link start_date} for signup start"
+						"description": "Event start date for the event i.e the day members should meet at shads,\r\n**NOT** the signups, refer to {@link start_date} for signup start"
 					},
 					"physical_end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event end time for the event i.e the last day members will be at the lodge,\nis optionial in case of one day events. **NOT** the signups, refer to\n{@link end_date} for signup end date"
+						"description": "Event end time for the event i.e the last day members will be at the lodge,\r\nis optionial in case of one day events. **NOT** the signups, refer to\r\n{@link end_date} for signup end date"
 					},
 					"max_occupancy": {
 						"type": "number",
@@ -1894,7 +1894,7 @@
 						}
 					}
 				},
-				"description": "Fetches latest events starting from the event with the latest starting date\n(**NOT** the signup open date) based on limit. Is paginated with a cursor",
+				"description": "Fetches latest events starting from the event with the latest starting date\r\n(**NOT** the signup open date) based on limit. Is paginated with a cursor",
 				"security": [],
 				"parameters": [
 					{
@@ -1926,7 +1926,7 @@
 						"description": "No content"
 					}
 				},
-				"description": "Streams the signup count for active events signups.\nNote that when testing this on swagger, the connection will remain open.",
+				"description": "Streams the signup count for active events signups.\r\nNote that when testing this on swagger, the connection will remain open.",
 				"security": [],
 				"parameters": []
 			}
