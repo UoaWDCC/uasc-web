@@ -134,10 +134,14 @@ const LoginForm = ({
           >
             Login
           </Button>
+
           <Link href="/register" className="flex">
             <Button variant="inverted-default-sm">Register</Button>
           </Link>
         </span>
+        {isLoading ? (
+          <p className="text-dark-blue-100 mt-4">Logging in...</p>
+        ) : null}
         <div className="mt-6 uppercase">
           {messages.success && (
             <h5 className="font-bold">{messages.success}</h5>

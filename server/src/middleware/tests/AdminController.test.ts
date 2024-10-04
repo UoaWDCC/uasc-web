@@ -18,6 +18,8 @@ import BookingDataService from "data-layer/services/BookingDataService"
 import AuthService from "business-layer/services/AuthService"
 import { UserRecord } from "firebase-admin/auth"
 import BookingHistoryService from "data-layer/services/BookingHistoryService"
+import { Event } from "data-layer/models/firebase"
+import EventService from "data-layer/services/EventService"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -804,6 +806,40 @@ describe("AdminController endpoint tests", () => {
         .send({})
 
       expect(res.body.historyEvents).toHaveLength(2)
+    })
+  })
+
+  describe("/admin/events", () => {
+    const event1: Event = {
+      title: "UASC New event",
+      physical_start_date: dateToFirestoreTimeStamp(new Date()),
+      location: "UASC",
+      start_date: dateToFirestoreTimeStamp(new Date()),
+      end_date: dateToFirestoreTimeStamp(new Date())
+    }
+    const eventService = new EventService()
+
+    it("should let admins create an event", async () => {
+      const res = await request
+        .post("/admin/events")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ data: event1 })
+
+      expect(res.status).toEqual(201)
+
+      // There should not be more than 1, even if we request more
+      expect((await eventService.getAllEvents(69)).events).toHaveLength(1)
+    })
+    it("should let admins edit an event", async () => {
+      const newEvent = await eventService.createEvent(event1)
+      const res = await request
+        .patch("/admin/events/" + newEvent.id)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ title: "Cool event!", location: "UoA" } as Partial<Event>)
+      expect(res.status).toEqual(200)
+      const fetchedEvent = await eventService.getEventById(newEvent.id)
+      expect(fetchedEvent.title).toEqual("Cool event!")
+      expect(fetchedEvent.location).toEqual("UoA")
     })
   })
 })

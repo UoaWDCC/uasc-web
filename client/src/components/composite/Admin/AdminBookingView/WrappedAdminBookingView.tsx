@@ -7,6 +7,7 @@ import { Timestamp } from "firebase/firestore"
 import { useDeleteBookingMutation } from "@/services/Admin/AdminMutations"
 import { IAdminBookingDate } from "./AdminBookingDateDisplay/AdminBookingDate/AdminBookingDate"
 import Messages from "@/services/Utils/Messages"
+import { compareStrings } from "@/services/Admin/AdminUtils"
 
 /**
  * Should be wrapped the `AdminBookingViewProvider`
@@ -36,12 +37,25 @@ const WrappedAdminBookingView = () => {
           DateUtils.timestampMilliseconds(date.date)
         )
         const bookingDate = DateUtils.formattedNzDate(bookingDateObject)
+
+        /**
+         * Users should be displayed in ascending alphabetical order
+         *
+         * i.e _Alex_ comes before _John
+         */
+        const sortedUsers = date.users.sort((a, b) =>
+          compareStrings(
+            a.first_name.trim().toLowerCase(),
+            b.first_name.trim().toLowerCase()
+          )
+        )
+
         return {
           dateString: bookingDate,
           dayName: bookingDateObject.toLocaleDateString("en-NZ", {
             weekday: "long"
           }),
-          users: date.users,
+          users: sortedUsers,
           handleUserDelete: (bookingId) => {
             if (
               confirm(

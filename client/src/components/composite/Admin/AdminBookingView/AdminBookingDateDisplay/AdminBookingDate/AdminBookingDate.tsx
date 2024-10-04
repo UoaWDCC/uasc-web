@@ -18,6 +18,8 @@ export interface IAdminBookingDate {
 
   /**
    * All of the user information associated with the date
+   *
+   * Refer to the utility type {@link BookingInfo}
    */
   users: Readonly<BookingInfo>[]
 
@@ -26,6 +28,11 @@ export interface IAdminBookingDate {
    */
   handleUserDelete: (id: string) => void
 }
+
+/**
+ * Used so the first user doesn't display as #1
+ */
+const INDEX_OFFSET = 1 as const
 
 /**
  * Component to display the available users for each date in a booking
@@ -48,7 +55,7 @@ const AdminBookingDate = ({
         return (
           <BookingUserCard
             user={user}
-            index={index}
+            index={index + INDEX_OFFSET} // Do not want the user order to be zero-indexed
             key={user.uid}
             handleDelete={handleUserDelete}
           />

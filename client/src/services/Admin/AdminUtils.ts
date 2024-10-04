@@ -28,3 +28,25 @@ export function replaceUserInPage<T extends keyof CombinedUserData>(
   })
   return updatedUserDataPages
 }
+
+/**
+ * Determines the order for strings when using the `sort` methods on an array
+ *
+ * **This is a case sensitive operation**
+ *
+ * @param a the first string to compare against
+ * @param b the second string to compare against
+ *
+ * @returns a **negative** number if `a` comes _before_ `b` alphabetically
+ * @returns a **positive** number if `a` comes _after_ `b` alphabetically
+ * @returns `0` if `a` and `b` are equal strings
+ */
+export function compareStrings(a: string, b: string) {
+  if (a < b) {
+    return -1
+  } else if (a > b) {
+    return 1
+  } else {
+    return 0
+  }
+}
