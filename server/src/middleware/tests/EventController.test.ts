@@ -117,4 +117,21 @@ describe("EventController endpoint tests", () => {
       })
     })
   })
+
+  describe("GET /events/:id", () => {
+    it("should return the event details for a valid event ID", async () => {
+      const { id: id1 } = await eventService.createEvent(event1)
+      const res = await request.get(`/events/${id1}`).send()
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toBeDefined()
+      expect(res.body.data.title).toEqual("UASC New event")
+      expect(res.body.data.location).toEqual("UASC")
+    })
+
+    it("should return 404 if the event does not exist", async () => {
+      const res = await request.get("/events/random-event").send()
+      expect(res.status).toEqual(404)
+      expect(res.body.error).toEqual("Event not found.")
+    })
+  })
 })
