@@ -141,7 +141,7 @@ export class EventController extends Controller {
   }
 
   @Get("{id}")
-  @SuccessResponse("200", "Successfully fetched all events")
+  @SuccessResponse("200", "Successfully fetched the event")
   public async getEventById(@Path() id: string): Promise<GetEventResponse> {
     try {
       const eventService = new EventService()
@@ -154,8 +154,9 @@ export class EventController extends Controller {
 
       return { data: event }
     } catch (e) {
+      this.setStatus(500)
       return {
-        error: "Something went wrong when fetching all events, please try again"
+        error: "Something went wrong when fetching the event, please try again"
       }
     }
   }
