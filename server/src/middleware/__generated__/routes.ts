@@ -215,9 +215,10 @@ const models: TsoaRoute.Models = {
             "title": {"dataType":"string","required":true},
             "description": {"dataType":"string"},
             "image_url": {"dataType":"string"},
-            "location": {"dataType":"string","required":true},
+            "location": {"dataType":"string"},
+            "google_forms_link": {"dataType":"string"},
             "start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "end_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "end_date": {"ref":"FirebaseFirestore.Timestamp"},
             "physical_start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "physical_end_date": {"ref":"FirebaseFirestore.Timestamp"},
             "max_occupancy": {"dataType":"double"},
@@ -568,7 +569,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_Event_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"description":{"dataType":"string"},"image_url":{"dataType":"string"},"location":{"dataType":"string"},"start_date":{"ref":"FirebaseFirestore.Timestamp"},"end_date":{"ref":"FirebaseFirestore.Timestamp"},"physical_start_date":{"ref":"FirebaseFirestore.Timestamp"},"physical_end_date":{"ref":"FirebaseFirestore.Timestamp"},"max_occupancy":{"dataType":"double"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"description":{"dataType":"string"},"image_url":{"dataType":"string"},"location":{"dataType":"string"},"google_forms_link":{"dataType":"string"},"start_date":{"ref":"FirebaseFirestore.Timestamp"},"end_date":{"ref":"FirebaseFirestore.Timestamp"},"physical_start_date":{"ref":"FirebaseFirestore.Timestamp"},"physical_end_date":{"ref":"FirebaseFirestore.Timestamp"},"max_occupancy":{"dataType":"double"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };

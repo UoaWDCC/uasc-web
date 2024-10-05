@@ -351,7 +351,12 @@ export interface components {
       /** @description The link for the image to display on the event page (essentially a thumbnail) */
       image_url?: string;
       /** @description The location of this event */
-      location: string;
+      location?: string;
+      /**
+       * @description A URL to the google form for signing up to the event. This is not to be included
+       * in any response body unless we are _near_ the period for sign up
+       */
+      google_forms_link?: string;
       /**
        * @description The signup period start date.
        * Note that this date is in UTC time.
@@ -362,7 +367,7 @@ export interface components {
        * @description The signup period end date.
        * Note that this date is in UTC time.
        */
-      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event start date for the event i.e the day members should meet at shads,
        * **NOT** the signups, refer to {@link start_date} for signup start
@@ -733,6 +738,11 @@ export interface components {
       image_url?: string;
       /** @description The location of this event */
       location?: string;
+      /**
+       * @description A URL to the google form for signing up to the event. This is not to be included
+       * in any response body unless we are _near_ the period for sign up
+       */
+      google_forms_link?: string;
       /**
        * @description The signup period start date.
        * Note that this date is in UTC time.

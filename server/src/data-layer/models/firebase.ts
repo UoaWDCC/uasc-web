@@ -173,7 +173,14 @@ export interface Event {
   /**
    * The location of this event
    */
-  location: string
+  location?: string
+
+  /**
+   * A URL to the google form for signing up to the event. This is not to be included
+   * in any response body unless we are _near_ the period for sign up
+   */
+  google_forms_link?: string
+
   /**
    * The signup period start date.
    * Note that this date is in UTC time.
@@ -185,7 +192,7 @@ export interface Event {
    * The signup period end date.
    * Note that this date is in UTC time.
    */
-  end_date: Timestamp
+  end_date?: Timestamp
 
   /**
    * Event start date for the event i.e the day members should meet at shads,

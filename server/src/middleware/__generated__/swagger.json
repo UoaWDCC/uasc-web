@@ -493,6 +493,10 @@
 						"type": "string",
 						"description": "The location of this event"
 					},
+					"google_forms_link": {
+						"type": "string",
+						"description": "A URL to the google form for signing up to the event. This is not to be included\nin any response body unless we are _near_ the period for sign up"
+					},
 					"start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
 						"description": "The signup period start date.\nNote that this date is in UTC time.\nUse the same start and end date to indicate a 1 day signup period."
@@ -518,9 +522,7 @@
 				},
 				"required": [
 					"title",
-					"location",
 					"start_date",
-					"end_date",
 					"physical_start_date"
 				],
 				"type": "object",
@@ -1435,6 +1437,10 @@
 					"location": {
 						"type": "string",
 						"description": "The location of this event"
+					},
+					"google_forms_link": {
+						"type": "string",
+						"description": "A URL to the google form for signing up to the event. This is not to be included\nin any response body unless we are _near_ the period for sign up"
 					},
 					"start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
