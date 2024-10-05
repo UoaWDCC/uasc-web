@@ -1,11 +1,36 @@
 import { CombinedUserData } from "service-layer/response-models/UserResponse"
-import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
+import { firestoreTimestampToDate } from "../src/data-layer/adapters/DateUtils"
 
 import { google } from "googleapis"
+import admin from "firebase-admin"
 import dotenv from "dotenv"
+// Process the env file first before creating admin
 dotenv.config()
+// Initilise app like in login-prod.ts
+admin.initializeApp({
+  credential: admin.credential.cert(
+    JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
+  )
+})
 
-const args = process.argv.slice(2)
+// Omitted stripe id
+const categories = [
+  "Email",
+  "First name",
+  "Last name",
+  "Phone number",
+  "Date of birth",
+  "Membership",
+  "Date joined",
+  "University year",
+  "Gender",
+  "Does racing",
+  "Does ski",
+  "Does snowboarding",
+  "Emergency contact",
+  "Dietary requirements",
+  "UID"
+]
 
 /**
  * Fetches users from the backend
@@ -36,7 +61,7 @@ async function fetchUsers(token: string, cursor?: string): Promise<any> {
 /**
  * Fetches all users from the backend
  * @param token - The token to authenticate the request
- * @returns An array of all users
+ * @returns An array of CombinedUserData
  */
 async function getAllUsers(token: string): Promise<CombinedUserData[]> {
   const allUsers: CombinedUserData[] = []
@@ -74,9 +99,6 @@ async function authenticateGoogle(): Promise<any> {
  * @returns The response from the Google Sheets API
  */
 async function updateGoogleSheet(auth: any, rows: any[]) {
-  // Clear sheet first
-  await clearSheet(auth)
-
   const sheets = google.sheets({
     version: "v4",
     auth
@@ -123,55 +145,76 @@ async function clearSheet(auth: any) {
   }
 }
 
-if (args.length === 0) {
-  console.log("Token required to update google sheet members.")
-} else {
-  const token = args[0]
-
-  getAllUsers(token)
-    .then(async (allUsers: CombinedUserData[]) => {
-      const rows = allUsers.map((user: CombinedUserData) => [
-        user.email,
-        user.first_name,
-        user.last_name,
-        user.phone_number,
-        firestoreTimestampToDate(user.date_of_birth).toISOString(),
-        user.membership,
-        user.dateJoined,
-        user.university_year,
-        user.gender,
-        user.does_racing,
-        user.does_ski,
-        user.does_snowboarding,
-        user.emergency_contact,
-        // Omit stripe id
-        user.dietary_requirements,
-        user.uid
-      ])
-      const categories = [
-        "Email",
-        "First name",
-        "Last name",
-        "Phone number",
-        "Date of birth",
-        "Membership",
-        "Date joined",
-        "University year",
-        "Gender",
-        "Does racing",
-        "Does ski",
-        "Does snowboarding",
-        "Emergency contact",
-        "Dietary requirements",
-        "UID"
-      ]
-      const auth = await authenticateGoogle()
-      await updateGoogleSheet(auth, [categories, ...rows])
-    })
-    .then(() => {
-      console.log("Successfully updated google sheet members.")
-    })
-    .catch((e) => {
-      console.error(e)
-    })
+/**
+ * Converts user information to an array that google sheets can parse.
+ * @param users An array of all CombinedUserData
+ * @returns The mapper user arrays
+ */
+function mapUsers(users: CombinedUserData[]) {
+  return users.map((user: CombinedUserData) => [
+    user.email,
+    user.first_name,
+    user.last_name,
+    user.phone_number,
+    firestoreTimestampToDate(user.date_of_birth).toLocaleString([], {
+      timeZone: "Pacific/Auckland",
+      hour12: true
+    }),
+    user.membership,
+    user.dateJoined,
+    user.university_year,
+    user.gender,
+    user.does_racing,
+    user.does_ski,
+    user.does_snowboarding,
+    user.emergency_contact,
+    // Remove stripe id from fields
+    user.dietary_requirements,
+    user.uid
+  ])
 }
+
+const createIdToken = async (uid: string) => {
+  try {
+    await admin.auth().setCustomUserClaims(uid, { member: true, admin: true })
+
+    const customToken = await admin.auth().createCustomToken(uid)
+
+    const res = await fetch(
+      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=${process.env.API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          token: customToken,
+          returnSecureToken: true
+        })
+      }
+    )
+
+    const data = (await res.json()) as any
+
+    return data.idToken
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+/**
+ * Updates the google sheet with members fetched from backend
+ * @param token - The token to authenticate the request
+ */
+async function updateGoogleSheetMembers() {
+  const token = await createIdToken(process.env.USER_ID)
+  const allUsers: CombinedUserData[] = await getAllUsers(token)
+  const rows = mapUsers(allUsers)
+  const auth = await authenticateGoogle()
+  // Clear sheet first
+  await clearSheet(auth)
+  await updateGoogleSheet(auth, [categories, ...rows])
+}
+
+updateGoogleSheetMembers()
