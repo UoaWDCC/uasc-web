@@ -13,14 +13,10 @@ const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID
 const SHEET_ID = process.env.GOOGLE_SHEET_ID
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY
 const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
-// const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_API_JSON
 const USER_ID = process.env.USER_ID
 
 admin.initializeApp({
   credential: admin.credential.cert(JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON))
-  // credential: admin.credential.cert(
-  //   JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
-  // )
 })
 
 const categories = [
@@ -115,7 +111,8 @@ async function updateGoogleSheet(auth: any, rows: any[]) {
 
   const request = {
     spreadsheetId: SPREADSHEET_ID,
-    range: SHEET_ID + "!A1", // Adjust to your sheet and cell range
+    // Sheet id is something like "Sheet1"
+    range: SHEET_ID + "!A1",
     valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
     resource: {
@@ -144,7 +141,7 @@ async function clearSheet(auth: any) {
 
   const request = {
     spreadsheetId: SPREADSHEET_ID,
-    range: SHEET_ID // Adjust to your sheet and cell range
+    range: SHEET_ID
   }
   try {
     await sheets.spreadsheets.values.clear(request)
@@ -223,8 +220,7 @@ async function updateGoogleSheetMembers() {
   )
   const rows = mapUsers(allUsers)
   const auth = await authenticateGoogle()
-  // Clear sheet first
-  await clearSheet(auth)
+  await clearSheet(auth) // Clear sheet first
   await updateGoogleSheet(auth, [categories, ...rows])
 }
 
