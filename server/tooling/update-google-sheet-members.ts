@@ -4,16 +4,20 @@ import { firestoreTimestampToDate } from "../src/data-layer/adapters/DateUtils"
 import { google } from "googleapis"
 import admin from "firebase-admin"
 import dotenv from "dotenv"
-// Process the env file first before creating admin
+
 dotenv.config()
-// Initilise app like in login-prod.ts
+
+// Environment variables
+const BASE_URL = process.env.VITE_BACKEND_BASE_URL
+const SHEET_ID = process.env.GOOGLE_SHEET_ID
+const API_KEY = process.env.API_KEY
+const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
+const USER_ID = process.env.USER_ID
+
 admin.initializeApp({
-  credential: admin.credential.cert(
-    JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
-  )
+  credential: admin.credential.cert(JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON))
 })
 
-// Omitted stripe id
 const categories = [
   "Email",
   "First name",
@@ -41,7 +45,7 @@ const categories = [
 async function fetchUsers(token: string, cursor?: string): Promise<any> {
   const res = await fetch(
     // Note that VITE_BACKEND_BASE_URL does have a slash at the end
-    `${process.env.VITE_BACKEND_BASE_URL}admin/users${cursor ? `?cursor=${cursor}` : ""}`,
+    `${BASE_URL}admin/users${cursor ? `?cursor=${cursor}` : ""}`,
     {
       method: "GET",
       headers: {
@@ -79,9 +83,7 @@ async function getAllUsers(token: string): Promise<CombinedUserData[]> {
  * @returns The google auth client
  */
 async function authenticateGoogle(): Promise<any> {
-  const { client_email, private_key } = JSON.parse(
-    process.env.GOOGLE_SERVICE_ACCOUNT_JSON
-  )
+  const { client_email, private_key } = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON)
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_email,
@@ -107,7 +109,7 @@ async function updateGoogleSheet(auth: any, rows: any[]) {
   })
 
   const request = {
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    spreadsheetId: SHEET_ID,
     range: "Sheet1!A1", // Adjust to your sheet and cell range
     valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
@@ -136,7 +138,7 @@ async function clearSheet(auth: any) {
   })
 
   const request = {
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+    spreadsheetId: SHEET_ID,
     range: "Sheet1" // Adjust to your sheet and cell range
   }
   try {
@@ -183,7 +185,7 @@ const createIdToken = async (uid: string) => {
     const customToken = await admin.auth().createCustomToken(uid)
 
     const res = await fetch(
-      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=${process.env.API_KEY}`,
+      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=${API_KEY}`,
       {
         method: "POST",
         headers: {
@@ -210,7 +212,7 @@ const createIdToken = async (uid: string) => {
  * @param token - The token to authenticate the request
  */
 async function updateGoogleSheetMembers() {
-  const token = await createIdToken(process.env.USER_ID)
+  const token = await createIdToken(USER_ID)
   const allUsers: CombinedUserData[] = await getAllUsers(token)
   const rows = mapUsers(allUsers)
   const auth = await authenticateGoogle()
