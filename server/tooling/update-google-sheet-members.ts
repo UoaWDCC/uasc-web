@@ -13,7 +13,7 @@ const MEMBERS_GOOGLE_SPREADSHEET_ID = process.env.MEMBERS_GOOGLE_SPREADSHEET_ID
 const MEMBERS_GOOGLE_SHEET_ID = process.env.MEMBERS_GOOGLE_SHEET_ID
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY
 const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
-const USER_ID = process.env.USER_ID
+const USER_ID = "google-sheets-bot"
 
 admin.initializeApp({
   credential: admin.credential.cert(JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON))
@@ -185,12 +185,22 @@ function mapUsers(users: CombinedUserData[]) {
  * @param uid - The user id to create the token for
  * @returns The jwt token
  */
-const createIdToken = async (uid: string) => {
+const createIdToken = async () => {
   try {
-    await admin.auth().setCustomUserClaims(uid, { member: true, admin: true })
+    // Ensure that the user exists
+    try {
+      await admin.auth().getUser(USER_ID)
+    } catch (e) {
+      console.error(e)
+      await admin
+        .auth()
+        .createUser({ uid: USER_ID, email: `${USER_ID}@${USER_ID}.com` })
+    }
+    await admin
+      .auth()
+      .setCustomUserClaims(USER_ID, { member: true, admin: true })
 
-    const customToken = await admin.auth().createCustomToken(uid)
-
+    const customToken = await admin.auth().createCustomToken(USER_ID)
     const res = await fetch(
       `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=${API_KEY}`,
       {
@@ -219,7 +229,7 @@ const createIdToken = async (uid: string) => {
  * @param token - The token to authenticate the request
  */
 async function updateGoogleSheetMembers() {
-  const token = await createIdToken(USER_ID)
+  const token = await createIdToken()
   const allUsers: CombinedUserData[] = (await getAllUsers(token)).filter(
     (user) => user.membership === "member"
   )
