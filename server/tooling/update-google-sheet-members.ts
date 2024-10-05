@@ -191,10 +191,7 @@ const createIdToken = async () => {
     try {
       await admin.auth().getUser(USER_ID)
     } catch (e) {
-      console.error(e)
-      await admin
-        .auth()
-        .createUser({ uid: USER_ID, email: `${USER_ID}@${USER_ID}.com` })
+      await admin.auth().createUser({ uid: USER_ID })
     }
     await admin
       .auth()
