@@ -9,8 +9,8 @@ dotenv.config()
 
 // Environment variables
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
-const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID
-const SHEET_ID = process.env.GOOGLE_SHEET_ID
+const MEMBERS_GOOGLE_SPREADSHEET_ID = process.env.MEMBERS_GOOGLE_SPREADSHEET_ID
+const MEMBERS_GOOGLE_SHEET_ID = process.env.MEMBERS_GOOGLE_SHEET_ID
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY
 const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
 const USER_ID = process.env.USER_ID
@@ -110,9 +110,9 @@ async function updateGoogleSheet(auth: any, rows: any[]) {
   })
 
   const request = {
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: MEMBERS_GOOGLE_SPREADSHEET_ID,
     // Sheet id is something like "Sheet1"
-    range: SHEET_ID + "!A1",
+    range: MEMBERS_GOOGLE_SHEET_ID + "!A1",
     valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
     resource: {
@@ -140,8 +140,8 @@ async function clearSheet(auth: any) {
   })
 
   const request = {
-    spreadsheetId: SPREADSHEET_ID,
-    range: SHEET_ID
+    spreadsheetId: MEMBERS_GOOGLE_SPREADSHEET_ID,
+    range: MEMBERS_GOOGLE_SHEET_ID
   }
   try {
     await sheets.spreadsheets.values.clear(request)
@@ -180,6 +180,11 @@ function mapUsers(users: CombinedUserData[]) {
   ])
 }
 
+/**
+ * Code from login-prod.ts to create admin jwt token
+ * @param uid - The user id to create the token for
+ * @returns The jwt token
+ */
 const createIdToken = async (uid: string) => {
   try {
     await admin.auth().setCustomUserClaims(uid, { member: true, admin: true })
