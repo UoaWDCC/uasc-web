@@ -8,9 +8,10 @@ import dotenv from "dotenv"
 dotenv.config()
 
 // Environment variables
-const BASE_URL = process.env.VITE_BACKEND_BASE_URL
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID
-const API_KEY = process.env.API_KEY
+const SHEET_ID = process.env.GOOGLE_SHEET_ID
+const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY
 const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
 const USER_ID = process.env.USER_ID
 
@@ -110,7 +111,7 @@ async function updateGoogleSheet(auth: any, rows: any[]) {
 
   const request = {
     spreadsheetId: SPREADSHEET_ID,
-    range: "Sheet1!A1", // Adjust to your sheet and cell range
+    range: SHEET_ID + "!A1", // Adjust to your sheet and cell range
     valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
     resource: {
@@ -139,7 +140,7 @@ async function clearSheet(auth: any) {
 
   const request = {
     spreadsheetId: SPREADSHEET_ID,
-    range: "Sheet1" // Adjust to your sheet and cell range
+    range: SHEET_ID // Adjust to your sheet and cell range
   }
   try {
     await sheets.spreadsheets.values.clear(request)
