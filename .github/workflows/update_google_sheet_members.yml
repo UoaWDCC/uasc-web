@@ -8,9 +8,11 @@ on:
 
 env:
   NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.VITE_BACKEND_BASE_URL}}
+  # NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.PROD_BACKEND_BASE_URL}}
   MEMBERS_GOOGLE_SPREADSHEET_ID: ${{secrets.MEMBERS_GOOGLE_SPREADSHEET_ID}}
   MEMBERS_GOOGLE_SHEET_ID: ${{secrets.MEMBERS_GOOGLE_SHEET_ID}}
-  GOOGLE_SERVICE_ACCOUNT_JSON: ${{secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD}}
+  GOOGLE_SERVICE_ACCOUNT_JSON: ${{secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC}}
+  # GOOGLE_SERVICE_ACCOUNT_JSON: ${{secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD}}
   NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
 
 jobs:
@@ -26,6 +28,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn
+
+      - name: Test locally
+        run: yarn dev-server
 
       - name: Update google sheet members with script
         run: |
