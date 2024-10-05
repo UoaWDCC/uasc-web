@@ -13,10 +13,14 @@ const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID
 const SHEET_ID = process.env.GOOGLE_SHEET_ID
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY
 const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
+// const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_API_JSON
 const USER_ID = process.env.USER_ID
 
 admin.initializeApp({
   credential: admin.credential.cert(JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON))
+  // credential: admin.credential.cert(
+  //   JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
+  // )
 })
 
 const categories = [
@@ -214,7 +218,9 @@ const createIdToken = async (uid: string) => {
  */
 async function updateGoogleSheetMembers() {
   const token = await createIdToken(USER_ID)
-  const allUsers: CombinedUserData[] = await getAllUsers(token)
+  const allUsers: CombinedUserData[] = (await getAllUsers(token)).filter(
+    (user) => user.membership === "member"
+  )
   const rows = mapUsers(allUsers)
   const auth = await authenticateGoogle()
   // Clear sheet first
