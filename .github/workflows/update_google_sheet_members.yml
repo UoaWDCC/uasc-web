@@ -20,8 +20,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: stable
 
       - name: Install volta
         uses: volta-cli/action@v4
