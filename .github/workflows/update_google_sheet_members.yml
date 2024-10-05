@@ -26,6 +26,9 @@ jobs:
       - name: Install volta
         uses: volta-cli/action@v4
 
+      - name: Install dependencies
+        run: yarn
+
       - name: Update google sheet members with script
         run: |
           yarn workspace server update-google-sheet-members
