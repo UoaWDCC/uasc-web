@@ -79,7 +79,9 @@ async function getAllUsers(token: string): Promise<CombinedUserData[]> {
  * @returns The google auth client
  */
 async function authenticateGoogle(): Promise<any> {
-  const { client_email, private_key } = JSON.parse(process.env.GOOGLE_API_JSON)
+  const { client_email, private_key } = JSON.parse(
+    process.env.GOOGLE_SERVICE_ACCOUNT_JSON
+  )
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_email,
