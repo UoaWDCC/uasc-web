@@ -354,27 +354,32 @@ export interface components {
       /** @description The link for the image to display on the event page (essentially a thumbnail) */
       image_url?: string;
       /** @description The location of this event */
-      location: string;
+      location?: string;
+      /**
+       * @description A URL to the google form for signing up to the event. This is not to be included
+       * in any response body unless we are _near_ the period for sign up
+       */
+      google_forms_link?: string;
       /**
        * @description The signup period start date.
        * Note that this date is in UTC time.
        * Use the same start and end date to indicate a 1 day signup period.
        */
-      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description The signup period end date.
        * Note that this date is in UTC time.
        */
-      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event start date for the event i.e the day members should meet at shads,
-       * **NOT** the signups, refer to {@link start_date} for signup start
+       * **NOT** the signups, refer to {@link sign_up_start_date} for signup start
        */
       physical_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event end time for the event i.e the last day members will be at the lodge,
        * is optionial in case of one day events. **NOT** the signups, refer to
-       * {@link end_date} for signup end date
+       * {@link sign_up_end_date} for signup end date
        */
       physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
@@ -742,25 +747,30 @@ export interface components {
       /** @description The location of this event */
       location?: string;
       /**
+       * @description A URL to the google form for signing up to the event. This is not to be included
+       * in any response body unless we are _near_ the period for sign up
+       */
+      google_forms_link?: string;
+      /**
        * @description The signup period start date.
        * Note that this date is in UTC time.
        * Use the same start and end date to indicate a 1 day signup period.
        */
-      start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description The signup period end date.
        * Note that this date is in UTC time.
        */
-      end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event start date for the event i.e the day members should meet at shads,
-       * **NOT** the signups, refer to {@link start_date} for signup start
+       * **NOT** the signups, refer to {@link sign_up_start_date} for signup start
        */
       physical_start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event end time for the event i.e the last day members will be at the lodge,
        * is optionial in case of one day events. **NOT** the signups, refer to
-       * {@link end_date} for signup end date
+       * {@link sign_up_end_date} for signup end date
        */
       physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**

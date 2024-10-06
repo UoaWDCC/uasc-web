@@ -493,21 +493,25 @@
 						"type": "string",
 						"description": "The location of this event"
 					},
-					"start_date": {
+					"google_forms_link": {
+						"type": "string",
+						"description": "A URL to the google form for signing up to the event. This is not to be included\nin any response body unless we are _near_ the period for sign up"
+					},
+					"sign_up_start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
 						"description": "The signup period start date.\nNote that this date is in UTC time.\nUse the same start and end date to indicate a 1 day signup period."
 					},
-					"end_date": {
+					"sign_up_end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
 						"description": "The signup period end date.\nNote that this date is in UTC time."
 					},
 					"physical_start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event start date for the event i.e the day members should meet at shads,\n**NOT** the signups, refer to {@link start_date} for signup start"
+						"description": "Event start date for the event i.e the day members should meet at shads,\n**NOT** the signups, refer to {@link sign_up_start_date} for signup start"
 					},
 					"physical_end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event end time for the event i.e the last day members will be at the lodge,\nis optionial in case of one day events. **NOT** the signups, refer to\n{@link end_date} for signup end date"
+						"description": "Event end time for the event i.e the last day members will be at the lodge,\nis optionial in case of one day events. **NOT** the signups, refer to\n{@link sign_up_end_date} for signup end date"
 					},
 					"max_occupancy": {
 						"type": "number",
@@ -518,9 +522,7 @@
 				},
 				"required": [
 					"title",
-					"location",
-					"start_date",
-					"end_date",
+					"sign_up_start_date",
 					"physical_start_date"
 				],
 				"type": "object",
@@ -1451,21 +1453,25 @@
 						"type": "string",
 						"description": "The location of this event"
 					},
-					"start_date": {
+					"google_forms_link": {
+						"type": "string",
+						"description": "A URL to the google form for signing up to the event. This is not to be included\nin any response body unless we are _near_ the period for sign up"
+					},
+					"sign_up_start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
 						"description": "The signup period start date.\nNote that this date is in UTC time.\nUse the same start and end date to indicate a 1 day signup period."
 					},
-					"end_date": {
+					"sign_up_end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
 						"description": "The signup period end date.\nNote that this date is in UTC time."
 					},
 					"physical_start_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event start date for the event i.e the day members should meet at shads,\n**NOT** the signups, refer to {@link start_date} for signup start"
+						"description": "Event start date for the event i.e the day members should meet at shads,\n**NOT** the signups, refer to {@link sign_up_start_date} for signup start"
 					},
 					"physical_end_date": {
 						"$ref": "#/components/schemas/FirebaseFirestore.Timestamp",
-						"description": "Event end time for the event i.e the last day members will be at the lodge,\nis optionial in case of one day events. **NOT** the signups, refer to\n{@link end_date} for signup end date"
+						"description": "Event end time for the event i.e the last day members will be at the lodge,\nis optionial in case of one day events. **NOT** the signups, refer to\n{@link sign_up_end_date} for signup end date"
 					},
 					"max_occupancy": {
 						"type": "number",

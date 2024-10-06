@@ -72,8 +72,8 @@ async function getAllUsers(token: string): Promise<CombinedUserData[]> {
   const allUsers: CombinedUserData[] = []
   let fetchedUsers = await fetchUsers(token)
   allUsers.push(...fetchedUsers.data)
-  while (fetchedUsers.cursor) {
-    fetchedUsers = await fetchUsers(token, fetchedUsers.cursor)
+  while (fetchedUsers.nextCursor) {
+    fetchedUsers = await fetchUsers(token, fetchedUsers.nextCursor)
     allUsers.push(...fetchedUsers.data)
   }
   return allUsers
