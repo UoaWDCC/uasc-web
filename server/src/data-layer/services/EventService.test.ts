@@ -22,16 +22,16 @@ const event1: Event = {
   description: "Grand opening of the website.",
   location: "Virtual pizza event",
   physical_start_date: startTimestamp,
-  start_date: startTimestamp,
-  end_date: endTimestamp
+  sign_up_start_date: startTimestamp,
+  sign_up_end_date: endTimestamp
 }
 const event2: Event = {
   title: "Snowboard racing",
   description: "Race and see who's the fastest!",
   location: "Snowsport club",
   physical_start_date: startTimestamp,
-  start_date: startTimestamp,
-  end_date: endTimestamp
+  sign_up_start_date: startTimestamp,
+  sign_up_end_date: endTimestamp
 }
 const now = new Date(Date.now())
 const futureEvent: Event = {
@@ -40,8 +40,10 @@ const futureEvent: Event = {
   physical_start_date: Timestamp.fromDate(
     new Date(now.getUTCFullYear() + 1, 1, 1)
   ),
-  start_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1)),
-  end_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1))
+  sign_up_start_date: Timestamp.fromDate(
+    new Date(now.getUTCFullYear() + 1, 1, 1)
+  ),
+  sign_up_end_date: Timestamp.fromDate(new Date(now.getUTCFullYear() + 1, 1, 1))
 }
 
 const reservation1: EventReservation = {
@@ -102,8 +104,10 @@ describe("EventService integration tests", () => {
 
     expect({
       ...data,
-      end_date: removeUnderscoresFromTimestamp(data.end_date),
-      start_date: removeUnderscoresFromTimestamp(data.start_date)
+      sign_up_end_date: removeUnderscoresFromTimestamp(data.sign_up_end_date),
+      sign_up_start_date: removeUnderscoresFromTimestamp(
+        data.sign_up_start_date
+      )
     }).toEqual(event1)
   })
 
@@ -114,8 +118,12 @@ describe("EventService integration tests", () => {
 
     expect({
       ...fetchedEvent,
-      end_date: removeUnderscoresFromTimestamp(fetchedEvent.end_date),
-      start_date: removeUnderscoresFromTimestamp(fetchedEvent.start_date)
+      sign_up_end_date: removeUnderscoresFromTimestamp(
+        fetchedEvent.sign_up_end_date
+      ),
+      sign_up_start_date: removeUnderscoresFromTimestamp(
+        fetchedEvent.sign_up_start_date
+      )
     }).toEqual(event1)
   })
 

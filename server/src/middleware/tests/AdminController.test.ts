@@ -814,8 +814,8 @@ describe("AdminController endpoint tests", () => {
       title: "UASC New event",
       physical_start_date: dateToFirestoreTimeStamp(new Date()),
       location: "UASC",
-      start_date: dateToFirestoreTimeStamp(new Date()),
-      end_date: dateToFirestoreTimeStamp(new Date())
+      sign_up_start_date: dateToFirestoreTimeStamp(new Date()),
+      sign_up_end_date: dateToFirestoreTimeStamp(new Date())
     }
     const eventService = new EventService()
 

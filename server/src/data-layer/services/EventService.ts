@@ -36,7 +36,7 @@ class EventService {
     const now = new Date(Date.now())
 
     const result = await FirestoreCollections.events
-      .where("end_date", ">", now) // Only get events that have not ended
+      .where("sign_up_end_date", ">", now) // Only get events that have not ended
       .get()
 
     return result.docs.map((doc) => {
