@@ -1017,7 +1017,7 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Successfully fetched all events */
+      /** @description Successfully fetched the event */
       200: {
         content: {
           "application/json": components["schemas"]["GetEventResponse"];
