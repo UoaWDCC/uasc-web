@@ -13,8 +13,8 @@ const event1: Event = {
   title: "UASC New event",
   location: "UASC",
   physical_start_date: earlierStartDate,
-  start_date: earlierStartDate,
-  end_date: earlierStartDate
+  sign_up_start_date: earlierStartDate,
+  sign_up_end_date: earlierStartDate
 }
 
 /**
@@ -24,8 +24,8 @@ const event2: Event = {
   title: "Straight Zhao",
   location: "UASC",
   physical_start_date: startDate,
-  start_date: startDate,
-  end_date: endDate
+  sign_up_start_date: startDate,
+  sign_up_end_date: endDate
 }
 const reservation1: Omit<EventReservation, "timestamp"> = {
   first_name: "John",
