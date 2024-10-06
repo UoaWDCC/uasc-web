@@ -88,13 +88,15 @@ describe("EventController endpoint tests", () => {
     })
 
     it("should not include google_forms_link if event is not within 1 minute", async () => {
-     await eventService.createEvent(event3)
+      await eventService.createEvent(event3)
 
       const res = await request.get("/events").send()
 
       expect(res.body.data).toContainEqual(
         expect.not.objectContaining({
-          google_forms_link: expect.not.stringContaining("https://random.com/event3")
+          google_forms_link: expect.not.stringContaining(
+            "https://random.com/event3"
+          )
         })
       )
     })
