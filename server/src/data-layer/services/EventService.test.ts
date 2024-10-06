@@ -104,8 +104,10 @@ describe("EventService integration tests", () => {
 
     expect({
       ...data,
-      end_date: removeUnderscoresFromTimestamp(data.sign_up_end_date),
-      start_date: removeUnderscoresFromTimestamp(data.sign_up_start_date)
+      sign_up_end_date: removeUnderscoresFromTimestamp(data.sign_up_end_date),
+      sign_up_start_date: removeUnderscoresFromTimestamp(
+        data.sign_up_start_date
+      )
     }).toEqual(event1)
   })
 
@@ -116,8 +118,10 @@ describe("EventService integration tests", () => {
 
     expect({
       ...fetchedEvent,
-      end_date: removeUnderscoresFromTimestamp(fetchedEvent.sign_up_end_date),
-      start_date: removeUnderscoresFromTimestamp(
+      sign_up_end_date: removeUnderscoresFromTimestamp(
+        fetchedEvent.sign_up_end_date
+      ),
+      sign_up_start_date: removeUnderscoresFromTimestamp(
         fetchedEvent.sign_up_start_date
       )
     }).toEqual(event1)
