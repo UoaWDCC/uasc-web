@@ -2,16 +2,18 @@ import EventService from "data-layer/services/EventService"
 import { EventSignupBody } from "service-layer/request-models/EventRequests"
 import {
   EventSignupResponse,
-  GetAllEventsResponse
+  GetAllEventsResponse,
+  GetEventResponse
 } from "service-layer/response-models/EventResponse"
 import {
   Body,
   Controller,
   Get,
+  Path,
   Post,
   Query,
-  Route,
   Request,
+  Route,
   SuccessResponse
 } from "tsoa"
 import express from "express"
@@ -136,5 +138,26 @@ export class EventController extends Controller {
       clearInterval(interValID) // Clear the loop
       req.res?.end()
     })
+  }
+
+  @Get("{id}")
+  @SuccessResponse("200", "Successfully fetched the event")
+  public async getEventById(@Path() id: string): Promise<GetEventResponse> {
+    try {
+      const eventService = new EventService()
+      const event = await eventService.getEventById(id)
+
+      if (!event) {
+        this.setStatus(404)
+        return { error: "Event not found." }
+      }
+
+      return { data: event }
+    } catch (e) {
+      this.setStatus(500)
+      return {
+        error: "Something went wrong when fetching the event, please try again"
+      }
+    }
   }
 }

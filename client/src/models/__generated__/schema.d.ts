@@ -70,6 +70,9 @@ export interface paths {
      */
     get: operations["StreamSignupCounts"];
   };
+  "/events/{id}": {
+    get: operations["GetEventById"];
+  };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
@@ -397,6 +400,11 @@ export interface components {
        */
       nextCursor?: string;
       data?: components["schemas"]["Event"][];
+    };
+    GetEventResponse: {
+      error?: string;
+      message?: string;
+      data?: components["schemas"]["Event"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -1009,6 +1017,21 @@ export interface operations {
       /** @description No content */
       204: {
         content: never;
+      };
+    };
+  };
+  GetEventById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Successfully fetched the event */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEventResponse"];
+        };
       };
     };
   };
