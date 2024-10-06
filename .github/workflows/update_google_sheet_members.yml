@@ -3,15 +3,15 @@ name: Update the google sheet with members
 on:
   workflow_dispatch:
   schedule:
-    # Updates every 00:00 every day
-    - cron: "0 0 * * *"
+    # Updates every hour
+    - cron: "0 * * * *"
 
 env:
-  NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.VITE_BACKEND_BASE_URL}}
+  NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.PROD_BACKEND_BASE_URL}}
   MEMBERS_GOOGLE_SPREADSHEET_ID: ${{secrets.MEMBERS_GOOGLE_SPREADSHEET_ID}}
   MEMBERS_GOOGLE_SHEET_ID: ${{secrets.MEMBERS_GOOGLE_SHEET_ID}}
-  GOOGLE_SERVICE_ACCOUNT_JSON: ${{secrets.GOOGLE_SERVICE_ACCOUNT_JSON}}
-  NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
+  GOOGLE_SERVICE_ACCOUNT_JSON: ${{secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD}}
+  NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
 
 jobs:
   update_google_sheet_members:
@@ -20,8 +20,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: stable
 
       - name: Install volta
         uses: volta-cli/action@v4
