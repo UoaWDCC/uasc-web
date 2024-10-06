@@ -97,6 +97,19 @@ export class EventController extends Controller {
       }
 
       const res = await eventService.getAllEvents(limit, snapshot)
+      const currentTime = Timestamp.now()
+
+      res.events.forEach((event) => {
+        const eventStartTime = event.physical_start_date
+        const timeDifference =
+          eventStartTime.toMillis() - currentTime.toMillis()
+
+        // 1 minute (60000 milliseconds)
+        if (timeDifference > 60000) {
+          delete event.google_forms_link
+        }
+      })
+
       return { nextCursor: res.nextCursor, data: res.events }
     } catch (e) {
       return {
