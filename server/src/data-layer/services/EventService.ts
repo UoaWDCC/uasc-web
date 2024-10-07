@@ -55,12 +55,10 @@ class EventService {
 
   /**
    * Deletes an existing event document by ID.
-   * Also deletes all reservation docs when deleting an event.
    *
    * @param eventId the ID of the event document
    */
   public async deleteEvent(eventId: string) {
-    // Delete main collection doc after deleting reservations
     return await FirestoreCollections.events.doc(eventId).delete()
   }
 
