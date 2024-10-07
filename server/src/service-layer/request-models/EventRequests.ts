@@ -1,9 +1,4 @@
-import { EventReservation, Event } from "data-layer/models/firebase"
-
-export interface EventSignupBody {
-  event_id: string
-  reservation: Omit<EventReservation, "timestamp">
-}
+import { Event } from "data-layer/models/firebase"
 
 export interface CreateEventBody {
   data: Event

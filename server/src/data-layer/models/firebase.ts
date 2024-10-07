@@ -130,30 +130,6 @@ export interface BookingChange {
   new_check_out: Timestamp // New check-out timestamp
 }
 
-export interface EventReservation {
-  /**
-   * The first name of the user who made this event reservation
-   */
-  first_name: string
-  /**
-   * The last name of the user who made this event reservation
-   */
-  last_name: string
-  /**
-   * The email of the user who made this even reservation
-   */
-  email: string
-  /**
-   * Boolean to check if the user is a member
-   * @example true
-   */
-  is_member: boolean
-  /**
-   * This is the timestamp of when the reservation was made
-   */
-  timestamp: Timestamp
-}
-
 export interface Event {
   /**
    * The title of this event
