@@ -1,7 +1,6 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
-import FirestoreSubcollections from "data-layer/adapters/FirestoreSubcollections"
 import { DocumentDataWithUid } from "data-layer/models/common"
-import { Event, EventReservation } from "data-layer/models/firebase"
+import { Event } from "data-layer/models/firebase"
 
 class EventService {
   /**
@@ -61,102 +60,8 @@ class EventService {
    * @param eventId the ID of the event document
    */
   public async deleteEvent(eventId: string) {
-    // Need to delete subcollections under this first
-    const snapshot = await FirestoreSubcollections.reservations(eventId).get()
-    const deletePromises = snapshot.docs.map((doc) => doc.ref.delete())
-    await Promise.all(deletePromises)
     // Delete main collection doc after deleting reservations
     return await FirestoreCollections.events.doc(eventId).delete()
-  }
-
-  /**
-   * Event reservation collection methods
-   */
-
-  /**
-   * Adds a reservation to an event.
-   *
-   * @param eventId the ID of the event document
-   * @param reservation the new EventReservation to add
-   * @returns the created reservation document reference
-   */
-  public async addReservation(eventId: string, reservation: EventReservation) {
-    return await FirestoreSubcollections.reservations(eventId).add(reservation)
-  }
-
-  /**
-   * Gets an existing reservation document by ID.
-   *
-   * @param eventId the ID of the event document
-   * @param reservationId the ID of the reservation document
-   * @returns the reservation document
-   */
-  public async getReservationById(
-    eventId: string,
-    reservationId: string
-  ): Promise<EventReservation> {
-    const result = await FirestoreSubcollections.reservations(eventId)
-      .doc(reservationId)
-      .get()
-
-    return result.data()
-  }
-
-  /**
-   * Gets all reservations for an event.
-   * @param eventId the ID of the event document
-   * @returns an array of all the event reservation documents
-   */
-  public async getAllReservations(
-    eventId: string
-  ): Promise<EventReservation[]> {
-    const result = await FirestoreSubcollections.reservations(eventId).get()
-    return result.docs.map((doc) => doc.data())
-  }
-
-  /**
-   * Used for the SSE feature to display the total number of active event reservations.
-   * @returns a record of all the event ids and their event count
-   */
-  public async getActiveReservationsCount(): Promise<Record<string, number>> {
-    const currentEvents = await this.getActiveEvents()
-    const output: Record<string, number> = {}
-    await Promise.all(
-      currentEvents.map(async (event) => {
-        const eventReservations = await this.getAllReservations(event.id)
-        output[`${event.id}`] = eventReservations.length
-      })
-    )
-    return output
-  }
-
-  /**
-   * Updates an existing reservation document by ID with new EventReservation data.
-   *
-   * @param eventId the ID of the event document
-   * @param reservationId the ID of the reservation document
-   * @param updatedReservation the new EventReservation data to update
-   */
-  public async updateReservation(
-    eventId: string,
-    reservationId: string,
-    updatedReservation: Partial<EventReservation>
-  ) {
-    return await FirestoreSubcollections.reservations(eventId)
-      .doc(reservationId)
-      .update(updatedReservation)
-  }
-
-  /**
-   * Deletes a reservation from an event.
-   *
-   * @param eventId the ID of the event document
-   * @param reservationId the ID of the reservation document
-   */
-  public async deleteReservation(eventId: string, reservationId: string) {
-    return await FirestoreSubcollections.reservations(eventId)
-      .doc(reservationId)
-      .delete()
   }
 
   /**
