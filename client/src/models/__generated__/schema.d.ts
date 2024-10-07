@@ -52,23 +52,12 @@ export interface paths {
      */
     post: operations["GetBookingPayment"];
   };
-  "/events/signup": {
-    /** @description Signs up for an event */
-    post: operations["EventSignup"];
-  };
   "/events": {
     /**
      * @description Fetches latest events starting from the event with the latest starting date
      * (**NOT** the signup open date) based on limit. Is paginated with a cursor
      */
     get: operations["GetAllEvents"];
-  };
-  "/events/reservations/stream": {
-    /**
-     * @description Streams the signup count for active events signups.
-     * Note that when testing this on swagger, the connection will remain open.
-     */
-    get: operations["StreamSignupCounts"];
   };
   "/events/{id}": {
     get: operations["GetEventById"];
@@ -313,35 +302,6 @@ export interface components {
       startDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
-    };
-    EventSignupResponse: {
-      error?: string;
-      message?: string;
-      data?: {
-        email: string;
-        last_name: string;
-        first_name: string;
-      };
-    };
-    /** @description From T, pick a set of properties whose keys are in the union K */
-    "Pick_EventReservation.Exclude_keyofEventReservation.timestamp__": {
-      /** @description The first name of the user who made this event reservation */
-      first_name: string;
-      /** @description The last name of the user who made this event reservation */
-      last_name: string;
-      /** @description The email of the user who made this even reservation */
-      email: string;
-      /**
-       * @description Boolean to check if the user is a member
-       * @example true
-       */
-      is_member: boolean;
-    };
-    /** @description Construct a type with the properties of T except for those in type K. */
-    "Omit_EventReservation.timestamp_": components["schemas"]["Pick_EventReservation.Exclude_keyofEventReservation.timestamp__"];
-    EventSignupBody: {
-      event_id: string;
-      reservation: components["schemas"]["Omit_EventReservation.timestamp_"];
     };
     Event: {
       /** @description The title of this event */
@@ -972,22 +932,6 @@ export interface operations {
       };
     };
   };
-  /** @description Signs up for an event */
-  EventSignup: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["EventSignupBody"];
-      };
-    };
-    responses: {
-      /** @description Successfully signed up for Event */
-      200: {
-        content: {
-          "application/json": components["schemas"]["EventSignupResponse"];
-        };
-      };
-    };
-  };
   /**
    * @description Fetches latest events starting from the event with the latest starting date
    * (**NOT** the signup open date) based on limit. Is paginated with a cursor
@@ -1005,18 +949,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["GetAllEventsResponse"];
         };
-      };
-    };
-  };
-  /**
-   * @description Streams the signup count for active events signups.
-   * Note that when testing this on swagger, the connection will remain open.
-   */
-  StreamSignupCounts: {
-    responses: {
-      /** @description No content */
-      204: {
-        content: never;
       };
     };
   };
