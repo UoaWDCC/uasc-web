@@ -11,6 +11,9 @@ type Story = StoryObj<typeof meta>
 
 export const DefaultAdminEventView: Story = {
   args: {
-    handleCreateEvent: () => {}
+    handlePostEvent: () => {},
+    generateImageLink: async () => {
+      return undefined
+    }
   }
 }

@@ -2,24 +2,24 @@ import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { CreateEventBody } from "@/models/Events"
 import { useState } from "react"
 import AdminEventForm from "./AdminEventForm/AdminEventForm"
-import StorageService from "@/services/Storage/StorageService"
 
 type EventViewModes = "view-all-events" | "creating-new-event" | "editing-event"
 
 interface IAdminEventView {
-  handleCreateEvent: (data: CreateEventBody) => void
+  generateImageLink: (image: File) => Promise<string | undefined>
+  handlePostEvent: (data: CreateEventBody) => void
 }
 
 const AdminEventViewContent = ({
   mode,
   setMode,
-  handlePostEvent
+  handlePostEvent,
+  generateImageLink
   // TODO: extend with the event id to allow showing an edit view
 }: {
   mode: EventViewModes
   setMode: (mode: EventViewModes) => void
-  handlePostEvent: IAdminEventView["handleCreateEvent"]
-}) => {
+} & IAdminEventView) => {
   switch (mode) {
     case "view-all-events":
       return null
@@ -27,7 +27,7 @@ const AdminEventViewContent = ({
       return (
         <AdminEventForm
           generateImageLink={async (image) => {
-            return await StorageService.uploadEventImage(image)
+            return await generateImageLink(image)
           }}
           handlePostEvent={async (data) => {
             await handlePostEvent(data)
@@ -50,7 +50,10 @@ const buttonMessage = (mode: EventViewModes) => {
   }
 }
 
-const AdminEventView = ({ handleCreateEvent }: IAdminEventView) => {
+const AdminEventView = ({
+  handlePostEvent,
+  generateImageLink
+}: IAdminEventView) => {
   const [mode, setMode] = useState<EventViewModes>("view-all-events")
 
   return (
@@ -78,7 +81,8 @@ const AdminEventView = ({ handleCreateEvent }: IAdminEventView) => {
       <AdminEventViewContent
         setMode={setMode}
         mode={mode}
-        handlePostEvent={handleCreateEvent}
+        handlePostEvent={handlePostEvent}
+        generateImageLink={generateImageLink}
       />
     </div>
   )
