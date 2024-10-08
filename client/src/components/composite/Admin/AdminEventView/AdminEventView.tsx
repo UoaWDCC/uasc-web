@@ -1,7 +1,8 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { CreateEventBody } from "@/models/Events"
 import { useState } from "react"
-import AdminEventForm from "./AdminEventCreation/AdminEventForm"
+import AdminEventForm from "./AdminEventForm/AdminEventForm"
+import StorageService from "@/services/Storage/StorageService"
 
 type EventViewModes = "view-all-events" | "creating-new-event" | "editing-event"
 
@@ -25,15 +26,12 @@ const AdminEventViewContent = ({
     case "creating-new-event":
       return (
         <AdminEventForm
+          generateImageLink={async (image) => {
+            return await StorageService.uploadEventImage(image)
+          }}
           handlePostEvent={async (data) => {
-            if (
-              confirm(
-                `Are you sure you want to create the new event with title ${data.data.title}?`
-              )
-            ) {
-              await handlePostEvent(data)
-              setMode("view-all-events")
-            }
+            await handlePostEvent(data)
+            setMode("view-all-events")
           }}
         />
       )
