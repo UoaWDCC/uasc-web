@@ -6,7 +6,19 @@ import AdminEventForm from "./AdminEventForm/AdminEventForm"
 type EventViewModes = "view-all-events" | "creating-new-event" | "editing-event"
 
 interface IAdminEventView {
+  /**
+   * Generates a link for the provided image.
+   *
+   * @param image - The image file for which the link needs to be generated.
+   * @returns A promise that resolves to the generated image link or undefined if the generation fails.
+   */
   generateImageLink: (image: File) => Promise<string | undefined>
+
+  /**
+   * Handles the posting of event data.
+   *
+   * @param data - The data of the event to be posted.
+   */
   handlePostEvent: (data: CreateEventBody) => void
 }
 
@@ -40,6 +52,9 @@ const AdminEventViewContent = ({
   }
 }
 
+/**
+ * For use with the button in the top right
+ */
 const buttonMessage = (mode: EventViewModes) => {
   switch (mode) {
     case "view-all-events":
@@ -50,6 +65,10 @@ const buttonMessage = (mode: EventViewModes) => {
   }
 }
 
+/**
+ * Contains all the components and display logic for management of events by admins
+ * @deprecated do not use directly in app, use {@link WrappedAdminEventView} instead
+ */
 const AdminEventView = ({
   handlePostEvent,
   generateImageLink
