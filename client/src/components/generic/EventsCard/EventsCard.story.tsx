@@ -17,3 +17,13 @@ export const DefaultEventsCard: Story = {
     content: `Get ready to kick off Re-O-Week with a bang!  Join us at Shadows Bar for the ultimate Outdoor Clubs Welcome Party, hosted by UoA Snowsports Club! Whether you're into hiking, biking, skiing, or just having a good time, this is the place to be!`
   }
 }
+
+export const DefaultEventsCard2: Story = {
+  tags: ["autodocs"],
+  args: {
+    title: "goon",
+    date: "...",
+    location: "goon cave",
+    content: `piss`
+  }
+}
