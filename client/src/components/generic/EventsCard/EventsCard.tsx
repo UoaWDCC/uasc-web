@@ -1,3 +1,4 @@
+import { viewport } from "next-sanity/studio"
 import Button from "../FigmaButtons/FigmaButton"
 import Image, { StaticImageData } from "next/image"
 /**
@@ -52,13 +53,13 @@ const EventsCard = ({
     return <div className="bg-gray-3 mb-4 mt-4 h-[1px] w-full"></div>
   }
   return (
-    <>
+    <div>
       <Image
         src={image}
         alt="Event cover image"
-        width={500}
+        width={800}
         height={300}
-        className="rounded-lg"
+        className=""
       />
       <div className="h-full w-full border p-8 text-center md:text-left">
         <h5 className="font-bold">{date}</h5>
@@ -74,7 +75,7 @@ const EventsCard = ({
           <Button onClick={onClick}>Sign Up!</Button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
