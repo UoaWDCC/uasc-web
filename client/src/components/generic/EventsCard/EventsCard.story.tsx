@@ -27,3 +27,32 @@ export const DefaultEventsCard2: Story = {
     content: `piss`
   }
 }
+
+export const EventsCardGroup: Story = {
+  render: () => (
+    <div style={{ display: "flex flex-col", gap: "1rem" }}>
+      <EventsCard
+        title="Another Event"
+        date="FRI 19/7 • 7pm"
+        location="Somewhere Else"
+        content="Join us for another exciting event!"
+        onClick={() => {}}
+      />
+      <EventsCard
+        title="Another Event"
+        date="FRI 19/7 • 7pm"
+        location="Somewhere Else"
+        content="Join us for another exciting event!"
+        onClick={() => {}}
+      />
+      <EventsCard
+        title="Another Event"
+        date="FRI 19/7 • 7pm"
+        location="Somewhere Else"
+        content="Join us for another exciting event!"
+        onClick={() => {}}
+      />
+    </div>
+  ),
+  args: {}
+}
