@@ -1,16 +1,34 @@
-import WorkInProgressComponent from "@/components/generic/WorkInProgressComponent/WorkInProgressComponent"
-import Link from "next/link"
+"use client"
+
+import EventsPage from "@/components/composite/EventsView/EventsView"
+import { EventsCardProps } from "@/components/generic/EventsCard/EventsCard"
+import { useLatestEventsQuery } from "@/services/Event/EventQueries"
+import { useMemo } from "react"
+
 const Events = () => {
+  const { data } = useLatestEventsQuery()
+  const rawEvents = useMemo(() => {
+    const flattenedEvents = data?.pages.flatMap((page) => {
+      return page.data
+    })
+    return flattenedEvents
+  }, [data])
+
+  const formattedEvents: EventsCardProps[] =
+    rawEvents?.map((event) => {
+      return {
+        date: "...",
+        title: event?.title || "",
+        location: event?.location,
+        content: <></>,
+        onClick: () => {}
+      }
+    }) || []
+
   return (
-    <div className="fixed flex h-screen w-full flex-col items-center justify-center gap-4">
-      <WorkInProgressComponent pageName="Events" />
-      <Link
-        href="https://www.facebook.com/UoAsnowsports"
-        className="text-light-blue-100 hover:underline"
-      >
-        Go to our Facebook to sign up for the events!
-      </Link>
-    </div>
+    <>
+      <EventsPage events={formattedEvents} />
+    </>
   )
 }
 
