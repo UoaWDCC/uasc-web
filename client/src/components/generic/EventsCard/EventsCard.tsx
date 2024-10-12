@@ -53,13 +53,13 @@ const EventsCard = ({
     return <div className="bg-gray-3 mb-4 mt-4 h-[1px] w-full"></div>
   }
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center">
       <Image
         src={image}
         alt="Event cover image"
-        width={800}
+        width={}
         height={300}
-        className=""
+        className="h-auto w-full"
       />
       <div className="h-full w-full border p-8 text-center md:text-left">
         <h5 className="font-bold">{date}</h5>
