@@ -164,7 +164,7 @@ const AdminEventForm = ({
         </span>
 
         <h3 className="text-dark-blue-100 mt-2 text-center">Event Dates</h3>
-        <span className="flex w-full flex-col justify-between gap-2 sm:flex-row">
+        <span className="flex w-full flex-col gap-2 sm:flex-row">
           <TextInput
             name={AdminEventFormKeys.PHYSICAL_START_DATE}
             data-testid={AdminEventFormKeys.PHYSICAL_START_DATE}
