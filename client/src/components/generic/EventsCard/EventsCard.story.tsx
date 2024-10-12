@@ -47,7 +47,8 @@ export const DefaultEventsCard4: Story = {
     title: "",
     date: "...",
     location: "",
-    content: ``
+    content: ``,
+    image: testImg.src
   }
 }
 export const EventsCardGroup: Story = {
@@ -67,6 +68,7 @@ export const EventsCardGroup: Story = {
         location="Somewhere Else"
         content="Join us for another exciting event!"
         onClick={() => {}}
+        image={testImg}
       />
       <EventsCard
         title="Another Event"
@@ -74,6 +76,7 @@ export const EventsCardGroup: Story = {
         location="Somewhere Else"
         content="Join us for another exciting event!"
         onClick={() => {}}
+        image={testImg}
       />
     </div>
   ),
