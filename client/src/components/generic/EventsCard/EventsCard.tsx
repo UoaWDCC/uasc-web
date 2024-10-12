@@ -1,4 +1,3 @@
-import { viewport } from "next-sanity/studio"
 import Button from "../FigmaButtons/FigmaButton"
 import Image, { StaticImageData } from "next/image"
 /**
@@ -57,7 +56,7 @@ const EventsCard = ({
       <Image
         src={image}
         alt="Event cover image"
-        width={}
+        width={500}
         height={300}
         className="h-auto w-full"
       />
