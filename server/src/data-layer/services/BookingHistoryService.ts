@@ -86,6 +86,7 @@ class BookingHistoryService {
     PaginatedFirebaseResponse<DocumentDataWithUid<BookingHistoryEvent>>
   > {
     const res = await db.bookingHistory
+      // TODO: properly make this descending
       .orderBy("timestamp")
       .startAfter(startAfter || 0)
       .limit(limit)

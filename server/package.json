@@ -32,6 +32,7 @@
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "firebase": "^10.10.0",
+    "googleapis": "^144.0.0",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.8",
@@ -46,6 +47,7 @@
     "serve": "node --es-module-specifier-resolution=node dist/index.js",
     "token": "ts-node ./tooling/login-prod.ts",
     "timestamp": "ts-node ./tooling/timestamp-conversion.ts",
-    "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json"
+    "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json",
+    "update-google-sheet-members": "ts-node ./tooling/update-google-sheet-members.ts"
   }
 }

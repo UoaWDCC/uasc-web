@@ -32,6 +32,10 @@ export interface paths {
     /** @description Fetches the prices of the membership products from Stripe. */
     get: operations["GetMembershipPrices"];
   };
+  "/payment/lodge_prices": {
+    /** @description Fetches the prices of the lodge products from Stripe. */
+    get: operations["GetLodgePrices"];
+  };
   "/payment/checkout_status": {
     /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
     get: operations["GetCheckoutSessionDetails"];
@@ -48,9 +52,15 @@ export interface paths {
      */
     post: operations["GetBookingPayment"];
   };
-  "/events/signup": {
-    /** @description Signs up for an event */
-    post: operations["EventSignup"];
+  "/events": {
+    /**
+     * @description Fetches latest events starting from the event with the latest starting date
+     * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+     */
+    get: operations["GetAllEvents"];
+  };
+  "/events/{id}": {
+    get: operations["GetEventById"];
   };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
@@ -139,6 +149,14 @@ export interface paths {
   "/admin/bookings/history": {
     /** @description Fetches the **latest** booking history events (uses cursor-based pagination) */
     get: operations["GetLatestHistory"];
+  };
+  "/admin/events": {
+    /** @description Endpoint for admin to create a new event */
+    post: operations["CreateNewEvent"];
+  };
+  "/admin/events/{id}": {
+    /** @description Endpoint for admints to edit an event. */
+    patch: operations["EditEvent"];
   };
 }
 
@@ -246,6 +264,20 @@ export interface components {
         }[];
     };
     /** @enum {string} */
+    LodgePricingTypeValues: "single_friday_or_saturday" | "normal";
+    LodgeStripeProductResponse: {
+      error?: string;
+      message?: string;
+      data?: {
+          originalPrice?: string;
+          displayPrice: string;
+          discount: boolean;
+          description?: string;
+          name: components["schemas"]["LodgePricingTypeValues"];
+          productId: string;
+        }[];
+    };
+    /** @enum {string} */
     "stripe.Stripe.Checkout.Session.Status": "complete" | "expired" | "open";
     /** @description Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format. */
     "stripe.Stripe.Metadata": {
@@ -271,31 +303,68 @@ export interface components {
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
-    EventSignupResponse: {
+    Event: {
+      /** @description The title of this event */
+      title: string;
+      /**
+       * @description An optional description for this event
+       * This should be in markdown
+       */
+      description?: string;
+      /** @description The link for the image to display on the event page (essentially a thumbnail) */
+      image_url?: string;
+      /** @description The location of this event */
+      location?: string;
+      /**
+       * @description A URL to the google form for signing up to the event. This is not to be included
+       * in any response body unless we are _near_ the period for sign up
+       */
+      google_forms_link?: string;
+      /**
+       * @description The signup period start date.
+       * Note that this date is in UTC time.
+       * Use the same start and end date to indicate a 1 day signup period.
+       */
+      sign_up_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The signup period end date.
+       * Note that this date is in UTC time.
+       */
+      sign_up_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description Event start date for the event i.e the day members should meet at shads,
+       * **NOT** the signups, refer to {@link sign_up_start_date} for signup start
+       */
+      physical_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description Event end time for the event i.e the last day members will be at the lodge,
+       * is optionial in case of one day events. **NOT** the signups, refer to
+       * {@link sign_up_end_date} for signup end date
+       */
+      physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * Format: double
+       * @description Max number of attendees at this event, left as optional for uncapped
+       * @example 30
+       */
+      max_occupancy?: number;
+    };
+    GetAllEventsResponse: {
       error?: string;
       message?: string;
-      data?: {
-        email: string;
-        last_name: string;
-        first_name: string;
-      };
-    };
-    EventReservation: {
-      /** @description The first name of the user who made this event reservation */
-      first_name: string;
-      /** @description The last name of the user who made this event reservation */
-      last_name: string;
-      /** @description The email of the user who made this even reservation */
-      email: string;
       /**
-       * @description Boolean to check if the user is a member
-       * @example true
+       * @description Needed for firestore operations which do not support offset
+       * based pagination
+       *
+       * **Will be undefined in case of last page**
        */
-      is_member: boolean;
+      nextCursor?: string;
+      data?: components["schemas"]["Event"][];
     };
-    EventSignupBody: {
-      event_id: string;
-      reservation: components["schemas"]["EventReservation"];
+    GetEventResponse: {
+      error?: string;
+      message?: string;
+      data?: components["schemas"]["Event"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -621,6 +690,56 @@ export interface components {
       message?: string;
       historyEvents?: components["schemas"]["BookingHistoryEvent"][];
     };
+    CreateEventBody: {
+      data: components["schemas"]["Event"];
+    };
+    /** @description Make all properties in T optional */
+    Partial_Event_: {
+      /** @description The title of this event */
+      title?: string;
+      /**
+       * @description An optional description for this event
+       * This should be in markdown
+       */
+      description?: string;
+      /** @description The link for the image to display on the event page (essentially a thumbnail) */
+      image_url?: string;
+      /** @description The location of this event */
+      location?: string;
+      /**
+       * @description A URL to the google form for signing up to the event. This is not to be included
+       * in any response body unless we are _near_ the period for sign up
+       */
+      google_forms_link?: string;
+      /**
+       * @description The signup period start date.
+       * Note that this date is in UTC time.
+       * Use the same start and end date to indicate a 1 day signup period.
+       */
+      sign_up_start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description The signup period end date.
+       * Note that this date is in UTC time.
+       */
+      sign_up_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description Event start date for the event i.e the day members should meet at shads,
+       * **NOT** the signups, refer to {@link sign_up_start_date} for signup start
+       */
+      physical_start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * @description Event end time for the event i.e the last day members will be at the lodge,
+       * is optionial in case of one day events. **NOT** the signups, refer to
+       * {@link sign_up_end_date} for signup end date
+       */
+      physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      /**
+       * Format: double
+       * @description Max number of attendees at this event, left as optional for uncapped
+       * @example 30
+       */
+      max_occupancy?: number;
+    };
   };
   responses: {
   };
@@ -741,6 +860,17 @@ export interface operations {
       };
     };
   };
+  /** @description Fetches the prices of the lodge products from Stripe. */
+  GetLodgePrices: {
+    responses: {
+      /** @description The prices of the lodge products. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LodgeStripeProductResponse"];
+        };
+      };
+    };
+  };
   /** @description Fetches the details of a checkout session based on a stripe checkout session id. */
   GetCheckoutSessionDetails: {
     parameters: {
@@ -802,18 +932,37 @@ export interface operations {
       };
     };
   };
-  /** @description Signs up for an event */
-  EventSignup: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["EventSignupBody"];
+  /**
+   * @description Fetches latest events starting from the event with the latest starting date
+   * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+   */
+  GetAllEvents: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
       };
     };
     responses: {
-      /** @description Successfully signed up for Event */
+      /** @description Successfully fetched all events */
       200: {
         content: {
-          "application/json": components["schemas"]["EventSignupResponse"];
+          "application/json": components["schemas"]["GetAllEventsResponse"];
+        };
+      };
+    };
+  };
+  GetEventById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Successfully fetched the event */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEventResponse"];
         };
       };
     };
@@ -1089,6 +1238,39 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["FetchLatestBookingHistoryEventResponse"];
         };
+      };
+    };
+  };
+  /** @description Endpoint for admin to create a new event */
+  CreateNewEvent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateEventBody"];
+      };
+    };
+    responses: {
+      /** @description Created Event */
+      201: {
+        content: never;
+      };
+    };
+  };
+  /** @description Endpoint for admints to edit an event. */
+  EditEvent: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Partial_Event_"];
+      };
+    };
+    responses: {
+      /** @description Successfully edited the event! */
+      200: {
+        content: never;
       };
     };
   };

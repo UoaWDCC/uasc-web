@@ -1,6 +1,5 @@
-import { EventReservation } from "data-layer/models/firebase"
+import { Event } from "data-layer/models/firebase"
 
-export interface EventSignupBody {
-  event_id: string
-  reservation: EventReservation
+export interface CreateEventBody {
+  data: Event
 }

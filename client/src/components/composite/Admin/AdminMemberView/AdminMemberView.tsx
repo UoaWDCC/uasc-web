@@ -139,16 +139,22 @@ export const AdminMemberView = ({
 
   const dataFilter = useCallback(
     (oldData: MemberColumnFormat[]) => {
-      return isValidSearchQuery || shouldFilterByAccount
-        ? oldData.filter(
-            (item) =>
-              (isValidSearchQuery &&
-                (item.Email?.toLowerCase().includes(currentSearchQuery) ||
-                  item.Name?.toLowerCase().includes(currentSearchQuery))) ||
-              (shouldFilterByAccount &&
-                filteredAccountType === item.Status?.toLowerCase())
-          )
-        : oldData
+      return oldData.filter((item) => {
+        const matchesSearchQuery =
+          isValidSearchQuery &&
+          (item.Email?.toLowerCase().includes(currentSearchQuery) ||
+            item.Name?.toLowerCase().includes(currentSearchQuery))
+
+        const matchesAccountType =
+          shouldFilterByAccount &&
+          filteredAccountType === item.Status?.toLowerCase()
+
+        // It is true if either filter matches or both
+        return (
+          (matchesSearchQuery || !isValidSearchQuery) &&
+          (matchesAccountType || !shouldFilterByAccount)
+        )
+      })
     },
     [
       isValidSearchQuery,

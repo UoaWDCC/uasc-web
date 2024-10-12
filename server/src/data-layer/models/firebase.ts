@@ -130,26 +130,6 @@ export interface BookingChange {
   new_check_out: Timestamp // New check-out timestamp
 }
 
-export interface EventReservation {
-  /**
-   * The first name of the user who made this event reservation
-   */
-  first_name: string
-  /**
-   * The last name of the user who made this event reservation
-   */
-  last_name: string
-  /**
-   * The email of the user who made this even reservation
-   */
-  email: string
-  /**
-   * Boolean to check if the user is a member
-   * @example true
-   */
-  is_member: boolean
-}
-
 export interface Event {
   /**
    * The title of this event
@@ -169,18 +149,40 @@ export interface Event {
   /**
    * The location of this event
    */
-  location: string
+  location?: string
+
   /**
-   * The start date of the event.
-   * Note that this date is in UTC time.
-   * Use the same start and end day to show that its a 1 day event.
+   * A URL to the google form for signing up to the event. This is not to be included
+   * in any response body unless we are _near_ the period for sign up
    */
-  start_date: Timestamp
+  google_forms_link?: string
+
   /**
-   * The end date of the event.
+   * The signup period start date.
+   * Note that this date is in UTC time.
+   * Use the same start and end date to indicate a 1 day signup period.
+   */
+  sign_up_start_date: Timestamp
+
+  /**
+   * The signup period end date.
    * Note that this date is in UTC time.
    */
-  end_date: Timestamp
+  sign_up_end_date?: Timestamp
+
+  /**
+   * Event start date for the event i.e the day members should meet at shads,
+   * **NOT** the signups, refer to {@link sign_up_start_date} for signup start
+   */
+  physical_start_date: Timestamp
+
+  /**
+   * Event end time for the event i.e the last day members will be at the lodge,
+   * is optionial in case of one day events. **NOT** the signups, refer to
+   * {@link sign_up_end_date} for signup end date
+   */
+  physical_end_date?: Timestamp
+
   /**
    * Max number of attendees at this event, left as optional for uncapped
    * @example 30

@@ -1,61 +1,57 @@
 import EventService from "data-layer/services/EventService"
-import { EventSignupBody } from "service-layer/request-models/EventRequests"
-import { EventSignupResponse } from "service-layer/response-models/EventResponse"
-import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
+import {
+  GetAllEventsResponse,
+  GetEventResponse
+} from "service-layer/response-models/EventResponse"
+import { Controller, Get, Path, Query, Route, SuccessResponse } from "tsoa"
 
 @Route("events")
 export class EventController extends Controller {
   /**
-   * Signs up for an event
+   * Fetches latest events starting from the event with the latest starting date
+   * (**NOT** the signup open date) based on limit. Is paginated with a cursor
    */
-  @SuccessResponse("200", "Successfully signed up for Event")
-  @Post("signup")
-  public async eventSignup(
-    @Body() requestBody: EventSignupBody
-  ): Promise<EventSignupResponse> {
-    const { event_id, reservation } = requestBody
-    const eventService = new EventService()
-    // Check if the event exists
-    const fetchedEvent = await eventService.getEventById(event_id)
-    if (!fetchedEvent) {
-      this.setStatus(404)
-      return { error: "Event not found." }
-    }
-    // Check if the event is full
-    const reservations = await eventService.getAllReservations(event_id)
-    if (
-      fetchedEvent.max_occupancy !== undefined &&
-      reservations.length >= fetchedEvent.max_occupancy
-    ) {
-      this.setStatus(400)
-      return { error: "Maximum event occupancy reached." }
-    }
-    // Check if the user is already signed up
-    if (
-      reservations.some(
-        (r) =>
-          r.email.trim().toLowerCase() ===
-          reservation.email.trim().toLowerCase()
-      )
-    ) {
-      this.setStatus(400)
-      return { error: "You have already signed up for this event." }
-    }
-    // Sign up the user
+  @Get()
+  @SuccessResponse("200", "Successfully fetched all events")
+  public async getAllEvents(
+    @Query() limit: number = 20,
+    @Query() cursor?: string
+  ): Promise<GetAllEventsResponse> {
     try {
-      await eventService.addReservation(event_id, reservation)
-      this.setStatus(200)
-      return {
-        message: "Successfully signed up for event.",
-        data: {
-          first_name: reservation.first_name,
-          last_name: reservation.last_name,
-          email: reservation.email
-        }
+      const eventService = new EventService()
+
+      let snapshot
+      if (cursor) {
+        snapshot = await eventService.getEventSnapshot(cursor)
       }
+
+      const res = await eventService.getAllEvents(limit, snapshot)
+      return { nextCursor: res.nextCursor, data: res.events }
+    } catch (e) {
+      return {
+        error: "Something went wrong when fetching all events, please try again"
+      }
+    }
+  }
+
+  @Get("{id}")
+  @SuccessResponse("200", "Successfully fetched the event")
+  public async getEventById(@Path() id: string): Promise<GetEventResponse> {
+    try {
+      const eventService = new EventService()
+      const event = await eventService.getEventById(id)
+
+      if (!event) {
+        this.setStatus(404)
+        return { error: "Event not found." }
+      }
+
+      return { data: event }
     } catch (e) {
       this.setStatus(500)
-      return { error: "Failed to sign up for event." }
+      return {
+        error: "Something went wrong when fetching the event, please try again"
+      }
     }
   }
 }
