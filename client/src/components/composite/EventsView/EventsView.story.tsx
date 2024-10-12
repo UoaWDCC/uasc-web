@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import EventsPage from "./Events"
+import EventsPage from "./EventsView"
 
 const meta: Meta<typeof EventsPage> = {
   component: EventsPage
