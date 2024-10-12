@@ -40,6 +40,15 @@ export const DefaultEventsCard3: Story = {
   }
 }
 
+export const DefaultEventsCard4: Story = {
+  tags: ["autodocs"],
+  args: {
+    title: "",
+    date: "...",
+    location: "",
+    content: ``
+  }
+}
 export const EventsCardGroup: Story = {
   render: () => (
     <div style={{ display: "flex flex-col", gap: "1rem" }}>
