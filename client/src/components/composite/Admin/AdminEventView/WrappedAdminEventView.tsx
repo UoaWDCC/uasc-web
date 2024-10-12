@@ -1,3 +1,5 @@
+"use client"
+
 import { useCreateEventMutation } from "@/services/Admin/AdminMutations"
 import AdminEventView from "./AdminEventView"
 import StorageService from "@/services/Storage/StorageService"
