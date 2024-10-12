@@ -38,6 +38,8 @@ export const AdminEventFormKeys = {
   MAX_OCCUPANCY: "max signups"
 } as const
 
+const Divider = () => <span className="bg-gray-3 my-3 h-[1px] w-full" />
+
 const AdminEventForm = ({
   handlePostEvent,
   generateImageLink
@@ -98,7 +100,7 @@ const AdminEventForm = ({
     }
   }
   return (
-    <div className="my-4 flex w-full flex-col items-center rounded-md bg-white p-2">
+    <div className="relative my-4 flex w-full flex-col items-center rounded-md bg-white p-2">
       <h2 className="text-dark-blue-100">Create Event</h2>
       <form
         onSubmit={handleSubmit}
@@ -146,6 +148,7 @@ const AdminEventForm = ({
           data-testid={AdminEventFormKeys.LOCATION}
           required
         />
+        <Divider />
         <h3 className="text-dark-blue-100 text-center">Sign up dates</h3>
         <span className="flex w-full flex-col gap-2 sm:flex-row">
           <TextInput
@@ -163,6 +166,7 @@ const AdminEventForm = ({
           />
         </span>
 
+        <Divider />
         <h3 className="text-dark-blue-100 mt-2 text-center">Event Dates</h3>
         <span className="flex w-full flex-col gap-2 sm:flex-row">
           <TextInput
@@ -179,6 +183,7 @@ const AdminEventForm = ({
             label="End Date of Event"
           />
         </span>
+        <Divider />
         <TextInput
           name={AdminEventFormKeys.GOOGLE_FORMS_LINK}
           data-testid={AdminEventFormKeys.GOOGLE_FORMS_LINK}
