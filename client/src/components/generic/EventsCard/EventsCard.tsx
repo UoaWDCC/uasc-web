@@ -1,5 +1,5 @@
 import Button from "../FigmaButtons/FigmaButton"
-import Image, { StaticImageData } from "next/image"
+import Image from "next/image"
 /**
  * Props for event card
  */
@@ -35,7 +35,7 @@ export interface EventsCardProps {
   /**
    * The image cover on the top of the card
    */
-  image: string | StaticImageData
+  image: string
 }
 
 type props = EventsCardProps
