@@ -448,6 +448,25 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"DocumentDataWithUid_Event_": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/Event"
+					},
+					{
+						"properties": {
+							"id": {
+								"type": "string",
+								"description": "The ID of the document for which this document contains data."
+							}
+						},
+						"required": [
+							"id"
+						],
+						"type": "object"
+					}
+				]
+			},
 			"GetAllEventsResponse": {
 				"properties": {
 					"error": {
@@ -462,7 +481,7 @@
 					},
 					"data": {
 						"items": {
-							"$ref": "#/components/schemas/Event"
+							"$ref": "#/components/schemas/DocumentDataWithUid_Event_"
 						},
 						"type": "array"
 					}

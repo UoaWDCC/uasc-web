@@ -349,6 +349,10 @@ export interface components {
        */
       max_occupancy?: number;
     };
+    DocumentDataWithUid_Event_: components["schemas"]["Event"] & {
+      /** @description The ID of the document for which this document contains data. */
+      id: string;
+    };
     GetAllEventsResponse: {
       error?: string;
       message?: string;
@@ -359,7 +363,7 @@ export interface components {
        * **Will be undefined in case of last page**
        */
       nextCursor?: string;
-      data?: components["schemas"]["Event"][];
+      data?: components["schemas"]["DocumentDataWithUid_Event_"][];
     };
     GetEventResponse: {
       error?: string;
