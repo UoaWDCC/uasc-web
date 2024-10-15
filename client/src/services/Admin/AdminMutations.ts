@@ -170,3 +170,12 @@ export function useDeleteBookingMutation() {
     }
   })
 }
+
+export function useCreateEventMutation() {
+  return useMutation({
+    mutationKey: ["create-booking"],
+    retry: false,
+    mutationFn: AdminService.createEvent
+    // TODO: invalidate all events query (we need to refetch the events)
+  })
+}
