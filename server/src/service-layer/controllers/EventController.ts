@@ -7,7 +7,6 @@ import { Controller, Get, Path, Query, Route, SuccessResponse } from "tsoa"
 import { ONE_MINUTE_IN_MS } from "../../business-layer/utils/EventConstants"
 import { Timestamp } from "firebase-admin/firestore"
 
-
 @Route("events")
 export class EventController extends Controller {
   /**
