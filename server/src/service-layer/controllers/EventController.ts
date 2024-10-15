@@ -18,6 +18,7 @@ import {
 } from "tsoa"
 import express from "express"
 import { Timestamp } from "firebase-admin/firestore"
+import { ONE_MINUTE_IN_MS } from "../../business-layer/utils/EventConstants"
 
 @Route("events")
 export class EventController extends Controller {
@@ -105,7 +106,7 @@ export class EventController extends Controller {
           eventStartTime.toMillis() - currentTime.toMillis()
 
         // 1 minute (60000 milliseconds)
-        if (timeDifference > 60000) {
+        if (timeDifference > ONE_MINUTE_IN_MS) {
           delete event.google_forms_link
         }
       })
