@@ -94,9 +94,7 @@ describe("EventController endpoint tests", () => {
 
       expect(res.body.data).toContainEqual(
         expect.not.objectContaining({
-          google_forms_link: expect.not.stringContaining(
-            "https://random.com/event3"
-          )
+          google_forms_link: expect.any(String)
         })
       )
     })
