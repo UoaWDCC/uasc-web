@@ -15,7 +15,9 @@ export interface IEventDetailed {
   googleFormLink?: string
 
   /**
-   * When the signups open
+   * When the signups open (includes both _time_ and _date_),
+   * this prop will have a side-effect on if the {@link googleFormLink}
+   * is displayed
    */
   signUpOpenDate?: Date
 
@@ -37,7 +39,8 @@ export interface IEventDetailed {
   content: React.ReactNode
 
   /**
-   * The function when the button on the card / preview card is clicked
+   * The callback for when the user attempts to return to any previous
+   * view (e.g the list of events)
    */
   onBack: () => void
 
@@ -47,6 +50,11 @@ export interface IEventDetailed {
   image: string
 }
 
+/**
+ * The view for users to sign up and see full information about the event.
+ *
+ * **No data fetching should be performed in this component**
+ */
 const EventDetailed = ({
   date,
   title,
@@ -78,30 +86,35 @@ const EventDetailed = ({
             className="block h-auto max-h-[400px] w-auto  py-4"
           />
         </div>
-        <div className="h-full w-full border bg-white p-8 text-center md:text-left">
+        <div className="h-full w-full gap-2 border bg-white p-8 text-center md:text-left">
           <h5 className="font-bold">{date}</h5>
 
           <h3 className="text-dark-blue-100 mt-1 font-bold">{title}</h3>
-
           <div className="text-gray-4 mt-2">{location}</div>
           <Divider />
 
-          <div className="text-left">{content}</div>
+          <div className="flex flex-col gap-4">
+            <div className="text-left">{content}</div>
 
-          {signUpOpenDate &&
-            (signUpOpenDate <= new Date() ? (
-              <>
-                <h5>Sign Ups Open!</h5>
-                {googleFormLink && <iframe src={googleFormLink} />}
-              </>
-            ) : (
-              <>
-                <h5 className="font-bold">
-                  Sign ups open at {signUpOpenDate.toLocaleString()}
-                </h5>
-                <a></a>
-              </>
-            ))}
+            {signUpOpenDate &&
+              (signUpOpenDate <= new Date() ? (
+                <>
+                  <h5 className="font-bold uppercase">
+                    <a href={googleFormLink} target="_blank" rel="noreferrer">
+                      Sign Ups Open!
+                    </a>
+                  </h5>
+                  {googleFormLink && <iframe src={googleFormLink} />}
+                </>
+              ) : (
+                <>
+                  <h5 className="font-bold">
+                    Sign ups open at {signUpOpenDate.toLocaleString()}
+                  </h5>
+                  <a></a>
+                </>
+              ))}
+          </div>
         </div>
       </div>
     </>
