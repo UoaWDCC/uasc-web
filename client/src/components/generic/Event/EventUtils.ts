@@ -41,28 +41,61 @@ export const EventMessages = {
   }
 } as const
 
+/**
+ * Static methods to perform comparions useful for the events
+ */
 export const EventDateComparisons = {
+  /**
+   * Logic for determining if the event has finished
+   *
+   * @param startDate date object corresponding to the event's start date timestamp
+   * @param endDate date object corresponding to the event's start date timestamp, if exists
+   *
+   * @returns `true` if the event has finshed, `false` otherwise
+   */
   isPastEvent: (startDate?: Date, endDate?: Date) => {
     const oneDayLater = new Date(Date.now() + 24 * 60 * 60 * MS_IN_SECOND)
 
-    if (endDate) return endDate <= oneDayLater
+    if (endDate) return endDate <= new Date()
     if (startDate) return startDate <= oneDayLater
     return false
   }
 } as const
 
 const EventDateFormatting = {
+  /**
+   * @example
+   * ```
+   * EventDateFormatting.shortDayName(new Date()) // 'Thu'
+   * ```
+   */
   shortDayName: (date: Date) => {
     return date.toLocaleDateString("en-NZ", {
       weekday: "short"
     })
   },
+  /**
+   * Returns a date in `dd/mm/yyyy` format
+   *
+   * @example
+   * ```
+   * EventDateFormatting.shortDate(new Date()) // '14/10/2024'
+   * ```
+   */
   shortDate: (date: Date) => {
     return date.toLocaleDateString("en-NZ", {
       hour: "2-digit",
       minute: "2-digit"
     })
   },
+  /**
+   * Displays a date in the `hh:mm pm` format (12 hour time)
+   *
+   * @example
+   * ```
+   * EventDateFormatting.shortTime(new Date()) // '9:12 pm'
+   * ```
+   */
   shortTime: (date: Date) => {
     return date.toLocaleTimeString("en-NZ", {
       hour: "2-digit",
