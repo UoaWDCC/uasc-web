@@ -180,44 +180,16 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "EventSignupResponse": {
-        "dataType": "refObject",
-        "properties": {
-            "error": {"dataType":"string"},
-            "message": {"dataType":"string"},
-            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"email":{"dataType":"string","required":true},"last_name":{"dataType":"string","required":true},"first_name":{"dataType":"string","required":true}}},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_EventReservation.Exclude_keyofEventReservation.timestamp__": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"first_name":{"dataType":"string","required":true},"last_name":{"dataType":"string","required":true},"email":{"dataType":"string","required":true},"is_member":{"dataType":"boolean","required":true}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Omit_EventReservation.timestamp_": {
-        "dataType": "refAlias",
-        "type": {"ref":"Pick_EventReservation.Exclude_keyofEventReservation.timestamp__","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "EventSignupBody": {
-        "dataType": "refObject",
-        "properties": {
-            "event_id": {"dataType":"string","required":true},
-            "reservation": {"ref":"Omit_EventReservation.timestamp_","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Event": {
         "dataType": "refObject",
         "properties": {
             "title": {"dataType":"string","required":true},
             "description": {"dataType":"string"},
             "image_url": {"dataType":"string"},
-            "location": {"dataType":"string","required":true},
-            "start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
-            "end_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "location": {"dataType":"string"},
+            "google_forms_link": {"dataType":"string"},
+            "sign_up_start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "sign_up_end_date": {"ref":"FirebaseFirestore.Timestamp"},
             "physical_start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "physical_end_date": {"ref":"FirebaseFirestore.Timestamp"},
             "max_occupancy": {"dataType":"double"},
@@ -232,6 +204,16 @@ const models: TsoaRoute.Models = {
             "message": {"dataType":"string"},
             "nextCursor": {"dataType":"string"},
             "data": {"dataType":"array","array":{"dataType":"refObject","ref":"Event"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GetEventResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "data": {"ref":"Event"},
         },
         "additionalProperties": false,
     },
@@ -568,7 +550,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_Event_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"description":{"dataType":"string"},"image_url":{"dataType":"string"},"location":{"dataType":"string"},"start_date":{"ref":"FirebaseFirestore.Timestamp"},"end_date":{"ref":"FirebaseFirestore.Timestamp"},"physical_start_date":{"ref":"FirebaseFirestore.Timestamp"},"physical_end_date":{"ref":"FirebaseFirestore.Timestamp"},"max_occupancy":{"dataType":"double"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"description":{"dataType":"string"},"image_url":{"dataType":"string"},"location":{"dataType":"string"},"google_forms_link":{"dataType":"string"},"sign_up_start_date":{"ref":"FirebaseFirestore.Timestamp"},"sign_up_end_date":{"ref":"FirebaseFirestore.Timestamp"},"physical_start_date":{"ref":"FirebaseFirestore.Timestamp"},"physical_end_date":{"ref":"FirebaseFirestore.Timestamp"},"max_occupancy":{"dataType":"double"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -888,36 +870,6 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/events/signup',
-            ...(fetchMiddlewares<RequestHandler>(EventController)),
-            ...(fetchMiddlewares<RequestHandler>(EventController.prototype.eventSignup)),
-
-            function EventController_eventSignup(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"EventSignupBody"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new EventController();
-
-              templateService.apiHandler({
-                methodName: 'eventSignup',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: 200,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/events',
             ...(fetchMiddlewares<RequestHandler>(EventController)),
             ...(fetchMiddlewares<RequestHandler>(EventController.prototype.getAllEvents)),
@@ -949,13 +901,13 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/events/reservations/stream',
+        app.get('/events/:id',
             ...(fetchMiddlewares<RequestHandler>(EventController)),
-            ...(fetchMiddlewares<RequestHandler>(EventController.prototype.streamSignupCounts)),
+            ...(fetchMiddlewares<RequestHandler>(EventController.prototype.getEventById)),
 
-            function EventController_streamSignupCounts(request: ExRequest, response: ExResponse, next: any) {
+            function EventController_getEventById(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
+                    id: {"in":"path","name":"id","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -967,12 +919,12 @@ export function RegisterRoutes(app: Router) {
                 const controller = new EventController();
 
               templateService.apiHandler({
-                methodName: 'streamSignupCounts',
+                methodName: 'getEventById',
                 controller,
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);

@@ -1,0 +1,32 @@
+name: Update the google sheet with members
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Updates every hour
+    - cron: "0 * * * *"
+
+env:
+  NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.PROD_BACKEND_BASE_URL}}
+  MEMBERS_GOOGLE_SPREADSHEET_ID: ${{secrets.MEMBERS_GOOGLE_SPREADSHEET_ID}}
+  MEMBERS_GOOGLE_SHEET_ID: ${{secrets.MEMBERS_GOOGLE_SHEET_ID}}
+  GOOGLE_SERVICE_ACCOUNT_JSON: ${{secrets.FIREBASE_SERVICE_ACCOUNT_UASC_PROD}}
+  NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
+
+jobs:
+  update_google_sheet_members:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install volta
+        uses: volta-cli/action@v4
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Update google sheet members with script
+        run: |
+          yarn workspace server update-google-sheet-members

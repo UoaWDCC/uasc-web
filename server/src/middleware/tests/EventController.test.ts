@@ -1,6 +1,6 @@
 import EventService from "data-layer/services/EventService"
 import { request } from "../routes.setup"
-import { Event, EventReservation } from "../../data-layer/models/firebase"
+import { Event } from "../../data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 
 const earlierStartDate = Timestamp.fromDate(new Date(2023, 1, 1))
@@ -13,8 +13,8 @@ const event1: Event = {
   title: "UASC New event",
   location: "UASC",
   physical_start_date: earlierStartDate,
-  start_date: earlierStartDate,
-  end_date: earlierStartDate
+  sign_up_start_date: earlierStartDate,
+  sign_up_end_date: earlierStartDate
 }
 
 /**
@@ -24,14 +24,8 @@ const event2: Event = {
   title: "Straight Zhao",
   location: "UASC",
   physical_start_date: startDate,
-  start_date: startDate,
-  end_date: endDate
-}
-const reservation1: Omit<EventReservation, "timestamp"> = {
-  first_name: "John",
-  last_name: "Doe",
-  email: "test@email.com",
-  is_member: true
+  sign_up_start_date: startDate,
+  sign_up_end_date: endDate
 }
 
 describe("EventController endpoint tests", () => {
@@ -64,57 +58,20 @@ describe("EventController endpoint tests", () => {
     })
   })
 
-  describe("/events/signup", () => {
-    it("should return 404 if the event does not exist", async () => {
-      const res = await request.post("/events/signup").send({
-        event_id: "non-existent-event",
-        reservation: reservation1
-      })
-      expect(res.status).toEqual(404)
-    })
-
-    it("should return 400 if the event is full", async () => {
-      const event = await eventService.createEvent({
-        ...event1,
-        max_occupancy: 0
-      })
-      const res = await request.post("/events/signup").send({
-        event_id: event.id,
-        reservation: reservation1
-      })
-      expect(res.status).toEqual(400)
-      expect(res.body.error).toEqual("Maximum event occupancy reached.")
-    })
-
-    it("should return 400 if already signed up to event", async () => {
-      const event = await eventService.createEvent(event1)
-      await eventService.addReservation(event.id, {
-        ...reservation1,
-        timestamp: Timestamp.now()
-      })
-      const res = await request.post("/events/signup").send({
-        event_id: event.id,
-        reservation: reservation1
-      })
-      expect(res.status).toEqual(400)
-      expect(res.body.error).toEqual(
-        "You have already signed up for this event."
-      )
-    })
-
-    it("should allow user to signup to an event", async () => {
-      const event = await eventService.createEvent(event1)
-      const res = await request.post("/events/signup").send({
-        event_id: event.id,
-        reservation: reservation1
-      })
+  describe("GET /events/:id", () => {
+    it("should return the event details for a valid event ID", async () => {
+      const { id: id1 } = await eventService.createEvent(event1)
+      const res = await request.get(`/events/${id1}`).send()
       expect(res.status).toEqual(200)
-      expect(res.body.message).toEqual("Successfully signed up for event.")
-      expect(res.body.data).toEqual({
-        first_name: reservation1.first_name,
-        last_name: reservation1.last_name,
-        email: reservation1.email
-      })
+      expect(res.body.data).toBeDefined()
+      expect(res.body.data.title).toEqual("UASC New event")
+      expect(res.body.data.location).toEqual("UASC")
+    })
+
+    it("should return 404 if the event does not exist", async () => {
+      const res = await request.get("/events/random-event").send()
+      expect(res.status).toEqual(404)
+      expect(res.body.error).toEqual("Event not found.")
     })
   })
 })

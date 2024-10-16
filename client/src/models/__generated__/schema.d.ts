@@ -52,10 +52,6 @@ export interface paths {
      */
     post: operations["GetBookingPayment"];
   };
-  "/events/signup": {
-    /** @description Signs up for an event */
-    post: operations["EventSignup"];
-  };
   "/events": {
     /**
      * @description Fetches latest events starting from the event with the latest starting date
@@ -63,12 +59,8 @@ export interface paths {
      */
     get: operations["GetAllEvents"];
   };
-  "/events/reservations/stream": {
-    /**
-     * @description Streams the signup count for active events signups.
-     * Note that when testing this on swagger, the connection will remain open.
-     */
-    get: operations["StreamSignupCounts"];
+  "/events/{id}": {
+    get: operations["GetEventById"];
   };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
@@ -311,35 +303,6 @@ export interface components {
       /** @description Firestore timestamp, should represent a UTC date that is set to exactly midnight */
       endDate?: components["schemas"]["FirebaseFirestore.Timestamp"];
     };
-    EventSignupResponse: {
-      error?: string;
-      message?: string;
-      data?: {
-        email: string;
-        last_name: string;
-        first_name: string;
-      };
-    };
-    /** @description From T, pick a set of properties whose keys are in the union K */
-    "Pick_EventReservation.Exclude_keyofEventReservation.timestamp__": {
-      /** @description The first name of the user who made this event reservation */
-      first_name: string;
-      /** @description The last name of the user who made this event reservation */
-      last_name: string;
-      /** @description The email of the user who made this even reservation */
-      email: string;
-      /**
-       * @description Boolean to check if the user is a member
-       * @example true
-       */
-      is_member: boolean;
-    };
-    /** @description Construct a type with the properties of T except for those in type K. */
-    "Omit_EventReservation.timestamp_": components["schemas"]["Pick_EventReservation.Exclude_keyofEventReservation.timestamp__"];
-    EventSignupBody: {
-      event_id: string;
-      reservation: components["schemas"]["Omit_EventReservation.timestamp_"];
-    };
     Event: {
       /** @description The title of this event */
       title: string;
@@ -351,27 +314,32 @@ export interface components {
       /** @description The link for the image to display on the event page (essentially a thumbnail) */
       image_url?: string;
       /** @description The location of this event */
-      location: string;
+      location?: string;
+      /**
+       * @description A URL to the google form for signing up to the event. This is not to be included
+       * in any response body unless we are _near_ the period for sign up
+       */
+      google_forms_link?: string;
       /**
        * @description The signup period start date.
        * Note that this date is in UTC time.
        * Use the same start and end date to indicate a 1 day signup period.
        */
-      start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description The signup period end date.
        * Note that this date is in UTC time.
        */
-      end_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event start date for the event i.e the day members should meet at shads,
-       * **NOT** the signups, refer to {@link start_date} for signup start
+       * **NOT** the signups, refer to {@link sign_up_start_date} for signup start
        */
       physical_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event end time for the event i.e the last day members will be at the lodge,
        * is optionial in case of one day events. **NOT** the signups, refer to
-       * {@link end_date} for signup end date
+       * {@link sign_up_end_date} for signup end date
        */
       physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
@@ -392,6 +360,11 @@ export interface components {
        */
       nextCursor?: string;
       data?: components["schemas"]["Event"][];
+    };
+    GetEventResponse: {
+      error?: string;
+      message?: string;
+      data?: components["schemas"]["Event"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -734,25 +707,30 @@ export interface components {
       /** @description The location of this event */
       location?: string;
       /**
+       * @description A URL to the google form for signing up to the event. This is not to be included
+       * in any response body unless we are _near_ the period for sign up
+       */
+      google_forms_link?: string;
+      /**
        * @description The signup period start date.
        * Note that this date is in UTC time.
        * Use the same start and end date to indicate a 1 day signup period.
        */
-      start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description The signup period end date.
        * Note that this date is in UTC time.
        */
-      end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event start date for the event i.e the day members should meet at shads,
-       * **NOT** the signups, refer to {@link start_date} for signup start
+       * **NOT** the signups, refer to {@link sign_up_start_date} for signup start
        */
       physical_start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description Event end time for the event i.e the last day members will be at the lodge,
        * is optionial in case of one day events. **NOT** the signups, refer to
-       * {@link end_date} for signup end date
+       * {@link sign_up_end_date} for signup end date
        */
       physical_end_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
@@ -954,22 +932,6 @@ export interface operations {
       };
     };
   };
-  /** @description Signs up for an event */
-  EventSignup: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["EventSignupBody"];
-      };
-    };
-    responses: {
-      /** @description Successfully signed up for Event */
-      200: {
-        content: {
-          "application/json": components["schemas"]["EventSignupResponse"];
-        };
-      };
-    };
-  };
   /**
    * @description Fetches latest events starting from the event with the latest starting date
    * (**NOT** the signup open date) based on limit. Is paginated with a cursor
@@ -990,15 +952,18 @@ export interface operations {
       };
     };
   };
-  /**
-   * @description Streams the signup count for active events signups.
-   * Note that when testing this on swagger, the connection will remain open.
-   */
-  StreamSignupCounts: {
+  GetEventById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
     responses: {
-      /** @description No content */
-      204: {
-        content: never;
+      /** @description Successfully fetched the event */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEventResponse"];
+        };
       };
     };
   };
