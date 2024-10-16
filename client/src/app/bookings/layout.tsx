@@ -11,16 +11,27 @@ import { Footer } from "@/components/generic/Footer/Footer"
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "@/services/QueryClient"
 
-type IBookingLayout = Readonly<{ children: ReactNode }>
+type IBookingLayout = Readonly<{
+  children: ReactNode
+  // policyInfoProps: ReactNode
+}>
 
 const InnerBookingLayout = ({ children }: IBookingLayout) => {
-  const { getExistingSession } = useContext(BookingContext)
+  const { getExistingSession, policies } = useContext(BookingContext)
 
   const getExistingSessionCallback = useCallback(() => {
     getExistingSession?.()
   }, [getExistingSession])
 
   useUserLoggedInCallback(getExistingSessionCallback)
+
+  const PoliciesContent = policies
+    ? policies.slice(0, 3).map((policy) => ({
+        order: policy.order || 0, // Ensure order is a number
+        title: policy.title || "Untitled", // Ensure title is a string
+        information: policy.information || [] // Make sure information is an array of PortableTextBlocks
+      }))
+    : []
 
   return (
     <>
@@ -36,7 +47,7 @@ const InnerBookingLayout = ({ children }: IBookingLayout) => {
         </div>
       </div>
       <span className="relative z-[11]">
-        <PolicyTabs />
+        <PolicyTabs policiesArray={PoliciesContent} />
       </span>
       <Footer />
     </>
