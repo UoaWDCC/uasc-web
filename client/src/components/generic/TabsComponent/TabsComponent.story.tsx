@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react"
-import TabsComponent from "./TabsComponent"
+import TabsComponent, { Tab } from "./TabsComponent"
 import { useState } from "react"
 
 const meta: Meta<typeof TabsComponent> = {
@@ -27,8 +27,8 @@ const BookingSection = () => (
   </>
 )
 
-const exampleHeadings = [
-  { title: "LODGE BOOKINGS", content: <BookingSection />, index: TabIndex.ONE },
+const exampleHeadings: Tab[] = [
+  { title: "LODGE BOOKINGS", content: <BookingSection />, order: TabIndex.ONE },
   {
     title: "CANCELLATION",
     content: (
@@ -39,9 +39,9 @@ const exampleHeadings = [
         nesciunt perferendis.
       </p>
     ),
-    index: TabIndex.TWO
+    order: TabIndex.TWO
   },
-  { title: "BEHAVIOUR", content: <p>Contents 3</p>, index: TabIndex.THREE }
+  { title: "BEHAVIOUR", content: <p>Contents 3</p>, order: TabIndex.THREE }
 ]
 
 export const DefaultStory = () => {
