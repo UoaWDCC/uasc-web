@@ -20,7 +20,10 @@ export const DefaultEventsPage: Story = {
         location: "UASC",
         physical_start_date: earlierStartDate,
         sign_up_start_date: earlierStartDate,
-        sign_up_end_date: earlierStartDate
+        sign_up_end_date: earlierStartDate,
+        google_forms_link: "https://google.com",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit adipisci repellat perferendis. Quia ipsum laborum est, veniam accusamus voluptas praesentium, odio perspiciatis blanditiis sequi dignissimos unde. Natus delectus nihil cum."
       },
       {
         id: "2",
@@ -28,7 +31,9 @@ export const DefaultEventsPage: Story = {
         location: "UASC",
         physical_start_date: earlierStartDate,
         sign_up_start_date: startDate,
-        sign_up_end_date: earlierStartDate
+        sign_up_end_date: earlierStartDate,
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit adipisci repellat perferendis. Quia ipsum laborum est, veniam accusamus voluptas praesentium, odio perspiciatis blanditiis sequi dignissimos unde. Natus delectus nihil cum."
       },
       {
         id: "3",
@@ -36,7 +41,9 @@ export const DefaultEventsPage: Story = {
         location: "UASC",
         physical_start_date: earlierStartDate,
         sign_up_start_date: startDate,
-        sign_up_end_date: earlierStartDate
+        sign_up_end_date: earlierStartDate,
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit adipisci repellat perferendis. Quia ipsum laborum est, veniam accusamus voluptas praesentium, odio perspiciatis blanditiis sequi dignissimos unde. Natus delectus nihil cum."
       }
     ]
   },
