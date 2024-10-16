@@ -749,7 +749,33 @@ export class AdminController extends Controller {
       this.setStatus(404)
     }
     try {
-      eventService.updateEvent(id, requestBody)
+      eventService.updateEvent(id, {
+        ...requestBody,
+        ...(requestBody.sign_up_start_date && {
+          sign_up_start_date: new Timestamp(
+            requestBody.sign_up_start_date.seconds,
+            requestBody.sign_up_start_date.nanoseconds
+          )
+        }),
+        ...(requestBody.sign_up_end_date && {
+          sign_up_end_date: new Timestamp(
+            requestBody.sign_up_end_date.seconds,
+            requestBody.sign_up_end_date.nanoseconds
+          )
+        }),
+        ...(requestBody.physical_start_date && {
+          physical_start_date: new Timestamp(
+            requestBody.physical_start_date.seconds,
+            requestBody.physical_start_date.nanoseconds
+          )
+        }),
+        ...(requestBody.physical_end_date && {
+          physical_end_date: new Timestamp(
+            requestBody.physical_end_date.seconds,
+            requestBody.physical_end_date.nanoseconds
+          )
+        })
+      })
     } catch (e) {
       this.setStatus(500)
     }
