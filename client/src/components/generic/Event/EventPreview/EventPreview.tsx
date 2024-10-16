@@ -3,19 +3,37 @@ import Image from "next/image"
 import Arrow from "@/assets/icons/rightarrow.svg"
 
 export interface IEventsCardPreview {
+  /**
+   * The image url of image to display
+   */
   image?: string
-  sign_up_open_date: string
+  /**
+   * A **pre-formatted** string to inform of when sign ups open for the event
+   */
+  signUpOpenDate: string
+  /**
+   * A **pre-formatted** string about when the event occurs
+   */
   date: string
+  /**
+   * The handler that takes the user to a detailed view of an event
+   */
   onClick: () => void
+  /**
+   * Where the event is located
+   */
   location?: string
 
   /**
    * If an event should show as disabled, i.e it was in the past
    */
   pastEvent?: boolean
-
+  /**
+   * Headline of the preview - generally is the title of the event
+   */
   title: string
 }
+
 type ViewButtonProps = {
   onClick: () => void
 }
@@ -32,13 +50,20 @@ const ViewButton = ({ onClick }: ViewButtonProps) => {
     </button>
   )
 }
+
+/**
+ * Card which is intended to be rendered multiple times to show
+ * basic information about the events.
+ *
+ * **No data fetching should be performed in this component**
+ */
 const EventsCardPreview = ({
   date,
   title,
   location,
   onClick,
   image = "",
-  sign_up_open_date,
+  signUpOpenDate,
   pastEvent
 }: IEventsCardPreview) => {
   return (
@@ -60,7 +85,7 @@ const EventsCardPreview = ({
         <div>
           <h5 className="text-lg font-bold">{date}</h5>
           <p className="text-gray-4 pt-1 text-lg">
-            Sign-up opens at {sign_up_open_date || "unknown date"}
+            Sign-up opens at {signUpOpenDate || "unknown date"}
           </p>
           <h2 className="text-dark-blue-100 sm:text-h2 text-h3">{title}</h2>
         </div>

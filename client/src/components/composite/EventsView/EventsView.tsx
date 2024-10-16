@@ -96,7 +96,7 @@ const EventsPage = ({ rawEvents }: IEventsPage) => {
         title: event?.title || "",
         location: event?.location,
         content: <p>{event?.description}</p>,
-        sign_up_open_date: EventMessages.signUpOpen(signUpStartDate),
+        signUpOpenDate: EventMessages.signUpOpen(signUpStartDate),
         pastEvent: EventDateComparisons.isPastEvent(
           eventStartDate,
           eventEndDate
