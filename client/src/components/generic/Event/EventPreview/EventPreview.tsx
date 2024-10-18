@@ -86,7 +86,7 @@ const EventsCardPreview = ({
       </div>
       <div className="mb-4 flex flex-col sm:ml-4 ">
         <div>
-          <h5 className="text-lg font-bold">{date}</h5>
+          <h5 className=" text-sm font-bold">{date}</h5>
           <p className="text-gray-4 pt-1 text-lg">
             {isPastEvent
               ? "Event has ended."

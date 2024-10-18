@@ -40,7 +40,7 @@ export const EventMessages = {
     const endDateMessage =
       `${EventDateFormatting.shortDayName(eventEndDate)} ${eventStartDate.toLocaleDateString()} • ${EventDateFormatting.shortTime(eventEndDate)}` as const
 
-    return `${startDateMessage} to ${endDateMessage}`
+    return `${startDateMessage} - ${endDateMessage}`
   }
 } as const
 

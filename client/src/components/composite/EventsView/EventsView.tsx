@@ -148,7 +148,13 @@ const EventsPage = ({
           SelectedEventPanel
         ) : (
           <>
-            {isLoading && <Loader />}
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <h5 className="text-dark-blue-100 font-bold uppercase">
+                Upcoming Events
+              </h5>
+            )}
             {formattedCurrentEvents.map((event) => (
               <EventsCardPreview key={event.title} {...event} />
             ))}
