@@ -11,6 +11,7 @@ import {
   EventRenderingUtils
 } from "@/components/generic/Event/EventUtils"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
+import Loader from "@/components/generic/SuspenseComponent/Loader"
 
 interface IEventsPage {
   /**
@@ -19,10 +20,10 @@ interface IEventsPage {
    * performed on this list as it will be further mutated in the
    * {@link EventsPage} component
    */
-  rawEvents: Event[]
-  isFetching?: boolean
+  rawEvents?: Event[]
+  isLoading?: boolean
   hasMoreEvents?: boolean
-  fetchNextPage?: () => void
+  fetchMoreEvents?: () => void
 }
 
 interface EventList {
@@ -38,7 +39,12 @@ interface EventList {
  * - String operations are ideally done in {@link EventMessages}
  * - Complex date comparisons should also be abstracted away into {@link EventDateComparisons}
  */
-const EventsPage = ({ rawEvents, hasMoreEvents, isFetching }: IEventsPage) => {
+const EventsPage = ({
+  rawEvents = [],
+  hasMoreEvents,
+  isLoading,
+  fetchMoreEvents
+}: IEventsPage) => {
   const [selectedEventId, setSelectedEventId] = useState<string | undefined>()
 
   /**
@@ -137,11 +143,12 @@ const EventsPage = ({ rawEvents, hasMoreEvents, isFetching }: IEventsPage) => {
 
   return (
     <>
-      <div className="flex w-full max-w-[1000px] flex-col gap-2">
+      <div className={`flex w-full max-w-[1000px] flex-col gap-2`}>
         {selectedEventId ? (
           SelectedEventPanel
         ) : (
           <>
+            {isLoading && <Loader />}
             {formattedCurrentEvents.map((event) => (
               <EventsCardPreview key={event.title} {...event} />
             ))}
@@ -153,7 +160,11 @@ const EventsPage = ({ rawEvents, hasMoreEvents, isFetching }: IEventsPage) => {
         )}
 
         {hasMoreEvents && (
-          <Button variant="default" disabled={isFetching}>
+          <Button
+            variant="default"
+            onClick={fetchMoreEvents}
+            disabled={isLoading}
+          >
             Load More
           </Button>
         )}

@@ -5,6 +5,7 @@ const EventService = {
     const { data, response } = await fetchClient.GET("/events", {
       params: {
         query: {
+          limit: 15,
           cursor: pageParam
         }
       }
