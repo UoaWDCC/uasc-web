@@ -1,16 +1,39 @@
-import WorkInProgressComponent from "@/components/generic/WorkInProgressComponent/WorkInProgressComponent"
-import Link from "next/link"
+"use client"
+
+import EventsPage from "@/components/composite/EventsView/EventsView"
+import { useLatestEventsQuery } from "@/services/Event/EventQueries"
+import { useMemo } from "react"
+
 const Events = () => {
+  const {
+    data,
+    isPending,
+    hasNextPage,
+    isFetching,
+    fetchNextPage,
+    isFetchingNextPage
+  } = useLatestEventsQuery()
+  const rawEvents = useMemo(() => {
+    const flattenedEvents = data?.pages.flatMap((page) => {
+      return page.data || []
+    })
+    return flattenedEvents
+  }, [data])
+
   return (
-    <div className="fixed flex h-screen w-full flex-col items-center justify-center gap-4">
-      <WorkInProgressComponent pageName="Events" />
-      <Link
-        href="https://www.facebook.com/UoAsnowsports"
-        className="text-light-blue-100 hover:underline"
-      >
-        Go to our Facebook to sign up for the events!
-      </Link>
-    </div>
+    <>
+      <h2 className="text-dark-blue-100 mt-8 italic">Events</h2>
+      <EventsPage
+        rawEvents={rawEvents || []}
+        hasMoreEvents={hasNextPage}
+        isLoading={isPending}
+        fetchMoreEvents={() => {
+          if (!isFetchingNextPage && !isFetching) {
+            fetchNextPage()
+          }
+        }}
+      />
+    </>
   )
 }
 

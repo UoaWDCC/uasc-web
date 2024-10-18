@@ -197,13 +197,18 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "DocumentDataWithUid_Event_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"intersection","subSchemas":[{"ref":"Event"},{"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"dataType":"string","required":true}}}],"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "GetAllEventsResponse": {
         "dataType": "refObject",
         "properties": {
             "error": {"dataType":"string"},
             "message": {"dataType":"string"},
             "nextCursor": {"dataType":"string"},
-            "data": {"dataType":"array","array":{"dataType":"refObject","ref":"Event"}},
+            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"DocumentDataWithUid_Event_"}},
         },
         "additionalProperties": false,
     },
