@@ -30,7 +30,7 @@ export interface IEventsCardPreview {
   /**
    * If an event should show as disabled, i.e it was in the past
    */
-  pastEvent?: boolean
+  isPastEvent?: boolean
   /**
    * Headline of the preview - generally is the title of the event
    */
@@ -67,13 +67,13 @@ const EventsCardPreview = ({
   onClick,
   image = "",
   signUpOpenDate,
-  pastEvent
+  isPastEvent
 }: IEventsCardPreview) => {
   return (
     <div
       className={`border-gray-3 navbar-shadow flex w-full flex-col items-center  
           	    justify-center gap-2 rounded-md border bg-white p-4 sm:flex-row 
-                sm:px-10 sm:py-12 ${pastEvent && "brightness-50"}`}
+                sm:px-10 sm:py-12 ${isPastEvent && "brightness-50"}`}
     >
       <div className="border-gray-3 h-[100px] max-h-[100px] w-[200px] border">
         <Image
@@ -88,7 +88,9 @@ const EventsCardPreview = ({
         <div>
           <h5 className="text-lg font-bold">{date}</h5>
           <p className="text-gray-4 pt-1 text-lg">
-            Sign-up opens at {signUpOpenDate || "unknown date"}
+            {isPastEvent
+              ? "Event has ended."
+              : signUpOpenDate || "unknown date"}
           </p>
           <h2 className="text-dark-blue-100 sm:text-h2 text-h3">{title}</h2>
         </div>

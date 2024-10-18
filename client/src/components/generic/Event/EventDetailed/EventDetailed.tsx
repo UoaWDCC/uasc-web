@@ -110,6 +110,7 @@ const EventDetailed = ({
             <div className="text-left">{content}</div>
 
             {signUpOpenDate &&
+              !isPastEvent &&
               (signUpOpenDate <= new Date() ? (
                 <>
                   <h5 className="font-bold uppercase">
@@ -124,7 +125,6 @@ const EventDetailed = ({
                   <h5 className="font-bold">
                     Sign ups open at {signUpOpenDate.toLocaleString()}
                   </h5>
-                  <a></a>
                 </>
               ))}
           </div>
