@@ -4,6 +4,8 @@ import {
   GetEventResponse
 } from "service-layer/response-models/EventResponse"
 import { Controller, Get, Path, Query, Route, SuccessResponse } from "tsoa"
+import { ONE_MINUTE_IN_MS } from "../../business-layer/utils/EventConstants"
+import { Timestamp } from "firebase-admin/firestore"
 
 @Route("events")
 export class EventController extends Controller {
@@ -26,6 +28,19 @@ export class EventController extends Controller {
       }
 
       const res = await eventService.getAllEvents(limit, snapshot)
+      const currentTime = Timestamp.now()
+
+      res.events.forEach((event) => {
+        const eventStartTime = event.physical_start_date
+        const timeDifference =
+          eventStartTime.toMillis() - currentTime.toMillis()
+
+        // 1 minute (60000 milliseconds)
+        if (timeDifference > ONE_MINUTE_IN_MS) {
+          delete event.google_forms_link
+        }
+      })
+
       return { nextCursor: res.nextCursor, data: res.events }
     } catch (e) {
       return {
