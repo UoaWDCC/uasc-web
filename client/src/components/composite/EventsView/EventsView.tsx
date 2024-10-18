@@ -26,7 +26,7 @@ interface IEventsPage {
  *
  * - **Do not make any network requests in this component, the data should
  * be fetched seperately and passed in as {@link rawEvents}**
- * - String operations are preferred to be done in {@link EventMessages}
+ * - String operations are ideally done in {@link EventMessages}
  * - Complex date comparisons should also be abstracted away into {@link EventDateComparisons}
  */
 const EventsPage = ({ rawEvents }: IEventsPage) => {

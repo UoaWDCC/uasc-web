@@ -2,6 +2,9 @@
 import Image from "next/image"
 import Arrow from "@/assets/icons/rightarrow.svg"
 
+/**
+ * The interface (props) associated with {@link EventsCardPreview}
+ */
 export interface IEventsCardPreview {
   /**
    * The image url of image to display
