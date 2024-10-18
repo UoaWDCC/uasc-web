@@ -68,6 +68,7 @@ const AdminEventForm = ({
       google_forms_link: data.get(
         AdminEventFormKeys.GOOGLE_FORMS_LINK
       ) as string,
+      description: data.get(AdminEventFormKeys.DESCRIPTION) as string,
       sign_up_end_date: sign_up_end_date
         ? Timestamp.fromDate(new Date(sign_up_end_date as string))
         : undefined,

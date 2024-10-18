@@ -41,27 +41,35 @@ const EventsPage = ({ rawEvents }: IEventsPage) => {
 
   const SelectedEventPanel = useMemo(() => {
     if (!selectedInfo) return null
-
+    const {
+      sign_up_start_date,
+      google_forms_link,
+      physical_end_date,
+      physical_start_date,
+      description,
+      title
+    } = selectedInfo
     return (
       <EventDetailed
         onBack={() => {
           setSelectedEvent(undefined)
         }}
         date={EventMessages.eventDateRange(
-          new Date(
-            DateUtils.timestampMilliseconds(selectedInfo.sign_up_start_date)
-          )
+          new Date(DateUtils.timestampMilliseconds(sign_up_start_date))
+        )}
+        isPastEvent={EventDateComparisons.isPastEvent(
+          new Date(DateUtils.timestampMilliseconds(physical_start_date)),
+          physical_end_date &&
+            new Date(DateUtils.timestampMilliseconds(physical_end_date))
         )}
         image={selectedInfo.image_url || ""}
         location={selectedInfo.location}
         signUpOpenDate={
-          new Date(
-            DateUtils.timestampMilliseconds(selectedInfo.sign_up_start_date)
-          )
+          new Date(DateUtils.timestampMilliseconds(sign_up_start_date))
         }
-        googleFormLink={selectedInfo.google_forms_link}
-        content={<p>{selectedInfo.description}</p>}
-        title={selectedInfo.title}
+        googleFormLink={google_forms_link}
+        content={<p>{description}</p>}
+        title={title}
       />
     )
   }, [selectedInfo])

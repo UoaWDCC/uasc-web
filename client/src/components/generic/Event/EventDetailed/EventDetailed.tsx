@@ -15,6 +15,11 @@ export interface IEventDetailed {
   googleFormLink?: string
 
   /**
+   * If the event is over, to avoid the user signing up etc
+   */
+  isPastEvent?: boolean
+
+  /**
    * When the signups open (includes both _time_ and _date_),
    * this prop will have a side-effect on if the {@link googleFormLink}
    * is displayed
@@ -63,7 +68,8 @@ const EventDetailed = ({
   onBack,
   image,
   signUpOpenDate,
-  googleFormLink
+  googleFormLink,
+  isPastEvent
 }: IEventDetailed) => {
   const Divider = () => {
     return <div className="bg-gray-3 mb-4 mt-4 h-[1px] w-full"></div>
@@ -87,7 +93,14 @@ const EventDetailed = ({
           />
         </div>
         <div className="h-full w-full gap-2 border bg-white p-8 text-center md:text-left">
-          <h5 className="font-bold">{date}</h5>
+          {isPastEvent && (
+            <h5 className="text-dark-blue-100 font-bold italic">
+              Event has ended!
+            </h5>
+          )}
+          <h5 className={`font-bold ${isPastEvent && "line-through"}`}>
+            {date}
+          </h5>
 
           <h3 className="text-dark-blue-100 mt-1 font-bold">{title}</h3>
           <div className="text-gray-4 mt-2">{location}</div>
