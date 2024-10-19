@@ -17,6 +17,7 @@ import { MembershipPaymentStore } from "@/store/MembershipPayment"
 import queryClient from "@/services/QueryClient"
 import { BOOKING_AVAILABLITY_KEY } from "@/services/Booking/BookingQueries"
 import { MEMBERSHIP_CLIENT_SECRET_KEY } from "@/services/Payment/PaymentQueries"
+import { getStorage } from "firebase/storage"
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -31,6 +32,7 @@ const firebaseConfig: FirebaseOptions = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const db = getFirestore(app)
+const storage = getStorage(app)
 let analytics: Analytics | null = null
 
 isSupported().then((yes) => {
@@ -80,4 +82,4 @@ export const fireAnalytics = (
   }
 }
 
-export { auth, db, analytics }
+export { auth, db, analytics, storage }
