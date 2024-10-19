@@ -107,18 +107,20 @@ const EventDetailed = ({
           <Divider />
 
           <div className="flex flex-col gap-4">
-            <div className="text-left">{content}</div>
+            <div className="whitespace-pre-line text-left">{content}</div>
 
             {signUpOpenDate &&
               !isPastEvent &&
+              googleFormLink &&
               (signUpOpenDate <= new Date() ? (
                 <>
-                  <h5 className="font-bold uppercase">
+                  <h5 className="font-bold uppercase">Sign Ups Open!</h5>
+                  <h5 className="text-dark-blue-100 font-bold uppercase italic">
                     <a href={googleFormLink} target="_blank" rel="noreferrer">
-                      Sign Ups Open!
+                      CLICK ME TO GO TO FORM
                     </a>
                   </h5>
-                  {googleFormLink && <iframe src={googleFormLink} />}
+                  <iframe height={"500"} src={googleFormLink} />
                 </>
               ) : (
                 <>

@@ -67,7 +67,7 @@ const EventsPage = ({
         }
 
         /**
-         * Determine the ordering of each the lists
+         * Start dates ascending for upcoming and current events
          */
         buf.upcomingAndCurrentEvents.sort(
           (
@@ -131,12 +131,12 @@ const EventsPage = ({
     )
   }, [selectedEventObject])
 
-  const formattedCurrentEvents: IEventsCardPreview[] =
+  const previewCurrentEvents: IEventsCardPreview[] =
     eventList.upcomingAndCurrentEvents?.map((event) => {
       return EventRenderingUtils.previewTransformer(event, setSelectedEventId)
     }) || []
 
-  const formattedPastEvents: IEventsCardPreview[] =
+  const previewPastEvents: IEventsCardPreview[] =
     eventList.pastEvents?.map((event) => {
       return EventRenderingUtils.previewTransformer(event, setSelectedEventId)
     }) || []
@@ -155,17 +155,17 @@ const EventsPage = ({
                 Upcoming Events
               </h5>
             )}
-            {formattedCurrentEvents.map((event) => (
+            {previewCurrentEvents.map((event) => (
               <EventsCardPreview key={event.title} {...event} />
             ))}
 
-            {formattedPastEvents.map((event) => (
+            {previewPastEvents.map((event) => (
               <EventsCardPreview key={event.title} {...event} />
             ))}
           </>
         )}
 
-        {hasMoreEvents && (
+        {hasMoreEvents && !selectedEventId && (
           <Button
             variant="default"
             onClick={fetchMoreEvents}
