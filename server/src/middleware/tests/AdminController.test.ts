@@ -832,14 +832,22 @@ describe("AdminController endpoint tests", () => {
     })
     it("should let admins edit an event", async () => {
       const newEvent = await eventService.createEvent(event1)
+      const newDate = dateToFirestoreTimeStamp(new Date())
       const res = await request
         .patch("/admin/events/" + newEvent.id)
         .set("Authorization", `Bearer ${adminToken}`)
-        .send({ title: "Cool event!", location: "UoA" } as Partial<Event>)
+        .send({
+          title: "Cool event!",
+          location: "UoA",
+          physical_start_date: newDate
+        } as Partial<Event>)
       expect(res.status).toEqual(200)
       const fetchedEvent = await eventService.getEventById(newEvent.id)
       expect(fetchedEvent.title).toEqual("Cool event!")
       expect(fetchedEvent.location).toEqual("UoA")
+      expect(
+        removeUnderscoresFromTimestamp(fetchedEvent.physical_start_date)
+      ).toEqual(newDate)
     })
   })
 })
