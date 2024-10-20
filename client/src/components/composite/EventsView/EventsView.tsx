@@ -221,7 +221,14 @@ const EventsPage = ({
               <Loader />
             ) : (
               <h5 className="text-dark-blue-100 font-bold uppercase">
-                Upcoming Events
+                {rawEvents.length > 0 ? (
+                  <>Upcoming Events</>
+                ) : (
+                  <>
+                    No events found, keep an eye on our socials for more
+                    updates!
+                  </>
+                )}
               </h5>
             )}
             {previewCurrentEvents.map((event) => (

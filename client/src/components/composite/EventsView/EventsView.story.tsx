@@ -49,3 +49,10 @@ export const DefaultEventsPage: Story = {
   },
   tags: ["autodocs"]
 }
+
+export const EmptyEventsPage: Story = {
+  args: {
+    rawEvents: []
+  },
+  tags: ["autodocs"]
+}
