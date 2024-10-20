@@ -130,20 +130,32 @@ const EventsPage = ({
     if (!selectedEventId) return
 
     const eventInfo = rawEvents.find((event) => event.id === selectedEventId)
-    return eventInfo
-  }, [selectedEventId, rawEvents])
 
-  /**
-   * Detailed view of the
-   */
-  const SelectedEventPanel = useMemo(() => {
     /**
      * See if we can find the event, otherwise give up
      * Has a side-effect depending on {@link rawEvents}
      */
-    if (!selectedEventObject) {
+    if (!eventInfo) {
       fetchMoreEvents?.()
-      !hasMoreEvents && eventSelectionHandler(undefined)
+      // We can't fetch any more, and it is still undefined, so we remove the query
+      !isLoading && !hasMoreEvents && eventSelectionHandler(undefined)
+    }
+
+    return eventInfo
+  }, [
+    selectedEventId,
+    rawEvents,
+    fetchMoreEvents,
+    hasMoreEvents,
+    isLoading,
+    eventSelectionHandler
+  ])
+
+  /**
+   * Detailed view of the event
+   */
+  const SelectedEventPanel = useMemo(() => {
+    if (!selectedEventObject) {
       return <Loader />
     }
 
@@ -180,12 +192,7 @@ const EventsPage = ({
         title={title}
       />
     )
-  }, [
-    selectedEventObject,
-    eventSelectionHandler,
-    fetchMoreEvents,
-    hasMoreEvents
-  ])
+  }, [selectedEventObject, eventSelectionHandler])
 
   const previewCurrentEvents: IEventsCardPreview[] =
     eventList.upcomingAndCurrentEvents?.map((event) => {

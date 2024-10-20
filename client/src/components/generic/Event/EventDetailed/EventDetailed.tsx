@@ -83,15 +83,6 @@ const EventDetailed = ({
         Back
       </h5>
       <div className="flex w-full flex-col items-center justify-center gap-4">
-        <div className="flex h-fit w-full justify-center border bg-white">
-          <Image
-            src={image}
-            alt="Event cover image"
-            width={500}
-            height={300}
-            className="block h-auto max-h-[400px] w-auto  py-4"
-          />
-        </div>
         <div className="h-full w-full gap-2 border bg-white p-8 text-center md:text-left">
           {isPastEvent && (
             <h5 className="text-dark-blue-100 font-bold italic">
@@ -130,6 +121,16 @@ const EventDetailed = ({
                 </>
               ))}
           </div>
+        </div>
+
+        <div className="flex h-fit w-full justify-center border bg-white">
+          <Image
+            src={image}
+            alt="Event cover image"
+            width={500}
+            height={300}
+            className="block h-auto max-h-[400px] w-auto  py-4"
+          />
         </div>
       </div>
     </>

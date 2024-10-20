@@ -75,13 +75,13 @@ const EventsCardPreview = ({
           	    justify-center gap-2 rounded-md border bg-white p-4 sm:flex-row 
                 sm:px-10 sm:py-12 ${isPastEvent && "brightness-50"}`}
     >
-      <div className="border-gray-3 h-[100px] max-h-[100px] w-[200px] border">
+      <div className="border-gray-3 h-fit max-h-[150px] w-[200px] overflow-hidden border">
         <Image
           src={image}
           alt="Event cover image"
           width={500}
           height={300}
-          className="h-full w-auto"
+          className="h-auto w-full"
         />
       </div>
       <div className="mb-4 flex flex-col sm:ml-4 ">
