@@ -3,6 +3,9 @@ import { Event } from "@/models/Events"
 import { MS_IN_SECOND } from "@/utils/Constants"
 import { IEventsCardPreview } from "./EventPreview/EventPreview"
 
+export const IMAGE_PLACEHOLDER_SRC =
+  "https://placehold.co/600x400?text=UASC+Event" as const
+
 /**
  * Static methods to format strings related to events
  */
@@ -101,7 +104,7 @@ export const EventRenderingUtils = {
       date: eventStartDate
         ? EventMessages.eventDateRange(eventStartDate, eventEndDate)
         : "",
-      image: event?.image_url || "",
+      image: event?.image_url || IMAGE_PLACEHOLDER_SRC,
       title: event?.title || "",
       location: event?.location,
       signUpOpenDate: EventMessages.signUpOpen(signUpStartDate),

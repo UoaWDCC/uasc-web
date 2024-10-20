@@ -8,7 +8,8 @@ import { useCallback, useMemo, useState } from "react"
 import {
   EventDateComparisons,
   EventMessages,
-  EventRenderingUtils
+  EventRenderingUtils,
+  IMAGE_PLACEHOLDER_SRC
 } from "@/components/generic/Event/EventUtils"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import Loader from "@/components/generic/SuspenseComponent/Loader"
@@ -182,7 +183,7 @@ const EventsPage = ({
           physical_end_date &&
             new Date(DateUtils.timestampMilliseconds(physical_end_date))
         )}
-        image={selectedEventObject.image_url || ""}
+        image={selectedEventObject.image_url || IMAGE_PLACEHOLDER_SRC}
         location={selectedEventObject.location}
         signUpOpenDate={
           new Date(DateUtils.timestampMilliseconds(sign_up_start_date))
