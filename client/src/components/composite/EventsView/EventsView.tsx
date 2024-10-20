@@ -4,7 +4,7 @@ import EventsCardPreview, {
 import EventDetailed from "@/components/generic/Event/EventDetailed/EventDetailed"
 import { DateUtils } from "@/components/utils/DateUtils"
 import { Event } from "@/models/Events"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import {
   EventDateComparisons,
   EventMessages,
@@ -13,19 +13,49 @@ import {
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import Loader from "@/components/generic/SuspenseComponent/Loader"
 
+/**
+ * Interface representing the properties of the Events Page.
+ */
 interface IEventsPage {
   /**
    * A list of _all_ {@link Event}s which should either be mocked
    * or fetched from the backend. **NO** pre-processing should be
    * performed on this list as it will be further mutated in the
-   * {@link EventsPage} component
+   * {@link EventsPage} component.
    */
   rawEvents?: Event[]
+
+  /**
+   * Indicates whether the events are currently being loaded.
+   */
   isLoading?: boolean
+
+  /**
+   * Indicates whether there are more events to be fetched.
+   */
   hasMoreEvents?: boolean
+
+  /**
+   * Function to fetch more events.
+   */
   fetchMoreEvents?: () => void
+
+  /**
+   * The ID of the preselected event.
+   */
+  preselectedEventId?: string
+
+  /**
+   * Callback function to handle changes to the selected event ID.
+   * @param id - The new selected event ID.
+   */
+  onSelectedEventIdChange?: (id?: string) => void
 }
 
+/**
+ * Helper type to split the raw events into upcoming and past ones,
+ * this is important as they need to be sorted differently
+ */
 interface EventList {
   upcomingAndCurrentEvents: Event[]
   pastEvents: Event[]
@@ -43,9 +73,21 @@ const EventsPage = ({
   rawEvents = [],
   hasMoreEvents,
   isLoading,
-  fetchMoreEvents
+  fetchMoreEvents,
+  preselectedEventId,
+  onSelectedEventIdChange
 }: IEventsPage) => {
-  const [selectedEventId, setSelectedEventId] = useState<string | undefined>()
+  const [selectedEventId, setSelectedEventId] = useState<string | undefined>(
+    preselectedEventId
+  )
+
+  const eventSelectionHandler = useCallback(
+    (id?: string) => {
+      setSelectedEventId(id)
+      onSelectedEventIdChange?.(id)
+    },
+    [setSelectedEventId, onSelectedEventIdChange]
+  )
 
   /**
    * Partitions of the array that allow us to individually process the ongoing events
@@ -95,7 +137,16 @@ const EventsPage = ({
    * Detailed view of the
    */
   const SelectedEventPanel = useMemo(() => {
-    if (!selectedEventObject) return null
+    /**
+     * See if we can find the event, otherwise give up
+     * Has a side-effect depending on {@link rawEvents}
+     */
+    if (!selectedEventObject) {
+      fetchMoreEvents?.()
+      !hasMoreEvents && eventSelectionHandler(undefined)
+      return <Loader />
+    }
+
     const {
       sign_up_start_date,
       google_forms_link,
@@ -107,7 +158,7 @@ const EventsPage = ({
     return (
       <EventDetailed
         onBack={() => {
-          setSelectedEventId(undefined)
+          eventSelectionHandler(undefined)
         }}
         date={EventMessages.eventDateRange(
           new Date(DateUtils.timestampMilliseconds(physical_start_date)),
@@ -129,16 +180,27 @@ const EventsPage = ({
         title={title}
       />
     )
-  }, [selectedEventObject])
+  }, [
+    selectedEventObject,
+    eventSelectionHandler,
+    fetchMoreEvents,
+    hasMoreEvents
+  ])
 
   const previewCurrentEvents: IEventsCardPreview[] =
     eventList.upcomingAndCurrentEvents?.map((event) => {
-      return EventRenderingUtils.previewTransformer(event, setSelectedEventId)
+      return EventRenderingUtils.previewTransformer(
+        event,
+        eventSelectionHandler
+      )
     }) || []
 
   const previewPastEvents: IEventsCardPreview[] =
     eventList.pastEvents?.map((event) => {
-      return EventRenderingUtils.previewTransformer(event, setSelectedEventId)
+      return EventRenderingUtils.previewTransformer(
+        event,
+        eventSelectionHandler
+      )
     }) || []
 
   return (
