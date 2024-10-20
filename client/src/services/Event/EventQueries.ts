@@ -8,7 +8,7 @@ export function useLatestEventsQuery() {
   return useInfiniteQuery({
     queryFn: EventService.getAllEvents,
     queryKey: ["fetch-all-events"],
-    retry: 1,
+    staleTime: 0, // always poll
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor
   })
