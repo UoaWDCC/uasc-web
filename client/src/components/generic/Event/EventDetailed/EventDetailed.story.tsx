@@ -1,8 +1,8 @@
 /* eslint-disable no-irregular-whitespace */
 import type { Meta, StoryObj } from "@storybook/react"
-import EventsCard from "./EventsCard"
-const meta: Meta<typeof EventsCard> = {
-  component: EventsCard
+import EventDetailed from "./EventDetailed"
+const meta: Meta<typeof EventDetailed> = {
+  component: EventDetailed
 }
 export default meta
 type Story = StoryObj<typeof meta>
@@ -55,28 +55,28 @@ export const DefaultEventsCard4: Story = {
 export const EventsCardGroup: Story = {
   render: () => (
     <div style={{ display: "flex flex-col", gap: "1rem" }}>
-      <EventsCard
+      <EventDetailed
         title="Another Event"
         date="FRI 19/7 • 7pm"
         location="Somewhere Else"
         content="Join us for another exciting event!"
-        onClick={() => {}}
+        onBack={() => {}}
         image=""
       />
-      <EventsCard
+      <EventDetailed
         title="Another Event"
         date="FRI 19/7 • 7pm"
         location="Somewhere Else"
         content="Join us for another exciting event!"
-        onClick={() => {}}
+        onBack={() => {}}
         image=""
       />
-      <EventsCard
+      <EventDetailed
         title="Another Event"
         date="FRI 19/7 • 7pm"
         location="Somewhere Else"
         content="Join us for another exciting event!"
-        onClick={() => {}}
+        onBack={() => {}}
         image=""
       />
     </div>

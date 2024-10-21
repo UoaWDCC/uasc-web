@@ -27,7 +27,11 @@ const nextConfig = {
   // Need this to allow static site generation to work with firebase hosting
   trailingSlash: generateStatic,
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.sanity.io" },
+      { protocol: "https", hostname: "firebasestorage.googleapis.com" },
+      { protocol: "https", hostname: "placehold.co" }
+    ],
     // TODO: remove this and use an image CDN
     unoptimized: generateStatic
   }

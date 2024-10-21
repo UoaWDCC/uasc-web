@@ -1,10 +1,11 @@
+import { DocumentDataWithUid } from "data-layer/models/common"
 import { CommonResponse, CursorPaginatedResponse } from "./CommonResponse"
 import { Event } from "data-layer/models/firebase"
 
 export interface GetAllEventsResponse
   extends CommonResponse,
     CursorPaginatedResponse {
-  data?: Event[]
+  data?: DocumentDataWithUid<Event>[]
 }
 
 export interface GetEventResponse extends CommonResponse {
