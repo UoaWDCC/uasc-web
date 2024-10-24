@@ -1,11 +1,9 @@
+import { storage } from "@/firebase"
 import {
   getDownloadURL,
   ref as storageRef,
-  uploadBytes,
-  getStorage
+  uploadBytes
 } from "firebase/storage"
-
-const storage = getStorage()
 
 // https://stackoverflow.com/a/19842865
 const uid = () => {

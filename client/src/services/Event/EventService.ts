@@ -1,16 +1,22 @@
-import fetchClient from "@/services/OpenApiFetchClient"
+import fetchClient from "../OpenApiFetchClient"
 
 const EventService = {
-  getAllEvents: async function (limit: number, cursor: string) {
-    const { data } = await fetchClient.GET("/events", {
+  getAllEvents: async function ({ pageParam }: { pageParam?: string }) {
+    const { data, response } = await fetchClient.GET("/events", {
       params: {
         query: {
-          limit,
-          cursor
+          limit: 15,
+          cursor: pageParam
         }
       }
     })
+
+    if (!response.ok || !data) {
+      throw new Error("Failed to fetch all events")
+    }
+
     return data
   }
-}
+} as const
+
 export default EventService
