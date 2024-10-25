@@ -11,6 +11,20 @@ export const IMAGE_PLACEHOLDER_SRC =
  */
 export const EventMessages = {
   /**
+   * Message to be displayed for confirming event creation or editing
+   *
+   * @param isEditing boolean indicating if the event is being edited
+   * @param title the title of the event
+   * @returns a formatted, user-readable string asking for confirmation
+   */
+  adminEventPostConfirmation: (isEditing: boolean, title: string) => {
+    if (isEditing) {
+      return `Are you sure you want to edit the event ${title}?`
+    } else {
+      return `Are you sure you want to create the new event with title ${title}?`
+    }
+  },
+  /**
    * Message to be displayed if sign ups have opened in relation to the sign up date
    *
    * @param signUpOpenDate the date object corresponding to the timestamp when the sign ups open
@@ -69,6 +83,17 @@ export const EventDateComparisons = {
 } as const
 
 export const EventRenderingUtils = {
+  /**
+   * Generates a placeholder string for a local date and time input field
+   *
+   * @param date the date object to be formatted
+   * @returns a formatted string in ISO 8601 format without milliseconds
+   */
+  dateTimeLocalPlaceHolder: (date: Date) => {
+    const isoString = date.toISOString()
+    const placeholderString = isoString.substring(0, isoString.lastIndexOf("."))
+    return placeholderString
+  },
   /**
    * Utility function to convert a raw {@link Event} into {@link IEventsCardPreview}
    *
