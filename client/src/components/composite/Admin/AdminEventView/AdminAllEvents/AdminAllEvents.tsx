@@ -17,7 +17,7 @@ import Loader from "@/components/generic/SuspenseComponent/Loader"
 /**
  * Interface representing the properties of the Events Page.
  */
-interface IEventsPage {
+interface IAdminAllEvents {
   /**
    * A list of _all_ {@link Event}s which should either be mocked
    * or fetched from the backend. **NO** pre-processing should be
@@ -70,14 +70,14 @@ interface EventList {
  * - String operations are ideally done in {@link EventMessages}
  * - Complex date comparisons should also be abstracted away into {@link EventDateComparisons}
  */
-const EventsPage = ({
+const AdminAllEvents = ({
   rawEvents = [],
   hasMoreEvents,
   isLoading,
   fetchMoreEvents,
   preselectedEventId,
   onSelectedEventIdChange
-}: IEventsPage) => {
+}: IAdminAllEvents) => {
   const [selectedEventId, setSelectedEventId] = useState<string | undefined>(
     preselectedEventId
   )
@@ -200,7 +200,7 @@ const EventsPage = ({
       return EventRenderingUtils.previewTransformer(
         event,
         eventSelectionHandler,
-        "view more"
+        "edit event"
       )
     }) || []
 
@@ -209,7 +209,7 @@ const EventsPage = ({
       return EventRenderingUtils.previewTransformer(
         event,
         eventSelectionHandler,
-        "view more"
+        "edit event"
       )
     }) || []
 
@@ -227,10 +227,7 @@ const EventsPage = ({
                 {rawEvents.length > 0 ? (
                   <>Upcoming Events</>
                 ) : (
-                  <>
-                    No events found, keep an eye on our socials for more
-                    updates!
-                  </>
+                  <>No events found!</>
                 )}
               </h5>
             )}
@@ -258,4 +255,4 @@ const EventsPage = ({
   )
 }
 
-export default EventsPage
+export default AdminAllEvents

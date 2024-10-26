@@ -78,7 +78,8 @@ export const EventRenderingUtils = {
    */
   previewTransformer: (
     event: Event,
-    eventSetter: (id?: string) => void
+    eventSetter: (id?: string) => void,
+    buttonText?: string
   ): IEventsCardPreview => {
     let eventStartDate
 
@@ -114,7 +115,8 @@ export const EventRenderingUtils = {
       ),
       onClick: () => {
         eventSetter(event.id)
-      }
+      },
+      viewButtonText: buttonText
     }
   }
 }

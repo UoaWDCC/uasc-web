@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react"
-
-import AdminEventView from "./AdminEventView"
+import AdminAllEvents from "./AdminAllEvents"
 import { Timestamp } from "firebase/firestore"
 
-const meta: Meta<typeof AdminEventView> = {
-  component: AdminEventView
+const meta: Meta<typeof AdminAllEvents> = {
+  component: AdminAllEvents
 }
 
 export default meta
@@ -13,22 +12,8 @@ type Story = StoryObj<typeof meta>
 const earlierStartDate = Timestamp.fromDate(new Date(2023, 1, 1))
 const startDate = Timestamp.fromDate(new Date(2024, 1, 1))
 
-export const DefaultAdminEventView: Story = {
+export const DefaultEventsPage: Story = {
   args: {
-    handlePostEvent: () => {},
-    generateImageLink: async () => {
-      return undefined
-    },
-    rawEvents: []
-  }
-}
-
-export const AdminEventViewWithEvents: Story = {
-  args: {
-    handlePostEvent: () => {},
-    generateImageLink: async () => {
-      return undefined
-    },
     rawEvents: [
       {
         id: "1",
@@ -62,5 +47,13 @@ export const AdminEventViewWithEvents: Story = {
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit adipisci repellat perferendis. Quia ipsum laborum est, veniam accusamus voluptas praesentium, odio perspiciatis blanditiis sequi dignissimos unde. Natus delectus nihil cum."
       }
     ]
-  }
+  },
+  tags: ["autodocs"]
+}
+
+export const EmptyEventsPage: Story = {
+  args: {
+    rawEvents: []
+  },
+  tags: ["autodocs"]
 }
