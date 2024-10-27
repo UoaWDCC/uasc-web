@@ -26,7 +26,7 @@ interface IAdminEventView {
    * A list of _all_ {@link Event}s which should either be mocked
    * or fetched from the backend. **NO** pre-processing should be
    * performed on this list as it will be further mutated in the
-   * {@link EventsPage} component.
+   * {@link AdminEventViewContent} component.
    */
   rawEvents?: Event[]
 
