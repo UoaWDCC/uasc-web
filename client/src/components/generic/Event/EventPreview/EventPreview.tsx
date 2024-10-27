@@ -35,7 +35,9 @@ export interface IEventsCardPreview {
    * Headline of the preview - generally is the title of the event
    */
   title: string
-
+  /**
+   * The text to display on the view button
+   */
   viewButtonText?: string
   /**
    * The variant of the card to render
