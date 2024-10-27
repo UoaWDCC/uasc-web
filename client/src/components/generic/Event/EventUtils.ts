@@ -83,7 +83,7 @@ export const EventRenderingUtils = {
     event: Event,
     eventSetter: (id?: string) => void,
     buttonText?: string,
-    variant?: EventCardPreviewVariant = "default"
+    variant?: EventCardPreviewVariant
   ): IEventsCardPreview => {
     let eventStartDate
 
