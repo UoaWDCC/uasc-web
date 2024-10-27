@@ -1,7 +1,10 @@
 import { DateUtils } from "@/components/utils/DateUtils"
 import { Event } from "@/models/Events"
 import { MS_IN_SECOND } from "@/utils/Constants"
-import { IEventsCardPreview } from "./EventPreview/EventPreview"
+import {
+  EventCardPreviewVariant,
+  IEventsCardPreview
+} from "./EventPreview/EventPreview"
 
 export const IMAGE_PLACEHOLDER_SRC =
   "https://placehold.co/600x400?text=UASC+Event" as const
@@ -79,7 +82,8 @@ export const EventRenderingUtils = {
   previewTransformer: (
     event: Event,
     eventSetter: (id?: string) => void,
-    buttonText?: string
+    buttonText?: string,
+    variant?: EventCardPreviewVariant = "default"
   ): IEventsCardPreview => {
     let eventStartDate
 
@@ -116,7 +120,8 @@ export const EventRenderingUtils = {
       onClick: () => {
         eventSetter(event.id)
       },
-      viewButtonText: buttonText
+      viewButtonText: buttonText,
+      variant
     }
   }
 }

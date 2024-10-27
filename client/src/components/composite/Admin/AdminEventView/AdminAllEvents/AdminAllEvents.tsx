@@ -200,7 +200,8 @@ const AdminAllEvents = ({
       return EventRenderingUtils.previewTransformer(
         event,
         eventSelectionHandler,
-        "edit event"
+        "edit event",
+        "admin"
       )
     }) || []
 
@@ -209,7 +210,8 @@ const AdminAllEvents = ({
       return EventRenderingUtils.previewTransformer(
         event,
         eventSelectionHandler,
-        "edit event"
+        "edit event",
+        "admin"
       )
     }) || []
 

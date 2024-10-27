@@ -1,7 +1,7 @@
 // 4 props: 3 string, 1 image
 import Image from "next/image"
 import Arrow from "@/assets/icons/rightarrow.svg"
-
+export type EventCardPreviewVariant = "regular" | "admin"
 /**
  * The interface (props) associated with {@link EventsCardPreview}
  */
@@ -37,6 +37,10 @@ export interface IEventsCardPreview {
   title: string
 
   viewButtonText?: string
+  /**
+   * The variant of the card to render
+   */
+  variant?: EventCardPreviewVariant
 }
 
 type ViewButtonProps = {
@@ -71,13 +75,14 @@ const EventsCardPreview = ({
   image = "",
   signUpOpenDate,
   isPastEvent,
-  viewButtonText = "view more"
+  viewButtonText = "view more",
+  variant = "regular"
 }: IEventsCardPreview) => {
   return (
     <div
       className={`border-gray-3 navbar-shadow flex w-full flex-col items-center
           	    justify-center gap-2 rounded-md border bg-white p-4 sm:flex-row
-                sm:px-10 sm:py-12 ${isPastEvent && "brightness-50"}`}
+                sm:px-10 sm:py-${variant === "admin" ? 10 : 12} ${isPastEvent && "brightness-50"}`}
     >
       <div className="border-gray-3 h-fit max-h-[150px] w-[200px] overflow-hidden border">
         <Image
