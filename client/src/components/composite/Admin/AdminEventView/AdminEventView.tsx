@@ -115,7 +115,7 @@ const AdminEventView = ({
   const [mode, setMode] = useState<EventViewModes>("view-all-events")
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col items-center">
       <span className="flex w-full flex-col items-center sm:flex-row">
         <h2 className="text-dark-blue-100 italic">Events</h2>
         <div className="sm:ml-auto">
