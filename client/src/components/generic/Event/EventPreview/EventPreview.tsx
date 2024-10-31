@@ -1,7 +1,7 @@
 // 4 props: 3 string, 1 image
 import Image from "next/image"
 import Arrow from "@/assets/icons/rightarrow.svg"
-
+export type EventCardPreviewVariant = "regular" | "admin"
 /**
  * The interface (props) associated with {@link EventsCardPreview}
  */
@@ -35,19 +35,28 @@ export interface IEventsCardPreview {
    * Headline of the preview - generally is the title of the event
    */
   title: string
+  /**
+   * The text to display on the view button
+   */
+  viewButtonText?: string
+  /**
+   * The variant of the card to render
+   */
+  variant?: EventCardPreviewVariant
 }
 
 type ViewButtonProps = {
   onClick: () => void
+  viewButtonText?: string
 }
-const ViewButton = ({ onClick }: ViewButtonProps) => {
+const ViewButton = ({ onClick, viewButtonText }: ViewButtonProps) => {
   return (
     <button
       onClick={onClick}
       className="flex items-center justify-center gap-4 text-nowrap p-2"
     >
       <h5 className="text-dark-blue-100  group text-lg font-bold uppercase">
-        view more
+        {viewButtonText}
       </h5>
       <Arrow className="fill-dark-blue-100 h-6 w-6" />
     </button>
@@ -67,13 +76,15 @@ const EventsCardPreview = ({
   onClick,
   image = "",
   signUpOpenDate,
-  isPastEvent
+  isPastEvent,
+  viewButtonText = "view more",
+  variant = "regular"
 }: IEventsCardPreview) => {
   return (
     <div
-      className={`border-gray-3 navbar-shadow flex w-full flex-col items-center  
-          	    justify-center gap-2 rounded-md border bg-white p-4 sm:flex-row 
-                sm:px-10 sm:py-12 ${isPastEvent && "brightness-50"}`}
+      className={`border-gray-3 navbar-shadow flex w-full flex-col items-center
+          	    justify-center gap-2 rounded-md border bg-white p-4 sm:flex-row
+                sm:px-10 sm:py-${variant === "admin" ? 10 : 12} ${isPastEvent && "brightness-50"}`}
     >
       <div className="border-gray-3 h-fit max-h-[150px] w-[200px] overflow-hidden border">
         <Image
@@ -97,7 +108,7 @@ const EventsCardPreview = ({
         <p className="text-gray-4 pt-1 text-lg">{location}</p>
       </div>
       <span className="ml-auto">
-        <ViewButton onClick={onClick} />
+        <ViewButton onClick={onClick} viewButtonText={viewButtonText} />
       </span>
     </div>
   )

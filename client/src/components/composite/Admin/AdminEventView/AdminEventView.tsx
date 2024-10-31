@@ -1,7 +1,8 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import { CreateEventBody } from "@/models/Events"
+import { CreateEventBody, Event } from "@/models/Events"
 import { useState } from "react"
 import AdminEventForm from "./AdminEventForm/AdminEventForm"
+import AdminAllEvents from "./AdminAllEvents/AdminAllEvents"
 
 type EventViewModes = "view-all-events" | "creating-new-event" | "editing-event"
 
@@ -20,13 +21,40 @@ interface IAdminEventView {
    * @param data - The data of the event to be posted.
    */
   handlePostEvent: (data: CreateEventBody) => void
+
+  /**
+   * A list of _all_ {@link Event}s which should either be mocked
+   * or fetched from the backend. **NO** pre-processing should be
+   * performed on this list as it will be further mutated in the
+   * {@link AdminEventViewContent} component.
+   */
+  rawEvents?: Event[]
+
+  /**
+   * Indicates whether the events are currently being loaded.
+   */
+  isLoading?: boolean
+
+  /**
+   * Indicates whether there are more events to be fetched.
+   */
+  hasMoreEvents?: boolean
+
+  /**
+   * Function to fetch more events.
+   */
+  fetchMoreEvents?: () => void
 }
 
 const AdminEventViewContent = ({
   mode,
   setMode,
   handlePostEvent,
-  generateImageLink
+  generateImageLink,
+  rawEvents,
+  hasMoreEvents,
+  isLoading,
+  fetchMoreEvents
   // TODO: extend with the event id to allow showing an edit view
 }: {
   mode: EventViewModes
@@ -34,7 +62,14 @@ const AdminEventViewContent = ({
 } & IAdminEventView) => {
   switch (mode) {
     case "view-all-events":
-      return null
+      return (
+        <AdminAllEvents
+          rawEvents={rawEvents}
+          hasMoreEvents={hasMoreEvents}
+          isLoading={isLoading}
+          fetchMoreEvents={fetchMoreEvents}
+        />
+      )
     case "creating-new-event":
       return (
         <AdminEventForm
@@ -71,12 +106,16 @@ const buttonMessage = (mode: EventViewModes) => {
  */
 const AdminEventView = ({
   handlePostEvent,
-  generateImageLink
+  generateImageLink,
+  rawEvents = [],
+  hasMoreEvents,
+  isLoading,
+  fetchMoreEvents
 }: IAdminEventView) => {
   const [mode, setMode] = useState<EventViewModes>("view-all-events")
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col items-center">
       <span className="flex w-full flex-col items-center sm:flex-row">
         <h2 className="text-dark-blue-100 italic">Events</h2>
         <div className="sm:ml-auto">
@@ -102,6 +141,10 @@ const AdminEventView = ({
         mode={mode}
         handlePostEvent={handlePostEvent}
         generateImageLink={generateImageLink}
+        rawEvents={rawEvents}
+        hasMoreEvents={hasMoreEvents}
+        isLoading={isLoading}
+        fetchMoreEvents={fetchMoreEvents}
       />
     </div>
   )
