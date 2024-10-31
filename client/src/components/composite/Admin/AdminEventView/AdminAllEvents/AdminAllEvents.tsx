@@ -1,15 +1,12 @@
 import EventsCardPreview, {
   IEventsCardPreview
 } from "@/components/generic/Event/EventPreview/EventPreview"
-import EventDetailed from "@/components/generic/Event/EventDetailed/EventDetailed"
 import { DateUtils } from "@/components/utils/DateUtils"
 import { Event } from "@/models/Events"
 import { useCallback, useMemo, useState } from "react"
 import {
   EventDateComparisons,
-  EventMessages,
-  EventRenderingUtils,
-  IMAGE_PLACEHOLDER_SRC
+  EventRenderingUtils
 } from "@/components/generic/Event/EventUtils"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import Loader from "@/components/generic/SuspenseComponent/Loader"
@@ -127,74 +124,9 @@ const AdminAllEvents = ({
     )
   }, [rawEvents])
 
-  const selectedEventObject = useMemo(() => {
-    if (!selectedEventId) return
-
-    const eventInfo = rawEvents.find((event) => event.id === selectedEventId)
-
-    /**
-     * See if we can find the event, otherwise give up
-     * Has a side-effect depending on {@link rawEvents}
-     */
-    if (!eventInfo) {
-      fetchMoreEvents?.()
-      // We can't fetch any more, and it is still undefined, so we remove the query
-      !isLoading && !hasMoreEvents && eventSelectionHandler(undefined)
-    }
-
-    return eventInfo
-  }, [
-    selectedEventId,
-    rawEvents,
-    fetchMoreEvents,
-    hasMoreEvents,
-    isLoading,
-    eventSelectionHandler
-  ])
-
   /**
    * Detailed view of the event
    */
-  const SelectedEventPanel = useMemo(() => {
-    if (!selectedEventObject) {
-      return <Loader />
-    }
-
-    const {
-      sign_up_start_date,
-      google_forms_link,
-      physical_end_date,
-      physical_start_date,
-      description,
-      title
-    } = selectedEventObject
-    return (
-      <EventDetailed
-        onBack={() => {
-          eventSelectionHandler(undefined)
-        }}
-        date={EventMessages.eventDateRange(
-          new Date(DateUtils.timestampMilliseconds(physical_start_date)),
-          physical_end_date &&
-            new Date(DateUtils.timestampMilliseconds(physical_end_date))
-        )}
-        isPastEvent={EventDateComparisons.isPastEvent(
-          new Date(DateUtils.timestampMilliseconds(physical_start_date)),
-          physical_end_date &&
-            new Date(DateUtils.timestampMilliseconds(physical_end_date))
-        )}
-        image={selectedEventObject.image_url || IMAGE_PLACEHOLDER_SRC}
-        location={selectedEventObject.location}
-        signUpOpenDate={
-          new Date(DateUtils.timestampMilliseconds(sign_up_start_date))
-        }
-        googleFormLink={google_forms_link}
-        content={<p>{description}</p>}
-        title={title}
-      />
-    )
-  }, [selectedEventObject, eventSelectionHandler])
-
   const previewCurrentEvents: IEventsCardPreview[] =
     eventList.upcomingAndCurrentEvents?.map((event) => {
       return EventRenderingUtils.previewTransformer(
@@ -218,9 +150,7 @@ const AdminAllEvents = ({
   return (
     <>
       <div className={`flex w-full max-w-[1000px] flex-col gap-2`}>
-        {selectedEventId ? (
-          SelectedEventPanel
-        ) : (
+        {selectedEventId ? null : (
           <>
             {isLoading ? (
               <Loader />
