@@ -1,9 +1,14 @@
+import {
+  EventMessages,
+  EventRenderingUtils
+} from "@/components/generic/Event/EventUtils"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import TextInput from "@/components/generic/TextInputComponent/TextInput"
+import { DateUtils } from "@/components/utils/DateUtils"
 import { CreateEventBody } from "@/models/Events"
 import { Timestamp } from "firebase/firestore"
 import Image from "next/image"
-import { FormEvent, useState } from "react"
+import { FormEvent, useMemo, useState } from "react"
 
 interface IAdminEventForm {
   /**
@@ -23,6 +28,18 @@ interface IAdminEventForm {
    * To be called after user submits the new data for the event
    */
   handlePostEvent: (data: CreateEventBody) => void
+  /**
+   * If the panel should suggest that the event is being edited, instead of created
+   *
+   * Does the create mode if set to `false`
+   */
+  isEditMode?: boolean
+  /**
+   * What to pre-fill the form with - _generally_ only to be used
+   * if {@link isEditMode} is set to true (which would have the previous
+   * values of the event.)
+   */
+  defaultData?: CreateEventBody["data"]
 }
 
 export const AdminEventFormKeys = {
@@ -42,11 +59,19 @@ const Divider = () => <span className="bg-gray-3 my-3 h-[1px] w-full" />
 
 const AdminEventForm = ({
   handlePostEvent,
-  generateImageLink
+  generateImageLink,
+  isEditMode = false,
+  defaultData
 }: IAdminEventForm) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const [uploadedImage, setUploadedImage] = useState<File | undefined>()
+
+  const formTitle = useMemo(
+    () =>
+      isEditMode ? `Edit Event ${defaultData?.title || ""}` : "Create Event",
+    [isEditMode, defaultData]
+  )
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -86,7 +111,7 @@ const AdminEventForm = ({
 
       if (
         confirm(
-          `Are you sure you want to create the new event with title ${body.title}?`
+          EventMessages.adminEventPostConfirmation(!!isEditMode, body.title)
         )
       ) {
         handlePostEvent({
@@ -102,7 +127,7 @@ const AdminEventForm = ({
   }
   return (
     <div className="relative my-4 flex w-full flex-col items-center rounded-md bg-white p-2">
-      <h2 className="text-dark-blue-100">Create Event</h2>
+      <h2 className="text-dark-blue-100">{formTitle}</h2>
       <form
         onSubmit={handleSubmit}
         className="flex w-full max-w-[800px] flex-col gap-2"
@@ -111,11 +136,13 @@ const AdminEventForm = ({
           name={AdminEventFormKeys.TITLE}
           type="text"
           label="Title"
+          defaultValue={defaultData?.title}
           data-testid={AdminEventFormKeys.TITLE}
           required
         />
         <label htmlFor={AdminEventFormKeys.DESCRIPTION}>Description</label>
         <textarea
+          defaultValue={defaultData?.description}
           name={AdminEventFormKeys.DESCRIPTION}
           data-testid={AdminEventFormKeys.DESCRIPTION}
         />
@@ -146,6 +173,7 @@ const AdminEventForm = ({
           name={AdminEventFormKeys.LOCATION}
           type="text"
           label="Location"
+          defaultValue={defaultData?.location}
           data-testid={AdminEventFormKeys.LOCATION}
           required
         />
@@ -156,12 +184,30 @@ const AdminEventForm = ({
             name={AdminEventFormKeys.SIGN_UP_START_DATE}
             data-testid={AdminEventFormKeys.SIGN_UP_START_DATE}
             type="datetime-local"
+            value={
+              defaultData &&
+              EventRenderingUtils.dateTimeLocalPlaceHolder(
+                new Date(
+                  DateUtils.timestampMilliseconds(
+                    defaultData?.sign_up_start_date
+                  )
+                )
+              )
+            }
             label="Sign Up Start Date"
             required
           />
           <TextInput
             name={AdminEventFormKeys.SIGN_UP_END_DATE}
             data-testid={AdminEventFormKeys.SIGN_UP_END_DATE}
+            value={
+              defaultData?.sign_up_end_date &&
+              EventRenderingUtils.dateTimeLocalPlaceHolder(
+                new Date(
+                  DateUtils.timestampMilliseconds(defaultData?.sign_up_end_date)
+                )
+              )
+            }
             type="datetime-local"
             label="Sign Up End Date (If exists)"
           />
@@ -173,6 +219,16 @@ const AdminEventForm = ({
           <TextInput
             name={AdminEventFormKeys.PHYSICAL_START_DATE}
             data-testid={AdminEventFormKeys.PHYSICAL_START_DATE}
+            value={
+              defaultData?.physical_start_date &&
+              EventRenderingUtils.dateTimeLocalPlaceHolder(
+                new Date(
+                  DateUtils.timestampMilliseconds(
+                    defaultData?.physical_start_date
+                  )
+                )
+              )
+            }
             type="datetime-local"
             label="Start Date of Event"
             required
@@ -180,6 +236,16 @@ const AdminEventForm = ({
           <TextInput
             name={AdminEventFormKeys.PHYSICAL_END_DATE}
             data-testid={AdminEventFormKeys.PHYSICAL_END_DATE}
+            value={
+              defaultData?.physical_end_date &&
+              EventRenderingUtils.dateTimeLocalPlaceHolder(
+                new Date(
+                  DateUtils.timestampMilliseconds(
+                    defaultData?.physical_end_date
+                  )
+                )
+              )
+            }
             type="datetime-local"
             label="End Date of Event"
           />
@@ -188,6 +254,7 @@ const AdminEventForm = ({
         <TextInput
           name={AdminEventFormKeys.GOOGLE_FORMS_LINK}
           data-testid={AdminEventFormKeys.GOOGLE_FORMS_LINK}
+          defaultValue={defaultData?.google_forms_link}
           type="url"
           label="Google Forms Link"
         />
@@ -196,7 +263,7 @@ const AdminEventForm = ({
           type="submit"
           data-testid="post-event-button"
         >
-          Add Event
+          {isEditMode ? "Update Event" : "Add Event"}
         </Button>
       </form>
     </div>
