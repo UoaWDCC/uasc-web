@@ -84,7 +84,7 @@ const EventsCardPreview = ({
     <div
       className={`border-gray-3 navbar-shadow flex w-full flex-col items-center
           	    justify-center gap-2 rounded-md border bg-white p-4 sm:flex-row
-                sm:px-10 sm:py-${variant === "admin" ? 10 : 12} ${isPastEvent && "brightness-50"}`}
+                sm:px-10 ${variant === "admin" ? "sm:py-10" : "sm:py-12"} ${isPastEvent && "brightness-50"}`}
     >
       <div className="border-gray-3 h-fit max-h-[150px] w-[200px] overflow-hidden border">
         <Image
