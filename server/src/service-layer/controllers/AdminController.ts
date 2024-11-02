@@ -792,8 +792,8 @@ export class AdminController extends Controller {
     this.setStatus(200)
   }
 
-  @Get("{id}")
   @SuccessResponse("200", "Successfully fetched the event")
+  @Get("events/{id}")
   public async getEventById(@Path() id: string): Promise<GetEventResponse> {
     try {
       const eventService = new EventService()

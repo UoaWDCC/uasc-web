@@ -2467,9 +2467,7 @@
 						}
 					}
 				}
-			}
-		},
-		"/admin/{id}": {
+			},
 			"get": {
 				"operationId": "GetEventById",
 				"responses": {
