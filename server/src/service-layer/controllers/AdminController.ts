@@ -58,7 +58,10 @@ import BookingUtils, {
   CHECK_OUT_TIME
 } from "business-layer/utils/BookingUtils"
 import BookingHistoryService from "data-layer/services/BookingHistoryService"
-import { FetchLatestBookingHistoryEventResponse } from "service-layer/response-models/AdminResponse"
+import {
+  FetchLatestBookingHistoryEventResponse,
+  GetEventResponse
+} from "service-layer/response-models/AdminResponse"
 import { CreateEventBody } from "service-layer/request-models/EventRequests"
 import EventService from "data-layer/services/EventService"
 
@@ -787,5 +790,26 @@ export class AdminController extends Controller {
       this.setStatus(500)
     }
     this.setStatus(200)
+  }
+
+  @Get("{id}")
+  @SuccessResponse("200", "Successfully fetched the event")
+  public async getEventById(@Path() id: string): Promise<GetEventResponse> {
+    try {
+      const eventService = new EventService()
+      const event = await eventService.getEventById(id)
+
+      if (!event) {
+        this.setStatus(404)
+        return { error: "Event not found." }
+      }
+
+      return { data: event }
+    } catch (e) {
+      this.setStatus(500)
+      return {
+        error: "Something went wrong when fetching the event, please try again"
+      }
+    }
   }
 }

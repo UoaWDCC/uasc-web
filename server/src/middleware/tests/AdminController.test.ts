@@ -850,4 +850,29 @@ describe("AdminController endpoint tests", () => {
       ).toEqual(newDate)
     })
   })
+  describe("GET /events/:id", () => {
+    const event1: Event = {
+      title: "UASC New event",
+      physical_start_date: dateToFirestoreTimeStamp(new Date()),
+      location: "UASC",
+      sign_up_start_date: dateToFirestoreTimeStamp(new Date()),
+      sign_up_end_date: dateToFirestoreTimeStamp(new Date())
+    }
+    const eventService = new EventService()
+
+    it("should return the event details for a valid event ID", async () => {
+      const { id: id1 } = await eventService.createEvent(event1)
+      const res = await request.get(`/events/${id1}`).send()
+      expect(res.status).toEqual(200)
+      expect(res.body.data).toBeDefined()
+      expect(res.body.data.title).toEqual("UASC New event")
+      expect(res.body.data.location).toEqual("UASC")
+    })
+
+    it("should return 404 if the event does not exist", async () => {
+      const res = await request.get("/events/random-event").send()
+      expect(res.status).toEqual(404)
+      expect(res.body.error).toEqual("Event not found.")
+    })
+  })
 })
