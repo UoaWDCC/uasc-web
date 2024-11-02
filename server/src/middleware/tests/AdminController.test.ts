@@ -862,7 +862,10 @@ describe("AdminController endpoint tests", () => {
 
     it("should return the event details for a valid event ID", async () => {
       const { id: id1 } = await eventService.createEvent(event1)
-      const res = await request.get(`/admin/events/${id1}`).send()
+      const res = await request
+        .get(`/admin/events/${id1}`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
       expect(res.status).toEqual(200)
       expect(res.body.data).toBeDefined()
       expect(res.body.data.title).toEqual("UASC New event")
@@ -870,7 +873,10 @@ describe("AdminController endpoint tests", () => {
     })
 
     it("should return 404 if the event does not exist", async () => {
-      const res = await request.get("/admin/events/random-event").send()
+      const res = await request
+        .get("/admin/events/random-event")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
       expect(res.status).toEqual(404)
       expect(res.body.error).toEqual("Event not found.")
     })
