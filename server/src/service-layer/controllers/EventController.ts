@@ -1,9 +1,6 @@
 import EventService from "data-layer/services/EventService"
-import {
-  GetAllEventsResponse,
-  GetEventResponse
-} from "service-layer/response-models/EventResponse"
-import { Controller, Get, Path, Query, Route, SuccessResponse } from "tsoa"
+import { GetAllEventsResponse } from "service-layer/response-models/EventResponse"
+import { Controller, Get, Query, Route, SuccessResponse } from "tsoa"
 import { ONE_MINUTE_IN_MS } from "../../business-layer/utils/EventConstants"
 import { Timestamp } from "firebase-admin/firestore"
 
@@ -45,27 +42,6 @@ export class EventController extends Controller {
     } catch (e) {
       return {
         error: "Something went wrong when fetching all events, please try again"
-      }
-    }
-  }
-
-  @Get("{id}")
-  @SuccessResponse("200", "Successfully fetched the event")
-  public async getEventById(@Path() id: string): Promise<GetEventResponse> {
-    try {
-      const eventService = new EventService()
-      const event = await eventService.getEventById(id)
-
-      if (!event) {
-        this.setStatus(404)
-        return { error: "Event not found." }
-      }
-
-      return { data: event }
-    } catch (e) {
-      this.setStatus(500)
-      return {
-        error: "Something went wrong when fetching the event, please try again"
       }
     }
   }

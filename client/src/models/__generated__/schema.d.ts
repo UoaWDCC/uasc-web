@@ -59,9 +59,6 @@ export interface paths {
      */
     get: operations["GetAllEvents"];
   };
-  "/events/{id}": {
-    get: operations["GetEventById"];
-  };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
@@ -155,6 +152,7 @@ export interface paths {
     post: operations["CreateNewEvent"];
   };
   "/admin/events/{id}": {
+    get: operations["GetEventById"];
     /** @description Endpoint for admints to edit an event. */
     patch: operations["EditEvent"];
   };
@@ -364,11 +362,6 @@ export interface components {
        */
       nextCursor?: string;
       data?: components["schemas"]["DocumentDataWithUid_Event_"][];
-    };
-    GetEventResponse: {
-      error?: string;
-      message?: string;
-      data?: components["schemas"]["Event"];
     };
     AllUserBookingSlotsResponse: {
       error?: string;
@@ -744,6 +737,11 @@ export interface components {
        */
       max_occupancy?: number;
     };
+    GetEventResponse: {
+      error?: string;
+      message?: string;
+      data?: components["schemas"]["Event"];
+    };
   };
   responses: {
   };
@@ -952,21 +950,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetAllEventsResponse"];
-        };
-      };
-    };
-  };
-  GetEventById: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description Successfully fetched the event */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetEventResponse"];
         };
       };
     };
@@ -1256,6 +1239,21 @@ export interface operations {
       /** @description Created Event */
       201: {
         content: never;
+      };
+    };
+  };
+  GetEventById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Successfully fetched the event */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEventResponse"];
+        };
       };
     };
   };
