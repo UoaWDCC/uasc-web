@@ -489,21 +489,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"GetEventResponse": {
-				"properties": {
-					"error": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"data": {
-						"$ref": "#/components/schemas/Event"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"AllUserBookingSlotsResponse": {
 				"properties": {
 					"error": {
@@ -1421,6 +1406,21 @@
 				},
 				"type": "object",
 				"description": "Make all properties in T optional"
+			},
+			"GetEventResponse": {
+				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/Event"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -1841,34 +1841,6 @@
 						"in": "query",
 						"name": "cursor",
 						"required": false,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/events/{id}": {
-			"get": {
-				"operationId": "GetEventById",
-				"responses": {
-					"200": {
-						"description": "Successfully fetched the event",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetEventResponse"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
 						"schema": {
 							"type": "string"
 						}
@@ -2495,6 +2467,38 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetEventById",
+				"responses": {
+					"200": {
+						"description": "Successfully fetched the event",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetEventResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},

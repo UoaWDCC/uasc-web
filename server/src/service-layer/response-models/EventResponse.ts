@@ -7,7 +7,3 @@ export interface GetAllEventsResponse
     CursorPaginatedResponse {
   data?: DocumentDataWithUid<Event>[]
 }
-
-export interface GetEventResponse extends CommonResponse {
-  data?: Event
-}
