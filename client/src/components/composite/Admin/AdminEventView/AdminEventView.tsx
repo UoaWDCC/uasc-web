@@ -75,7 +75,8 @@ const AdminEventViewContent = ({
   handleEditEvent,
   selectedEventId,
   setEventId,
-  eventPreviousData
+  eventPreviousData,
+  fetchEventToEdit
 }: {
   mode: EventViewModes
   setEventId: (id?: string) => void
@@ -86,7 +87,8 @@ const AdminEventViewContent = ({
     case "view-all-events":
       return (
         <AdminAllEvents
-          onSelectedEventIdChange={(id) => {
+          onSelectedEventIdChange={async (id) => {
+            await fetchEventToEdit?.(id)
             setEventId(id)
             setMode("editing-event")
           }}
@@ -154,7 +156,9 @@ const AdminEventView = ({
   hasMoreEvents,
   isLoading,
   fetchMoreEvents,
-  eventPreviousData
+  eventPreviousData,
+  handleEditEvent,
+  fetchEventToEdit
 }: IAdminEventView) => {
   const [mode, setMode] = useState<EventViewModes>("view-all-events")
 
@@ -176,6 +180,7 @@ const AdminEventView = ({
                   setMode("view-all-events")
                   break
                 case "editing-event":
+                  fetchEventToEdit?.(undefined)
                   setMode("view-all-events")
               }
             }}
@@ -187,6 +192,8 @@ const AdminEventView = ({
       <AdminEventViewContent
         setMode={setMode}
         mode={mode}
+        fetchEventToEdit={fetchEventToEdit}
+        handleEditEvent={handleEditEvent}
         setEventId={setEditedEventId}
         selectedEventId={editedEventId}
         handlePostEvent={handlePostEvent}

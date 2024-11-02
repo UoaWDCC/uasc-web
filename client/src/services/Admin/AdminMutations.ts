@@ -10,6 +10,7 @@ import {
 } from "./AdminQueries"
 import { CombinedUserData } from "@/models/User"
 import { replaceUserInPage } from "./AdminUtils"
+import { ALL_EVENTS_QUERY_KEY } from "../Event/EventQueries"
 
 export function usePromoteUserMutation() {
   return useMutation({
@@ -175,8 +176,12 @@ export function useCreateEventMutation() {
   return useMutation({
     mutationKey: ["create-booking"],
     retry: false,
-    mutationFn: AdminService.createEvent
-    // TODO: invalidate all events query (we need to refetch the events)
+    mutationFn: AdminService.createEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ALL_EVENTS_QUERY_KEY]
+      })
+    }
   })
 }
 
@@ -184,6 +189,11 @@ export function useEditEventMutation() {
   return useMutation({
     mutationKey: ["edit-event"],
     retry: false,
-    mutationFn: AdminService.editEvent
+    mutationFn: AdminService.editEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ALL_EVENTS_QUERY_KEY]
+      })
+    }
   })
 }

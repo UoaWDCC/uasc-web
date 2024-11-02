@@ -224,6 +224,19 @@ const AdminService = {
         `Failed to edit the event ${newData.title} with id ${eventId}`
       )
     }
+  },
+  getEvent: async function (eventId: string) {
+    const { response, data } = await fetchClient.GET("/events/{id}", {
+      params: {
+        path: { id: eventId }
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data for event with id ${eventId}`)
+    }
+
+    return data?.data
   }
 } as const
 
