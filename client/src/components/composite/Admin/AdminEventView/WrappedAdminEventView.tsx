@@ -1,6 +1,9 @@
 "use client"
 
-import { useCreateEventMutation } from "@/services/Admin/AdminMutations"
+import {
+  useCreateEventMutation,
+  useEditEventMutation
+} from "@/services/Admin/AdminMutations"
 import AdminEventView from "./AdminEventView"
 import StorageService from "@/services/Storage/StorageService"
 import { useLatestEventsQuery } from "@/services/Event/EventQueries"
@@ -16,6 +19,9 @@ const WrappedAdminEventView = () => {
     fetchNextPage,
     isFetchingNextPage
   } = useLatestEventsQuery()
+
+  const { mutateAsync: editEvent } = useEditEventMutation()
+
   const rawEvents = useMemo(() => {
     const flattenedEvents = data?.pages.flatMap((page) => {
       return page.data || []
@@ -30,6 +36,9 @@ const WrappedAdminEventView = () => {
         generateImageLink={async (image) =>
           await StorageService.uploadEventImage(image)
         }
+        handleEditEvent={async (eventId, newData) => {
+          await editEvent({ eventId, newData })
+        }}
         rawEvents={rawEvents || []}
         hasMoreEvents={hasNextPage}
         isLoading={isPending}

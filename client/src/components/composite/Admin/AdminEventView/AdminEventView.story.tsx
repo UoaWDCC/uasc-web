@@ -29,6 +29,17 @@ export const AdminEventViewWithEvents: Story = {
     generateImageLink: async () => {
       return undefined
     },
+    eventPreviousData: {
+      id: "1",
+      title: "CACK",
+      location: "STRAIGHT ZHAO",
+      physical_start_date: earlierStartDate,
+      physical_end_date: earlierStartDate,
+      sign_up_start_date: earlierStartDate,
+      sign_up_end_date: earlierStartDate,
+      google_forms_link: "https://google.com",
+      description: "default data"
+    },
     rawEvents: [
       {
         id: "1",

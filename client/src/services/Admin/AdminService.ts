@@ -2,7 +2,7 @@ import { Timestamp } from "firebase/firestore"
 import { UserAdditionalInfo } from "@/models/User"
 import fetchClient from "@/services/OpenApiFetchClient"
 import { MEMBER_TABLE_MAX_DATA } from "@/utils/Constants"
-import { CreateEventBody } from "@/models/Events"
+import { CreateEventBody, EditEventBody } from "@/models/Events"
 
 export type EditUsersBody = {
   uid: string
@@ -201,6 +201,28 @@ const AdminService = {
 
     if (!response.ok) {
       throw new Error(`Failed to create the event ${data.title}`)
+    }
+  },
+  editEvent: async function ({
+    eventId,
+    newData
+  }: {
+    eventId: string
+    newData: EditEventBody
+  }) {
+    const { response } = await fetchClient.PATCH("/admin/events/{id}", {
+      params: {
+        path: {
+          id: eventId
+        }
+      },
+      body: { ...newData }
+    })
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to edit the event ${newData.title} with id ${eventId}`
+      )
     }
   }
 } as const
