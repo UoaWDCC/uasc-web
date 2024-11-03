@@ -28,7 +28,7 @@ export class EventController extends Controller {
       const currentTime = Timestamp.now()
 
       res.events.forEach((event) => {
-        const eventStartTime = event.physical_start_date
+        const eventStartTime = event.sign_up_start_date
         const timeDifference =
           eventStartTime.toMillis() - currentTime.toMillis()
 

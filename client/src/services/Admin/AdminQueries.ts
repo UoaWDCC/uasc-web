@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import { Timestamp } from "firebase/firestore"
 import AdminService from "./AdminService"
 
@@ -39,5 +39,16 @@ export function useBookingHistoryQuery() {
     retry: 0,
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor
+  })
+}
+
+export function useGetEventQuery() {
+  /**
+   * Need to use a mutation instead of query because
+   * we only want a manual trigger of the fetch
+   */
+  return useMutation({
+    mutationKey: ["single-event"],
+    mutationFn: AdminService.getEvent
   })
 }

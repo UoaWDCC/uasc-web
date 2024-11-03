@@ -26,8 +26,18 @@ interface IAdminEventForm {
 
   /**
    * To be called after user submits the new data for the event
+   *
+   * (the big call to action button)
    */
   handlePostEvent: (data: CreateEventBody) => void
+
+  /**
+   * Handler which is passed in if {@link isEditMode} is `true`,
+   *
+   * if the user confirms they want the event deleted this handler will be called
+   */
+  handleDeleteEvent?: () => void
+
   /**
    * If the panel should suggest that the event is being edited, instead of created
    *
@@ -41,6 +51,18 @@ interface IAdminEventForm {
    */
   defaultData?: CreateEventBody["data"]
 }
+
+const USER_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+const TimezoneIndicator = () => (
+  <>
+    {USER_TIMEZONE && (
+      <h5 className="text-center font-bold uppercase">
+        The timezone is: {USER_TIMEZONE}
+      </h5>
+    )}
+  </>
+)
 
 export const AdminEventFormKeys = {
   TITLE: "title",
@@ -61,7 +83,8 @@ const AdminEventForm = ({
   handlePostEvent,
   generateImageLink,
   isEditMode = false,
-  defaultData
+  defaultData,
+  handleDeleteEvent
 }: IAdminEventForm) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
@@ -102,7 +125,11 @@ const AdminEventForm = ({
         Number.parseInt(data.get(AdminEventFormKeys.MAX_OCCUPANCY) as string) ||
         undefined,
       physical_end_date: physical_end_date
-        ? Timestamp.fromDate(new Date(physical_end_date as string))
+        ? Timestamp.fromDate(
+            new Date(
+              (physical_end_date as string).replace(/-/g, "/").replace("T", " ")
+            )
+          )
         : undefined
     }
 
@@ -128,6 +155,20 @@ const AdminEventForm = ({
   return (
     <div className="relative my-4 flex w-full flex-col items-center rounded-md bg-white p-2">
       <h2 className="text-dark-blue-100">{formTitle}</h2>
+      {isEditMode && (
+        <button
+          className="mt-2"
+          onClick={() => {
+            confirm(
+              EventMessages.adminDeleteEventConfirmation(
+                defaultData?.title || ""
+              )
+            ) && handleDeleteEvent?.()
+          }}
+        >
+          <h5 className="text-red font-bold uppercase">Delete Event</h5>
+        </button>
+      )}
       <form
         onSubmit={handleSubmit}
         className="flex w-full max-w-[800px] flex-col gap-2"
@@ -184,7 +225,7 @@ const AdminEventForm = ({
             name={AdminEventFormKeys.SIGN_UP_START_DATE}
             data-testid={AdminEventFormKeys.SIGN_UP_START_DATE}
             type="datetime-local"
-            value={
+            defaultValue={
               defaultData &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
@@ -200,7 +241,7 @@ const AdminEventForm = ({
           <TextInput
             name={AdminEventFormKeys.SIGN_UP_END_DATE}
             data-testid={AdminEventFormKeys.SIGN_UP_END_DATE}
-            value={
+            defaultValue={
               defaultData?.sign_up_end_date &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
@@ -212,14 +253,14 @@ const AdminEventForm = ({
             label="Sign Up End Date (If exists)"
           />
         </span>
-
+        <TimezoneIndicator />
         <Divider />
         <h3 className="text-dark-blue-100 mt-2 text-center">Event Dates</h3>
         <span className="flex w-full flex-col gap-2 sm:flex-row">
           <TextInput
             name={AdminEventFormKeys.PHYSICAL_START_DATE}
             data-testid={AdminEventFormKeys.PHYSICAL_START_DATE}
-            value={
+            defaultValue={
               defaultData?.physical_start_date &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
@@ -236,7 +277,7 @@ const AdminEventForm = ({
           <TextInput
             name={AdminEventFormKeys.PHYSICAL_END_DATE}
             data-testid={AdminEventFormKeys.PHYSICAL_END_DATE}
-            value={
+            defaultValue={
               defaultData?.physical_end_date &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
@@ -250,6 +291,7 @@ const AdminEventForm = ({
             label="End Date of Event"
           />
         </span>
+        <TimezoneIndicator />
         <Divider />
         <TextInput
           name={AdminEventFormKeys.GOOGLE_FORMS_LINK}

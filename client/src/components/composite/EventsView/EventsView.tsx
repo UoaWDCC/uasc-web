@@ -1,6 +1,4 @@
-import EventsCardPreview, {
-  IEventsCardPreview
-} from "@/components/generic/Event/EventPreview/EventPreview"
+import EventsCardPreview from "@/components/generic/Event/EventPreview/EventPreview"
 import EventDetailed from "@/components/generic/Event/EventDetailed/EventDetailed"
 import { DateUtils } from "@/components/utils/DateUtils"
 import { Event } from "@/models/Events"
@@ -195,7 +193,7 @@ const EventsPage = ({
     )
   }, [selectedEventObject, eventSelectionHandler])
 
-  const previewCurrentEvents: IEventsCardPreview[] =
+  const previewCurrentEvents =
     eventList.upcomingAndCurrentEvents?.map((event) => {
       return EventRenderingUtils.previewTransformer(
         event,
@@ -204,7 +202,7 @@ const EventsPage = ({
       )
     }) || []
 
-  const previewPastEvents: IEventsCardPreview[] =
+  const previewPastEvents =
     eventList.pastEvents?.map((event) => {
       return EventRenderingUtils.previewTransformer(
         event,
@@ -235,11 +233,11 @@ const EventsPage = ({
               </h5>
             )}
             {previewCurrentEvents.map((event) => (
-              <EventsCardPreview key={event.title} {...event} />
+              <EventsCardPreview {...event} key={event.key} />
             ))}
 
             {previewPastEvents.map((event) => (
-              <EventsCardPreview key={event.title} {...event} />
+              <EventsCardPreview {...event} key={event.key} />
             ))}
           </>
         )}

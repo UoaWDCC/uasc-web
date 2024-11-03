@@ -14,6 +14,15 @@ export const IMAGE_PLACEHOLDER_SRC =
  */
 export const EventMessages = {
   /**
+   * Message to be displayed for deleting an event
+   *
+   * @param title the title of the event
+   * @returns a formatted, user-readable string asking for confirmation
+   */
+  adminDeleteEventConfirmation: (title: string) => {
+    return `Are you sure you want to delete the event ${title}? This can NOT be undone!`
+  },
+  /**
    * Message to be displayed for confirming event creation or editing
    *
    * @param isEditing boolean indicating if the event is being edited
@@ -85,6 +94,13 @@ export const EventDateComparisons = {
   }
 } as const
 
+/**
+ * Utility type to allow for a key to to be associated with a preview
+ *
+ * (generally using the firebase `uid`)
+ */
+export type EventCardPreviewWithKey = IEventsCardPreview & { key: string }
+
 export const EventRenderingUtils = {
   /**
    * Generates a placeholder string for a local date and time input field
@@ -93,9 +109,13 @@ export const EventRenderingUtils = {
    * @returns a formatted string in ISO 8601 format without milliseconds
    */
   dateTimeLocalPlaceHolder: (date: Date) => {
-    const isoString = date.toISOString()
-    const placeholderString = isoString.substring(0, isoString.lastIndexOf("."))
-    return placeholderString
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const day = String(date.getDate()).padStart(2, "0")
+    const hours = String(date.getHours()).padStart(2, "0")
+    const minutes = String(date.getMinutes()).padStart(2, "0")
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`
   },
   /**
    * Utility function to convert a raw {@link Event} into {@link IEventsCardPreview}
@@ -109,7 +129,7 @@ export const EventRenderingUtils = {
     eventSetter: (id?: string) => void,
     buttonText?: string,
     variant?: EventCardPreviewVariant
-  ): IEventsCardPreview => {
+  ): EventCardPreviewWithKey => {
     let eventStartDate
 
     if (event.physical_start_date) {
@@ -131,6 +151,7 @@ export const EventRenderingUtils = {
     )
 
     return {
+      key: event.id || event.title,
       date: eventStartDate
         ? EventMessages.eventDateRange(eventStartDate, eventEndDate)
         : "",

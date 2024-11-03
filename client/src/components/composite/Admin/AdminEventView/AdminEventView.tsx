@@ -1,8 +1,9 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import { CreateEventBody, Event } from "@/models/Events"
+import { CreateEventBody, EditEventBody, Event } from "@/models/Events"
 import { useState } from "react"
 import AdminEventForm from "./AdminEventForm/AdminEventForm"
 import AdminAllEvents from "./AdminAllEvents/AdminAllEvents"
+import Loader from "@/components/generic/SuspenseComponent/Loader"
 
 type EventViewModes = "view-all-events" | "creating-new-event" | "editing-event"
 
@@ -44,6 +45,22 @@ interface IAdminEventView {
    * Function to fetch more events.
    */
   fetchMoreEvents?: () => void
+
+  /**
+   * If passed in, will open the edit panel for the event with given data
+   */
+  eventPreviousData?: Event
+
+  /**
+   * Will be called when the admin is _editing_ a selected event
+   */
+  handleEditEvent?: (eventId: string, newData: EditEventBody) => void
+
+  /**
+   * Obtains the latest data for an event to edit, if `undefined` is passed
+   * in then it means that no event should be edited
+   */
+  fetchEventToEdit?: (eventId?: string) => void
 }
 
 const AdminEventViewContent = ({
@@ -54,16 +71,28 @@ const AdminEventViewContent = ({
   rawEvents,
   hasMoreEvents,
   isLoading,
-  fetchMoreEvents
-  // TODO: extend with the event id to allow showing an edit view
+  fetchMoreEvents,
+  handleEditEvent,
+  eventPreviousData,
+  fetchEventToEdit
 }: {
   mode: EventViewModes
   setMode: (mode: EventViewModes) => void
 } & IAdminEventView) => {
+  /**
+   * Used to make the `PATCH` request for the event (need to specify path with `id`)
+   */
+  const [editedEventId, setEditedEventId] = useState<string | undefined>()
+
   switch (mode) {
     case "view-all-events":
       return (
         <AdminAllEvents
+          onSelectedEventIdChange={(id) => {
+            setEditedEventId(id)
+            fetchEventToEdit?.(id)
+            setMode("editing-event")
+          }}
           rawEvents={rawEvents}
           hasMoreEvents={hasMoreEvents}
           isLoading={isLoading}
@@ -83,7 +112,28 @@ const AdminEventViewContent = ({
         />
       )
     case "editing-event":
-      return null
+      if (!editedEventId) {
+        setMode("view-all-events")
+        return <Loader />
+      }
+
+      if (!eventPreviousData) {
+        return <Loader />
+      }
+
+      return (
+        <AdminEventForm
+          generateImageLink={async (image) => {
+            return await generateImageLink(image)
+          }}
+          defaultData={eventPreviousData}
+          handlePostEvent={async (data) => {
+            await handleEditEvent?.(editedEventId, data.data)
+            setMode("view-all-events")
+          }}
+          isEditMode
+        />
+      )
   }
 }
 
@@ -95,6 +145,7 @@ const buttonMessage = (mode: EventViewModes) => {
     case "view-all-events":
       return "Create Event"
     case "creating-new-event":
+      return "Back to Events"
     case "editing-event":
       return "Back to Events"
   }
@@ -110,7 +161,10 @@ const AdminEventView = ({
   rawEvents = [],
   hasMoreEvents,
   isLoading,
-  fetchMoreEvents
+  fetchMoreEvents,
+  eventPreviousData,
+  handleEditEvent,
+  fetchEventToEdit
 }: IAdminEventView) => {
   const [mode, setMode] = useState<EventViewModes>("view-all-events")
 
@@ -127,7 +181,10 @@ const AdminEventView = ({
                   setMode("creating-new-event")
                   break
                 case "creating-new-event":
+                  setMode("view-all-events")
+                  break
                 case "editing-event":
+                  fetchEventToEdit?.()
                   setMode("view-all-events")
               }
             }}
@@ -136,14 +193,18 @@ const AdminEventView = ({
           </Button>
         </div>
       </span>
+      {/** TODO: pass in delete handler */}
       <AdminEventViewContent
         setMode={setMode}
         mode={mode}
+        fetchEventToEdit={fetchEventToEdit}
+        handleEditEvent={handleEditEvent}
         handlePostEvent={handlePostEvent}
         generateImageLink={generateImageLink}
         rawEvents={rawEvents}
         hasMoreEvents={hasMoreEvents}
         isLoading={isLoading}
+        eventPreviousData={eventPreviousData}
         fetchMoreEvents={fetchMoreEvents}
       />
     </div>
