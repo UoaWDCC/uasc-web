@@ -226,7 +226,7 @@ const AdminService = {
     }
   },
   getEvent: async function (eventId: string) {
-    const { response, data } = await fetchClient.GET("/events/{id}", {
+    const { response, data } = await fetchClient.GET("/admin/events/{id}", {
       params: {
         path: { id: eventId }
       }
