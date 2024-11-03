@@ -57,6 +57,11 @@ interface IAdminEventView {
   handleEditEvent?: (eventId: string, newData: EditEventBody) => void
 
   /**
+   * Callback for when an event is deleted by admin
+   */
+  handleDeleteEvent?: (eventId: string) => void
+
+  /**
    * Obtains the latest data for an event to edit, if `undefined` is passed
    * in then it means that no event should be edited
    */
@@ -74,7 +79,8 @@ const AdminEventViewContent = ({
   fetchMoreEvents,
   handleEditEvent,
   eventPreviousData,
-  fetchEventToEdit
+  fetchEventToEdit,
+  handleDeleteEvent
 }: {
   mode: EventViewModes
   setMode: (mode: EventViewModes) => void
@@ -127,6 +133,10 @@ const AdminEventViewContent = ({
             return await generateImageLink(image)
           }}
           defaultData={eventPreviousData}
+          handleDeleteEvent={async () => {
+            await handleDeleteEvent?.(editedEventId)
+            setMode("view-all-events")
+          }}
           handlePostEvent={async (data) => {
             await handleEditEvent?.(editedEventId, data.data)
             setMode("view-all-events")
@@ -164,7 +174,8 @@ const AdminEventView = ({
   fetchMoreEvents,
   eventPreviousData,
   handleEditEvent,
-  fetchEventToEdit
+  fetchEventToEdit,
+  handleDeleteEvent
 }: IAdminEventView) => {
   const [mode, setMode] = useState<EventViewModes>("view-all-events")
 
@@ -193,10 +204,10 @@ const AdminEventView = ({
           </Button>
         </div>
       </span>
-      {/** TODO: pass in delete handler */}
       <AdminEventViewContent
         setMode={setMode}
         mode={mode}
+        handleDeleteEvent={handleDeleteEvent}
         fetchEventToEdit={fetchEventToEdit}
         handleEditEvent={handleEditEvent}
         handlePostEvent={handlePostEvent}

@@ -172,16 +172,18 @@ export function useDeleteBookingMutation() {
   })
 }
 
+const invalidateEventsQuery = () => {
+  queryClient.invalidateQueries({
+    queryKey: [ALL_EVENTS_QUERY_KEY]
+  })
+}
+
 export function useCreateEventMutation() {
   return useMutation({
     mutationKey: ["create-booking"],
     retry: false,
     mutationFn: AdminService.createEvent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [ALL_EVENTS_QUERY_KEY]
-      })
-    }
+    onSuccess: invalidateEventsQuery
   })
 }
 
@@ -190,10 +192,15 @@ export function useEditEventMutation() {
     mutationKey: ["edit-event"],
     retry: false,
     mutationFn: AdminService.editEvent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [ALL_EVENTS_QUERY_KEY]
-      })
-    }
+    onSuccess: invalidateEventsQuery
+  })
+}
+
+export function useDeleteEventMutation() {
+  return useMutation({
+    mutationKey: ["delete-event"],
+    retry: false,
+    mutationFn: AdminService.deleteEvent,
+    onSuccess: invalidateEventsQuery
   })
 }
