@@ -100,9 +100,13 @@ export const EventRenderingUtils = {
    * @returns a formatted string in ISO 8601 format without milliseconds
    */
   dateTimeLocalPlaceHolder: (date: Date) => {
-    const isoString = date.toISOString()
-    const placeholderString = isoString.substring(0, isoString.lastIndexOf("."))
-    return placeholderString
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const day = String(date.getDate()).padStart(2, "0")
+    const hours = String(date.getHours()).padStart(2, "0")
+    const minutes = String(date.getMinutes()).padStart(2, "0")
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`
   },
   /**
    * Utility function to convert a raw {@link Event} into {@link IEventsCardPreview}

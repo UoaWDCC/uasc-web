@@ -42,6 +42,18 @@ interface IAdminEventForm {
   defaultData?: CreateEventBody["data"]
 }
 
+const USER_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+const TimezoneIndicator = () => (
+  <>
+    {USER_TIMEZONE && (
+      <h5 className="text-center font-bold uppercase">
+        The timezone is: {USER_TIMEZONE}
+      </h5>
+    )}
+  </>
+)
+
 export const AdminEventFormKeys = {
   TITLE: "title",
   DESCRIPTION: "description",
@@ -102,7 +114,11 @@ const AdminEventForm = ({
         Number.parseInt(data.get(AdminEventFormKeys.MAX_OCCUPANCY) as string) ||
         undefined,
       physical_end_date: physical_end_date
-        ? Timestamp.fromDate(new Date(physical_end_date as string))
+        ? Timestamp.fromDate(
+            new Date(
+              (physical_end_date as string).replace(/-/g, "/").replace("T", " ")
+            )
+          )
         : undefined
     }
 
@@ -184,7 +200,7 @@ const AdminEventForm = ({
             name={AdminEventFormKeys.SIGN_UP_START_DATE}
             data-testid={AdminEventFormKeys.SIGN_UP_START_DATE}
             type="datetime-local"
-            value={
+            defaultValue={
               defaultData &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
@@ -200,7 +216,7 @@ const AdminEventForm = ({
           <TextInput
             name={AdminEventFormKeys.SIGN_UP_END_DATE}
             data-testid={AdminEventFormKeys.SIGN_UP_END_DATE}
-            value={
+            defaultValue={
               defaultData?.sign_up_end_date &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
@@ -212,14 +228,14 @@ const AdminEventForm = ({
             label="Sign Up End Date (If exists)"
           />
         </span>
-
+        <TimezoneIndicator />
         <Divider />
         <h3 className="text-dark-blue-100 mt-2 text-center">Event Dates</h3>
         <span className="flex w-full flex-col gap-2 sm:flex-row">
           <TextInput
             name={AdminEventFormKeys.PHYSICAL_START_DATE}
             data-testid={AdminEventFormKeys.PHYSICAL_START_DATE}
-            value={
+            defaultValue={
               defaultData?.physical_start_date &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
@@ -236,7 +252,7 @@ const AdminEventForm = ({
           <TextInput
             name={AdminEventFormKeys.PHYSICAL_END_DATE}
             data-testid={AdminEventFormKeys.PHYSICAL_END_DATE}
-            value={
+            defaultValue={
               defaultData?.physical_end_date &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
@@ -250,6 +266,7 @@ const AdminEventForm = ({
             label="End Date of Event"
           />
         </span>
+        <TimezoneIndicator />
         <Divider />
         <TextInput
           name={AdminEventFormKeys.GOOGLE_FORMS_LINK}
