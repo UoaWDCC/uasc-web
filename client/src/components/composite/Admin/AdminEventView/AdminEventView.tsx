@@ -135,10 +135,12 @@ const AdminEventViewContent = ({
           defaultData={eventPreviousData}
           handleDeleteEvent={async () => {
             await handleDeleteEvent?.(editedEventId)
+            await fetchEventToEdit?.()
             setMode("view-all-events")
           }}
           handlePostEvent={async (data) => {
             await handleEditEvent?.(editedEventId, data.data)
+            await fetchEventToEdit?.()
             setMode("view-all-events")
           }}
           isEditMode
