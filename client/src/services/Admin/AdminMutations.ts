@@ -172,8 +172,11 @@ export function useDeleteBookingMutation() {
   })
 }
 
+/**
+ * Utility function to refresh the events cache
+ */
 const invalidateEventsQuery = () => {
-  queryClient.invalidateQueries({
+  queryClient.removeQueries({
     queryKey: [ALL_EVENTS_QUERY_KEY]
   })
 }
