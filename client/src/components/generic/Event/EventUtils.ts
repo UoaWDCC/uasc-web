@@ -85,6 +85,13 @@ export const EventDateComparisons = {
   }
 } as const
 
+/**
+ * Utility type to allow for a key to to be associated with a preview
+ *
+ * (generally using the firebase `uid`)
+ */
+export type EventCardPreviewWithKey = IEventsCardPreview & { key: string }
+
 export const EventRenderingUtils = {
   /**
    * Generates a placeholder string for a local date and time input field
@@ -109,7 +116,7 @@ export const EventRenderingUtils = {
     eventSetter: (id?: string) => void,
     buttonText?: string,
     variant?: EventCardPreviewVariant
-  ): IEventsCardPreview => {
+  ): EventCardPreviewWithKey => {
     let eventStartDate
 
     if (event.physical_start_date) {
@@ -131,6 +138,7 @@ export const EventRenderingUtils = {
     )
 
     return {
+      key: event.id || event.title,
       date: eventStartDate
         ? EventMessages.eventDateRange(eventStartDate, eventEndDate)
         : "",

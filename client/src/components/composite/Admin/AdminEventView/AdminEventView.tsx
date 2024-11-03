@@ -73,24 +73,23 @@ const AdminEventViewContent = ({
   isLoading,
   fetchMoreEvents,
   handleEditEvent,
-  selectedEventId,
   eventPreviousData,
   fetchEventToEdit
 }: {
   mode: EventViewModes
-
+  setMode: (mode: EventViewModes) => void
+} & IAdminEventView) => {
   /**
    * Used to make the `PATCH` request for the event (need to specify path with `id`)
    */
-  selectedEventId?: string
-  setEventId: (id?: string) => void
-  setMode: (mode: EventViewModes) => void
-} & IAdminEventView) => {
+  const [editedEventId, setEditedEventId] = useState<string | undefined>()
+
   switch (mode) {
     case "view-all-events":
       return (
         <AdminAllEvents
-          onSelectedEventIdChange={async (id) => {
+          onSelectedEventIdChange={(id) => {
+            setEditedEventId(id)
             fetchEventToEdit?.(id)
             setMode("editing-event")
           }}
@@ -113,7 +112,7 @@ const AdminEventViewContent = ({
         />
       )
     case "editing-event":
-      if (!selectedEventId) {
+      if (!editedEventId) {
         setMode("view-all-events")
         return <Loader />
       }
@@ -129,7 +128,7 @@ const AdminEventViewContent = ({
           }}
           defaultData={eventPreviousData}
           handlePostEvent={async (data) => {
-            await handleEditEvent?.(selectedEventId, data.data)
+            await handleEditEvent?.(editedEventId, data.data)
             setMode("view-all-events")
           }}
           isEditMode
@@ -169,8 +168,6 @@ const AdminEventView = ({
 }: IAdminEventView) => {
   const [mode, setMode] = useState<EventViewModes>("view-all-events")
 
-  const [editedEventId, setEditedEventId] = useState<string | undefined>()
-
   return (
     <div className="flex w-full flex-col items-center">
       <span className="flex w-full flex-col items-center sm:flex-row">
@@ -201,8 +198,6 @@ const AdminEventView = ({
         mode={mode}
         fetchEventToEdit={fetchEventToEdit}
         handleEditEvent={handleEditEvent}
-        setEventId={setEditedEventId}
-        selectedEventId={editedEventId}
         handlePostEvent={handlePostEvent}
         generateImageLink={generateImageLink}
         rawEvents={rawEvents}
