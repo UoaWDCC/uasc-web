@@ -34,7 +34,7 @@ const event3: Event = {
   title: "Another Event",
   location: "Krispy Kreme",
   physical_start_date: laterStartDate,
-  sign_up_start_date: earlierStartDate,
+  sign_up_start_date: laterStartDate,
   sign_up_end_date: earlierStartDate,
   google_forms_link: "https://random.com/event3"
 }
