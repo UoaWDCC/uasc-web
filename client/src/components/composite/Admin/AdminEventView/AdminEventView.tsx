@@ -193,6 +193,7 @@ const AdminEventView = ({
           </Button>
         </div>
       </span>
+      {/** TODO: pass in delete handler */}
       <AdminEventViewContent
         setMode={setMode}
         mode={mode}

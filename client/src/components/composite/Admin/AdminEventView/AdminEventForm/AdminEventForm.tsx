@@ -26,8 +26,18 @@ interface IAdminEventForm {
 
   /**
    * To be called after user submits the new data for the event
+   *
+   * (the big call to action button)
    */
   handlePostEvent: (data: CreateEventBody) => void
+
+  /**
+   * Handler which is passed in if {@link isEditMode} is `true`,
+   *
+   * if the user confirms they want the event deleted this handler will be called
+   */
+  handleDeleteEvent?: () => void
+
   /**
    * If the panel should suggest that the event is being edited, instead of created
    *
@@ -73,7 +83,8 @@ const AdminEventForm = ({
   handlePostEvent,
   generateImageLink,
   isEditMode = false,
-  defaultData
+  defaultData,
+  handleDeleteEvent
 }: IAdminEventForm) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
@@ -144,6 +155,20 @@ const AdminEventForm = ({
   return (
     <div className="relative my-4 flex w-full flex-col items-center rounded-md bg-white p-2">
       <h2 className="text-dark-blue-100">{formTitle}</h2>
+      {isEditMode && (
+        <button
+          className="mt-2"
+          onClick={() => {
+            confirm(
+              EventMessages.adminDeleteEventConfirmation(
+                defaultData?.title || ""
+              )
+            ) && handleDeleteEvent?.()
+          }}
+        >
+          <h5 className="text-red font-bold uppercase">Delete Event</h5>
+        </button>
+      )}
       <form
         onSubmit={handleSubmit}
         className="flex w-full max-w-[800px] flex-col gap-2"

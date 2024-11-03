@@ -14,6 +14,15 @@ export const IMAGE_PLACEHOLDER_SRC =
  */
 export const EventMessages = {
   /**
+   * Message to be displayed for deleting an event
+   *
+   * @param title the title of the event
+   * @returns a formatted, user-readable string asking for confirmation
+   */
+  adminDeleteEventConfirmation: (title: string) => {
+    return `Are you sure you want to delete the event ${title}? This can NOT be undone!`
+  },
+  /**
    * Message to be displayed for confirming event creation or editing
    *
    * @param isEditing boolean indicating if the event is being edited
