@@ -2,6 +2,7 @@
 
 import {
   useCreateEventMutation,
+  useDeleteEventMutation,
   useEditEventMutation
 } from "@/services/Admin/AdminMutations"
 import AdminEventView from "./AdminEventView"
@@ -24,6 +25,8 @@ const WrappedAdminEventView = () => {
   } = useLatestEventsQuery()
 
   const { mutateAsync: editEvent } = useEditEventMutation()
+
+  const { mutateAsync: deleteEvent } = useDeleteEventMutation()
 
   const [eventPreviousData, setEventPreviousData] = useState<
     Event | undefined
@@ -64,6 +67,7 @@ const WrappedAdminEventView = () => {
         handleEditEvent={async (eventId, newData) => {
           await editEvent({ eventId, newData })
         }}
+        handleDeleteEvent={deleteEvent}
         eventPreviousData={eventPreviousData}
         rawEvents={rawEvents || []}
         hasMoreEvents={hasNextPage}

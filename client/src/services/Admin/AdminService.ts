@@ -237,6 +237,19 @@ const AdminService = {
     }
 
     return data?.data
+  },
+  deleteEvent: async function (eventId: string) {
+    const { response } = await fetchClient.DELETE("/admin/events/{id}", {
+      params: {
+        path: {
+          id: eventId
+        }
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete event with id ${eventId}`)
+    }
   }
 } as const
 
