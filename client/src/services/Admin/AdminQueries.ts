@@ -44,7 +44,8 @@ export function useBookingHistoryQuery() {
 
 export function useGetEventQuery() {
   /**
-   * Need to use this one because we only want a manual trigger
+   * Need to use a mutation instead of query because
+   * we only want a manual trigger of the fetch
    */
   return useMutation({
     mutationKey: ["single-event"],

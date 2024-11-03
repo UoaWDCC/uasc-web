@@ -52,6 +52,13 @@ const WrappedAdminEventView = () => {
         fetchEventToEdit={async (id) => {
           if (id) {
             setEventPreviousData(await fetchEventToBeEdited(id))
+          } else {
+            /**
+             * If we go back to the main screen we
+             * don't have an event id thats being edited,
+             * so we have to consider the data stale
+             */
+            setEventPreviousData(undefined)
           }
         }}
         handleEditEvent={async (eventId, newData) => {

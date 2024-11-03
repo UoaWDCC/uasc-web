@@ -74,22 +74,24 @@ const AdminEventViewContent = ({
   fetchMoreEvents,
   handleEditEvent,
   selectedEventId,
-  setEventId,
   eventPreviousData,
   fetchEventToEdit
 }: {
   mode: EventViewModes
+
+  /**
+   * Used to make the `PATCH` request for the event (need to specify path with `id`)
+   */
+  selectedEventId?: string
   setEventId: (id?: string) => void
   setMode: (mode: EventViewModes) => void
-  selectedEventId?: string
 } & IAdminEventView) => {
   switch (mode) {
     case "view-all-events":
       return (
         <AdminAllEvents
           onSelectedEventIdChange={async (id) => {
-            await fetchEventToEdit?.(id)
-            setEventId(id)
+            fetchEventToEdit?.(id)
             setMode("editing-event")
           }}
           rawEvents={rawEvents}
@@ -115,6 +117,11 @@ const AdminEventViewContent = ({
         setMode("view-all-events")
         return <Loader />
       }
+
+      if (!eventPreviousData) {
+        return <Loader />
+      }
+
       return (
         <AdminEventForm
           generateImageLink={async (image) => {
@@ -180,7 +187,7 @@ const AdminEventView = ({
                   setMode("view-all-events")
                   break
                 case "editing-event":
-                  fetchEventToEdit?.(undefined)
+                  fetchEventToEdit?.()
                   setMode("view-all-events")
               }
             }}
