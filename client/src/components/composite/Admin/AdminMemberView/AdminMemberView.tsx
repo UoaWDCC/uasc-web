@@ -65,6 +65,13 @@ interface IAdminMemberView {
    * Used to indicate if there is currently an operation going on
    */
   isUpdating?: boolean
+
+  /**
+   * Method which makes relevant network call to make all
+   * non-admin users guests, which forces everyone to pay
+   * for a membership again
+   */
+  handleResetMemberships?: () => void
 }
 
 /**
@@ -101,7 +108,8 @@ export const AdminMemberView = ({
   openAddMemberView,
   exportUserDataHandler,
   isUpdating,
-  hasNextPage
+  hasNextPage,
+  handleResetMemberships
 }: IAdminMemberView) => {
   /**
    * For use with `AdminSearchBar`
@@ -194,7 +202,7 @@ export const AdminMemberView = ({
     <div
       className={`w-full ${isUpdating ? "brightness-75" : "brightness-100"}`}
     >
-      <span className="mb-4 mt-6 flex w-full justify-between">
+      <span className="mb-4 mt-6 flex w-full flex-col justify-between sm:flex-row">
         <span className="flex gap-5">
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
           <Button
@@ -227,6 +235,11 @@ export const AdminMemberView = ({
           setIsLastPage(last)
         }}
       />
+      <span className="mt-2 flex">
+        <Button variant="inverted-default-sm" onClick={handleResetMemberships}>
+          DANGER - Reset Memberships
+        </Button>
+      </span>
     </div>
   )
 }

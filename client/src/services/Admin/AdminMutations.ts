@@ -207,3 +207,16 @@ export function useDeleteEventMutation() {
     onSuccess: invalidateEventsQuery
   })
 }
+
+export function useResetMembershipsMutation() {
+  return useMutation({
+    mutationKey: ["reset-memberships"],
+    retry: false,
+    mutationFn: AdminService.resetMemberships,
+    onSuccess: () => {
+      queryClient.removeQueries({
+        queryKey: [ALL_USERS_QUERY]
+      })
+    }
+  })
+}
