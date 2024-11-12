@@ -1,7 +1,6 @@
 import type { Meta } from "@storybook/react"
 
 import PricingSection from "./PricingSection"
-import { pricingBannerContent, pricingNote } from "./utils/Pricing"
 import { HomeProps } from "../HomeComponent"
 
 const meta: Meta<typeof PricingSection> = {
@@ -10,12 +9,17 @@ const meta: Meta<typeof PricingSection> = {
 
 export default meta
 
-export const DefaultPricingSection = ({ pricingData: data }: HomeProps) => {
+export const DefaultPricingSection = ({
+  membershipPricingData: data
+}: HomeProps) => {
   return (
     <PricingSection
       pricings={data}
-      note={pricingNote}
-      bannerContent={pricingBannerContent}
+      note={"THis is an optional disclaimer"}
+      bannerContent={{
+        priceInformation: "asdkjasdjkaslk",
+        headline: "LOL STRAIGHT ZHAO"
+      }}
     />
   )
 }

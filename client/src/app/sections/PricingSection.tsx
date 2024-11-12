@@ -1,15 +1,15 @@
 import PricingBanner from "@/components/generic/PricingBanner/PricingBanner"
 import PricingCard from "@/components/generic/PricingCard/PricingCard"
 import { PricingBannerContent } from "@/components/utils/types"
-import { Prices } from "@/services/AppData/AppDataService"
+import { MembershipPrices } from "@/services/AppData/AppDataService"
 import Link from "next/link"
 import HomeSectionHeading from "./utils/HomeSectionHeading"
 import HomeSectionWrapper from "./utils/HomeSectionWrapper"
 
 interface IPricingSection {
   note?: string
-  pricings: Prices[]
-  bannerContent?: PricingBannerContent
+  pricings: MembershipPrices[]
+  bannerContent: PricingBannerContent
 }
 
 const PricingSection = ({ note, pricings, bannerContent }: IPricingSection) => (

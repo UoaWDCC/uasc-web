@@ -8,12 +8,14 @@ import { PortableText } from "@portabletext/react"
 import { Policies, POLICIES_GROQ_QUERY } from "@/models/sanity/Policies/Utils"
 import BookingPolicyStorage from "./BookingPolicyStorage"
 import { PolicyWithTextBlocks } from "@/components/composite/Booking/BookingContext"
+import AppDataService from "@/services/AppData/AppDataService"
 
 const BookingPage = async () => {
   const lodgeInfo = await sanityQuery<LodgeInformation[]>(
     LODGE_INFORMATION_GROQ_QUERY
   )
 
+  const lodgePrices = await AppDataService.getLodgePrices()
   /**
    * We assume there will be only one based on the way {@link LodgeInformation}
    * is set up in sanity
@@ -55,6 +57,7 @@ const BookingPage = async () => {
     <>
       <BookingInformationAndCreation
         enableNetworkRequests
+        lodgePricing={lodgePrices}
         lodgeInfoProps={{
           children: <RenderedContent />,
           imageSrcs: processedImages

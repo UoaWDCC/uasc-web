@@ -3,14 +3,16 @@
 import { useAppData } from "@/store/Store"
 import { SignUpNotif } from "@/components/generic/SignUpNotif/SignUpNotif"
 import { useAvailableBookingsQuery } from "@/services/Booking/BookingQueries"
-import { CreateBookingSection } from "./BookingCreation"
+import { CreateBookingSection, ICreateBookingSection } from "./BookingCreation"
 import { useContext, useEffect } from "react"
 import { BookingContext } from "../BookingContext"
 
 /**
  * @deprecated not for direct consumption on pages, use `BookingInformationAndCreation` instead
  */
-export const ProtectedCreateBookingSection = () => {
+export const ProtectedCreateBookingSection = ({
+  lodgePrices
+}: Pick<ICreateBookingSection, "lodgePrices">) => {
   const [{ currentUser, currentUserClaims }] = useAppData()
 
   const { data } = useAvailableBookingsQuery()
@@ -38,6 +40,7 @@ export const ProtectedCreateBookingSection = () => {
       handleAllergyChange={setAllergies}
       hasExistingSession={!!clientSecret}
       isPending={isPending}
+      lodgePrices={lodgePrices}
     />
   )
 }

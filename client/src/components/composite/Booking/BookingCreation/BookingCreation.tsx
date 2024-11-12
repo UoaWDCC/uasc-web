@@ -16,6 +16,7 @@ import {
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "@/components/generic/Checkbox/Checkbox"
 import { DateRange, DateUtils } from "@/components/utils/DateUtils"
+import { LodgePricingProps } from "@/services/AppData/AppDataService"
 
 /*
  * Swaps around dates if invalid
@@ -67,10 +68,9 @@ export interface ICreateBookingSection {
    * If a request related to creating/fetching a booking is in progress
    */
   isPending?: boolean
-}
 
-const NORMAL_PRICE = 40 as const
-const SPECIAL_PRICE = 60 as const
+  lodgePrices: LodgePricingProps
+}
 
 /**
  * A notification to the user informing the actual
@@ -110,12 +110,19 @@ export const CreateBookingSection = ({
   handleBookingCreation,
   handleAllergyChange,
   hasExistingSession,
-  isPending
+  isPending,
+  lodgePrices
 }: ICreateBookingSection) => {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
     endDate: new Date()
   })
+
+  /**
+   * Derive prices from the props
+   */
+  const NORMAL_PRICE = lodgePrices.normal
+  const SPECIAL_PRICE = lodgePrices.moreExpensive
 
   const [isValidForCreation, setIsValidForCreation] = useState<boolean>(false)
 
@@ -220,7 +227,7 @@ export const CreateBookingSection = ({
       : NORMAL_PRICE
 
     return `$${requiredPrice} * ${nights} night${nights > 1 ? "s" : ""} = $${requiredPrice * nights}` as const
-  }, [currentStartDate, currentEndDate])
+  }, [currentStartDate, currentEndDate, SPECIAL_PRICE, NORMAL_PRICE])
 
   return (
     <>
