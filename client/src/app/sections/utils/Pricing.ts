@@ -1,12 +1,9 @@
-import { Pricing } from "@/components/utils/types"
-
-export const pricingNote =
-  "*We have a discounted membership price on offer until Sunday 17th March so lock in now for a year of awesome memories!"
+import { MembershipPricing } from "@/components/utils/types"
 
 /**
  * An object containing messages for the pricing banner.
  */
-export const pricingBannerMessages = {
+export const lodgeBookingPricingBannerMessages = {
   /**
    * The headline message for the pricing banner.
    */
@@ -31,7 +28,7 @@ export const pricingBannerMessages = {
     `*$${moreExpensivePrice} when booking a single Friday or Saturday` as const
 } as const
 
-export const Pricings: Pricing[] = [
+export const MembershipPricings: MembershipPricing[] = [
   {
     title: "UoA Student",
     discountedPrice: "$45",

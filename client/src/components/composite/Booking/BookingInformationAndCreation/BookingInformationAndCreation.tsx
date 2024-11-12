@@ -36,7 +36,10 @@ interface IBookingInformationAndCreation {
    */
   enableNetworkRequests?: boolean
 
-  lodgePrices: LodgePricingProps
+  /**
+   * How much each the different types of bookings cost, based on {@link LodgePricingProps}
+   */
+  lodgePricing: LodgePricingProps
 }
 
 /**
@@ -47,7 +50,7 @@ const BookingInformationAndCreation = ({
   bookingCreationProps,
   lodgeInfoProps,
   enableNetworkRequests,
-  lodgePrices
+  lodgePricing
 }: IBookingInformationAndCreation) => {
   const params = useSearchParams()
 
@@ -70,12 +73,12 @@ const BookingInformationAndCreation = ({
       )
     case "booking-creation":
       if (enableNetworkRequests) {
-        return <ProtectedCreateBookingSection lodgePrices={lodgePrices} />
+        return <ProtectedCreateBookingSection lodgePrices={lodgePricing} />
       } else {
         return (
           <CreateBookingSection
             {...bookingCreationProps}
-            lodgePrices={lodgePrices}
+            lodgePrices={lodgePricing}
           />
         )
       }
