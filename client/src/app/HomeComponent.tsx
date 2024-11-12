@@ -9,7 +9,7 @@ import BenefitSection from "./sections/BenefitSection"
 import LandingSection from "./sections/LandingSection"
 import PricingSection from "./sections/PricingSection"
 import { benefits } from "./sections/utils/Benefits"
-import { pricingBannerMessages } from "./sections/utils/Pricing"
+import { lodgeBookingPricingBannerMessages } from "./sections/utils/Pricing"
 
 export type HomeProps = {
   /**
@@ -51,11 +51,12 @@ const HomeComponent = ({
           note={content?.pricing?.discount}
           pricings={membershipPricingData}
           bannerContent={{
-            headline: pricingBannerMessages.headline,
-            priceInformation: pricingBannerMessages.priceInformation(
-              lodgePricing.normal
-            ),
-            disclaimer: pricingBannerMessages.priceInformation(
+            headline: lodgeBookingPricingBannerMessages.headline,
+            priceInformation:
+              lodgeBookingPricingBannerMessages.priceInformation(
+                lodgePricing.normal
+              ),
+            disclaimer: lodgeBookingPricingBannerMessages.priceInformation(
               lodgePricing.moreExpensive
             )
           }}

@@ -17,7 +17,7 @@ export type Benefit = {
 /**
  * For use with the pricing cards that have the `home` variant
  */
-export type Pricing = {
+export type MembershipPricing = {
   title: string
   originalPrice?: string
   discountedPrice: string

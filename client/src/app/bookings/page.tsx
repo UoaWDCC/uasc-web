@@ -57,7 +57,7 @@ const BookingPage = async () => {
     <>
       <BookingInformationAndCreation
         enableNetworkRequests
-        lodgePrices={lodgePrices}
+        lodgePricing={lodgePrices}
         lodgeInfoProps={{
           children: <RenderedContent />,
           imageSrcs: processedImages
