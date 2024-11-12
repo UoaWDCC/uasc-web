@@ -1,13 +1,15 @@
-import { Pricing, PricingBannerContent } from "@/components/utils/types"
+import { Pricing } from "@/components/utils/types"
 
 export const pricingNote =
   "*We have a discounted membership price on offer until Sunday 17th March so lock in now for a year of awesome memories!"
 
-export const pricingBannerContent: PricingBannerContent = {
-  headline: "Great nightly rates",
-  priceInformation: "$40 per night*",
-  disclaimer: "*$60 when booking a single Friday or Saturday"
-}
+export const pricingBannerMessages = {
+  headline: "Great nightly rates" as const,
+  priceInformation: (normalPrice: number) =>
+    `$${normalPrice} per night*` as const,
+  disclaimer: (moreExpensivePrice: number) =>
+    `*$${moreExpensivePrice} when booking a single Friday or Saturday` as const
+} as const
 
 export const Pricings: Pricing[] = [
   {

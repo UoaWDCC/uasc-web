@@ -8,6 +8,7 @@ import {
 } from "../BookingCreation/BookingCreation"
 import { ProtectedCreateBookingSection } from "../BookingCreation/ProtectedCreateBookingSection"
 import { useSearchParams } from "next/navigation"
+import { LodgePricingProps } from "@/services/AppData/AppDataService"
 
 /**
  * Utility type determining what should be displayed to the user in {@link BookingInformationAndCreation}
@@ -34,6 +35,8 @@ interface IBookingInformationAndCreation {
    * uses the implementation of{@link CreateBookingSection}
    */
   enableNetworkRequests?: boolean
+
+  lodgePrices: LodgePricingProps
 }
 
 /**
@@ -43,7 +46,8 @@ interface IBookingInformationAndCreation {
 const BookingInformationAndCreation = ({
   bookingCreationProps,
   lodgeInfoProps,
-  enableNetworkRequests
+  enableNetworkRequests,
+  lodgePrices
 }: IBookingInformationAndCreation) => {
   const params = useSearchParams()
 
@@ -66,9 +70,14 @@ const BookingInformationAndCreation = ({
       )
     case "booking-creation":
       if (enableNetworkRequests) {
-        return <ProtectedCreateBookingSection />
+        return <ProtectedCreateBookingSection lodgePrices={lodgePrices} />
       } else {
-        return <CreateBookingSection {...bookingCreationProps} />
+        return (
+          <CreateBookingSection
+            {...bookingCreationProps}
+            lodgePrices={lodgePrices}
+          />
+        )
       }
   }
 }
