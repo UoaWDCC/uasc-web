@@ -250,6 +250,13 @@ const AdminService = {
     if (!response.ok) {
       throw new Error(`Failed to delete event with id ${eventId}`)
     }
+  },
+  resetMemberships: async function () {
+    const { response } = await fetchClient.PATCH("/admin/users/demote-all")
+
+    if (!response.ok) {
+      throw new Error(`Failed to demote all users`)
+    }
   }
 } as const
 

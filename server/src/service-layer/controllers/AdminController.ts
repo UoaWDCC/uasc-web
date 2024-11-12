@@ -605,7 +605,7 @@ export class AdminController extends Controller {
     const authService = new AuthService()
     let allUsers: UserRecord[] = await authService.getAllUsers()
     allUsers = allUsers.filter(
-      (user) => !user.customClaims.admin && user.customClaims.member
+      (user) => !user.customClaims?.admin && user.customClaims?.member
     )
     const demotePromises = await Promise.all(
       allUsers.map((user) => {
