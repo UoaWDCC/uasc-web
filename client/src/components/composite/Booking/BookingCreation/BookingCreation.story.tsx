@@ -10,5 +10,10 @@ type Story = StoryObj<typeof meta>
 
 export const DefaultCreateBookingPage: Story = {
   decorators: [(Story) => <Story />],
-  args: {}
+  args: {
+    lodgePrices: {
+      normal: 69,
+      moreExpensive: 420
+    }
+  }
 }

@@ -1,12 +1,27 @@
 import { MembershipTypes } from "@/models/Payment"
 import fetchClient from "@/services/OpenApiFetchClient"
+import { DEFAULT_NORMAL_PRICE, DEFAULT_SPECIAL_PRICE } from "@/utils/Constants"
 
-export type Prices = {
+export type MembershipPrices = {
   title: string
   name: MembershipTypes
   priceString: string
   originalPrice?: string
   extraInfo?: string
+}
+
+/**
+ * Helper type to be used when components consume information about the lodge prices
+ */
+export interface LodgePricingProps {
+  /**
+   * Price (per night) for when a user books the lodge
+   */
+  normal: number
+  /**
+   * Price (per night) for when a user books a single Friday or Saturday
+   */
+  moreExpensive: number
 }
 
 const MembershipLongNames = {
@@ -16,7 +31,7 @@ const MembershipLongNames = {
   ALL_OTHER_STUDENTS: "All Other Students"
 } as const
 
-const fallbackData: Prices[] = [
+const fallbackData: MembershipPrices[] = [
   {
     title: MembershipLongNames.ALL_UOA_STUDENTS,
     name: "uoa_student",
@@ -46,7 +61,9 @@ const membershipOrder = {
   new_non_student: 4
 }
 
-const sortMembershipPrices = (prices: Prices[]): Prices[] => {
+const sortMembershipPrices = (
+  prices: MembershipPrices[]
+): MembershipPrices[] => {
   return prices.sort(
     (a, b) => membershipOrder[a.name] - membershipOrder[b.name]
   )
@@ -61,12 +78,40 @@ const AppDataService = {
     }
     return data
   },
-  getMembershipPricingDetails: async function (): Promise<Prices[]> {
+  getLodgePrices: async function (): Promise<LodgePricingProps> {
+    try {
+      const { data } = await fetchClient.GET("/payment/lodge_prices")
+      const priceList = data?.data
+
+      const normalPrice = priceList?.find(
+        (price) => price.name === "normal"
+      )?.displayPrice
+      const moreExpensivePrice = priceList?.find(
+        (price) => price.name === "single_friday_or_saturday"
+      )?.displayPrice
+
+      return {
+        normal: normalPrice
+          ? Number.parseInt(normalPrice)
+          : DEFAULT_NORMAL_PRICE,
+        moreExpensive: moreExpensivePrice
+          ? Number.parseInt(moreExpensivePrice)
+          : DEFAULT_SPECIAL_PRICE
+      }
+    } catch (e) {
+      console.error("Failed to fetch lodge prices", e)
+      return {
+        normal: DEFAULT_NORMAL_PRICE,
+        moreExpensive: DEFAULT_SPECIAL_PRICE
+      }
+    }
+  },
+  getMembershipPricingDetails: async function (): Promise<MembershipPrices[]> {
     try {
       const { data } = await fetchClient.GET("/payment/membership_prices")
 
       if (data && data.data) {
-        const transformedData: Prices[] =
+        const transformedData: MembershipPrices[] =
           data.data &&
           data.data.map((data) => {
             let displayName
