@@ -24,6 +24,9 @@ export default meta
 type Story = StoryObj<typeof meta>
 export const DefaultAdminMemberView: Story = {
   args: {
-    data: mockDataArray
+    data: mockDataArray,
+    handleResetMemberships() {
+      alert("YOU WANT TO RESET???")
+    }
   }
 }

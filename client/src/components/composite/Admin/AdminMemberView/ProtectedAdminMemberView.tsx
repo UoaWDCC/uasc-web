@@ -3,7 +3,8 @@ import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
 import {
   useDeleteUserMutation,
   useDemoteUserMutation,
-  usePromoteUserMutation
+  usePromoteUserMutation,
+  useResetMembershipsMutation
 } from "@/services/Admin/AdminMutations"
 import { TableRowOperation } from "@/components/generic/ReusableTable/TableUtils"
 import AdminUserCreationModal, {
@@ -36,6 +37,8 @@ const WrappedAdminMemberView = () => {
    * The `admin` key is important as we don't want to share cache with the normal sign up
    */
   const { mutateAsync: addNewUser } = useSignUpUserMutation("admin")
+
+  const { mutateAsync: resetAllMemberships } = useResetMembershipsMutation()
 
   /**
    * https://stackoverflow.com/a/68066447
@@ -189,6 +192,15 @@ const WrappedAdminMemberView = () => {
       <AdminMemberView
         fetchNextPage={() => {
           !isFetchingNextPage && hasNextPage && fetchNextPage()
+        }}
+        handleResetMemberships={async () => {
+          if (
+            confirm(
+              "Are you SURE you want to reset all memberships for ALL members (they will have to pay for membership again)"
+            )
+          ) {
+            await resetAllMemberships()
+          }
         }}
         hasNextPage={hasNextPage}
         exportUserDataHandler={handleExportUsers}
