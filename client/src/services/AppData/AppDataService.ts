@@ -78,6 +78,9 @@ const AppDataService = {
     }
     return data
   },
+  /**
+   * Gives the prices of the two different types of bookings (uses a fallback otherwise)
+   */
   getLodgePrices: async function (): Promise<LodgePricingProps> {
     try {
       const { data } = await fetchClient.GET("/payment/lodge_prices")
