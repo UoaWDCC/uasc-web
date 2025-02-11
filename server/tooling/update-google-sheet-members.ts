@@ -1,7 +1,7 @@
 import { CombinedUserData } from "service-layer/response-models/UserResponse"
 import { firestoreTimestampToDate } from "../src/data-layer/adapters/DateUtils"
 
-import { google } from "googleapis"
+import { google, sheets_v4 } from "googleapis"
 import admin from "firebase-admin"
 import dotenv from "dotenv"
 
@@ -109,12 +109,17 @@ async function updateGoogleSheet(auth: any, rows: any[]) {
     auth
   })
 
-  const request = {
+  interface GAPIRequest
+    extends sheets_v4.Params$Resource$Spreadsheets$Values$Append {
+    resource: any
+  }
+
+  const request: GAPIRequest = {
     spreadsheetId: MEMBERS_GOOGLE_SPREADSHEET_ID,
     // Sheet id is something like "Sheet1"
     range: MEMBERS_GOOGLE_SHEET_ID + "!A1",
     valueInputOption: "RAW",
-    insertDataOption: "INSERT_ROWS",
+    insertDataOption: "OVERWRITE",
     resource: {
       values: rows
     }
