@@ -1,0 +1,24 @@
+name: Cleanup Cloudflare Pages Deployments
+
+on:
+  # every midnight
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install volta
+        uses: volta-cli/action@v4
+
+      - name: Run cleanup script
+        run: yarn workspace server prune-cloudflare-deployments
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_PROJECT_NAME: uasc
+          CF_AUTH_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
