@@ -609,7 +609,7 @@ export class AdminController extends Controller {
         (user) => !user.customClaims?.admin && user.customClaims?.member
       )
 
-      const MAX_USERS_IN_BATCH = 5 as const
+      const MAX_USERS_IN_BATCH = 3 as const
 
       // Batching solution adapted from https://stackoverflow.com/a/58686835
       while (allUsers.length) {
