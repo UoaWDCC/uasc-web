@@ -176,7 +176,7 @@ const WrappedAdminMemberView = () => {
       name: "edit",
       handler: () => {
         // TODO
-        throw new Error("Not Implemented")
+        alert("Not Implemented")
       }
     }
   ]
@@ -196,7 +196,7 @@ const WrappedAdminMemberView = () => {
         handleResetMemberships={async () => {
           if (
             confirm(
-              "Are you SURE you want to reset all memberships for ALL members (they will have to pay for membership again)"
+              "Are you SURE you want to reset all memberships for ALL members (they will have to pay for membership again). This may take a few minutes."
             )
           ) {
             await resetAllMemberships()
