@@ -1,9 +1,9 @@
 name: Cleanup Cloudflare Pages Deployments
 
 on:
-  # every sat at midnight
+  # every midnight
   schedule:
-    - cron: '0 0 * * 6'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
