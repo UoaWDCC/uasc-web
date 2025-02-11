@@ -16,6 +16,9 @@ jobs:
       - name: Install volta
         uses: volta-cli/action@v4
 
+      - name: Install dependencies
+        run: yarn
+
       - name: Run cleanup script
         run: yarn workspace server prune-cloudflare-deployments
         env:
