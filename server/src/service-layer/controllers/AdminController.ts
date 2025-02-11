@@ -602,19 +602,27 @@ export class AdminController extends Controller {
   @SuccessResponse("200", "Demoted all non-admin users")
   @Patch("/users/demote-all")
   public async demoteAllUsers(): Promise<void> {
-    const authService = new AuthService()
-    let allUsers: UserRecord[] = await authService.getAllUsers()
-    allUsers = allUsers.filter(
-      (user) => !user.customClaims?.admin && user.customClaims?.member
-    )
-    const demotePromises = await Promise.all(
-      allUsers.map((user) => {
-        return authService.setCustomUserClaim(user.uid, null)
-      })
-    )
-    if (demotePromises) {
+    try {
+      const authService = new AuthService()
+      let allUsers: UserRecord[] = await authService.getAllUsers()
+      allUsers = allUsers.filter(
+        (user) => !user.customClaims?.admin && user.customClaims?.member
+      )
+
+      const MAX_USERS_IN_BATCH = 5 as const
+
+      // Batching solution adapted from https://stackoverflow.com/a/58686835
+      while (allUsers.length) {
+        await Promise.all(
+          allUsers
+            .splice(0, MAX_USERS_IN_BATCH - 1)
+            .map((user) => authService.setCustomUserClaim(user.uid, null))
+        )
+      }
+
       this.setStatus(200)
-    } else {
+    } catch (e) {
+      console.error(e)
       this.setStatus(500)
     }
   }
