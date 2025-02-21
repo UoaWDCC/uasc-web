@@ -17,6 +17,9 @@ import { Timestamp } from "firebase/firestore"
 import Checkbox from "@/components/generic/Checkbox/Checkbox"
 import { DateRange, DateUtils } from "@/components/utils/DateUtils"
 import { LodgePricingProps } from "@/services/AppData/AppDataService"
+import EmergencyContactAlert, {
+  isValidEmergencyContact
+} from "./EmergencyContactAlert/EmergencyContactAlert"
 
 /*
  * Swaps around dates if invalid
@@ -69,6 +72,8 @@ export interface ICreateBookingSection {
    */
   isPending?: boolean
 
+  userEmergencyContact?: string
+
   lodgePrices: LodgePricingProps
 }
 
@@ -111,8 +116,11 @@ export const CreateBookingSection = ({
   handleAllergyChange,
   hasExistingSession,
   isPending,
-  lodgePrices
+  lodgePrices,
+  userEmergencyContact
 }: ICreateBookingSection) => {
+  const validEmergencyContact = isValidEmergencyContact(userEmergencyContact)
+
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
     endDate: new Date()
@@ -171,7 +179,7 @@ export const CreateBookingSection = ({
   const CreateBookingButton = useMemo(() => {
     return (
       <Button
-        disabled={isPending}
+        disabled={isPending || !validEmergencyContact}
         variant="default"
         onClick={() => {
           if (!isValidForCreation) {
@@ -199,10 +207,13 @@ export const CreateBookingSection = ({
             )
         }}
       >
-        Proceed to Payment
+        {validEmergencyContact
+          ? "Proceed to Payment"
+          : "Set Emergency Contact First!"}
       </Button>
     )
   }, [
+    validEmergencyContact,
     currentStartDate,
     currentEndDate,
     isValidForCreation,
@@ -231,9 +242,10 @@ export const CreateBookingSection = ({
 
   return (
     <>
+      <EmergencyContactAlert userEmergencyContact={userEmergencyContact} />
       <div
-        className="grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center gap-2 px-1
-                      sm:px-0 md:grid-cols-2"
+        className="mt-2 grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center gap-2
+                      px-1 sm:px-0 md:grid-cols-2"
       >
         <div className="h-full max-h-[600px] self-start">
           <BookingInfoComponent
