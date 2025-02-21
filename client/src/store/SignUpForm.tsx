@@ -81,9 +81,11 @@ const actions = {
       }
 
       const validateAdditionalSection = (invalidFields: string[]) => {
-        const {dietary_requirements} = getState()
-        if (dietary_requirements.length < 2) { // invalid dietary requirements
+        const { dietary_requirements } = getState()
+        if (dietary_requirements.length < 2) {
+          // invalid dietary requirements
           invalidFields.push("Dietary Requirements")
+        }
       }
 
       switch (pageToValidate) {
