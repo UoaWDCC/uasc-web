@@ -23,6 +23,7 @@ const categories = [
   "Email",
   "First name",
   "Last name",
+  "UPI",
   "Phone number",
   "Date of birth",
   "Membership",
@@ -166,6 +167,7 @@ function mapUsers(users: CombinedUserData[]) {
     user.email,
     user.first_name,
     user.last_name,
+    user.student_id,
     user.phone_number,
     firestoreTimestampToDate(user.date_of_birth).toLocaleString([], {
       timeZone: "Pacific/Auckland",
