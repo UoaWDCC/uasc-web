@@ -17,6 +17,7 @@ import { Timestamp } from "firebase/firestore"
 import Checkbox from "@/components/generic/Checkbox/Checkbox"
 import { DateRange, DateUtils } from "@/components/utils/DateUtils"
 import { LodgePricingProps } from "@/services/AppData/AppDataService"
+import Link from "next/link"
 
 /*
  * Swaps around dates if invalid
@@ -69,6 +70,8 @@ export interface ICreateBookingSection {
    */
   isPending?: boolean
 
+  userEmergencyContact?: string
+
   lodgePrices: LodgePricingProps
 }
 
@@ -111,8 +114,12 @@ export const CreateBookingSection = ({
   handleAllergyChange,
   hasExistingSession,
   isPending,
-  lodgePrices
+  lodgePrices,
+  userEmergencyContact
 }: ICreateBookingSection) => {
+  const validEmergencyContact =
+    userEmergencyContact && userEmergencyContact.length > 1 // 2 or more characters
+
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
     endDate: new Date()
@@ -171,7 +178,7 @@ export const CreateBookingSection = ({
   const CreateBookingButton = useMemo(() => {
     return (
       <Button
-        disabled={isPending}
+        disabled={isPending || !validEmergencyContact}
         variant="default"
         onClick={() => {
           if (!isValidForCreation) {
@@ -199,10 +206,13 @@ export const CreateBookingSection = ({
             )
         }}
       >
-        Proceed to Payment
+        {validEmergencyContact
+          ? "Proceed to Payment"
+          : "Set Emergency Contact First!"}
       </Button>
     )
   }, [
+    validEmergencyContact,
     currentStartDate,
     currentEndDate,
     isValidForCreation,
@@ -229,11 +239,40 @@ export const CreateBookingSection = ({
     return `$${requiredPrice} * ${nights} night${nights > 1 ? "s" : ""} = $${requiredPrice * nights}` as const
   }, [currentStartDate, currentEndDate, SPECIAL_PRICE, NORMAL_PRICE])
 
+  const EmergencyContactAlert = useMemo(() => {
+    return (
+      <div className="border-gray-3 flex flex-col gap-2 rounded border bg-white p-3">
+        <h5 className="text-dark-blue-100 font-bold uppercase">
+          Important - Double check your emergency contact!
+        </h5>
+        <div>
+          {validEmergencyContact ? (
+            <p>
+              Is your emergency contact{" "}
+              <span className="text-light-blue-100 font-bold">
+                {userEmergencyContact}
+              </span>{" "}
+              still correct? If not you MUST update it before booking.
+            </p>
+          ) : (
+            <p>You MUST set an emergency contact before booking, </p>
+          )}
+          <p>
+            <Link className="text-light-blue-100" href={"/profile"}>
+              go to your profile!
+            </Link>
+          </p>
+        </div>
+      </div>
+    )
+  }, [validEmergencyContact, userEmergencyContact])
+
   return (
     <>
+      {EmergencyContactAlert}
       <div
-        className="grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center gap-2 px-1
-                      sm:px-0 md:grid-cols-2"
+        className="mt-2 grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center gap-2
+                      px-1 sm:px-0 md:grid-cols-2"
       >
         <div className="h-full max-h-[600px] self-start">
           <BookingInfoComponent

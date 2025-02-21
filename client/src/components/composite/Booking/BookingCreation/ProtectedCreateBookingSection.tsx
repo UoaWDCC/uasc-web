@@ -6,6 +6,7 @@ import { useAvailableBookingsQuery } from "@/services/Booking/BookingQueries"
 import { CreateBookingSection, ICreateBookingSection } from "./BookingCreation"
 import { useContext, useEffect } from "react"
 import { BookingContext } from "../BookingContext"
+import { useSelfDataQuery } from "@/services/User/UserQueries"
 
 /**
  * @deprecated not for direct consumption on pages, use `BookingInformationAndCreation` instead
@@ -16,6 +17,8 @@ export const ProtectedCreateBookingSection = ({
   const [{ currentUser, currentUserClaims }] = useAppData()
 
   const { data } = useAvailableBookingsQuery()
+
+  const { data: currentUserData } = useSelfDataQuery()
 
   const {
     handleBookingCreation,
@@ -37,6 +40,7 @@ export const ProtectedCreateBookingSection = ({
     <CreateBookingSection
       bookingSlots={data}
       handleBookingCreation={handleBookingCreation}
+      userEmergencyContact={currentUserData?.emergency_contact}
       handleAllergyChange={setAllergies}
       hasExistingSession={!!clientSecret}
       isPending={isPending}
