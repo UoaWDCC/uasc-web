@@ -240,28 +240,32 @@ export const CreateBookingSection = ({
   }, [currentStartDate, currentEndDate, SPECIAL_PRICE, NORMAL_PRICE])
 
   const EmergencyContactAlert = useMemo(() => {
+    const ProfileLink = (
+      <Link className="text-light-blue-100" href="/profile">
+        profile
+      </Link>
+    )
+
+    const Message = validEmergencyContact ? (
+      <>
+        Is your emergency contact{" "}
+        <span className="text-light-blue-100 font-bold">
+          {userEmergencyContact}
+        </span>{" "}
+        still correct? If not you MUST update it before booking. In your{" "}
+        {ProfileLink}
+      </>
+    ) : (
+      <>You MUST set an emergency contact before booking, {ProfileLink}!</>
+    )
+
     return (
       <div className="border-gray-3 flex flex-col gap-2 rounded border bg-white p-3">
         <h5 className="text-dark-blue-100 font-bold uppercase">
           Important - Double check your emergency contact!
         </h5>
         <div>
-          {validEmergencyContact ? (
-            <p>
-              Is your emergency contact{" "}
-              <span className="text-light-blue-100 font-bold">
-                {userEmergencyContact}
-              </span>{" "}
-              still correct? If not you MUST update it before booking.
-            </p>
-          ) : (
-            <p>You MUST set an emergency contact before booking, </p>
-          )}
-          <p>
-            <Link className="text-light-blue-100" href={"/profile"}>
-              go to your profile!
-            </Link>
-          </p>
+          <p>{Message}</p>
         </div>
       </div>
     )
