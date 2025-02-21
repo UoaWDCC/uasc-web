@@ -17,7 +17,9 @@ import { Timestamp } from "firebase/firestore"
 import Checkbox from "@/components/generic/Checkbox/Checkbox"
 import { DateRange, DateUtils } from "@/components/utils/DateUtils"
 import { LodgePricingProps } from "@/services/AppData/AppDataService"
-import Link from "next/link"
+import EmergencyContactAlert, {
+  isValidEmergencyContact
+} from "./EmergencyContactAlert/EmergencyContactAlert"
 
 /*
  * Swaps around dates if invalid
@@ -117,8 +119,7 @@ export const CreateBookingSection = ({
   lodgePrices,
   userEmergencyContact
 }: ICreateBookingSection) => {
-  const validEmergencyContact =
-    userEmergencyContact && userEmergencyContact.length > 1 // 2 or more characters
+  const validEmergencyContact = isValidEmergencyContact(userEmergencyContact)
 
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
     startDate: new Date(),
@@ -239,41 +240,9 @@ export const CreateBookingSection = ({
     return `$${requiredPrice} * ${nights} night${nights > 1 ? "s" : ""} = $${requiredPrice * nights}` as const
   }, [currentStartDate, currentEndDate, SPECIAL_PRICE, NORMAL_PRICE])
 
-  const EmergencyContactAlert = useMemo(() => {
-    const ProfileLink = (
-      <Link className="text-light-blue-100" href="/profile">
-        profile
-      </Link>
-    )
-
-    const Message = validEmergencyContact ? (
-      <>
-        Is your emergency contact{" "}
-        <span className="text-light-blue-100 font-bold">
-          {userEmergencyContact}
-        </span>{" "}
-        still correct? If not you MUST update it before booking. In your{" "}
-        {ProfileLink}
-      </>
-    ) : (
-      <>You MUST set an emergency contact before booking, {ProfileLink}!</>
-    )
-
-    return (
-      <div className="border-gray-3 flex flex-col gap-2 rounded border bg-white p-3">
-        <h5 className="text-dark-blue-100 font-bold uppercase">
-          Important - Double check your emergency contact!
-        </h5>
-        <div>
-          <p>{Message}</p>
-        </div>
-      </div>
-    )
-  }, [validEmergencyContact, userEmergencyContact])
-
   return (
     <>
-      {EmergencyContactAlert}
+      <EmergencyContactAlert userEmergencyContact={userEmergencyContact} />
       <div
         className="mt-2 grid w-full max-w-[900px] grid-cols-1 items-center justify-items-center gap-2
                       px-1 sm:px-0 md:grid-cols-2"
