@@ -56,7 +56,7 @@ const actions = {
       const validateSecondSection = (invalidFields: string[]) => {
         const { student_id } = getState()
         if (!student_id || student_id.length < 2) {
-          invalidFields.push("Student ID")
+          invalidFields.push("UoA UPI")
         }
       }
 
@@ -78,6 +78,12 @@ const actions = {
         if (emergency_contact === "") {
           invalidFields.push("Emergency Contact")
         }
+      }
+
+      const validateAdditionalSection = (invalidFields: string[]) => {
+        const {dietary_requirements} = getState()
+        if (dietary_requirements.length < 2) { // invalid dietary requirements
+          invalidFields.push("Dietary Requirements")
       }
 
       switch (pageToValidate) {
@@ -150,6 +156,7 @@ const actions = {
           const invalidFields: string[] = []
           validateFirstSection(invalidFields)
           validateContactSection(invalidFields)
+          validateAdditionalSection(invalidFields)
           if (invalidFields.length > 0) {
             setState({
               formValidity: {
