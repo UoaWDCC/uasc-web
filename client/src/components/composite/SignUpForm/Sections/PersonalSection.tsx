@@ -105,11 +105,11 @@ export const PersonalSectionSecond = () => {
     <div className="flex max-w-sm flex-col gap-5">
       <TextInput
         type="text"
-        label="UoA Student ID Number"
+        label="UoA UPI"
         description="Put NA if not a UoA Student"
         id="FirstName"
         defaultValue={student_id}
-        placeholder="e.g. 111222333"
+        placeholder="e.g. jdoe696"
         onChange={(e) => updateFormData({ student_id: e.target.value })}
         required
       />

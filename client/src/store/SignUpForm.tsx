@@ -53,6 +53,13 @@ const actions = {
         if (last_name.length === 0) invalidFields.push("Last Name")
       }
 
+      const validateSecondSection = (invalidFields: string[]) => {
+        const { student_id } = getState()
+        if (!student_id || student_id.length < 2) {
+          invalidFields.push("Student ID")
+        }
+      }
+
       const validateContactSection = (invalidFields: string[]) => {
         const { email, confirmEmail, phone_number, emergency_contact } =
           getState()
@@ -96,8 +103,18 @@ const actions = {
           nextFn()
           break
         }
-        case PAGES.PersonalSecond:
-          // No required fields here
+        case PAGES.PersonalSecond: {
+          const invalidFields: string[] = []
+          validateSecondSection(invalidFields)
+          if (invalidFields.length > 0) {
+            setState({
+              formValidity: {
+                errorMessage: `Please fill in ${invalidFields.join(" ")}`,
+                success: false
+              }
+            })
+            break
+          }
           setState({
             formValidity: {
               errorMessage: undefined,
@@ -106,6 +123,7 @@ const actions = {
           })
           nextFn()
           break
+        }
         case PAGES.Contact: {
           const invalidFields: string[] = []
           validateContactSection(invalidFields)
