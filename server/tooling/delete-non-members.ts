@@ -9,7 +9,7 @@ dotenv.config()
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
 const API_KEY = process.env.API_KEY
 const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
-const USER_ID = "google-sheets-bot"
+const USER_ID = "delete-users-bot"
 
 admin.initializeApp({
   credential: admin.credential.cert(JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON))
