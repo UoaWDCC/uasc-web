@@ -89,7 +89,7 @@ export const AdditionalSection = () => {
         value={
           does_racing !== undefined ? (does_racing ? "Yes" : "No") : undefined
         }
-        label="Would you be keen on Racing in 2024?"
+        label={`Would you be keen on Racing in ${new Date().getFullYear()}?`}
         description="All skill levels welcome! Multiple ski races held throughout the season"
         onChange={(e) =>
           updateFormData({ does_racing: e.target?.value === "Yes" })
@@ -120,7 +120,7 @@ export const AdditionalSection = () => {
 
       <div className="flex flex-col">
         <label htmlFor="hypeLevel">
-          How f#&@g excited are you to SEND IT IN 2024!!!!
+          How f#&@g excited are you to SEND IT IN {new Date().getFullYear()}!!!!
         </label>
         <ExcitementSlider min={0} max={20} />
       </div>

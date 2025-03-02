@@ -8,7 +8,7 @@ interface IAboutSection {
 
 const DEFAULT_TITLE = "Get ready for the best year of your life!" as const
 const DEFAULT_SUBHEADING =
-  "The University of Auckland Snowsports Club is back again for another banging year, and it's time to lock in your membership for 2024!" as const
+  `The University of Auckland Snowsports Club is back again for another banging year, and it's time to lock in your membership for ${new Date().getFullYear()}!` as const
 const DEFAULT_DESCRIPTION =
   "Whether you're new to the club or an old fart coming back for more, we can't wait to see your pretty face for a year of sending and shredding on and off the slopes!" as const
 
