@@ -120,7 +120,7 @@ export const AdditionalSection = () => {
 
       <div className="flex flex-col">
         <label htmlFor="hypeLevel">
-          How f#&@g excited are you to SEND IT IN 2024!!!!
+          How f#&@g excited are you to SEND IT IN {new Date().getFullYear()}!!!!
         </label>
         <ExcitementSlider min={0} max={20} />
       </div>
