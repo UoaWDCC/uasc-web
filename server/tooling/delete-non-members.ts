@@ -7,7 +7,7 @@ dotenv.config()
 
 // Environment variables
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
-const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY
+const API_KEY = process.env.API_KEY
 const GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
 const USER_ID = "google-sheets-bot"
 
@@ -38,6 +38,33 @@ async function fetchUsers(token: string, cursor?: string): Promise<any> {
     return data
   } else {
     throw new Error(`Failed to fetch users, status: ${res.status}`)
+  }
+}
+
+/**
+ * Fetches users from the backend
+ * @param token - The token to authenticate the request
+ * @param cursor - The cursor to fetch the next page of users
+ * @returns The data json object from the response
+ */
+async function deleteUser(uid: string, token: string): Promise<any> {
+  const res = await fetch(
+    // Note that VITE_BACKEND_BASE_URL does have a slash at the end
+    `${BASE_URL}users/delete-user`,
+    {
+      method: "DELETE",
+      headers: {
+        accept: "application/json",
+        authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ uid })
+    }
+  )
+  if (res.ok) {
+    return res.json()
+  } else {
+    throw new Error(`Failed to delete user ${uid}, status: ${res.status}`)
   }
 }
 
@@ -105,10 +132,24 @@ const createIdToken = async () => {
 async function main() {
   const token = await createIdToken()
   const allUsers: CombinedUserData[] = (await getAllUsers(token)).filter(
-    (user) => user.membership === "member"
+    (user) => user.membership !== "member" && user.membership !== "admin"
   )
 
-  console.log(allUsers)
+  const toDelete = allUsers.map((user) => {
+    return { uid: user.uid, membership: user.membership }
+  })
+
+  console.log("Deleting these users with uids:", toDelete)
+  await Promise.all(
+    toDelete.map(async (user) => {
+      try {
+        const res = await deleteUser(user.uid, token)
+        console.log(`Delete success for ${res}`)
+      } catch (e) {
+        console.error(`Failed to delete user ${user.uid}`, e)
+      }
+    })
+  )
 }
 
 main()

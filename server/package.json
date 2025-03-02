@@ -49,6 +49,7 @@
     "timestamp": "ts-node ./tooling/timestamp-conversion.ts",
     "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json",
     "update-google-sheet-members": "ts-node ./tooling/update-google-sheet-members.ts",
-    "prune-cloudflare-deployments": "ts-node ./tooling/prune-cloudflare-deployments.ts"
+    "prune-cloudflare-deployments": "ts-node ./tooling/prune-cloudflare-deployments.ts",
+    "delete-all-non-members": "ts-node ./tooling/delete-non-members.ts"
   }
 }
