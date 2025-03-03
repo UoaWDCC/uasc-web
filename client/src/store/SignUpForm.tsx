@@ -64,7 +64,7 @@ const actions = {
         const { email, confirmEmail, phone_number, emergency_contact } =
           getState()
         const validRegex =
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]{2,}$/
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
         if (!email.match(validRegex)) {
           invalidFields.push("Email")
