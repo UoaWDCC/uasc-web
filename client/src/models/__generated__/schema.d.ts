@@ -59,6 +59,16 @@ export interface paths {
      */
     get: operations["GetAllEvents"];
   };
+  "/events/for-members": {
+    /**
+     * @description Fetches latest events starting from the event with the latest starting date
+     * (**NOT** the signup open date) based on limit. Is paginated with a cursor.
+     *
+     * This endpoint is only accessible to members as it includes the sign up links
+     * members-only events
+     */
+    get: operations["GetAllEventsAsMember"];
+  };
   "/bookings": {
     /** @description Fetches all bookings for a user based on their UID. */
     get: operations["GetAllBookings"];
@@ -347,6 +357,8 @@ export interface components {
        * @example 30
        */
       max_occupancy?: number;
+      /** @description If `true` then only members should see the sign up link */
+      is_members_only?: boolean;
     };
     DocumentDataWithUid_Event_: components["schemas"]["Event"] & {
       /** @description The ID of the document for which this document contains data. */
@@ -737,6 +749,8 @@ export interface components {
        * @example 30
        */
       max_occupancy?: number;
+      /** @description If `true` then only members should see the sign up link */
+      is_members_only?: boolean;
     };
     GetEventResponse: {
       error?: string;
@@ -940,6 +954,29 @@ export interface operations {
    * (**NOT** the signup open date) based on limit. Is paginated with a cursor
    */
   GetAllEvents: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
+      };
+    };
+    responses: {
+      /** @description Successfully fetched all events */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAllEventsResponse"];
+        };
+      };
+    };
+  };
+  /**
+   * @description Fetches latest events starting from the event with the latest starting date
+   * (**NOT** the signup open date) based on limit. Is paginated with a cursor.
+   *
+   * This endpoint is only accessible to members as it includes the sign up links
+   * members-only events
+   */
+  GetAllEventsAsMember: {
     parameters: {
       query?: {
         limit?: number;

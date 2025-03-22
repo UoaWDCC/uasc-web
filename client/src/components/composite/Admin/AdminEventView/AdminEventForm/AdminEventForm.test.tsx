@@ -52,6 +52,8 @@ describe("AdminEventForm", () => {
       target: { value: "Test Location" }
     })
 
+    fireEvent.click(getByTestId(AdminEventFormKeys.IS_MEMBERS_ONLY))
+
     fireEvent.click(getByTestId("post-event-button"))
 
     await waitFor(() => {
@@ -60,7 +62,8 @@ describe("AdminEventForm", () => {
           title: "Test Event",
           sign_up_start_date: expect.any(Object),
           physical_start_date: expect.any(Object),
-          location: "Test Location"
+          location: "Test Location",
+          is_members_only: true
         })
       })
     })

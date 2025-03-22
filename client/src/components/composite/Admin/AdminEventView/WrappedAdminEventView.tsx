@@ -22,7 +22,7 @@ const WrappedAdminEventView = () => {
     isFetching,
     fetchNextPage,
     isFetchingNextPage
-  } = useLatestEventsQuery()
+  } = useLatestEventsQuery(true)
 
   const { mutateAsync: editEvent } = useEditEventMutation()
 
