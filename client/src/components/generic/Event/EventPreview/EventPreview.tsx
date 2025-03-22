@@ -39,7 +39,7 @@ export interface IEventsCardPreview {
   /**
    * The text to display on the view button
    */
-  viewButtonText?: string,
+  viewButtonText?: string
 
   /**
    * If the event is members only
@@ -105,7 +105,10 @@ const EventsCardPreview = ({
       </div>
       <div className="mb-4 flex flex-col sm:ml-4 ">
         <div>
-          <h5 className=" text-sm font-bold">{date}<MembersOnlyMessage isMembersOnly={!!isMembersOnly} /></h5>
+          <h5 className=" text-sm font-bold">
+            {date}
+            <MembersOnlyMessage isMembersOnly={!!isMembersOnly} />
+          </h5>
           <p className="text-gray-4 pt-1 text-lg">
             {isPastEvent
               ? "Event has ended."

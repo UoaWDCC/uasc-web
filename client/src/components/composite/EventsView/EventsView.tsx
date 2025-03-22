@@ -102,7 +102,7 @@ const EventsPage = ({
           EventDateComparisons.isPastEvent(
             new Date(DateUtils.timestampMilliseconds(physical_start_date)),
             physical_end_date &&
-            new Date(DateUtils.timestampMilliseconds(physical_end_date))
+              new Date(DateUtils.timestampMilliseconds(physical_end_date))
           )
         ) {
           buf.pastEvents.push(event)
@@ -178,12 +178,12 @@ const EventsPage = ({
         date={EventMessages.eventDateRange(
           new Date(DateUtils.timestampMilliseconds(physical_start_date)),
           physical_end_date &&
-          new Date(DateUtils.timestampMilliseconds(physical_end_date))
+            new Date(DateUtils.timestampMilliseconds(physical_end_date))
         )}
         isPastEvent={EventDateComparisons.isPastEvent(
           new Date(DateUtils.timestampMilliseconds(physical_start_date)),
           physical_end_date &&
-          new Date(DateUtils.timestampMilliseconds(physical_end_date))
+            new Date(DateUtils.timestampMilliseconds(physical_end_date))
         )}
         image={selectedEventObject.image_url || IMAGE_PLACEHOLDER_SRC}
         location={selectedEventObject.location}

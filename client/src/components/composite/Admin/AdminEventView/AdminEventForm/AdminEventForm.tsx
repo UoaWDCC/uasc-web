@@ -128,10 +128,10 @@ const AdminEventForm = ({
         undefined,
       physical_end_date: physical_end_date
         ? Timestamp.fromDate(
-          new Date(
-            (physical_end_date as string).replace(/-/g, "/").replace("T", " ")
+            new Date(
+              (physical_end_date as string).replace(/-/g, "/").replace("T", " ")
+            )
           )
-        )
         : undefined,
       is_members_only: data.get(AdminEventFormKeys.IS_MEMBERS_ONLY) === "on"
     }
@@ -303,10 +303,12 @@ const AdminEventForm = ({
           type="url"
           label="Google Forms Link"
         />
-        <Checkbox label="Only show sign up link to members?"
+        <Checkbox
+          label="Only show sign up link to members?"
           name={AdminEventFormKeys.IS_MEMBERS_ONLY}
           data-testid={AdminEventFormKeys.IS_MEMBERS_ONLY}
-          defaultChecked={!!defaultData?.is_members_only} />
+          defaultChecked={!!defaultData?.is_members_only}
+        />
         <Button
           disabled={isSubmitting}
           type="submit"
