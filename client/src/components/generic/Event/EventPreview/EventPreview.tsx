@@ -1,6 +1,7 @@
 // 4 props: 3 string, 1 image
 import Image from "next/image"
 import Arrow from "@/assets/icons/rightarrow.svg"
+import { MembersOnlyMessage } from "../EventUtils/EventUtils"
 export type EventCardPreviewVariant = "regular" | "admin"
 /**
  * The interface (props) associated with {@link EventsCardPreview}
@@ -38,7 +39,13 @@ export interface IEventsCardPreview {
   /**
    * The text to display on the view button
    */
-  viewButtonText?: string
+  viewButtonText?: string,
+
+  /**
+   * If the event is members only
+   */
+  isMembersOnly?: boolean
+
   /**
    * The variant of the card to render
    */
@@ -77,6 +84,7 @@ const EventsCardPreview = ({
   image = "",
   signUpOpenDate,
   isPastEvent,
+  isMembersOnly,
   viewButtonText = "view more",
   variant = "regular"
 }: IEventsCardPreview) => {
@@ -97,7 +105,7 @@ const EventsCardPreview = ({
       </div>
       <div className="mb-4 flex flex-col sm:ml-4 ">
         <div>
-          <h5 className=" text-sm font-bold">{date}</h5>
+          <h5 className=" text-sm font-bold">{date}<MembersOnlyMessage isMembersOnly={!!isMembersOnly} /></h5>
           <p className="text-gray-4 pt-1 text-lg">
             {isPastEvent
               ? "Event has ended."

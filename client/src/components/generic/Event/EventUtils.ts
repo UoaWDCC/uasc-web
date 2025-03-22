@@ -167,6 +167,7 @@ export const EventRenderingUtils = {
         eventSetter(event.id)
       },
       viewButtonText: buttonText,
+      isMembersOnly: event.is_members_only,
       variant
     }
   }

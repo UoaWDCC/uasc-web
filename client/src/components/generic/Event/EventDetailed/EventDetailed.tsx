@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { MembersOnlyMessage } from "../EventUtils/EventUtils"
 /**
  * Props for event card
  */
@@ -52,7 +53,13 @@ export interface IEventDetailed {
   /**
    * The image cover on the top of the card
    */
-  image: string
+  image: string,
+
+  /**
+   * If the event permits the current user to have access to sign up
+   */
+  hasSignUpRights?: boolean
+  isMembersOnly?: boolean
 }
 
 /**
@@ -69,8 +76,11 @@ const EventDetailed = ({
   image,
   signUpOpenDate,
   googleFormLink,
-  isPastEvent
+  isPastEvent,
+  hasSignUpRights,
+  isMembersOnly
 }: IEventDetailed) => {
+
   const Divider = () => {
     return <div className="bg-gray-3 mb-4 mt-4 h-[1px] w-full"></div>
   }
@@ -90,7 +100,7 @@ const EventDetailed = ({
             </h5>
           )}
           <h5 className={`font-bold ${isPastEvent && "line-through"}`}>
-            {date}
+            {date} <MembersOnlyMessage isMembersOnly={!!isMembersOnly} />
           </h5>
 
           <h3 className="text-dark-blue-100 mt-1 font-bold">{title}</h3>
@@ -99,8 +109,7 @@ const EventDetailed = ({
 
           <div className="flex flex-col gap-4">
             <div className="whitespace-pre-line text-left">{content}</div>
-
-            {signUpOpenDate &&
+            {hasSignUpRights ? <>{signUpOpenDate &&
               !isPastEvent &&
               googleFormLink &&
               (signUpOpenDate <= new Date() ? (
@@ -111,7 +120,7 @@ const EventDetailed = ({
                       CLICK ME TO GO TO FORM
                     </a>
                   </h5>
-                  <iframe height={"500"} src={googleFormLink} />
+                  <iframe height={"500"} src={googleFormLink} title="Google Forms Sign Up" />
                 </>
               ) : (
                 <>
@@ -119,7 +128,9 @@ const EventDetailed = ({
                     Sign ups open at {signUpOpenDate.toLocaleString()}
                   </h5>
                 </>
-              ))}
+              ))}</> :
+              <h5 className="text-dark-blue-100 font-bold">Members Only Event {" - "}
+                <a href="/register" className="underline text-light-blue-100">Become a member</a></h5>}
           </div>
         </div>
 
