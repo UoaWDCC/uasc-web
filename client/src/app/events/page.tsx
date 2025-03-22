@@ -2,6 +2,7 @@
 
 import EventsPage from "@/components/composite/EventsView/EventsView"
 import { useLatestEventsQuery } from "@/services/Event/EventQueries"
+import { useAppData } from "@/store/Store"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 
@@ -18,6 +19,9 @@ const Events = () => {
   const [preselectedEventId, setPreselectedEventId] = useState<
     string | undefined
   >(params.get(EVENT_QUERY_KEY) || undefined)
+
+  const [{ currentUserClaims }] = useAppData()
+  const isMember = !!currentUserClaims?.member
 
   /**
    * Set the search params (i.e `/events?id={id}`) to the required value
@@ -41,7 +45,8 @@ const Events = () => {
     isFetching,
     fetchNextPage,
     isFetchingNextPage
-  } = useLatestEventsQuery()
+  } = useLatestEventsQuery(isMember)
+
   const rawEvents = useMemo(() => {
     const flattenedEvents = data?.pages.flatMap((page) => {
       return page.data || []
@@ -63,6 +68,7 @@ const Events = () => {
             fetchNextPage()
           }
         }}
+        isMember={isMember}
       />
     </>
   )

@@ -438,6 +438,10 @@
 						"format": "double",
 						"description": "Max number of attendees at this event, left as optional for uncapped",
 						"example": 30
+					},
+					"is_members_only": {
+						"type": "boolean",
+						"description": "If `true` then only members should see the sign up link"
 					}
 				},
 				"required": [
@@ -1402,6 +1406,10 @@
 						"format": "double",
 						"description": "Max number of attendees at this event, left as optional for uncapped",
 						"example": 30
+					},
+					"is_members_only": {
+						"type": "boolean",
+						"description": "If `true` then only members should see the sign up link"
 					}
 				},
 				"type": "object",
@@ -1826,6 +1834,51 @@
 				},
 				"description": "Fetches latest events starting from the event with the latest starting date\n(**NOT** the signup open date) based on limit. Is paginated with a cursor",
 				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 20,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "cursor",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/events/for-members": {
+			"get": {
+				"operationId": "GetAllEventsAsMember",
+				"responses": {
+					"200": {
+						"description": "Successfully fetched all events",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetAllEventsResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Fetches latest events starting from the event with the latest starting date\n(**NOT** the signup open date) based on limit. Is paginated with a cursor.\n\nThis endpoint is only accessible to members as it includes the sign up links\nmembers-only events",
+				"security": [
+					{
+						"jwt": [
+							"member"
+						]
+					}
+				],
 				"parameters": [
 					{
 						"in": "query",

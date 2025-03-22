@@ -49,6 +49,8 @@ interface IEventsPage {
    * @param id - The new selected event ID.
    */
   onSelectedEventIdChange?: (id?: string) => void
+
+  isMember?: boolean
 }
 
 /**
@@ -74,7 +76,8 @@ const EventsPage = ({
   isLoading,
   fetchMoreEvents,
   preselectedEventId,
-  onSelectedEventIdChange
+  onSelectedEventIdChange,
+  isMember
 }: IEventsPage) => {
   const [selectedEventId, setSelectedEventId] = useState<string | undefined>(
     preselectedEventId
@@ -164,7 +167,8 @@ const EventsPage = ({
       physical_end_date,
       physical_start_date,
       description,
-      title
+      title,
+      is_members_only
     } = selectedEventObject
     return (
       <EventDetailed
@@ -189,9 +193,11 @@ const EventsPage = ({
         googleFormLink={google_forms_link}
         content={<p>{description}</p>}
         title={title}
+        hasSignUpRights={!is_members_only || isMember}
+        isMembersOnly={is_members_only}
       />
     )
-  }, [selectedEventObject, eventSelectionHandler])
+  }, [selectedEventObject, eventSelectionHandler, isMember])
 
   const previewCurrentEvents =
     eventList.upcomingAndCurrentEvents?.map((event) => {

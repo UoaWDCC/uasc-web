@@ -1,5 +1,5 @@
 import EventService from "data-layer/services/EventService"
-import { request } from "../routes.setup"
+import { memberToken, request } from "../routes.setup"
 import { Event } from "../../data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 
@@ -37,6 +37,16 @@ const event3: Event = {
   sign_up_start_date: laterStartDate,
   sign_up_end_date: earlierStartDate,
   google_forms_link: "https://random.com/event3"
+}
+
+const membersOnlyEvent: Event = {
+  title: "Another Event",
+  location: "Krispy Kreme",
+  physical_start_date: laterStartDate,
+  sign_up_start_date: earlierStartDate,
+  sign_up_end_date: earlierStartDate,
+  google_forms_link: "https://random.com/event3",
+  is_members_only: true
 }
 
 describe("EventController endpoint tests", () => {
@@ -91,6 +101,44 @@ describe("EventController endpoint tests", () => {
           google_forms_link: expect.any(String)
         })
       )
+    })
+
+    it("should not include google_forms_link if event is members only", async () => {
+      await eventService.createEvent(membersOnlyEvent)
+
+      const res = await request.get("/events").send()
+
+      expect(res.body.data).toContainEqual(
+        expect.not.objectContaining({
+          google_forms_link: expect.any(String)
+        })
+      )
+    })
+
+    describe("GET /events/for-members", () => {
+      it("is unauthorized if user does not have permission", async () => {
+        await eventService.createEvent(membersOnlyEvent)
+
+        const res = await request.get("/events/for-members").send()
+
+        expect(res.status).toEqual(401)
+      })
+
+      it("should include google_forms_link if user is a member", async () => {
+        await eventService.createEvent(membersOnlyEvent)
+
+        const requestWithMember = await request
+          .get("/events/for-members")
+          .set("Authorization", `Bearer ${memberToken}`)
+          .send()
+
+        expect(requestWithMember.status).toEqual(200)
+        expect(requestWithMember.body.data).toContainEqual(
+          expect.objectContaining({
+            google_forms_link: "https://random.com/event3"
+          })
+        )
+      })
     })
   })
 })

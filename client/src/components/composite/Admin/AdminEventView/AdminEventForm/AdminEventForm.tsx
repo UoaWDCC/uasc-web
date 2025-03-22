@@ -1,3 +1,4 @@
+import Checkbox from "@/components/generic/Checkbox/Checkbox"
 import {
   EventMessages,
   EventRenderingUtils
@@ -74,7 +75,8 @@ export const AdminEventFormKeys = {
   SIGN_UP_END_DATE: "sign up end date",
   PHYSICAL_START_DATE: "physical start date",
   PHYSICAL_END_DATE: "physical end date",
-  MAX_OCCUPANCY: "max signups"
+  MAX_OCCUPANCY: "max signups",
+  IS_MEMBERS_ONLY: "is members only"
 } as const
 
 const Divider = () => <span className="bg-gray-3 my-3 h-[1px] w-full" />
@@ -130,7 +132,8 @@ const AdminEventForm = ({
               (physical_end_date as string).replace(/-/g, "/").replace("T", " ")
             )
           )
-        : undefined
+        : undefined,
+      is_members_only: data.get(AdminEventFormKeys.IS_MEMBERS_ONLY) === "on"
     }
 
     try {
@@ -299,6 +302,12 @@ const AdminEventForm = ({
           defaultValue={defaultData?.google_forms_link}
           type="url"
           label="Google Forms Link"
+        />
+        <Checkbox
+          label="Only show sign up link to members?"
+          name={AdminEventFormKeys.IS_MEMBERS_ONLY}
+          data-testid={AdminEventFormKeys.IS_MEMBERS_ONLY}
+          defaultChecked={!!defaultData?.is_members_only}
         />
         <Button
           disabled={isSubmitting}

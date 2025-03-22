@@ -188,6 +188,11 @@ export interface Event {
    * @example 30
    */
   max_occupancy?: number
+
+  /**
+   * If `true` then only members should see the sign up link
+   */
+  is_members_only?: boolean
 }
 
 /**
