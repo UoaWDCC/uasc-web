@@ -63,7 +63,10 @@ export class EventController extends Controller {
 
   /**
    * Fetches latest events starting from the event with the latest starting date
-   * (**NOT** the signup open date) based on limit. Is paginated with a cursor
+   * (**NOT** the signup open date) based on limit. Is paginated with a cursor.
+   *
+   * This endpoint is only accessible to members as it includes the sign up links
+   * members-only events
    */
   @Get("for-members")
   @Security("jwt", ["member"])
