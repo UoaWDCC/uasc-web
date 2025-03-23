@@ -1,0 +1,26 @@
+name: Sync Stable Branch with Master
+
+on:
+    workflow_dispatch:
+
+jobs:
+  update-stable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+
+      - name: Update stable branch to match master
+        run: |
+          echo "Updating stable branch to match master branch"
+          git checkout stable || git checkout -b stable
+          git reset --hard origin/master
+          git push -f origin stable
+          echo "Successfully updated stable branch to match master"
