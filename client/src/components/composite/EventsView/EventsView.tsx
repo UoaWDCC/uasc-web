@@ -188,6 +188,7 @@ const EventsPage = ({
         image={selectedEventObject.image_url || IMAGE_PLACEHOLDER_SRC}
         location={selectedEventObject.location}
         signUpOpenDate={
+          sign_up_start_date &&
           new Date(DateUtils.timestampMilliseconds(sign_up_start_date))
         }
         googleFormLink={google_forms_link}

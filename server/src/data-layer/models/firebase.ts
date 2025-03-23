@@ -162,7 +162,7 @@ export interface Event {
    * Note that this date is in UTC time.
    * Use the same start and end date to indicate a 1 day signup period.
    */
-  sign_up_start_date: Timestamp
+  sign_up_start_date?: Timestamp
 
   /**
    * The signup period end date.

@@ -717,10 +717,13 @@ export class AdminController extends Controller {
       const eventService = new EventService()
       await eventService.createEvent({
         ...body.data,
-        sign_up_start_date: new Timestamp(
-          body.data.sign_up_start_date.seconds,
-          body.data.sign_up_start_date.nanoseconds
-        ),
+        // Optional field
+        ...(body.data.sign_up_start_date && {
+          sign_up_start_date: new Timestamp(
+            body.data.sign_up_start_date.seconds,
+            body.data.sign_up_start_date.nanoseconds
+          )
+        }),
         // Optional field
         ...(body.data.sign_up_end_date && {
           sign_up_end_date: new Timestamp(
@@ -741,7 +744,8 @@ export class AdminController extends Controller {
         })
       })
       this.setStatus(201)
-    } catch {
+    } catch (e) {
+      console.error(e)
       this.setStatus(500)
     }
   }

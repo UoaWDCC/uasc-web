@@ -446,7 +446,6 @@
 				},
 				"required": [
 					"title",
-					"sign_up_start_date",
 					"physical_start_date"
 				],
 				"type": "object",
