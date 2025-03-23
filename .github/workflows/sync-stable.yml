@@ -3,6 +3,9 @@ name: Sync Stable Branch with Master
 on:
     workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   update-stable:
     runs-on: ubuntu-latest
