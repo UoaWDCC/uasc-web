@@ -103,14 +103,12 @@ const AdminEventForm = ({
     const data = new FormData(e.currentTarget)
 
     const physical_end_date = data.get(AdminEventFormKeys.PHYSICAL_END_DATE)
+    const sign_up_start_date = data.get(AdminEventFormKeys.SIGN_UP_START_DATE)
     const sign_up_end_date = data.get(AdminEventFormKeys.SIGN_UP_END_DATE)
 
     const body: CreateEventBody["data"] = {
       // Required Fields
       title: data.get(AdminEventFormKeys.TITLE) as string,
-      sign_up_start_date: Timestamp.fromDate(
-        new Date(data.get(AdminEventFormKeys.SIGN_UP_START_DATE) as string)
-      ),
       physical_start_date: Timestamp.fromDate(
         new Date(data.get(AdminEventFormKeys.PHYSICAL_START_DATE) as string)
       ),
@@ -119,6 +117,9 @@ const AdminEventForm = ({
         AdminEventFormKeys.GOOGLE_FORMS_LINK
       ) as string,
       description: data.get(AdminEventFormKeys.DESCRIPTION) as string,
+      sign_up_start_date: sign_up_start_date
+        ? Timestamp.fromDate(new Date(sign_up_start_date as string))
+        : undefined,
       sign_up_end_date: sign_up_end_date
         ? Timestamp.fromDate(new Date(sign_up_end_date as string))
         : undefined,
