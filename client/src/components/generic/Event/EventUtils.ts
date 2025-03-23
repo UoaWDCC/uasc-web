@@ -131,7 +131,6 @@ export const EventRenderingUtils = {
     variant?: EventCardPreviewVariant
   ): EventCardPreviewWithKey => {
     let eventStartDate
-
     if (event.physical_start_date) {
       eventStartDate = new Date(
         DateUtils.timestampMilliseconds(event?.physical_start_date)
@@ -139,16 +138,18 @@ export const EventRenderingUtils = {
     }
 
     let eventEndDate
-
     if (event.physical_end_date) {
       eventEndDate = new Date(
         DateUtils.timestampMilliseconds(event?.physical_end_date)
       )
     }
 
-    const signUpStartDate = new Date(
-      DateUtils.timestampMilliseconds(event.sign_up_start_date)
-    )
+    let signUpStartDate
+    if (event.sign_up_start_date) {
+      signUpStartDate = new Date(
+        DateUtils.timestampMilliseconds(event.sign_up_start_date)
+      )
+    }
 
     return {
       key: event.id || event.title,
@@ -158,7 +159,9 @@ export const EventRenderingUtils = {
       image: event?.image_url || IMAGE_PLACEHOLDER_SRC,
       title: event?.title || "",
       location: event?.location,
-      signUpOpenDate: EventMessages.signUpOpen(signUpStartDate),
+      signUpOpenDate: signUpStartDate
+        ? EventMessages.signUpOpen(signUpStartDate)
+        : undefined,
       isPastEvent: EventDateComparisons.isPastEvent(
         eventStartDate,
         eventEndDate

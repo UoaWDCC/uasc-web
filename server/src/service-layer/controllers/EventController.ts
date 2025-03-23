@@ -28,6 +28,9 @@ export class EventController extends Controller {
       const currentTime = Timestamp.now()
 
       res.events.forEach((event) => {
+        if (!event.sign_up_start_date) {
+          return
+        }
         const eventStartTime = event.sign_up_start_date
         const timeDifference =
           eventStartTime.toMillis() - currentTime.toMillis()
@@ -42,6 +45,7 @@ export class EventController extends Controller {
 
       return { nextCursor: res.nextCursor, data: res.events }
     } catch (e) {
+      console.error(e)
       return {
         error: "Something went wrong when fetching all events, please try again"
       }

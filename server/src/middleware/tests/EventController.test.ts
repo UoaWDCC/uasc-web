@@ -49,6 +49,13 @@ const membersOnlyEvent: Event = {
   is_members_only: true
 }
 
+const noSignUpStartDate: Event = {
+  title: "Another Event",
+  location: "Krispy Kreme",
+  physical_start_date: laterStartDate,
+  google_forms_link: "https://random.com/event3"
+}
+
 describe("EventController endpoint tests", () => {
   const eventService = new EventService()
 
@@ -89,6 +96,14 @@ describe("EventController endpoint tests", () => {
           google_forms_link: "https://random.com/event2"
         })
       )
+    })
+
+    it("should be able to get events with no start date", async () => {
+      const { id } = await eventService.createEvent(noSignUpStartDate)
+
+      const res = await request.get("/events").send()
+
+      expect(res.body.data).toContainEqual(expect.objectContaining({ id }))
     })
 
     it("should not include google_forms_link if event is not within 1 minute", async () => {

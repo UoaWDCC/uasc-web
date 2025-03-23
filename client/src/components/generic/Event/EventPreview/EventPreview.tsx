@@ -14,7 +14,7 @@ export interface IEventsCardPreview {
   /**
    * A **pre-formatted** string to inform of when sign ups open for the event
    */
-  signUpOpenDate: string
+  signUpOpenDate?: string
   /**
    * A **pre-formatted** string about when the event occurs
    */
@@ -109,11 +109,13 @@ const EventsCardPreview = ({
             {date}
             <MembersOnlyMessage isMembersOnly={!!isMembersOnly} />
           </h5>
-          <p className="text-gray-4 pt-1 text-lg">
-            {isPastEvent
-              ? "Event has ended."
-              : signUpOpenDate || "unknown date"}
-          </p>
+          {signUpOpenDate && (
+            <p className="text-gray-4 pt-1 text-lg">
+              {isPastEvent
+                ? "Event has ended."
+                : signUpOpenDate || "unknown date"}
+            </p>
+          )}
           <h2 className="text-dark-blue-100 sm:text-h2 text-h3">{title}</h2>
         </div>
         <p className="text-gray-4 pt-1 text-lg">{location}</p>
