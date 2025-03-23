@@ -229,7 +229,7 @@ const AdminEventForm = ({
             data-testid={AdminEventFormKeys.SIGN_UP_START_DATE}
             type="datetime-local"
             defaultValue={
-              defaultData &&
+              defaultData?.sign_up_start_date &&
               EventRenderingUtils.dateTimeLocalPlaceHolder(
                 new Date(
                   DateUtils.timestampMilliseconds(
@@ -238,8 +238,7 @@ const AdminEventForm = ({
                 )
               )
             }
-            label="Sign Up Start Date"
-            required
+            label="Sign Up Start Date (If exists)"
           />
           <TextInput
             name={AdminEventFormKeys.SIGN_UP_END_DATE}
@@ -301,7 +300,7 @@ const AdminEventForm = ({
           data-testid={AdminEventFormKeys.GOOGLE_FORMS_LINK}
           defaultValue={defaultData?.google_forms_link}
           type="url"
-          label="Google Forms Link"
+          label="Google Forms Link (You must set sign up start date to show this)"
         />
         <Checkbox
           label="Only show sign up link to members?"

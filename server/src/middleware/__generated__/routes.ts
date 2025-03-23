@@ -188,7 +188,7 @@ const models: TsoaRoute.Models = {
             "image_url": {"dataType":"string"},
             "location": {"dataType":"string"},
             "google_forms_link": {"dataType":"string"},
-            "sign_up_start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
+            "sign_up_start_date": {"ref":"FirebaseFirestore.Timestamp"},
             "sign_up_end_date": {"ref":"FirebaseFirestore.Timestamp"},
             "physical_start_date": {"ref":"FirebaseFirestore.Timestamp","required":true},
             "physical_end_date": {"ref":"FirebaseFirestore.Timestamp"},

@@ -334,7 +334,7 @@ export interface components {
        * Note that this date is in UTC time.
        * Use the same start and end date to indicate a 1 day signup period.
        */
-      sign_up_start_date: components["schemas"]["FirebaseFirestore.Timestamp"];
+      sign_up_start_date?: components["schemas"]["FirebaseFirestore.Timestamp"];
       /**
        * @description The signup period end date.
        * Note that this date is in UTC time.
