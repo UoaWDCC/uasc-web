@@ -46,6 +46,7 @@ export class EventController extends Controller {
       return { nextCursor: res.nextCursor, data: res.events }
     } catch (e) {
       console.error(e)
+      this.setStatus(500)
       return {
         error: "Something went wrong when fetching all events, please try again"
       }
