@@ -60,14 +60,14 @@ export const EventMessages = {
    */
   eventDateRange: (eventStartDate: Date, eventEndDate?: Date) => {
     const startDateMessage =
-      `${EventDateFormatting.shortDayName(eventStartDate)} ${eventStartDate.toLocaleDateString()} • ${EventDateFormatting.shortTime(eventStartDate)}` as const
+      `${EventDateFormatting.shortDayName(eventStartDate)} ${eventStartDate.toLocaleDateString("en-NZ")} • ${EventDateFormatting.shortTime(eventStartDate)}` as const
 
     if (!eventEndDate) {
       return startDateMessage
     }
 
     const endDateMessage =
-      `${EventDateFormatting.shortDayName(eventEndDate)} ${eventEndDate.toLocaleDateString()} • ${EventDateFormatting.shortTime(eventEndDate)}` as const
+      `${EventDateFormatting.shortDayName(eventEndDate)} ${eventEndDate.toLocaleDateString("en-NZ")} • ${EventDateFormatting.shortTime(eventEndDate)}` as const
 
     return `${startDateMessage} - ${endDateMessage}`
   }
