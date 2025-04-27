@@ -56,7 +56,7 @@ const HomeComponent = ({
               lodgeBookingPricingBannerMessages.priceInformation(
                 lodgePricing.normal
               ),
-            disclaimer: lodgeBookingPricingBannerMessages.priceInformation(
+            disclaimer: lodgeBookingPricingBannerMessages.disclaimer(
               lodgePricing.moreExpensive
             )
           }}
