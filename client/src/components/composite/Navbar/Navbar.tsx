@@ -72,13 +72,21 @@ const Navbar = ({
       <div className="flex w-full">
         <Logo />
         <div
-          className={`left-0 md:ml-auto ${isOpen ? "flex" : "hidden"} bg-gray-1 absolute top-12 h-fit min-h-screen
-          w-full flex-col items-center justify-start gap-2 self-end pt-8 md:relative md:top-0 md:ml-auto
-          md:flex md:min-h-full md:flex-row md:items-end md:justify-end md:gap-8 md:bg-none md:pr-4 md:pt-0`}
+          className={`
+            absolute left-0 top-12 h-fit min-h-screen w-full
+            flex-col items-center justify-start gap-2 self-end pt-8
+            ${isOpen ? "flex" : "hidden"}
+            bg-gray-1
+            
+            md:relative md:top-0 md:ml-auto md:flex
+            md:min-h-full md:flex-row md:items-end md:justify-end
+            md:gap-7 md:bg-none md:pr-4 md:pt-0
+          `}
         >
           <WrappedTab to="/">Home</WrappedTab>
           <WrappedTab to="/bookings">Book the Lodge!</WrappedTab>
           <WrappedTab to="/events">Events</WrappedTab>
+          <WrappedTab to="/shop">Shop</WrappedTab>
           <span className="hidden md:block">
             <WrappedMenuTab displayName="about" to="/about">
               <AboutMenuItemsFull />

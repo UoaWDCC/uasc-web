@@ -52,6 +52,7 @@ export default defineConfig({
               ),
 
             // Regular document types
+            S.documentTypeListItem("shop-item").title("Shop Item"),
             S.documentTypeListItem("about-item").title("About Item"),
             S.documentTypeListItem("contact-detail").title("Contact Detail"),
             S.documentTypeListItem("life-member").title("Life Member"),

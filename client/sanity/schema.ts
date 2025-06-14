@@ -6,6 +6,7 @@ import { type SchemaTypeDefinition } from "sanity"
 import { CommitteeMemberSchema } from "@/models/sanity/CommitteeMembers/Schema"
 import { LifeMemberSchema } from "@/models/sanity/LifeMembers/Schema"
 import { PoliciesSchema } from "@/models/sanity/Policies/Schema"
+import { ShopItemSchema } from "@/models/sanity/ShopItem/Schema"
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -15,6 +16,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     LodgeInfoSchema,
     PoliciesSchema,
     CommitteeMemberSchema,
-    LifeMemberSchema
+    LifeMemberSchema,
+    ShopItemSchema
   ]
 }
