@@ -1,0 +1,3 @@
+export enum RedirectKeys {
+  MEMBERS_GOOGLE_SHEET_LINK = "MEMBERS_GOOGLE_SHEET_LINK"
+}

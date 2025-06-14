@@ -2604,6 +2604,50 @@
 					}
 				]
 			}
+		},
+		"/admin/redirect/{redirectKey}": {
+			"get": {
+				"operationId": "GetEnvUrl",
+				"responses": {
+					"200": {
+						"description": "Successfully retrieved URL",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"error": {
+											"type": "string"
+										},
+										"url": {
+											"type": "string"
+										}
+									},
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns a URL specified in environment variables",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- Key to look up in environment variables for the URL",
+						"in": "path",
+						"name": "redirectKey",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
 		}
 	},
 	"servers": [

@@ -20,6 +20,7 @@ import { UserRecord } from "firebase-admin/auth"
 import BookingHistoryService from "data-layer/services/BookingHistoryService"
 import { Event } from "data-layer/models/firebase"
 import EventService from "data-layer/services/EventService"
+import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -903,6 +904,76 @@ describe("AdminController endpoint tests", () => {
       const event = await eventService.getEventById(id1)
 
       expect(event).not.toBeDefined()
+    })
+  })
+
+  describe("/admin/redirect/{redirectKey}", () => {
+    const originalEnv = process.env
+    beforeEach(() => {
+      process.env["REDIRECT_" + RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK] =
+        "https://test.example.com"
+    })
+
+    afterEach(() => {
+      process.env = originalEnv
+    })
+
+    it("should return the correct URL for valid redirect key", async () => {
+      const res = await request
+        .get(`/admin/redirect/${RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK}`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
+
+      expect(res.status).toEqual(200)
+      expect(res.body.url).toEqual("https://test.example.com")
+    })
+
+    it("should be case insensitive for redirect keys", async () => {
+      const res = await request
+        .get(
+          `/admin/redirect/${RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK.toLowerCase()}`
+        )
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
+
+      expect(res.status).toEqual(200)
+      expect(res.body.url).toEqual("https://test.example.com")
+    })
+
+    it("should return 404 for invalid redirect keys", async () => {
+      const res = await request
+        .get("/admin/redirect/nonexistent")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
+
+      expect(res.status).toEqual(404)
+      expect(res.body.error).toBeDefined()
+    })
+
+    it("should return 404 when environment variable is not set", async () => {
+      delete process.env.unset
+
+      const res = await request
+        .get(`/admin/redirect/unset`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
+
+      expect(res.status).toEqual(404)
+      expect(res.body.error).toBeDefined()
+    })
+
+    it("should not be accessible by non-admin users", async () => {
+      let res = await request
+        .get("/admin/redirect/test")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send()
+      expect(res.status).toEqual(401)
+
+      res = await request
+        .get("/admin/redirect/test")
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send()
+      expect(res.status).toEqual(401)
     })
   })
 })
