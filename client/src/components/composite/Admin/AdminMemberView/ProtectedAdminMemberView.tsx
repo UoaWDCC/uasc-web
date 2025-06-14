@@ -197,7 +197,7 @@ const WrappedAdminMemberView = () => {
         fetchNextPage={() => {
           !isFetchingNextPage && hasNextPage && fetchNextPage()
         }}
-        handleGoToGoogleForm={() => {
+        handleGoToGoogleSheet={() => {
           if (memberGoogleSheetData) {
             window.open(memberGoogleSheetData, "_blank")
           }
