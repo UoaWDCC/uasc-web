@@ -1,5 +1,5 @@
 import {
-  useMemberGoogleSheet,
+  useMemberGoogleSheetUrlQuery,
   useUsersQuery
 } from "@/services/Admin/AdminQueries"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
@@ -130,7 +130,7 @@ const WrappedAdminMemberView = () => {
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
   const { mutateAsync: deleteUser, isPending } = useDeleteUserMutation()
-  const { data: memberGoogleSheetData } = useMemberGoogleSheet()
+  const { data: memberGoogleSheetData } = useMemberGoogleSheetUrlQuery()
 
   const handleExportUsers = useCallback(() => {
     if (hasNextPage) {

@@ -53,7 +53,7 @@ export function useGetEventQuery() {
   })
 }
 
-export function useMemberGoogleSheet() {
+export function useMemberGoogleSheetUrlQuery() {
   return useQuery({
     queryKey: ["go-to-google-sheet"],
     queryFn: AdminService.getMemberGoogleSheetUrl
