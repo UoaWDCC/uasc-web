@@ -149,3 +149,12 @@ jobs:
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{secrets.STAGING_SANITY_PROJECT_ID}}
           NEXT_PUBLIC_SANITY_DATASET: staging
           NEXT_CONFIG_ENV: staging
+
+  verify:
+    name: Verify
+    needs: [check_changes, lint, prettier, test, codegen, build]
+    runs-on: ubuntu-latest
+    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.lint.result == 'success' && needs.prettier.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success' && needs.build.result == 'success')) }}
+    steps:
+      - name: All checks passed
+        run: echo "All checks passed!"
