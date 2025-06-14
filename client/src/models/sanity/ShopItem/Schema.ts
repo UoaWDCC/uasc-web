@@ -54,7 +54,11 @@ export const ShopItemSchema: SchemaTypeDefinition = {
       name: "description",
       title: "Description",
       type: "text",
-      description: "A brief description of the item."
+      description: "A brief description of the item.",
+      validation: (Rule) =>
+        Rule.max(250).warning(
+          "Description should be concise for better display"
+        )
     })
   ]
 }
