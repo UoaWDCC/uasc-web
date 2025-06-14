@@ -153,7 +153,7 @@ jobs:
   build-server:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
-    name: Build
+    name: Build Server
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
