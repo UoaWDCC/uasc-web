@@ -107,8 +107,8 @@ jobs:
 
       - name: Run all tests
         uses: ./.github/ci-actions/test
-        env:
-          API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+        with:
+          api-key: ${{ secrets.VITE_FIREBASE_API_KEY }}
 
   code-gen:
     needs: [check_changes, setup]
