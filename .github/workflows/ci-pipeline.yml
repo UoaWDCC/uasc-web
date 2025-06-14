@@ -1,0 +1,206 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check_changes:
+    name: Check Changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      exists: ${{ steps.filter.outputs.exists }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Filter changes
+        uses: yumemi-inc/path-filter@v2
+        id: filter
+        with:
+          patterns: |
+            **
+            !**.md
+            !.gitignore
+            !.gitattributes
+            !.vscode/**
+            !.env.example
+
+  setup:
+    name: Setup
+    needs: check_changes
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Cache yarn node_modules
+        uses: actions/cache@v4
+        id: cache-node-modules
+        with:
+          path: |
+            **/node_modules
+            node_modules
+            .yarn
+          key: node-modules-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            node-modules-
+          lookup-only: true
+
+      - name: Install Volta
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        uses: volta-cli/action@v4
+
+      - name: Install dependencies if cache misses
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: yarn
+
+  prettier:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Prettier Composite Action
+        uses: ./.github/ci-actions/prettier/
+
+  lint:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Eslint Composite Action
+        uses: ./.github/ci-actions/lint/
+
+  test:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run all tests
+        uses: ./.github/ci-actions/test
+        with:
+          api-key: ${{ secrets.VITE_FIREBASE_API_KEY }}
+
+  codegen:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Code Generation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Code-gen Composite Action
+        uses: ./.github/ci-actions/codegen
+
+  build-client:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Build Client
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Build Client Composite Action
+        uses: ./.github/ci-actions/build-client
+        with:
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_BACKEND_BASE_URL: ${{ secrets.VITE_BACKEND_BASE_URL }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.TEST_STRIPE_PK }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.STAGING_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: staging
+          NEXT_CONFIG_ENV: staging
+
+  build-server:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Build Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Build Server Composite Action
+        uses: ./.github/ci-actions/build-server
+
+  firebase-preview:
+    name: Firebase preview
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Firebase Preview Composite Action
+        uses: ./.github/ci-actions/firebase-preview
+        with:
+          # Deployment build secrets
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_BACKEND_BASE_URL: ${{ secrets.VITE_BACKEND_BASE_URL }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.TEST_STRIPE_PK }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.STAGING_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: staging
+          NEXT_CONFIG_ENV: staging
+          # Firebase Hosting Secrets
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}
+          PROJECT_ID: uasc-ceebc
+          ENTRY_POINT: client
+
+  verify:
+    name: Verify
+    needs: [check_changes, lint, prettier, test, codegen, build-client, build-server]
+    runs-on: ubuntu-latest
+    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || (needs.lint.result == 'success' && needs.prettier.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success' && needs.build-client.result == 'success' && needs.build-server.result == 'success')) }}
+    steps:
+      - name: All checks passed
+        run: echo "All checks passed!"

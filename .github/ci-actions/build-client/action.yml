@@ -1,0 +1,75 @@
+name: "Build Client"
+description: "This workflow checks if the client builds are working correctly."
+
+inputs:
+  NEXT_PUBLIC_FIREBASE_API_KEY:
+    description: "Next Public Firebase API Key"
+    required: true
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:
+    description: "Next Public Firebase Auth Domain"
+    required: true
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID:
+    description: "Next Public Firebase Project ID"
+    required: true
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET:
+    description: "Next Public Firebase Storage Bucket"
+    required: true
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
+    description: "Next Public Firebase Messaging Sender ID"
+    required: true
+  NEXT_PUBLIC_FIREBASE_APP_ID:
+    description: "Next Public Firebase App ID"
+    required: true
+  NEXT_PUBLIC_BACKEND_BASE_URL:
+    description: "Next Public Backend Base URL"
+    required: true
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+    description: "Next Stripe Publishable Key"
+    required: true
+  NEXT_PUBLIC_SANITY_PROJECT_ID:
+    description: "Next  Staging Sanity Project ID"
+    required: true
+  NEXT_PUBLIC_SANITY_DATASET:
+    description: "Next Public Sanity Dataset"
+    required: true
+  NEXT_CONFIG_ENV:
+    description: "Next Public Sanity Project ID"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+
+    - name: Install volta
+      uses: volta-cli/action@v4
+
+    - name: Cache yarn node_modules
+      uses: actions/cache@v4
+      id: cache-node-modules
+      with:
+        path: |
+          **/node_modules
+          node_modules
+          .yarn
+        key: node-modules-${{ hashFiles('yarn.lock') }}
+
+    - name: Check client builds
+      env:
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${{ inputs.NEXT_PUBLIC_FIREBASE_API_KEY }}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ inputs.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ inputs.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ inputs.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ inputs.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${{ inputs.NEXT_PUBLIC_FIREBASE_APP_ID }}
+        NEXT_PUBLIC_BACKEND_BASE_URL: ${{ inputs.NEXT_PUBLIC_BACKEND_BASE_URL }}
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ inputs.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+        NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ inputs.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+        NEXT_PUBLIC_SANITY_DATASET: ${{ inputs.NEXT_PUBLIC_SANITY_DATASET }}
+        NEXT_CONFIG_ENV: ${{ inputs.NEXT_CONFIG_ENV }}
+      run: |
+        yarn workspace client build
+      shell: bash
