@@ -35,6 +35,7 @@ const categories = [
   "Does snowboarding",
   "Emergency contact",
   "Dietary requirements",
+  "Has Whakapapa season pass",
   "UID"
 ]
 
@@ -57,8 +58,7 @@ async function fetchUsers(token: string, cursor?: string): Promise<any> {
     }
   )
   if (res.status === 200) {
-    const data = await res.json()
-    return data
+    return await res.json()
   } else {
     throw new Error(`Failed to fetch users, status: ${res.status}`)
   }
@@ -94,8 +94,7 @@ async function authenticateGoogle(): Promise<any> {
     scopes: ["https://www.googleapis.com/auth/spreadsheets"]
   })
 
-  const authClient = await auth.getClient()
-  return authClient
+  return await auth.getClient()
 }
 
 /**
@@ -183,13 +182,13 @@ function mapUsers(users: CombinedUserData[]) {
     user.emergency_contact,
     // Remove stripe id from fields
     user.dietary_requirements,
+    user.has_whakapapa_season_pass,
     user.uid
   ])
 }
 
 /**
  * Code from login-prod.ts to create admin jwt token
- * @param uid - The user id to create the token for
  * @returns The jwt token
  */
 const createIdToken = async () => {
@@ -230,7 +229,6 @@ const createIdToken = async () => {
 
 /**
  * Updates the google sheet with members fetched from backend
- * @param token - The token to authenticate the request
  */
 async function updateGoogleSheetMembers() {
   const token = await createIdToken()

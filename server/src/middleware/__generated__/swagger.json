@@ -76,6 +76,10 @@
 					},
 					"university_year": {
 						"type": "string"
+					},
+					"has_whakapapa_season_pass": {
+						"type": "boolean",
+						"description": "If the user has a Whakapapa season pass, this should be set to `true`."
 					}
 				},
 				"type": "object",
@@ -187,6 +191,10 @@
 					},
 					"university_year": {
 						"type": "string"
+					},
+					"has_whakapapa_season_pass": {
+						"type": "boolean",
+						"description": "If the user has a Whakapapa season pass, this should be set to `true`."
 					}
 				},
 				"required": [
@@ -627,6 +635,10 @@
 					"university_year": {
 						"type": "string"
 					},
+					"has_whakapapa_season_pass": {
+						"type": "boolean",
+						"description": "If the user has a Whakapapa season pass, this should be set to `true`."
+					},
 					"stripe_id": {
 						"type": "string",
 						"description": "For identification DO NOT RETURN to users in exposed endpoints"
@@ -921,6 +933,10 @@
 					"university_year": {
 						"type": "string"
 					},
+					"has_whakapapa_season_pass": {
+						"type": "boolean",
+						"description": "If the user has a Whakapapa season pass, this should be set to `true`."
+					},
 					"stripe_id": {
 						"type": "string",
 						"description": "For identification DO NOT RETURN to users in exposed endpoints"
@@ -1041,6 +1057,10 @@
 					"university_year": {
 						"type": "string"
 					},
+					"has_whakapapa_season_pass": {
+						"type": "boolean",
+						"description": "If the user has a Whakapapa season pass, this should be set to `true`."
+					},
 					"stripe_id": {
 						"type": "string",
 						"description": "For identification DO NOT RETURN to users in exposed endpoints"
@@ -1120,6 +1140,10 @@
 					},
 					"university_year": {
 						"type": "string"
+					},
+					"has_whakapapa_season_pass": {
+						"type": "boolean",
+						"description": "If the user has a Whakapapa season pass, this should be set to `true`."
 					},
 					"stripe_id": {
 						"type": "string",
@@ -1456,6 +1480,9 @@
 									"properties": {
 										"stripe_id": {
 											"type": "string"
+										},
+										"has_whakapapa_season_pass": {
+											"type": "boolean"
 										},
 										"university_year": {
 											"type": "string"
