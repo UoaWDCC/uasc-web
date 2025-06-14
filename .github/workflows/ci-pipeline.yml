@@ -72,6 +72,11 @@ jobs:
     name: Prettier
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - name: Run Prettier Composite Action
         uses: ./.github/ci-actions/prettier/
 
@@ -81,6 +86,11 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - name: Run Eslint Composite Action
         uses: ./.github/ci-actions/lint/
 
@@ -90,6 +100,11 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - name: Run all tests
         uses: ./.github/ci-actions/test
         env:
@@ -101,5 +116,10 @@ jobs:
     name: Code Generation
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - name: Run Code-gen Composite Action
         uses: ./.github/ci-actions/check-codegen
