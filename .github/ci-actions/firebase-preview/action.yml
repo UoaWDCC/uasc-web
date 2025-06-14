@@ -61,9 +61,6 @@ runs:
       uses: volta-cli/action@v4
 
     - run: yarn workspaces focus client && yarn workspace client build
-      shell: bash
-
-    - uses: FirebaseExtended/action-hosting-deploy@v0
       env:
         NEXT_PUBLIC_FIREBASE_API_KEY: ${{ inputs.NEXT_PUBLIC_FIREBASE_API_KEY }}
         NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ inputs.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
@@ -76,6 +73,9 @@ runs:
         NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ inputs.NEXT_PUBLIC_SANITY_PROJECT_ID }}
         NEXT_PUBLIC_SANITY_DATASET: ${{ inputs.NEXT_PUBLIC_SANITY_DATASET }}
         NEXT_CONFIG_ENV: ${{ inputs.NEXT_CONFIG_ENV }}
+      shell: bash
+
+    - uses: FirebaseExtended/action-hosting-deploy@v0
       with:
         repoToken: "${{ inputs.GITHUB_TOKEN }}"
         firebaseServiceAccount: "${{ inputs.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}"
