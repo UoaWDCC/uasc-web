@@ -9,6 +9,13 @@ export type EditUsersBody = {
   updatedInformation: UserAdditionalInfo
 }[]
 
+/**
+ * Mirrored from the backend type
+ */
+enum RedirectKeys {
+  MEMBERS_GOOGLE_FORM_LINK = "MEMBERS_GOOGLE_FORM_LINK"
+}
+
 const AdminService = {
   getUsers: async function ({
     limit = MEMBER_TABLE_MAX_DATA,
@@ -257,6 +264,27 @@ const AdminService = {
     if (!response.ok) {
       throw new Error(`Failed to demote all users`)
     }
+  },
+  redirectToGoogleForm: async function () {
+    const { response } = await fetchClient.GET(
+      "/admin/redirect/{redirectKey}",
+      {
+        params: {
+          path: {
+            redirectKey: RedirectKeys.MEMBERS_GOOGLE_FORM_LINK
+          }
+        }
+      }
+    )
+
+    // Extract the redirect URL from the Location header
+    const redirectUrl = response.headers.get("Location") || response.url
+
+    if (!redirectUrl) {
+      throw new Error("Failed to get redirect URL from the server")
+    }
+    // Open URL in a new tab
+    window.open(redirectUrl, "_blank", "noopener,noreferrer")
   }
 } as const
 

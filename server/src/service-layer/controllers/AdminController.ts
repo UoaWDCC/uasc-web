@@ -65,6 +65,7 @@ import {
 } from "service-layer/response-models/AdminResponse"
 import { CreateEventBody } from "service-layer/request-models/EventRequests"
 import EventService from "data-layer/services/EventService"
+import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -835,6 +836,33 @@ export class AdminController extends Controller {
       return {
         error: "Something went wrong when fetching the event, please try again"
       }
+    }
+  }
+
+  /**
+   * Redirects to a URL specified in environment variables
+   * @param redirectKey - Key to look up in environment variables for the redirect URL
+   * @returns void
+   */
+  @Get("redirect/{redirectKey}")
+  public async redirectToEnvUrl(@Path() redirectKey: string): Promise<void> {
+    try {
+      const parsedRedirectKey = redirectKey.trim().toUpperCase()
+      const redirectUrl = process.env[`REDIRECT_${parsedRedirectKey}`]
+
+      if (
+        !redirectUrl ||
+        !Object.values(RedirectKeys).includes(parsedRedirectKey as RedirectKeys)
+      ) {
+        this.setStatus(404)
+        return
+      }
+
+      this.setHeader("Location", redirectUrl)
+      this.setStatus(302)
+    } catch (e) {
+      console.error(`Error redirecting to URL for key ${redirectKey}:`, e)
+      this.setStatus(500)
     }
   }
 }

@@ -1,0 +1,3 @@
+export enum RedirectKeys {
+  MEMBERS_GOOGLE_FORM_LINK = "MEMBERS_GOOGLE_FORM_LINK"
+}

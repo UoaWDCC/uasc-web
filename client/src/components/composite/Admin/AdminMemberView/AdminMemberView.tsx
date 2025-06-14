@@ -72,6 +72,18 @@ interface IAdminMemberView {
    * for a membership again
    */
   handleResetMemberships?: () => void
+
+  /**
+   * The callback for when the "Go to Google Form" button is clicked.
+   *
+   * @example
+   * ```tsx
+   * handleGoToGoogleForm={() => {
+   *  window.open(process.env.NEXT_PUBLIC_REDIRECT_MEMBERS_GOOGLE_FORM_LINK, "_blank")
+   *  }}
+   * ```
+   */
+  handleGoToGoogleForm?: () => void
 }
 
 /**
@@ -109,7 +121,8 @@ export const AdminMemberView = ({
   exportUserDataHandler,
   isUpdating,
   hasNextPage,
-  handleResetMemberships
+  handleResetMemberships,
+  handleGoToGoogleForm
 }: IAdminMemberView) => {
   /**
    * For use with `AdminSearchBar`
@@ -202,7 +215,10 @@ export const AdminMemberView = ({
     <div
       className={`w-full ${isUpdating ? "brightness-75" : "brightness-100"}`}
     >
-      <span className="mb-4 mt-6 flex w-full flex-col justify-between sm:flex-row">
+      <Button variant="inverted-default-sm" onClick={handleGoToGoogleForm}>
+        Go to Google Form
+      </Button>
+      <span className="mb-4 mt-3 flex w-full flex-col justify-between sm:flex-row">
         <span className="flex gap-5">
           <AdminSearchBar onQueryChanged={onSeachQueryChangedHandler} />
           <Button

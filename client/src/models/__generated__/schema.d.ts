@@ -167,6 +167,10 @@ export interface paths {
     /** @description Endpoint for admints to edit an event. */
     patch: operations["EditEvent"];
   };
+  "/admin/redirect/{redirectKey}": {
+    /** @description Redirects to a URL specified in environment variables */
+    get: operations["RedirectToEnvUrl"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -1336,6 +1340,21 @@ export interface operations {
     responses: {
       /** @description Successfully edited the event! */
       200: {
+        content: never;
+      };
+    };
+  };
+  /** @description Redirects to a URL specified in environment variables */
+  RedirectToEnvUrl: {
+    parameters: {
+      path: {
+        /** @description - Key to look up in environment variables for the redirect URL */
+        redirectKey: string;
+      };
+    };
+    responses: {
+      /** @description No content */
+      204: {
         content: never;
       };
     };
