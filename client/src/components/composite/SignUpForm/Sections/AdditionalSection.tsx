@@ -53,7 +53,13 @@ const doesSnowboarding = (currentSportOption: SportOptions) => {
 
 export const AdditionalSection = () => {
   const [
-    { does_ski, does_snowboarding, does_racing, dietary_requirements },
+    {
+      does_ski,
+      does_snowboarding,
+      does_racing,
+      dietary_requirements,
+      has_whakapapa_season_pass
+    },
     { updateFormData }
   ] = useSignUpFormData()
 
@@ -102,6 +108,34 @@ export const AdditionalSection = () => {
           Yes
         </option>
         <option key="No" value="No">
+          No
+        </option>
+      </Dropdown>
+
+      <Dropdown
+        label="Do you have a Whakapapa Season Pass?"
+        id="HasWhakapapaSeasonPass"
+        description="https://www.whakapapa.com/passes/season-passes"
+        value={
+          has_whakapapa_season_pass !== undefined
+            ? has_whakapapa_season_pass
+              ? "true"
+              : "false"
+            : undefined
+        }
+        onChange={(e) => {
+          updateFormData({
+            has_whakapapa_season_pass: e.target.value === "true"
+          })
+        }}
+      >
+        <option value="" disabled>
+          Select...
+        </option>
+        <option key="Yes" value="true">
+          Yes
+        </option>
+        <option key="No" value="false">
           No
         </option>
       </Dropdown>

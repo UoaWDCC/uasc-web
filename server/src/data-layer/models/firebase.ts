@@ -46,6 +46,12 @@ export interface UserAdditionalInfo {
    * @isString Please enter your year of study
    */
   university_year?: string
+
+  /**
+   * If the user has a Whakapapa season pass, this should be set to `true`.
+   */
+  has_whakapapa_season_pass?: boolean
+
   /**
    * For identification DO NOT RETURN to users in exposed endpoints
    */
