@@ -37,7 +37,18 @@ export const ShopItemSchema: SchemaTypeDefinition = {
       title: "Display Price",
       type: "string",
       description: "Example: '$19.99'",
-      validation: (Rule) => Rule.required()
+      validation: (Rule) =>
+        Rule.required().custom((price) => {
+          if (typeof price === "undefined") {
+            return true // Allow undefined values
+          }
+
+          // Regex for price formats like $19.99, $19, £10.50, etc.
+          const regex = /^\$\s?(\d+|\d{1,3}(,\d{3})*)(\.\d{1,2})?$/
+          return regex.test(price)
+            ? true
+            : "Please enter a valid price format (e.g. $19.99)"
+        })
     }),
     defineField({
       name: "description",
