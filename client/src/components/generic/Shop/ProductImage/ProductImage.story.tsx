@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import ProductImage from "./ProductImage"
-import { useState } from "react"
 
 const meta: Meta<typeof ProductImage> = {
   component: ProductImage,
@@ -62,15 +61,13 @@ export const WithSecondaryImage: Story = {
 
 export const Interactive: Story = {
   render: () => {
-    const [showSecondary, setShowSecondary] = useState(false)
-
     return (
       <ProductImage
         mainImageUrl="https://source.unsplash.com/random/300x200?product3"
         secondaryImageUrl="https://source.unsplash.com/random/300x200?product4"
         itemName="Interactive Product"
-        showSecondaryImage={showSecondary}
-        setShowSecondaryImage={setShowSecondary}
+        showSecondaryImage={false}
+        setShowSecondaryImage={() => {}}
       />
     )
   }

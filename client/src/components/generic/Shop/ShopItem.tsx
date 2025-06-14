@@ -42,7 +42,7 @@ const ShopItem: React.FC<ShopItemProps> = ({
   const [showSecondaryImage, setShowSecondaryImage] = useState(false)
 
   return (
-    <div className="flex h-full max-w-xs min-w-full flex-col overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-xl">
+    <div className="flex h-full min-w-full max-w-xs flex-col overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-xl">
       <ProductImage
         mainImageUrl={mainImageUrl}
         secondaryImageUrl={secondaryImageUrl}
