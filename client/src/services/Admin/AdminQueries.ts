@@ -52,3 +52,10 @@ export function useGetEventQuery() {
     mutationFn: AdminService.getEvent
   })
 }
+
+export function useMemberGoogleSheet() {
+  return useQuery({
+    queryKey: ["go-to-google-sheet"],
+    queryFn: AdminService.getMemberGoogleSheetUrl
+  })
+}

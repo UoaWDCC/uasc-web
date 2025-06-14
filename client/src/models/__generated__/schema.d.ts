@@ -168,8 +168,8 @@ export interface paths {
     patch: operations["EditEvent"];
   };
   "/admin/redirect/{redirectKey}": {
-    /** @description Redirects to a URL specified in environment variables */
-    get: operations["RedirectToEnvUrl"];
+    /** @description Returns a URL specified in environment variables */
+    get: operations["GetEnvUrl"];
   };
 }
 
@@ -1344,18 +1344,23 @@ export interface operations {
       };
     };
   };
-  /** @description Redirects to a URL specified in environment variables */
-  RedirectToEnvUrl: {
+  /** @description Returns a URL specified in environment variables */
+  GetEnvUrl: {
     parameters: {
       path: {
-        /** @description - Key to look up in environment variables for the redirect URL */
+        /** @description - Key to look up in environment variables for the URL */
         redirectKey: string;
       };
     };
     responses: {
-      /** @description No content */
-      204: {
-        content: never;
+      /** @description Successfully retrieved URL */
+      200: {
+        content: {
+          "application/json": {
+            error?: string;
+            url?: string;
+          };
+        };
       };
     };
   };

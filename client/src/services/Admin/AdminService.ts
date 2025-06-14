@@ -13,7 +13,7 @@ export type EditUsersBody = {
  * Mirrored from the backend type
  */
 enum RedirectKeys {
-  MEMBERS_GOOGLE_FORM_LINK = "MEMBERS_GOOGLE_FORM_LINK"
+  MEMBERS_GOOGLE_SHEET_LINK = "MEMBERS_GOOGLE_SHEET_LINK"
 }
 
 const AdminService = {
@@ -265,26 +265,23 @@ const AdminService = {
       throw new Error(`Failed to demote all users`)
     }
   },
-  redirectToGoogleForm: async function () {
-    const { response } = await fetchClient.GET(
+  getMemberGoogleSheetUrl: async function () {
+    const { response, data } = await fetchClient.GET(
       "/admin/redirect/{redirectKey}",
       {
         params: {
           path: {
-            redirectKey: RedirectKeys.MEMBERS_GOOGLE_FORM_LINK
+            redirectKey: RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK
           }
         }
       }
     )
 
-    // Extract the redirect URL from the Location header
-    const redirectUrl = response.headers.get("Location") || response.url
-
-    if (!redirectUrl) {
-      throw new Error("Failed to get redirect URL from the server")
+    if (!response.ok) {
+      throw new Error("Failed to fetch Google Sheet URL")
     }
-    // Open URL in a new tab
-    window.open(redirectUrl, "_blank", "noopener,noreferrer")
+
+    return data?.url
   }
 } as const
 

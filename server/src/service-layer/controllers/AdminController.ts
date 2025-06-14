@@ -840,29 +840,33 @@ export class AdminController extends Controller {
   }
 
   /**
-   * Redirects to a URL specified in environment variables
-   * @param redirectKey - Key to look up in environment variables for the redirect URL
-   * @returns void
+   * Returns a URL specified in environment variables
+   * @param redirectKey - Key to look up in environment variables for the URL
+   * @returns The URL from environment variables or an error
    */
+  @SuccessResponse("200", "Successfully retrieved URL")
   @Get("redirect/{redirectKey}")
-  public async redirectToEnvUrl(@Path() redirectKey: string): Promise<void> {
+  public async getEnvUrl(
+    @Path() redirectKey: string
+  ): Promise<{ url?: string; error?: string }> {
     try {
       const parsedRedirectKey = redirectKey.trim().toUpperCase()
-      const redirectUrl = process.env[`REDIRECT_${parsedRedirectKey}`]
+      const url = process.env[`REDIRECT_${parsedRedirectKey}`]
 
       if (
-        !redirectUrl ||
+        !url ||
         !Object.values(RedirectKeys).includes(parsedRedirectKey as RedirectKeys)
       ) {
         this.setStatus(404)
-        return
+        return { error: "URL not found" }
       }
 
-      this.setHeader("Location", redirectUrl)
-      this.setStatus(302)
+      this.setStatus(200)
+      return { url }
     } catch (e) {
-      console.error(`Error redirecting to URL for key ${redirectKey}:`, e)
+      console.error(`Error retrieving URL for key ${redirectKey}:`, e)
       this.setStatus(500)
+      return { error: "An error occurred while retrieving the URL" }
     }
   }
 }

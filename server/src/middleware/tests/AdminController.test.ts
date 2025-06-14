@@ -910,7 +910,7 @@ describe("AdminController endpoint tests", () => {
   describe("/admin/redirect/{redirectKey}", () => {
     const originalEnv = process.env
     beforeEach(() => {
-      process.env["REDIRECT_" + RedirectKeys.MEMBERS_GOOGLE_FORM_LINK] =
+      process.env["REDIRECT_" + RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK] =
         "https://test.example.com"
     })
 
@@ -918,26 +918,26 @@ describe("AdminController endpoint tests", () => {
       process.env = originalEnv
     })
 
-    it("should redirect to the correct URL for valid redirect key", async () => {
+    it("should return the correct URL for valid redirect key", async () => {
       const res = await request
-        .get(`/admin/redirect/${RedirectKeys.MEMBERS_GOOGLE_FORM_LINK}`)
+        .get(`/admin/redirect/${RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK}`)
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(302)
-      expect(res.header.location).toEqual("https://test.example.com")
+      expect(res.status).toEqual(200)
+      expect(res.body.url).toEqual("https://test.example.com")
     })
 
     it("should be case insensitive for redirect keys", async () => {
       const res = await request
         .get(
-          `/admin/redirect/${RedirectKeys.MEMBERS_GOOGLE_FORM_LINK.toLowerCase()}`
+          `/admin/redirect/${RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK.toLowerCase()}`
         )
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(302)
-      expect(res.header.location).toEqual("https://test.example.com")
+      expect(res.status).toEqual(200)
+      expect(res.body.url).toEqual("https://test.example.com")
     })
 
     it("should return 404 for invalid redirect keys", async () => {
@@ -947,6 +947,7 @@ describe("AdminController endpoint tests", () => {
         .send()
 
       expect(res.status).toEqual(404)
+      expect(res.body.error).toBeDefined()
     })
 
     it("should return 404 when environment variable is not set", async () => {
@@ -958,6 +959,7 @@ describe("AdminController endpoint tests", () => {
         .send()
 
       expect(res.status).toEqual(404)
+      expect(res.body.error).toBeDefined()
     })
 
     it("should not be accessible by non-admin users", async () => {

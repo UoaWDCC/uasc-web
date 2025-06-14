@@ -1567,9 +1567,9 @@ export function RegisterRoutes(app: Router) {
         app.get('/admin/redirect/:redirectKey',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
-            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.redirectToEnvUrl)),
+            ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getEnvUrl)),
 
-            function AdminController_redirectToEnvUrl(request: ExRequest, response: ExResponse, next: any) {
+            function AdminController_getEnvUrl(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     redirectKey: {"in":"path","name":"redirectKey","required":true,"dataType":"string"},
             };
@@ -1583,12 +1583,12 @@ export function RegisterRoutes(app: Router) {
                 const controller = new AdminController();
 
               templateService.apiHandler({
-                methodName: 'redirectToEnvUrl',
+                methodName: 'getEnvUrl',
                 controller,
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);

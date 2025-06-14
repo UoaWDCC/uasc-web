@@ -2607,13 +2607,28 @@
 		},
 		"/admin/redirect/{redirectKey}": {
 			"get": {
-				"operationId": "RedirectToEnvUrl",
+				"operationId": "GetEnvUrl",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Successfully retrieved URL",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"error": {
+											"type": "string"
+										},
+										"url": {
+											"type": "string"
+										}
+									},
+									"type": "object"
+								}
+							}
+						}
 					}
 				},
-				"description": "Redirects to a URL specified in environment variables",
+				"description": "Returns a URL specified in environment variables",
 				"security": [
 					{
 						"jwt": [
@@ -2623,7 +2638,7 @@
 				],
 				"parameters": [
 					{
-						"description": "- Key to look up in environment variables for the redirect URL",
+						"description": "- Key to look up in environment variables for the URL",
 						"in": "path",
 						"name": "redirectKey",
 						"required": true,
