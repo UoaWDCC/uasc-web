@@ -4,7 +4,10 @@ import WrappedProfileEdit, { IGeneralProfileEdit } from "./WrappedProfileEdit"
 
 type EditAdditionalFields = Pick<
   Partial<ReducedUserAdditionalInfo>,
-  "does_snowboarding" | "does_ski" | "dietary_requirements"
+  | "does_snowboarding"
+  | "does_ski"
+  | "dietary_requirements"
+  | "has_whakapapa_season_pass"
 >
 
 /**
@@ -28,6 +31,10 @@ const EditAdditionalPanel = ({ isOpen, handleClose }: IGeneralProfileEdit) => {
         {
           fieldName: "does_snowboarding",
           defaultFieldValue: currentUserData?.does_snowboarding
+        },
+        {
+          fieldName: "has_whakapapa_season_pass",
+          defaultFieldValue: currentUserData?.has_whakapapa_season_pass
         }
       ]}
     ></WrappedProfileEdit>

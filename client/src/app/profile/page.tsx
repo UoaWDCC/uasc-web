@@ -268,6 +268,10 @@ function ProfileInner() {
                       Snowboard: currentUserData?.does_snowboarding
                     })}
                   />
+                  <Field
+                    subtitle="Has Whakapapa Season Pass?"
+                    description={`${currentUserData?.has_whakapapa_season_pass ? "Yes" : "No"}`}
+                  />
                 </ProfileInformationPanel>
                 <ProfileBookingsTable />
               </div>

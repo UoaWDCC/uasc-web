@@ -77,26 +77,28 @@ const nameTransformer = (
       return "UoA Student ID Number"
     case "university_year":
       return "University Year"
+    case "has_whakapapa_season_pass":
+      return "Has Whakapapa Season Pass?"
   }
 }
 
 /**
  * Panel for when profile needs to be edited.
- * 
+ *
  * The fields displayed should be determened by the generic typing
- * 
+ *
  * @example
-    <ProfileEdit<{
-      first_name: string
-      last_name: string
-      date_of_birth: { seconds: number; nanoseconds: number }
-      faculty: string
-      phone_number: number
-      emergency_contact: string
-      student_id: string
-    }> 
-      title="example"
-      />
+ <ProfileEdit<{
+ first_name: string
+ last_name: string
+ date_of_birth: { seconds: number; nanoseconds: number }
+ faculty: string
+ phone_number: number
+ emergency_contact: string
+ student_id: string
+ }>
+ title="example"
+ />
  */
 const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
   title,
@@ -130,7 +132,8 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
             const isTel = field.fieldName === "phone_number"
             const isBool =
               field.fieldName === "does_snowboarding" ||
-              field.fieldName === "does_ski"
+              field.fieldName === "does_ski" ||
+              field.fieldName === "has_whakapapa_season_pass"
             return (
               <TextInput
                 key={field.fieldName.toString()}

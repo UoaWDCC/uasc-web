@@ -28,6 +28,7 @@ const initialState: State = {
   university: undefined,
   student_id: undefined,
   university_year: "",
+  has_whakapapa_season_pass: false,
   formValidity: {
     success: false
   }
