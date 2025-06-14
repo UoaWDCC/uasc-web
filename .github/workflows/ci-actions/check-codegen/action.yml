@@ -1,0 +1,70 @@
+name: Code Generation Check
+description: Runs code generation check
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+
+    - name: Install volta
+      uses: volta-cli/action@v4
+
+    - name: Cache yarn node_modules
+      uses: actions/cache@v4
+      id: cache-node-modules
+      with:
+        path: |
+          **/node_modules
+          node_modules
+          .yarn
+        key: node-modules-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          node-modules-
+
+    - name: Install dependencies if cache misses
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: yarn
+      shell: bash
+
+    - name: Generate server code
+      run: yarn workspace server tsoa spec-and-routes
+      shell: bash
+
+    - name: Write git diff
+      run: |
+        if git diff --quiet; then
+          echo "SERVER_DIFF=0" >> $GITHUB_ENV
+        else
+          echo "SERVER_DIFF=1" >> $GITHUB_ENV
+        fi
+      shell: bash
+
+    - name: Check for differences in server code
+      if: ${{ env.SERVER_DIFF != '0'}}
+      uses: actions/github-script@v3
+      with:
+        script: |
+            core.setFailed('Your code generation for the server is not up to date. Run yarn workspace server tsoa spec-and-routes')
+
+    - name: Generate client code
+      run: yarn workspace client generate-types
+      shell: bash
+
+    - name: Write git diff
+      run: |
+        if git diff --quiet; then
+          echo "CLIENT_DIFF=0" >> $GITHUB_ENV
+        else
+          echo "CLIENT_DIFF=1" >> $GITHUB_ENV
+        fi
+      shell: bash
+
+    - name: Check for differences in client code
+      if: ${{ env.CLIENT_DIFF != '0'}}
+      uses: actions/github-script@v3
+      with:
+        script: |
+            core.setFailed('Your code generation for the client is not up to date. Run yarn workspace client generate-types')
