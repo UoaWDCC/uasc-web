@@ -188,7 +188,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       all_checks_success: ${{ needs.lint.result == 'success' && needs.prettier.result == 'success' && needs.test.result == 'success' && needs.codegen.result == 'success' && needs.build.result == 'success' }}
-    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || needs.all_checks_success }}
+    if: ${{ always() && (needs.check_changes.outputs.exists != 'true' || needs.all_checks_success) }}
     steps:
       - name: All checks passed
         run: echo "All checks passed!"
