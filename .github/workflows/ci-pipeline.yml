@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Prettier Composite Action
-        uses: ./ci-actions/prettier/
+        uses: ./.github/ci-actions/prettier/
 
   lint:
     needs: [check_changes, setup]
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Eslint Composite Action
-        uses: ./ci-actions/lint/
+        uses: ./.github/ci-actions/lint/
 
   test:
     needs: [check_changes, setup]
@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run all tests
-        uses: ./ci-actions/test
+        uses: ./.github/ci-actions/test
         env:
           API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
 
@@ -102,4 +102,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Code-gen Composite Action
-        uses: ./ci-actions/check-codegen
+        uses: ./.github/ci-actions/check-codegen
