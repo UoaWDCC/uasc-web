@@ -122,4 +122,18 @@ jobs:
           fetch-depth: 2
 
       - name: Run Code-gen Composite Action
-        uses: ./.github/ci-actions/check-codegen
+        uses: ./.github/ci-actions/codegen
+
+  build:
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Build Composite Action
+        uses: ./.github/ci-actions/build

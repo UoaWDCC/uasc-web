@@ -1,0 +1,59 @@
+name: "Check builds working"
+description: "This workflow checks if the client and server builds are working correctly."
+
+# inputs:
+#   next-public-firebase-api-key:
+#     description: "Next Public Firebase API Key"
+#     required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+
+    - name: Install volta
+      uses: volta-cli/action@v4
+
+    - name: Cache yarn node_modules
+      env:
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{secrets.VITE_FIREBASE_AUTH_DOMAIN}}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{secrets.VITE_FIREBASE_PROJECT_ID}}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{secrets.VITE_FIREBASE_STORAGE_BUCKET}}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{secrets.VITE_FIREBASE_MESSAGING_SENDER_ID}}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${{secrets.VITE_FIREBASE_APP_ID}}
+        NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.VITE_BACKEND_BASE_URL}}
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{secrets.TEST_STRIPE_PK}}
+        NEXT_PUBLIC_SANITY_PROJECT_ID: ${{secrets.STAGING_SANITY_PROJECT_ID}}
+        NEXT_PUBLIC_SANITY_DATASET: staging
+        NEXT_CONFIG_ENV: staging
+      uses: actions/cache@v4
+      id: cache-node-modules
+      with:
+        path: |
+          **/node_modules
+          node_modules
+          .yarn
+        key: node-modules-${{ hashFiles('yarn.lock') }}
+
+    - name: Check client builds
+      env:
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{secrets.VITE_FIREBASE_AUTH_DOMAIN}}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{secrets.VITE_FIREBASE_PROJECT_ID}}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{secrets.VITE_FIREBASE_STORAGE_BUCKET}}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{secrets.VITE_FIREBASE_MESSAGING_SENDER_ID}}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${{secrets.VITE_FIREBASE_APP_ID}}
+        NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.VITE_BACKEND_BASE_URL}}
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{secrets.TEST_STRIPE_PK}}
+        NEXT_PUBLIC_SANITY_PROJECT_ID: ${{secrets.STAGING_SANITY_PROJECT_ID}}
+        NEXT_PUBLIC_SANITY_DATASET: staging
+        NEXT_CONFIG_ENV: staging
+      run: |
+        yarn workspace client build
+      shell: bash
+
+    - name: Check server builds
+      run: |
+        yarn workspace server build
+      shell: bash
