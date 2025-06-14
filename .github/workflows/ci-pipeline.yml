@@ -110,7 +110,7 @@ jobs:
         with:
           api-key: ${{ secrets.VITE_FIREBASE_API_KEY }}
 
-  code-gen:
+  codegen:
     needs: [check_changes, setup]
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Code Generation
