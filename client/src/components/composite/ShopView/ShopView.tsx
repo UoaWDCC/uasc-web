@@ -3,6 +3,9 @@ import { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
 import ShopItem from "@/components/generic/Shop/ShopItem"
 
 interface ShopViewProps {
+  /**
+   * Array of {@link ShopItem} to display
+   */
   items?: ShopItemType[]
   isLoading?: boolean
   error?: Error | null
