@@ -1,5 +1,5 @@
-name: "Check builds working"
-description: "This workflow checks if the client and server builds are working correctly."
+name: "Build Client"
+description: "This workflow checks if the client builds are working correctly."
 
 inputs:
   NEXT_PUBLIC_FIREBASE_API_KEY:
@@ -72,9 +72,4 @@ runs:
         NEXT_CONFIG_ENV: ${{ inputs.NEXT_CONFIG_ENV }}
       run: |
         yarn workspace client build
-      shell: bash
-
-    - name: Check server builds
-      run: |
-        yarn workspace server build
       shell: bash

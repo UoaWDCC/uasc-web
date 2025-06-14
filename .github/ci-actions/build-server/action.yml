@@ -1,0 +1,28 @@
+name: "Build Server"
+description: "This workflow checks if the server builds are working correctly."
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+
+    - name: Install volta
+      uses: volta-cli/action@v4
+
+    - name: Cache yarn node_modules
+      uses: actions/cache@v4
+      id: cache-node-modules
+      with:
+        path: |
+          **/node_modules
+          node_modules
+          .yarn
+        key: node-modules-${{ hashFiles('yarn.lock') }}
+
+    - name: Check server builds
+      run: |
+        yarn workspace server build
+      shell: bash
