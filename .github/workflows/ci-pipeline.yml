@@ -138,17 +138,49 @@ jobs:
       - name: Run Build Composite Action
         uses: ./.github/ci-actions/build
         with:
-          NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
-          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{secrets.VITE_FIREBASE_AUTH_DOMAIN}}
-          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{secrets.VITE_FIREBASE_PROJECT_ID}}
-          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{secrets.VITE_FIREBASE_STORAGE_BUCKET}}
-          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{secrets.VITE_FIREBASE_MESSAGING_SENDER_ID}}
-          NEXT_PUBLIC_FIREBASE_APP_ID: ${{secrets.VITE_FIREBASE_APP_ID}}
-          NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.VITE_BACKEND_BASE_URL}}
-          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{secrets.TEST_STRIPE_PK}}
-          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{secrets.STAGING_SANITY_PROJECT_ID}}
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_BACKEND_BASE_URL: ${{ secrets.VITE_BACKEND_BASE_URL }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.TEST_STRIPE_PK }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.STAGING_SANITY_PROJECT_ID }}
           NEXT_PUBLIC_SANITY_DATASET: staging
           NEXT_CONFIG_ENV: staging
+
+  firebase-preview:
+    name: Firebase preview
+    needs: [check_changes, setup]
+    if: ${{ needs.check_changes.outputs.exists == 'true' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Firebase Preview Composite Action
+        uses: ./.github/ci-actions/firebase-preview
+        with:
+          # Deployment build secrets
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_BACKEND_BASE_URL: ${{ secrets.VITE_BACKEND_BASE_URL }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.TEST_STRIPE_PK }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.STAGING_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: staging
+          NEXT_CONFIG_ENV: staging
+          # Firebase Hosting Secrets
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}
+          PROJECT_ID: uasc-ceebc
+          ENTRY_POINT: client
 
   verify:
     name: Verify
