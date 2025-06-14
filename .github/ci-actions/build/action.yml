@@ -45,6 +45,16 @@ runs:
       uses: volta-cli/action@v4
 
     - name: Cache yarn node_modules
+      uses: actions/cache@v4
+      id: cache-node-modules
+      with:
+        path: |
+          **/node_modules
+          node_modules
+          .yarn
+        key: node-modules-${{ hashFiles('yarn.lock') }}
+
+    - name: Check client builds
       env:
         NEXT_PUBLIC_FIREBASE_API_KEY: ${{ inputs.NEXT_PUBLIC_FIREBASE_API_KEY }}
         NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ inputs.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
@@ -57,16 +67,6 @@ runs:
         NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ inputs.NEXT_PUBLIC_SANITY_PROJECT_ID }}
         NEXT_PUBLIC_SANITY_DATASET: ${{ inputs.NEXT_PUBLIC_SANITY_DATASET }}
         NEXT_CONFIG_ENV: ${{ inputs.NEXT_CONFIG_ENV }}
-      uses: actions/cache@v4
-      id: cache-node-modules
-      with:
-        path: |
-          **/node_modules
-          node_modules
-          .yarn
-        key: node-modules-${{ hashFiles('yarn.lock') }}
-
-    - name: Check client builds
       run: |
         yarn workspace client build
       shell: bash
