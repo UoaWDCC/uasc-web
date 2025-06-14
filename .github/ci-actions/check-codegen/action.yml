@@ -21,8 +21,6 @@ runs:
           node_modules
           .yarn
         key: node-modules-${{ hashFiles('yarn.lock') }}
-        restore-keys: |
-          node-modules-
 
     - name: Install dependencies if cache misses
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
