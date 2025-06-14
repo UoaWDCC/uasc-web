@@ -36,6 +36,10 @@ declare global {
        * Refer to https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237
        */
       NODE_MAILER_PASSWORD: string
+      /**
+       * The URL to show to admins when they need to access the admin member sheet.
+       */
+      REDIRECT_MEMBERS_GOOGLE_FORM_LINK: string
     }
   }
 }

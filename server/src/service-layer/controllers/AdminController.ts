@@ -65,6 +65,7 @@ import {
 } from "service-layer/response-models/AdminResponse"
 import { CreateEventBody } from "service-layer/request-models/EventRequests"
 import EventService from "data-layer/services/EventService"
+import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -835,6 +836,37 @@ export class AdminController extends Controller {
       return {
         error: "Something went wrong when fetching the event, please try again"
       }
+    }
+  }
+
+  /**
+   * Returns a URL specified in environment variables
+   * @param redirectKey - Key to look up in environment variables for the URL
+   * @returns The URL from environment variables or an error
+   */
+  @SuccessResponse("200", "Successfully retrieved URL")
+  @Get("redirect/{redirectKey}")
+  public async getEnvUrl(
+    @Path() redirectKey: string
+  ): Promise<{ url?: string; error?: string }> {
+    try {
+      const parsedRedirectKey = redirectKey.trim().toUpperCase()
+      const url = process.env[`REDIRECT_${parsedRedirectKey}`]
+
+      if (
+        !url ||
+        !Object.values(RedirectKeys).includes(parsedRedirectKey as RedirectKeys)
+      ) {
+        this.setStatus(404)
+        return { error: "URL not found" }
+      }
+
+      this.setStatus(200)
+      return { url }
+    } catch (e) {
+      console.error(`Error retrieving URL for key ${redirectKey}:`, e)
+      this.setStatus(500)
+      return { error: "An error occurred while retrieving the URL" }
     }
   }
 }

@@ -9,6 +9,13 @@ export type EditUsersBody = {
   updatedInformation: UserAdditionalInfo
 }[]
 
+/**
+ * Mirrored from the backend type
+ */
+enum RedirectKeys {
+  MEMBERS_GOOGLE_SHEET_LINK = "MEMBERS_GOOGLE_SHEET_LINK"
+}
+
 const AdminService = {
   getUsers: async function ({
     limit = MEMBER_TABLE_MAX_DATA,
@@ -257,6 +264,24 @@ const AdminService = {
     if (!response.ok) {
       throw new Error(`Failed to demote all users`)
     }
+  },
+  getMemberGoogleSheetUrl: async function () {
+    const { response, data } = await fetchClient.GET(
+      "/admin/redirect/{redirectKey}",
+      {
+        params: {
+          path: {
+            redirectKey: RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK
+          }
+        }
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch Google Sheet URL")
+    }
+
+    return data?.url
   }
 } as const
 

@@ -1,4 +1,7 @@
-import { useUsersQuery } from "@/services/Admin/AdminQueries"
+import {
+  useMemberGoogleSheetUrlQuery,
+  useUsersQuery
+} from "@/services/Admin/AdminQueries"
 import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
 import {
   useDeleteUserMutation,
@@ -127,6 +130,7 @@ const WrappedAdminMemberView = () => {
   const { mutateAsync: promoteUser } = usePromoteUserMutation()
   const { mutateAsync: demoteUser } = useDemoteUserMutation()
   const { mutateAsync: deleteUser, isPending } = useDeleteUserMutation()
+  const { data: memberGoogleSheetData } = useMemberGoogleSheetUrlQuery()
 
   const handleExportUsers = useCallback(() => {
     if (hasNextPage) {
@@ -192,6 +196,11 @@ const WrappedAdminMemberView = () => {
       <AdminMemberView
         fetchNextPage={() => {
           !isFetchingNextPage && hasNextPage && fetchNextPage()
+        }}
+        handleGoToGoogleSheet={() => {
+          if (memberGoogleSheetData) {
+            window.open(memberGoogleSheetData, "_blank")
+          }
         }}
         handleResetMemberships={async () => {
           if (
