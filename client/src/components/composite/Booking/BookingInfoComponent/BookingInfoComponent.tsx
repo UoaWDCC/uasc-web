@@ -46,8 +46,8 @@ const BookingInfoComponent = ({
             <strong>bookings@uasc.co.nz</strong>
           </a>
         </h5>
-        {/* TODO: REMOVE THIS PART */}
-        <p>Bookings open - 5th of July </p>
+        {/* TODO: REMOVE THIS PART AND CONNECT TO CMS */}
+        <p>Bookings open - 16th of June </p>
         <p>Lodge open - 12th of July</p>
       </div>
 
@@ -62,9 +62,11 @@ const BookingInfoComponent = ({
         </p>
         <p>Please read UASC policy below before booking.</p>
         <h4>
+          {/* TODO: REMOVE THIS PART AND CONNECT TO CMS */}
           Check in time: <strong>{CHECK_IN_TIME}</strong>
         </h4>
         <h4>
+          {/* TODO: REMOVE THIS PART AND CONNECT TO CMS */}
           Check out time: <strong>{CHECK_OUT_TIME}</strong>
         </h4>
         <h4 className="text-red font-bold italic">
