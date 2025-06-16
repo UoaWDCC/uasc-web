@@ -62,7 +62,7 @@ jobs:
 
       - name: Install dependencies if cache misses
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: yarn
+        run: yarn --immutable
 
   prettier:
     needs: [check_changes, setup]

@@ -10,6 +10,7 @@ services:
       context: .
       dockerfile: ./Server.Dockerfile
     restart: always
-
+    volumes:
+      - node_modules:/app/.yarn
 volumes:
   node_modules:
