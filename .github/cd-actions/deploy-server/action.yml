@@ -1,0 +1,89 @@
+name: "Deploy Server"
+description: Deploys the server
+
+inputs:
+  # Host secrets
+  SERVER_USERNAME:
+    description: The username to use for authentication.
+    required: true
+  SERVER_HOST:
+    description: The hostname or IP address of the server.
+    required: true
+  SERVER_SSH_KEY:
+    description: The SSH key to use for authentication.
+    required: true
+  # Deployment secrets
+  GOOGLE_SERVICE_ACCOUNT_JSON:
+    description: The Google service account JSON to use for authentication.
+    required: true
+  STRIPE_WEBHOOK_SECRET:
+    description: The Stripe webhook secret to use for authentication.
+    required: true
+  STRIPE_API_KEY:
+    description: The Stripe API key to use for authentication.
+    required: true
+  FRONTEND_URL:
+    description: The frontend URL to use for authentication.
+    required: true
+  NODE_MAILER_EMAIL:
+    description: The email address to use for authentication.
+    required: true
+  NODE_MAILER_PASSWORD:
+    description: The password to use for authentication.
+    required: true
+  REDIRECT_MEMBERS_GOOGLE_SHEET_LINK:
+    description: The Google Sheet link to use for authentication.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare directory structure for deployment
+      shell: bash
+      run: |
+        mkdir -p app
+        cp ./yarn.lock app/yarn.lock
+        cp ./.yarnrc.yml app/yarnrc.yml
+        cp ./Server.Dockerfile app/Server.Dockerfile
+        cp ./docker-compose.yml app/docker-compose.yml
+        cp ./tsconfig.json app/tsconfig.json
+        mkdir -p app/server
+        cp -r ./server/. app/server
+
+    - name: Upload combined directory to EC2
+      uses: burnett01/rsync-deployments@7.0.2
+      with:
+        switches: -avz --delete
+        path: ./app
+        remote_path: ~/app/
+        remote_host: ${{ inputs.SERVER_HOST }}
+        remote_user: ${{ inputs.SERVER_USERNAME }}
+        remote_key: ${{ inputs.SERVER_SSH_KEY }}
+
+    - name: Connect via SSH to host, store secrets and deploy
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ inputs.SERVER_HOST }}
+        username: ${{ inputs.SERVER_USERNAME }}
+        key: ${{ inputs.SERVER_SSH_KEY }}
+        port: 22
+        script: |
+          cd ~/app
+
+          echo "storing secrets"
+          echo "GOOGLE_SERVICE_ACCOUNT_JSON=$(echo ${{ inputs.STAGING_SERVER_SERVICE_ACCOUNT }} | base64 --decode)" >> .env
+          echo "STRIPE_WEBHOOK_SECRET=${{ inputs.STAGING_SERVER_STRIPE_WEBHOOK_SECRET }}" >> .env
+          echo "STRIPE_API_KEY=${{ inputs.STAGING_SERVER_STRIPE_API_KEY }}" >> .env
+          echo "FRONTEND_URL=${{ inputs.STAGING_FRONTEND_URL }}" >> .env
+          echo "NODE_MAILER_EMAIL=${{ inputs.STAGING_EMAIL }}" >> .env
+          echo "NODE_MAILER_PASSWORD=${{ inputs.STAGING_EMAIL_PASSWORD }}" >> .env
+          echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> .env
+
+          echo "Stopping old containers"
+          docker-compose down
+
+          echo "Rebuilding and starting containers"
+          docker-compose up -d --build
+
+          echo "Removing old images after build"
+          docker system prune -f
