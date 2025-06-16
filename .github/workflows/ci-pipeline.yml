@@ -20,8 +20,6 @@ jobs:
       exists: ${{ steps.filter.outputs.exists }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: Filter changes
         uses: yumemi-inc/path-filter@v2

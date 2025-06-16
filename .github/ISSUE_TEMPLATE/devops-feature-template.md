@@ -1,9 +1,9 @@
 ---
-name: Frontend feature template
-about: Features relating to the frontend
-title: "[FRONTEND]"
+name: DevOps feature template
+about: Features relating to the development operations
+title: "[DevOps] "
 type: Feature
-labels: frontend
+labels: devops
 assignees: ''
 ---
 
@@ -19,11 +19,12 @@ assignees: ''
 **Additional context**
 <!-- Add any other context or screenshots about the feature request here. -->
 
+**Acceptance Criteria**
+<!-- Define the acceptance criteria for the feature -->
+
 **BEFORE MERGING**
 
-- [ ] Storybooks created where possible
-- [ ] Tested with [nock](https://tanstack.com/query/v3/docs/framework/react/guides/testing) if data fetching
-- [ ] Tests written for critical interactions
+- [ ] Acceptance criteria met
 - [ ] PR Reviewed (For non-trivial changes)
-- [ ] Changes tested after rebasing on master or merging in master (_hint_: `git fetch origin master:master`, then `git rebase master` or `git merge master`)
+- [ ] Changes tested after rebasing on master or merging in master (*hint*: `git fetch origin master:master`, then `git rebase master` or `git merge master`)
 - [ ] All required PR checks passing
