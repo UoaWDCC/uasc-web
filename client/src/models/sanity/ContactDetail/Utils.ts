@@ -9,5 +9,5 @@ export type ContactDetailItem = {
   title: string
   description?: string
   email?: string
-  link?: ContactDetailLink[]
+  links?: ContactDetailLink[]
 }

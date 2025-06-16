@@ -16,6 +16,7 @@ const ContactDetailPanel = ({ items }: IContactDetailPanel) => {
               title={item.title}
               description={item.description}
               email={item.email}
+              links={item.links}
             />
           </span>
         )

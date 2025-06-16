@@ -49,7 +49,7 @@ const ContactDetail = ({
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-light-blue-100 hover:underline"
+                className="text-light-blue-100 text-sm hover:underline"
               >
                 {displayName}
               </a>
