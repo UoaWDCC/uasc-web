@@ -12,7 +12,7 @@ const BenefitSection = ({ benefits }: IBenefitSection) => (
   <section>
     <HomeSectionWrapper>
       <HomeSectionHeading text="Member Benefits" />
-      <div className="mt-16 grid grid-cols-1 items-center gap-12 sm:grid-cols-2 sm:px-6 lg:px-0">
+      <div className="mt-12 grid grid-cols-1 items-center gap-12 sm:grid-cols-2 sm:px-6 lg:px-0">
         {benefits.map((benefit) => {
           const { text, image } = benefit
           return (
