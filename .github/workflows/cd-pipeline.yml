@@ -33,8 +33,5 @@ jobs:
         with:
           fetch-depth: 2
 
-  # deploy-server:
-  #   name: Deploy UASC Server
-  #   if: github.event.inputs.workflow == 'Setup Server'
-  #   environment:
-  #     name: ${{ github.event.inputs.environment }}
+      - name: Run Host Setup Composite Action
+        uses: ./.github/cd-actions/setup-host/
