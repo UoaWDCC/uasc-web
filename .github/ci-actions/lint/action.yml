@@ -4,10 +4,6 @@ description: Runs eslint on all files
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 2
-
     - name: Install volta
       uses: volta-cli/action@v4
 

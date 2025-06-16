@@ -1,0 +1,42 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Manual deployment environment'
+        type: environment
+        required: true
+      workflow:
+        description: 'Workflow type'
+        options:
+          - Setup Host
+          - Deploy Server
+          - Deploy Client
+        required: true
+
+jobs:
+  setup-host:
+    name: Setup Host
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'Setup Host'
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Host Setup Composite Action
+        uses: ./.github/cd-actions/setup-host/
+        with:
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
