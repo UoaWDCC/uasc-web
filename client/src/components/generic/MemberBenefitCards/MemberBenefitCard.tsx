@@ -28,7 +28,7 @@ const BenefitCard = ({ text, imageSrc }: props) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
         <div className="absolute bottom-0 w-full p-4">
-          <span className="bg-light-blue-100 block rounded-sm px-4 py-3 text-lg font-bold text-white bg-opacity-95">
+          <span className="bg-light-blue-100 block rounded-sm bg-opacity-95 px-4 py-3 text-lg font-bold text-white">
             {text}
           </span>
         </div>
