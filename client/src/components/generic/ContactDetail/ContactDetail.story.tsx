@@ -17,3 +17,21 @@ export const Default: Story = {
     email: "bookings@gmail.com"
   }
 }
+
+export const WithLinks: Story = {
+  args: {
+    title: "Customer Support",
+    description: "For any technical issues or questions",
+    email: "support@example.com",
+    links: [
+      {
+        url: "https://example.com/help",
+        displayName: "Help Center"
+      },
+      {
+        url: "https://example.com/faq",
+        displayName: "FAQ"
+      }
+    ]
+  }
+}

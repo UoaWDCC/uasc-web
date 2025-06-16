@@ -1,3 +1,5 @@
+import { ContactDetailLink } from "@/models/sanity/ContactDetail/Utils"
+
 export interface IContactDetail {
   /**
    * The main description of the contact
@@ -17,9 +19,21 @@ export interface IContactDetail {
    * @example "mail@mail.com"
    */
   email?: string
+
+  /**
+   * The link to the contact page or external contact form
+   *
+   * @example "https://example.com/contact"
+   */
+  links?: ContactDetailLink[]
 }
 
-const ContactDetail = ({ title, description, email }: IContactDetail) => {
+const ContactDetail = ({
+  title,
+  description,
+  email,
+  links
+}: IContactDetail) => {
   return (
     <div className="flex flex-col gap-2">
       <h3>{title}</h3>
@@ -27,6 +41,22 @@ const ContactDetail = ({ title, description, email }: IContactDetail) => {
       <h5 className="text-light-blue-100 font-bold">
         <a href={`mailto:${email}`}>{email}</a>
       </h5>
+      {links && links.length > 0 && (
+        <ul className="flex flex-col gap-1">
+          {links.map(({ url, displayName }) => (
+            <li key={url}>
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-light-blue-100 text-sm hover:underline"
+              >
+                {displayName}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
