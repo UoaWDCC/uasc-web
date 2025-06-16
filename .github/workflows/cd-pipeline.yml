@@ -16,15 +16,15 @@ on:
       workflow:
         description: 'Workflow type'
         options:
-          - Setup Host
-          - Deploy Server
-          - Deploy Client
+          - setup-host
+          - deploy-server
+          - deploy-client
         required: true
 
 jobs:
   setup-host:
     name: Setup Host
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'Setup Host'
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'setup-host'
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
