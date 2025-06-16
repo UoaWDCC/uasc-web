@@ -42,6 +42,7 @@ runs:
       shell: bash
       run: |
         mkdir -p app
+        cp ./package.json app/package.json
         cp ./yarn.lock app/yarn.lock
         cp ./.yarnrc.yml app/yarnrc.yml
         cp ./Server.Dockerfile app/Server.Dockerfile
