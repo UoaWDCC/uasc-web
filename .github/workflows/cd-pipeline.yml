@@ -1,0 +1,40 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Manual deployment environment'
+        type: environment
+        required: true
+      workflow:
+        description: 'The workflow type'
+        options:
+          - Setup Host
+          - Deploy Server
+          - Deploy Client
+
+jobs:
+  setup-host:
+    name: Setup Host
+    if: github.event.inputs.workflow == 'Setup Server'
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+  # deploy-server:
+  #   name: Deploy UASC Server
+  #   if: github.event.inputs.workflow == 'Setup Server'
+  #   environment:
+  #     name: ${{ github.event.inputs.environment }}

@@ -1,0 +1,48 @@
+name: "Setup Host"
+description: Sets up the server that hosts client/server
+
+inputs:
+  SERVER_HOST:
+    description: The hostname or IP address of the server.
+    required: true
+  SERVER_SSH_KEY:
+    description: The SSH key to use for authentication.
+    required: true
+  SERVER_USERNAME:
+    description: The username to use for authentication.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Connect via SSH and enable root access
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ inputs.SERVER_HOST }}
+        username: ubuntu
+        key: ${{ inputs.SERVER_SSH_KEY }}
+        port: 22
+        script: |
+          AUTHORIZED_KEYS="/root/.ssh/authorized_keys"
+          BACKUP="/root/.ssh/authorized_keys.bak"
+
+          # Backup original authorized_keys file
+          sudo cp "$AUTHORIZED_KEYS" "$BACKUP"
+
+          sudo sed -i 's/^.*command=.*Please login as the user \\"ubuntu\\".*ssh-rsa/ssh-rsa/' "$AUTHORIZED_KEYS"
+
+    - name: Install required dependencies
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ inputs.SERVER_HOST }}
+        username: ${{ inputs.SERVER_USERNAME }}
+        key: ${{ inputs.SERVER_SSH_KEY }}
+        port: 22
+        script: |
+          echo "Updating package list"
+          sudo apt-get update
+
+          echo "Install docker and docker-compose"
+          sudo apt-get install -y docker.io docker-compose
+          sudo usermod -aG docker $USER
+          newgrp docker
