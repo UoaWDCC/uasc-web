@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  payload:
+  server:
     container_name: uasc-server
     ports:
       - "443:8000"
