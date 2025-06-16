@@ -19,8 +19,7 @@ on:
           - Setup Host
           - Deploy Server
           - Deploy Client
-  pull_request:
-    branches: [master]
+        required: true
 
 jobs:
   setup-host:
