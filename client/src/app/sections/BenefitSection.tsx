@@ -1,8 +1,8 @@
 import { Benefit } from "@/components/utils/types"
-import Image from "next/image"
 import HomeSectionHeading from "./utils/HomeSectionHeading"
 import HomeSectionWrapper from "./utils/HomeSectionWrapper"
 import { SanityImageUrl } from "../../../sanity/lib/utils"
+import MemberBenefitCard from "@/components/generic/MemberBenefitCards/MemberBenefitCard"
 
 interface IBenefitSection {
   benefits: Benefit[]
@@ -16,24 +16,18 @@ const BenefitSection = ({ benefits }: IBenefitSection) => (
         {benefits.map((benefit) => {
           const { text, image } = benefit
           return (
-            <div key={text} className="relative isolate h-64 w-full">
-              <Image
-                src={
-                  image
-                    ? new SanityImageUrl(image)
-                        .autoFormat()
-                        .width(1000)
-                        .toString()
-                    : ""
-                }
-                alt={text}
-                fill
-                className="-z-10 size-full object-cover"
-              />
-              <span className="bg-light-blue-100 absolute -top-6 w-fit max-w-[80%] px-6 py-4 text-lg font-bold text-white sm:-left-6">
-                {text}
-              </span>
-            </div>
+            <MemberBenefitCard
+              key={text}
+              text={text}
+              imageSrc={
+                image
+                  ? new SanityImageUrl(image)
+                      .autoFormat()
+                      .width(1000)
+                      .toString()
+                  : ""
+              }
+            />
           )
         })}
       </div>
