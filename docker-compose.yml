@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  payload:
+    container_name: uasc-server
+    ports:
+      - "443:8000"
+      - "80:8000"
+    build:
+      context: .
+      dockerfile: ./Server.Dockerfile
+    restart: always
+
+volumes:
+  node_modules:
