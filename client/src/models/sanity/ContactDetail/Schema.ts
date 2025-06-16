@@ -22,6 +22,35 @@ export const ContactDetailSchema: SchemaTypeDefinition = {
     defineField({
       name: "email",
       type: "email"
+    }),
+    defineField({
+      name: "links",
+      title: "Links",
+      description: "Optional list of links with display names and URLs",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "displayName",
+              title: "Display Name",
+              description:
+                "The text shown for the link (e.g., 'Book Now', 'Contact Us')",
+              type: "string",
+              validation: (v) => v.required()
+            },
+            {
+              name: "url",
+              title: "URL",
+              description:
+                "The full URL the link points to (e.g., 'https://example.com/contact')",
+              type: "url",
+              validation: (v) => v.required()
+            }
+          ]
+        }
+      ]
     })
   ]
 }
