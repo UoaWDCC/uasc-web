@@ -23,7 +23,7 @@ on:
 jobs:
   setup-host:
     name: Setup Host
-    if: github.event.inputs.workflow == 'Setup Server'
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'Setup Server'
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
