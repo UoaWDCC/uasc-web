@@ -18,29 +18,24 @@ type props = ICardProps
 
 const BenefitCard = ({ text, imageSrc }: props) => {
   return (
-    <div
-      className="border-light-blue-100 
-      bg-gray-1 flex max-h-[200px] 
-    w-full items-center justify-center rounded-md 
-     border px-6 py-7"
-    >
-      <h3 className="text-light-blue-100 sm:text-h3 mb-2 w-[270px] text-lg font-bold">
-        {text}
-      </h3>
-      <span className=" -ml-7 w-[138px] min-w-[138px] opacity-15">
-        {imageSrc && (
-          <Image
-            width={1000}
-            height={1000}
-            src={imageSrc}
-            alt={`corresponding image for ${text}`}
-          />
-        )}
-      </span>
+    <div className="group relative overflow-hidden rounded-md shadow-lg transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
+      <div className="relative h-64 w-full">
+        <Image
+          src={imageSrc || ""}
+          alt={`corresponding image for ${text}`}
+          fill
+          className="rounded-md object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+        <div className="absolute bottom-0 w-full p-4">
+          <span className="bg-light-blue-100 block rounded-sm bg-opacity-95 px-4 py-3 text-lg font-bold text-white">
+            {text}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }
-
 /**
  *
  * Usage: pass in the SVG imported using the `import Icon from 'path/icon.svg '` syntax
