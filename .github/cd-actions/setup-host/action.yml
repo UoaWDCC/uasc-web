@@ -2,14 +2,14 @@ name: "Setup Host"
 description: Sets up the server that hosts client/server
 
 inputs:
+  SERVER_USERNAME:
+    description: The username to use for authentication.
+    required: true
   SERVER_HOST:
     description: The hostname or IP address of the server.
     required: true
   SERVER_SSH_KEY:
     description: The SSH key to use for authentication.
-    required: true
-  SERVER_USERNAME:
-    description: The username to use for authentication.
     required: true
 
 runs:

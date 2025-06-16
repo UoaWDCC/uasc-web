@@ -35,3 +35,7 @@ jobs:
 
       - name: Run Host Setup Composite Action
         uses: ./.github/cd-actions/setup-host/
+        with:
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
