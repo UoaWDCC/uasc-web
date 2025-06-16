@@ -55,7 +55,7 @@ runs:
       with:
         switches: -avz --delete
         path: ./app
-        remote_path: ~/app
+        remote_path: ~/
         remote_host: ${{ inputs.SERVER_HOST }}
         remote_user: ${{ inputs.SERVER_USERNAME }}
         remote_key: ${{ inputs.SERVER_SSH_KEY }}
