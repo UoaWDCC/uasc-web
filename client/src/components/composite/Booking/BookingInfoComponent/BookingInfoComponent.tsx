@@ -47,8 +47,8 @@ const BookingInfoComponent = ({
           </a>
         </h5>
         {/* TODO: REMOVE THIS PART AND CONNECT TO CMS */}
-        <p>Bookings open - 29th of June </p>
-        <p>Lodge open - 12th of July</p>
+        <p>Bookings open - 16th of June </p>
+        <p>Lodge open - 29th of June</p>
       </div>
 
       <Divider />
