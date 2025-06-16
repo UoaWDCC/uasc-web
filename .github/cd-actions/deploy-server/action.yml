@@ -55,7 +55,7 @@ runs:
       with:
         switches: -avz --delete
         path: ./app
-        remote_path: ~/app/
+        remote_path: ~/app
         remote_host: ${{ inputs.SERVER_HOST }}
         remote_user: ${{ inputs.SERVER_USERNAME }}
         remote_key: ${{ inputs.SERVER_SSH_KEY }}
@@ -71,19 +71,10 @@ runs:
           cd ~/app
 
           echo "storing secrets"
-          echo "GOOGLE_SERVICE_ACCOUNT_JSON=$(echo ${{ inputs.STAGING_SERVER_SERVICE_ACCOUNT }} | base64 --decode)" >> .env
-          echo "STRIPE_WEBHOOK_SECRET=${{ inputs.STAGING_SERVER_STRIPE_WEBHOOK_SECRET }}" >> .env
-          echo "STRIPE_API_KEY=${{ inputs.STAGING_SERVER_STRIPE_API_KEY }}" >> .env
-          echo "FRONTEND_URL=${{ inputs.STAGING_FRONTEND_URL }}" >> .env
-          echo "NODE_MAILER_EMAIL=${{ inputs.STAGING_EMAIL }}" >> .env
-          echo "NODE_MAILER_PASSWORD=${{ inputs.STAGING_EMAIL_PASSWORD }}" >> .env
+          echo "GOOGLE_SERVICE_ACCOUNT_JSON=$(echo ${{ inputs.GOOGLE_SERVICE_ACCOUNT_JSON }} | base64 --decode)" >> .env
+          echo "STRIPE_WEBHOOK_SECRET=${{ inputs.STRIPE_WEBHOOK_SECRET }}" >> .env
+          echo "STRIPE_API_KEY=${{ inputs.STRIPE_API_KEY }}" >> .env
+          echo "FRONTEND_URL=${{ inputs.FRONTEND_URL }}" >> .env
+          echo "NODE_MAILER_EMAIL=${{ inputs.NODE_MAILER_EMAIL }}" >> .env
+          echo "NODE_MAILER_PASSWORD=${{ inputs.NODE_MAILER_PASSWORD }}" >> .env
           echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> .env
-
-          echo "Stopping old containers"
-          docker-compose down
-
-          echo "Rebuilding and starting containers"
-          docker-compose up -d --build
-
-          echo "Removing old images after build"
-          docker system prune -f
