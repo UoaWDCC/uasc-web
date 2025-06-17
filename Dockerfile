@@ -6,7 +6,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Stage 1: Copy package files and install
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./server/package.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./client/package.json ./server/package.json ./
 RUN corepack enable pnpm && pnpm install --frozen-lockfile --filter server
 
 # Stage 2: Copy server and build
