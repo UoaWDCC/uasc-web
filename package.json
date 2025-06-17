@@ -3,6 +3,27 @@
   "version": "1.0.0",
   "description": "Monorepo for the UASC project (by WDCC @ UoA)",
   "private": true,
+  "scripts": {
+    "lint": "eslint",
+    "lint:all": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier . --write",
+    "prettier:ci": "prettier . --check",
+    "dev": "turbo run dev",
+    "generate:types": "turbo run generate:types",
+    "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
+    "postinstall": "husky",
+    "dev-client": "yarn workspace client dev",
+    "dev-server": "yarn workspace server start",
+    "storybook": "yarn workspace client storybook",
+    "test-endpoints": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src/middleware --config=server/jest.config.endpoints.ts\"",
+    "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src --config=server/jest.config.server.ts\"",
+    "test-client": "yarn workspace client test",
+    "test": "yarn test-client && yarn test-server && yarn test-endpoints",
+    "firebase-test": "firebase emulators:exec --only firestore,auth --project staging",
+    "test:controller": "sh -c 'yarn firebase-test \"jest --config=server/jest.config.endpoints.ts $0\"'",
+    "test:service": "sh -c 'yarn firebase-test \"jest --config=server/jest.config.server.ts $0\"'"
+  },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/jest": "^29.5.12",
@@ -30,6 +51,7 @@
     "prettier-plugin-tailwindcss": "^0.5.13",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
+    "turbo": "^2.5.4",
     "typescript": "^5.3.3"
   },
   "lint-staged": {
@@ -51,6 +73,10 @@
   },
   "volta": {
     "node": "20.3.0"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": "^10.0.0"
   },
   "packageManager": "pnpm@10.11.0"
 }

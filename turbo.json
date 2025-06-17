@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "globalDependencies": [".env"],
+  "tasks": {
+    "generate:types": {},
+    "dev": {
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "persistent": true
+    }
+  },
+  "ui": "tui"
+}
