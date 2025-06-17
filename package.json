@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "description": "Monorepo for the UASC project (by WDCC @ UoA)",
   "private": true,
-  "workspaces": [
-    "client",
-    "server"
-  ],
-  "packageManager": "yarn@4.1.1+sha256.f3cc0eda8e5560e529c7147565b30faa43b4e472d90e8634d7134a37c7f59781",
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/jest": "^29.5.12",
@@ -43,25 +38,6 @@
       "yarn prettier"
     ]
   },
-  "scripts": {
-    "lint": "eslint",
-    "lint-all": "eslint .",
-    "prettier": "prettier . --write",
-    "prettier:ci": "prettier . --check",
-    "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
-    "postinstall": "husky",
-    "lint-and-fix": "eslint . --fix",
-    "dev-client": "yarn workspace client dev",
-    "dev-server": "yarn workspace server start",
-    "storybook": "yarn workspace client storybook",
-    "test-endpoints": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src/middleware --config=server/jest.config.endpoints.ts\"",
-    "test-server": "yarn firebase-test \"node --experimental-vm-modules --dns-result-order=ipv4first ./node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --testPathPattern=server/src --config=server/jest.config.server.ts\"",
-    "test-client": "yarn workspace client test",
-    "test": "yarn test-client && yarn test-server && yarn test-endpoints",
-    "firebase-test": "firebase emulators:exec --only firestore,auth --project staging",
-    "test:controller": "sh -c 'yarn firebase-test \"jest --config=server/jest.config.endpoints.ts $0\"'",
-    "test:service": "sh -c 'yarn firebase-test \"jest --config=server/jest.config.server.ts $0\"'"
-  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -74,7 +50,7 @@
     ]
   },
   "volta": {
-    "node": "20.3.0",
-    "yarn": "4.1.1"
-  }
+    "node": "20.3.0"
+  },
+  "packageManager": "pnpm@10.11.0"
 }
