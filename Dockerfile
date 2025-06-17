@@ -7,7 +7,6 @@ ENV NODE_ENV=production
 
 # Stage 1: Copy package files and install
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./client/package.json ./server/package.json ./
-RUN cp ./server/tsconfig.prod.json ./tsconfig.prod.json
 RUN corepack enable pnpm && pnpm install --filter server
 
 # Stage 2: Copy server and build
