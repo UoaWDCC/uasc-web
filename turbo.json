@@ -12,6 +12,8 @@
       "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
     },
     "test:firebase": {
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env"],
       "cache": false
     },
     "test:server": {},
