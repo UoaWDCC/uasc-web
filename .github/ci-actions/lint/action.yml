@@ -19,7 +19,8 @@ runs:
       id: cache-node-modules
       with:
         path: |
-          **/node_modules
+          server/node_modules
+          client/node_modules
           node_modules
         key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
