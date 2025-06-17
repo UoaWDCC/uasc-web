@@ -1,4 +1,4 @@
-name: Deploy Production Build of Client for UASC
+name: Deploy Production Client
 
 on:
   workflow_dispatch:
