@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
+    "test:client": "jest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "generate:types": "openapi-typescript ../server/src/middleware/__generated__/swagger.json -o ./src/models/__generated__/schema.d.ts"

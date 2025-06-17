@@ -4,6 +4,15 @@
   "tasks": {
     "generate:types": {},
     "build": {},
+    "test": {
+      "dependsOn": ["test:server", "test:endpoints", "test:client"]
+    },
+    "test:firebase": {
+      "cache": false
+    },
+    "test:server": {},
+    "test:endpoints": {},
+    "test:client": {},
     "dev": {
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
