@@ -6,7 +6,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Stage 1: Copy package files and install
-COPY --link package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY --link package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY --link ./server/package.json ./server/package.json
 RUN corepack enable pnpm && pnpm install --filter server
 
