@@ -15,9 +15,18 @@
       "env": ["API_KEY"],
       "cache": false
     },
-    "test:server": {},
-    "test:services": {},
-    "test:routes": {},
+    "test:server": {
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
+    "test:services": {
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
+    "test:routes": {
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
     "test:client": {},
     "dev": {
       "cache": false,
