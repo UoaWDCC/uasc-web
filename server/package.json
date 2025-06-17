@@ -50,6 +50,7 @@
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "firebase": "^10.10.0",
+    "firebase-tools": "^13.35.1",
     "googleapis": "^144.0.0",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
