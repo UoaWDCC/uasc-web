@@ -4,20 +4,26 @@ description: "This workflow checks if the server builds are working correctly."
 runs:
   using: composite
   steps:
-    - name: Install volta
-      uses: volta-cli/action@v4
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
 
-    - name: Cache yarn node_modules
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Cache node_modules
       uses: actions/cache@v4
       id: cache-node-modules
       with:
         path: |
           **/node_modules
           node_modules
-          .yarn
-        key: node-modules-${{ hashFiles('yarn.lock') }}
+        key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
 
     - name: Check server builds
       run: |
-        yarn workspace server build
+        pnpm build --filter server
       shell: bash
