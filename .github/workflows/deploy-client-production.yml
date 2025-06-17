@@ -1,4 +1,4 @@
-name: Deploy Production Client
+name: Deploy Client Production
 
 on:
   workflow_dispatch:
