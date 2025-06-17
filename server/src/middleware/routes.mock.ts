@@ -1,6 +1,7 @@
 import { auth } from "business-layer/security/Firebase"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 import {
+  EMULATOR_API_KEY,
   EMULATOR_AUTH_PORT,
   EMULATOR_HOST,
   EMULATOR_PROJECT_ID
@@ -19,9 +20,8 @@ type claims = typeof AuthServiceClaims.ADMIN | typeof AuthServiceClaims.MEMBER
 
 const clientFirebase = initializeApp({
   projectId: EMULATOR_PROJECT_ID,
-  apiKey: process.env.API_KEY
+  apiKey: EMULATOR_API_KEY
 })
-console.log(`${process.env.API_KEY} ${process.env.API_KEY.length}`)
 
 const clientAuth = getAuth(clientFirebase)
 connectAuthEmulator(clientAuth, `http://${EMULATOR_HOST}:${EMULATOR_AUTH_PORT}`)
