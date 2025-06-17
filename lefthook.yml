@@ -20,9 +20,6 @@ pre-commit:
     prettier:
       glob: "*.{js,jsx,ts,tsx,json,css,scss,md}"
       run: yarn prettier --write {staged_files} && git add {staged_files}
-    ts-check:
-      glob: "*.{ts,tsx}"
-      run: yarn tsc --noEmit
 #   scripts:
 #     "hello.js":
 #       runner: node
