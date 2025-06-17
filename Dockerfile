@@ -1,56 +1,18 @@
-# syntax = docker/dockerfile:1
-FROM debian:stable-slim as base
+FROM node:20.3.0-slim AS base
 
-LABEL fly_launch_runtime="Node.js"
-
-# Node.js app lives here
+# Stage 1: Install dependencies
+FROM base AS deps
 WORKDIR /app
+COPY --link package.json pnpm-lock.yaml pnpm-workspace.yaml ./server/package.json ./
+RUN pnpm install --frozen-lockfile
 
-# curl and ca-certificates are needed for volta installation
-RUN apt-get update \
-  && apt-get install -y \
-  curl \
-  ca-certificates \
-  --no-install-recommends
-
-# bash will load volta() function via .bashrc 
-# using $VOLTA_HOME/load.sh
-SHELL ["/bin/bash", "-c"]
-
-# since we're starting non-interactive shell, 
-# we wil need to tell bash to load .bashrc manually
-ENV BASH_ENV ~/.bashrc
-# needed by volta() function
-ENV VOLTA_HOME /root/.volta
-# make sure packages managed by volta will be in PATH
-ENV PATH $VOLTA_HOME/bin:$PATH
-
-# install volta
-RUN curl https://get.volta.sh | bash
-RUN volta install node
-
-# Throw-away build stage to reduce size of final image
-FROM base as install 
-
-# Install node modules
-COPY --link package.json yarn.lock .yarnrc.yml tsconfig.json ./
-COPY --link ./server ./server
-RUN yarn workspaces focus server
-
-# Copy application code
-
+# Stage 2: Build server
 FROM base as build
+COPY --link ./server ./server
+RUN pnpm build --filter backend
 
-COPY --from=install /app /app
-
-RUN yarn workspace server build 
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
+# Stage 3: Run server
+FROM base as run
+COPY --link ./server ./server
 EXPOSE 8000
-CMD [ "yarn", "workspace", "server", "serve" ]
+CMD [ "pnpm", "--prefix=server", "serve" ]
