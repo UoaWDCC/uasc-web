@@ -10,7 +10,7 @@
     "build": "tsc -p ./tsconfig.prod.json && tsc-alias && pnpm copy-templates",
     "test:firebase": "firebase emulators:exec --only firestore,auth --project staging",
     "test:server": "pnpm test:firebase 'node --experimental-vm-modules --dns-result-order=ipv4first ../node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --config=jest.config.ts'",
-    "test:endpoints": "pnpm test:firebase 'node --experimental-vm-modules --dns-result-order=ipv4first ../node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --config=jest.config.endpoints.ts'",
+    "test:routes": "pnpm test:firebase 'node --experimental-vm-modules --dns-result-order=ipv4first ../node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --config=jest.config.routes.ts'",
     "test:services": "pnpm test:firebase 'node --experimental-vm-modules --dns-result-order=ipv4first ../node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --config=jest.config.services.ts'",
     "copy-templates": "cp -r ./src/business-layer/templates ./dist/business-layer/templates",
     "serve": "node --es-module-specifier-resolution=node dist/index.js",
