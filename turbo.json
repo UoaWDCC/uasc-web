@@ -3,11 +3,13 @@
   "globalDependencies": [".env"],
   "tasks": {
     "generate:types": {},
-    "build": {},
+    "build": {
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
     "test": {
-      "dependsOn": ["test:server", "test:client"],
+      "dependsOn": ["^test", "test:server", "test:client"],
       "env": ["API_KEY"],
-      "inputs": ["$TURBO_DEFAULT$", ".env"]
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
     },
     "test:firebase": {
       "cache": false
