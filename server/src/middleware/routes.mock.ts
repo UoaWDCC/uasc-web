@@ -21,9 +21,9 @@ const clientFirebase = initializeApp({
   projectId: EMULATOR_PROJECT_ID,
   apiKey: process.env.API_KEY
 })
+console.log(`${process.env.API_KEY} ${process.env.API_KEY.length}`)
 
 const clientAuth = getAuth(clientFirebase)
-console.log(`${process.env.API_KEY} ${process.env.API_KEY.length}`)
 connectAuthEmulator(clientAuth, `http://${EMULATOR_HOST}:${EMULATOR_AUTH_PORT}`)
 
 const userService = new UserDataService()
