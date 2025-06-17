@@ -22,7 +22,21 @@ env:
   FRONTEND_BASE_URL: ${{secrets.PROD_FRONTEND_URL}}
 
 jobs:
+  setup:
+    name: Setup
+    needs: check_changes
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Setup Composite Action
+        uses: ./.github/ci-actions/setup/
+
   Deploy-Client:
+    needs: [setup]
     runs-on: ubuntu-latest
     environment: Client Production
     steps:

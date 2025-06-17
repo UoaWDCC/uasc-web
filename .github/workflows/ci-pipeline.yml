@@ -43,45 +43,8 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: cache-node-modules
-        with:
-          path: |
-            server/node_modules
-            client/node_modules
-            node_modules
-          key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          lookup-only: true
-
-      - name: Setup Node.js
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Setup pnpm
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          run_install: false
-
-      - name: Restore only if cache missed
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          path: |
-            server/node_modules
-            client/node_modules
-            node_modules
-          key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            node-modules-pnpm-
-
-      - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+      - name: Run Setup Composite Action
+        uses: ./.github/ci-actions/setup/
 
   prettier:
     needs: [check_changes, setup]

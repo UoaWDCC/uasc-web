@@ -22,7 +22,21 @@ env:
   NEXT_CONFIG_ENV: staging
 
 jobs:
+  setup:
+    name: Setup
+    needs: check_changes
+    if: ${{ needs.check_changes.outputs.exists == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Setup Composite Action
+        uses: ./.github/ci-actions/setup/
+
   build_and_deploy:
+    needs: [setup]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
