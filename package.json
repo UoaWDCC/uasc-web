@@ -16,13 +16,13 @@
     "postinstall": "husky",
     "storybook": "pnpm --prefix=client storybook",
     "test": "turbo run test",
-    "test:endpoints": "turbo run test:endpoints",
+    "test:routes": "turbo run test:endpoints",
     "test:firebase": "turbo run test:firebase",
-    "test:services": "turbo run test:routes",
+    "test:services": "turbo run test:services",
     "test:server": "turbo run test:server",
     "test:client": "turbo run test:client",
-    "test:endpoint": "sh -c 'pnpm test:firebase \"jest --config=server/jest.config.endpoints.ts $0\"'",
-    "test:service": "sh -c 'pnpm test:firebase \"jest --config=server/jest.config.server.ts $0\"'"
+    "test:route": "sh -c 'pnpm test:firebase -- \"jest --config=jest.config.endpoints.ts $0\"'",
+    "test:service": "sh -c 'pnpm test:firebase -- \"jest --config=jest.config.server.ts $0\"'"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.20.1",

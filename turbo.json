@@ -12,7 +12,7 @@
     },
     "test:server": {},
     "test:services": {},
-    "test:endpoints": {},
+    "test:routes": {},
     "test:client": {},
     "dev": {
       "cache": false,
