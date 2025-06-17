@@ -18,5 +18,5 @@ runs:
         key: node-modules-${{ hashFiles('yarn.lock') }}
 
     - name: Run ESLint on ALL files
-      run: yarn lint-all
+      run: pnpm lint:all
       shell: bash

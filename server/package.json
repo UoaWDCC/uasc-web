@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint:all": "eslint .",
-    "dev": "concurrently \"yarn nodemon -e ts,js --exec \" \"pnpm generate:types && pnpm normalise-newlines\"",
+    "dev": "concurrently \"pnpm nodemon -e ts,js --exec \" \"pnpm generate:types && pnpm normalise-newlines\"",
     "generate:types": "tsoa spec-and-routes",
-    "nodemon": "nodemon",
-    "build": "tsc -p ./tsconfig.prod.json && tsc-alias && yarn copy-templates",
+    "build": "tsc -p ./tsconfig.prod.json && tsc-alias && pnpm copy-templates",
     "copy-templates": "cp -r ./src/business-layer/templates ./dist/business-layer/templates",
     "serve": "node --es-module-specifier-resolution=node dist/index.js",
     "token": "ts-node ./tooling/login-prod.ts",

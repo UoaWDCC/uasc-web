@@ -3,6 +3,7 @@
   "globalDependencies": [".env"],
   "tasks": {
     "generate:types": {},
+    "build": {},
     "dev": {
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
