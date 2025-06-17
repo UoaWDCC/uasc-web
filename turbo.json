@@ -5,7 +5,9 @@
     "generate:types": {},
     "build": {},
     "test": {
-      "dependsOn": ["test:server", "test:client"]
+      "dependsOn": ["test:server", "test:client"],
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "test:firebase": {
       "cache": false
