@@ -1,6 +1,6 @@
 name: Deploy Production Build of Client for UASC
 
-on: 
+on:
   workflow_dispatch:
   # schedules this to run every 30 minutes
   schedule:
@@ -27,20 +27,33 @@ jobs:
     environment: Client Production
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Enable Corepack
+        shell: bash
+        run: corepack enable
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
-          ref: stable
+          version: latest
+          run_install: false
 
-      - name: Install volta
-        uses: volta-cli/action@v4
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: cache-node-modules
+        with:
+          path: |
+            server/node_modules
+            client/node_modules
+            node_modules
+          key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - run: yarn workspaces focus client && yarn workspace client build
+      - run: pnpm build --filter client
 
       - name: Publish to cloudflare
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: uasc 
-          directory: client/out 
+          projectName: uasc
+          directory: client/out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
