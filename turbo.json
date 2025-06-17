@@ -5,12 +5,13 @@
     "generate:types": {},
     "build": {},
     "test": {
-      "dependsOn": ["test:server", "test:endpoints", "test:client"]
+      "dependsOn": ["test:server", "test:client"]
     },
     "test:firebase": {
       "cache": false
     },
     "test:server": {},
+    "test:services": {},
     "test:endpoints": {},
     "test:client": {},
     "dev": {
