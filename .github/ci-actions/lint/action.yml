@@ -21,7 +21,7 @@ runs:
         path: |
           **/node_modules
           node_modules
-        key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+        key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
     - name: Run ESLint on ALL files
       run: pnpm lint:all
