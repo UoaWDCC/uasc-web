@@ -24,7 +24,6 @@ env:
 jobs:
   setup:
     name: Setup
-    needs: check_changes
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -70,12 +69,3 @@ jobs:
           channelId: live
           projectId: uasc-ceebc
           entryPoint: client
-
-  verify:
-    name: Verify
-    needs: [build-and-deploy]
-    runs-on: ubuntu-latest
-    if: ${{ always() && (needs.build-and-deploy.result == 'success') }}
-    steps:
-      - name: All checks passed
-        run: echo "All checks passed!"

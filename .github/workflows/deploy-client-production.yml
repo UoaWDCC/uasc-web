@@ -24,7 +24,6 @@ env:
 jobs:
   setup:
     name: Setup
-    needs: check_changes
     if: ${{ needs.check_changes.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
