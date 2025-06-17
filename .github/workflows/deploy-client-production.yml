@@ -35,7 +35,7 @@ jobs:
       - name: Run Setup Composite Action
         uses: ./.github/ci-actions/setup/
 
-  Deploy-Client:
+  build-and-deploy:
     needs: [setup]
     runs-on: ubuntu-latest
     environment: Client Production
@@ -74,3 +74,12 @@ jobs:
           projectName: uasc
           directory: client/out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  verify:
+    name: Verify
+    needs: [build-and-deploy]
+    runs-on: ubuntu-latest
+    if: ${{ always() && (needs.build-and-deploy.result == 'success') }}
+    steps:
+      - name: All checks passed
+        run: echo "All checks passed!"
