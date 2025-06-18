@@ -3,6 +3,23 @@
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "lint:all": "eslint .",
+    "dev": "concurrently \"pnpm nodemon -e ts,js --exec \" \"pnpm generate:types && pnpm normalise-newlines\"",
+    "generate:types": "tsoa spec-and-routes",
+    "build": "tsc -p ./tsconfig.prod.json && tsc-alias && pnpm copy-templates",
+    "test:firebase": "firebase emulators:exec --only firestore,auth --project staging",
+    "test:server": "pnpm test:firebase 'node --experimental-vm-modules --dns-result-order=ipv4first ../node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --config=jest.config.ts'",
+    "test:routes": "pnpm test:firebase 'node --experimental-vm-modules --dns-result-order=ipv4first ../node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --config=jest.config.routes.ts'",
+    "test:services": "pnpm test:firebase 'node --experimental-vm-modules --dns-result-order=ipv4first ../node_modules/jest/bin/jest.js --setupFiles dotenv/config --passWithNoTests --detectOpenHandles --forceExit --config=jest.config.services.ts'",
+    "copy-templates": "cp -r ./src/business-layer/templates ./dist/business-layer/templates",
+    "serve": "node --es-module-specifier-resolution=node dist/index.js",
+    "token": "ts-node ./tooling/login-prod.ts",
+    "timestamp": "ts-node ./tooling/timestamp-conversion.ts",
+    "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json",
+    "update-google-sheet-members": "ts-node ./tooling/update-google-sheet-members.ts",
+    "prune-cloudflare-deployments": "ts-node ./tooling/prune-cloudflare-deployments.ts"
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -16,14 +33,15 @@
     "supertest": "^6.3.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "tsoa": "~6.2.0"
+    "tsoa": "~6.2.0",
+    "@tsoa/runtime": "^6.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
     "@types/helmet": "^4.0.0",
-    "@types/node": "^20.11.22",
+    "@types/node": "^20.11.23",
     "@types/nodemailer": "^6",
     "@types/pug": "^2.0.10",
     "@types/supertest": "^6.0.2",
@@ -32,23 +50,12 @@
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "firebase": "^10.10.0",
+    "firebase-tools": "^13.35.1",
     "googleapis": "^144.0.0",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.8",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.3"
-  },
-  "scripts": {
-    "start": "concurrently \"yarn nodemon -e ts,js --exec \" \"yarn tsoa spec-and-routes && yarn normalise-newlines && yarn workspace client generate-types\"",
-    "nodemon": "nodemon",
-    "build": "tsc -p ./tsconfig.prod.json && tsc-alias && yarn copy-templates",
-    "copy-templates": "cp -r ./src/business-layer/templates ./dist/business-layer/templates",
-    "serve": "node --es-module-specifier-resolution=node dist/index.js",
-    "token": "ts-node ./tooling/login-prod.ts",
-    "timestamp": "ts-node ./tooling/timestamp-conversion.ts",
-    "normalise-newlines": "ts-node ./tooling/remove-newlines.ts ./src/middleware/__generated__/swagger.json",
-    "update-google-sheet-members": "ts-node ./tooling/update-google-sheet-members.ts",
-    "prune-cloudflare-deployments": "ts-node ./tooling/prune-cloudflare-deployments.ts"
   }
 }

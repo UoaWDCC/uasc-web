@@ -1,6 +1,6 @@
-name: Deploy Production Build of Client for UASC
+name: Deploy Client Production
 
-on: 
+on:
   workflow_dispatch:
   # schedules this to run every 30 minutes
   schedule:
@@ -22,25 +22,63 @@ env:
   FRONTEND_BASE_URL: ${{secrets.PROD_FRONTEND_URL}}
 
 jobs:
-  Deploy-Client:
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Setup Composite Action
+        uses: ./.github/ci-actions/setup/
+
+  build-and-deploy:
+    needs: [setup]
     runs-on: ubuntu-latest
     environment: Client Production
-
     steps:
       - uses: actions/checkout@v4
         with:
           ref: stable
 
-      - name: Install volta
-        uses: volta-cli/action@v4
+      - name: Enable Corepack
+        shell: bash
+        run: corepack enable
 
-      - run: yarn workspaces focus client && yarn workspace client build
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: cache-node-modules
+        with:
+          path: |
+            server/node_modules
+            client/node_modules
+            node_modules
+          key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Build client
+        run: pnpm build --filter client
 
       - name: Publish to cloudflare
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: uasc 
-          directory: client/out 
+          projectName: uasc
+          directory: client/out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  verify:
+    name: Verify
+    needs: [build-and-deploy]
+    runs-on: ubuntu-latest
+    if: ${{ always() && (needs.build-and-deploy.result == 'success') }}
+    steps:
+      - name: All checks passed
+        run: echo "All checks passed!"
