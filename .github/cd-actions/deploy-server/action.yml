@@ -46,6 +46,7 @@ runs:
         cp ./pnpm-lock.yaml app/pnpm-lock.yaml
         cp ./.nvmrc app/.nvmrc
         cp ./Dockerfile app/Dockerfile
+        cp ./pnpm-workspace.yaml app/pnpm-workspace.yaml
         cp ./docker-compose.yml app/docker-compose.yml
         cp ./tsconfig.json app/tsconfig.json
         mkdir -p app/server
