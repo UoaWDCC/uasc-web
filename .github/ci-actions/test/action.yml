@@ -27,9 +27,9 @@ runs:
           server/node_modules
           client/node_modules
           node_modules
-        key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+        key: node-modules-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
         restore-keys: |
-          node-modules-
+          node-modules-${{ runner.os }}-
 
     - name: Run all tests
       env:
