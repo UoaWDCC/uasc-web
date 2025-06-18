@@ -46,12 +46,16 @@ export function expressAuthentication(
               resolve(user)
             })
             .catch((reason) => {
-              console.error(reason)
+              if (!(reason instanceof FireBaseError)) {
+                console.error(reason)
+              }
               reject(new FireBaseError("Authentication Error", 401, reason))
             })
         })
         .catch((reason) => {
-          console.error(reason)
+          if (!(reason instanceof FireBaseError)) {
+            console.error(reason)
+          }
           reject(new FireBaseError("Authentication Error", 401, reason))
         })
     })

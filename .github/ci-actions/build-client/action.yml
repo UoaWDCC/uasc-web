@@ -39,18 +39,25 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Install volta
-      uses: volta-cli/action@v4
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
 
-    - name: Cache yarn node_modules
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Cache node_modules
       uses: actions/cache@v4
       id: cache-node-modules
       with:
         path: |
-          **/node_modules
+          server/node_modules
+          client/node_modules
           node_modules
-          .yarn
-        key: node-modules-${{ hashFiles('yarn.lock') }}
+        key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
     - name: Check client builds
       env:
@@ -66,5 +73,5 @@ runs:
         NEXT_PUBLIC_SANITY_DATASET: ${{ inputs.NEXT_PUBLIC_SANITY_DATASET }}
         NEXT_CONFIG_ENV: ${{ inputs.NEXT_CONFIG_ENV }}
       run: |
-        yarn workspace client build
+        pnpm build --filter client
       shell: bash

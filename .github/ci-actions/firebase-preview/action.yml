@@ -55,10 +55,27 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Install volta
-      uses: volta-cli/action@v4
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
 
-    - run: yarn workspaces focus client && yarn workspace client build
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: false
+
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      id: cache-node-modules
+      with:
+        path: |
+          server/node_modules
+          client/node_modules
+          node_modules
+        key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+
+    - run: pnpm build --filter client
       env:
         NEXT_PUBLIC_FIREBASE_API_KEY: ${{ inputs.NEXT_PUBLIC_FIREBASE_API_KEY }}
         NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ inputs.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}

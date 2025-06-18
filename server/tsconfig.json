@@ -11,7 +11,7 @@
     "strictNullChecks": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["jest"],
+    "types": ["jest", "node"],
     "experimentalDecorators": true,
     "moduleResolution": "Node",
     "resolveJsonModule": true

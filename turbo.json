@@ -1,0 +1,38 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "globalDependencies": [".env"],
+  "tasks": {
+    "generate:types": {},
+    "build": {
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
+    "test": {
+      "dependsOn": ["^test", "test:server", "test:client"],
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
+    "test:firebase": {
+      "env": ["API_KEY"],
+      "cache": false
+    },
+    "test:server": {
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
+    "test:services": {
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
+    "test:routes": {
+      "env": ["API_KEY"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", "server/.env", "client/.env"]
+    },
+    "test:client": {},
+    "dev": {
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "persistent": true
+    }
+  },
+  "ui": "tui"
+}
