@@ -48,7 +48,6 @@ jobs:
 
   prettier:
     needs: [check_changes, setup]
-    if: ${{ needs.check_changes.outputs.exists == 'true' }}
     name: Prettier
     runs-on: ubuntu-latest
     steps:
