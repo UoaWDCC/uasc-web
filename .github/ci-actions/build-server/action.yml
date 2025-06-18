@@ -23,6 +23,9 @@ runs:
           client/node_modules
           node_modules
         key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          node-modules-pnpm
 
     - name: Check server builds
       run: |
