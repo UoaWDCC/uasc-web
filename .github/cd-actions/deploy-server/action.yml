@@ -51,7 +51,7 @@ runs:
         mkdir -p app/server
         cp -r ./server/. app/server
 
-    - name: Upload combined directory to EC2
+    - name: Upload combined directory to E2
       uses: burnett01/rsync-deployments@7.0.2
       with:
         switches: -avz --delete
@@ -79,3 +79,12 @@ runs:
           echo "NODE_MAILER_EMAIL=${{ inputs.NODE_MAILER_EMAIL }}" >> .env
           echo "NODE_MAILER_PASSWORD=${{ inputs.NODE_MAILER_PASSWORD }}" >> .env
           echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> .env
+
+          echo "Stopping old containers"
+          docker-compose down
+
+          echo "Rebuilding and starting containers"
+          docker-compose up -d --build
+
+          echo "Removing old images after build"
+          docker system prune -f
