@@ -39,7 +39,7 @@ runs:
         key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
         restore-keys: |
           node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          node-modules-pnpm
+          node-modules-pnpm-
 
     - name: Install dependencies
       shell: bash
