@@ -59,7 +59,8 @@ jobs:
             node_modules
           key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - run: pnpm build --filter client
+      - name: Build client
+        run: pnpm build --filter client
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
