@@ -14,7 +14,7 @@
     "generate:types": "turbo run generate:types",
     "build": "turbo run build",
     "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
-    "postinstall": "lefthook install",
+    "postinstall": "ts-node scripts/skip-in-production.ts || lefthook install",
     "storybook": "pnpm --prefix=client storybook",
     "test": "turbo run test",
     "test:routes": "turbo run test:routes",

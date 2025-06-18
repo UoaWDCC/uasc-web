@@ -8,6 +8,7 @@ ENV NODE_ENV=production
 # Stage 1: Copy package files and install
 COPY --link package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.json ./
 COPY --link ./server/package.json ./server/package.json
+COPY --link ./scripts ./scripts
 RUN corepack enable pnpm && pnpm install --filter server
 
 # Stage 2: Copy server and build

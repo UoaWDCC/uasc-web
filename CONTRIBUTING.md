@@ -1,19 +1,26 @@
 # Contributing Guidelines
+
 Thank you for considering contributing to our project (UASC is the largest sports club at the University of Auckland)! This document outlines the process and guidelines for contributing.
 
 ## Table of Contents
+
 - [Issue Creation](#issue-creation)
 - [Branch Naming](#branch-naming)
 - [Pull Requests](#pull-requests)
 - [Testing Guidelines](#testing-guidelines)
 - [Handling Generated Files](#handling-generated-files)
 - [Package Management](#package-management)
+
 ## Issue Creation
+
 Anyone can create tickets for bugs or feature requests. Please ensure you:
+
 - Use the appropriate issue templates
 - Provide detailed information for developers to understand the context
 - Create the issue on our [project board](https://github.com/orgs/UoaWDCC/projects/34)
+
 ## Branch Naming
+
 Branch names should follow the format: `<issue-number>-<relevant-name>`
 **Note:** Keep the name relevant to the issue (exceptions for funny names)
 
@@ -26,6 +33,7 @@ git checkout -b <branch-name>
 ```
 
 ## Pull Requests
+
 ### General Guidelines
 
 - All changes to master must be made through pull requests
@@ -49,30 +57,32 @@ Everyone is welcome and encouraged to review code. Please remember:
 - This ensures accountability and clear ownership of the changes
 
 ## Testing Guidelines
+
 ### Client-Side Testing
 
 - Use Storybook for UI component development
 
-- Create files with *.story.tsx naming scheme
+- Create files with \*.story.tsx naming scheme
 
 - Example Storybook story structure:
 
 ```tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { YourComponent } from './YourComponent';
+import type { Meta, StoryObj } from "@storybook/react"
+import { YourComponent } from "./YourComponent"
 const meta: Meta<typeof YourComponent> = {
-  component: YourComponent,
-};
-export default meta;
-type Story = StoryObj<typeof YourComponent>;
+  component: YourComponent
+}
+export default meta
+type Story = StoryObj<typeof YourComponent>
 export const FirstStory: Story = {
   args: {
     // Component props here
-  },
-};
+  }
+}
 ```
 
 ### Server-Side Testing
+
 - Unit tests required for most non-data-fetching logic
 
 - Integration tests required for:
@@ -90,6 +100,7 @@ File naming conventions:
 - Mocks: `*.mock.ts`
 
 ## Handling Generated Files
+
 When resolving merge conflicts with generated files:
 
 1. Update master:
@@ -99,6 +110,7 @@ git fetch origin master:master
 ```
 
 2. Merge changes:
+
 ```bash
 git merge master
 ```
@@ -114,7 +126,9 @@ git commit -a -m "fix merge conflicts"
 5. Push changes
 
 ## Package Management
+
 ### Important Notes
+
 - Install packages in appropriate workspaces
 
 - DO NOT use npm for package installation
