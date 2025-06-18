@@ -61,6 +61,11 @@ runs:
         restore-keys: |
           node-modules-${{ runner.os }}-
 
+    - name: Install dependencies if cache misses
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: pnpm install
+      shell: bash
+
     - name: Check client builds
       env:
         NEXT_PUBLIC_FIREBASE_API_KEY: ${{ inputs.NEXT_PUBLIC_FIREBASE_API_KEY }}

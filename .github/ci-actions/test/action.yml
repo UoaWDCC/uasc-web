@@ -31,6 +31,11 @@ runs:
         restore-keys: |
           node-modules-${{ runner.os }}-
 
+    - name: Install dependencies if cache misses
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: pnpm install
+      shell: bash
+
     - name: Run all tests
       env:
         API_KEY: ${{ inputs.api-key }}
