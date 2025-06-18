@@ -57,7 +57,9 @@ jobs:
             server/node_modules
             client/node_modules
             node_modules
-          key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            node-modules-
 
       - name: Build client
         run: pnpm build --filter client

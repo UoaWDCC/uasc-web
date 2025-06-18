@@ -22,10 +22,9 @@ runs:
           server/node_modules
           client/node_modules
           node_modules
-        key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+        key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
         restore-keys: |
-          node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          node-modules-pnpm
+          node-modules-
 
     - name: Check server builds
       run: |

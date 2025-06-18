@@ -39,7 +39,9 @@ jobs:
             server/node_modules
             client/node_modules
             node_modules
-          key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          key: node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            node-modules-
 
       - name: Update google sheet members with script
         run: |
