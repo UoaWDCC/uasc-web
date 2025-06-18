@@ -43,9 +43,9 @@ runs:
       run: |
         mkdir -p app
         cp ./package.json app/package.json
-        cp ./yarn.lock app/yarn.lock
-        cp ./.yarnrc.yml app/.yarnrc.yml
-        cp ./Server.Dockerfile app/Server.Dockerfile
+        cp ./pnpm-lock.yaml app/pnpm-lock.yaml
+        cp ./.nvmrc app/.nvmrc
+        cp ./Dockerfile app/Dockerfile
         cp ./docker-compose.yml app/docker-compose.yml
         cp ./tsconfig.json app/tsconfig.json
         mkdir -p app/server
