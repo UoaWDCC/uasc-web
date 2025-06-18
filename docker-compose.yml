@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     restart: always
-    volumes:
-      - node_modules:/app/node_modules
+    # volumes:
+    # - node_modules:/app/node_modules
 volumes:
   node_modules:

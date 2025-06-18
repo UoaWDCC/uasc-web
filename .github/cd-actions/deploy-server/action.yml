@@ -49,6 +49,7 @@ runs:
         cp ./pnpm-workspace.yaml app/pnpm-workspace.yaml
         cp ./docker-compose.yml app/docker-compose.yml
         cp ./tsconfig.json app/tsconfig.json
+        cp ./turbo.json app/turbo.json
         mkdir -p app/server
         cp -r ./server/. app/server
 
@@ -73,18 +74,16 @@ runs:
           cd ~/app
 
           echo "storing secrets"
-          echo "GOOGLE_SERVICE_ACCOUNT_JSON=$(echo ${{ inputs.GOOGLE_SERVICE_ACCOUNT_JSON }} | base64 --decode)" >> .env
-          echo "STRIPE_WEBHOOK_SECRET=${{ inputs.STRIPE_WEBHOOK_SECRET }}" >> .env
-          echo "STRIPE_API_KEY=${{ inputs.STRIPE_API_KEY }}" >> .env
-          echo "FRONTEND_URL=${{ inputs.FRONTEND_URL }}" >> .env
-          echo "NODE_MAILER_EMAIL=${{ inputs.NODE_MAILER_EMAIL }}" >> .env
-          echo "NODE_MAILER_PASSWORD=${{ inputs.NODE_MAILER_PASSWORD }}" >> .env
-          echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> .env
-
-          echo "Stopping old containers"
-          docker-compose down
+          echo "GOOGLE_SERVICE_ACCOUNT_JSON=$(echo ${{ inputs.GOOGLE_SERVICE_ACCOUNT_JSON }} | base64 --decode)" >> server/.env
+          echo "STRIPE_WEBHOOK_SECRET=${{ inputs.STRIPE_WEBHOOK_SECRET }}" >> server/.env
+          echo "STRIPE_API_KEY=${{ inputs.STRIPE_API_KEY }}" >> server/.env
+          echo "FRONTEND_URL=${{ inputs.FRONTEND_URL }}" >> server/.env
+          echo "NODE_MAILER_EMAIL=${{ inputs.NODE_MAILER_EMAIL }}" >> server/.env
+          echo "NODE_MAILER_PASSWORD=${{ inputs.NODE_MAILER_PASSWORD }}" >> server/.env
+          echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> server/.env
 
           echo "Rebuilding and starting containers"
+          export COMPOSE_HTTP_TIMEOUT=200
           docker-compose up -d --build
 
           echo "Removing old images after build"
