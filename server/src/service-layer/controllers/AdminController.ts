@@ -82,7 +82,7 @@ import MailConfigService from "data-layer/services/MailConfigService"
 import { compile as pugCompile } from "pug"
 import * as process from "node:process"
 import { EncryptionService } from "../../business-layer/services/EncryptionService"
-import { StatusCodes } from "http-status-codes"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -911,7 +911,7 @@ export class AdminController extends Controller {
       console.error("Error getting mail configuration:", error)
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
-        error: "Internal Server Error",
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
         message: "Failed to retrieve mail configuration"
       }
     }
@@ -940,7 +940,7 @@ export class AdminController extends Controller {
       console.error("Error updating mail configuration:", error)
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
-        error: "Internal Server Error",
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
         message: "Failed to update mail configuration"
       }
     }
@@ -966,7 +966,7 @@ export class AdminController extends Controller {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
         templates: [],
-        error: "Internal Server Error",
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
         message: "Failed to retrieve email templates"
       }
     }
@@ -991,7 +991,7 @@ export class AdminController extends Controller {
       if (!template) {
         this.setStatus(StatusCodes.NOT_FOUND)
         return {
-          error: "Not Found",
+          error: getReasonPhrase(StatusCodes.NOT_FOUND),
           message: "Email template not found"
         }
       }
@@ -1002,7 +1002,7 @@ export class AdminController extends Controller {
       console.error(`Error getting email template ${id}:`, error)
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
-        error: "Internal Server Error",
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
         message: "Failed to retrieve email template"
       }
     }
@@ -1048,7 +1048,7 @@ export class AdminController extends Controller {
       console.error(`Error updating email template:`, error)
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
-        error: "Internal Server Error",
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
         message: "Failed to update email template"
       }
     }
