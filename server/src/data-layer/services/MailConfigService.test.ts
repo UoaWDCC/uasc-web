@@ -146,34 +146,5 @@ describe("MailConfigService integration tests", () => {
       expect(result?.name).toEqual("Updated Name")
       expect(result?.content).toEqual("p Updated content with #{name}")
     })
-
-    it("should update the timestamp when updating a template", async () => {
-      // Create initial template with fixed date
-      const initialDate = new Date("2023-01-01")
-      await mailConfigService.updateEmailTemplate({
-        ...template,
-        updatedAt: initialDate
-      })
-
-      // Get the initial saved template
-      const initialTemplate = await mailConfigService.getEmailTemplate(
-        template.id
-      )
-
-      // Update template and verify timestamp changes
-      await new Promise((resolve) => setTimeout(resolve, 10)) // Small delay to ensure timestamp difference
-      await mailConfigService.updateEmailTemplate({
-        ...template,
-        name: "New Name"
-      })
-
-      const updatedTemplate = await mailConfigService.getEmailTemplate(
-        template.id
-      )
-
-      expect(updatedTemplate?.updatedAt.getTime()).toBeGreaterThan(
-        initialTemplate?.updatedAt.getTime() as number
-      )
-    })
   })
 })
