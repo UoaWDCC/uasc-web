@@ -988,7 +988,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
     })
 
     it("should not allow members to get mail configuration", async () => {
@@ -997,7 +997,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send()
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
 
     it("should not allow guests to get mail configuration", async () => {
@@ -1006,7 +1006,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${guestToken}`)
         .send()
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
 
     it("should allow admins to update mail configuration", async () => {
@@ -1022,7 +1022,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send(configData)
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
 
       // Verify the config was saved
       const mailConfigService = new MailConfigService(new EncryptionService())
@@ -1038,7 +1038,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ config: { email: "test@example.com" } })
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 
@@ -1065,7 +1065,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.templates).toBeDefined()
       expect(res.body.templates.length).toBeGreaterThanOrEqual(1)
     })
@@ -1076,7 +1076,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.template).toBeDefined()
       expect(res.body.template.id).toEqual("test_template")
       expect(res.body.template.name).toEqual("Test Template")
@@ -1089,7 +1089,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(404)
+      expect(res.status).toEqual(StatusCodes.NOT_FOUND)
       expect(res.body.error).toBeDefined()
     })
 
@@ -1107,7 +1107,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send(templateData)
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
 
       // Verify the template was saved
       const template = await mailConfigService.getEmailTemplate(
@@ -1131,7 +1131,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send(templateData)
 
-      expect(res.status).toEqual(400)
+      expect(res.status).toEqual(StatusCodes.BAD_REQUEST)
       expect(res.body.error).toContain("Invalid template content")
     })
 
@@ -1141,7 +1141,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send()
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
 
       res = await request
         .put("/admin/mail/templates")
@@ -1152,7 +1152,7 @@ describe("AdminController endpoint tests", () => {
           content: "p Test"
         })
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 })

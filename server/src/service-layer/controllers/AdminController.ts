@@ -905,7 +905,7 @@ export class AdminController extends Controller {
       )
       const config = await mailConfigService.getMailConfig()
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { config }
     } catch (error) {
       console.error("Error getting mail configuration:", error)
@@ -934,7 +934,7 @@ export class AdminController extends Controller {
 
       await mailConfigService.updateMailConfig(requestBody.config)
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { message: "Mail configuration updated successfully" }
     } catch (error) {
       console.error("Error updating mail configuration:", error)
@@ -959,7 +959,7 @@ export class AdminController extends Controller {
       )
       const templates = await mailConfigService.getAllEmailTemplates()
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { templates }
     } catch (error) {
       console.error("Error getting email templates:", error)
@@ -989,14 +989,14 @@ export class AdminController extends Controller {
       const template = await mailConfigService.getEmailTemplate(id)
 
       if (!template) {
-        this.setStatus(404)
+        this.setStatus(StatusCodes.NOT_FOUND)
         return {
           error: "Not Found",
           message: "Email template not found"
         }
       }
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { template }
     } catch (error) {
       console.error(`Error getting email template ${id}:`, error)
@@ -1027,7 +1027,7 @@ export class AdminController extends Controller {
       try {
         pugCompile(requestBody.content)
       } catch (pugError) {
-        this.setStatus(400)
+        this.setStatus(StatusCodes.BAD_REQUEST)
         return {
           error: `Invalid template content: ${pugError}`
         }
@@ -1042,7 +1042,7 @@ export class AdminController extends Controller {
         updatedAt: new Date()
       })
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { message: "Email template updated successfully" }
     } catch (error) {
       console.error(`Error updating email template:`, error)
