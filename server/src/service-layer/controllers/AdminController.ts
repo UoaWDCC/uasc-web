@@ -687,8 +687,8 @@ export class AdminController extends Controller {
   /**
    * Fetches the **latest** booking history events (uses cursor-based pagination)
    *
-   * @param limit - The maximum number of history events to fetch
-   * @param cursor - Optional starting point for pagination
+   * @param limit The maximum number of history events to fetch
+   * @param cursor Optional starting point for pagination
    * @returns The list of latest history events
    */
   @SuccessResponse("200", "History Events Fetched")
