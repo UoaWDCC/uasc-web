@@ -66,6 +66,7 @@ import {
 import { CreateEventBody } from "service-layer/request-models/EventRequests"
 import EventService from "data-layer/services/EventService"
 import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
+import { StatusCodes } from "http-status-codes"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -391,7 +392,7 @@ export class AdminController extends Controller {
   ): Promise<AllUsersResponse> {
     // validation
     if (toFetch > 100 || toFetch < 0) {
-      this.setStatus(400)
+      this.setStatus(StatusCodes.BAD_REQUEST)
       return { error: "Invalid fetch amount" }
     }
     const USERS_TO_FETCH = toFetch || 100
@@ -546,7 +547,7 @@ export class AdminController extends Controller {
     const user: UserAdditionalInfo = await userService.getUserData(
       requestBody.uid
     )
-    if (!user) return this.setStatus(400) // bad request
+    if (!user) return this.setStatus(StatusCodes.BAD_REQUEST) // bad request
     const userClaimRole = await authService.getCustomerUserClaim(
       requestBody.uid
     )
@@ -579,7 +580,7 @@ export class AdminController extends Controller {
     const user: UserAdditionalInfo = await userService.getUserData(
       requestBody.uid
     )
-    if (!user) return this.setStatus(400) // bad request
+    if (!user) return this.setStatus(StatusCodes.BAD_REQUEST) // bad request
     const userClaimRole = await authService.getCustomerUserClaim(
       requestBody.uid
     )
@@ -651,7 +652,7 @@ export class AdminController extends Controller {
         return
       }
       if (!user.stripe_id) {
-        this.setStatus(400)
+        this.setStatus(StatusCodes.BAD_REQUEST)
         return
       }
 

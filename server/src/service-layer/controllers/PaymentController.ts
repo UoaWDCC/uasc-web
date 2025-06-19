@@ -385,7 +385,7 @@ export class PaymentController extends Controller {
           new Date()
         )
       ) {
-        this.setStatus(400)
+        this.setStatus(StatusCodes.BAD_REQUEST)
         return {
           error:
             "Invalid date, booking start date and end date must be in the range of today up to a year later. "
@@ -414,7 +414,7 @@ export class PaymentController extends Controller {
       const MAX_BOOKING_DAYS = 10
       // Validate number of dates to avoid kiddies from forging bookings
       if (totalDays > MAX_BOOKING_DAYS) {
-        this.setStatus(400)
+        this.setStatus(StatusCodes.BAD_REQUEST)
         return {
           error: "Invalid date range, booking must be a maximum of 10 days. "
         }
