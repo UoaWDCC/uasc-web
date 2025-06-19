@@ -2,6 +2,11 @@ import { cleanFirestore } from "../../test-config/TestUtils"
 import MailConfigService from "./MailConfigService"
 import { EmailTemplate, MailConfig } from "../models/MailConfig"
 
+import db from "../adapters/FirestoreCollections"
+
+// Set environment variable for testing
+process.env.MAIL_ENCRYPTION_KEY = "test_encryption_key_for_unit_tests"
+
 describe("MailConfigService integration tests", () => {
   const mailConfigService = new MailConfigService()
 
@@ -15,7 +20,7 @@ describe("MailConfigService integration tests", () => {
       expect(result).toBeUndefined()
     })
 
-    it("should create and retrieve mail config", async () => {
+    it("should create and retrieve mail config with encrypted password", async () => {
       const config: MailConfig = {
         email: "test@example.com",
         password: "test-password",
@@ -24,12 +29,21 @@ describe("MailConfigService integration tests", () => {
 
       await mailConfigService.updateMailConfig(config)
 
+      // Get raw document from Firestore to verify password is encrypted
+      const doc = await db.mailConfig.doc("current").get()
+      const rawData = doc.data() as MailConfig
+
+      // Verify the stored password is encrypted
+      expect(rawData.password).not.toEqual("test-password")
+      expect(rawData.password).toContain(":") // Our encryption format uses IV:encryptedData
+
+      // Now verify that the service decrypts it properly when retrieving
       const result = await mailConfigService.getMailConfig()
 
       expect(result).toEqual(config)
     })
 
-    it("should update existing mail config", async () => {
+    it("should update existing mail config maintaining password encryption", async () => {
       // Initial config
       await mailConfigService.updateMailConfig({
         email: "initial@example.com",
@@ -46,12 +60,19 @@ describe("MailConfigService integration tests", () => {
 
       await mailConfigService.updateMailConfig(updatedConfig)
 
-      const result = await mailConfigService.getMailConfig()
+      // Get raw document to check encryption
+      const doc = await db.mailConfig.doc("current").get()
+      const rawData = doc.data() as MailConfig
 
+      // Verify encryption
+      expect(rawData.password).not.toEqual("updated-password")
+
+      // Verify decryption works
+      const result = await mailConfigService.getMailConfig()
       expect(result).toEqual(updatedConfig)
     })
 
-    it("should partially update mail config", async () => {
+    it("should partially update mail config without affecting password", async () => {
       // Initial config
       const initialConfig: MailConfig = {
         email: "initial@example.com",
@@ -61,7 +82,7 @@ describe("MailConfigService integration tests", () => {
 
       await mailConfigService.updateMailConfig(initialConfig)
 
-      // Partial update
+      // Partial update without password
       await mailConfigService.updateMailConfig({
         email: "updated@example.com"
       })
@@ -73,6 +94,23 @@ describe("MailConfigService integration tests", () => {
         password: "initial-password",
         fromHeader: "Initial Header"
       })
+    })
+
+    it("should handle updating only the password", async () => {
+      // Initial config
+      await mailConfigService.updateMailConfig({
+        email: "test@example.com",
+        password: "initial-password"
+      })
+
+      // Update only password
+      await mailConfigService.updateMailConfig({
+        password: "new-password"
+      })
+
+      const result = await mailConfigService.getMailConfig()
+      expect(result?.password).toEqual("new-password")
+      expect(result?.email).toEqual("test@example.com")
     })
   })
 

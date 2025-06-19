@@ -1,61 +1,27 @@
 import { MailConfig, EmailTemplate } from "../../data-layer/models/MailConfig"
+import { CommonResponse } from "./CommonResponse"
 
-export interface GetMailConfigResponse {
+export interface GetMailConfigResponse extends CommonResponse {
   /**
    * The current mail configuration or undefined if not found
    */
   config?: MailConfig
-
-  /**
-   * Error message if an error occurred
-   */
-  error?: string
 }
 
-export interface UpdateMailConfigResponse {
-  /**
-   * Whether the update was successful
-   */
-  success: boolean
+export interface UpdateMailConfigResponse extends CommonResponse {}
 
-  /**
-   * Error message if an error occurred
-   */
-  error?: string
-}
-
-export interface GetEmailTemplateResponse {
+export interface GetEmailTemplateResponse extends CommonResponse {
   /**
    * The email template or undefined if not found
    */
   template?: EmailTemplate
-
-  /**
-   * Error message if an error occurred
-   */
-  error?: string
 }
 
-export interface GetAllEmailTemplatesResponse {
+export interface GetAllEmailTemplatesResponse extends CommonResponse {
   /**
    * The list of available email templates
    */
   templates: EmailTemplate[]
-
-  /**
-   * Error message if an error occurred
-   */
-  error?: string
 }
 
-export interface UpdateEmailTemplateResponse {
-  /**
-   * Whether the update was successful
-   */
-  success: boolean
-
-  /**
-   * Error message if an error occurred
-   */
-  error?: string
-}
+export interface UpdateEmailTemplateResponse extends CommonResponse {}

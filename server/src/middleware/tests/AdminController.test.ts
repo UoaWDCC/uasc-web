@@ -979,10 +979,10 @@ describe("AdminController endpoint tests", () => {
     })
   })
 
-  describe("/admin/mail-config", () => {
+  describe("/admin/mail/config", () => {
     it("should allow admins to get mail configuration", async () => {
       const res = await request
-        .get("/admin/mail-config")
+        .get("/admin/mail/config")
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
@@ -991,7 +991,7 @@ describe("AdminController endpoint tests", () => {
 
     it("should not allow members to get mail configuration", async () => {
       const res = await request
-        .get("/admin/mail-config")
+        .get("/admin/mail/config")
         .set("Authorization", `Bearer ${memberToken}`)
         .send()
 
@@ -1000,7 +1000,7 @@ describe("AdminController endpoint tests", () => {
 
     it("should not allow guests to get mail configuration", async () => {
       const res = await request
-        .get("/admin/mail-config")
+        .get("/admin/mail/config")
         .set("Authorization", `Bearer ${guestToken}`)
         .send()
 
@@ -1016,7 +1016,7 @@ describe("AdminController endpoint tests", () => {
       }
 
       const res = await request
-        .put("/admin/mail-config")
+        .put("/admin/mail/config")
         .set("Authorization", `Bearer ${adminToken}`)
         .send(configData)
 
@@ -1033,7 +1033,7 @@ describe("AdminController endpoint tests", () => {
 
     it("should not allow members to update mail configuration", async () => {
       const res = await request
-        .put("/admin/mail-config")
+        .put("/admin/mail/config")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ config: { email: "test@example.com" } })
 
@@ -1041,7 +1041,7 @@ describe("AdminController endpoint tests", () => {
     })
   })
 
-  describe("/admin/mail-templates", () => {
+  describe("/admin/mail/templates", () => {
     const mailConfigService = new MailConfigService()
 
     // Setup a test template
@@ -1060,7 +1060,7 @@ describe("AdminController endpoint tests", () => {
 
     it("should allow admins to get all email templates", async () => {
       const res = await request
-        .get("/admin/mail-templates")
+        .get("/admin/mail/templates")
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
@@ -1071,7 +1071,7 @@ describe("AdminController endpoint tests", () => {
 
     it("should allow admins to get a specific email template", async () => {
       const res = await request
-        .get("/admin/mail-templates/test_template")
+        .get("/admin/mail/templates/test_template")
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
@@ -1084,7 +1084,7 @@ describe("AdminController endpoint tests", () => {
 
     it("should return 404 for non-existent template", async () => {
       const res = await request
-        .get("/admin/mail-templates/nonexistent_template")
+        .get("/admin/mail/templates/nonexistent_template")
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
@@ -1102,7 +1102,7 @@ describe("AdminController endpoint tests", () => {
       }
 
       const res = await request
-        .put("/admin/mail-templates")
+        .put("/admin/mail/templates")
         .set("Authorization", `Bearer ${adminToken}`)
         .send(templateData)
 
@@ -1127,7 +1127,7 @@ describe("AdminController endpoint tests", () => {
       }
 
       const res = await request
-        .put("/admin/mail-templates")
+        .put("/admin/mail/templates")
         .set("Authorization", `Bearer ${adminToken}`)
         .send(templateData)
 
@@ -1138,14 +1138,14 @@ describe("AdminController endpoint tests", () => {
 
     it("should not allow members to access or update templates", async () => {
       let res = await request
-        .get("/admin/mail-templates")
+        .get("/admin/mail/templates")
         .set("Authorization", `Bearer ${memberToken}`)
         .send()
 
       expect(res.status).toEqual(401)
 
       res = await request
-        .put("/admin/mail-templates")
+        .put("/admin/mail/templates")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({
           id: "booking_confirmation",

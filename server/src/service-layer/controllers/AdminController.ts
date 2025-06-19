@@ -79,7 +79,7 @@ import {
 } from "service-layer/response-models/MailConfigResponse"
 import MailConfigService from "data-layer/services/MailConfigService"
 
-import { compile } from "pug"
+import { compile as pugCompile } from "pug"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -685,9 +685,9 @@ export class AdminController extends Controller {
   /**
    * Fetches the **latest** booking history events (uses cursor-based pagination)
    *
-   * @returns the list of latest history events
-   * @param limit
-   * @param cursor
+   * @param limit - The maximum number of history events to fetch
+   * @param cursor - Optional starting point for pagination
+   * @returns The list of latest history events
    */
   @SuccessResponse("200", "History Events Fetched")
   @Get("bookings/history")
@@ -894,7 +894,7 @@ export class AdminController extends Controller {
    * @returns The current mail configuration or undefined if not set
    */
   @SuccessResponse("200", "Mail configuration retrieved")
-  @Get("/mail-config")
+  @Get("/mail/config")
   public async getMailConfig(): Promise<GetMailConfigResponse> {
     try {
       const mailConfigService = new MailConfigService()
@@ -905,7 +905,10 @@ export class AdminController extends Controller {
     } catch (error) {
       console.error("Error getting mail configuration:", error)
       this.setStatus(500)
-      return { error: "Failed to retrieve mail configuration" }
+      return {
+        error: "Internal Server Error",
+        message: "Failed to retrieve mail configuration"
+      }
     }
   }
 
@@ -915,7 +918,7 @@ export class AdminController extends Controller {
    * @returns Success status and any error message
    */
   @SuccessResponse("200", "Mail configuration updated")
-  @Put("/mail-config")
+  @Put("/mail/config")
   public async updateMailConfig(
     @Body() requestBody: UpdateMailConfigRequestBody
   ): Promise<UpdateMailConfigResponse> {
@@ -925,13 +928,13 @@ export class AdminController extends Controller {
       await mailConfigService.updateMailConfig(requestBody.config)
 
       this.setStatus(200)
-      return { success: true }
+      return { message: "Mail configuration updated successfully" }
     } catch (error) {
       console.error("Error updating mail configuration:", error)
       this.setStatus(500)
       return {
-        success: false,
-        error: "Failed to update mail configuration"
+        error: "Internal Server Error",
+        message: "Failed to update mail configuration"
       }
     }
   }
@@ -941,7 +944,7 @@ export class AdminController extends Controller {
    * @returns List of email templates
    */
   @SuccessResponse("200", "Email templates retrieved")
-  @Get("/mail-templates")
+  @Get("/mail/templates")
   public async getAllEmailTemplates(): Promise<GetAllEmailTemplatesResponse> {
     try {
       const mailConfigService = new MailConfigService()
@@ -965,7 +968,7 @@ export class AdminController extends Controller {
    * @returns The email template or an error
    */
   @SuccessResponse("200", "Email template retrieved")
-  @Get("/mail-templates/{id}")
+  @Get("/mail/templates/{id}")
   public async getEmailTemplate(
     @Path() id: string
   ): Promise<GetEmailTemplateResponse> {
@@ -993,7 +996,7 @@ export class AdminController extends Controller {
    * @returns Success status and any error message
    */
   @SuccessResponse("200", "Email template updated")
-  @Put("/mail-templates")
+  @Put("/mail/templates")
   public async updateEmailTemplate(
     @Body() requestBody: UpdateEmailTemplateRequestBody
   ): Promise<UpdateEmailTemplateResponse> {
@@ -1002,11 +1005,10 @@ export class AdminController extends Controller {
 
       // Validate that the template content is valid Pug
       try {
-        compile(requestBody.content)
+        pugCompile(requestBody.content)
       } catch (pugError) {
         this.setStatus(400)
         return {
-          success: false,
           error: `Invalid template content: ${pugError}`
         }
       }
@@ -1021,12 +1023,11 @@ export class AdminController extends Controller {
       })
 
       this.setStatus(200)
-      return { success: true }
+      return { message: "Email template updated successfully" }
     } catch (error) {
       console.error(`Error updating email template:`, error)
       this.setStatus(500)
       return {
-        success: false,
         error: "Failed to update email template"
       }
     }
