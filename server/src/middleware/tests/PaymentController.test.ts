@@ -1,5 +1,6 @@
 import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
 import { request, adminToken, memberToken, guestToken } from "../routes.setup"
+import { StatusCodes } from "http-status-codes"
 
 describe("PaymentController endpoint tests", () => {
   describe("/payments/booking", () => {
@@ -10,13 +11,13 @@ describe("PaymentController endpoint tests", () => {
         .set("Authorization", `Bearer ${guestToken}`)
         .send({ startDate: { seconds: 0, nanoseconds: 0 } })
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
 
       res = await request
         .post("/payment/booking")
         .send({ seconds: 0, nanoseconds: 0 })
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
   describe("/payments/membership", () => {
@@ -28,7 +29,7 @@ describe("PaymentController endpoint tests", () => {
           membershipType: MembershipTypeValues.UoaStudent
         })
 
-      expect(res.status).toEqual(409)
+      expect(res.status).toEqual(StatusCodes.CONFLICT)
     })
 
     it("should let guests/admins to try create sessions", async () => {
@@ -38,7 +39,7 @@ describe("PaymentController endpoint tests", () => {
         .send({
           membershipType: MembershipTypeValues.NewNonStudent
         })
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
 
       /**
        * Note admins should be able to create sessions for testing purposes, it is assumed that admin users will not try pay
@@ -49,7 +50,7 @@ describe("PaymentController endpoint tests", () => {
         .send({
           membershipType: MembershipTypeValues.UoaStudent
         })
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
     })
   })
 })

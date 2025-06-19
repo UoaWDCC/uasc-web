@@ -2,6 +2,7 @@ import EventService from "data-layer/services/EventService"
 import { memberToken, request } from "../routes.setup"
 import { Event } from "../../data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
+import { StatusCodes } from "http-status-codes"
 
 const earlierStartDate = Timestamp.fromDate(new Date(2023, 1, 1))
 const startDate = Timestamp.fromDate(new Date(Date.now() + 60000)) // plus one min
@@ -72,7 +73,7 @@ describe("EventController endpoint tests", () => {
       expect(res.body.data).toHaveLength(1)
       expect(res.body.data).not.toContainEqual({ ...event1, id: id1 })
       expect(res.body.data).toContainEqual({ ...event2, id: id2 })
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
 
       res = await request
         .get("/events")
@@ -82,7 +83,7 @@ describe("EventController endpoint tests", () => {
       expect(res.body.data).toHaveLength(1)
       expect(res.body.data).toContainEqual({ ...event1, id: id1 })
       expect(res.body.data).not.toContainEqual({ ...event2, id: id2 })
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
     })
 
     it("should include google_forms_link if event is within 1 minute", async () => {
@@ -136,7 +137,7 @@ describe("EventController endpoint tests", () => {
 
         const res = await request.get("/events/for-members").send()
 
-        expect(res.status).toEqual(401)
+        expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
       })
 
       it("should include google_forms_link if user is a member", async () => {
@@ -147,7 +148,7 @@ describe("EventController endpoint tests", () => {
           .set("Authorization", `Bearer ${memberToken}`)
           .send()
 
-        expect(requestWithMember.status).toEqual(200)
+        expect(requestWithMember.status).toEqual(StatusCodes.OK)
         expect(requestWithMember.body.data).toContainEqual(
           expect.objectContaining({
             google_forms_link: "https://random.com/event3"

@@ -45,6 +45,7 @@ import {
   Body
 } from "tsoa"
 import BookingUtils from "business-layer/utils/BookingUtils"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 
 @Route("payment")
 export class PaymentController extends Controller {
@@ -104,7 +105,7 @@ export class PaymentController extends Controller {
       return { data: productsValues }
     } catch (error) {
       console.error(error)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return { error: "Error fetching active Stripe products" }
     }
   }
@@ -144,11 +145,11 @@ export class PaymentController extends Controller {
           originalPrice: product.metadata.original_price
         }
       })
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { data: productsValues }
     } catch (error) {
       console.error(error)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return { error: "Error fetching active Stripe products" }
     }
   }
@@ -174,7 +175,7 @@ export class PaymentController extends Controller {
         metadata
       }
     } catch (e) {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return null
     }
   }
@@ -196,7 +197,7 @@ export class PaymentController extends Controller {
       const { uid, customClaims } = request.user
       if (customClaims && customClaims[AuthServiceClaims.MEMBER]) {
         // Can't pay for membership if already member
-        this.setStatus(409)
+        this.setStatus(StatusCodes.CONFLICT)
         return { error: "Already a member" }
       }
 
@@ -224,7 +225,7 @@ export class PaymentController extends Controller {
         )
         if (activeSession) {
           const { client_secret, metadata } = activeSession
-          this.setStatus(200)
+          this.setStatus(StatusCodes.OK)
           return {
             stripeClientSecret: client_secret,
             membershipType: metadata[
@@ -242,7 +243,7 @@ export class PaymentController extends Controller {
             stripeCustomerId
           )
         ) {
-          this.setStatus(409)
+          this.setStatus(StatusCodes.CONFLICT)
           return {
             message: "Membership payment is still being processed"
           }
@@ -254,9 +255,10 @@ export class PaymentController extends Controller {
        */
       const requiredMembership = requestBody.membershipType
       if (!requiredMembership) {
-        this.setStatus(404)
+        this.setStatus(StatusCodes.NOT_FOUND)
         return {
-          error:
+          error: getReasonPhrase(StatusCodes.NOT_FOUND),
+          message:
             "No existing session could be found, and no new session could be created because membership type was not provided"
         }
       }
@@ -294,15 +296,18 @@ export class PaymentController extends Controller {
         },
         stripeCustomerId
       )
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return {
         stripeClientSecret: clientSecret,
         membershipType: requiredMembership
       }
     } catch (error) {
       console.error(error)
-      this.setStatus(500)
-      return { error: "Something went wrong" }
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+      return {
+        message: "Something went wrong",
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
+      }
     }
   }
 

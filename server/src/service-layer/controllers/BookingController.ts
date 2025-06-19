@@ -36,6 +36,8 @@ import {
 import StripeService from "business-layer/services/StripeService"
 import BookingUtils from "business-layer/utils/BookingUtils"
 
+import { StatusCodes, getReasonPhrase } from "http-status-codes"
+
 @Route("bookings")
 export class BookingController extends Controller {
   /**
@@ -75,8 +77,8 @@ export class BookingController extends Controller {
       }
       return bookingDates
     } catch (e) {
-      this.setStatus(500)
-      return { error: "Failed to get bookings." }
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+      return { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) }
     }
   }
 
@@ -176,11 +178,11 @@ export class BookingController extends Controller {
       const responseData = await Promise.all(queryPromises)
 
       // Query stripe for the amount of active checkout sessions for each of the slots - IGNORE FOR NOW
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { data: responseData }
     } catch (e) {
-      this.setStatus(500)
-      return { error: "Something went wrong" }
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+      return { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) }
     }
   }
 
@@ -269,7 +271,7 @@ export class BookingController extends Controller {
 
       await Promise.all(bookingPromises)
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
 
       /**
        * Returning the response data
@@ -280,9 +282,9 @@ export class BookingController extends Controller {
       return { data: responseData.filter((data) => !!data) }
     } catch (e) {
       console.error("Error in getBookingsByDateRange:", e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
 
-      return { error: "Something went wrong" }
+      return { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) }
     }
   }
 }
