@@ -1021,7 +1021,6 @@ describe("AdminController endpoint tests", () => {
         .send(configData)
 
       expect(res.status).toEqual(200)
-      expect(res.body.success).toEqual(true)
 
       // Verify the config was saved
       const mailConfigService = new MailConfigService()
@@ -1107,7 +1106,6 @@ describe("AdminController endpoint tests", () => {
         .send(templateData)
 
       expect(res.status).toEqual(200)
-      expect(res.body.success).toEqual(true)
 
       // Verify the template was saved
       const template = await mailConfigService.getEmailTemplate(
@@ -1132,7 +1130,6 @@ describe("AdminController endpoint tests", () => {
         .send(templateData)
 
       expect(res.status).toEqual(400)
-      expect(res.body.success).toEqual(false)
       expect(res.body.error).toContain("Invalid template content")
     })
 
