@@ -1,5 +1,6 @@
 import fetchClient from "../OpenApiFetchClient"
 import { ReducedUserAdditionalInfo } from "@/models/User"
+import { StatusCodes } from "http-status-codes"
 
 export type SignUpUserBody = {
   email: string
@@ -23,12 +24,12 @@ const UserService = {
       body: userData
     })
 
-    if (response.status === 400)
+    if (response.status === StatusCodes.BAD_REQUEST)
       throw new Error(
         "Invalid details, double check to see if the details are correct"
       )
 
-    if (response.status === 409)
+    if (response.status === StatusCodes.CONFLICT)
       throw new Error(
         `An account already exists with the email ${userData.email}`
       )

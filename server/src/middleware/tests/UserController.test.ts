@@ -2,6 +2,7 @@ import * as admin from "firebase-admin"
 import UserDataService from "data-layer/services/UserDataService"
 import { ADMIN_USER_UID, GUEST_USER_UID, MEMBER_USER_UID } from "../routes.mock"
 import { request, adminToken, memberToken } from "../routes.setup"
+import { StatusCodes } from "http-status-codes"
 
 describe("UserController endpoint tests", () => {
   describe("/users/self", () => {
@@ -27,7 +28,7 @@ describe("UserController endpoint tests", () => {
           }
         })
 
-      expect(res.status).toEqual(200) // success
+      expect(res.status).toEqual(StatusCodes.OK) // success
       const updatedUser = await new UserDataService().getUserData(
         ADMIN_USER_UID
       )
@@ -48,7 +49,7 @@ describe("UserController endpoint tests", () => {
           }
         })
 
-      expect(res.status).toEqual(400) // invalid request
+      expect(res.status).toEqual(StatusCodes.BAD_REQUEST) // invalid request
       const updatedUser = await new UserDataService().getUserData(
         MEMBER_USER_UID
       )
@@ -61,7 +62,7 @@ describe("UserController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ updatedInformation: { does_ski: "invalid" } })
 
-      expect(res.status).toEqual(400) // invalid request
+      expect(res.status).toEqual(StatusCodes.BAD_REQUEST) // invalid request
       const updatedUser = await new UserDataService().getUserData(
         MEMBER_USER_UID
       )
@@ -76,7 +77,7 @@ describe("UserController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       const deletedUser = await new UserDataService().getUserData(
         MEMBER_USER_UID
       )
@@ -108,7 +109,7 @@ describe("UserController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
 
-      expect(res.status).toEqual(403) // forbidden request
+      expect(res.status).toEqual(StatusCodes.FORBIDDEN) // forbidden request
       const deletedUser = await new UserDataService().getUserData(
         ADMIN_USER_UID
       )
@@ -124,7 +125,7 @@ describe("UserController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ uid: MEMBER_USER_UID })
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 })

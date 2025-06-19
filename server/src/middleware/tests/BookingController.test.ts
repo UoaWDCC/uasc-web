@@ -4,6 +4,7 @@ import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import BookingDataService from "data-layer/services/BookingDataService"
 import { Timestamp } from "firebase-admin/firestore"
+import { StatusCodes } from "http-status-codes"
 
 describe("BookingController endpoint tests", () => {
   describe("/bookings", () => {
@@ -13,7 +14,7 @@ describe("BookingController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
 
-      expect(res.status).toBe(200)
+      expect(res.status).toBe(StatusCodes.OK)
       expect(res.body.dates).toEqual([])
     })
 
@@ -51,7 +52,7 @@ describe("BookingController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
 
-      expect(res.status).toBe(200)
+      expect(res.status).toBe(StatusCodes.OK)
       expect(res.body.dates).toContainEqual("2024-06-06")
       expect(res.body.dates).toContainEqual("2024-06-10")
       expect(res.body.dates.length).toBe(2)
@@ -63,7 +64,7 @@ describe("BookingController endpoint tests", () => {
         .set("Authorization", `Bearer ${guestToken}`)
         .send({})
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 
@@ -93,7 +94,7 @@ describe("BookingController endpoint tests", () => {
           endDate: dateToFirestoreTimeStamp(new Date("11/09/2009"))
         })
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.data[0].availableSpaces).toEqual(45)
     })
 
@@ -119,7 +120,7 @@ describe("BookingController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.data[0].availableSpaces).toEqual(40)
     })
 
@@ -172,7 +173,7 @@ describe("BookingController endpoint tests", () => {
           endDate: dateToFirestoreTimeStamp(new Date("10/21/2015"))
         })
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.data).toHaveLength(2)
       expect(
         res.body.data.find(
@@ -197,7 +198,7 @@ describe("BookingController endpoint tests", () => {
           endDate: dateToFirestoreTimeStamp(new Date("10/21/2015"))
         })
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
 
     it("should not return negative availabilties", async () => {
@@ -225,7 +226,7 @@ describe("BookingController endpoint tests", () => {
           endDate: dateToFirestoreTimeStamp(new Date("10/21/2009"))
         })
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.data[0].availableSpaces).toEqual(0)
     })
   })
@@ -284,7 +285,7 @@ describe("BookingController endpoint tests", () => {
           endDate
         })
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.data).toHaveLength(2)
       expect.arrayContaining([
         expect.objectContaining({
@@ -322,7 +323,7 @@ describe("BookingController endpoint tests", () => {
           endDate
         })
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 })

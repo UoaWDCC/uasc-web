@@ -1,7 +1,7 @@
 import AuthService from "business-layer/services/AuthService"
 import { GUEST_USER_UID } from "../routes.mock"
-
 import { request } from "../routes.setup"
+import { StatusCodes } from "http-status-codes"
 
 describe("StripeWebhook endpoint tests", () => {
   describe("/webhook", () => {
@@ -12,7 +12,7 @@ describe("StripeWebhook endpoint tests", () => {
         .send({
           test: "foo"
         })
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       const userClaims = await new AuthService().getCustomerUserClaim(
         GUEST_USER_UID
       )

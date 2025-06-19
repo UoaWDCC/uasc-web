@@ -21,6 +21,7 @@ import BookingHistoryService from "data-layer/services/BookingHistoryService"
 import { Event } from "data-layer/models/firebase"
 import EventService from "data-layer/services/EventService"
 import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
+import { StatusCodes } from "http-status-codes"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -29,7 +30,7 @@ describe("AdminController endpoint tests", () => {
         .get("/admin/users")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
-        .expect(200, done)
+        .expect(StatusCodes.OK, done)
     })
 
     it("should fetch merged data for users", async () => {
@@ -38,7 +39,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(response.status).toEqual(200)
+      expect(response.status).toEqual(StatusCodes.OK)
       expect(response.body.data).toHaveLength(3)
       expect(
         response.body.data.some(
@@ -53,7 +54,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .query({ toFetch: 101 })
         .send({})
-      expect(response.status).toEqual(400)
+      expect(response.status).toEqual(StatusCodes.BAD_REQUEST)
 
       response = await request
         .get(`/admin/users`)
@@ -61,7 +62,7 @@ describe("AdminController endpoint tests", () => {
         .query({ toFetch: -1 })
         .send({})
       // we should fetch everything after the one we just got
-      expect(response.status).toEqual(400)
+      expect(response.status).toEqual(StatusCodes.BAD_REQUEST)
     })
 
     it("should fetch merged data for users, after the offset", async () => {
@@ -71,7 +72,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(response.status).toEqual(200)
+      expect(response.status).toEqual(StatusCodes.OK)
       expect(response.body.data).toHaveLength(1)
       expect(typeof response.body.nextCursor).toBe("string")
 
@@ -91,14 +92,14 @@ describe("AdminController endpoint tests", () => {
         .get("/admin/users")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
-        .expect(401, done)
+        .expect(StatusCodes.UNAUTHORIZED, done)
     })
     it("Should not allow guests to get users", (done) => {
       request
         .get("/admin/users")
         .set("Authorization", `Bearer ${guestToken}`)
         .send({})
-        .expect(401, done)
+        .expect(StatusCodes.UNAUTHORIZED, done)
     })
   })
 
@@ -108,14 +109,14 @@ describe("AdminController endpoint tests", () => {
         .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
-        .expect(200, done)
+        .expect(StatusCodes.OK, done)
     })
     it("Should allow admins to demote members", (done) => {
       request
         .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
-        .expect(200, done)
+        .expect(StatusCodes.OK, done)
     })
     it("Should not allow admins to demote or promote admins", async () => {
       let res
@@ -123,13 +124,13 @@ describe("AdminController endpoint tests", () => {
         .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
-      expect(res.status).toEqual(403) // forbidden
+      expect(res.status).toEqual(StatusCodes.FORBIDDEN) // forbidden
 
       res = await request
         .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
-      expect(res.status).toEqual(403) // forbidden
+      expect(res.status).toEqual(StatusCodes.FORBIDDEN) // forbidden
     })
 
     it("Should not allow guests/members to use demote/promote", async () => {
@@ -138,13 +139,13 @@ describe("AdminController endpoint tests", () => {
         .put("/admin/users/promote")
         .set("Authorization", `Bearer ${guestToken}`)
         .send({ uid: GUEST_USER_UID })
-      expect(res.status).toEqual(401) // unauthorised
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED) // unauthorised
 
       res = await request
         .put("/admin/users/demote")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ uid: MEMBER_USER_UID })
-      expect(res.status).toEqual(401) // unauthorised
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED) // unauthorised
     })
 
     it("Should conflict upon promoting members/demoting guests", async () => {
@@ -153,13 +154,13 @@ describe("AdminController endpoint tests", () => {
         .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
-      expect(res.status).toEqual(409) // conflict
+      expect(res.status).toEqual(StatusCodes.CONFLICT) // conflict
 
       res = await request
         .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
-      expect(res.status).toEqual(409) // conflict
+      expect(res.status).toEqual(StatusCodes.CONFLICT) // conflict
     })
   })
 
@@ -171,7 +172,7 @@ describe("AdminController endpoint tests", () => {
         .patch("/admin/users/demote-all")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
 
       const { admin } = await authService.getCustomerUserClaim(ADMIN_USER_UID)
       expect(admin).toEqual(true)
@@ -187,7 +188,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       const allUsers: UserRecord[] = await authService.getAllUsers()
       expect(
         allUsers.some((user) => user.customClaims?.member === true)
@@ -208,7 +209,7 @@ describe("AdminController endpoint tests", () => {
           endDate
         })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
       expect(res.body.updatedBookingSlots).toHaveLength(6)
       expect(
         removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
@@ -240,7 +241,7 @@ describe("AdminController endpoint tests", () => {
           slots: 69
         })
 
-      expect(res.status).toEqual(400) // exceed maximum
+      expect(res.status).toEqual(StatusCodes.BAD_REQUEST) // exceed maximum
 
       res = await request
         .post("/admin/bookings/make-dates-available")
@@ -250,7 +251,7 @@ describe("AdminController endpoint tests", () => {
           endDate
         })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
       expect(res.body.updatedBookingSlots).toHaveLength(6)
       expect(
         removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
@@ -309,7 +310,7 @@ describe("AdminController endpoint tests", () => {
           endDate
         })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
       expect(res.body.updatedBookingSlots).toHaveLength(0)
     })
 
@@ -335,7 +336,7 @@ describe("AdminController endpoint tests", () => {
           endDate: startDate
         })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
       expect(res.body.updatedBookingSlots).toHaveLength(1)
       expect(
         removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
@@ -366,7 +367,7 @@ describe("AdminController endpoint tests", () => {
           endDate
         })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
       expect(res.body.updatedBookingSlots).toHaveLength(0)
 
       const dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
@@ -387,7 +388,7 @@ describe("AdminController endpoint tests", () => {
           endDate
         })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
       expect(res.body.updatedBookingSlots).toHaveLength(0)
     })
 
@@ -414,7 +415,7 @@ describe("AdminController endpoint tests", () => {
           endDate: startDate
         })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
       expect(res.body.updatedBookingSlots).toHaveLength(1)
       expect(
         removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
@@ -460,7 +461,7 @@ describe("AdminController endpoint tests", () => {
           endDate: leapDate
         })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
       expect(res.body.updatedBookingSlots).toHaveLength(2)
 
       dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
@@ -511,7 +512,7 @@ describe("AdminController endpoint tests", () => {
           userId: MEMBER_USER_UID
         })
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.data).toHaveLength(3)
       expect.arrayContaining([
         expect.objectContaining({
@@ -535,7 +536,7 @@ describe("AdminController endpoint tests", () => {
           userId: undefined
         })
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
 
     it("Shouldn't duplicate members in the same slot", async () => {
@@ -570,7 +571,7 @@ describe("AdminController endpoint tests", () => {
           userId: MEMBER_USER_UID
         })
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.data).toHaveLength(1)
       expect.arrayContaining([
         expect.objectContaining({
@@ -618,7 +619,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ bookingID: "blah blah" })
 
-      expect(res.status).toEqual(404)
+      expect(res.status).toEqual(StatusCodes.NOT_FOUND)
     })
     it("should delete booking by booking id", async () => {
       const bookingDataService = new BookingDataService()
@@ -639,7 +640,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ bookingID: createdBooking.id })
 
-      expect(deleteRes.status).toEqual(200)
+      expect(deleteRes.status).toEqual(StatusCodes.OK)
       expect(deleteRes.body.user_id).toEqual("Eddie Wang")
 
       const res = await request
@@ -662,7 +663,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID, quantity: 5 })
 
-      expect(response.status).toEqual(200)
+      expect(response.status).toEqual(StatusCodes.OK)
     })
 
     it("Should not allow adding a coupon to a user without stripe_id", async () => {
@@ -671,7 +672,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID, quantity: 5 })
 
-      expect(response.status).toEqual(400)
+      expect(response.status).toEqual(StatusCodes.BAD_REQUEST)
     })
 
     it("Should return 404 if user is not found", async () => {
@@ -680,7 +681,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: "non_existent_user", quantity: 5 })
 
-      expect(response.status).toEqual(404)
+      expect(response.status).toEqual(StatusCodes.NOT_FOUND)
     })
 
     it("Should not allow members to add a coupon", async () => {
@@ -689,7 +690,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ uid: MEMBER_USER_UID, quantity: 5 })
 
-      expect(response.status).toEqual(401)
+      expect(response.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
 
     it("Should not allow guests to add a coupon", async () => {
@@ -698,7 +699,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${guestToken}`)
         .send({ uid: MEMBER_USER_UID, quantity: 5 })
 
-      expect(response.status).toEqual(401)
+      expect(response.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 
@@ -709,7 +710,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(response.status).toEqual(200)
+      expect(response.status).toEqual(StatusCodes.OK)
       expect(response.body.data.uid).toEqual(MEMBER_USER_UID)
     })
 
@@ -719,7 +720,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(response.status).toEqual(404)
+      expect(response.status).toEqual(StatusCodes.NOT_FOUND)
       expect(response.body.error).toEqual("User not found")
     })
 
@@ -729,7 +730,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
 
-      expect(response.status).toEqual(401)
+      expect(response.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
 
     it("Should not allow guests to get individual user data", async () => {
@@ -738,7 +739,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${guestToken}`)
         .send({})
 
-      expect(response.status).toEqual(401)
+      expect(response.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
   describe("/admin/bookings/history", () => {
@@ -747,17 +748,17 @@ describe("AdminController endpoint tests", () => {
         .get(`/admin/bookings/history?limit=100`)
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
 
       res = await request
         .get(`/admin/bookings/history?limit=100`)
         .set("Authorization", `Bearer ${guestToken}`)
         .send({})
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
 
       res = await request.get(`/admin/bookings/history?limit=100`).send({})
 
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
 
     it("should be able to fetch the latest X bookings", async () => {
@@ -787,7 +788,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.historyEvents).toHaveLength(1)
 
       /**
@@ -798,7 +799,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.historyEvents).toHaveLength(1)
 
       res = await request
@@ -826,7 +827,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ data: event1 })
 
-      expect(res.status).toEqual(201)
+      expect(res.status).toEqual(StatusCodes.CREATED)
 
       // There should not be more than 1, even if we request more
       expect((await eventService.getAllEvents(69)).events).toHaveLength(1)
@@ -842,7 +843,7 @@ describe("AdminController endpoint tests", () => {
           location: "UoA",
           physical_start_date: newDate
         } as Partial<Event>)
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       const fetchedEvent = await eventService.getEventById(newEvent.id)
       expect(fetchedEvent.title).toEqual("Cool event!")
       expect(fetchedEvent.location).toEqual("UoA")
@@ -867,7 +868,7 @@ describe("AdminController endpoint tests", () => {
         .get(`/admin/events/${id1}`)
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.data).toBeDefined()
       expect(res.body.data.title).toEqual("UASC New event")
       expect(res.body.data.location).toEqual("UASC")
@@ -878,7 +879,7 @@ describe("AdminController endpoint tests", () => {
         .get("/admin/events/random-event")
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
-      expect(res.status).toEqual(404)
+      expect(res.status).toEqual(StatusCodes.NOT_FOUND)
       expect(res.body.error).toEqual("Event not found.")
     })
   })
@@ -899,7 +900,7 @@ describe("AdminController endpoint tests", () => {
         .delete(`/admin/events/${id1}`)
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
-      expect(res.status).toEqual(204)
+      expect(res.status).toEqual(StatusCodes.NO_CONTENT)
 
       const event = await eventService.getEventById(id1)
 
@@ -924,7 +925,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.url).toEqual("https://test.example.com")
     })
 
@@ -936,7 +937,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(200)
+      expect(res.status).toEqual(StatusCodes.OK)
       expect(res.body.url).toEqual("https://test.example.com")
     })
 
@@ -946,7 +947,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(404)
+      expect(res.status).toEqual(StatusCodes.NOT_FOUND)
       expect(res.body.error).toBeDefined()
     })
 
@@ -958,7 +959,7 @@ describe("AdminController endpoint tests", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send()
 
-      expect(res.status).toEqual(404)
+      expect(res.status).toEqual(StatusCodes.NOT_FOUND)
       expect(res.body.error).toBeDefined()
     })
 
@@ -967,13 +968,13 @@ describe("AdminController endpoint tests", () => {
         .get("/admin/redirect/test")
         .set("Authorization", `Bearer ${memberToken}`)
         .send()
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
 
       res = await request
         .get("/admin/redirect/test")
         .set("Authorization", `Bearer ${guestToken}`)
         .send()
-      expect(res.status).toEqual(401)
+      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 })
