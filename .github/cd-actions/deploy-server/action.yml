@@ -2,6 +2,13 @@ name: "Deploy Server"
 description: Deploys the server
 
 inputs:
+  # HTTPs Secrets
+  HTTPS_SERVER_KEY:
+    description: The HTTPS server key to use for authentication.
+    required: true
+  HTTPS_SERVER_CERTIFICATE:
+    description: The HTTPS server certificate to use for authentication.
+    required: true
   # Host secrets
   SERVER_USERNAME:
     description: The username to use for authentication.
@@ -74,6 +81,8 @@ runs:
           cd ~/app
 
           echo "storing secrets"
+          echo "HTTPS_SERVER_CERTIFICATE=$(echo ${{ inputs.HTTPS_SERVER_CERTIFICATE }} | base64 --decode)" >> server/.env
+          echo "HTTPS_SERVER_KEY=$(echo ${{ inputs.HTTPS_SERVER_KEY }} | base64 --decode)" >> server/.env
           echo "GOOGLE_SERVICE_ACCOUNT_JSON=$(echo ${{ inputs.GOOGLE_SERVICE_ACCOUNT_JSON }} | base64 --decode)" >> server/.env
           echo "STRIPE_WEBHOOK_SECRET=${{ inputs.STRIPE_WEBHOOK_SECRET }}" >> server/.env
           echo "STRIPE_API_KEY=${{ inputs.STRIPE_API_KEY }}" >> server/.env

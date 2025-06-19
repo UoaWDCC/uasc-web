@@ -38,6 +38,8 @@ jobs:
       - name: Run Server Deployment Composite Action
         uses: ./.github/cd-actions/deploy-server/
         with:
+          HTTPS_SERVER_CERTIFICATE: ${{ secrets.HTTPS_SERVER_CERTIFICATE }}
+          HTTPS_SERVER_KEY: ${{ secrets.HTTPS_SERVER_KEY }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
