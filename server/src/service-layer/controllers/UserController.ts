@@ -118,7 +118,10 @@ export class UsersController extends Controller {
     } catch (err) {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error(err)
-      return { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) }
+      return { 
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
+        message: "An unexpected error occurred while processing the request. Please try again later." 
+      }
     }
   }
 }
