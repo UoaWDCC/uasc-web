@@ -40,6 +40,12 @@ declare global {
        * The URL to show to admins when they need to access the admin member sheet.
        */
       REDIRECT_MEMBERS_GOOGLE_FORM_LINK: string
+      /**
+       * The encryption key used for encrypting sensitive data in the mail configuration.
+       *
+       * @sensitive This MUST be set in production environments to a secure value.
+       */
+      MAIL_ENCRYPTION_KEY: string
     }
   }
 }
