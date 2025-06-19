@@ -5,6 +5,7 @@ import { UserSignupResponse } from "service-layer/response-models/UserSignupResp
 import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
 import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
 import { parseFirebaseError } from "business-layer/utils/FirebaseErrorParser"
+import { StatusCodes } from "http-status-codes"
 
 @Route("signup")
 export class UserSignup extends Controller {
@@ -28,7 +29,7 @@ export class UserSignup extends Controller {
     try {
       userRecord = await authService.createUser(requestBody.email)
     } catch (e) {
-      this.setStatus(409)
+      this.setStatus(StatusCodes.CONFLICT)
       return {
         error: parseFirebaseError(e)
       }
@@ -41,11 +42,11 @@ export class UserSignup extends Controller {
         userRecord.uid,
         undefined
       )
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { jwtToken, uid: userRecord.uid }
     } catch (e) {
       console.error(e)
-      this.setStatus(500) // server error
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR) // server error
       return { error: parseFirebaseError(e) }
     }
   }
