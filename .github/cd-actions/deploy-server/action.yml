@@ -57,7 +57,7 @@ runs:
         cp ./docker-compose.yml app/docker-compose.yml
         cp ./tsconfig.json app/tsconfig.json
         cp ./turbo.json app/turbo.json
-        cp -r ./scripts app/scripts
+        cp -r ./scripts/. app/scripts
         mkdir -p app/server
         cp -r ./server/. app/server
 
