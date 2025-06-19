@@ -73,10 +73,14 @@ runs:
           server/node_modules
           client/node_modules
           node_modules
-        key: node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+        key: node-modules-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
         restore-keys: |
-          node-modules-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          node-modules-pnpm
+          node-modules-${{ runner.os }}-
+
+    - name: Install dependencies if cache misses
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: pnpm install
+      shell: bash
 
     - run: pnpm build --filter client
       env:

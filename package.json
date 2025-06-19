@@ -7,13 +7,14 @@
     "lint": "eslint",
     "lint:all": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prettier": "prettier . --write",
+    "prettier": "prettier",
+    "prettier:fix": "prettier . --write",
     "prettier:ci": "prettier . --check",
     "dev": "turbo run dev",
     "generate:types": "turbo run generate:types",
     "build": "turbo run build",
     "vsc-setup": "code --install-extension dbaeumer.vscode-eslint && code --install-extension esbenp.prettier-vscode && code install-extension bradlc.vscode-tailwindcss",
-    "postinstall": "husky",
+    "postinstall": "ts-node scripts/skip-in-production.ts || lefthook install",
     "storybook": "pnpm --prefix=client storybook",
     "test": "turbo run test",
     "test:routes": "turbo run test:routes",
@@ -43,8 +44,8 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-storybook": "^0.8.0",
-    "husky": "^9.0.11",
     "jest": "^29.7.0",
+    "lefthook": "^1.11.14",
     "lint-staged": "^15.2.2",
     "nodemon": "^3.1.0",
     "prettier": "~3.2.5",
@@ -53,12 +54,6 @@
     "ts-node": "^10.9.2",
     "turbo": "^2.5.4",
     "typescript": "^5.3.3"
-  },
-  "lint-staged": {
-    "*.{js,mjs,cjs,jsx,ts,tsx,vue}": [
-      "yarn lint",
-      "yarn prettier"
-    ]
   },
   "eslintConfig": {
     "extends": [

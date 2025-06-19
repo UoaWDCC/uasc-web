@@ -1,0 +1,13 @@
+# EXAMPLE USAGE
+# Refer for explanation to following link:
+# https://github.com/evilmartians/lefthook/blob/master/docs/full_guide.md
+
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.{js,jsx,ts,tsx}"
+      run: pnpm lint -- {staged_files}
+    prettier:
+      glob: "*.{js,jsx,ts,tsx,json,css,scss,md}"
+      run: pnpm prettier --write {staged_files} && git add {staged_files}
