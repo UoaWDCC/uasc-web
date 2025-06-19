@@ -1011,11 +1011,7 @@ describe("AdminController endpoint tests", () => {
       const configData = {
         config: {
           email: "test@example.com",
-          service: "Gmail",
-          fromHeader: "Test UASC Bookings",
-          host: "smtp.gmail.com",
-          port: 465,
-          secure: true
+          fromHeader: "Test UASC Bookings"
         }
       }
 
