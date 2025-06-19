@@ -96,9 +96,9 @@ export class UsersController extends Controller {
         }
         if (userClaims && userClaims[AuthServiceClaims.ADMIN]) {
           this.setStatus(StatusCodes.FORBIDDEN)
-          return { 
-            error: getReasonPhrase(StatusCodes.FORBIDDEN), 
-            message: "Cannot delete another admin." 
+          return {
+            error: getReasonPhrase(StatusCodes.FORBIDDEN),
+            message: "Cannot delete another admin."
           }
         }
 
@@ -118,9 +118,10 @@ export class UsersController extends Controller {
     } catch (err) {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error(err)
-      return { 
-        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-        message: "An unexpected error occurred while processing the request. Please try again later." 
+      return {
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message:
+          "An unexpected error occurred while processing the request. Please try again later."
       }
     }
   }
