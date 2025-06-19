@@ -1452,6 +1452,205 @@
 				},
 				"type": "object",
 				"additionalProperties": false
+			},
+			"MailConfig": {
+				"description": "Interface for mail configuration settings that can be stored in Firebase",
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "Email address used for sending emails"
+					},
+					"password": {
+						"type": "string",
+						"description": "App password for the email service"
+					},
+					"fromHeader": {
+						"type": "string",
+						"description": "From header for sent emails",
+						"default": "UASC Bookings"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetMailConfigResponse": {
+				"properties": {
+					"config": {
+						"$ref": "#/components/schemas/MailConfig",
+						"description": "The current mail configuration or undefined if not found"
+					},
+					"error": {
+						"type": "string",
+						"description": "Error message if an error occurred"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateMailConfigResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether the update was successful"
+					},
+					"error": {
+						"type": "string",
+						"description": "Error message if an error occurred"
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_MailConfig_": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "Email address used for sending emails"
+					},
+					"password": {
+						"type": "string",
+						"description": "App password for the email service"
+					},
+					"fromHeader": {
+						"type": "string",
+						"description": "From header for sent emails",
+						"default": "UASC Bookings"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"UpdateMailConfigRequestBody": {
+				"properties": {
+					"config": {
+						"$ref": "#/components/schemas/Partial_MailConfig_",
+						"description": "The updated mail configuration settings"
+					}
+				},
+				"required": [
+					"config"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EmailTemplate": {
+				"description": "Interface for email template configuration",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The template ID",
+						"example": "booking_confirmation"
+					},
+					"content": {
+						"type": "string",
+						"description": "The template content in Pug format"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "Last updated timestamp"
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the template",
+						"example": "Booking Confirmation"
+					},
+					"description": {
+						"type": "string",
+						"description": "A description of the template's purpose"
+					}
+				},
+				"required": [
+					"id",
+					"content",
+					"updatedAt",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetAllEmailTemplatesResponse": {
+				"properties": {
+					"templates": {
+						"items": {
+							"$ref": "#/components/schemas/EmailTemplate"
+						},
+						"type": "array",
+						"description": "The list of available email templates"
+					},
+					"error": {
+						"type": "string",
+						"description": "Error message if an error occurred"
+					}
+				},
+				"required": [
+					"templates"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetEmailTemplateResponse": {
+				"properties": {
+					"template": {
+						"$ref": "#/components/schemas/EmailTemplate",
+						"description": "The email template or undefined if not found"
+					},
+					"error": {
+						"type": "string",
+						"description": "Error message if an error occurred"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateEmailTemplateResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether the update was successful"
+					},
+					"error": {
+						"type": "string",
+						"description": "Error message if an error occurred"
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateEmailTemplateRequestBody": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The template ID",
+						"example": "booking_confirmation"
+					},
+					"name": {
+						"type": "string",
+						"description": "The template name",
+						"example": "Booking Confirmation"
+					},
+					"content": {
+						"type": "string",
+						"description": "The template content in Pug format"
+					},
+					"description": {
+						"type": "string",
+						"description": "An optional description of the template's purpose"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"content"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -2641,6 +2840,166 @@
 						"description": "- Key to look up in environment variables for the URL",
 						"in": "path",
 						"name": "redirectKey",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/admin/mail-config": {
+			"get": {
+				"operationId": "GetMailConfig",
+				"responses": {
+					"200": {
+						"description": "Mail configuration retrieved",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetMailConfigResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Mail Configuration Operations",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": []
+			},
+			"put": {
+				"operationId": "UpdateMailConfig",
+				"responses": {
+					"200": {
+						"description": "Mail configuration updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UpdateMailConfigResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update the mail configuration",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "The updated mail configuration",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateMailConfigRequestBody",
+								"description": "The updated mail configuration"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/mail-templates": {
+			"get": {
+				"operationId": "GetAllEmailTemplates",
+				"responses": {
+					"200": {
+						"description": "Email templates retrieved",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetAllEmailTemplatesResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all available email templates",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": []
+			},
+			"put": {
+				"operationId": "UpdateEmailTemplate",
+				"responses": {
+					"200": {
+						"description": "Email template updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UpdateEmailTemplateResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update or create an email template",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "The email template to update or create",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateEmailTemplateRequestBody",
+								"description": "The email template to update or create"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/mail-templates/{id}": {
+			"get": {
+				"operationId": "GetEmailTemplate",
+				"responses": {
+					"200": {
+						"description": "Email template retrieved",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetEmailTemplateResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get a specific email template by ID",
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "The template ID",
+						"in": "path",
+						"name": "id",
 						"required": true,
 						"schema": {
 							"type": "string"

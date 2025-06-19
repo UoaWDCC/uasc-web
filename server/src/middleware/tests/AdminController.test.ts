@@ -21,6 +21,8 @@ import BookingHistoryService from "data-layer/services/BookingHistoryService"
 import { Event } from "data-layer/models/firebase"
 import EventService from "data-layer/services/EventService"
 import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
+import MailConfigService from "data-layer/services/MailConfigService"
+import { EmailTemplate } from "data-layer/models/mailConfig"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -973,6 +975,188 @@ describe("AdminController endpoint tests", () => {
         .get("/admin/redirect/test")
         .set("Authorization", `Bearer ${guestToken}`)
         .send()
+      expect(res.status).toEqual(401)
+    })
+  })
+
+  describe("/admin/mail-config", () => {
+    it("should allow admins to get mail configuration", async () => {
+      const res = await request
+        .get("/admin/mail-config")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
+
+      expect(res.status).toEqual(200)
+    })
+
+    it("should not allow members to get mail configuration", async () => {
+      const res = await request
+        .get("/admin/mail-config")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send()
+
+      expect(res.status).toEqual(401)
+    })
+
+    it("should not allow guests to get mail configuration", async () => {
+      const res = await request
+        .get("/admin/mail-config")
+        .set("Authorization", `Bearer ${guestToken}`)
+        .send()
+
+      expect(res.status).toEqual(401)
+    })
+
+    it("should allow admins to update mail configuration", async () => {
+      const configData = {
+        config: {
+          email: "test@example.com",
+          service: "Gmail",
+          fromHeader: "Test UASC Bookings",
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true
+        }
+      }
+
+      const res = await request
+        .put("/admin/mail-config")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send(configData)
+
+      expect(res.status).toEqual(200)
+      expect(res.body.success).toEqual(true)
+
+      // Verify the config was saved
+      const mailConfigService = new MailConfigService()
+      const savedConfig = await mailConfigService.getMailConfig()
+      expect(savedConfig).toBeDefined()
+      expect(savedConfig.email).toEqual("test@example.com")
+      expect(savedConfig.fromHeader).toEqual("Test UASC Bookings")
+    })
+
+    it("should not allow members to update mail configuration", async () => {
+      const res = await request
+        .put("/admin/mail-config")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({ config: { email: "test@example.com" } })
+
+      expect(res.status).toEqual(401)
+    })
+  })
+
+  describe("/admin/mail-templates", () => {
+    const mailConfigService = new MailConfigService()
+
+    // Setup a test template
+    beforeEach(async () => {
+      const testTemplate: EmailTemplate = {
+        id: "test_template",
+        name: "Test Template",
+        content:
+          "p Hello #{name}, your booking is from #{startDate} to #{endDate}",
+        description: "Test description",
+        updatedAt: new Date()
+      }
+
+      await mailConfigService.updateEmailTemplate(testTemplate)
+    })
+
+    it("should allow admins to get all email templates", async () => {
+      const res = await request
+        .get("/admin/mail-templates")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
+
+      expect(res.status).toEqual(200)
+      expect(res.body.templates).toBeDefined()
+      expect(res.body.templates.length).toBeGreaterThanOrEqual(1)
+    })
+
+    it("should allow admins to get a specific email template", async () => {
+      const res = await request
+        .get("/admin/mail-templates/test_template")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
+
+      expect(res.status).toEqual(200)
+      expect(res.body.template).toBeDefined()
+      expect(res.body.template.id).toEqual("test_template")
+      expect(res.body.template.name).toEqual("Test Template")
+      expect(res.body.template.content).toContain("Hello #{name}")
+    })
+
+    it("should return 404 for non-existent template", async () => {
+      const res = await request
+        .get("/admin/mail-templates/nonexistent_template")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send()
+
+      expect(res.status).toEqual(404)
+      expect(res.body.error).toBeDefined()
+    })
+
+    it("should allow admins to update an email template", async () => {
+      const templateData = {
+        id: "booking_confirmation",
+        name: "Updated Booking Confirmation",
+        content:
+          "p Hello there #{name}! Your booking from #{startDate} to #{endDate} is confirmed.",
+        description: "Updated template for booking confirmations"
+      }
+
+      const res = await request
+        .put("/admin/mail-templates")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send(templateData)
+
+      expect(res.status).toEqual(200)
+      expect(res.body.success).toEqual(true)
+
+      // Verify the template was saved
+      const template = await mailConfigService.getEmailTemplate(
+        "booking_confirmation"
+      )
+      expect(template).toBeDefined()
+      expect(template.name).toEqual("Updated Booking Confirmation")
+      expect(template.content).toContain("Hello there #{name}!")
+    })
+
+    it("should reject invalid pug templates", async () => {
+      const templateData = {
+        id: "booking_confirmation",
+        name: "Invalid Template",
+        content: "p Hello #{name! Your booking is confirmed.", // Missing closing brace
+        description: "Invalid template"
+      }
+
+      const res = await request
+        .put("/admin/mail-templates")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send(templateData)
+
+      expect(res.status).toEqual(400)
+      expect(res.body.success).toEqual(false)
+      expect(res.body.error).toContain("Invalid template content")
+    })
+
+    it("should not allow members to access or update templates", async () => {
+      let res = await request
+        .get("/admin/mail-templates")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send()
+
+      expect(res.status).toEqual(401)
+
+      res = await request
+        .put("/admin/mail-templates")
+        .set("Authorization", `Bearer ${memberToken}`)
+        .send({
+          id: "booking_confirmation",
+          name: "Test",
+          content: "p Test"
+        })
+
       expect(res.status).toEqual(401)
     })
   })
