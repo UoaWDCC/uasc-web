@@ -96,7 +96,10 @@ export class UsersController extends Controller {
         }
         if (userClaims && userClaims[AuthServiceClaims.ADMIN]) {
           this.setStatus(StatusCodes.FORBIDDEN)
-          return { error: getReasonPhrase(StatusCodes.FORBIDDEN) }
+          return { 
+            error: getReasonPhrase(StatusCodes.FORBIDDEN), 
+            message: "Cannot delete another admin." 
+          }
         }
 
         this.setStatus(StatusCodes.OK)
