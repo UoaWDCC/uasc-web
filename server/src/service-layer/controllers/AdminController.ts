@@ -132,10 +132,10 @@ export class AdminController extends Controller {
         change: slots || DEFAULT_BOOKING_MAX_SLOTS
       })
 
-      this.setStatus(201)
+      this.setStatus(StatusCodes.CREATED)
       return { updatedBookingSlots: bookingSlotIds }
     } catch (e) {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error(`An error occurred when making dates available: ${e}`)
       return { error: "Something went wrong when making dates available" }
     }
@@ -199,12 +199,12 @@ export class AdminController extends Controller {
         change
       })
 
-      this.setStatus(201)
+      this.setStatus(StatusCodes.CREATED)
       return {
         updatedBookingSlots: bookingSlotIds.filter((id) => !!id) // No way to "skip" with map
       }
     } catch (e) {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error(`An error occurred when making dates unavailable: ${e}`)
       return { error: "Something went wrong when making dates unavailable" }
     }
@@ -274,7 +274,7 @@ export class AdminController extends Controller {
         uid: userId
       })
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       /**
        * Send confirmation using MailService so that admins do not need to manually
        * followup on manual bookings.
@@ -321,7 +321,7 @@ export class AdminController extends Controller {
       return { data: responseData.filter((data) => !!data) }
     } catch (e) {
       console.error("Error in getBookingsByDateRange:", e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
 
       return { error: "Something went wrong" }
     }
@@ -348,7 +348,7 @@ export class AdminController extends Controller {
       user_id = booking.user_id
       booking_slot_id = booking.booking_slot_id
     } catch (err) {
-      this.setStatus(404)
+      this.setStatus(StatusCodes.NOT_FOUND)
       return { message: "Booking not found with that booking ID." }
     }
     // attempt to delete
@@ -439,12 +439,12 @@ export class AdminController extends Controller {
         nextCursor = lastUid
       }
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
 
       return { data: combinedUserData, nextCursor }
     } catch (e) {
       console.error("Failed to fetch all users", e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return { error: "Something went wrong when fetching all users" }
     }
   }
@@ -463,7 +463,7 @@ export class AdminController extends Controller {
       const user = await userService.getUserData(uid)
 
       if (!user) {
-        this.setStatus(404)
+        this.setStatus(StatusCodes.NOT_FOUND)
         return { error: "User not found" }
       }
 
@@ -472,7 +472,7 @@ export class AdminController extends Controller {
       const { customClaims, email, metadata } = { ...userAuthData }
       const membership: UserAccountTypes =
         authService.getMembershipType(customClaims)
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return {
         data: {
           email,
@@ -483,7 +483,7 @@ export class AdminController extends Controller {
       }
     } catch (e) {
       console.error("Failed to fetch user data", e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return { error: "Something went wrong when fetching user data" }
     }
   }
@@ -501,11 +501,11 @@ export class AdminController extends Controller {
   ): Promise<void> {
     const { uid, user } = requestBody
     if (await new UserDataService().userDataExists(uid)) {
-      this.setStatus(409)
+      this.setStatus(StatusCodes.CONFLICT)
       return
     }
     await new UserDataService().createUserData(uid, user)
-    this.setStatus(200)
+    this.setStatus(StatusCodes.OK)
   }
 
   /**
@@ -526,7 +526,7 @@ export class AdminController extends Controller {
       return userService.editUserData(uid, updatedInformation)
     })
     await Promise.all(editPromises)
-    this.setStatus(200)
+    this.setStatus(StatusCodes.OK)
   }
 
   /**
@@ -551,15 +551,15 @@ export class AdminController extends Controller {
     const userClaimRole = await authService.getCustomerUserClaim(
       requestBody.uid
     )
-    if (userClaimRole?.admin) return this.setStatus(403) // admin forbidden
-    if (userClaimRole?.member) return this.setStatus(409) // conflict
+    if (userClaimRole?.admin) return this.setStatus(StatusCodes.FORBIDDEN) // admin forbidden
+    if (userClaimRole?.member) return this.setStatus(StatusCodes.CONFLICT) // conflict
     try {
       // update user claims in AuthService
       await authService.setCustomUserClaim(requestBody.uid, "member")
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
     } catch (e) {
       console.error(e)
-      this.setStatus(500) // unknown server error?
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR) // unknown server error?
     }
   }
 
@@ -584,15 +584,15 @@ export class AdminController extends Controller {
     const userClaimRole = await authService.getCustomerUserClaim(
       requestBody.uid
     )
-    if (userClaimRole?.admin) return this.setStatus(403) // admin forbidden
-    if (!userClaimRole?.member) return this.setStatus(409) // conflict
+    if (userClaimRole?.admin) return this.setStatus(StatusCodes.FORBIDDEN) // admin forbidden
+    if (!userClaimRole?.member) return this.setStatus(StatusCodes.CONFLICT) // conflict
     try {
       // update user claims in AuthService, set to null to delete the claim
       await authService.setCustomUserClaim(requestBody.uid, null)
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
     } catch (e) {
       console.error(e)
-      this.setStatus(500) // unknown server error?
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR) // unknown server error?
     }
   }
 
@@ -622,10 +622,10 @@ export class AdminController extends Controller {
         )
       }
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
     } catch (e) {
       console.error(e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -648,7 +648,7 @@ export class AdminController extends Controller {
       const user = await userService.getUserData(uid)
 
       if (!user) {
-        this.setStatus(404)
+        this.setStatus(StatusCodes.NOT_FOUND)
         return
       }
       if (!user.stripe_id) {
@@ -663,9 +663,9 @@ export class AdminController extends Controller {
       )
       await Promise.all(couponPromises)
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
     } catch (e) {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -695,13 +695,13 @@ export class AdminController extends Controller {
         snapshot
       )
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return {
         historyEvents: data,
         nextCursor
       }
     } catch (e) {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error("Failed to fetch the latest booking history", e)
       return {
         error: "Unable to fetch the booking history"
@@ -745,10 +745,10 @@ export class AdminController extends Controller {
           )
         })
       })
-      this.setStatus(201)
+      this.setStatus(StatusCodes.CREATED)
     } catch (e) {
       console.error(e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -764,7 +764,7 @@ export class AdminController extends Controller {
     const eventService = new EventService()
     const fetchedEvent = await eventService.getEventById(id)
     if (!fetchedEvent) {
-      this.setStatus(404)
+      this.setStatus(StatusCodes.NOT_FOUND)
     }
     try {
       const {
@@ -802,9 +802,9 @@ export class AdminController extends Controller {
       })
     } catch (e) {
       console.error(e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
     }
-    this.setStatus(200)
+    this.setStatus(StatusCodes.OK)
   }
 
   @SuccessResponse("204", "Deleted single event")
@@ -813,9 +813,9 @@ export class AdminController extends Controller {
     try {
       const eventService = new EventService()
       await eventService.deleteEvent(id)
-      this.setStatus(204)
+      this.setStatus(StatusCodes.NO_CONTENT)
     } catch {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -827,13 +827,13 @@ export class AdminController extends Controller {
       const event = await eventService.getEventById(id)
 
       if (!event) {
-        this.setStatus(404)
+        this.setStatus(StatusCodes.NOT_FOUND)
         return { error: "Event not found." }
       }
 
       return { data: event }
     } catch (e) {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
         error: "Something went wrong when fetching the event, please try again"
       }
@@ -858,15 +858,15 @@ export class AdminController extends Controller {
         !url ||
         !Object.values(RedirectKeys).includes(parsedRedirectKey as RedirectKeys)
       ) {
-        this.setStatus(404)
+        this.setStatus(StatusCodes.NOT_FOUND)
         return { error: "URL not found" }
       }
 
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return { url }
     } catch (e) {
       console.error(`Error retrieving URL for key ${redirectKey}:`, e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return { error: "An error occurred while retrieving the URL" }
     }
   }

@@ -365,7 +365,7 @@ export class PaymentController extends Controller {
             activeSession.created * 1000 + THIRTY_MINUTES_MS
           ).toLocaleTimeString("en-NZ")
 
-          this.setStatus(200)
+          this.setStatus(StatusCodes.OK)
           return {
             stripeClientSecret: activeSession.client_secret,
             message: `Existing booking checkout session found for the nights ${activeSession.metadata[START_DATE] || ""} to ${activeSession.metadata[END_DATE] || ""}, you may start a new one after ${sessionStartTime} (NZST)`
@@ -429,7 +429,7 @@ export class PaymentController extends Controller {
         )
 
       if (bookingSlots.length !== totalDays) {
-        this.setStatus(423) // Resource busy
+        this.setStatus(StatusCodes.LOCKED) // Resource busy
         return {
           error: "No booking slot available for one or more dates."
         }
@@ -442,7 +442,7 @@ export class PaymentController extends Controller {
           bookingSlots
         )
       if (baseAvailabilities.some((slot) => !slot)) {
-        this.setStatus(409)
+        this.setStatus(StatusCodes.CONFLICT)
         return {
           error: "User has already booked a slot or there is no availability"
         }
@@ -472,7 +472,7 @@ export class PaymentController extends Controller {
       )
 
       if (outOfStockBecauseSessionActive) {
-        this.setStatus(409)
+        this.setStatus(StatusCodes.CONFLICT)
         return {
           error:
             "Someone may currently have this item in cart, please try again later"
@@ -520,13 +520,13 @@ export class PaymentController extends Controller {
         },
         true
       )
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
       return {
         stripeClientSecret: clientSecret,
         message: `You have until ${new Date(Date.now() + THIRTY_MINUTES_MS).toLocaleTimeString("en-NZ")} to pay for the nights ${BOOKING_START_DATE} to ${BOOKING_END_DATE}`
       }
     } catch (e) {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error("Something went wrong when creating the booking session", e)
       return {
         error: "Something went wrong when creating the booking session"
