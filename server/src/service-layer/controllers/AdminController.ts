@@ -957,7 +957,8 @@ export class AdminController extends Controller {
       this.setStatus(500)
       return {
         templates: [],
-        error: "Failed to retrieve email templates"
+        error: "Internal Server Error",
+        message: "Failed to retrieve email templates"
       }
     }
   }
@@ -978,7 +979,10 @@ export class AdminController extends Controller {
 
       if (!template) {
         this.setStatus(404)
-        return { error: "Email template not found" }
+        return {
+          error: "Not Found",
+          message: "Email template not found"
+        }
       }
 
       this.setStatus(200)
@@ -986,7 +990,10 @@ export class AdminController extends Controller {
     } catch (error) {
       console.error(`Error getting email template ${id}:`, error)
       this.setStatus(500)
-      return { error: "Failed to retrieve email template" }
+      return {
+        error: "Internal Server Error",
+        message: "Failed to retrieve email template"
+      }
     }
   }
 
@@ -1028,7 +1035,8 @@ export class AdminController extends Controller {
       console.error(`Error updating email template:`, error)
       this.setStatus(500)
       return {
-        error: "Failed to update email template"
+        error: "Internal Server Error",
+        message: "Failed to update email template"
       }
     }
   }
