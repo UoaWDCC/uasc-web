@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express"
 import { RegisterRoutes } from "middleware/__generated__/routes"
 import helmet from "helmet"
 import https from "https"
+import http from "http"
 
 let spec: swaggerUi.JsonObject | undefined
 let generatedHtml: string | undefined
@@ -50,7 +51,7 @@ RegisterRoutes(app)
 
 const port = process.env.PORT || 8000
 
-let _app
+let _app: http.Server | https.Server
 
 if (process.env.NODE_ENV === "production") {
   const httpsPort = process.env.HTTPS_PORT || 8443
