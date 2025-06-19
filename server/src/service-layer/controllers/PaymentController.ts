@@ -106,7 +106,10 @@ export class PaymentController extends Controller {
     } catch (error) {
       console.error(error)
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
-      return { error: "Error fetching active Stripe products" }
+      return { 
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
+        message: "Error fetching active Stripe products" 
+      }
     }
   }
 
