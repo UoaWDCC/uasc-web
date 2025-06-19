@@ -2657,7 +2657,7 @@
 				],
 				"parameters": [
 					{
-						"description": "- The maximum number of history events to fetch",
+						"description": "The maximum number of history events to fetch",
 						"in": "query",
 						"name": "limit",
 						"required": true,
@@ -2667,7 +2667,7 @@
 						}
 					},
 					{
-						"description": "- Optional starting point for pagination",
+						"description": "Optional starting point for pagination",
 						"in": "query",
 						"name": "cursor",
 						"required": false,

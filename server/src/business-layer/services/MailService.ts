@@ -2,6 +2,7 @@ import * as NodeMailer from "nodemailer"
 import path from "path"
 import { compile, compileFile } from "pug"
 import MailConfigService from "../../data-layer/services/MailConfigService"
+import { EncryptionService } from "./EncryptionService"
 
 const TEMPLATE_BASE_PATH = path.join(__dirname, "..", "templates")
 
@@ -15,7 +16,9 @@ export default class MailService {
   private transporter: NodeMailer.Transporter | null = null
 
   constructor() {
-    this.mailConfigService = new MailConfigService()
+    this.mailConfigService = new MailConfigService(
+      new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+    )
   }
 
   /**
