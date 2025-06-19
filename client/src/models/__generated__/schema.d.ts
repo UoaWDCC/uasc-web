@@ -171,19 +171,19 @@ export interface paths {
     /** @description Returns a URL specified in environment variables */
     get: operations["GetEnvUrl"];
   };
-  "/admin/mail-config": {
+  "/admin/mail/config": {
     /** @description Mail Configuration Operations */
     get: operations["GetMailConfig"];
     /** @description Update the mail configuration */
     put: operations["UpdateMailConfig"];
   };
-  "/admin/mail-templates": {
+  "/admin/mail/templates": {
     /** @description Get all available email templates */
     get: operations["GetAllEmailTemplates"];
     /** @description Update or create an email template */
     put: operations["UpdateEmailTemplate"];
   };
-  "/admin/mail-templates/{id}": {
+  "/admin/mail/templates/{id}": {
     /** @description Get a specific email template by ID */
     get: operations["GetEmailTemplate"];
   };
@@ -802,16 +802,14 @@ export interface components {
       fromHeader?: string;
     };
     GetMailConfigResponse: {
+      error?: string;
+      message?: string;
       /** @description The current mail configuration or undefined if not found */
       config?: components["schemas"]["MailConfig"];
-      /** @description Error message if an error occurred */
-      error?: string;
     };
     UpdateMailConfigResponse: {
-      /** @description Whether the update was successful */
-      success: boolean;
-      /** @description Error message if an error occurred */
       error?: string;
+      message?: string;
     };
     /** @description Make all properties in T optional */
     Partial_MailConfig_: {
@@ -852,22 +850,20 @@ export interface components {
       description?: string;
     };
     GetAllEmailTemplatesResponse: {
+      error?: string;
+      message?: string;
       /** @description The list of available email templates */
       templates: components["schemas"]["EmailTemplate"][];
-      /** @description Error message if an error occurred */
-      error?: string;
     };
     GetEmailTemplateResponse: {
+      error?: string;
+      message?: string;
       /** @description The email template or undefined if not found */
       template?: components["schemas"]["EmailTemplate"];
-      /** @description Error message if an error occurred */
-      error?: string;
     };
     UpdateEmailTemplateResponse: {
-      /** @description Whether the update was successful */
-      success: boolean;
-      /** @description Error message if an error occurred */
       error?: string;
+      message?: string;
     };
     UpdateEmailTemplateRequestBody: {
       /**
@@ -1382,7 +1378,9 @@ export interface operations {
   GetLatestHistory: {
     parameters: {
       query: {
+        /** @description - The maximum number of history events to fetch */
         limit: number;
+        /** @description - Optional starting point for pagination */
         cursor?: string;
       };
     };

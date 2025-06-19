@@ -1475,13 +1475,15 @@
 			},
 			"GetMailConfigResponse": {
 				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
 					"config": {
 						"$ref": "#/components/schemas/MailConfig",
 						"description": "The current mail configuration or undefined if not found"
-					},
-					"error": {
-						"type": "string",
-						"description": "Error message if an error occurred"
 					}
 				},
 				"type": "object",
@@ -1489,18 +1491,13 @@
 			},
 			"UpdateMailConfigResponse": {
 				"properties": {
-					"success": {
-						"type": "boolean",
-						"description": "Whether the update was successful"
-					},
 					"error": {
-						"type": "string",
-						"description": "Error message if an error occurred"
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
 					}
 				},
-				"required": [
-					"success"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -1574,16 +1571,18 @@
 			},
 			"GetAllEmailTemplatesResponse": {
 				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
 					"templates": {
 						"items": {
 							"$ref": "#/components/schemas/EmailTemplate"
 						},
 						"type": "array",
 						"description": "The list of available email templates"
-					},
-					"error": {
-						"type": "string",
-						"description": "Error message if an error occurred"
 					}
 				},
 				"required": [
@@ -1594,13 +1593,15 @@
 			},
 			"GetEmailTemplateResponse": {
 				"properties": {
+					"error": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
 					"template": {
 						"$ref": "#/components/schemas/EmailTemplate",
 						"description": "The email template or undefined if not found"
-					},
-					"error": {
-						"type": "string",
-						"description": "Error message if an error occurred"
 					}
 				},
 				"type": "object",
@@ -1608,18 +1609,13 @@
 			},
 			"UpdateEmailTemplateResponse": {
 				"properties": {
-					"success": {
-						"type": "boolean",
-						"description": "Whether the update was successful"
-					},
 					"error": {
-						"type": "string",
-						"description": "Error message if an error occurred"
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
 					}
 				},
-				"required": [
-					"success"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -2661,6 +2657,7 @@
 				],
 				"parameters": [
 					{
+						"description": "- The maximum number of history events to fetch",
 						"in": "query",
 						"name": "limit",
 						"required": true,
@@ -2670,6 +2667,7 @@
 						}
 					},
 					{
+						"description": "- Optional starting point for pagination",
 						"in": "query",
 						"name": "cursor",
 						"required": false,
@@ -2848,7 +2846,7 @@
 				]
 			}
 		},
-		"/admin/mail-config": {
+		"/admin/mail/config": {
 			"get": {
 				"operationId": "GetMailConfig",
 				"responses": {
@@ -2910,7 +2908,7 @@
 				}
 			}
 		},
-		"/admin/mail-templates": {
+		"/admin/mail/templates": {
 			"get": {
 				"operationId": "GetAllEmailTemplates",
 				"responses": {
@@ -2972,7 +2970,7 @@
 				}
 			}
 		},
-		"/admin/mail-templates/{id}": {
+		"/admin/mail/templates/{id}": {
 			"get": {
 				"operationId": "GetEmailTemplate",
 				"responses": {

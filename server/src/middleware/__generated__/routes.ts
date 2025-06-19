@@ -576,8 +576,9 @@ const models: TsoaRoute.Models = {
     "GetMailConfigResponse": {
         "dataType": "refObject",
         "properties": {
-            "config": {"ref":"MailConfig"},
             "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "config": {"ref":"MailConfig"},
         },
         "additionalProperties": false,
     },
@@ -585,8 +586,8 @@ const models: TsoaRoute.Models = {
     "UpdateMailConfigResponse": {
         "dataType": "refObject",
         "properties": {
-            "success": {"dataType":"boolean","required":true},
             "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -619,8 +620,9 @@ const models: TsoaRoute.Models = {
     "GetAllEmailTemplatesResponse": {
         "dataType": "refObject",
         "properties": {
-            "templates": {"dataType":"array","array":{"dataType":"refObject","ref":"EmailTemplate"},"required":true},
             "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "templates": {"dataType":"array","array":{"dataType":"refObject","ref":"EmailTemplate"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -628,8 +630,9 @@ const models: TsoaRoute.Models = {
     "GetEmailTemplateResponse": {
         "dataType": "refObject",
         "properties": {
-            "template": {"ref":"EmailTemplate"},
             "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "template": {"ref":"EmailTemplate"},
         },
         "additionalProperties": false,
     },
@@ -637,8 +640,8 @@ const models: TsoaRoute.Models = {
     "UpdateEmailTemplateResponse": {
         "dataType": "refObject",
         "properties": {
-            "success": {"dataType":"boolean","required":true},
             "error": {"dataType":"string"},
+            "message": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -1696,7 +1699,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsAdminController_getMailConfig: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/admin/mail-config',
+        app.get('/admin/mail/config',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getMailConfig)),
@@ -1727,7 +1730,7 @@ export function RegisterRoutes(app: Router) {
         const argsAdminController_updateMailConfig: Record<string, TsoaRoute.ParameterSchema> = {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UpdateMailConfigRequestBody"},
         };
-        app.put('/admin/mail-config',
+        app.put('/admin/mail/config',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.updateMailConfig)),
@@ -1757,7 +1760,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsAdminController_getAllEmailTemplates: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/admin/mail-templates',
+        app.get('/admin/mail/templates',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getAllEmailTemplates)),
@@ -1788,7 +1791,7 @@ export function RegisterRoutes(app: Router) {
         const argsAdminController_getEmailTemplate: Record<string, TsoaRoute.ParameterSchema> = {
                 id: {"in":"path","name":"id","required":true,"dataType":"string"},
         };
-        app.get('/admin/mail-templates/:id',
+        app.get('/admin/mail/templates/:id',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.getEmailTemplate)),
@@ -1819,7 +1822,7 @@ export function RegisterRoutes(app: Router) {
         const argsAdminController_updateEmailTemplate: Record<string, TsoaRoute.ParameterSchema> = {
                 requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UpdateEmailTemplateRequestBody"},
         };
-        app.put('/admin/mail-templates',
+        app.put('/admin/mail/templates',
             authenticateMiddleware([{"jwt":["admin"]}]),
             ...(fetchMiddlewares<RequestHandler>(AdminController)),
             ...(fetchMiddlewares<RequestHandler>(AdminController.prototype.updateEmailTemplate)),
