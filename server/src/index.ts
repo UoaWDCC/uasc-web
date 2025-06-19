@@ -4,6 +4,7 @@ import cors from "cors"
 import swaggerUi from "swagger-ui-express"
 import { RegisterRoutes } from "middleware/__generated__/routes"
 import helmet from "helmet"
+import https from "https"
 
 let spec: swaggerUi.JsonObject | undefined
 let generatedHtml: string | undefined
@@ -41,7 +42,7 @@ app.use("/api-docs", swaggerUi.serve, async (_req: Request, res: Response) => {
     return res.send(generatedHtml)
   }
 })
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
   res.send("UASC backend server is up!")
 })
 
@@ -49,9 +50,22 @@ RegisterRoutes(app)
 
 const port = process.env.PORT || 8000
 
-const _app = app.listen(port, () => {
-  console.log(`UASC backend server listening on port ${port}.`)
-})
+let _app
+
+if (process.env.NODE_ENV === "production") {
+  const httpsPort = process.env.HTTPS_PORT || 8443
+  const httpsApp = https.createServer(
+    { key: process.env.SERVER_KEY, cert: process.env.SERVER_CERTIFICATE },
+    app
+  )
+  _app = httpsApp.listen(httpsPort, () => {
+    console.log(`UASC backend server HTTPs listening on port ${httpsPort}.`)
+  })
+} else {
+  _app = app.listen(port, () => {
+    console.log(`UASC backend server listening on port ${port}.`)
+  })
+}
 
 // So we can use for testing
 export { _app }

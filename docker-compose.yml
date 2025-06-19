@@ -4,7 +4,7 @@ services:
   server:
     container_name: uasc-server
     ports:
-      - "443:8000"
+      - "443:8443"
       - "80:8000"
     build:
       context: .
