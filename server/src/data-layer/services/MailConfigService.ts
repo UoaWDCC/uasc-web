@@ -1,14 +1,12 @@
-import { getFirestore } from "firebase-admin/firestore"
 import { EmailTemplate, MailConfig } from "../models/mailConfig"
 
-const MAIL_CONFIG_COLLECTION = "mail_config"
-const EMAIL_TEMPLATES_COLLECTION = "email_templates"
+import db from "../adapters/FirestoreCollections"
 
 /**
  * Service for managing mail configuration settings in Firebase
  */
 export default class MailConfigService {
-  private firestore = getFirestore()
+  private firestore = db
 
   /**
    * Get the current mail configuration
@@ -16,10 +14,7 @@ export default class MailConfigService {
    */
   public async getMailConfig(): Promise<MailConfig | undefined> {
     try {
-      const snapshot = await this.firestore
-        .collection(MAIL_CONFIG_COLLECTION)
-        .doc("current")
-        .get()
+      const snapshot = await this.firestore.mailConfig.doc("current").get()
 
       if (!snapshot.exists) {
         return undefined
@@ -39,8 +34,7 @@ export default class MailConfigService {
    */
   public async updateMailConfig(config: MailConfig): Promise<void> {
     try {
-      await this.firestore
-        .collection(MAIL_CONFIG_COLLECTION)
+      await this.firestore.mailConfig
         .doc("current")
         .set(config, { merge: true })
     } catch (error) {
@@ -55,9 +49,7 @@ export default class MailConfigService {
    */
   public async getAllEmailTemplates(): Promise<EmailTemplate[]> {
     try {
-      const snapshot = await this.firestore
-        .collection(EMAIL_TEMPLATES_COLLECTION)
-        .get()
+      const snapshot = await this.firestore.emailTemplates.get()
 
       return snapshot.docs.map((doc) => {
         const data = doc.data() as Omit<EmailTemplate, "id">
@@ -81,10 +73,7 @@ export default class MailConfigService {
     id: string
   ): Promise<EmailTemplate | undefined> {
     try {
-      const snapshot = await this.firestore
-        .collection(EMAIL_TEMPLATES_COLLECTION)
-        .doc(id)
-        .get()
+      const snapshot = await this.firestore.emailTemplates.doc(id).get()
 
       if (!snapshot.exists) {
         return undefined
@@ -109,16 +98,13 @@ export default class MailConfigService {
   public async updateEmailTemplate(template: EmailTemplate): Promise<void> {
     try {
       const { id, ...data } = template
-      await this.firestore
-        .collection(EMAIL_TEMPLATES_COLLECTION)
-        .doc(id)
-        .set(
-          {
-            ...data,
-            updatedAt: new Date()
-          },
-          { merge: true }
-        )
+      await this.firestore.emailTemplates.doc(id).set(
+        {
+          ...data,
+          updatedAt: new Date()
+        },
+        { merge: true }
+      )
     } catch (error) {
       console.error(`Error updating email template ${template.id}:`, error)
       throw error
