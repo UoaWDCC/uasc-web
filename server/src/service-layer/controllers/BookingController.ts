@@ -80,8 +80,8 @@ export class BookingController extends Controller {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error("Error fetching bookings:", e)
       return {
-        error: "Failed to get bookings.",
-        reason: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
+        message: "Failed to get bookings.",
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
       }
     }
   }
