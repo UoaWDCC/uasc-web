@@ -1378,9 +1378,9 @@ export interface operations {
   GetLatestHistory: {
     parameters: {
       query: {
-        /** @description - The maximum number of history events to fetch */
+        /** @description The maximum number of history events to fetch */
         limit: number;
-        /** @description - Optional starting point for pagination */
+        /** @description Optional starting point for pagination */
         cursor?: string;
       };
     };
