@@ -3,12 +3,15 @@ import MailConfigService from "./MailConfigService"
 import { EmailTemplate, MailConfig } from "../models/MailConfig"
 
 import db from "../adapters/FirestoreCollections"
+import { EncryptionService } from "../../business-layer/services/EncryptionService"
 
 // Set environment variable for testing
 process.env.MAIL_ENCRYPTION_KEY = "test_encryption_key_for_unit_tests"
 
 describe("MailConfigService integration tests", () => {
-  const mailConfigService = new MailConfigService()
+  const mailConfigService = new MailConfigService(
+    new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+  )
 
   afterEach(async () => {
     await cleanFirestore()

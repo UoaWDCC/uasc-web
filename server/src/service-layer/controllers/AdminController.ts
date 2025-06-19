@@ -80,6 +80,8 @@ import {
 import MailConfigService from "data-layer/services/MailConfigService"
 
 import { compile as pugCompile } from "pug"
+import * as process from "node:process"
+import { EncryptionService } from "../../business-layer/services/EncryptionService"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -897,7 +899,9 @@ export class AdminController extends Controller {
   @Get("/mail/config")
   public async getMailConfig(): Promise<GetMailConfigResponse> {
     try {
-      const mailConfigService = new MailConfigService()
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
       const config = await mailConfigService.getMailConfig()
 
       this.setStatus(200)
@@ -923,7 +927,9 @@ export class AdminController extends Controller {
     @Body() requestBody: UpdateMailConfigRequestBody
   ): Promise<UpdateMailConfigResponse> {
     try {
-      const mailConfigService = new MailConfigService()
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
 
       await mailConfigService.updateMailConfig(requestBody.config)
 
@@ -947,7 +953,9 @@ export class AdminController extends Controller {
   @Get("/mail/templates")
   public async getAllEmailTemplates(): Promise<GetAllEmailTemplatesResponse> {
     try {
-      const mailConfigService = new MailConfigService()
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
       const templates = await mailConfigService.getAllEmailTemplates()
 
       this.setStatus(200)
@@ -974,7 +982,9 @@ export class AdminController extends Controller {
     @Path() id: string
   ): Promise<GetEmailTemplateResponse> {
     try {
-      const mailConfigService = new MailConfigService()
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
       const template = await mailConfigService.getEmailTemplate(id)
 
       if (!template) {
@@ -1008,7 +1018,9 @@ export class AdminController extends Controller {
     @Body() requestBody: UpdateEmailTemplateRequestBody
   ): Promise<UpdateEmailTemplateResponse> {
     try {
-      const mailConfigService = new MailConfigService()
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
 
       // Validate that the template content is valid Pug
       try {
