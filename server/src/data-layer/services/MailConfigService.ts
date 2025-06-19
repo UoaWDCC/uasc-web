@@ -1,4 +1,4 @@
-import { EmailTemplate, MailConfig } from "../models/mailConfig"
+import { EmailTemplate, MailConfig } from "../models/MailConfig"
 
 import db from "../adapters/FirestoreCollections"
 

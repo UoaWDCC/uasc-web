@@ -12,7 +12,7 @@ import {
   EMAIL_TEMPLATES_COLLECTION,
   MAIL_CONFIG_COLLECTION
 } from "./CollectionNames"
-import { EmailTemplate, MailConfig } from "../models/mailConfig"
+import { EmailTemplate, MailConfig } from "../models/MailConfig"
 
 const FirestoreCollections = {
   users: firestore.collection<UserAdditionalInfo>("users"),

@@ -22,7 +22,7 @@ import { Event } from "data-layer/models/firebase"
 import EventService from "data-layer/services/EventService"
 import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
 import MailConfigService from "data-layer/services/MailConfigService"
-import { EmailTemplate } from "data-layer/models/mailConfig"
+import { EmailTemplate } from "../../data-layer/models/MailConfig"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {

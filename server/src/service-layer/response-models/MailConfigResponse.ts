@@ -1,4 +1,4 @@
-import { MailConfig, EmailTemplate } from "../../data-layer/models/mailConfig"
+import { MailConfig, EmailTemplate } from "../../data-layer/models/MailConfig"
 
 export interface GetMailConfigResponse {
   /**
