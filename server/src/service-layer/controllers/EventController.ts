@@ -49,7 +49,7 @@ export class EventController extends Controller {
       console.error(e)
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
-        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
+        error: "Something went wrong when fetching all events, please try again"
       }
     }
   }
