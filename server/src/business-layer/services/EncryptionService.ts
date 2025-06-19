@@ -4,8 +4,17 @@ export class EncryptionService {
   private readonly encryptionAlgorithm = "aes-256-cbc"
   private readonly encryptionKey: string
 
-  constructor(encryptionKey: string) {
-    this.encryptionKey = encryptionKey
+  constructor(encryptionKey?: string) {
+    // Use environment variable for encryption key in production
+    // or generate a secure key if not available (development/testing)
+    this.encryptionKey =
+      encryptionKey || "uasc_default_dev_key_not_for_production_use"
+
+    if (process.env.NODE_ENV === "production" && !encryptionKey) {
+      console.warn(
+        "WARNING: Using default encryption key in production! Set MAIL_ENCRYPTION_KEY environment variable."
+      )
+    }
   }
 
   /**

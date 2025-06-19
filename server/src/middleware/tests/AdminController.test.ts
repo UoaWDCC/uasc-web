@@ -23,6 +23,7 @@ import EventService from "data-layer/services/EventService"
 import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
 import MailConfigService from "data-layer/services/MailConfigService"
 import { EmailTemplate } from "../../data-layer/models/MailConfig"
+import { EncryptionService } from "../../business-layer/services/EncryptionService"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -1023,7 +1024,7 @@ describe("AdminController endpoint tests", () => {
       expect(res.status).toEqual(200)
 
       // Verify the config was saved
-      const mailConfigService = new MailConfigService()
+      const mailConfigService = new MailConfigService(new EncryptionService())
       const savedConfig = await mailConfigService.getMailConfig()
       expect(savedConfig).toBeDefined()
       expect(savedConfig.email).toEqual("test@example.com")
@@ -1041,7 +1042,7 @@ describe("AdminController endpoint tests", () => {
   })
 
   describe("/admin/mail/templates", () => {
-    const mailConfigService = new MailConfigService()
+    const mailConfigService = new MailConfigService(new EncryptionService())
 
     // Setup a test template
     beforeEach(async () => {
