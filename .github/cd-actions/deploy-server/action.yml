@@ -91,6 +91,7 @@ runs:
           echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> server/.env
           echo "HTTPS_SERVER_CERTIFICATE=$(echo ${{ inputs.HTTPS_SERVER_CERTIFICATE }} | base64 --decode)" >> server/.env
           echo "HTTPS_SERVER_KEY=$(echo ${{ inputs.HTTPS_SERVER_KEY }} | base64 --decode)" >> server/.env
+
           echo "Stopping containers"
           docker-compose down
 
