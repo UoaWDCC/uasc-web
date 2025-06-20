@@ -56,7 +56,10 @@ let _app: http.Server | https.Server
 if (process.env.NODE_ENV === "production") {
   const httpsPort = process.env.HTTPS_PORT || 8443
   const httpsApp = https.createServer(
-    { key: process.env.SERVER_KEY, cert: process.env.SERVER_CERTIFICATE },
+    {
+      key: process.env.HTTPS_SERVER_KEY,
+      cert: process.env.HTTPS_SERVER_CERTIFICATE
+    },
     app
   )
   _app = httpsApp.listen(httpsPort, () => {
