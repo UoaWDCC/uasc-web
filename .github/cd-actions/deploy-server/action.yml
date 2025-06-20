@@ -1,0 +1,103 @@
+name: "Deploy Server"
+description: Deploys the server
+
+inputs:
+  # Host secrets
+  SERVER_USERNAME:
+    description: The username to use for authentication.
+    required: true
+  SERVER_HOST:
+    description: The hostname or IP address of the server.
+    required: true
+  SERVER_SSH_KEY:
+    description: The SSH key to use for authentication.
+    required: true
+  # Deployment secrets
+  GOOGLE_SERVICE_ACCOUNT_JSON:
+    description: The Google service account JSON to use for authentication.
+    required: true
+  STRIPE_WEBHOOK_SECRET:
+    description: The Stripe webhook secret to use for authentication.
+    required: true
+  STRIPE_API_KEY:
+    description: The Stripe API key to use for authentication.
+    required: true
+  FRONTEND_URL:
+    description: The frontend URL to use for authentication.
+    required: true
+  NODE_MAILER_EMAIL:
+    description: The email address to use for authentication.
+    required: true
+  NODE_MAILER_PASSWORD:
+    description: The password to use for authentication.
+    required: true
+  REDIRECT_MEMBERS_GOOGLE_SHEET_LINK:
+    description: The Google Sheet link to use for authentication.
+    required: true
+  # HTTPs Secrets
+  HTTPS_SERVER_KEY:
+    description: The HTTPS server key to use for authentication.
+    required: true
+  HTTPS_SERVER_CERTIFICATE:
+    description: The HTTPS server certificate to use for authentication.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare directory structure for deployment
+      shell: bash
+      run: |
+        mkdir -p app
+        cp ./package.json app/package.json
+        cp ./pnpm-lock.yaml app/pnpm-lock.yaml
+        cp ./.nvmrc app/.nvmrc
+        cp ./Dockerfile app/Dockerfile
+        cp ./.dockerignore app/.dockerignore
+        cp ./pnpm-workspace.yaml app/pnpm-workspace.yaml
+        cp ./docker-compose.yml app/docker-compose.yml
+        cp ./tsconfig.json app/tsconfig.json
+        cp ./turbo.json app/turbo.json
+        cp -r ./scripts/. app/scripts
+        cp -r ./server/. app/server
+
+    - name: Upload combined directory to E2
+      uses: burnett01/rsync-deployments@7.0.2
+      with:
+        switches: -avz --delete
+        path: ./app
+        remote_path: ~/
+        remote_host: ${{ inputs.SERVER_HOST }}
+        remote_user: ${{ inputs.SERVER_USERNAME }}
+        remote_key: ${{ inputs.SERVER_SSH_KEY }}
+
+    - name: Connect via SSH to host, store secrets and deploy
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ inputs.SERVER_HOST }}
+        username: ${{ inputs.SERVER_USERNAME }}
+        key: ${{ inputs.SERVER_SSH_KEY }}
+        port: 22
+        script: |
+          cd ~/app
+
+          echo "storing secrets"
+          echo "GOOGLE_SERVICE_ACCOUNT_JSON=$(echo ${{ inputs.GOOGLE_SERVICE_ACCOUNT_JSON }} | base64 --decode)" >> server/.env
+          echo "STRIPE_WEBHOOK_SECRET=${{ inputs.STRIPE_WEBHOOK_SECRET }}" >> server/.env
+          echo "STRIPE_API_KEY=${{ inputs.STRIPE_API_KEY }}" >> server/.env
+          echo "FRONTEND_URL=${{ inputs.FRONTEND_URL }}" >> server/.env
+          echo "NODE_MAILER_EMAIL=${{ inputs.NODE_MAILER_EMAIL }}" >> server/.env
+          echo "NODE_MAILER_PASSWORD=${{ inputs.NODE_MAILER_PASSWORD }}" >> server/.env
+          echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> server/.env
+          echo "HTTPS_SERVER_CERTIFICATE=$(echo ${{ inputs.HTTPS_SERVER_CERTIFICATE }} | base64 --decode)" >> server/.env
+          echo "HTTPS_SERVER_KEY=$(echo ${{ inputs.HTTPS_SERVER_KEY }} | base64 --decode)" >> server/.env
+          echo "Stopping containers"
+          docker-compose down
+
+          echo "Rebuilding and starting containers"
+          export DOCKER_CLIENT_TIMEOUT=120
+          export COMPOSE_HTTP_TIMEOUT=120
+          DOCKER_BUILDKIT=1 docker-compose up -d --build
+
+          echo "Removing old images after build"
+          docker system prune -f

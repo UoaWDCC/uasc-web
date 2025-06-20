@@ -40,6 +40,14 @@ declare global {
        * The URL to show to admins when they need to access the admin member sheet.
        */
       REDIRECT_MEMBERS_GOOGLE_FORM_LINK: string
+      /**
+       * The SSL certificate to use for HTTPS.
+       */
+      HTTPS_SERVER_CERTIFICATE: string
+      /**
+       * The SSL key to use for HTTPS.
+       */
+      HTTPS_SERVER_KEY: string
     }
   }
 }

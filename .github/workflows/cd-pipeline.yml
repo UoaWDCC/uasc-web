@@ -16,15 +16,47 @@ on:
       workflow:
         description: 'Workflow type'
         options:
-          - Setup Host
-          - Deploy Server
-          - Deploy Client
+          - setup-host
+          - deploy-server
+          - deploy-client
         required: true
 
 jobs:
+  deploy-server:
+    name: Deploy Server
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'deploy-server')
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment  || 'server-staging' }}
+      url: ${{ secrets.DEPLOYMENT_URL }}
+    concurrency:
+      group: deploy-${{ github.event.inputs.environment  || 'server-staging' }}-server
+      cancel-in-progress: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run Server Deployment Composite Action
+        uses: ./.github/cd-actions/deploy-server/
+        with:
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+          NODE_MAILER_EMAIL: ${{ secrets.NODE_MAILER_EMAIL }}
+          NODE_MAILER_PASSWORD: ${{ secrets.NODE_MAILER_PASSWORD }}
+          REDIRECT_MEMBERS_GOOGLE_SHEET_LINK: https://google.com
+          HTTPS_SERVER_CERTIFICATE: ${{ secrets.HTTPS_SERVER_CERTIFICATE }}
+          HTTPS_SERVER_KEY: ${{ secrets.HTTPS_SERVER_KEY }}
+
   setup-host:
     name: Setup Host
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'Setup Host'
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'setup-host'
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
