@@ -41,6 +41,12 @@ declare global {
        */
       REDIRECT_MEMBERS_GOOGLE_FORM_LINK: string
       /**
+       * The encryption key used for encrypting sensitive data in the mail configuration.
+       *
+       * @sensitive This MUST be set in production environments to a secure value.
+       */
+      MAIL_ENCRYPTION_KEY: string
+      /**
        * The SSL certificate to use for HTTPS.
        */
       HTTPS_SERVER_CERTIFICATE: string

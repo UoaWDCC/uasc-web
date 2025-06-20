@@ -66,7 +66,23 @@ import {
 import { CreateEventBody } from "service-layer/request-models/EventRequests"
 import EventService from "data-layer/services/EventService"
 import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
-import { StatusCodes } from "http-status-codes"
+import {
+  UpdateEmailTemplateRequestBody,
+  UpdateMailConfigRequestBody
+} from "service-layer/request-models/MailConfigRequests"
+import {
+  GetAllEmailTemplatesResponse,
+  GetEmailTemplateResponse,
+  GetMailConfigResponse,
+  UpdateEmailTemplateResponse,
+  UpdateMailConfigResponse
+} from "service-layer/response-models/MailConfigResponse"
+import MailConfigService from "data-layer/services/MailConfigService"
+
+import { compile as pugCompile } from "pug"
+import * as process from "node:process"
+import { EncryptionService } from "../../business-layer/services/EncryptionService"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -672,8 +688,9 @@ export class AdminController extends Controller {
   /**
    * Fetches the **latest** booking history events (uses cursor-based pagination)
    *
-   * @param requestBody - contains the pagination variables
-   * @returns the list of latest history events
+   * @param limit The maximum number of history events to fetch
+   * @param cursor Optional starting point for pagination
+   * @returns The list of latest history events
    */
   @SuccessResponse("200", "History Events Fetched")
   @Get("bookings/history")
@@ -868,6 +885,172 @@ export class AdminController extends Controller {
       console.error(`Error retrieving URL for key ${redirectKey}:`, e)
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return { error: "An error occurred while retrieving the URL" }
+    }
+  }
+
+  /**
+   * Mail Configuration Operations
+   */
+
+  /**
+   * Get the current mail configuration
+   * @returns The current mail configuration or undefined if not set
+   */
+  @SuccessResponse("200", "Mail configuration retrieved")
+  @Get("/mail/config")
+  public async getMailConfig(): Promise<GetMailConfigResponse> {
+    try {
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
+      const config = await mailConfigService.getMailConfig()
+
+      this.setStatus(StatusCodes.OK)
+      return { config }
+    } catch (error) {
+      console.error("Error getting mail configuration:", error)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+      return {
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message: "Failed to retrieve mail configuration"
+      }
+    }
+  }
+
+  /**
+   * Update the mail configuration
+   * @param requestBody The updated mail configuration
+   * @returns Success status and any error message
+   */
+  @SuccessResponse("200", "Mail configuration updated")
+  @Put("/mail/config")
+  public async updateMailConfig(
+    @Body() requestBody: UpdateMailConfigRequestBody
+  ): Promise<UpdateMailConfigResponse> {
+    try {
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
+
+      await mailConfigService.updateMailConfig(requestBody.config)
+
+      this.setStatus(StatusCodes.OK)
+      return { message: "Mail configuration updated successfully" }
+    } catch (error) {
+      console.error("Error updating mail configuration:", error)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+      return {
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message: "Failed to update mail configuration"
+      }
+    }
+  }
+
+  /**
+   * Get all available email templates
+   * @returns List of email templates
+   */
+  @SuccessResponse("200", "Email templates retrieved")
+  @Get("/mail/templates")
+  public async getAllEmailTemplates(): Promise<GetAllEmailTemplatesResponse> {
+    try {
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
+      const templates = await mailConfigService.getAllEmailTemplates()
+
+      this.setStatus(StatusCodes.OK)
+      return { templates }
+    } catch (error) {
+      console.error("Error getting email templates:", error)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+      return {
+        templates: [],
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message: "Failed to retrieve email templates"
+      }
+    }
+  }
+
+  /**
+   * Get a specific email template by ID
+   * @param id The template ID
+   * @returns The email template or an error
+   */
+  @SuccessResponse("200", "Email template retrieved")
+  @Get("/mail/templates/{id}")
+  public async getEmailTemplate(
+    @Path() id: string
+  ): Promise<GetEmailTemplateResponse> {
+    try {
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
+      const template = await mailConfigService.getEmailTemplate(id)
+
+      if (!template) {
+        this.setStatus(StatusCodes.NOT_FOUND)
+        return {
+          error: getReasonPhrase(StatusCodes.NOT_FOUND),
+          message: "Email template not found"
+        }
+      }
+
+      this.setStatus(StatusCodes.OK)
+      return { template }
+    } catch (error) {
+      console.error(`Error getting email template ${id}:`, error)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+      return {
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message: "Failed to retrieve email template"
+      }
+    }
+  }
+
+  /**
+   * Update or create an email template
+   * @param requestBody The email template to update or create
+   * @returns Success status and any error message
+   */
+  @SuccessResponse("200", "Email template updated")
+  @Put("/mail/templates")
+  public async updateEmailTemplate(
+    @Body() requestBody: UpdateEmailTemplateRequestBody
+  ): Promise<UpdateEmailTemplateResponse> {
+    try {
+      const mailConfigService = new MailConfigService(
+        new EncryptionService(process.env.MAIL_ENCRYPTION_KEY)
+      )
+
+      // Validate that the template content is valid Pug
+      try {
+        pugCompile(requestBody.content)
+      } catch (pugError) {
+        this.setStatus(StatusCodes.BAD_REQUEST)
+        return {
+          error: `Invalid template content: ${pugError}`
+        }
+      }
+
+      // Update the template
+      await mailConfigService.updateEmailTemplate({
+        id: requestBody.id,
+        name: requestBody.name,
+        content: requestBody.content,
+        description: requestBody.description,
+        updatedAt: new Date()
+      })
+
+      this.setStatus(StatusCodes.OK)
+      return { message: "Email template updated successfully" }
+    } catch (error) {
+      console.error(`Error updating email template:`, error)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+      return {
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message: "Failed to update email template"
+      }
     }
   }
 }

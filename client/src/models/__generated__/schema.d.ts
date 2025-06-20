@@ -171,6 +171,22 @@ export interface paths {
     /** @description Returns a URL specified in environment variables */
     get: operations["GetEnvUrl"];
   };
+  "/admin/mail/config": {
+    /** @description Mail Configuration Operations */
+    get: operations["GetMailConfig"];
+    /** @description Update the mail configuration */
+    put: operations["UpdateMailConfig"];
+  };
+  "/admin/mail/templates": {
+    /** @description Get all available email templates */
+    get: operations["GetAllEmailTemplates"];
+    /** @description Update or create an email template */
+    put: operations["UpdateEmailTemplate"];
+  };
+  "/admin/mail/templates/{id}": {
+    /** @description Get a specific email template by ID */
+    get: operations["GetEmailTemplate"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -773,6 +789,98 @@ export interface components {
       message?: string;
       data?: components["schemas"]["Event"];
     };
+    /** @description Interface for mail configuration settings that can be stored in Firebase */
+    MailConfig: {
+      /** @description Email address used for sending emails */
+      email?: string;
+      /** @description App password for the email service */
+      password?: string;
+      /**
+       * @description From header for sent emails
+       * @default UASC Bookings
+       */
+      fromHeader?: string;
+    };
+    GetMailConfigResponse: {
+      error?: string;
+      message?: string;
+      /** @description The current mail configuration or undefined if not found */
+      config?: components["schemas"]["MailConfig"];
+    };
+    UpdateMailConfigResponse: {
+      error?: string;
+      message?: string;
+    };
+    /** @description Make all properties in T optional */
+    Partial_MailConfig_: {
+      /** @description Email address used for sending emails */
+      email?: string;
+      /** @description App password for the email service */
+      password?: string;
+      /**
+       * @description From header for sent emails
+       * @default UASC Bookings
+       */
+      fromHeader?: string;
+    };
+    UpdateMailConfigRequestBody: {
+      /** @description The updated mail configuration settings */
+      config: components["schemas"]["Partial_MailConfig_"];
+    };
+    /** @description Interface for email template configuration */
+    EmailTemplate: {
+      /**
+       * @description The template ID
+       * @example booking_confirmation
+       */
+      id: string;
+      /** @description The template content in Pug format */
+      content: string;
+      /**
+       * Format: date-time
+       * @description Last updated timestamp
+       */
+      updatedAt: string;
+      /**
+       * @description The name of the template
+       * @example Booking Confirmation
+       */
+      name: string;
+      /** @description A description of the template's purpose */
+      description?: string;
+    };
+    GetAllEmailTemplatesResponse: {
+      error?: string;
+      message?: string;
+      /** @description The list of available email templates */
+      templates: components["schemas"]["EmailTemplate"][];
+    };
+    GetEmailTemplateResponse: {
+      error?: string;
+      message?: string;
+      /** @description The email template or undefined if not found */
+      template?: components["schemas"]["EmailTemplate"];
+    };
+    UpdateEmailTemplateResponse: {
+      error?: string;
+      message?: string;
+    };
+    UpdateEmailTemplateRequestBody: {
+      /**
+       * @description The template ID
+       * @example booking_confirmation
+       */
+      id: string;
+      /**
+       * @description The template name
+       * @example Booking Confirmation
+       */
+      name: string;
+      /** @description The template content in Pug format */
+      content: string;
+      /** @description An optional description of the template's purpose */
+      description?: string;
+    };
   };
   responses: {
   };
@@ -1270,7 +1378,9 @@ export interface operations {
   GetLatestHistory: {
     parameters: {
       query: {
+        /** @description The maximum number of history events to fetch */
         limit: number;
+        /** @description Optional starting point for pagination */
         cursor?: string;
       };
     };
@@ -1360,6 +1470,79 @@ export interface operations {
             error?: string;
             url?: string;
           };
+        };
+      };
+    };
+  };
+  /** @description Mail Configuration Operations */
+  GetMailConfig: {
+    responses: {
+      /** @description Mail configuration retrieved */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetMailConfigResponse"];
+        };
+      };
+    };
+  };
+  /** @description Update the mail configuration */
+  UpdateMailConfig: {
+    /** @description The updated mail configuration */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateMailConfigRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Mail configuration updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateMailConfigResponse"];
+        };
+      };
+    };
+  };
+  /** @description Get all available email templates */
+  GetAllEmailTemplates: {
+    responses: {
+      /** @description Email templates retrieved */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAllEmailTemplatesResponse"];
+        };
+      };
+    };
+  };
+  /** @description Update or create an email template */
+  UpdateEmailTemplate: {
+    /** @description The email template to update or create */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateEmailTemplateRequestBody"];
+      };
+    };
+    responses: {
+      /** @description Email template updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateEmailTemplateResponse"];
+        };
+      };
+    };
+  };
+  /** @description Get a specific email template by ID */
+  GetEmailTemplate: {
+    parameters: {
+      path: {
+        /** @description The template ID */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Email template retrieved */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEmailTemplateResponse"];
         };
       };
     };
