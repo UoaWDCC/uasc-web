@@ -1,17 +1,18 @@
 FROM node:20.3.0-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+ENV NODE_ENV=production
 
 FROM base AS runner
 WORKDIR /app
-# Set Node environment as production
-ENV NODE_ENV=production
-
-# Stage 1: Copy package files and install
+RUN corepack enable
+# Stage 1: Install prod deps
 COPY --link package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.json ./
 COPY --link ./server/package.json ./server/package.json
 COPY --link ./scripts ./scripts
-RUN corepack enable pnpm && pnpm install --filter server
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter server
 
-# Stage 2: Copy server and build
+# Stage 2: Build
 COPY --link ./server ./server
 RUN pnpm build --filter server
 

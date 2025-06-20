@@ -53,6 +53,7 @@ runs:
         cp ./pnpm-lock.yaml app/pnpm-lock.yaml
         cp ./.nvmrc app/.nvmrc
         cp ./Dockerfile app/Dockerfile
+        cp ./.dockerignore app/.dockerignore
         cp ./pnpm-workspace.yaml app/pnpm-workspace.yaml
         cp ./docker-compose.yml app/docker-compose.yml
         cp ./tsconfig.json app/tsconfig.json
@@ -91,9 +92,13 @@ runs:
           echo "NODE_MAILER_PASSWORD=${{ inputs.NODE_MAILER_PASSWORD }}" >> server/.env
           echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> server/.env
 
+          echo "Stopping containers"
+          docker-compose down
+
           echo "Rebuilding and starting containers"
-          export COMPOSE_HTTP_TIMEOUT=200
-          docker-compose up -d --build
+          export DOCKER_CLIENT_TIMEOUT=120
+          export COMPOSE_HTTP_TIMEOUT=120
+          DOCKER_BUILDKIT=1 docker-compose up -d --build
 
           echo "Removing old images after build"
           docker system prune -f
