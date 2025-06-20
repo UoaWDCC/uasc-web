@@ -46,6 +46,14 @@ declare global {
        * @sensitive This MUST be set in production environments to a secure value.
        */
       MAIL_ENCRYPTION_KEY: string
+      /**
+       * The SSL certificate to use for HTTPS.
+       */
+      HTTPS_SERVER_CERTIFICATE: string
+      /**
+       * The SSL key to use for HTTPS.
+       */
+      HTTPS_SERVER_KEY: string
     }
   }
 }
