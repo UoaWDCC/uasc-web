@@ -15,6 +15,7 @@ on:
         required: true
       workflow:
         description: 'Workflow type'
+        type: choice
         options:
           - setup-host
           - deploy-server
