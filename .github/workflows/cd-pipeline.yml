@@ -2,8 +2,8 @@ name: CD Pipeline
 
 on:
   push:
-    branches:
-      - master
+    # branches:
+    #   - master
     paths-ignore:
       - '**.md'
       - '.gitignore'
