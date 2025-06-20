@@ -63,11 +63,13 @@ if (process.env.NODE_ENV === "production") {
     app
   )
   _app = httpsApp.listen(httpsPort, () => {
-    console.log(`UASC backend server HTTPs listening on port ${httpsPort}.`)
+    console.log(
+      `UASC production backend server listening on port ${httpsPort}.`
+    )
   })
 } else {
   _app = app.listen(port, () => {
-    console.log(`UASC backend server listening on port ${port}.`)
+    console.log(`UASC staging backend server listening on port ${port}.`)
   })
 }
 
