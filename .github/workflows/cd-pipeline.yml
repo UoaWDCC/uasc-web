@@ -38,8 +38,6 @@ jobs:
       - name: Run Server Deployment Composite Action
         uses: ./.github/cd-actions/deploy-server/
         with:
-          HTTPS_SERVER_CERTIFICATE: ${{ secrets.HTTPS_SERVER_CERTIFICATE }}
-          HTTPS_SERVER_KEY: ${{ secrets.HTTPS_SERVER_KEY }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
@@ -50,6 +48,8 @@ jobs:
           NODE_MAILER_EMAIL: ${{ secrets.NODE_MAILER_EMAIL }}
           NODE_MAILER_PASSWORD: ${{ secrets.NODE_MAILER_PASSWORD }}
           REDIRECT_MEMBERS_GOOGLE_SHEET_LINK: https://google.com
+          HTTPS_SERVER_CERTIFICATE: ${{ secrets.HTTPS_SERVER_CERTIFICATE }}
+          HTTPS_SERVER_KEY: ${{ secrets.HTTPS_SERVER_KEY }}
 
   setup-host:
     name: Setup Host
