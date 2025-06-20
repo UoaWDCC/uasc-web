@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment  || 'server-staging' }}
-      url: ${{ secrets.DEPLOYMENT_URL }}
+      url: ${{ var.DEPLOYMENT_URL }}
     concurrency:
       group: deploy-${{ github.event.inputs.environment  || 'server-staging' }}-server
       cancel-in-progress: true
