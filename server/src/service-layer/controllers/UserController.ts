@@ -19,6 +19,7 @@ import {
   Delete
 } from "tsoa"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
+import { StatusCodes, getReasonPhrase } from "http-status-codes"
 
 @Route("users")
 export class UsersController extends Controller {
@@ -37,9 +38,9 @@ export class UsersController extends Controller {
     delete data.stripe_id
 
     if (data !== undefined) {
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
     } else {
-      this.setStatus(404)
+      this.setStatus(StatusCodes.NOT_FOUND)
     }
 
     return data
@@ -63,10 +64,10 @@ export class UsersController extends Controller {
         request.user.uid,
         requestBody.updatedInformation
       )
-      this.setStatus(200)
+      this.setStatus(StatusCodes.OK)
     } catch (error) {
       console.error(error)
-      this.setStatus(401)
+      this.setStatus(StatusCodes.UNAUTHORIZED)
     }
   }
 
@@ -94,11 +95,14 @@ export class UsersController extends Controller {
           console.info(`Couldn't fetch user claims for ${userUid}. ${e}`)
         }
         if (userClaims && userClaims[AuthServiceClaims.ADMIN]) {
-          this.setStatus(403) // forbidden request
-          return { error: "Cannot delete another admin." }
+          this.setStatus(StatusCodes.FORBIDDEN)
+          return {
+            error: getReasonPhrase(StatusCodes.FORBIDDEN),
+            message: "Cannot delete another admin."
+          }
         }
 
-        this.setStatus(200)
+        this.setStatus(StatusCodes.OK)
         try {
           await authService.deleteUser(userUid)
         } catch (e) {
@@ -112,9 +116,13 @@ export class UsersController extends Controller {
         }
       }
     } catch (err) {
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error(err)
-      return { error: "Failed to delete user." }
+      return {
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message:
+          "An unexpected error occurred while processing the request. Please try again later."
+      }
     }
   }
 }

@@ -3,6 +3,7 @@ import { GetAllEventsResponse } from "service-layer/response-models/EventRespons
 import { Controller, Get, Query, Route, Security, SuccessResponse } from "tsoa"
 import { ONE_MINUTE_IN_MS } from "../../business-layer/utils/EventConstants"
 import { Timestamp } from "firebase-admin/firestore"
+import { StatusCodes, getReasonPhrase } from "http-status-codes"
 
 @Route("events")
 export class EventController extends Controller {
@@ -46,9 +47,9 @@ export class EventController extends Controller {
       return { nextCursor: res.nextCursor, data: res.events }
     } catch (e) {
       console.error(e)
-      this.setStatus(500)
+      this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
-        error: "Something went wrong when fetching all events, please try again"
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
       }
     }
   }

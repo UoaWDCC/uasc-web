@@ -8,6 +8,7 @@ import {
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues
 } from "business-layer/utils/StripeSessionMetadata"
+import { StatusCodes } from "http-status-codes"
 
 @Route("webhook")
 export class StripeWebhook extends Controller {
@@ -32,7 +33,7 @@ export class StripeWebhook extends Controller {
       )
     } catch (err) {
       console.error(err)
-      return this.setStatus(401) // unauthorized request
+      return this.setStatus(StatusCodes.UNAUTHORIZED) // unauthorized request
     }
 
     // Create services
@@ -58,7 +59,7 @@ export class StripeWebhook extends Controller {
             console.log(
               `[WEBHOOK] internal error: failed to fetch uid from stripe session '${session.id}' (payment intent '${payment_intent_id}')`
             )
-            return this.setStatus(400)
+            return this.setStatus(StatusCodes.BAD_REQUEST)
           }
 
           const checkoutType = Object.values(CheckoutTypeValues).find(
@@ -68,7 +69,7 @@ export class StripeWebhook extends Controller {
             console.log(
               `[WEBHOOK] internal error: session '${session.id}' had no checkout type metadata (payment intent '${payment_intent_id}')`
             )
-            return this.setStatus(400) // bad request, not the membership we want
+            return this.setStatus(StatusCodes.BAD_REQUEST) // bad request, not the membership we want
           }
 
           switch (checkoutType) {
@@ -79,9 +80,9 @@ export class StripeWebhook extends Controller {
                 console.error(
                   `[WEBHOOK] Failed to handle booking payment session '${session.id}': ${e}`
                 )
-                return this.setStatus(500)
+                return this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
               }
-              return this.setStatus(200)
+              return this.setStatus(StatusCodes.OK)
             }
             case CheckoutTypeValues.MEMBERSHIP: {
               try {
@@ -90,12 +91,12 @@ export class StripeWebhook extends Controller {
                 console.error(
                   `[WEBHOOK] Failed to handle membership payment session '${session.id}': ${e}`
                 )
-                return this.setStatus(500)
+                return this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
               }
               console.log(
                 `[WEBHOOK] added membership to user '${uid}' from session '${session.id}'`
               )
-              return this.setStatus(200)
+              return this.setStatus(StatusCodes.OK)
             }
             default: {
               throw new UnreachableCase(checkoutType)
@@ -104,6 +105,6 @@ export class StripeWebhook extends Controller {
         }
     }
 
-    return this.setStatus(501)
+    return this.setStatus(StatusCodes.NOT_IMPLEMENTED)
   }
 }
