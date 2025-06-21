@@ -19,7 +19,5 @@ RUN pnpm build --filter server
 # Stage 3: Run
 RUN chmod +x ./server/setup-newrelic.sh
 
-RUN ./server/setup-newrelic.sh
-
 EXPOSE 8000 8443
-CMD [ "pnpm", "--prefix=server", "serve" ]
+ENTRYPOINT ["./server/setup-newrelic.sh"]
