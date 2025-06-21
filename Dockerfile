@@ -19,4 +19,6 @@ RUN pnpm build --filter server
 # Stage 3: Run
 EXPOSE 8000 8443
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+COPY --link ./server/entrypoint.sh ./entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
