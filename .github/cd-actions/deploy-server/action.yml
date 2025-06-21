@@ -116,8 +116,7 @@ runs:
           echo "Rebuilding and starting containers"
           export DOCKER_CLIENT_TIMEOUT=120
           export COMPOSE_HTTP_TIMEOUT=120
-          
           DOCKER_BUILDKIT=1 docker-compose up -d --build
-          
+ 
           echo "Removing old images after build"
           docker system prune -f
