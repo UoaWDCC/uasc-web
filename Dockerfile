@@ -17,7 +17,5 @@ COPY --link ./server ./server
 RUN pnpm build --filter server
 
 # Stage 3: Run
-RUN chmod +x ./server/setup-newrelic.sh
-
 EXPOSE 8000 8443
-ENTRYPOINT ["./server/setup-newrelic.sh"]
+CMD [ "sh", "-c", "NEW_RELIC_APP_NAME=$(cat /run/secrets/nr_name) NEW_RELIC_LICENSE_KEY=$(cat /run/secrets/nr_key) pnpm --prefix=server serve" ]
