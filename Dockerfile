@@ -17,10 +17,11 @@ COPY --link ./server ./server
 RUN pnpm build --filter server
 
 # Stage 3: Run
-EXPOSE 8000 8443
-
 COPY --link ./server/entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ./entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
+
+EXPOSE 8000 8443
+CMD [ "pnpm", "--prefix=server", "serve" ]
