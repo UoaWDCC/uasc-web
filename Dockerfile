@@ -17,11 +17,11 @@ COPY --link ./server ./server
 RUN pnpm build --filter server
 
 # Stage 3: Run
-COPY --link ./server/entrypoint.sh ./entrypoint.sh
-
-RUN chmod +x ./entrypoint.sh
-
-ENTRYPOINT ["./entrypoint.sh"]
-
 EXPOSE 8000 8443
-CMD [ "pnpm", "--prefix=server", "serve" ]
+CMD /bin/bash -c 'if [ -f /run/secrets/NEW_RELIC_APP_NAME ] && [ -f /run/secrets/NEW_RELIC_LICENSE_KEY ]; then \
+  NR_NAME=$(cat /run/secrets/NEW_RELIC_APP_NAME); \
+  NR_KEY=$(cat /run/secrets/NEW_RELIC_LICENSE_KEY); \
+  NEW_RELIC_APP_NAME="$NR_NAME" NEW_RELIC_LICENSE_KEY="$NR_KEY" pnpm --prefix=server serve; \
+else \
+  pnpm --prefix=server serve; \
+fi'
