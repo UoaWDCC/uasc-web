@@ -105,8 +105,8 @@ runs:
           echo "HTTPS_SERVER_CERTIFICATE=$(echo ${{ inputs.HTTPS_SERVER_CERTIFICATE }} | base64 --decode)" >> server/.env
           echo "HTTPS_SERVER_KEY=$(echo ${{ inputs.HTTPS_SERVER_KEY }} | base64 --decode)" >> server/.env
           
-          echo "NEW_RELIC_APP_NAME=${{ inputs.NEW_RELIC_APP_NAME }}" >> new_relic_app_name.txt
-          echo "NEW_RELIC_LICENSE_KEY=${{ inputs.NEW_RELIC_LICENSE_KEY }}" >> new_relic_license_key.txt
+          echo "${{ inputs.NEW_RELIC_APP_NAME }}" >> new_relic_app_name.txt
+          echo "${{ inputs.NEW_RELIC_LICENSE_KEY }}" >> new_relic_license_key.txt
 
           if [ "${{ inputs.rebuild }}" = "true" ]; then
             echo "Stopping containers"
