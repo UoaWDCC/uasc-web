@@ -104,6 +104,9 @@ runs:
           echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> server/.env
           echo "HTTPS_SERVER_CERTIFICATE=$(echo ${{ inputs.HTTPS_SERVER_CERTIFICATE }} | base64 --decode)" >> server/.env
           echo "HTTPS_SERVER_KEY=$(echo ${{ inputs.HTTPS_SERVER_KEY }} | base64 --decode)" >> server/.env
+          
+          echo "NEW_RELIC_APP_NAME=${{ inputs.NEW_RELIC_APP_NAME }}" >> new_relic_app_name.txt
+          echo "NEW_RELIC_LICENSE_KEY=${{ inputs.NEW_RELIC_LICENSE_KEY }}" >> new_relic_license_key.txt
 
           if [ "${{ inputs.rebuild }}" = "true" ]; then
             echo "Stopping containers"
@@ -114,10 +117,7 @@ runs:
           export DOCKER_CLIENT_TIMEOUT=120
           export COMPOSE_HTTP_TIMEOUT=120
           
-          DOCKER_BUILDKIT=1 docker-compose up -d \
-              --secret id=NEW_RELIC_APP_NAME,env=${{ inputs.NEW_RELIC_APP_NAME }} \
-              --secret id=new_relic_license_key,env=${{ inputs.NEW_RELIC_LICENSE_KEY }} \
-              --build
+          DOCKER_BUILDKIT=1 docker-compose up -d --build
           
           echo "Removing old images after build"
           docker system prune -f
