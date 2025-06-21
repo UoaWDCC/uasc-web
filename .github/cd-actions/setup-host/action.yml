@@ -39,6 +39,9 @@ runs:
         key: ${{ inputs.SERVER_SSH_KEY }}
         port: 22
         script: |
+          #!/usr/bin/env bash
+          set -e
+
           echo "Updating package list"
           sudo apt-get update
 
