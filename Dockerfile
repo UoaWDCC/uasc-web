@@ -17,11 +17,9 @@ COPY --link ./server ./server
 RUN pnpm build --filter server
 
 # Stage 3: Run
+RUN chmod +x ./server/setup-newrelic.sh
+
+RUN ./server/setup-newrelic.sh
+
 EXPOSE 8000 8443
-CMD /bin/bash -c 'if [ -f /run/secrets/NEW_RELIC_APP_NAME ] && [ -f /run/secrets/NEW_RELIC_LICENSE_KEY ]; then \
-  NR_NAME=$(cat /run/secrets/NEW_RELIC_APP_NAME); \
-  NR_KEY=$(cat /run/secrets/NEW_RELIC_LICENSE_KEY); \
-  NEW_RELIC_APP_NAME="$NR_NAME" NEW_RELIC_LICENSE_KEY="$NR_KEY" pnpm --prefix=server serve; \
-else \
-  pnpm --prefix=server serve; \
-fi'
+CMD [ "pnpm", "--prefix=server", "serve" ]
