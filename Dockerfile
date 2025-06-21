@@ -13,12 +13,6 @@ COPY --link ./scripts ./scripts
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter server
 
 # Stage 2: Build
-COPY --link ./server ./server
-RUN pnpm build --filter server
+RUN ["chmod", "+x", "/app/server/entrypoint.sh"]
 
-# Stage 3: Run
-EXPOSE 8000 8443
-
-RUN ["chmod", "+x", "/server/entrypoint.sh"]
-
-ENTRYPOINT ["/server/entrypoint.sh"]
+ENTRYPOINT ["/app/server/entrypoint.sh"]
