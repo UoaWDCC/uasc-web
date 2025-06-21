@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Manual deployment environment'
+        description: 'Deployment environment'
         type: environment
         required: true
       workflow:
@@ -21,6 +21,11 @@ on:
           - deploy-server
           - deploy-client
         required: true
+      rebuild:
+        description: 'Whether to rebuild the containers by stopping them first'
+        type: boolean
+        default: false
+        required: false
 
 jobs:
   deploy-server:
@@ -42,6 +47,8 @@ jobs:
       - name: Run Server Deployment Composite Action
         uses: ./.github/cd-actions/deploy-server/
         with:
+          rebuild: ${{ github.event.inputs.rebuild || 'false' }}
+          # secrets
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
