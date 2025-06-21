@@ -2,6 +2,10 @@ name: "Deploy Server"
 description: Deploys the server
 
 inputs:
+  rebuild:
+    description: Whether to rebuild the containers by stopping them first.
+    required: true
+    default: 'false'
   # Host secrets
   SERVER_USERNAME:
     description: The username to use for authentication.
@@ -95,8 +99,10 @@ runs:
           echo "HTTPS_SERVER_CERTIFICATE=$(echo ${{ inputs.HTTPS_SERVER_CERTIFICATE }} | base64 --decode)" >> server/.env
           echo "HTTPS_SERVER_KEY=$(echo ${{ inputs.HTTPS_SERVER_KEY }} | base64 --decode)" >> server/.env
 
-          echo "Stopping containers"
-          docker-compose down
+          if [ "${{ inputs.rebuild }}" = "true" ]; then
+            echo "Stopping containers"
+            docker-compose down
+          fi
 
           echo "Rebuilding and starting containers"
           export DOCKER_CLIENT_TIMEOUT=120
