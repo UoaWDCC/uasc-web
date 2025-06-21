@@ -96,7 +96,7 @@ runs:
           echo "HTTPS_SERVER_CERTIFICATE=$(echo ${{ inputs.HTTPS_SERVER_CERTIFICATE }} | base64 --decode)" >> server/.env
           echo "HTTPS_SERVER_KEY=$(echo ${{ inputs.HTTPS_SERVER_KEY }} | base64 --decode)" >> server/.env
 
-          if [ "${{ inputs.REBUILD }}" = "true" ]; then
+          if [ "${{ inputs.rebuild }}" = "true" ]; then
             echo "Stopping containers"
             docker-compose down
           fi
