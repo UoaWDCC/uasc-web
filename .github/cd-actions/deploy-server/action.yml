@@ -45,6 +45,12 @@ inputs:
   HTTPS_SERVER_CERTIFICATE:
     description: The HTTPS server certificate to use for authentication.
     required: true
+  NEW_RELIC_APP_NAME:
+    description: The New Relic application name to use for monitoring.
+    required: true
+  NEW_RELIC_LICENSE_KEY:
+    description: The New Relic license key to use for monitoring.
+    required: true
 
 runs:
   using: "composite"
@@ -107,7 +113,11 @@ runs:
           echo "Rebuilding and starting containers"
           export DOCKER_CLIENT_TIMEOUT=120
           export COMPOSE_HTTP_TIMEOUT=120
-          DOCKER_BUILDKIT=1 docker-compose up -d --build
-
+          
+          DOCKER_BUILDKIT=1 docker-compose up -d \
+              --secret id=NEW_RELIC_APP_NAME,env=${{ inputs.NEW_RELIC_APP_NAME }} \
+              --secret id=new_relic_license_key,env=${{ inputs.NEW_RELIC_LICENSE_KEY }} \
+              --build
+          
           echo "Removing old images after build"
           docker system prune -f

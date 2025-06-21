@@ -61,6 +61,8 @@ jobs:
           REDIRECT_MEMBERS_GOOGLE_SHEET_LINK: https://google.com
           HTTPS_SERVER_CERTIFICATE: ${{ secrets.HTTPS_SERVER_CERTIFICATE }}
           HTTPS_SERVER_KEY: ${{ secrets.HTTPS_SERVER_KEY }}
+          NEW_RELIC_APP_NAME: ${{ secrets.NEW_RELIC_APP_NAME }}
+          NEW_RELIC_LICENSE_KEY: ${{ secrets.NEW_RELIC_LICENSE_KEY }}
 
   setup-host:
     name: Setup Host
