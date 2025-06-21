@@ -15,7 +15,9 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter server
 # Stage 2: Build
 COPY --link ./server ./server
 RUN pnpm build --filter server
+RUN chmod +x ./server/entrypoint.sh
 
 # Stage 3: Run
 EXPOSE 8000 8443
-CMD [ "sh", "-c", "NEW_RELIC_APP_NAME=$(cat /run/secrets/NEW_RELIC_APP_NAME) NEW_RELIC_LICENSE_KEY=$(cat /run/secrets/NEW_RELIC_LICENSE_KEY) pnpm --prefix=server serve" ]
+ENTRYPOINT [ "./server/entrypoint.sh" ]
+CMD [ "pnpm", "--prefix=server", "serve" ]

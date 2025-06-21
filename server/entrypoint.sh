@@ -6,7 +6,8 @@ if [ -f /run/secrets/NEW_RELIC_APP_NAME ] && [ -f /run/secrets/NEW_RELIC_LICENSE
   NR_NAME=$(cat /run/secrets/NEW_RELIC_APP_NAME)
   NR_KEY=$(cat /run/secrets/NEW_RELIC_LICENSE_KEY)
 
-  exec NEW_RELIC_APP_NAME="$NR_NAME" NEW_RELIC_LICENSE_KEY="$NR_KEY" pnpm --prefix=server serve
-else
-  exec pnpm --prefix=server serve
+  export NEW_RELIC_APP_NAME="$NR_NAME"
+  export NEW_RELIC_LICENSE_KEY="$NR_KEY"
 fi
+
+exec "$@"
