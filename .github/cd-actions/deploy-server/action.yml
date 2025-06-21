@@ -83,6 +83,9 @@ runs:
         key: ${{ inputs.SERVER_SSH_KEY }}
         port: 22
         script: |
+          #!/usr/bin/env bash
+          set -e
+
           cd ~/app
 
           echo "storing secrets"
