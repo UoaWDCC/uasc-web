@@ -18,4 +18,4 @@ RUN pnpm build --filter server
 
 # Stage 3: Run
 EXPOSE 8000 8443
-CMD [ "sh", "-c", "NEW_RELIC_APP_NAME=$(cat /run/secrets/nr_name) NEW_RELIC_LICENSE_KEY=$(cat /run/secrets/nr_key) pnpm --prefix=server serve" ]
+CMD [ "sh", "-c", "NEW_RELIC_APP_NAME=$(cat /run/secrets/NEW_RELIC_APP_NAME) NEW_RELIC_LICENSE_KEY=$(cat /run/secrets/NEW_RELIC_LICENSE_KEY) pnpm --prefix=server serve" ]
