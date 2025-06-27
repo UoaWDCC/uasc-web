@@ -1,6 +1,12 @@
 # IDEs
-.idea
-.vscode
+.idea/*
+.vscode/*
+
+!.vscode/
+!.vscode/settings.json
+!.idea/
+!.idea/biome.xml
+!.idea/externalDependencies.xml
 
 # Below is a copy of https://github.com/github/gitignore/blob/HEAD/Node.gitignore
 

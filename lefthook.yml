@@ -10,4 +10,4 @@ pre-commit:
       run: pnpm biome lint {staged_files}
     prettier:
       glob: "*.{js,jsx,ts,tsx,json,css,scss,md}"
-      run: pnpm biome format {staged_files} && git add {staged_files}
+      run: pnpm biome format --write {staged_files} && git add {staged_files}
