@@ -4,6 +4,7 @@
 
 !.vscode/
 !.vscode/settings.json
+!.vscode/extensions.json
 !.idea/
 !.idea/biome.xml
 !.idea/externalDependencies.xml
