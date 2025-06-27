@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import FormContainer from "./FormContainer/FormContainer"
 import Button from "../FigmaButtons/FigmaButton"
 

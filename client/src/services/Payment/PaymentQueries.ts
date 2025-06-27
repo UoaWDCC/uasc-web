@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import PaymentService from "./PaymentService"
-import { MembershipTypes } from "@/models/Payment"
+import type { MembershipTypes } from "@/models/Payment"
 
 export const MEMBERSHIP_CLIENT_SECRET_KEY = "membershipClientSecret"
 

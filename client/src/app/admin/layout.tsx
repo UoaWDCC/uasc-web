@@ -4,7 +4,7 @@ import { DateSelectionProvider } from "@/components/composite/Admin/AdminAvailab
 import AdminNavbar from "@/components/composite/Admin/AdminNavbar/AdminNavbar"
 import { useAppData } from "@/store/Store"
 import { AdminBookingViewProvider } from "@/components/composite/Admin/AdminBookingView/AdminBookingViewContext"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "@/services/QueryClient"
 import Loader from "@/components/generic/SuspenseComponent/Loader"

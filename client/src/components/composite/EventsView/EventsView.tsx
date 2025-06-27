@@ -1,7 +1,7 @@
 import EventsCardPreview from "@/components/generic/Event/EventPreview/EventPreview"
 import EventDetailed from "@/components/generic/Event/EventDetailed/EventDetailed"
 import { DateUtils } from "@/components/utils/DateUtils"
-import { Event } from "@/models/Events"
+import type { Event } from "@/models/Events"
 import { useCallback, useMemo, useState } from "react"
 import {
   EventDateComparisons,

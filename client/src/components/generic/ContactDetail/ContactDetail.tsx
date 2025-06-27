@@ -1,4 +1,4 @@
-import { ContactDetailLink } from "@/models/sanity/ContactDetail/Utils"
+import type { ContactDetailLink } from "@/models/sanity/ContactDetail/Utils"
 
 export interface IContactDetail {
   /**

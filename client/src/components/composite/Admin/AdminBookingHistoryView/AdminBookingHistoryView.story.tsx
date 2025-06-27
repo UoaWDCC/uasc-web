@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { BookingHistoryEvent } from "@/models/History"
+import type { BookingHistoryEvent } from "@/models/History"
 import AdminBookingHistoryView from "./AdminBookingHistoryView"
 import { Timestamp } from "firebase/firestore"
-import { CombinedUserData } from "@/models/User"
+import type { CombinedUserData } from "@/models/User"
 
 const meta: Meta<typeof AdminBookingHistoryView> = {
   component: AdminBookingHistoryView

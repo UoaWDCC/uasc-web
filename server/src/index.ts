@@ -1,11 +1,11 @@
 import "dotenv/config"
-import express, { Express, Request, Response } from "express"
+import express, { type Express, type Request, type Response } from "express"
 import cors from "cors"
 import swaggerUi from "swagger-ui-express"
 import { RegisterRoutes } from "middleware/__generated__/routes"
 import helmet from "helmet"
 import https from "https"
-import http from "http"
+import type http from "http"
 
 let spec: swaggerUi.JsonObject | undefined
 let generatedHtml: string | undefined

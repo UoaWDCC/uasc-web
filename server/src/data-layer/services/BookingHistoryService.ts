@@ -1,16 +1,16 @@
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 import db from "data-layer/adapters/FirestoreCollections"
-import {
+import type {
   DocumentDataWithUid,
   PaginatedFirebaseResponse
 } from "data-layer/models/common"
-import {
+import type {
   BookingAddedEvent,
   BookingAvailabilityChangeEvent,
   BookingDeletedEvent,
   BookingHistoryEvent
 } from "data-layer/models/firebase"
-import { Timestamp } from "firebase-admin/firestore"
+import type { Timestamp } from "firebase-admin/firestore"
 
 const DEFAULT_PAGINATION_AMOUNT = 100 as const
 

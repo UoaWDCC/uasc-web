@@ -1,6 +1,6 @@
 import React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import ExecImage, { ExecImageProps } from "./ExecImage"
+import ExecImage, { type ExecImageProps } from "./ExecImage"
 
 const meta: Meta<typeof ExecImage> = {
   component: ExecImage,

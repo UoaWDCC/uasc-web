@@ -1,4 +1,4 @@
-import {
+import type {
   LoginHandlerArgs,
   HandlerResponse
 } from "@/components/composite/LoginForm/LoginForm"

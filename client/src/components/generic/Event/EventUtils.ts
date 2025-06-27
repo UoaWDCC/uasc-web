@@ -1,7 +1,7 @@
 import { DateUtils } from "@/components/utils/DateUtils"
-import { Event } from "@/models/Events"
+import type { Event } from "@/models/Events"
 import { MS_IN_SECOND } from "@/utils/Constants"
-import {
+import type {
   EventCardPreviewVariant,
   IEventsCardPreview
 } from "./EventPreview/EventPreview"

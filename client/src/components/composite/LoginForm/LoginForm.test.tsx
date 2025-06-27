@@ -1,5 +1,8 @@
-import { render, fireEvent, waitFor } from "@testing-library/react"
-import LoginForm, { LoginHandlerArgs, HandlerResponse } from "./LoginForm"
+import { fireEvent, render, waitFor } from "@testing-library/react"
+import LoginForm, {
+  type HandlerResponse,
+  type LoginHandlerArgs
+} from "./LoginForm"
 
 describe("LoginForm", () => {
   describe("Login Functionality", () => {

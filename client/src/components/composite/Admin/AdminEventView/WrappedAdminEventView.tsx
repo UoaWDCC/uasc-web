@@ -10,7 +10,7 @@ import StorageService from "@/services/Storage/StorageService"
 import { useLatestEventsQuery } from "@/services/Event/EventQueries"
 import { useMemo, useState } from "react"
 import { useGetEventQuery } from "@/services/Admin/AdminQueries"
-import { Event } from "@/models/Events"
+import type { Event } from "@/models/Events"
 import Loader from "@/components/generic/SuspenseComponent/Loader"
 
 const WrappedAdminEventView = () => {

@@ -5,7 +5,7 @@ import Button from "@/components/generic/FigmaButtons/FigmaButton"
 
 import {
   PasswordSetupForm,
-  HandlerResponse
+  type HandlerResponse
 } from "@/components/generic/PasswordSetupForm/PasswordSetupForm"
 import { oneLevelUp } from "../utils/Utils"
 import { SUCCESS_ROUTE } from "../utils/RouteNames"

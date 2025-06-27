@@ -1,7 +1,7 @@
 import fetchClient from "../OpenApiFetchClient"
 
 const EventService = {
-  getAllEvents: async function ({ pageParam }: { pageParam?: string }) {
+  getAllEvents: async ({ pageParam }: { pageParam?: string }) => {
     const { data, response } = await fetchClient.GET("/events", {
       params: {
         query: {
@@ -17,7 +17,7 @@ const EventService = {
 
     return data
   },
-  getAllEventsAsMember: async function ({ pageParam }: { pageParam?: string }) {
+  getAllEventsAsMember: async ({ pageParam }: { pageParam?: string }) => {
     const { data, response } = await fetchClient.GET("/events/for-members", {
       params: {
         query: {

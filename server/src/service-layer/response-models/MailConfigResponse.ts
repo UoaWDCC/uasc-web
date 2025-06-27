@@ -1,5 +1,8 @@
-import { MailConfig, EmailTemplate } from "../../data-layer/models/MailConfig"
-import { CommonResponse } from "./CommonResponse"
+import type {
+  EmailTemplate,
+  MailConfig
+} from "../../data-layer/models/MailConfig"
+import type { CommonResponse } from "./CommonResponse"
 
 export interface GetMailConfigResponse extends CommonResponse {
   /**

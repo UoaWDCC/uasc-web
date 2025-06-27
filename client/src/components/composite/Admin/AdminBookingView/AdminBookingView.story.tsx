@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import AdminBookingView from "./AdminBookingView"
-import {
+import type {
   BookingInfo,
   IAdminBookingDate
 } from "./AdminBookingDateDisplay/AdminBookingDate/AdminBookingDate"

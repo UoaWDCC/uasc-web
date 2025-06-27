@@ -1,9 +1,9 @@
-import { User } from "firebase/auth"
-import { UserClaims } from "@/models/User"
+import type { User } from "firebase/auth"
+import type { UserClaims } from "@/models/User"
 import {
   defaultRegistry,
   createStore,
-  Action,
+  type Action,
   createHook
 } from "react-sweet-state"
 

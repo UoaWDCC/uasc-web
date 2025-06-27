@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { Timestamp } from "firebase/firestore"
 import BookingUserCard from "./BookingUserCard"
-import { BookingInfo } from "./AdminBookingDate"
+import type { BookingInfo } from "./AdminBookingDate"
 
 const meta: Meta<typeof BookingUserCard> = {
   component: BookingUserCard

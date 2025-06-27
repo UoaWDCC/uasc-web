@@ -1,5 +1,5 @@
 import EventService from "data-layer/services/EventService"
-import { GetAllEventsResponse } from "service-layer/response-models/EventResponse"
+import type { GetAllEventsResponse } from "service-layer/response-models/EventResponse"
 import { Controller, Get, Query, Route, Security, SuccessResponse } from "tsoa"
 import { ONE_MINUTE_IN_MS } from "../../business-layer/utils/EventConstants"
 import { Timestamp } from "firebase-admin/firestore"

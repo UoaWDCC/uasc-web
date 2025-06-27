@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
-  TableRowObjectWithIdentifier,
-  TableRowOperation,
-  TableRowOperationStyle
+  type TableRowObjectWithIdentifier,
+  type TableRowOperation,
+  type TableRowOperationStyle
 } from "./TableUtils"
 import TableFooterPaginator from "./TableFooterPaginator"
 import ThreeDotsVertical from "@/assets/icons/three-dots-vertical.svg"

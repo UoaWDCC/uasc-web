@@ -1,6 +1,6 @@
-import { DocumentDataWithUid } from "data-layer/models/common"
-import { CommonResponse, CursorPaginatedResponse } from "./CommonResponse"
-import { Event } from "data-layer/models/firebase"
+import type { DocumentDataWithUid } from "data-layer/models/common"
+import type { CommonResponse, CursorPaginatedResponse } from "./CommonResponse"
+import type { Event } from "data-layer/models/firebase"
 
 export interface GetAllEventsResponse
   extends CommonResponse,

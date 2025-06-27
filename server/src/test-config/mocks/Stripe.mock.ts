@@ -2,7 +2,7 @@ import {
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues
 } from "business-layer/utils/StripeSessionMetadata"
-import * as Stripe from "stripe"
+import type * as Stripe from "stripe"
 
 export const customerMock: Stripe.Stripe.Customer = {
   id: "cus_123456789",

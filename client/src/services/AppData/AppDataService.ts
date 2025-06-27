@@ -1,4 +1,4 @@
-import { MembershipTypes } from "@/models/Payment"
+import type { MembershipTypes } from "@/models/Payment"
 import fetchClient from "@/services/OpenApiFetchClient"
 import { DEFAULT_NORMAL_PRICE, DEFAULT_SPECIAL_PRICE } from "@/utils/Constants"
 
@@ -70,7 +70,7 @@ const sortMembershipPrices = (
 }
 
 const AppDataService = {
-  getBankPaymentDetails: async function () {
+  getBankPaymentDetails: async () => {
     // TODO: Dynamically fetch and make sure there is appropriate fallback
     const data = {
       email: "club.admin@uasc.co.nz",
@@ -81,7 +81,7 @@ const AppDataService = {
   /**
    * Gives the prices of the two different types of bookings (uses a fallback otherwise)
    */
-  getLodgePrices: async function (): Promise<LodgePricingProps> {
+  getLodgePrices: async (): Promise<LodgePricingProps> => {
     try {
       const { data } = await fetchClient.GET("/payment/lodge_prices")
       const priceList = data?.data
@@ -109,7 +109,7 @@ const AppDataService = {
       }
     }
   },
-  getMembershipPricingDetails: async function (): Promise<MembershipPrices[]> {
+  getMembershipPricingDetails: async (): Promise<MembershipPrices[]> => {
     try {
       const { data } = await fetchClient.GET("/payment/membership_prices")
 

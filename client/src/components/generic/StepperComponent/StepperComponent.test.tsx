@@ -1,4 +1,4 @@
-import Stepper, { StepProps } from "./StepperComponent"
+import Stepper, { type StepProps } from "./StepperComponent"
 import { useState } from "react"
 import { render, act, screen } from "@testing-library/react"
 

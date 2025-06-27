@@ -1,6 +1,6 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
-import { DocumentDataWithUid } from "data-layer/models/common"
-import { Event } from "data-layer/models/firebase"
+import type { DocumentDataWithUid } from "data-layer/models/common"
+import type { Event } from "data-layer/models/firebase"
 
 class EventService {
   /**

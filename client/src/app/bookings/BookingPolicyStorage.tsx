@@ -2,7 +2,7 @@
 
 import {
   BookingContext,
-  PolicyWithTextBlocks
+  type PolicyWithTextBlocks
 } from "@/components/composite/Booking/BookingContext"
 import { useContext, useEffect } from "react"
 

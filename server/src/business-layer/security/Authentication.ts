@@ -1,4 +1,4 @@
-import * as express from "express"
+import type * as express from "express"
 import { auth } from "./Firebase"
 import FireBaseError from "data-layer/utils/FirebaseError"
 

@@ -1,14 +1,14 @@
-import {
+import type {
   AvailableDatesRequestModel,
   BookingsByDateRangeRequestModel
 } from "service-layer/request-models/UserRequests"
-import { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
+import type { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
 import { Timestamp } from "firebase-admin/firestore"
 
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
-import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
+import type { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
+import type { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
 import {
   Controller,
   Get,
@@ -20,15 +20,15 @@ import {
   Request
 } from "tsoa"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
-import {
+import type {
   BookingIdandUserData,
   CombinedUserData
 } from "../response-models/UserResponse"
-import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
+import type { UsersByDateRangeResponse } from "../response-models/BookingResponse"
 import UserDataService from "../../data-layer/services/UserDataService"
 import * as console from "console"
 import AuthService from "../../business-layer/services/AuthService"
-import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
+import type { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import {
   BOOKING_SLOTS_KEY,
   CheckoutTypeValues

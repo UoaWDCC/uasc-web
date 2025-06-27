@@ -1,5 +1,5 @@
 import { useState } from "react"
-import PaginatedForm, { PageProps } from "./PaginatedForm"
+import PaginatedForm, { type PageProps } from "./PaginatedForm"
 import { render, screen } from "@testing-library/react"
 import { act } from "react-dom/test-utils"
 

@@ -1,6 +1,6 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { DateUtils } from "@/components/utils/DateUtils"
-import { BookingHistoryEvent } from "@/models/History"
+import type { BookingHistoryEvent } from "@/models/History"
 import { useMemo } from "react"
 
 interface IAdminBookingHistoryItem {

@@ -11,7 +11,7 @@ import {
   MembershipTypeValues,
   MEMBERSHIP_TYPE_KEY,
   LODGE_PRICING_TYPE_KEY,
-  LodgePricingTypeValues
+  type LodgePricingTypeValues
 } from "business-layer/utils/StripeProductMetadata"
 import {
   UTCDateToDdMmYyyy,
@@ -21,18 +21,18 @@ import {
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
-import {
+import type {
   UserPaymentRequestModel,
   SelfRequestModel,
   UserBookingRequestingModel
 } from "service-layer/request-models/UserRequests"
-import {
+import type {
   BookingPaymentResponse,
   LodgeStripeProductResponse,
   MembershipPaymentResponse,
   MembershipStripeProductResponse
 } from "service-layer/response-models/PaymentResponse"
-import Stripe from "stripe"
+import type Stripe from "stripe"
 import {
   Controller,
   Post,

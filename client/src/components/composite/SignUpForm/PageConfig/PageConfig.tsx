@@ -1,4 +1,4 @@
-import { PageProps } from "@/components/generic/PaginatedForm/PaginatedForm"
+import type { PageProps } from "@/components/generic/PaginatedForm/PaginatedForm"
 import {
   PersonalSectionFirst,
   PersonalSectionSecond
@@ -19,7 +19,7 @@ import {
   PAYMENT_ROUTE,
   PERSONAL_ROUTE_1,
   PERSONAL_ROUTE_2,
-  RouteNames
+  type RouteNames
 } from "../utils/RouteNames"
 import {
   PaymentInformationSection,

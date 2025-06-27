@@ -1,6 +1,6 @@
-import { BookingHistoryEvent } from "@/models/History"
+import type { BookingHistoryEvent } from "@/models/History"
 import AdminBookingHistoryItem from "./AdminBookingHistoryItem"
-import { CombinedUserData } from "@/models/User"
+import type { CombinedUserData } from "@/models/User"
 import { useMemo } from "react"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { useAddUserToBookingMutation } from "@/services/Admin/AdminMutations"

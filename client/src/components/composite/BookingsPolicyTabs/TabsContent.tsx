@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import TabsComponent from "@/components/generic/TabsComponent/TabsComponent"
-import { PolicyWithTextBlocks } from "../Booking/BookingContext"
+import type { PolicyWithTextBlocks } from "../Booking/BookingContext"
 
 enum PolicyPage {
   LODGE_BOOKINGS = 0, // Start from 0 for better indexing

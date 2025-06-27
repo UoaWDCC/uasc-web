@@ -1,6 +1,6 @@
 import ProfileEdit from "@/components/composite/Profile/ProfileEdit/ProfileEdit"
 import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
-import { ReducedUserAdditionalInfo } from "@/models/User"
+import type { ReducedUserAdditionalInfo } from "@/models/User"
 import { useEffect } from "react"
 import { useEditSelfMutation } from "@/services/User/UserMutations"
 

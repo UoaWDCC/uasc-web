@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type { Meta } from "@storybook/react"
 // importing button.tsx as the object
-import Stepper, { StepProps } from "./StepperComponent"
+import Stepper, { type StepProps } from "./StepperComponent"
 
 const meta: Meta<typeof Stepper> = {
   component: Stepper

@@ -1,12 +1,12 @@
 import UserDataService from "data-layer/services/UserDataService"
 import AuthService from "business-layer/services/AuthService"
-import {
+import type {
   EditSelfRequestBody,
   SelfRequestModel,
   EditSelfRequestModel,
   DeleteUserRequestBody
 } from "service-layer/request-models/UserRequests"
-import { CommonResponse } from "service-layer/response-models/CommonResponse"
+import type { CommonResponse } from "service-layer/response-models/CommonResponse"
 import {
   Body,
   Controller,

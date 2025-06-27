@@ -1,6 +1,6 @@
 import { cleanFirestore } from "../../test-config/TestUtils"
 import MailConfigService from "./MailConfigService"
-import { EmailTemplate, MailConfig } from "../models/MailConfig"
+import type { EmailTemplate, MailConfig } from "../models/MailConfig"
 
 import db from "../adapters/FirestoreCollections"
 import { EncryptionService } from "../../business-layer/services/EncryptionService"

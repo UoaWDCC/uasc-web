@@ -6,10 +6,10 @@ import {
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import TextInput from "@/components/generic/TextInputComponent/TextInput"
 import { DateUtils } from "@/components/utils/DateUtils"
-import { CreateEventBody } from "@/models/Events"
+import type { CreateEventBody } from "@/models/Events"
 import { Timestamp } from "firebase/firestore"
 import Image from "next/image"
-import { FormEvent, useMemo, useState } from "react"
+import { type FormEvent, useMemo, useState } from "react"
 
 interface IAdminEventForm {
   /**

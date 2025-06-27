@@ -1,7 +1,7 @@
-import { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
-import { UserAdditionalInfo } from "data-layer/models/firebase"
-import { Timestamp } from "firebase-admin/firestore"
-import { UserRecord } from "firebase-admin/lib/auth/user-record"
+import type { MembershipTypeValues } from "business-layer/utils/StripeProductMetadata"
+import type { UserAdditionalInfo } from "data-layer/models/firebase"
+import type { Timestamp } from "firebase-admin/firestore"
+import type { UserRecord } from "firebase-admin/lib/auth/user-record"
 
 export interface EditUsersRequestBody {
   users: { uid: string; updatedInformation: Partial<UserAdditionalInfo> }[]

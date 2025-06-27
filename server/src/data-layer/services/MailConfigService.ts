@@ -1,6 +1,6 @@
-import { EmailTemplate, MailConfig } from "../models/MailConfig"
+import type { EmailTemplate, MailConfig } from "../models/MailConfig"
 import db from "../adapters/FirestoreCollections"
-import { EncryptionService } from "../../business-layer/services/EncryptionService"
+import type { EncryptionService } from "../../business-layer/services/EncryptionService"
 
 /**
  * Service for managing mail configuration settings in Firebase

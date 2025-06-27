@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from "react"
+import { type RefObject, useEffect } from "react"
 
 export const debounce = (fn: (...args: any[]) => void, timeout: number) => {
   let timer: NodeJS.Timeout

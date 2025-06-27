@@ -1,14 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import LodgeInfo, { ILodgeInfo } from "../../LodgeInfo/LodgeInfo"
+import LodgeInfo, { type ILodgeInfo } from "../../LodgeInfo/LodgeInfo"
 import {
   CreateBookingSection,
-  ICreateBookingSection
+  type ICreateBookingSection
 } from "../BookingCreation/BookingCreation"
 import { ProtectedCreateBookingSection } from "../BookingCreation/ProtectedCreateBookingSection"
 import { useSearchParams } from "next/navigation"
-import { LodgePricingProps } from "@/services/AppData/AppDataService"
+import type { LodgePricingProps } from "@/services/AppData/AppDataService"
 
 /**
  * Utility type determining what should be displayed to the user in {@link BookingInformationAndCreation}

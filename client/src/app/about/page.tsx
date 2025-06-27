@@ -1,19 +1,19 @@
 import AboutSection from "@/components/generic/AboutSection/AboutSection"
 // import all 4 images
 import { Footer } from "@/components/generic/Footer/Footer"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import {
   ABOUT_ITEMS_GROQ_QUERY,
-  AboutItem
+  type AboutItem
 } from "@/models/sanity/AboutItem/Utils"
 import { SanityImageUrl, sanityQuery } from "../../../sanity/lib/utils"
 import {
   COMMITTEE_MEMBERS_GROQ_QUERY,
-  CommitteeMembers
+  type CommitteeMembers
 } from "@/models/sanity/CommitteeMembers/Utils"
 import {
   LIFE_MEMBERS_GROQ_QUERY,
-  LifeMembers
+  type LifeMembers
 } from "@/models/sanity/LifeMembers/Utils"
 import ExecImage from "@/components/generic/ExecImage/ExecImage"
 

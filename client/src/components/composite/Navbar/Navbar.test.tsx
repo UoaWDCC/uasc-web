@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Navbar, { INavbarProps } from "./Navbar"
+import Navbar, { type INavbarProps } from "./Navbar"
 import { act, render, screen } from "@testing-library/react"
 
 const TestNavbar = ({

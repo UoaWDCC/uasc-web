@@ -1,12 +1,12 @@
 "use client"
 
 import PaginatedForm, {
-  PageProps
+  type PageProps
 } from "@/components/generic/PaginatedForm/PaginatedForm"
 import { STEPPER_PROPS } from "./PageConfig/PageConfig"
 import Stepper from "@/components/generic/StepperComponent/StepperComponent"
 import { useCheckRegisterPermissions, useCurrentStep } from "./utils/Utils"
-import { PAGES } from "./utils/RouteNames"
+import type { PAGES } from "./utils/RouteNames"
 import AlertsComponent from "@/components/generic/AlertsComponent/AlertsComponent"
 
 type Alerts = {

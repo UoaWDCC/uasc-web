@@ -1,8 +1,8 @@
 import { Timestamp } from "firebase/firestore"
-import { UserAdditionalInfo } from "@/models/User"
+import type { CreateEventBody, EditEventBody } from "@/models/Events"
+import type { UserAdditionalInfo } from "@/models/User"
 import fetchClient from "@/services/OpenApiFetchClient"
 import { MEMBER_TABLE_MAX_DATA } from "@/utils/Constants"
-import { CreateEventBody, EditEventBody } from "@/models/Events"
 
 export type EditUsersBody = {
   uid: string
@@ -17,13 +17,13 @@ enum RedirectKeys {
 }
 
 const AdminService = {
-  getUsers: async function ({
+  getUsers: async ({
     limit = MEMBER_TABLE_MAX_DATA,
     pageParam
   }: {
     pageParam?: string
     limit?: number
-  }) {
+  }) => {
     const { data } = await fetchClient.GET("/admin/users", {
       params: {
         query: {
@@ -35,14 +35,14 @@ const AdminService = {
     if (!data) throw new Error("Failed to fetch all users")
     return data
   },
-  editUsers: async function (users: EditUsersBody) {
+  editUsers: async (users: EditUsersBody) => {
     await fetchClient.PATCH("/admin/users/bulk-edit", {
       body: {
         users
       }
     })
   },
-  demoteUser: async function (uid: string) {
+  demoteUser: async (uid: string) => {
     const { response } = await fetchClient.PUT("/admin/users/demote", {
       body: {
         uid
@@ -50,7 +50,7 @@ const AdminService = {
     })
     if (!response.ok) throw new Error(`Failed to demote ${uid}`)
   },
-  promoteUser: async function (uid: string) {
+  promoteUser: async (uid: string) => {
     const { response } = await fetchClient.PUT("/admin/users/promote", {
       body: {
         uid
@@ -58,7 +58,7 @@ const AdminService = {
     })
     if (!response.ok) throw new Error(`Failed to promote ${uid}`)
   },
-  deleteBooking: async function (id: string) {
+  deleteBooking: async (id: string) => {
     const { response } = await fetchClient.POST("/admin/bookings/delete", {
       body: {
         bookingID: id
@@ -68,13 +68,13 @@ const AdminService = {
       throw new Error(`Failed to delete booking with id ${id}`)
     }
   },
-  getBookingsBetweenDateRange: async function ({
+  getBookingsBetweenDateRange: async ({
     startDate = Timestamp.fromDate(new Date(Date.now())),
     endDate = Timestamp.fromDate(new Date(Date.now()))
   }: {
     startDate?: Timestamp
     endDate?: Timestamp
-  }) {
+  }) => {
     /**
      * We can **NOT** have any nanoseconds because it causes weird offset problems
      */
@@ -96,7 +96,7 @@ const AdminService = {
     return data?.data
   },
 
-  deleteUser: async function ({ uid }: { uid: string }) {
+  deleteUser: async ({ uid }: { uid: string }) => {
     const { response } = await fetchClient.DELETE("/users/delete-user", {
       body: {
         uid
@@ -105,11 +105,11 @@ const AdminService = {
     if (!response.ok) throw new Error(`Failed to delete user ${uid}`)
   },
 
-  makeDatesAvailable: async function (
+  makeDatesAvailable: async (
     startDate: Timestamp,
     endDate: Timestamp,
     slots?: number
-  ) {
+  ) => {
     const { response, data } = await fetchClient.POST(
       "/admin/bookings/make-dates-available",
       {
@@ -128,10 +128,7 @@ const AdminService = {
     return data
   },
 
-  makeDatesUnavailable: async function (
-    startDate: Timestamp,
-    endDate: Timestamp
-  ) {
+  makeDatesUnavailable: async (startDate: Timestamp, endDate: Timestamp) => {
     const { response, data } = await fetchClient.POST(
       "/admin/bookings/make-dates-unavailable",
       {
@@ -148,7 +145,7 @@ const AdminService = {
       )
     return data
   },
-  addUsersToBookingForDateRange: async function ({
+  addUsersToBookingForDateRange: async ({
     startDate,
     endDate,
     userId
@@ -156,7 +153,7 @@ const AdminService = {
     startDate: Timestamp
     endDate: Timestamp
     userId: string
-  }) {
+  }) => {
     const { response, data } = await fetchClient.POST(
       "/admin/bookings/create",
       {
@@ -176,13 +173,13 @@ const AdminService = {
 
     return data?.data
   },
-  getBookingHistory: async function ({
+  getBookingHistory: async ({
     pageParam,
     limit = 200
   }: {
     pageParam?: string
     limit?: number
-  }) {
+  }) => {
     const { response, data } = await fetchClient.GET(
       "/admin/bookings/history",
       {
@@ -201,7 +198,7 @@ const AdminService = {
 
     return data
   },
-  createEvent: async function ({ data }: CreateEventBody) {
+  createEvent: async ({ data }: CreateEventBody) => {
     const { response } = await fetchClient.POST("/admin/events", {
       body: { data }
     })
@@ -210,13 +207,13 @@ const AdminService = {
       throw new Error(`Failed to create the event ${data.title}`)
     }
   },
-  editEvent: async function ({
+  editEvent: async ({
     eventId,
     newData
   }: {
     eventId: string
     newData: EditEventBody
-  }) {
+  }) => {
     const { response } = await fetchClient.PATCH("/admin/events/{id}", {
       params: {
         path: {
@@ -232,7 +229,7 @@ const AdminService = {
       )
     }
   },
-  getEvent: async function (eventId: string) {
+  getEvent: async (eventId: string) => {
     const { response, data } = await fetchClient.GET("/admin/events/{id}", {
       params: {
         path: { id: eventId }
@@ -245,7 +242,7 @@ const AdminService = {
 
     return data?.data
   },
-  deleteEvent: async function (eventId: string) {
+  deleteEvent: async (eventId: string) => {
     const { response } = await fetchClient.DELETE("/admin/events/{id}", {
       params: {
         path: {
@@ -258,14 +255,14 @@ const AdminService = {
       throw new Error(`Failed to delete event with id ${eventId}`)
     }
   },
-  resetMemberships: async function () {
+  resetMemberships: async () => {
     const { response } = await fetchClient.PATCH("/admin/users/demote-all")
 
     if (!response.ok) {
       throw new Error(`Failed to demote all users`)
     }
   },
-  getMemberGoogleSheetUrl: async function () {
+  getMemberGoogleSheetUrl: async () => {
     const { response, data } = await fetchClient.GET(
       "/admin/redirect/{redirectKey}",
       {

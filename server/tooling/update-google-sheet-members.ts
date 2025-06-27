@@ -1,9 +1,9 @@
-import { CombinedUserData } from "service-layer/response-models/UserResponse"
-import { firestoreTimestampToDate } from "../src/data-layer/adapters/DateUtils"
-
-import { google, sheets_v4 } from "googleapis"
-import admin from "firebase-admin"
 import dotenv from "dotenv"
+import admin from "firebase-admin"
+
+import { google, type sheets_v4 } from "googleapis"
+import type { CombinedUserData } from "service-layer/response-models/UserResponse"
+import { firestoreTimestampToDate } from "../src/data-layer/adapters/DateUtils"
 
 dotenv.config()
 
@@ -196,7 +196,7 @@ const createIdToken = async () => {
     // Ensure that the user exists
     try {
       await admin.auth().getUser(USER_ID)
-    } catch (e) {
+    } catch {
       await admin.auth().createUser({ uid: USER_ID })
     }
     await admin

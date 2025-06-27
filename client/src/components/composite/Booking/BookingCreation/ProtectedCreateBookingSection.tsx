@@ -1,12 +1,15 @@
 "use client"
 
-import { useAppData } from "@/store/Store"
+import { useContext, useEffect } from "react"
 import { SignUpNotif } from "@/components/generic/SignUpNotif/SignUpNotif"
 import { useAvailableBookingsQuery } from "@/services/Booking/BookingQueries"
-import { CreateBookingSection, ICreateBookingSection } from "./BookingCreation"
-import { useContext, useEffect } from "react"
-import { BookingContext } from "../BookingContext"
 import { useSelfDataQuery } from "@/services/User/UserQueries"
+import { useAppData } from "@/store/Store"
+import { BookingContext } from "../BookingContext"
+import {
+  CreateBookingSection,
+  type ICreateBookingSection
+} from "./BookingCreation"
 
 /**
  * @deprecated not for direct consumption on pages, use `BookingInformationAndCreation` instead

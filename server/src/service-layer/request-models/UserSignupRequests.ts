@@ -1,4 +1,4 @@
-import { UserAdditionalInfo } from "data-layer/models/firebase"
+import type { UserAdditionalInfo } from "data-layer/models/firebase"
 
 export interface UserSignupBody {
   email: string

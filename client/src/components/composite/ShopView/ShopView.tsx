@@ -1,5 +1,5 @@
-import React from "react"
-import { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
+import type React from "react"
+import type { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
 import ShopItem from "@/components/generic/Shop/ShopItem"
 
 interface ShopViewProps {

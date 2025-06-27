@@ -1,4 +1,4 @@
-import { MailConfig } from "../../data-layer/models/MailConfig"
+import type { MailConfig } from "../../data-layer/models/MailConfig"
 
 export interface UpdateMailConfigRequestBody {
   /**

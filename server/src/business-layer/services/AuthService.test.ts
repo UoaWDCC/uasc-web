@@ -1,6 +1,6 @@
 import { auth } from "business-layer/security/Firebase"
 import AuthService from "./AuthService"
-import { UserRecord } from "firebase-admin/auth"
+import type { UserRecord } from "firebase-admin/auth"
 import { cleanAuth } from "test-config/TestUtils"
 import { AuthServiceClaims, UserAccountTypes } from "../utils/AuthServiceClaims"
 

@@ -1,5 +1,5 @@
 import AdminBookingDate, {
-  IAdminBookingDate
+  type IAdminBookingDate
 } from "./AdminBookingDate/AdminBookingDate"
 
 export interface IAdminBookingDateDisplay {

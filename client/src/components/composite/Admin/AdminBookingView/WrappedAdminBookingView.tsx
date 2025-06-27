@@ -5,7 +5,7 @@ import { AdminBookingViewContext } from "./AdminBookingViewContext"
 import { useContext, useMemo } from "react"
 import { Timestamp } from "firebase/firestore"
 import { useDeleteBookingMutation } from "@/services/Admin/AdminMutations"
-import { IAdminBookingDate } from "./AdminBookingDateDisplay/AdminBookingDate/AdminBookingDate"
+import type { IAdminBookingDate } from "./AdminBookingDateDisplay/AdminBookingDate/AdminBookingDate"
 import Messages from "@/services/Utils/Messages"
 import { compareStrings } from "@/services/Admin/AdminUtils"
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import AdminBookingDate, { BookingInfo } from "./AdminBookingDate"
+import AdminBookingDate, { type BookingInfo } from "./AdminBookingDate"
 import { Timestamp } from "firebase/firestore"
 
 const meta: Meta<typeof AdminBookingDate> = {

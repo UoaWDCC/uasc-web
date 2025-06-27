@@ -1,5 +1,5 @@
 import ContactDetailPanel, {
-  IContactDetailPanel
+  type IContactDetailPanel
 } from "./ContactDetailPanel/ContactDetailPanel"
 import { Footer } from "@/components/generic/Footer/Footer"
 

@@ -1,6 +1,6 @@
-import { UserAdditionalInfo } from "data-layer/models/firebase"
-import { CommonResponse, CursorPaginatedResponse } from "./CommonResponse"
-import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
+import type { UserAdditionalInfo } from "data-layer/models/firebase"
+import type { CommonResponse, CursorPaginatedResponse } from "./CommonResponse"
+import type { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
 
 export interface CombinedUserData extends UserAdditionalInfo {
   /**

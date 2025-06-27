@@ -8,29 +8,29 @@ import {
   firestoreTimestampToDate,
   timestampsInRange
 } from "data-layer/adapters/DateUtils"
-import { UserAdditionalInfo, Event } from "data-layer/models/firebase"
+import type { UserAdditionalInfo, Event } from "data-layer/models/firebase"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
-import {
+import type {
   DeleteBookingRequest,
   AddCouponRequestBody,
   MakeDatesAvailableRequestBody,
   FetchLatestBookingEventRequest
 } from "service-layer/request-models/AdminRequests"
-import {
+import type {
   CreateBookingsRequestModel,
   CreateUserRequestBody,
   DemoteUserRequestBody,
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
-import {
+import type {
   UIdssByDateRangeResponse,
   BookingDeleteResponse,
   BookingSlotUpdateResponse
 } from "service-layer/response-models/BookingResponse"
-import {
+import type {
   AllUsersResponse,
   GetUserResponse
 } from "service-layer/response-models/UserResponse"
@@ -50,8 +50,8 @@ import {
 } from "tsoa"
 import * as console from "console"
 import StripeService from "../../business-layer/services/StripeService"
-import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
-import { UserRecord } from "firebase-admin/auth"
+import type { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
+import type { UserRecord } from "firebase-admin/auth"
 import { Timestamp } from "firebase-admin/firestore"
 import MailService from "business-layer/services/MailService"
 import BookingUtils, {
@@ -59,18 +59,18 @@ import BookingUtils, {
   CHECK_OUT_TIME
 } from "business-layer/utils/BookingUtils"
 import BookingHistoryService from "data-layer/services/BookingHistoryService"
-import {
+import type {
   FetchLatestBookingHistoryEventResponse,
   GetEventResponse
 } from "service-layer/response-models/AdminResponse"
-import { CreateEventBody } from "service-layer/request-models/EventRequests"
+import type { CreateEventBody } from "service-layer/request-models/EventRequests"
 import EventService from "data-layer/services/EventService"
 import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
-import {
+import type {
   UpdateEmailTemplateRequestBody,
   UpdateMailConfigRequestBody
 } from "service-layer/request-models/MailConfigRequests"
-import {
+import type {
   GetAllEmailTemplatesResponse,
   GetEmailTemplateResponse,
   GetMailConfigResponse,

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import ShopView from "./ShopView"
-import { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
+import type { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
 
 const meta: Meta<typeof ShopView> = {
   title: "Composite/ShopView",

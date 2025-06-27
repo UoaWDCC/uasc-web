@@ -1,7 +1,7 @@
-import { Booking, BookingSlot } from "data-layer/models/firebase"
+import type { Booking, BookingSlot } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
-import { DocumentDataWithUid } from "data-layer/models/common"
-import { Timestamp } from "firebase-admin/firestore"
+import type { DocumentDataWithUid } from "data-layer/models/common"
+import type { Timestamp } from "firebase-admin/firestore"
 
 export default class BookingDataService {
   public async createBooking(bookingData: Booking) {

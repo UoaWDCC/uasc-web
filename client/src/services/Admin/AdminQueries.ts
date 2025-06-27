@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
-import { Timestamp } from "firebase/firestore"
+import type { Timestamp } from "firebase/firestore"
 import AdminService from "./AdminService"
 
 export const ALL_USERS_QUERY = "allUsers"

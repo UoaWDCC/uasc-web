@@ -5,9 +5,9 @@ import {
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
-import { UserAdditionalInfo } from "data-layer/models/firebase"
+import type { UserAdditionalInfo } from "data-layer/models/firebase"
 import UserDataService from "data-layer/services/UserDataService"
-import { UserRecord } from "firebase-admin/auth"
+import type { UserRecord } from "firebase-admin/auth"
 import Stripe from "stripe"
 import AuthService from "./AuthService"
 import BookingDataService from "data-layer/services/BookingDataService"

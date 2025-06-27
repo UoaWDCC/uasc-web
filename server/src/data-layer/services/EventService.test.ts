@@ -4,7 +4,7 @@ import {
   dateToFirestoreTimeStamp,
   removeUnderscoresFromTimestamp
 } from "data-layer/adapters/DateUtils"
-import { Event } from "data-layer/models/firebase"
+import type { Event } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import { Timestamp } from "firebase-admin/firestore"
 

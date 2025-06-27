@@ -1,6 +1,6 @@
 import { Footer } from "@/components/generic/Footer/Footer"
-import { HomePage } from "@/models/sanity/HomePage/Utils"
-import {
+import type { HomePage } from "@/models/sanity/HomePage/Utils"
+import type {
   LodgePricingProps,
   MembershipPrices
 } from "@/services/AppData/AppDataService"

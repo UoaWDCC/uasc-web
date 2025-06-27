@@ -1,7 +1,7 @@
 // credit https://plainenglish.io/blog/using-firestore-with-typescript-in-the-v9-sdk-cf36851bb099
 import "dotenv/config"
 import firestore from "./Firestore"
-import {
+import type {
   Booking,
   BookingHistoryEvent,
   BookingSlot,
@@ -12,7 +12,7 @@ import {
   EMAIL_TEMPLATES_COLLECTION,
   MAIL_CONFIG_COLLECTION
 } from "./CollectionNames"
-import { EmailTemplate, MailConfig } from "../models/MailConfig"
+import type { EmailTemplate, MailConfig } from "../models/MailConfig"
 
 const FirestoreCollections = {
   users: firestore.collection<UserAdditionalInfo>("users"),

@@ -1,4 +1,4 @@
-import { MembershipPricing } from "@/components/utils/types"
+import type { MembershipPricing } from "@/components/utils/types"
 
 /**
  * An object containing messages for the pricing banner.

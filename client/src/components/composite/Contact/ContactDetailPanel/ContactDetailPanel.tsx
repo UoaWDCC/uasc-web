@@ -1,5 +1,5 @@
 import ContactDetail, {
-  IContactDetail
+  type IContactDetail
 } from "@/components/generic/ContactDetail/ContactDetail"
 
 export interface IContactDetailPanel {

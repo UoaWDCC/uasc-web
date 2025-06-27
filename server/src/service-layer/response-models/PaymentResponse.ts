@@ -1,9 +1,9 @@
-import {
+import type {
   LodgePricingTypeValues,
   MembershipTypeValues
 } from "business-layer/utils/StripeProductMetadata"
-import { CommonResponse } from "./CommonResponse"
-import { Timestamp } from "firebase-admin/firestore"
+import type { CommonResponse } from "./CommonResponse"
+import type { Timestamp } from "firebase-admin/firestore"
 
 type AvailableDates = {
   id: string
