@@ -45,6 +45,12 @@ inputs:
   HTTPS_SERVER_CERTIFICATE:
     description: The HTTPS server certificate to use for authentication.
     required: true
+  NEW_RELIC_APP_NAME:
+    description: The New Relic application name to use for monitoring.
+    required: true
+  NEW_RELIC_LICENSE_KEY:
+    description: The New Relic license key to use for monitoring.
+    required: true
 
 runs:
   using: "composite"
@@ -98,6 +104,9 @@ runs:
           echo "REDIRECT_MEMBERS_GOOGLE_SHEET_LINK=${{ inputs.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}" >> server/.env
           echo "HTTPS_SERVER_CERTIFICATE=$(echo ${{ inputs.HTTPS_SERVER_CERTIFICATE }} | base64 --decode)" >> server/.env
           echo "HTTPS_SERVER_KEY=$(echo ${{ inputs.HTTPS_SERVER_KEY }} | base64 --decode)" >> server/.env
+          
+          echo "${{ inputs.NEW_RELIC_APP_NAME }}" >> new_relic_app_name.txt
+          echo "${{ inputs.NEW_RELIC_LICENSE_KEY }}" >> new_relic_license_key.txt
 
           if [ "${{ inputs.rebuild }}" = "true" ]; then
             echo "Stopping containers"
@@ -108,6 +117,6 @@ runs:
           export DOCKER_CLIENT_TIMEOUT=120
           export COMPOSE_HTTP_TIMEOUT=120
           DOCKER_BUILDKIT=1 docker-compose up -d --build
-
+ 
           echo "Removing old images after build"
           docker system prune -f
