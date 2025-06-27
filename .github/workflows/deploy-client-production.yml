@@ -73,12 +73,12 @@ jobs:
         run: pnpm build --filter client
 
       - name: Publish to cloudflare
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          environment: client-production
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: uasc
-          directory: client/out
+          command: pages deploy client/out --project-name=uasc
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   verify:
