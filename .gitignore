@@ -141,3 +141,5 @@ dist
 # turbo
 .turbo
 .DS_Store
+
+.husky
