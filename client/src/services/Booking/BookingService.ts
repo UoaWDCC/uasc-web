@@ -1,12 +1,12 @@
-import { Timestamp } from "firebase/firestore"
-import { BookingAvailability } from "@/models/Booking"
+import type { Timestamp } from "firebase/firestore"
+import type { BookingAvailability } from "@/models/Booking"
 import fetchClient from "@/services/OpenApiFetchClient"
 
 const BookingService = {
-  getBookingAvailability: async function (
+  getBookingAvailability: async (
     startDate: Timestamp,
     endDate: Timestamp
-  ): Promise<BookingAvailability[]> {
+  ): Promise<BookingAvailability[]> => {
     const { data } = await fetchClient.POST("/bookings/available-dates", {
       body: {
         startDate,
@@ -18,7 +18,7 @@ const BookingService = {
 
     return data.data
   },
-  getSelfBookings: async function () {
+  getSelfBookings: async () => {
     const { data, response } = await fetchClient.GET("/bookings")
 
     if (!response.ok) {

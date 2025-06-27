@@ -1,6 +1,6 @@
-import { Timestamp } from "firebase-admin/firestore"
-import { CommonResponse } from "./CommonResponse"
-import { BookingIdandUserData } from "./UserResponse"
+import type { Timestamp } from "firebase-admin/firestore"
+import type { CommonResponse } from "./CommonResponse"
+import type { BookingIdandUserData } from "./UserResponse"
 
 export interface BookingSlotUpdateResponse extends CommonResponse {
   updatedBookingSlots?: { date: Timestamp; bookingSlotId: string }[]

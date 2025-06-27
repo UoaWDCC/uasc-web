@@ -1,6 +1,6 @@
-import { render, fireEvent, waitFor } from "@testing-library/react"
-import { PasswordSetupForm } from "./PasswordSetupForm"
+import { fireEvent, render, waitFor } from "@testing-library/react"
 import { createRef } from "react"
+import { PasswordSetupForm } from "./PasswordSetupForm"
 
 const MockPasswordSetupFormConsumer = ({
   mockSetupHandler,
@@ -20,7 +20,11 @@ const MockPasswordSetupFormConsumer = ({
         successHandler={mockSuccessHandler}
         formRef={formRef}
       />
-      <button onClick={() => submit()} data-testid="submit-button">
+      <button
+        type="submit"
+        onClick={() => submit()}
+        data-testid="submit-button"
+      >
         submit
       </button>
     </>

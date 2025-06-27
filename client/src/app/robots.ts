@@ -1,4 +1,4 @@
-import { MetadataRoute } from "next"
+import type { MetadataRoute } from "next"
 
 const FRONTEND_URL = process.env.FRONTEND_BASE_URL
 

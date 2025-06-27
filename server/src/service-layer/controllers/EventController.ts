@@ -1,9 +1,9 @@
 import EventService from "data-layer/services/EventService"
-import { GetAllEventsResponse } from "service-layer/response-models/EventResponse"
+import { type DocumentSnapshot, Timestamp } from "firebase-admin/firestore"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
+import type { GetAllEventsResponse } from "service-layer/response-models/EventResponse"
 import { Controller, Get, Query, Route, Security, SuccessResponse } from "tsoa"
 import { ONE_MINUTE_IN_MS } from "../../business-layer/utils/EventConstants"
-import { Timestamp } from "firebase-admin/firestore"
-import { StatusCodes, getReasonPhrase } from "http-status-codes"
 
 @Route("events")
 export class EventController extends Controller {
@@ -21,7 +21,7 @@ export class EventController extends Controller {
   ): Promise<GetAllEventsResponse> {
     try {
       const eventService = new EventService()
-      let snapshot
+      let snapshot: DocumentSnapshot
       if (cursor) {
         snapshot = await eventService.getEventSnapshot(cursor)
       }

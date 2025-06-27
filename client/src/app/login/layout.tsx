@@ -1,10 +1,10 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 import { Footer } from "@/components/generic/Footer/Footer"
 import FullPageBackgroundImage from "@/components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 import { useAppData } from "@/store/Store"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 
 export default function LoginLayout({
   children

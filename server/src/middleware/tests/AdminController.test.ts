@@ -1,30 +1,30 @@
+import AuthService from "business-layer/services/AuthService"
 import { UserAccountTypes } from "business-layer/utils/AuthServiceClaims"
-import { request, adminToken, memberToken, guestToken } from "../routes.setup"
-import {
-  ADMIN_USER_UID,
-  GUEST_USER_UID,
-  MEMBER_USER_UID,
-  createUserDataWithStripeId,
-  createUserWithClaim
-} from "../routes.mock"
-import { Timestamp } from "firebase-admin/firestore"
 import { DEFAULT_BOOKING_MAX_SLOTS } from "business-layer/utils/BookingConstants"
 import {
   dateToFirestoreTimeStamp,
   removeUnderscoresFromTimestamp
 } from "data-layer/adapters/DateUtils"
-import BookingSlotService from "data-layer/services/BookingSlotsService"
+import type { Event } from "data-layer/models/firebase"
 import BookingDataService from "data-layer/services/BookingDataService"
-import AuthService from "business-layer/services/AuthService"
-import { UserRecord } from "firebase-admin/auth"
 import BookingHistoryService from "data-layer/services/BookingHistoryService"
-import { Event } from "data-layer/models/firebase"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
 import EventService from "data-layer/services/EventService"
-import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
 import MailConfigService from "data-layer/services/MailConfigService"
-import { EmailTemplate } from "../../data-layer/models/MailConfig"
-import { EncryptionService } from "../../business-layer/services/EncryptionService"
+import type { UserRecord } from "firebase-admin/auth"
+import { Timestamp } from "firebase-admin/firestore"
 import { StatusCodes } from "http-status-codes"
+import { EncryptionService } from "../../business-layer/services/EncryptionService"
+import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
+import type { EmailTemplate } from "../../data-layer/models/MailConfig"
+import {
+  ADMIN_USER_UID,
+  createUserDataWithStripeId,
+  createUserWithClaim,
+  GUEST_USER_UID,
+  MEMBER_USER_UID
+} from "../routes.mock"
+import { adminToken, guestToken, memberToken, request } from "../routes.setup"
 
 describe("AdminController endpoint tests", () => {
   describe("/admin/users", () => {
@@ -52,25 +52,25 @@ describe("AdminController endpoint tests", () => {
     })
 
     it("should reject invalid fetch quantities", async () => {
-      let response = await request
+      const response = await request
         .get("/admin/users")
         .set("Authorization", `Bearer ${adminToken}`)
         .query({ toFetch: 101 })
         .send({})
       expect(response.status).toEqual(StatusCodes.BAD_REQUEST)
 
-      response = await request
+      const response2 = await request
         .get(`/admin/users`)
         .set("Authorization", `Bearer ${adminToken}`)
         .query({ toFetch: -1 })
         .send({})
       // we should fetch everything after the one we just got
-      expect(response.status).toEqual(StatusCodes.BAD_REQUEST)
+      expect(response2.status).toEqual(StatusCodes.BAD_REQUEST)
     })
 
     it("should fetch merged data for users, after the offset", async () => {
       // Will fetch indexes 1,2
-      let response = await request
+      const response = await request
         .get("/admin/users?toFetch=1")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
@@ -81,13 +81,13 @@ describe("AdminController endpoint tests", () => {
 
       const nextCursor = response.body.nextCursor
 
-      response = await request
+      const response2 = await request
         .get(`/admin/users`)
         .set("Authorization", `Bearer ${adminToken}`)
         .query({ toFetch: 3, cursor: nextCursor })
         .send({})
       // we should fetch everything after the one we just got
-      expect(response.body.data).toHaveLength(2)
+      expect(response2.body.data).toHaveLength(2)
     })
 
     it("Should not allow members to get users", (done) => {
@@ -122,48 +122,45 @@ describe("AdminController endpoint tests", () => {
         .expect(StatusCodes.OK, done)
     })
     it("Should not allow admins to demote or promote admins", async () => {
-      let res
-      res = await request
+      const res = await request
         .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
       expect(res.status).toEqual(StatusCodes.FORBIDDEN) // forbidden
 
-      res = await request
+      const res2 = await request
         .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: ADMIN_USER_UID })
-      expect(res.status).toEqual(StatusCodes.FORBIDDEN) // forbidden
+      expect(res2.status).toEqual(StatusCodes.FORBIDDEN) // forbidden
     })
 
     it("Should not allow guests/members to use demote/promote", async () => {
-      let res
-      res = await request
+      const res = await request
         .put("/admin/users/promote")
         .set("Authorization", `Bearer ${guestToken}`)
         .send({ uid: GUEST_USER_UID })
       expect(res.status).toEqual(StatusCodes.UNAUTHORIZED) // unauthorised
 
-      res = await request
+      const res2 = await request
         .put("/admin/users/demote")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({ uid: MEMBER_USER_UID })
-      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED) // unauthorised
+      expect(res2.status).toEqual(StatusCodes.UNAUTHORIZED) // unauthorised
     })
 
     it("Should conflict upon promoting members/demoting guests", async () => {
-      let res
-      res = await request
+      const res = await request
         .put("/admin/users/promote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: MEMBER_USER_UID })
       expect(res.status).toEqual(StatusCodes.CONFLICT) // conflict
 
-      res = await request
+      const res2 = await request
         .put("/admin/users/demote")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ uid: GUEST_USER_UID })
-      expect(res.status).toEqual(StatusCodes.CONFLICT) // conflict
+      expect(res2.status).toEqual(StatusCodes.CONFLICT) // conflict
     })
   })
 
@@ -235,7 +232,7 @@ describe("AdminController endpoint tests", () => {
     it("Should create booking slots specified within the date range, using the specified slots - while also overwriting old availabilities", async () => {
       const startDate = dateToFirestoreTimeStamp(new Date("10/09/2001"))
       const endDate = dateToFirestoreTimeStamp(new Date("10/14/2001"))
-      let res = await request
+      const res = await request
         .post("/admin/bookings/make-dates-available")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
@@ -246,7 +243,7 @@ describe("AdminController endpoint tests", () => {
 
       expect(res.status).toEqual(StatusCodes.BAD_REQUEST) // exceed maximum
 
-      res = await request
+      const res2 = await request
         .post("/admin/bookings/make-dates-available")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
@@ -254,13 +251,13 @@ describe("AdminController endpoint tests", () => {
           endDate
         })
 
-      expect(res.status).toEqual(StatusCodes.CREATED)
-      expect(res.body.updatedBookingSlots).toHaveLength(6)
+      expect(res2.status).toEqual(StatusCodes.CREATED)
+      expect(res2.body.updatedBookingSlots).toHaveLength(6)
       expect(
-        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
+        removeUnderscoresFromTimestamp(res2.body.updatedBookingSlots[0].date)
       ).toEqual(startDate)
       expect(
-        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[5].date)
+        removeUnderscoresFromTimestamp(res2.body.updatedBookingSlots[5].date)
       ).toEqual(endDate)
 
       let dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
@@ -275,7 +272,7 @@ describe("AdminController endpoint tests", () => {
 
       const CUSTOM_SLOTS = 11 as const
 
-      res = await request
+      const res3 = await request
         .post("/admin/bookings/make-dates-available")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
@@ -283,12 +280,12 @@ describe("AdminController endpoint tests", () => {
           endDate,
           slots: CUSTOM_SLOTS
         })
-      expect(res.body.updatedBookingSlots).toHaveLength(6)
+      expect(res3.body.updatedBookingSlots).toHaveLength(6)
       expect(
-        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[0].date)
+        removeUnderscoresFromTimestamp(res3.body.updatedBookingSlots[0].date)
       ).toEqual(startDate)
       expect(
-        removeUnderscoresFromTimestamp(res.body.updatedBookingSlots[5].date)
+        removeUnderscoresFromTimestamp(res3.body.updatedBookingSlots[5].date)
       ).toEqual(endDate)
 
       dates = await bookingSlotService.getBookingSlotsBetweenDateRange(
@@ -747,21 +744,23 @@ describe("AdminController endpoint tests", () => {
   })
   describe("/admin/bookings/history", () => {
     it("should be scoped to admins only", async () => {
-      let res = await request
+      const res = await request
         .get(`/admin/bookings/history?limit=100`)
         .set("Authorization", `Bearer ${memberToken}`)
         .send({})
       expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
 
-      res = await request
+      const res2 = await request
         .get(`/admin/bookings/history?limit=100`)
         .set("Authorization", `Bearer ${guestToken}`)
         .send({})
-      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
+      expect(res2.status).toEqual(StatusCodes.UNAUTHORIZED)
 
-      res = await request.get(`/admin/bookings/history?limit=100`).send({})
+      const res3 = await request
+        .get(`/admin/bookings/history?limit=100`)
+        .send({})
 
-      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
+      expect(res3.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
 
     it("should be able to fetch the latest X bookings", async () => {
@@ -786,7 +785,7 @@ describe("AdminController endpoint tests", () => {
         timestamp: Timestamp.now()
       })
 
-      let res = await request
+      const res = await request
         .get(`/admin/bookings/history?limit=1`)
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
@@ -797,20 +796,20 @@ describe("AdminController endpoint tests", () => {
       /**
        * Pagination Test
        */
-      res = await request
+      const res2 = await request
         .get(`/admin/bookings/history?limit=100&cursor=${res.body.nextCursor}`)
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(res.status).toEqual(StatusCodes.OK)
-      expect(res.body.historyEvents).toHaveLength(1)
+      expect(res2.status).toEqual(StatusCodes.OK)
+      expect(res2.body.historyEvents).toHaveLength(1)
 
-      res = await request
+      const res3 = await request
         .get(`/admin/bookings/history?limit=2`)
         .set("Authorization", `Bearer ${adminToken}`)
         .send({})
 
-      expect(res.body.historyEvents).toHaveLength(2)
+      expect(res3.body.historyEvents).toHaveLength(2)
     })
   })
 
@@ -839,7 +838,7 @@ describe("AdminController endpoint tests", () => {
       const newEvent = await eventService.createEvent(event1)
       const newDate = dateToFirestoreTimeStamp(new Date())
       const res = await request
-        .patch("/admin/events/" + newEvent.id)
+        .patch(`/admin/events/${newEvent.id}`)
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           title: "Cool event!",
@@ -914,7 +913,7 @@ describe("AdminController endpoint tests", () => {
   describe("/admin/redirect/{redirectKey}", () => {
     const originalEnv = process.env
     beforeEach(() => {
-      process.env["REDIRECT_" + RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK] =
+      process.env[`REDIRECT_${RedirectKeys.MEMBERS_GOOGLE_SHEET_LINK}`] =
         "https://test.example.com"
     })
 
@@ -967,17 +966,17 @@ describe("AdminController endpoint tests", () => {
     })
 
     it("should not be accessible by non-admin users", async () => {
-      let res = await request
+      const res = await request
         .get("/admin/redirect/test")
         .set("Authorization", `Bearer ${memberToken}`)
         .send()
       expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
 
-      res = await request
+      const res2 = await request
         .get("/admin/redirect/test")
         .set("Authorization", `Bearer ${guestToken}`)
         .send()
-      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
+      expect(res2.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 
@@ -1136,14 +1135,14 @@ describe("AdminController endpoint tests", () => {
     })
 
     it("should not allow members to access or update templates", async () => {
-      let res = await request
+      const res = await request
         .get("/admin/mail/templates")
         .set("Authorization", `Bearer ${memberToken}`)
         .send()
 
       expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
 
-      res = await request
+      const res2 = await request
         .put("/admin/mail/templates")
         .set("Authorization", `Bearer ${memberToken}`)
         .send({
@@ -1152,7 +1151,7 @@ describe("AdminController endpoint tests", () => {
           content: "p Test"
         })
 
-      expect(res.status).toEqual(StatusCodes.UNAUTHORIZED)
+      expect(res2.status).toEqual(StatusCodes.UNAUTHORIZED)
     })
   })
 })

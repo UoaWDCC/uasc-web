@@ -1,5 +1,5 @@
-import { IPricingBanner } from "@/components/generic/PricingBanner/PricingBanner"
-import { FC, SVGProps } from "react"
+import type { IPricingBanner } from "@/components/generic/PricingBanner/PricingBanner"
+import type { FC, SVGProps } from "react"
 
 /**
  * This is the type of elements that are exported with the `import Icon from 'path/icon.svg ` syntax

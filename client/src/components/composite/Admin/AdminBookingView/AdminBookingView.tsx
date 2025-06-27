@@ -1,13 +1,13 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import CalenderIcon from "@/assets/icons/calender.svg"
 import Calendar from "@/components/generic/Calendar/Calendar"
-import { TableRowOperation } from "@/components/generic/ReusableTable/TableUtils"
+import type { TableRowOperation } from "@/components/generic/ReusableTable/TableUtils"
 import { useState, useRef, useMemo } from "react"
 import { useClickOutside } from "@/components/utils/Utils"
 import ModalContainer from "@/components/generic/ModalContainer/ModalContainer"
 import WrappedAdminBookingCreationPopUp from "./WrappedAdminBookingCreationPopUp"
 import AdminBookingDateDisplay from "./AdminBookingDateDisplay/AdminBookingDateDisplay"
-import { IAdminBookingDate } from "./AdminBookingDateDisplay/AdminBookingDate/AdminBookingDate"
+import type { IAdminBookingDate } from "./AdminBookingDateDisplay/AdminBookingDate/AdminBookingDate"
 
 /**
  * The format of the columns in the admin booking view.

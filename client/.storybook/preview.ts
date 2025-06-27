@@ -1,12 +1,12 @@
-import type { Preview } from "@storybook/react"
 import {
-  ReadonlyURLSearchParams,
   getRouter,
+  ReadonlyURLSearchParams,
   usePathname,
   useSearchParams
 } from "@storybook/nextjs/navigation.mock"
-import { useMemo } from "react"
+import type { Preview } from "@storybook/react"
 import mockRouter from "next-router-mock"
+import { useMemo } from "react"
 import "../src/app/globals.css"
 import "../src/components/generic/Calendar/Calendar.css"
 
@@ -31,7 +31,7 @@ const preview: Preview = {
           new ReadonlyURLSearchParams(
             new URLSearchParams(mockRouter.query as Record<string, string>)
           ),
-        [mockRouter.query]
+        []
       )
       return searchParams
     })

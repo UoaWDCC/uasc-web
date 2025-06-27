@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 // importing button.tsx as the object
 import Button from "./Button"
+
 const meta: Meta<typeof Button> = {
   component: Button,
   argTypes: {
@@ -32,11 +33,11 @@ export const comparison: Story = {
     () => {
       return (
         <>
-          <button>test</button>
+          <button type="button">test</button>
           <Button variant="v1">test</Button>
-          <button>test</button>
+          <button type="button">test</button>
           <Button variant="v2">test</Button>
-          <button>test</button>
+          <button type="button">test</button>
           <Button variant="signup">test</Button>
         </>
       )

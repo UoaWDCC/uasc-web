@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import LoginInner from "./LoginInner"
 
 export const metadata: Metadata = {
@@ -7,9 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function Login() {
-  return (
-    <>
-      <LoginInner />
-    </>
-  )
+  return <LoginInner />
 }

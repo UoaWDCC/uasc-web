@@ -1,14 +1,17 @@
+import { PortableText } from "@portabletext/react"
+import type { PolicyWithTextBlocks } from "@/components/composite/Booking/BookingContext"
 import BookingInformationAndCreation from "@/components/composite/Booking/BookingInformationAndCreation/BookingInformationAndCreation"
-import { SanityImageUrl, sanityQuery } from "../../../sanity/lib/utils"
 import {
   LODGE_INFORMATION_GROQ_QUERY,
-  LodgeInformation
+  type LodgeInformation
 } from "@/models/sanity/LodgeInfo/Utils"
-import { PortableText } from "@portabletext/react"
-import { Policies, POLICIES_GROQ_QUERY } from "@/models/sanity/Policies/Utils"
-import BookingPolicyStorage from "./BookingPolicyStorage"
-import { PolicyWithTextBlocks } from "@/components/composite/Booking/BookingContext"
+import {
+  POLICIES_GROQ_QUERY,
+  type Policies
+} from "@/models/sanity/Policies/Utils"
 import AppDataService from "@/services/AppData/AppDataService"
+import { SanityImageUrl, sanityQuery } from "../../../sanity/lib/utils"
+import BookingPolicyStorage from "./BookingPolicyStorage"
 
 const BookingPage = async () => {
   const lodgeInfo = await sanityQuery<LodgeInformation[]>(

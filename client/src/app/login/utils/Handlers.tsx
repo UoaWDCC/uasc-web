@@ -1,14 +1,14 @@
 import {
-  LoginHandlerArgs,
-  HandlerResponse
+  AuthErrorCodes,
+  getAuth,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword
+} from "firebase/auth"
+import type {
+  HandlerResponse,
+  LoginHandlerArgs
 } from "@/components/composite/LoginForm/LoginForm"
 import { fireAnalytics } from "@/firebase"
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  AuthErrorCodes,
-  sendPasswordResetEmail
-} from "firebase/auth"
 
 export const resetPassword = async (
   email: string
@@ -20,7 +20,7 @@ export const resetPassword = async (
       success: true,
       successMessage: `Password reset link has been sent to ${email}`
     }
-  } catch (error) {
+  } catch {
     return {
       success: false,
       error: {
@@ -40,7 +40,7 @@ export const loginHandler = async ({
     fireAnalytics("login")
     return { success: true }
   } catch (error) {
-    let message
+    let message: string | undefined
     console.error(error)
     switch (
       (error as { code: (typeof AuthErrorCodes)[keyof typeof AuthErrorCodes] })

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import ReactCalendar, { CalendarProps } from "react-calendar"
+import ReactCalendar, { type CalendarProps } from "react-calendar"
 import "./Calendar.css"
 
 type ValuePiece = Date | null

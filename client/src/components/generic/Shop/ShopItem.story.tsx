@@ -1,7 +1,6 @@
-import React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
+import type { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
 import ShopItem from "./ShopItem"
-import { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
 
 const meta: Meta<typeof ShopItem> = {
   component: ShopItem,

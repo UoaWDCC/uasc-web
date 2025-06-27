@@ -1,16 +1,16 @@
 // setup firebase
 import { initializeApp, type FirebaseOptions } from "firebase/app"
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
-import { ParsedToken, getAuth } from "firebase/auth"
+import { type ParsedToken, getAuth } from "firebase/auth"
 import {
-  EventNameString,
-  EventParams,
+  type EventNameString,
+  type EventParams,
   getAnalytics,
   logEvent,
   isSupported,
-  Analytics
+  type Analytics
 } from "firebase/analytics"
-import { UserClaims } from "@/models/User"
+import type { UserClaims } from "@/models/User"
 import { setToken } from "@/services/OpenApiFetchClient"
 import { StoreInstance } from "@/store/Store"
 import { MembershipPaymentStore } from "@/store/MembershipPayment"

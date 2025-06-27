@@ -1,4 +1,4 @@
-import { Benefit } from "@/components/utils/types"
+import type { Benefit } from "@/components/utils/types"
 import HomeSectionHeading from "./utils/HomeSectionHeading"
 import HomeSectionWrapper from "./utils/HomeSectionWrapper"
 import { SanityImageUrl } from "../../../sanity/lib/utils"

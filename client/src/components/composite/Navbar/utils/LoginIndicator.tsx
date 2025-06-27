@@ -1,5 +1,5 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import { INavbarProps } from "../Navbar"
+import type { INavbarProps } from "../Navbar"
 import ProfileButton from "./ProfileButton"
 import { WrappedTab } from "./WrappedTab"
 

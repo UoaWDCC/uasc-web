@@ -1,20 +1,21 @@
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
 import { PaymentForm } from "@/components/generic/PaymentComponent/PaymentForm"
 import PricingCard from "@/components/generic/PricingCard/PricingCard"
-import { useState } from "react"
-import { useMembershipClientSecretQuery } from "@/services/Payment/PaymentQueries"
-import {
-  getMembershipTypeConfirmationMessage,
-  oneLevelUp
-} from "../utils/Utils"
 import {
   useBankPaymentDetailsQuery,
   useMembershipPricesQuery
 } from "@/services/AppData/AppDataQueries"
-import { ACCOUNT_SETUP_ROUTE } from "../utils/RouteNames"
+import { useMembershipClientSecretQuery } from "@/services/Payment/PaymentQueries"
 import { useMembershipPaymentDetails } from "@/store/MembershipPayment"
 import { useAppData } from "@/store/Store"
-import { useRouter, useSearchParams } from "next/navigation"
-import Link from "next/link"
+import { ACCOUNT_SETUP_ROUTE } from "../utils/RouteNames"
+import {
+  getMembershipTypeConfirmationMessage,
+  oneLevelUp
+} from "../utils/Utils"
+
 type PaymentSectionProps = { wantsBankTransfer: (newState: boolean) => void }
 
 const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
@@ -41,6 +42,7 @@ const BankTransferSection = ({ wantsBankTransfer }: PaymentSectionProps) => {
     }
     return (
       <button
+        type="button"
         onClick={handleOnclick}
         className="border-dark-blue-100 text-h5 text-dark-blue-100 hover:bg-dark-blue-100 rounded-md border px-8 py-1 font-bold uppercase hover:text-white"
       >
@@ -154,15 +156,13 @@ export const PaymentSection = () => {
     setWantsBankTransfer(state)
   }
   return (
-    <>
-      <div className="flex h-full w-full flex-col gap-5 pb-4">
-        {wantsBankTransfer ? (
-          <BankTransferSection wantsBankTransfer={_setWantsBankTransfer} />
-        ) : (
-          <CardPaymentSection wantsBankTransfer={_setWantsBankTransfer} />
-        )}
-      </div>
-    </>
+    <div className="flex h-full w-full flex-col gap-5 pb-4">
+      {wantsBankTransfer ? (
+        <BankTransferSection wantsBankTransfer={_setWantsBankTransfer} />
+      ) : (
+        <CardPaymentSection wantsBankTransfer={_setWantsBankTransfer} />
+      )}
+    </div>
   )
 }
 
@@ -183,88 +183,82 @@ export const PaymentInformationSection = () => {
   }
 
   return (
-    <>
-      <div className="flex flex-col">
-        <h5>
-          <strong>Important</strong>
-        </h5>
-        <h5 className="mb-5 mt-1">
-          You should have gotten a password reset email sent to{" "}
-          <strong>{currentUser?.email}</strong>. If the email{" "}
-          <strong>{currentUser?.email}</strong> is incorrect you should{" "}
-          <strong>not</strong> proceed with payment and instead first update
-          your email by going to{" "}
-          <Link href="/profile">
-            <strong className="text-light-blue-100">profile</strong>
-          </Link>
-        </h5>
-        <div className="flex h-fit flex-col gap-1">
-          {prices ? (
-            prices.map((price) => {
-              if (existingMembershipType) {
-                return (
-                  <>
-                    {price.name === existingMembershipType && (
-                      <span
-                        key={price.title}
-                        className="w-full justify-self-center"
-                      >
-                        <PricingCard
-                          title={price.title}
-                          priceString={price.priceString}
-                          selected={price.name === membershipType}
-                          extraInfo={price.extraInfo}
-                          discountedPriceString=""
-                        />
-                      </span>
-                    )}
-                  </>
-                )
-              }
+    <div className="flex flex-col">
+      <h5>
+        <strong>Important</strong>
+      </h5>
+      <h5 className="mb-5 mt-1">
+        You should have gotten a password reset email sent to{" "}
+        <strong>{currentUser?.email}</strong>. If the email{" "}
+        <strong>{currentUser?.email}</strong> is incorrect you should{" "}
+        <strong>not</strong> proceed with payment and instead first update your
+        email by going to{" "}
+        <Link href="/profile">
+          <strong className="text-light-blue-100">profile</strong>
+        </Link>
+      </h5>
+      <div className="flex h-fit flex-col gap-1">
+        {prices ? (
+          prices.map((price) => {
+            if (existingMembershipType) {
               return (
                 <>
-                  <PricingCard
-                    key={price.title}
-                    title={price.title}
-                    priceString={price.priceString}
-                    selected={price.name === membershipType}
-                    extraInfo={price.extraInfo}
-                    discountedPriceString=""
-                    onClick={() => {
-                      if (
-                        confirm(
-                          getMembershipTypeConfirmationMessage(price.name)
-                        )
-                      ) {
-                        setMembershipType(price.name)
-                      }
-                    }}
-                  />
+                  {price.name === existingMembershipType && (
+                    <span
+                      key={price.title}
+                      className="w-full justify-self-center"
+                    >
+                      <PricingCard
+                        title={price.title}
+                        priceString={price.priceString}
+                        selected={price.name === membershipType}
+                        extraInfo={price.extraInfo}
+                        discountedPriceString=""
+                      />
+                    </span>
+                  )}
                 </>
               )
-            })
-          ) : (
-            <>
-              {/* TODO: add skeleton or fallback */}
-              <h5>Loading</h5>
-            </>
-          )}
-        </div>
-        <span className="my-3">
-          {existingMembershipType ? (
-            <h5>
-              We are using the previously started membership type. You will get
-              the chance to reselect 30 mins after you first started the
-              checkout session
-            </h5>
-          ) : (
-            <h5 className="font-bold uppercase">
-              Please confirm your membership type before hitting Next, you will
-              only be able to select a new one after 30 minutes
-            </h5>
-          )}
-        </span>
+            }
+            return (
+              <PricingCard
+                key={price.title}
+                title={price.title}
+                priceString={price.priceString}
+                selected={price.name === membershipType}
+                extraInfo={price.extraInfo}
+                discountedPriceString=""
+                onClick={() => {
+                  if (
+                    confirm(getMembershipTypeConfirmationMessage(price.name))
+                  ) {
+                    setMembershipType(price.name)
+                  }
+                }}
+              />
+            )
+          })
+        ) : (
+          <>
+            {/* TODO: add skeleton or fallback */}
+            <h5>Loading</h5>
+          </>
+        )}
       </div>
-    </>
+      <span className="my-3">
+        {existingMembershipType ? (
+          <h5>
+            We are using the previously started membership type. You will get
+            the chance to reselect 30 mins after you first started the checkout
+            session
+          </h5>
+        ) : (
+          <h5 className="font-bold uppercase">
+            Please confirm your membership type before hitting Next, you will
+            only be able to select a new one after 30 minutes
+          </h5>
+        )}
+      </span>
+    </div>
   )
 }

@@ -5,7 +5,7 @@ import TextInput from "@/components/generic/TextInputComponent/TextInput"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
-import { BookingAvailability } from "@/models/Booking"
+import type { BookingAvailability } from "@/models/Booking"
 import {
   CHECK_IN_TIME,
   CHECK_OUT_TIME,
@@ -15,8 +15,8 @@ import {
 } from "@/utils/Constants"
 import { Timestamp } from "firebase/firestore"
 import Checkbox from "@/components/generic/Checkbox/Checkbox"
-import { DateRange, DateUtils } from "@/components/utils/DateUtils"
-import { LodgePricingProps } from "@/services/AppData/AppDataService"
+import { type DateRange, DateUtils } from "@/components/utils/DateUtils"
+import type { LodgePricingProps } from "@/services/AppData/AppDataService"
 import EmergencyContactAlert, {
   isValidEmergencyContact
 } from "./EmergencyContactAlert/EmergencyContactAlert"

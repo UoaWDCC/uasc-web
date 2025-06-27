@@ -3,9 +3,9 @@ import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import Table from "@/components/generic/ReusableTable/Table"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
-  TableRowOperation
+  type TableRowOperation
 } from "@/components/generic/ReusableTable/TableUtils"
-import { AccountType } from "@/models/User"
+import type { AccountType } from "@/models/User"
 import { useCallback, useEffect, useState } from "react"
 
 export type MemberColumnFormat = {

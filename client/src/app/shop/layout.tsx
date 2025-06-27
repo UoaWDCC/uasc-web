@@ -1,5 +1,5 @@
-import { Metadata } from "next"
-import { ReactNode } from "react"
+import type { Metadata } from "next"
+import type { ReactNode } from "react"
 import FullPageBackgroundImage from "@/components/generic/FullPageBackgroundImage/FullPageBackgroundImage"
 
 export const metadata: Metadata = {

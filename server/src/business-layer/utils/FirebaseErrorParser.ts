@@ -6,7 +6,7 @@ const firebaseErrorMessages: Record<string, string> = {
 }
 
 export const parseFirebaseError = (error: any): string => {
-  if (error && error.code && firebaseErrorMessages[error.code]) {
+  if (error?.code && firebaseErrorMessages[error.code]) {
     return firebaseErrorMessages[error.code]
   } else {
     return "An unexpected error occurred. Please try again."

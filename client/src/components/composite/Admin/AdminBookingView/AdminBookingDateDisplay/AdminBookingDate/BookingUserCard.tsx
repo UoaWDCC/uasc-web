@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { BookingInfo } from "./AdminBookingDate"
+import type { BookingInfo } from "./AdminBookingDate"
 
 interface IBookingUserCard {
   /**

@@ -1,7 +1,7 @@
 "use client"
+import { useRouter } from "next/navigation"
 import LoginForm from "@/components/composite/LoginForm/LoginForm"
 import { fireAnalytics } from "@/firebase"
-import { useRouter } from "next/navigation"
 import { loginHandler } from "./utils/Handlers"
 
 const LoginInner = () => {
@@ -13,12 +13,10 @@ const LoginInner = () => {
   }
 
   return (
-    <>
-      <LoginForm
-        loginHandler={loginHandler}
-        passwordResetHandler={passwordResetHandler}
-      />
-    </>
+    <LoginForm
+      loginHandler={loginHandler}
+      passwordResetHandler={passwordResetHandler}
+    />
   )
 }
 

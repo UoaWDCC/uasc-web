@@ -1,5 +1,5 @@
 import fetchClient from "../OpenApiFetchClient"
-import { ReducedUserAdditionalInfo } from "@/models/User"
+import type { ReducedUserAdditionalInfo } from "@/models/User"
 import { StatusCodes } from "http-status-codes"
 
 export type SignUpUserBody = {
@@ -8,7 +8,7 @@ export type SignUpUserBody = {
 }
 
 const UserService = {
-  getSelfData: async function () {
+  getSelfData: async () => {
     const { data, response } = await fetchClient.GET("/users/self")
     if (!response.ok) {
       throw new Error(
@@ -18,7 +18,7 @@ const UserService = {
 
     return data
   },
-  signUpUser: async function (userData: SignUpUserBody) {
+  signUpUser: async (userData: SignUpUserBody) => {
     // gets data from signup and returns data (all data needed after signing up)
     const { data, response } = await fetchClient.POST("/signup", {
       body: userData
@@ -41,7 +41,7 @@ const UserService = {
 
     return data
   },
-  editSelf: async function (userData: Partial<ReducedUserAdditionalInfo>) {
+  editSelf: async (userData: Partial<ReducedUserAdditionalInfo>) => {
     const { response } = await fetchClient.PATCH("/users/edit-self", {
       body: { updatedInformation: userData }
     })

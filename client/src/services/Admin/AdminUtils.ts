@@ -1,4 +1,4 @@
-import { CombinedUserData } from "@/models/User"
+import type { CombinedUserData } from "@/models/User"
 
 /**
  * @deprecated only for internal use in `AdminMutations`

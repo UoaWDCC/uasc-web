@@ -1,42 +1,39 @@
-import {
-  AvailableDatesRequestModel,
-  BookingsByDateRangeRequestModel
-} from "service-layer/request-models/UserRequests"
-import { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
-import { Timestamp } from "firebase-admin/firestore"
-
-import BookingDataService from "data-layer/services/BookingDataService"
-import BookingSlotService from "data-layer/services/BookingSlotsService"
-import { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
-import { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
-import {
-  Controller,
-  Get,
-  Post,
-  Route,
-  Security,
-  SuccessResponse,
-  Body,
-  Request
-} from "tsoa"
-import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
-import {
-  BookingIdandUserData,
-  CombinedUserData
-} from "../response-models/UserResponse"
-import { UsersByDateRangeResponse } from "../response-models/BookingResponse"
-import UserDataService from "../../data-layer/services/UserDataService"
-import * as console from "console"
-import AuthService from "../../business-layer/services/AuthService"
-import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
+import StripeService from "business-layer/services/StripeService"
+import BookingUtils from "business-layer/utils/BookingUtils"
 import {
   BOOKING_SLOTS_KEY,
   CheckoutTypeValues
 } from "business-layer/utils/StripeSessionMetadata"
-import StripeService from "business-layer/services/StripeService"
-import BookingUtils from "business-layer/utils/BookingUtils"
-
-import { StatusCodes, getReasonPhrase } from "http-status-codes"
+import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
+import BookingDataService from "data-layer/services/BookingDataService"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
+import { Timestamp } from "firebase-admin/firestore"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
+import type { AllUserBookingsRequestBody } from "service-layer/request-models/BookingRequests"
+import type {
+  AvailableDatesRequestModel,
+  BookingsByDateRangeRequestModel
+} from "service-layer/request-models/UserRequests"
+import type { AllUserBookingSlotsResponse } from "service-layer/response-models/BookingResponse"
+import type { AvailableDatesResponse } from "service-layer/response-models/PaymentResponse"
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  Route,
+  Security,
+  SuccessResponse
+} from "tsoa"
+import AuthService from "../../business-layer/services/AuthService"
+import type { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
+import UserDataService from "../../data-layer/services/UserDataService"
+import type { UsersByDateRangeResponse } from "../response-models/BookingResponse"
+import type {
+  BookingIdandUserData,
+  CombinedUserData
+} from "../response-models/UserResponse"
 
 @Route("bookings")
 export class BookingController extends Controller {
@@ -184,7 +181,7 @@ export class BookingController extends Controller {
       // Query stripe for the amount of active checkout sessions for each of the slots - IGNORE FOR NOW
       this.setStatus(StatusCodes.OK)
       return { data: responseData }
-    } catch (e) {
+    } catch {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return { error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) }
     }

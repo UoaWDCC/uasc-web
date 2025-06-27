@@ -1,4 +1,4 @@
-import { ListUsersResult, UserRecord } from "firebase-admin/auth"
+import type { ListUsersResult, UserRecord } from "firebase-admin/auth"
 import { auth } from "business-layer/security/Firebase"
 import {
   AuthServiceClaims,

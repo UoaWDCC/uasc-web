@@ -1,12 +1,12 @@
-import { cleanFirestore } from "test-config/TestUtils"
-import EventService from "./EventService"
 import {
   dateToFirestoreTimeStamp,
   removeUnderscoresFromTimestamp
 } from "data-layer/adapters/DateUtils"
-import { Event } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
-import { Timestamp } from "firebase-admin/firestore"
+import type { Event } from "data-layer/models/firebase"
+import { type DocumentSnapshot, Timestamp } from "firebase-admin/firestore"
+import { cleanFirestore } from "test-config/TestUtils"
+import EventService from "./EventService"
 
 const eventService = new EventService()
 
@@ -66,7 +66,7 @@ describe("EventService integration tests", () => {
 
     expect(page1Events.nextCursor).toBeDefined()
 
-    let snapshot
+    let snapshot: DocumentSnapshot
     if (page1Events.nextCursor) {
       snapshot = await eventService.getEventSnapshot(page1Events.nextCursor)
     }

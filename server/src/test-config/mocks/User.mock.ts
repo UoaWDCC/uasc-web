@@ -1,5 +1,5 @@
 import { dateToFirestoreTimeStamp } from "data-layer/adapters/DateUtils"
-import { UserAdditionalInfo } from "data-layer/models/firebase"
+import type { UserAdditionalInfo } from "data-layer/models/firebase"
 
 export const userInfoMock: UserAdditionalInfo = {
   date_of_birth: dateToFirestoreTimeStamp(new Date(10000000000)),

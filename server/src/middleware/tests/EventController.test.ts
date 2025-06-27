@@ -1,6 +1,6 @@
 import EventService from "data-layer/services/EventService"
 import { memberToken, request } from "../routes.setup"
-import { Event } from "../../data-layer/models/firebase"
+import type { Event } from "../../data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
 import { StatusCodes } from "http-status-codes"
 

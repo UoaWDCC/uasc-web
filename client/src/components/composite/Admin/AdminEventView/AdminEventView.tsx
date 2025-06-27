@@ -1,5 +1,5 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import { CreateEventBody, EditEventBody, Event } from "@/models/Events"
+import type { CreateEventBody, EditEventBody, Event } from "@/models/Events"
 import { useState } from "react"
 import AdminEventForm from "./AdminEventForm/AdminEventForm"
 import AdminAllEvents from "./AdminAllEvents/AdminAllEvents"

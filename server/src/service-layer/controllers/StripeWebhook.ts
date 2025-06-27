@@ -1,14 +1,13 @@
-import { Controller, SuccessResponse, Route, Post, Request } from "tsoa"
-import Stripe from "stripe"
-import UserDataService from "data-layer/services/UserDataService"
-import {} from "business-layer/utils/StripeProductMetadata"
 import StripeService from "business-layer/services/StripeService"
-import { UnreachableCase } from "business-layer/utils/UnreachableCase"
 import {
   CHECKOUT_TYPE_KEY,
   CheckoutTypeValues
 } from "business-layer/utils/StripeSessionMetadata"
+import { UnreachableCase } from "business-layer/utils/UnreachableCase"
+import UserDataService from "data-layer/services/UserDataService"
 import { StatusCodes } from "http-status-codes"
+import Stripe from "stripe"
+import { Controller, Post, Request, Route, SuccessResponse } from "tsoa"
 
 @Route("webhook")
 export class StripeWebhook extends Controller {

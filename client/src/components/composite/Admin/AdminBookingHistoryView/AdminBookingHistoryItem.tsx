@@ -1,7 +1,7 @@
+import { useMemo } from "react"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { DateUtils } from "@/components/utils/DateUtils"
-import { BookingHistoryEvent } from "@/models/History"
-import { useMemo } from "react"
+import type { BookingHistoryEvent } from "@/models/History"
 
 interface IAdminBookingHistoryItem {
   /**
@@ -43,28 +43,26 @@ const AdminBookingHistoryItem = ({
     }
     const SharedContent = () => {
       return (
-        <>
-          <p>
-            At{" "}
-            <strong>
-              {new Date(
-                DateUtils.timestampMilliseconds(item.timestamp)
-              ).toLocaleString()}
-            </strong>{" "}
-            for the date range{" "}
-            <strong>
-              {DateUtils.formattedNzDate(
-                new Date(DateUtils.timestampMilliseconds(item.start_date))
-              )}
-            </strong>{" "}
-            to{" "}
-            <strong>
-              {DateUtils.formattedNzDate(
-                new Date(DateUtils.timestampMilliseconds(item.end_date))
-              )}
-            </strong>
-          </p>
-        </>
+        <p>
+          At{" "}
+          <strong>
+            {new Date(
+              DateUtils.timestampMilliseconds(item.timestamp)
+            ).toLocaleString()}
+          </strong>{" "}
+          for the date range{" "}
+          <strong>
+            {DateUtils.formattedNzDate(
+              new Date(DateUtils.timestampMilliseconds(item.start_date))
+            )}
+          </strong>{" "}
+          to{" "}
+          <strong>
+            {DateUtils.formattedNzDate(
+              new Date(DateUtils.timestampMilliseconds(item.end_date))
+            )}
+          </strong>
+        </p>
       )
     }
     switch (item.event_type) {
@@ -104,20 +102,18 @@ const AdminBookingHistoryItem = ({
   }, [item, name, email])
 
   return (
-    <>
-      <div className="border-gray-3 flex w-full flex-col gap-1 rounded-md border bg-white p-4">
-        {InnerContent}
-        {undoHandler && (
-          <Button
-            variant="inverted-default-sm"
-            className="mt-2"
-            onClick={undoHandler}
-          >
-            Undo
-          </Button>
-        )}
-      </div>
-    </>
+    <div className="border-gray-3 flex w-full flex-col gap-1 rounded-md border bg-white p-4">
+      {InnerContent}
+      {undoHandler && (
+        <Button
+          variant="inverted-default-sm"
+          className="mt-2"
+          onClick={undoHandler}
+        >
+          Undo
+        </Button>
+      )}
+    </div>
   )
 }
 

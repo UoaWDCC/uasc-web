@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
-import { AdminMemberView, MemberColumnFormat } from "./AdminMemberView"
+import { AdminMemberView, type MemberColumnFormat } from "./AdminMemberView"
 
 const meta: Meta<typeof AdminMemberView> = {
   component: AdminMemberView

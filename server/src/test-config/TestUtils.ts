@@ -1,8 +1,8 @@
 import {
+  EMULATOR_AUTH_PORT,
   EMULATOR_FIRESTORE_PORT,
   EMULATOR_HOST,
-  EMULATOR_PROJECT_ID,
-  EMULATOR_AUTH_PORT
+  EMULATOR_PROJECT_ID
 } from "data-layer/adapters/EmulatorConfig"
 
 export async function cleanFirestore() {
@@ -13,7 +13,7 @@ export async function cleanFirestore() {
     }
   )
   if (response.status !== 200) {
-    throw new Error("Trouble clearing Emulator: " + (await response.text()))
+    throw new Error(`Trouble clearing Emulator: ${await response.text()}`)
   }
 }
 export async function cleanAuth() {
@@ -24,6 +24,6 @@ export async function cleanAuth() {
     }
   )
   if (response.status !== 200) {
-    throw new Error("Trouble clearing Emulator: " + (await response.text()))
+    throw new Error(`Trouble clearing Emulator: ${await response.text()}`)
   }
 }

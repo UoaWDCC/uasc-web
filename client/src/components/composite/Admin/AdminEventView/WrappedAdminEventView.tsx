@@ -1,17 +1,17 @@
 "use client"
 
+import { useMemo, useState } from "react"
+import Loader from "@/components/generic/SuspenseComponent/Loader"
+import type { Event } from "@/models/Events"
 import {
   useCreateEventMutation,
   useDeleteEventMutation,
   useEditEventMutation
 } from "@/services/Admin/AdminMutations"
-import AdminEventView from "./AdminEventView"
-import StorageService from "@/services/Storage/StorageService"
-import { useLatestEventsQuery } from "@/services/Event/EventQueries"
-import { useMemo, useState } from "react"
 import { useGetEventQuery } from "@/services/Admin/AdminQueries"
-import { Event } from "@/models/Events"
-import Loader from "@/components/generic/SuspenseComponent/Loader"
+import { useLatestEventsQuery } from "@/services/Event/EventQueries"
+import StorageService from "@/services/Storage/StorageService"
+import AdminEventView from "./AdminEventView"
 
 const WrappedAdminEventView = () => {
   const { mutateAsync: handleEventCreation } = useCreateEventMutation()
@@ -46,39 +46,37 @@ const WrappedAdminEventView = () => {
   }
 
   return (
-    <>
-      <AdminEventView
-        handlePostEvent={handleEventCreation}
-        generateImageLink={async (image) =>
-          await StorageService.uploadEventImage(image)
+    <AdminEventView
+      handlePostEvent={handleEventCreation}
+      generateImageLink={async (image) =>
+        await StorageService.uploadEventImage(image)
+      }
+      fetchEventToEdit={async (id) => {
+        if (id) {
+          setEventPreviousData(await fetchEventToBeEdited(id))
+        } else {
+          /**
+           * If we go back to the main screen we
+           * don't have an event id thats being edited,
+           * so we have to consider the data stale
+           */
+          setEventPreviousData(undefined)
         }
-        fetchEventToEdit={async (id) => {
-          if (id) {
-            setEventPreviousData(await fetchEventToBeEdited(id))
-          } else {
-            /**
-             * If we go back to the main screen we
-             * don't have an event id thats being edited,
-             * so we have to consider the data stale
-             */
-            setEventPreviousData(undefined)
-          }
-        }}
-        handleEditEvent={async (eventId, newData) => {
-          await editEvent({ eventId, newData })
-        }}
-        handleDeleteEvent={deleteEvent}
-        eventPreviousData={eventPreviousData}
-        rawEvents={rawEvents || []}
-        hasMoreEvents={hasNextPage}
-        isLoading={isPending}
-        fetchMoreEvents={() => {
-          if (!isFetchingNextPage && !isFetching) {
-            fetchNextPage()
-          }
-        }}
-      />
-    </>
+      }}
+      handleEditEvent={async (eventId, newData) => {
+        await editEvent({ eventId, newData })
+      }}
+      handleDeleteEvent={deleteEvent}
+      eventPreviousData={eventPreviousData}
+      rawEvents={rawEvents || []}
+      hasMoreEvents={hasNextPage}
+      isLoading={isPending}
+      fetchMoreEvents={() => {
+        if (!isFetchingNextPage && !isFetching) {
+          fetchNextPage()
+        }
+      }}
+    />
   )
 }
 

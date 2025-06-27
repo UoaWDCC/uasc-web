@@ -1,6 +1,6 @@
-import { Timestamp } from "firebase/firestore"
+import type { Timestamp } from "firebase/firestore"
 import {
-  CondensedBookingInfoColumn,
+  type CondensedBookingInfoColumn,
   formatBookingSlotsForAvailabilityView
 } from "./AdminAvailabilityView"
 import { MS_IN_SECOND } from "@/utils/Constants"

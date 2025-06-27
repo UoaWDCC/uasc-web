@@ -1,6 +1,7 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
-import { DocumentDataWithUid } from "data-layer/models/common"
-import { Event } from "data-layer/models/firebase"
+import type { DocumentDataWithUid } from "data-layer/models/common"
+import type { Event } from "data-layer/models/firebase"
+import type { DocumentSnapshot } from "firebase-admin/firestore"
 
 class EventService {
   /**
@@ -67,7 +68,7 @@ class EventService {
    *
    * @param id the document id of the event to check, likely coming from a pagination cursor
    */
-  public async getEventSnapshot(id: string) {
+  public async getEventSnapshot(id: string): Promise<DocumentSnapshot> {
     return await FirestoreCollections.events.doc(id).get()
   }
 
@@ -79,13 +80,7 @@ class EventService {
    * fetch using the helper defined as {@link getEventSnapshot}
    * @returns an object providing the id of the next snapshot and list of events
    */
-  public async getAllEvents(
-    limit: number,
-    startAfter?: FirebaseFirestore.DocumentSnapshot<
-      Event,
-      FirebaseFirestore.DocumentData
-    >
-  ) {
+  public async getAllEvents(limit: number, startAfter?: DocumentSnapshot) {
     let query = FirestoreCollections.events
       // Start at the largest (latest) date
       .orderBy("physical_start_date", "desc")

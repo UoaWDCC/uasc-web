@@ -1,11 +1,11 @@
 import { fireAnalytics } from "@/firebase"
-import { Timestamp } from "firebase/firestore"
+import type { Timestamp } from "firebase/firestore"
 import { createContext, useState } from "react"
 import { BOOKING_AVAILABLITY_KEY } from "@/services/Booking/BookingQueries"
 import { useBookingPaymentClientSecretMutation } from "@/services/Payment/PaymentMutations"
 import queryClient from "@/services/QueryClient"
 import { useEditSelfMutation } from "@/services/User/UserMutations"
-import { Policies } from "@/models/sanity/Policies/Utils"
+import type { Policies } from "@/models/sanity/Policies/Utils"
 import { useRouter } from "next/navigation"
 
 export type PolicyWithTextBlocks = Omit<Policies, "information"> & {

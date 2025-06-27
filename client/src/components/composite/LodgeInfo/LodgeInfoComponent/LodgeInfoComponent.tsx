@@ -1,5 +1,5 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 
 interface ILodgeInfoComponent {
   /**

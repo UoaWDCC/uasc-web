@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, useCallback, useContext } from "react"
+import { type ReactNode, useCallback, useContext } from "react"
 import {
   BookingContext,
   BookingContextProvider

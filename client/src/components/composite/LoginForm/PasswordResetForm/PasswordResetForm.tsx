@@ -1,7 +1,7 @@
-import { FormEvent, useState } from "react"
+import { type FormEvent, useState } from "react"
 import TextInput from "@/components/generic/TextInputComponent/TextInput"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import { HandlerResponse } from "../LoginForm"
+import type { HandlerResponse } from "../LoginForm"
 
 type MessageTypes = {
   success?: string

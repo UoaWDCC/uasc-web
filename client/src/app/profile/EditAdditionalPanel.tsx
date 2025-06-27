@@ -1,6 +1,8 @@
-import { ReducedUserAdditionalInfo } from "@/models/User"
+import type { ReducedUserAdditionalInfo } from "@/models/User"
 import { useSelfDataQuery } from "@/services/User/UserQueries"
-import WrappedProfileEdit, { IGeneralProfileEdit } from "./WrappedProfileEdit"
+import WrappedProfileEdit, {
+  type IGeneralProfileEdit
+} from "./WrappedProfileEdit"
 
 type EditAdditionalFields = Pick<
   Partial<ReducedUserAdditionalInfo>,
