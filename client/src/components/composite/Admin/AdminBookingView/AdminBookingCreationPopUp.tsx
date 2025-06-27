@@ -1,18 +1,18 @@
-import AdminSearchBar from "../AdminMemberView/AdminSearchBar"
-import type { CombinedUserData } from "@/models/User"
-import Calendar from "@/components/generic/Calendar/Calendar"
-import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import DateRangePicker from "@/components/generic/DateRangePicker/DateRangePicker"
-import { useState, useMemo, useRef } from "react"
-import CloseButton from "@/assets/icons/x.svg"
+import { Timestamp } from "firebase/firestore"
+import { useMemo, useRef, useState } from "react"
 import LeftArrowButton from "@/assets/icons/leftarrow.svg"
 import Tick from "@/assets/icons/tick.svg"
-import { NEXT_YEAR_FROM_TODAY, TODAY } from "@/utils/Constants"
+import CloseButton from "@/assets/icons/x.svg"
+import Calendar from "@/components/generic/Calendar/Calendar"
+import DateRangePicker from "@/components/generic/DateRangePicker/DateRangePicker"
+import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import { type DateRange, DateUtils } from "@/components/utils/DateUtils"
-import type { BookingAvailability } from "@/models/Booking"
-import { Timestamp } from "firebase/firestore"
 import { useClickOutside } from "@/components/utils/Utils"
+import type { BookingAvailability } from "@/models/Booking"
+import type { CombinedUserData } from "@/models/User"
 import Messages from "@/services/Utils/Messages"
+import { NEXT_YEAR_FROM_TODAY, TODAY } from "@/utils/Constants"
+import AdminSearchBar from "../AdminMemberView/AdminSearchBar"
 
 interface IAdminBookingCreationPopUp {
   /**
@@ -282,6 +282,7 @@ const AdminBookingCreationPopUp = ({
                   setCurrentStage(FlowStages.SEARCH_FOR_USER)
                   setCurrentSelectedUserUid(undefined)
                 }}
+                type="button"
               >
                 <div className="flex items-center gap-2">
                   <div className="flex h-[15px] w-[15px] items-center">

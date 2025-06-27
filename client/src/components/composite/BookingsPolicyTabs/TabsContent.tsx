@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState } from "react"
 import TabsComponent from "@/components/generic/TabsComponent/TabsComponent"
 import type { PolicyWithTextBlocks } from "../Booking/BookingContext"
 

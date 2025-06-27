@@ -50,6 +50,7 @@ const AboutSection = ({
               className="border-dark-blue-100 text-dark-blue-100 hover:bg-dark-blue-100 flex
               w-full flex-col items-center rounded-md bg-white py-3 font-sans font-bold uppercase
               enabled:border enabled:hover:text-white disabled:bg-gray-400 md:py-4 md:text-2xl"
+              type="button"
             >
               Sign up now!
             </button>
@@ -60,6 +61,7 @@ const AboutSection = ({
               flex w-full flex-col items-center rounded-md py-3 font-sans
               font-bold uppercase text-white hover:bg-white enabled:border
               md:py-4 md:text-2xl"
+              type="button"
             >
               LOG IN
             </button>

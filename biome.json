@@ -15,7 +15,7 @@
       "!**/node_modules",
       "!.turbo",
       "!build",
-      "!server/src/middleware/__generated__",
+      "!**/__generated__",
       "!.github"
     ],
     "ignoreUnknown": true
@@ -40,10 +40,16 @@
         "noUnusedImports": "error"
       },
       "suspicious": {
-        "noExplicitAny": "warn"
+        "noExplicitAny": "off"
       },
       "complexity": {
         "noStaticOnlyClass": "off"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "off",
+        "noSvgWithoutTitle": "off",
+        "noStaticElementInteractions": "off",
+        "useAriaPropsSupportedByRole": "off"
       }
     }
   },
@@ -57,7 +63,7 @@
       "quoteProperties": "asNeeded",
       "quoteStyle": "double",
       "semicolons": "asNeeded",
-      "trailingCommas": "all"
+      "trailingCommas": "none"
     },
     "parser": {
       "unsafeParameterDecoratorsEnabled": true

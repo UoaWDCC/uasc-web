@@ -1,8 +1,6 @@
-import EventsCardPreview from "@/components/generic/Event/EventPreview/EventPreview"
-import EventDetailed from "@/components/generic/Event/EventDetailed/EventDetailed"
-import { DateUtils } from "@/components/utils/DateUtils"
-import type { Event } from "@/models/Events"
 import { useCallback, useMemo, useState } from "react"
+import EventDetailed from "@/components/generic/Event/EventDetailed/EventDetailed"
+import EventsCardPreview from "@/components/generic/Event/EventPreview/EventPreview"
 import {
   EventDateComparisons,
   EventMessages,
@@ -11,6 +9,8 @@ import {
 } from "@/components/generic/Event/EventUtils"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import Loader from "@/components/generic/SuspenseComponent/Loader"
+import { DateUtils } from "@/components/utils/DateUtils"
+import type { Event } from "@/models/Events"
 
 /**
  * Interface representing the properties of the Events Page.
@@ -88,7 +88,7 @@ const EventsPage = ({
       setSelectedEventId(id)
       onSelectedEventIdChange?.(id)
     },
-    [setSelectedEventId, onSelectedEventIdChange]
+    [onSelectedEventIdChange]
   )
 
   /**

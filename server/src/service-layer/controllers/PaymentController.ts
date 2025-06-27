@@ -1,5 +1,12 @@
 import StripeService from "business-layer/services/StripeService"
 import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
+import BookingUtils from "business-layer/utils/BookingUtils"
+import {
+  LODGE_PRICING_TYPE_KEY,
+  type LodgePricingTypeValues,
+  MEMBERSHIP_TYPE_KEY,
+  MembershipTypeValues
+} from "business-layer/utils/StripeProductMetadata"
 import {
   BOOKING_SLOTS_KEY,
   CHECKOUT_TYPE_KEY,
@@ -8,23 +15,18 @@ import {
   START_DATE
 } from "business-layer/utils/StripeSessionMetadata"
 import {
-  MembershipTypeValues,
-  MEMBERSHIP_TYPE_KEY,
-  LODGE_PRICING_TYPE_KEY,
-  type LodgePricingTypeValues
-} from "business-layer/utils/StripeProductMetadata"
-import {
-  UTCDateToDdMmYyyy,
   firestoreTimestampToDate,
-  timestampsInRange
+  timestampsInRange,
+  UTCDateToDdMmYyyy
 } from "data-layer/adapters/DateUtils"
 import BookingDataService from "data-layer/services/BookingDataService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
 import type {
-  UserPaymentRequestModel,
   SelfRequestModel,
-  UserBookingRequestingModel
+  UserBookingRequestingModel,
+  UserPaymentRequestModel
 } from "service-layer/request-models/UserRequests"
 import type {
   BookingPaymentResponse,
@@ -34,18 +36,16 @@ import type {
 } from "service-layer/response-models/PaymentResponse"
 import type Stripe from "stripe"
 import {
+  Body,
   Controller,
-  Post,
   Get,
-  Route,
-  Request,
-  Security,
+  Post,
   Query,
-  SuccessResponse,
-  Body
+  Request,
+  Route,
+  Security,
+  SuccessResponse
 } from "tsoa"
-import BookingUtils from "business-layer/utils/BookingUtils"
-import { getReasonPhrase, StatusCodes } from "http-status-codes"
 
 @Route("payment")
 export class PaymentController extends Controller {
@@ -177,7 +177,7 @@ export class PaymentController extends Controller {
         pricePaid: amount_total,
         metadata
       }
-    } catch (e) {
+    } catch {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return null
     }

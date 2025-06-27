@@ -1,12 +1,12 @@
-import type { BookingHistoryEvent } from "@/models/History"
-import AdminBookingHistoryItem from "./AdminBookingHistoryItem"
-import type { CombinedUserData } from "@/models/User"
+import { Timestamp } from "firebase/firestore"
 import { useMemo } from "react"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import { useAddUserToBookingMutation } from "@/services/Admin/AdminMutations"
-import { Timestamp } from "firebase/firestore"
 import { DateUtils } from "@/components/utils/DateUtils"
+import type { BookingHistoryEvent } from "@/models/History"
+import type { CombinedUserData } from "@/models/User"
+import { useAddUserToBookingMutation } from "@/services/Admin/AdminMutations"
 import Messages from "@/services/Utils/Messages"
+import AdminBookingHistoryItem from "./AdminBookingHistoryItem"
 
 interface IAdminBookingHistoryView {
   /**
@@ -56,7 +56,7 @@ const AdminBookingHistoryView = ({
           /**
            * Add more cases as required to implement additional undo handlers
            */
-          let undoHandler
+          let undoHandler: (() => Promise<void>) | undefined
           switch (item.event_type) {
             case "removed_user_from_booking": {
               const startDate = Timestamp.fromMillis(

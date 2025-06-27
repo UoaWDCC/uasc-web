@@ -1,5 +1,6 @@
 import { useRouter } from "next/navigation"
 import { WrappedTab } from "../../Navbar/utils/WrappedTab"
+
 const Exit = () => {
   const router = useRouter()
 
@@ -7,7 +8,7 @@ const Exit = () => {
     router.push("/login")
   }
   return (
-    <button onClick={handleOnclick}>
+    <button type="button" onClick={handleOnclick}>
       <h5 className="text-red uppercase">exit</h5>
     </button>
   )

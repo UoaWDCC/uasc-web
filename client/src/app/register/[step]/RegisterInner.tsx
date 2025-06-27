@@ -45,7 +45,7 @@ export default function RegisterInner({ step }: { step: string }) {
           resetForm()
         },
         onError(error) {
-          console.error("Error signing up " + error)
+          console.error(`Error signing up ${error}`)
         }
       }
     )

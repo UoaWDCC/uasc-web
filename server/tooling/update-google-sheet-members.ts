@@ -84,7 +84,7 @@ async function getAllUsers(token: string): Promise<CombinedUserData[]> {
  * Creates google authentication client
  * @returns The google auth client
  */
-async function authenticateGoogle(): Promise<any> {
+async function authenticateGoogle() {
   const { client_email, private_key } = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON)
   const auth = new google.auth.GoogleAuth({
     credentials: {
@@ -111,13 +111,13 @@ async function updateGoogleSheet(auth: any, rows: any[]) {
 
   interface GAPIRequest
     extends sheets_v4.Params$Resource$Spreadsheets$Values$Append {
-    resource: any
+    resource: Record<string, unknown>
   }
 
   const request: GAPIRequest = {
     spreadsheetId: MEMBERS_GOOGLE_SPREADSHEET_ID,
     // Sheet id is something like "Sheet1"
-    range: MEMBERS_GOOGLE_SHEET_ID + "!A1",
+    range: `${MEMBERS_GOOGLE_SHEET_ID}!A1`,
     valueInputOption: "RAW",
     insertDataOption: "OVERWRITE",
     resource: {
@@ -219,7 +219,7 @@ const createIdToken = async () => {
       }
     )
 
-    const data = (await res.json()) as any
+    const data = (await res.json()) as { idToken: string }
 
     return data.idToken
   } catch (e) {

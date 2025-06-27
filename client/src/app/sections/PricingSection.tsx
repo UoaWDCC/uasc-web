@@ -1,8 +1,8 @@
+import Link from "next/link"
 import PricingBanner from "@/components/generic/PricingBanner/PricingBanner"
 import PricingCard from "@/components/generic/PricingCard/PricingCard"
 import type { PricingBannerContent } from "@/components/utils/types"
 import type { MembershipPrices } from "@/services/AppData/AppDataService"
-import Link from "next/link"
 import HomeSectionHeading from "./utils/HomeSectionHeading"
 import HomeSectionWrapper from "./utils/HomeSectionWrapper"
 
@@ -44,6 +44,7 @@ const PricingSection = ({ note, pricings, bannerContent }: IPricingSection) => (
             className="border-dark-blue-100 text-dark-blue-100 hover:bg-dark-blue-100 flex
               w-full flex-col items-center rounded-md bg-white py-3 font-sans text-2xl font-bold
               uppercase enabled:border enabled:hover:text-white disabled:bg-gray-400 md:py-4 md:text-2xl"
+            type="button"
           >
             Sign up now!
           </button>
@@ -63,6 +64,7 @@ const PricingSection = ({ note, pricings, bannerContent }: IPricingSection) => (
             className="bg-dark-blue-100 border-dark-blue-100 enabled:hover:text-dark-blue-100 flex w-full
               flex-col items-center rounded-md py-3 font-sans text-2xl font-bold
               text-white hover:bg-white enabled:border disabled:bg-gray-400 md:py-4 md:text-2xl"
+            type="button"
           >
             Book the Lodge
           </button>
