@@ -34,13 +34,21 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "style": {
+        "noNonNullAssertion": "off"
+      },
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "error",
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "useExhaustiveDependencies": "info"
       },
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noImplicitAnyLet": "info",
+        "noConfusingVoidType": "off",
+        "noFocusedTests": "off",
+        "noArrayIndexKey": "info"
       },
       "complexity": {
         "noStaticOnlyClass": "off"
@@ -49,7 +57,8 @@
         "useKeyWithClickEvents": "off",
         "noSvgWithoutTitle": "off",
         "noStaticElementInteractions": "off",
-        "useAriaPropsSupportedByRole": "off"
+        "useAriaPropsSupportedByRole": "off",
+        "noLabelWithoutControl": "off"
       }
     }
   },

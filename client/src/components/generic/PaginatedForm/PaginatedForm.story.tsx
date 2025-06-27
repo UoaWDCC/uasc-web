@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
-
-import PaginatedForm from "./PaginatedForm"
 import { useState } from "react"
+import PaginatedForm from "./PaginatedForm"
 
 const meta: Meta<typeof PaginatedForm> = {
   component: PaginatedForm
@@ -14,11 +13,7 @@ export const Default: Story = {}
 
 export const ExampleUsage = () => {
   const [currentPage, setCurrentPage] = useState<number>(0)
-  const PageContents = [
-    <>
-      <p>First Page</p>
-    </>
-  ]
+  const PageContents = [<p key="">First Page</p>]
 
   const PageProps = [
     {
@@ -41,10 +36,8 @@ export const ExampleUsage = () => {
   ]
 
   return (
-    <>
-      <PaginatedForm pages={PageProps} currentPageIndex={currentPage}>
-        {PageContents[currentPage]}
-      </PaginatedForm>
-    </>
+    <PaginatedForm pages={PageProps} currentPageIndex={currentPage}>
+      {PageContents[currentPage]}
+    </PaginatedForm>
   )
 }

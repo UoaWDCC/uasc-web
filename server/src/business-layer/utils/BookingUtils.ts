@@ -147,7 +147,7 @@ const BookingUtils = {
     // Add one day
     date.setDate(date.getDate() + 1)
 
-    if (isNaN(date.getTime()) || year < 2000) {
+    if (Number.isNaN(date.getTime()) || year < 2000) {
       throw new Error("Invalid date")
     }
 

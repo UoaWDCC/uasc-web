@@ -16,17 +16,15 @@ export const PaymentForm = ({
   onComplete
 }: IPaymentFormProps) => {
   return (
-    <>
-      <EmbeddedCheckoutProvider
-        // @ts-ignore
-        stripe={stripePromise}
-        options={{
-          clientSecret,
-          onComplete
-        }}
-      >
-        <EmbeddedCheckout />
-      </EmbeddedCheckoutProvider>
-    </>
+    <EmbeddedCheckoutProvider
+      // @ts-ignore
+      stripe={stripePromise}
+      options={{
+        clientSecret,
+        onComplete
+      }}
+    >
+      <EmbeddedCheckout />
+    </EmbeddedCheckoutProvider>
   )
 }

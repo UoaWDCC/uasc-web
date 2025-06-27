@@ -1,5 +1,5 @@
-import type React from "react"
 import Image from "next/image"
+import type React from "react"
 
 /**
  * A component that displays product images with the ability to toggle between main and secondary images.
@@ -57,11 +57,13 @@ const ProductImage: React.FC<{
       {secondaryImageUrl && (
         <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 transform space-x-2">
           <button
+            type="button"
             className={`h-2 w-2 rounded-full ${!showSecondaryImage ? "bg-dark-blue-100" : "bg-gray-3"}`}
             onClick={() => setShowSecondaryImage(false)}
             aria-label="View main image"
           />
           <button
+            type="button"
             className={`h-2 w-2 rounded-full ${showSecondaryImage ? "bg-dark-blue-100" : "bg-gray-3"}`}
             onClick={() => setShowSecondaryImage(true)}
             aria-label="View secondary image"

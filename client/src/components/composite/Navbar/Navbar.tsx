@@ -1,8 +1,8 @@
-import HamburgerIcon from "@/assets/icons/hamburger.svg"
-import UASCLogo from "@/assets/logos/UASC-LOGO-White.svg"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import HamburgerIcon from "@/assets/icons/hamburger.svg"
+import UASCLogo from "@/assets/logos/UASC-LOGO-White.svg"
 import InstagramLink from "./utils/InstagramLink"
 import LoginIndicator from "./utils/LoginIndicator"
 import WrappedMenuTab from "./utils/WrappedMenuTab"
@@ -26,11 +26,7 @@ const Logo = () => {
 }
 
 const AboutMenuItemsFull = () => {
-  return (
-    <>
-      <Link href="/contact">Contact</Link>
-    </>
-  )
+  return <Link href="/contact">Contact</Link>
 }
 
 const AboutMenuItemsMobile = () => {
@@ -77,7 +73,7 @@ const Navbar = ({
             flex-col items-center justify-start gap-2 self-end pt-8
             ${isOpen ? "flex" : "hidden"}
             bg-gray-1
-            
+
             md:relative md:top-0 md:ml-auto md:flex
             md:min-h-full md:flex-row md:items-end md:justify-end
             md:gap-7 md:bg-none md:pr-4 md:pt-0

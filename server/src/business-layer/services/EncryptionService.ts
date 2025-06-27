@@ -1,4 +1,4 @@
-import * as crypto from "crypto"
+import * as crypto from "node:crypto"
 
 export class EncryptionService {
   private readonly encryptionAlgorithm = "aes-256-cbc"
@@ -38,7 +38,7 @@ export class EncryptionService {
       let encrypted = cipher.update(text, "utf8", "base64")
       encrypted += cipher.final("base64")
       // Prepend the IV to the encrypted data (we'll need it for decryption)
-      return iv.toString("hex") + ":" + encrypted
+      return `${iv.toString("hex")}:${encrypted}`
     } catch (error) {
       console.error("Encryption error:", error)
       throw new Error("Failed to encrypt data")

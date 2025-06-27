@@ -1,5 +1,6 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 import type { UserAdditionalInfo } from "data-layer/models/firebase"
+import type { DocumentSnapshot } from "firebase-admin/firestore"
 
 export default class UserDataService {
   // Create
@@ -20,10 +21,7 @@ export default class UserDataService {
    */
   public async getAllUserData(
     limit: number = 100,
-    startAfter?: FirebaseFirestore.DocumentSnapshot<
-      UserAdditionalInfo,
-      FirebaseFirestore.DocumentData
-    >
+    startAfter?: DocumentSnapshot
   ) {
     // is ordered by id by default
     const res = await FirestoreCollections.users

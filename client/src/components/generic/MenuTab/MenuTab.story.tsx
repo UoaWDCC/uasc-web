@@ -14,11 +14,11 @@ export const DefaultMenuTab: Story = {
     displayText: "Default Tab",
     children: (
       <>
-        <a>item 1</a>
-        <a>item 2</a>
-        <a>item 3</a>
-        <a>item 4</a>
-        <a>item 5</a>
+        <a href="https://google.com">item 1</a>
+        <a href="https://google.com">item 2</a>
+        <a href="https://google.com">item 3</a>
+        <a href="https://google.com">item 4</a>
+        <a href="https://google.com">item 5</a>
       </>
     )
   }
@@ -29,27 +29,27 @@ export const LongText: Story = {
     displayText: "Default Tab",
     children: (
       <>
-        <a>
+        <a href="https://google.com">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
           veritatis voluptas explicabo excepturi obcaecati sint quisquam
           voluptates impedit perspiciatis.
         </a>
-        <a>
+        <a href="https://google.com">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
           veritatis voluptas explicabo excepturi obcaecati sint quisquam
           voluptates impedit perspiciatis.
         </a>
-        <a>
+        <a href="https://google.com">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
           veritatis voluptas explicabo excepturi obcaecati sint quisquam
           voluptates impedit perspiciatis.
         </a>
-        <a>
+        <a href="https://google.com">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
           veritatis voluptas explicabo excepturi obcaecati sint quisquam
           voluptates impedit perspiciatis.
         </a>
-        <a>
+        <a href="https://google.com">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quae
           veritatis voluptas explicabo excepturi obcaecati sint quisquam
           voluptates impedit perspiciatis.

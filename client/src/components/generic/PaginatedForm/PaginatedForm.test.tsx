@@ -1,7 +1,7 @@
-import { useState } from "react"
-import PaginatedForm, { type PageProps } from "./PaginatedForm"
 import { render, screen } from "@testing-library/react"
+import { useState } from "react"
 import { act } from "react-dom/test-utils"
+import PaginatedForm, { type PageProps } from "./PaginatedForm"
 
 describe("paginated form", () => {
   it("should not perform any callbacks if buttons are disabled", async () => {
@@ -9,11 +9,7 @@ describe("paginated form", () => {
     const backCallBack = jest.fn()
     const TestForm = () => {
       const [currentPage, setCurrentPage] = useState<number>(0)
-      const PageContents = [
-        <>
-          <p>First Page</p>
-        </>
-      ]
+      const PageContents = [<p key="">First Page</p>]
 
       const PageProps: PageProps[] = [
         {
@@ -41,11 +37,9 @@ describe("paginated form", () => {
       ]
 
       return (
-        <>
-          <PaginatedForm pages={PageProps} currentPageIndex={currentPage}>
-            {PageContents[currentPage]}
-          </PaginatedForm>
-        </>
+        <PaginatedForm pages={PageProps} currentPageIndex={currentPage}>
+          {PageContents[currentPage]}
+        </PaginatedForm>
       )
     }
     render(<TestForm />)

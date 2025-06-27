@@ -109,36 +109,28 @@ const EventDetailed = ({
           <div className="flex flex-col gap-4">
             <div className="whitespace-pre-line text-left">{content}</div>
             {hasSignUpRights ? (
-              <>
-                {signUpOpenDate &&
-                  !isPastEvent &&
-                  googleFormLink &&
-                  (signUpOpenDate <= new Date() ? (
-                    <>
-                      <h5 className="font-bold uppercase">Sign Ups Open!</h5>
-                      <h5 className="text-dark-blue-100 font-bold uppercase italic">
-                        <a
-                          href={googleFormLink}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          CLICK ME TO GO TO FORM
-                        </a>
-                      </h5>
-                      <iframe
-                        height={"500"}
-                        src={googleFormLink}
-                        title="Google Forms Sign Up"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <h5 className="font-bold">
-                        Sign ups open at {signUpOpenDate.toLocaleString()}
-                      </h5>
-                    </>
-                  ))}
-              </>
+              signUpOpenDate &&
+              !isPastEvent &&
+              googleFormLink &&
+              (signUpOpenDate <= new Date() ? (
+                <>
+                  <h5 className="font-bold uppercase">Sign Ups Open!</h5>
+                  <h5 className="text-dark-blue-100 font-bold uppercase italic">
+                    <a href={googleFormLink} target="_blank" rel="noreferrer">
+                      CLICK ME TO GO TO FORM
+                    </a>
+                  </h5>
+                  <iframe
+                    height={"500"}
+                    src={googleFormLink}
+                    title="Google Forms Sign Up"
+                  />
+                </>
+              ) : (
+                <h5 className="font-bold">
+                  Sign ups open at {signUpOpenDate.toLocaleString()}
+                </h5>
+              ))
             ) : (
               <h5 className="text-dark-blue-100 font-bold">
                 Members Only Event {" - "}

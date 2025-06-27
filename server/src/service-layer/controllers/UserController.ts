@@ -94,7 +94,7 @@ export class UsersController extends Controller {
         } catch (e) {
           console.info(`Couldn't fetch user claims for ${userUid}. ${e}`)
         }
-        if (userClaims && userClaims[AuthServiceClaims.ADMIN]) {
+        if (userClaims?.[AuthServiceClaims.ADMIN]) {
           this.setStatus(StatusCodes.FORBIDDEN)
           return {
             error: getReasonPhrase(StatusCodes.FORBIDDEN),

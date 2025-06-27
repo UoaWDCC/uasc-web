@@ -219,47 +219,40 @@ const EventsPage = ({
     }) || []
 
   return (
-    <>
-      <div className={`flex w-full max-w-[1000px] flex-col gap-2`}>
-        {selectedEventId ? (
-          SelectedEventPanel
-        ) : (
-          <>
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <h5 className="text-dark-blue-100 font-bold uppercase">
-                {rawEvents.length > 0 ? (
-                  <>Upcoming Events</>
-                ) : (
-                  <>
-                    No events found, keep an eye on our socials for more
-                    updates!
-                  </>
-                )}
-              </h5>
-            )}
-            {previewCurrentEvents.map((event) => (
-              <EventsCardPreview {...event} key={event.key} />
-            ))}
+    <div className={`flex w-full max-w-[1000px] flex-col gap-2`}>
+      {selectedEventId ? (
+        SelectedEventPanel
+      ) : (
+        <>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <h5 className="text-dark-blue-100 font-bold uppercase">
+              {rawEvents.length > 0
+                ? "Upcoming Events"
+                : "No events found, keep an eye on our socials for more updates!"}
+            </h5>
+          )}
+          {previewCurrentEvents.map((event) => (
+            <EventsCardPreview {...event} key={event.key} />
+          ))}
 
-            {previewPastEvents.map((event) => (
-              <EventsCardPreview {...event} key={event.key} />
-            ))}
-          </>
-        )}
+          {previewPastEvents.map((event) => (
+            <EventsCardPreview {...event} key={event.key} />
+          ))}
+        </>
+      )}
 
-        {hasMoreEvents && !selectedEventId && (
-          <Button
-            variant="default"
-            onClick={fetchMoreEvents}
-            disabled={isLoading}
-          >
-            Load More
-          </Button>
-        )}
-      </div>
-    </>
+      {hasMoreEvents && !selectedEventId && (
+        <Button
+          variant="default"
+          onClick={fetchMoreEvents}
+          disabled={isLoading}
+        >
+          Load More
+        </Button>
+      )}
+    </div>
   )
 }
 

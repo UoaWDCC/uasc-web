@@ -1,5 +1,5 @@
-import { useState } from "react"
 import type { Meta } from "@storybook/react"
+import { useState } from "react"
 // importing button.tsx as the object
 import Stepper, { type StepProps } from "./StepperComponent"
 
@@ -37,8 +37,12 @@ export const DefaultStepper = () => {
       <Stepper currentStep={currentStep} steps={steps} />
       <h1>Current Step: {currentStep}</h1>
       <span className="flex gap-3">
-        <button onClick={() => setCurrentStep(currentStep - 1)}>back</button>
-        <button onClick={() => setCurrentStep(currentStep + 1)}>next</button>
+        <button type="button" onClick={() => setCurrentStep(currentStep - 1)}>
+          back
+        </button>
+        <button type="button" onClick={() => setCurrentStep(currentStep + 1)}>
+          next
+        </button>
       </span>
     </>
   )
@@ -70,8 +74,12 @@ export const DefaultStepperWithLongTexts = () => {
       <Stepper currentStep={currentStep} steps={steps} />
       <h1>Current Step: {currentStep}</h1>
       <span className="flex gap-3">
-        <button onClick={() => setCurrentStep(currentStep - 1)}>back</button>
-        <button onClick={() => setCurrentStep(currentStep + 1)}>next</button>
+        <button type="button" onClick={() => setCurrentStep(currentStep - 1)}>
+          back
+        </button>
+        <button type="button" onClick={() => setCurrentStep(currentStep + 1)}>
+          next
+        </button>
       </span>
     </>
   )
@@ -103,8 +111,12 @@ export const DefaultStepperWithDifferentTextsLength = () => {
       <Stepper currentStep={currentStep} steps={steps} />
       <h1>Current Step: {currentStep}</h1>
       <span className="flex gap-3">
-        <button onClick={() => setCurrentStep(currentStep - 1)}>back</button>
-        <button onClick={() => setCurrentStep(currentStep + 1)}>next</button>
+        <button type="button" onClick={() => setCurrentStep(currentStep - 1)}>
+          back
+        </button>
+        <button type="button" onClick={() => setCurrentStep(currentStep + 1)}>
+          next
+        </button>
       </span>
     </>
   )

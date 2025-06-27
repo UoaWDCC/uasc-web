@@ -1,15 +1,15 @@
-import { createRef } from "react"
 import { updatePassword } from "firebase/auth"
-import { useAppData } from "@/store/Store"
+import { useRouter } from "next/navigation"
+import { createRef } from "react"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 
 import {
-  PasswordSetupForm,
-  type HandlerResponse
+  type HandlerResponse,
+  PasswordSetupForm
 } from "@/components/generic/PasswordSetupForm/PasswordSetupForm"
-import { oneLevelUp } from "../utils/Utils"
+import { useAppData } from "@/store/Store"
 import { SUCCESS_ROUTE } from "../utils/RouteNames"
-import { useRouter } from "next/navigation"
+import { oneLevelUp } from "../utils/Utils"
 
 const AccountSetupSection = () => {
   const [{ currentUser }] = useAppData()
@@ -24,7 +24,7 @@ const AccountSetupSection = () => {
       passwordResetFormRef.current?.reset()
       router.push(oneLevelUp(SUCCESS_ROUTE))
       return { success: true, successMessage: "Password Set!" }
-    } catch (e) {
+    } catch {
       return { success: false, error: { message: "Something Went Wrong" } }
     }
   }

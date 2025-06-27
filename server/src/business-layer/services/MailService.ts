@@ -1,5 +1,5 @@
+import path from "node:path"
 import * as NodeMailer from "nodemailer"
-import path from "path"
 import { compile, compileFile } from "pug"
 import MailConfigService from "../../data-layer/services/MailConfigService"
 import { EncryptionService } from "./EncryptionService"

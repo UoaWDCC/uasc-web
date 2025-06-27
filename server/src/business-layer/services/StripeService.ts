@@ -5,26 +5,25 @@ import {
   USER_FIREBASE_EMAIL_KEY,
   USER_FIREBASE_ID_KEY
 } from "business-layer/utils/StripeProductMetadata"
+import {
+  BOOKING_SLOTS_KEY,
+  CHECKOUT_TYPE_KEY,
+  CheckoutTypeValues,
+  END_DATE,
+  START_DATE
+} from "business-layer/utils/StripeSessionMetadata"
 import type { UserAdditionalInfo } from "data-layer/models/firebase"
+import BookingDataService from "data-layer/services/BookingDataService"
+import BookingSlotService from "data-layer/services/BookingSlotsService"
 import UserDataService from "data-layer/services/UserDataService"
 import type { UserRecord } from "firebase-admin/auth"
 import Stripe from "stripe"
-import AuthService from "./AuthService"
-import BookingDataService from "data-layer/services/BookingDataService"
-import {
-  CheckoutTypeValues,
-  CHECKOUT_TYPE_KEY,
-  BOOKING_SLOTS_KEY,
-  START_DATE,
-  END_DATE
-} from "business-layer/utils/StripeSessionMetadata"
-import BookingSlotService from "data-layer/services/BookingSlotsService"
-import console from "console"
-import MailService from "./MailService"
 import BookingUtils, {
   CHECK_IN_TIME,
   CHECK_OUT_TIME
 } from "../utils/BookingUtils"
+import AuthService from "./AuthService"
+import MailService from "./MailService"
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
@@ -213,7 +212,7 @@ export default class StripeService {
     description: string,
     default_price_data: Stripe.ProductCreateParams.DefaultPriceData
   ): Promise<Stripe.Response<Stripe.Product>> {
-    let product
+    let product: Stripe.Response<Stripe.Product>
     try {
       product = await stripe.products.create({
         name,
@@ -518,7 +517,7 @@ export default class StripeService {
         coupon: coupon.id,
         customer: stripeId
       })
-    } catch (e) {
+    } catch {
       throw new Error("Failed to add coupon to user")
     }
   }

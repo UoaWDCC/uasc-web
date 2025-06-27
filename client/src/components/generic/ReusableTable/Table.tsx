@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react"
+import ThreeDotsVertical from "@/assets/icons/three-dots-vertical.svg"
+import { useClickOutside } from "@/components/utils/Utils"
+import TableFooterPaginator from "./TableFooterPaginator"
 import {
   TABLE_ROW_IDENTIFIER_KEY,
   type TableRowObjectWithIdentifier,
   type TableRowOperation,
   type TableRowOperationStyle
 } from "./TableUtils"
-import TableFooterPaginator from "./TableFooterPaginator"
-import ThreeDotsVertical from "@/assets/icons/three-dots-vertical.svg"
-import { useClickOutside } from "@/components/utils/Utils"
 
 type TableRowOperations<T extends TableRowOperationStyle> =
   T extends "multiple-operations"
@@ -122,7 +122,7 @@ export const OperationButton = <
           <h5
             data-testid="single-operation-button"
             className="text-red cursor-pointer font-bold"
-            onClick={() => rowOperations && rowOperations[0]?.handler(uid)}
+            onClick={() => rowOperations?.[0]?.handler(uid)}
           >
             X
           </h5>
@@ -236,7 +236,7 @@ const Table = <
                 onClick={() => {
                   onRowClick?.(obj[TABLE_ROW_IDENTIFIER_KEY])
                 }}
-                className={`break-keep pb-2 pl-4 pt-2 
+                className={`break-keep pb-2 pl-4 pt-2
                     ${groupSameRows && rowClass} ${!!onRowClick && "cursor-pointer"}`}
                 key={key}
               >
@@ -279,7 +279,7 @@ const Table = <
         <tbody>{TableData}</tbody>
       </table>
       <div
-        className="border-b-gray-3 text-gray-3 flex h-11 items-center 
+        className="border-b-gray-3 text-gray-3 flex h-11 items-center
       justify-between border-t pl-2"
       >
         <h5>Total: {data.length}</h5>

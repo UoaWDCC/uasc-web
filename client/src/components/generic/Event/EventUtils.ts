@@ -130,21 +130,21 @@ export const EventRenderingUtils = {
     buttonText?: string,
     variant?: EventCardPreviewVariant
   ): EventCardPreviewWithKey => {
-    let eventStartDate
+    let eventStartDate: Date | undefined
     if (event.physical_start_date) {
       eventStartDate = new Date(
         DateUtils.timestampMilliseconds(event?.physical_start_date)
       )
     }
 
-    let eventEndDate
+    let eventEndDate: Date | undefined
     if (event.physical_end_date) {
       eventEndDate = new Date(
         DateUtils.timestampMilliseconds(event?.physical_end_date)
       )
     }
 
-    let signUpStartDate
+    let signUpStartDate: Date | undefined
     if (event.sign_up_start_date) {
       signUpStartDate = new Date(
         DateUtils.timestampMilliseconds(event.sign_up_start_date)

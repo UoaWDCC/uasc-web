@@ -1,6 +1,6 @@
-import Stepper, { type StepProps } from "./StepperComponent"
+import { act, render, screen } from "@testing-library/react"
 import { useState } from "react"
-import { render, act, screen } from "@testing-library/react"
+import Stepper, { type StepProps } from "./StepperComponent"
 
 test("Calls the correct function when clicking on element", async () => {
   const fakeFunction = jest.fn()
@@ -31,8 +31,12 @@ test("Calls the correct function when clicking on element", async () => {
         <Stepper currentStep={currentStep} steps={steps} />
         <h1>Current Step: {currentStep}</h1>
         <span className="flex gap-3">
-          <button onClick={() => setCurrentStep(currentStep - 1)}>back</button>
-          <button onClick={() => setCurrentStep(currentStep + 1)}>next</button>
+          <button type="button" onClick={() => setCurrentStep(currentStep - 1)}>
+            back
+          </button>
+          <button type="button" onClick={() => setCurrentStep(currentStep + 1)}>
+            next
+          </button>
         </span>
       </>
     )

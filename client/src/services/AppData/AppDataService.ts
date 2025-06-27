@@ -113,36 +113,34 @@ const AppDataService = {
     try {
       const { data } = await fetchClient.GET("/payment/membership_prices")
 
-      if (data && data.data) {
-        const transformedData: MembershipPrices[] =
-          data.data &&
-          data.data.map((data) => {
-            let displayName
-            switch (data.name) {
-              case "uoa_student":
-                displayName = MembershipLongNames.ALL_UOA_STUDENTS
-                break
-              case "non_uoa_student":
-                displayName = MembershipLongNames.ALL_OTHER_STUDENTS
-                break
-              case "returning_member":
-                displayName = MembershipLongNames.NON_STUDENT_RETURNING
-                break
-              case "new_non_student":
-                displayName = MembershipLongNames.NON_STUDENT_NEW
-                break
-            }
-            if (data.originalPrice != null) {
-              data.originalPrice = `$${data.originalPrice}`
-            }
-            return {
-              title: displayName,
-              name: data.name,
-              priceString: `$${data.displayPrice}`,
-              originalPrice: data.originalPrice,
-              extraInfo: data.description
-            }
-          })
+      if (data?.data) {
+        const transformedData: MembershipPrices[] = data?.data.map((data) => {
+          let displayName: string
+          switch (data.name) {
+            case "uoa_student":
+              displayName = MembershipLongNames.ALL_UOA_STUDENTS
+              break
+            case "non_uoa_student":
+              displayName = MembershipLongNames.ALL_OTHER_STUDENTS
+              break
+            case "returning_member":
+              displayName = MembershipLongNames.NON_STUDENT_RETURNING
+              break
+            case "new_non_student":
+              displayName = MembershipLongNames.NON_STUDENT_NEW
+              break
+          }
+          if (data.originalPrice != null) {
+            data.originalPrice = `$${data.originalPrice}`
+          }
+          return {
+            title: displayName,
+            name: data.name,
+            priceString: `$${data.displayPrice}`,
+            originalPrice: data.originalPrice,
+            extraInfo: data.description
+          }
+        })
 
         return sortMembershipPrices(transformedData)
       }

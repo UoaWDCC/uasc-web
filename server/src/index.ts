@@ -1,11 +1,11 @@
 import "dotenv/config"
-import express, { type Express, type Request, type Response } from "express"
+import type http from "node:http"
+import https from "node:https"
 import cors from "cors"
-import swaggerUi from "swagger-ui-express"
-import { RegisterRoutes } from "middleware/__generated__/routes"
+import express, { type Express, type Request, type Response } from "express"
 import helmet from "helmet"
-import https from "https"
-import type http from "http"
+import { RegisterRoutes } from "middleware/__generated__/routes"
+import swaggerUi from "swagger-ui-express"
 
 let spec: swaggerUi.JsonObject | undefined
 let generatedHtml: string | undefined
@@ -17,8 +17,8 @@ const importSwaggerJson = async () => {
 
 const app: Express = express()
 
-function keepRawBody(req: any, res: any, buf: Buffer) {
-  if (buf && buf.length) {
+function keepRawBody(req: any, _res: any, buf: Buffer) {
+  if (buf?.length) {
     req.rawBody = buf
   }
 }
