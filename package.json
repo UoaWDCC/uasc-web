@@ -26,6 +26,7 @@
     "test:service": "sh -c 'pnpm test:firebase -- \"jest --config=jest.config.server.ts $0\"'"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
     "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.23",
