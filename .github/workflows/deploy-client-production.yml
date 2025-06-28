@@ -77,7 +77,6 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          environment: client-production
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy client/out --project-name=uasc
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
