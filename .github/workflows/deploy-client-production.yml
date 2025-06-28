@@ -51,7 +51,7 @@ jobs:
         with:
           version: latest
           run_install: |
-            - args: [--global, wrangler]
+            - args: [--global, wrangler@3.90.0]
 
       - name: Cache node_modules
         uses: actions/cache@v4
