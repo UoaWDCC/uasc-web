@@ -1,4 +1,4 @@
-import { MembershipTypes } from "@/models/Payment"
+import type { MembershipTypes } from "@/models/Payment"
 
 const membershipOrder: { [key in MembershipTypes]: number } = {
   uoa_student: 1,

@@ -1,7 +1,7 @@
 import { cleanFirestore } from "test-config/TestUtils"
 import BookingSlotsService from "./BookingSlotsService"
 import { Timestamp } from "firebase-admin/firestore"
-import { BookingSlot } from "data-layer/models/firebase"
+import type { BookingSlot } from "data-layer/models/firebase"
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
 
 const timestamp = Timestamp.fromDate(new Date(2024, 4, 23))

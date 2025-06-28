@@ -3,7 +3,7 @@
 import { Footer } from "@/components/generic/Footer/Footer"
 import queryClient from "@/services/QueryClient"
 import { QueryClientProvider } from "@tanstack/react-query"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 
 type IBookingLayout = Readonly<{ children: ReactNode }>
 

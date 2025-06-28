@@ -1,6 +1,9 @@
-import { SanityImageUrl, sanityQuery } from "../../../sanity/lib/utils"
-import { SHOP_ITEMS_GROQ_QUERY, ShopItem } from "@/models/sanity/ShopItem/Utils"
 import ShopView from "@/components/composite/ShopView/ShopView"
+import {
+  SHOP_ITEMS_GROQ_QUERY,
+  type ShopItem
+} from "@/models/sanity/ShopItem/Utils"
+import { SanityImageUrl, sanityQuery } from "../../../sanity/lib/utils"
 
 const Shop = async () => {
   let shopItems: ShopItem[] = []

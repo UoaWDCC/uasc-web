@@ -1,9 +1,9 @@
-import { ReducedUserAdditionalInfo } from "@/models/User"
+import type { ReducedUserAdditionalInfo } from "@/models/User"
 import TextInput from "@/components/generic/TextInputComponent/TextInput"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import CloseButton from "@/assets/icons/x.svg"
 import { Timestamp } from "firebase/firestore"
-import { DateUtils, UnknownTimestamp } from "@/components/utils/DateUtils"
+import { DateUtils, type UnknownTimestamp } from "@/components/utils/DateUtils"
 import { useState } from "react"
 
 interface IProfileEdit<T extends Partial<ReducedUserAdditionalInfo>> {

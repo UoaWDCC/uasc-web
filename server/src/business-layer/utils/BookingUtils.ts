@@ -1,8 +1,8 @@
-import { Timestamp } from "firebase-admin/firestore"
-import { LodgePricingTypeValues } from "./StripeProductMetadata"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
+import type { Timestamp } from "firebase-admin/firestore"
 import BookingDataService from "../../data-layer/services/BookingDataService"
 import BookingSlotService from "../../data-layer/services/BookingSlotsService"
+import { LodgePricingTypeValues } from "./StripeProductMetadata"
 
 // Need to validate the booking date through a startDate and endDate range.
 /**
@@ -30,12 +30,12 @@ const BookingUtils = {
    * @param endDate firestore `Timestamp`
    * @returns true if the date range is invalid, false otherwise
    */
-  hasInvalidStartAndEndDates: function (
+  hasInvalidStartAndEndDates: (
     startDate: Timestamp,
     endDate: Timestamp,
     earliestDate?: Date,
     latestDate?: Date
-  ) {
+  ) => {
     if (!earliestDate) {
       earliestDate = _earliestDate
     }
@@ -58,7 +58,7 @@ const BookingUtils = {
    * @param busySlotIds any 1d array of strings
    * @returns a map keyed by the slot id with the amount of occurences
    */
-  getSlotOccurences: function (busySlotIds: Array<string>) {
+  getSlotOccurences: (busySlotIds: Array<string>) => {
     const slotOccurences = new Map<string, number>()
     busySlotIds.forEach((slotId) => {
       const currentSlots = slotOccurences.get(slotId)
@@ -77,9 +77,7 @@ const BookingUtils = {
    * @param datesInBooking an array of dates for checking
    * @returns a `LodgePricingTypeValue` based on if the date meets any special conditions
    */
-  getRequiredPricing: function (
-    datesInBooking: Timestamp[]
-  ): LodgePricingTypeValues {
+  getRequiredPricing: (datesInBooking: Timestamp[]): LodgePricingTypeValues => {
     const totalDays = datesInBooking.length
     const FRIDAY = 5
     const SATURDAY = 6
@@ -102,7 +100,7 @@ const BookingUtils = {
    * @param bookingSlotId The ID of the booking slot
    * @returns true if the last spot is taken, false otherwise
    */
-  isLastSpotTaken: async function (bookingSlotId: string): Promise<boolean> {
+  isLastSpotTaken: async (bookingSlotId: string): Promise<boolean> => {
     const bookingDataService = new BookingDataService()
     const bookingSlotService = new BookingSlotService()
 
@@ -149,7 +147,7 @@ const BookingUtils = {
     // Add one day
     date.setDate(date.getDate() + 1)
 
-    if (isNaN(date.getTime()) || year < 2000) {
+    if (Number.isNaN(date.getTime()) || year < 2000) {
       throw new Error("Invalid date")
     }
 

@@ -39,6 +39,7 @@ const AlertsComponent = ({ variant, message, isButton }: AlertsInputProp) => {
 
         {isButton && (
           <button
+            type="button"
             className="mr-5 h-5 w-5 hover:scale-110 hover:opacity-80"
             onClick={() => setModalOpen(false)}
           >
@@ -60,15 +61,16 @@ const AlertsComponent = ({ variant, message, isButton }: AlertsInputProp) => {
           {message}
           {""}
         </span>
-
         {isButton && (
           <button
+            type="button"
             className="mr-5 h-5 w-5 hover:scale-110 hover:opacity-80"
             onClick={() => setModalOpen(false)}
           >
             <XIcon className="fill-white" />
           </button>
         )}
+        t{" "}
       </div>
     )
   }
@@ -87,6 +89,7 @@ const AlertsComponent = ({ variant, message, isButton }: AlertsInputProp) => {
 
         {isButton && (
           <button
+            type="button"
             className="mr-5 h-5 w-5 hover:scale-110 hover:opacity-80"
             onClick={() => setModalOpen(false)}
           >

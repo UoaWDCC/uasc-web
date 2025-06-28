@@ -1,7 +1,7 @@
-import { useBookingHistoryQuery } from "@/services/Admin/AdminQueries"
-import AdminBookingHistoryView from "./AdminBookingHistoryView"
 import { useCallback, useMemo } from "react"
 import useAllUsers from "@/hooks/useAllUsers"
+import { useBookingHistoryQuery } from "@/services/Admin/AdminQueries"
+import AdminBookingHistoryView from "./AdminBookingHistoryView"
 
 /**
  * To be used for consumption of {@link AdminBookingHistoryView}
@@ -30,13 +30,11 @@ const WrappedAdminBookingHistoryView = () => {
   const { users } = useAllUsers()
 
   return (
-    <>
-      <AdminBookingHistoryView
-        historyItems={historyItems}
-        users={users}
-        loadMore={loadMoreHistory}
-      />
-    </>
+    <AdminBookingHistoryView
+      historyItems={historyItems}
+      users={users}
+      loadMore={loadMoreHistory}
+    />
   )
 }
 

@@ -16,5 +16,5 @@ export const useUserLoggedInCallback = (callback: () => void) => {
   useEffect(() => {
     if (loggedIn) callback()
     // eslint-disable-next-line
-  }, [loggedIn])
+  }, [loggedIn, callback])
 }

@@ -1,8 +1,8 @@
-import { MembershipTypes } from "@/models/Payment"
+import type { MembershipTypes } from "@/models/Payment"
 import {
   defaultRegistry,
   createStore,
-  Action,
+  type Action,
   createHook
 } from "react-sweet-state"
 

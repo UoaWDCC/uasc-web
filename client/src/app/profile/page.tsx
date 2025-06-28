@@ -1,24 +1,24 @@
 "use client"
 
-import { useAppData } from "@/store/Store"
-import ProfileInformationPanel from "@/components/generic/ProfileInformationPanel/ProfileInformationPanel"
-import { Footer } from "@/components/generic/Footer/Footer"
-import ResponsiveBackgroundImage from "@/components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
-import { useForceRefreshToken } from "@/hooks/useRefreshedToken"
-import { signOut } from "firebase/auth"
-import { auth, fireAnalytics } from "@/firebase"
-import { DateUtils } from "@/components/utils/DateUtils"
-import { useCallback, useMemo, useState } from "react"
-import { useSelfDataQuery } from "@/services/User/UserQueries"
-import { useBookingsForSelfQuery } from "@/services/Booking/BookingQueries"
-import Table from "@/components/generic/ReusableTable/Table"
 import { QueryClientProvider } from "@tanstack/react-query"
-import queryClient from "@/services/QueryClient"
-import { useRouter } from "next/navigation"
+import { signOut } from "firebase/auth"
 import Link from "next/link"
-import EditPersonalPanel from "./EditPersonalPanel"
-import EditAdditionalPanel from "./EditAdditionalPanel"
+import { useRouter } from "next/navigation"
+import { useCallback, useMemo, useState } from "react"
+import { Footer } from "@/components/generic/Footer/Footer"
+import ProfileInformationPanel from "@/components/generic/ProfileInformationPanel/ProfileInformationPanel"
+import ResponsiveBackgroundImage from "@/components/generic/ResponsiveBackgroundImage/ResponsiveBackground"
+import Table from "@/components/generic/ReusableTable/Table"
 import Loader from "@/components/generic/SuspenseComponent/Loader"
+import { DateUtils } from "@/components/utils/DateUtils"
+import { auth, fireAnalytics } from "@/firebase"
+import { useForceRefreshToken } from "@/hooks/useRefreshedToken"
+import { useBookingsForSelfQuery } from "@/services/Booking/BookingQueries"
+import queryClient from "@/services/QueryClient"
+import { useSelfDataQuery } from "@/services/User/UserQueries"
+import { useAppData } from "@/store/Store"
+import EditAdditionalPanel from "./EditAdditionalPanel"
+import EditPersonalPanel from "./EditPersonalPanel"
 
 const SignOutButton = () => {
   const router = useRouter()
@@ -30,10 +30,10 @@ const SignOutButton = () => {
   return (
     <div
       className="border-red space-x-4; disabled:bg-gray-3 text-red hover:bg-red
-    flex flex-col items-center rounded-md border bg-white px-8 py-2 font-sans font-bold 
+    flex flex-col items-center rounded-md border bg-white px-8 py-2 font-sans font-bold
    hover:text-white enabled:border"
     >
-      <button className="uppercase" onClick={handleOnclick}>
+      <button type="button" className="uppercase" onClick={handleOnclick}>
         sign out
       </button>
     </div>
@@ -63,16 +63,14 @@ const Field = ({
   description?: string | JSX.Element
 }) => {
   return (
-    <>
-      <div>
-        <p className="pb-1 text-base font-normal leading-tight text-stone-300">
-          {subtitle}
-        </p>
-        <p className="text-black/opacity-20 pb-1 text-base font-normal leading-tight">
-          {description}
-        </p>
-      </div>
-    </>
+    <div>
+      <p className="pb-1 text-base font-normal leading-tight text-stone-300">
+        {subtitle}
+      </p>
+      <p className="text-black/opacity-20 pb-1 text-base font-normal leading-tight">
+        {description}
+      </p>
+    </div>
   )
 }
 

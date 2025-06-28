@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { BookingHistoryEvent } from "@/models/History"
+import type { BookingHistoryEvent } from "@/models/History"
 import { Timestamp } from "firebase/firestore"
 import AdminBookingHistoryItem from "./AdminBookingHistoryItem"
 

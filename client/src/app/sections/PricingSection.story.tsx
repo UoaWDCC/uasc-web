@@ -1,7 +1,7 @@
 import type { Meta } from "@storybook/react"
 
 import PricingSection from "./PricingSection"
-import { HomeProps } from "../HomeComponent"
+import type { HomeProps } from "../HomeComponent"
 
 const meta: Meta<typeof PricingSection> = {
   component: PricingSection

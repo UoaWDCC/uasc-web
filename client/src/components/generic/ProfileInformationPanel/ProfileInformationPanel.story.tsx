@@ -83,16 +83,14 @@ const thirdStoryElements = [
 
 export const littleElementsWithEdit = () => {
   return (
-    <>
-      <ProfileInformationPanel
-        title="Additional details"
-        onEdit={() => {
-          alert("Additional details button clicked")
-        }}
-      >
-        {ChildMapper(firstStoryElements)}
-      </ProfileInformationPanel>
-    </>
+    <ProfileInformationPanel
+      title="Additional details"
+      onEdit={() => {
+        alert("Additional details button clicked")
+      }}
+    >
+      {ChildMapper(firstStoryElements)}
+    </ProfileInformationPanel>
   )
 }
 

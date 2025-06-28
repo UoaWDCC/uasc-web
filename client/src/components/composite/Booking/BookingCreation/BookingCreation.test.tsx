@@ -1,13 +1,13 @@
 import { fireEvent, render } from "@testing-library/react"
 import {
-  RequirementCheckBoxes,
-  handleDateRangeInputChange
+  handleDateRangeInputChange,
+  RequirementCheckBoxes
 } from "./BookingCreation"
 
 describe("handleDateRangeInputChange", () => {
   let setDateFunction: any
-  let startDate
-  let endDate
+  let startDate: Date
+  let endDate: Date
 
   beforeEach(() => {
     setDateFunction = jest.fn()

@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
-import { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
+import type React from "react"
+import { useState } from "react"
+import type { ShopItem as ShopItemType } from "../../../models/sanity/ShopItem/Utils"
 import ProductImage from "@/components/generic/Shop/ProductImage/ProductImage"
 import ProductInfo from "@/components/generic/Shop/ProductInfo/ProductInfo"
 

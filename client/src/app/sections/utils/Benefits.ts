@@ -1,4 +1,4 @@
-import { Benefit } from "@/components/utils/types"
+import type { Benefit } from "@/components/utils/types"
 
 export const benefits: Benefit[] = [
   {

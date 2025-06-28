@@ -46,28 +46,26 @@ const TabsComponent = ({
   }
 
   return (
-    <>
-      <div className="bg-dark-blue-60 relative flex h-full w-full flex-col items-center py-[78px]">
-        <div className="xs:gap-3 xs:flex-row absolute -top-[15px] left-1/2 flex -translate-x-1/2 flex-col sm:gap-5 ">
-          {tabs.map((tab) => (
-            <>
-              <Button
-                key={tab.order} // Add a key prop to each Button
-                variant="tertiary"
-                onClick={() => setCurrentIndex(tab.order)}
-                disabled={tab.order === selectedIndex}
-              >
-                {" "}
-                {tab.title}
-              </Button>
-            </>
-          ))}
-        </div>
-        <div className="flex max-w-[800px] flex-col items-center px-2 text-white">
-          {tabs[selectedIndex]?.content || <div>No content available</div>}
-        </div>
+    <div className="bg-dark-blue-60 relative flex h-full w-full flex-col items-center py-[78px]">
+      <div className="xs:gap-3 xs:flex-row absolute -top-[15px] left-1/2 flex -translate-x-1/2 flex-col sm:gap-5 ">
+        {tabs.map((tab) => (
+          <>
+            <Button
+              key={tab.order} // Add a key prop to each Button
+              variant="tertiary"
+              onClick={() => setCurrentIndex(tab.order)}
+              disabled={tab.order === selectedIndex}
+            >
+              {" "}
+              {tab.title}
+            </Button>
+          </>
+        ))}
       </div>
-    </>
+      <div className="flex max-w-[800px] flex-col items-center px-2 text-white">
+        {tabs[selectedIndex]?.content || <div>No content available</div>}
+      </div>
+    </div>
   )
 }
 

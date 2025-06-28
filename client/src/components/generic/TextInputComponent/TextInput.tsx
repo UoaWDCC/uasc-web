@@ -1,4 +1,4 @@
-import React from "react"
+import type React from "react"
 
 type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   variant?: "success" | "error"

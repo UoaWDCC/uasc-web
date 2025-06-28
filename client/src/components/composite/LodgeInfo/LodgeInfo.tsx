@@ -1,7 +1,7 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import LodgeInfoComponent from "./LodgeInfoComponent/LodgeInfoComponent"
 import LodgeInfoGallery from "./LodgeInfoGallery/LodgeInfoGallery"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 
 export interface ILodgeInfo {
   /**

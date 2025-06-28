@@ -1,6 +1,6 @@
 import MenuList from "@/components/generic/MenuList/MenuList"
 import ProfileIcon from "@/assets/icons/profile.svg"
-import { INavbarProps } from "../Navbar"
+import type { INavbarProps } from "../Navbar"
 import { useRef, useState } from "react"
 import { useClickOutside } from "@/components/utils/Utils"
 import Link from "next/link"

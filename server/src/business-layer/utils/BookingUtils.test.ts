@@ -3,7 +3,7 @@ import BookingUtils, { _earliestDate, _latestDate } from "./BookingUtils"
 import { LodgePricingTypeValues } from "./StripeProductMetadata"
 import BookingDataService from "../../data-layer/services/BookingDataService"
 import { cleanFirestore } from "../../test-config/TestUtils"
-import { BookingSlot } from "../../data-layer/models/firebase"
+import type { BookingSlot } from "../../data-layer/models/firebase"
 import BookingSlotsService from "../../data-layer/services/BookingSlotsService"
 
 describe("BookingUtils", () => {

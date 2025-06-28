@@ -59,6 +59,7 @@ type ViewButtonProps = {
 const ViewButton = ({ onClick, viewButtonText }: ViewButtonProps) => {
   return (
     <button
+      type="button"
       onClick={onClick}
       className="flex items-center justify-center gap-4 text-nowrap p-2"
     >

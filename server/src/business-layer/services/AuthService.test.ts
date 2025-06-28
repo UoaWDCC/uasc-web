@@ -1,8 +1,8 @@
 import { auth } from "business-layer/security/Firebase"
-import AuthService from "./AuthService"
-import { UserRecord } from "firebase-admin/auth"
+import type { UserRecord } from "firebase-admin/auth"
 import { cleanAuth } from "test-config/TestUtils"
 import { AuthServiceClaims, UserAccountTypes } from "../utils/AuthServiceClaims"
+import AuthService from "./AuthService"
 
 describe("AuthService Integration Tests", () => {
   afterEach(async () => {
@@ -21,7 +21,7 @@ describe("AuthService Integration Tests", () => {
   it("deletes a user", async () => {
     await auth.createUser({ uid: "test" })
     new AuthService().deleteUser("test")
-    let user
+    let user: UserRecord
     try {
       user = await auth.getUser("test")
     } catch {}
@@ -30,7 +30,7 @@ describe("AuthService Integration Tests", () => {
 
   it("creates a user", async () => {
     const createdUser = await new AuthService().createUser("test@gmail.com")
-    let user
+    let user: UserRecord
     try {
       user = await auth.getUser(createdUser.uid)
     } catch {}

@@ -1,6 +1,6 @@
 import StripeService from "./StripeService"
 import { productMock } from "test-config/mocks/Stripe.mock"
-import Stripe from "stripe"
+import type Stripe from "stripe"
 
 jest.mock("stripe", () => {
   const stripe = jest.requireActual("stripe")

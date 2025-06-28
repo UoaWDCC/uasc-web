@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { oneLevelUp } from "../utils/Utils"
 import { PERSONAL_ROUTE_1 } from "../utils/RouteNames"
-import { SvgImport } from "@/components/utils/types"
+import type { SvgImport } from "@/components/utils/types"
 import { useRouter, useSearchParams } from "next/navigation"
 type confirmationVariants = "default"
 

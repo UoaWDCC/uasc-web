@@ -1,7 +1,7 @@
 import FirestoreCollections from "data-layer/adapters/FirestoreCollections"
-import { BookingSlot } from "data-layer/models/firebase"
+import type { BookingSlot } from "data-layer/models/firebase"
 import { Timestamp } from "firebase-admin/firestore"
-import { DocumentDataWithUid } from "data-layer/models/common"
+import type { DocumentDataWithUid } from "data-layer/models/common"
 import { firestoreTimestampToDate } from "data-layer/adapters/DateUtils"
 
 export default class BookingSlotService {

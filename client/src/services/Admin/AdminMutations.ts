@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import AdminService from "./AdminService"
-import { Timestamp } from "firebase/firestore"
+import type { Timestamp } from "firebase/firestore"
 import queryClient from "@/services/QueryClient"
 import { BOOKING_AVAILABLITY_KEY } from "@/services/Booking/BookingQueries"
 import {
@@ -8,7 +8,7 @@ import {
   ALL_USERS_QUERY,
   BOOKING_HISTORY_QUERY
 } from "./AdminQueries"
-import { CombinedUserData } from "@/models/User"
+import type { CombinedUserData } from "@/models/User"
 import { replaceUserInPage } from "./AdminUtils"
 import { ALL_EVENTS_QUERY_KEY } from "../Event/EventQueries"
 

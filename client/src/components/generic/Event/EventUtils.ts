@@ -1,7 +1,7 @@
 import { DateUtils } from "@/components/utils/DateUtils"
-import { Event } from "@/models/Events"
+import type { Event } from "@/models/Events"
 import { MS_IN_SECOND } from "@/utils/Constants"
-import {
+import type {
   EventCardPreviewVariant,
   IEventsCardPreview
 } from "./EventPreview/EventPreview"
@@ -130,21 +130,21 @@ export const EventRenderingUtils = {
     buttonText?: string,
     variant?: EventCardPreviewVariant
   ): EventCardPreviewWithKey => {
-    let eventStartDate
+    let eventStartDate: Date | undefined
     if (event.physical_start_date) {
       eventStartDate = new Date(
         DateUtils.timestampMilliseconds(event?.physical_start_date)
       )
     }
 
-    let eventEndDate
+    let eventEndDate: Date | undefined
     if (event.physical_end_date) {
       eventEndDate = new Date(
         DateUtils.timestampMilliseconds(event?.physical_end_date)
       )
     }
 
-    let signUpStartDate
+    let signUpStartDate: Date | undefined
     if (event.sign_up_start_date) {
       signUpStartDate = new Date(
         DateUtils.timestampMilliseconds(event.sign_up_start_date)

@@ -1,4 +1,4 @@
-import { CombinedUserData } from "@/models/User"
+import type { CombinedUserData } from "@/models/User"
 import BookingUserCard from "./BookingUserCard"
 
 export type BookingInfo = CombinedUserData & { bookingId: string }

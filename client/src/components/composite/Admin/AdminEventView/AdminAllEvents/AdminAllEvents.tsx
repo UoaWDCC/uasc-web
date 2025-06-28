@@ -1,13 +1,13 @@
-import EventsCardPreview from "@/components/generic/Event/EventPreview/EventPreview"
-import { DateUtils } from "@/components/utils/DateUtils"
-import { Event } from "@/models/Events"
 import { useCallback, useMemo, useState } from "react"
+import EventsCardPreview from "@/components/generic/Event/EventPreview/EventPreview"
 import {
   EventDateComparisons,
   EventRenderingUtils
 } from "@/components/generic/Event/EventUtils"
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import Loader from "@/components/generic/SuspenseComponent/Loader"
+import { DateUtils } from "@/components/utils/DateUtils"
+import type { Event } from "@/models/Events"
 
 /**
  * Interface representing the properties of the Events Page.
@@ -82,7 +82,7 @@ const AdminAllEvents = ({
       setSelectedEventId(id)
       onSelectedEventIdChange?.(id)
     },
-    [setSelectedEventId, onSelectedEventIdChange]
+    [onSelectedEventIdChange]
   )
 
   /**
@@ -146,42 +146,36 @@ const AdminAllEvents = ({
     }) || []
 
   return (
-    <>
-      <div className={`flex w-full max-w-[1000px] flex-col gap-2`}>
-        {selectedEventId ? null : (
-          <>
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <h5 className="text-dark-blue-100 font-bold uppercase">
-                {rawEvents.length > 0 ? (
-                  <>Upcoming Events</>
-                ) : (
-                  <>No events found!</>
-                )}
-              </h5>
-            )}
-            {previewCurrentEvents.map((event) => (
-              <EventsCardPreview {...event} key={event.key} />
-            ))}
+    <div className={`flex w-full max-w-[1000px] flex-col gap-2`}>
+      {selectedEventId ? null : (
+        <>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <h5 className="text-dark-blue-100 font-bold uppercase">
+              {rawEvents.length > 0 ? "Upcoming Events" : "No events found!"}
+            </h5>
+          )}
+          {previewCurrentEvents.map((event) => (
+            <EventsCardPreview {...event} key={event.key} />
+          ))}
 
-            {previewPastEvents.map((event) => (
-              <EventsCardPreview {...event} key={event.key} />
-            ))}
-          </>
-        )}
+          {previewPastEvents.map((event) => (
+            <EventsCardPreview {...event} key={event.key} />
+          ))}
+        </>
+      )}
 
-        {hasMoreEvents && !selectedEventId && (
-          <Button
-            variant="default"
-            onClick={fetchMoreEvents}
-            disabled={isLoading}
-          >
-            Load More
-          </Button>
-        )}
-      </div>
-    </>
+      {hasMoreEvents && !selectedEventId && (
+        <Button
+          variant="default"
+          onClick={fetchMoreEvents}
+          disabled={isLoading}
+        >
+          Load More
+        </Button>
+      )}
+    </div>
   )
 }
 

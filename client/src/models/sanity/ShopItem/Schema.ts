@@ -1,4 +1,4 @@
-import { defineField, SchemaTypeDefinition } from "sanity"
+import { defineField, type SchemaTypeDefinition } from "sanity"
 
 export const ShopItemSchema: SchemaTypeDefinition = {
   name: "shop-item",

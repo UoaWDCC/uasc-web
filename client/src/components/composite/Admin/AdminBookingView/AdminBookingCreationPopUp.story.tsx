@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import AdminBookingCreationPopUp from "./AdminBookingCreationPopUp"
-import { CombinedUserData } from "@/models/User"
+import type { CombinedUserData } from "@/models/User"
 import { Timestamp } from "firebase/firestore"
 
 const meta: Meta<typeof AdminBookingCreationPopUp> = {

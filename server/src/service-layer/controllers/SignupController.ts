@@ -1,11 +1,12 @@
 import AuthService from "business-layer/services/AuthService"
-import UserDataService from "data-layer/services/UserDataService"
-// import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
-import { UserSignupResponse } from "service-layer/response-models/UserSignupResponse"
-import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
-import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
 import { parseFirebaseError } from "business-layer/utils/FirebaseErrorParser"
+import UserDataService from "data-layer/services/UserDataService"
+import type { UserRecord } from "firebase-admin/auth"
 import { StatusCodes } from "http-status-codes"
+import type { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
+// import { UserSignupBody } from "service-layer/request-models/UserSignupRequests"
+import type { UserSignupResponse } from "service-layer/response-models/UserSignupResponse"
+import { Body, Controller, Post, Route, SuccessResponse } from "tsoa"
 
 @Route("signup")
 export class UserSignup extends Controller {
@@ -24,7 +25,7 @@ export class UserSignup extends Controller {
 
     // Received userInfo omits stripe_id
     const userInfo = requestBody.user
-    let userRecord
+    let userRecord: UserRecord
     // Seperate try/catch to avoid conflicting emails while creating user.
     try {
       userRecord = await authService.createUser(requestBody.email)

@@ -1,3 +1,6 @@
+import { Timestamp } from "firebase/firestore"
+import Image from "next/image"
+import { type FormEvent, useMemo, useState } from "react"
 import Checkbox from "@/components/generic/Checkbox/Checkbox"
 import {
   EventMessages,
@@ -6,10 +9,7 @@ import {
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
 import TextInput from "@/components/generic/TextInputComponent/TextInput"
 import { DateUtils } from "@/components/utils/DateUtils"
-import { CreateEventBody } from "@/models/Events"
-import { Timestamp } from "firebase/firestore"
-import Image from "next/image"
-import { FormEvent, useMemo, useState } from "react"
+import type { CreateEventBody } from "@/models/Events"
 
 interface IAdminEventForm {
   /**
@@ -161,6 +161,7 @@ const AdminEventForm = ({
       <h2 className="text-dark-blue-100">{formTitle}</h2>
       {isEditMode && (
         <button
+          type="button"
           className="mt-2"
           onClick={() => {
             confirm(

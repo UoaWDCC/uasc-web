@@ -11,7 +11,7 @@ import {
   PERSONAL_ROUTE_2,
   SUCCESS_ROUTE
 } from "./RouteNames"
-import { MembershipTypes } from "@/models/Payment"
+import type { MembershipTypes } from "@/models/Payment"
 import { useRouter } from "next/navigation"
 import { useAppData } from "@/store/Store"
 

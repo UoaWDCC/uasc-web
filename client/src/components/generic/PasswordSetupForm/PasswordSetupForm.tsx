@@ -2,7 +2,7 @@ import TextInput from "../TextInputComponent/TextInput"
 
 import AlertsComponent from "../AlertsComponent/AlertsComponent"
 
-import { FormEvent, useState } from "react"
+import { type FormEvent, useState } from "react"
 
 export type HandlerResponse = {
   /**

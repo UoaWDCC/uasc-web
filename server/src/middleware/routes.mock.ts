@@ -1,5 +1,5 @@
 import { auth } from "business-layer/security/Firebase"
-import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
+import type { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
 import {
   EMULATOR_AUTH_PORT,
   EMULATOR_HOST,

@@ -2,9 +2,9 @@ import Contact from "@/components/composite/Contact/Contact"
 import { sanityQuery } from "../../../sanity/lib/utils"
 import {
   CONTACT_DETAIL_GROQ_QUERY,
-  ContactDetailItem
+  type ContactDetailItem
 } from "@/models/sanity/ContactDetail/Utils"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Contact UASC",

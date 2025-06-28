@@ -1,36 +1,69 @@
 import AuthService from "business-layer/services/AuthService"
+import { EncryptionService } from "business-layer/services/EncryptionService"
+import MailService from "business-layer/services/MailService"
 import {
   DEFAULT_BOOKING_MAX_SLOTS,
   EMPTY_BOOKING_SLOTS
 } from "business-layer/utils/BookingConstants"
+import BookingUtils, {
+  CHECK_IN_TIME,
+  CHECK_OUT_TIME
+} from "business-layer/utils/BookingUtils"
 import {
-  UTCDateToDdMmYyyy,
   firestoreTimestampToDate,
-  timestampsInRange
+  timestampsInRange,
+  UTCDateToDdMmYyyy
 } from "data-layer/adapters/DateUtils"
-import { UserAdditionalInfo, Event } from "data-layer/models/firebase"
+import type {
+  BookingHistoryEvent,
+  Event,
+  UserAdditionalInfo
+} from "data-layer/models/firebase"
 import BookingDataService from "data-layer/services/BookingDataService"
+import BookingHistoryService from "data-layer/services/BookingHistoryService"
 import BookingSlotService from "data-layer/services/BookingSlotsService"
+import EventService from "data-layer/services/EventService"
+import MailConfigService from "data-layer/services/MailConfigService"
 import UserDataService from "data-layer/services/UserDataService"
-import {
-  DeleteBookingRequest,
+import type { UserRecord } from "firebase-admin/auth"
+import { type DocumentSnapshot, Timestamp } from "firebase-admin/firestore"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
+import { compile as pugCompile } from "pug"
+import type {
   AddCouponRequestBody,
-  MakeDatesAvailableRequestBody,
-  FetchLatestBookingEventRequest
+  DeleteBookingRequest,
+  FetchLatestBookingEventRequest,
+  MakeDatesAvailableRequestBody
 } from "service-layer/request-models/AdminRequests"
-import {
+import type { CreateEventBody } from "service-layer/request-models/EventRequests"
+import type {
+  UpdateEmailTemplateRequestBody,
+  UpdateMailConfigRequestBody
+} from "service-layer/request-models/MailConfigRequests"
+import type {
   CreateBookingsRequestModel,
   CreateUserRequestBody,
   DemoteUserRequestBody,
   EditUsersRequestBody,
   PromoteUserRequestBody
 } from "service-layer/request-models/UserRequests"
-import {
-  UIdssByDateRangeResponse,
+import type {
+  FetchLatestBookingHistoryEventResponse,
+  GetEventResponse
+} from "service-layer/response-models/AdminResponse"
+import type {
   BookingDeleteResponse,
-  BookingSlotUpdateResponse
+  BookingSlotUpdateResponse,
+  UIdssByDateRangeResponse
 } from "service-layer/response-models/BookingResponse"
-import {
+import type {
+  GetAllEmailTemplatesResponse,
+  GetEmailTemplateResponse,
+  GetMailConfigResponse,
+  UpdateEmailTemplateResponse,
+  UpdateMailConfigResponse
+} from "service-layer/response-models/MailConfigResponse"
+import type {
   AllUsersResponse,
   GetUserResponse
 } from "service-layer/response-models/UserResponse"
@@ -48,41 +81,9 @@ import {
   Security,
   SuccessResponse
 } from "tsoa"
-import * as console from "console"
 import StripeService from "../../business-layer/services/StripeService"
-import { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
-import { UserRecord } from "firebase-admin/auth"
-import { Timestamp } from "firebase-admin/firestore"
-import MailService from "business-layer/services/MailService"
-import BookingUtils, {
-  CHECK_IN_TIME,
-  CHECK_OUT_TIME
-} from "business-layer/utils/BookingUtils"
-import BookingHistoryService from "data-layer/services/BookingHistoryService"
-import {
-  FetchLatestBookingHistoryEventResponse,
-  GetEventResponse
-} from "service-layer/response-models/AdminResponse"
-import { CreateEventBody } from "service-layer/request-models/EventRequests"
-import EventService from "data-layer/services/EventService"
+import type { UserAccountTypes } from "../../business-layer/utils/AuthServiceClaims"
 import { RedirectKeys } from "../../business-layer/utils/RedirectKeys"
-import {
-  UpdateEmailTemplateRequestBody,
-  UpdateMailConfigRequestBody
-} from "service-layer/request-models/MailConfigRequests"
-import {
-  GetAllEmailTemplatesResponse,
-  GetEmailTemplateResponse,
-  GetMailConfigResponse,
-  UpdateEmailTemplateResponse,
-  UpdateMailConfigResponse
-} from "service-layer/response-models/MailConfigResponse"
-import MailConfigService from "data-layer/services/MailConfigService"
-
-import { compile as pugCompile } from "pug"
-import * as process from "node:process"
-import { EncryptionService } from "../../business-layer/services/EncryptionService"
-import { getReasonPhrase, StatusCodes } from "http-status-codes"
 
 @Route("admin")
 @Security("jwt", ["admin"])
@@ -125,7 +126,7 @@ export class AdminController extends Controller {
         })
 
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
-      } catch (e) {
+      } catch {
         console.error(
           `Something went wrong when trying to make the date
           ${firestoreTimestampToDate(dateTimestamp).toString()} available`
@@ -192,7 +193,7 @@ export class AdminController extends Controller {
         }
 
         return { bookingSlotId: bookingSlotForDate.id, date: dateTimestamp }
-      } catch (e) {
+      } catch {
         console.error(
           `Something went wrong when trying to make the date
           ${firestoreTimestampToDate(dateTimestamp).toString()} available`
@@ -318,7 +319,7 @@ export class AdminController extends Controller {
           `${BOOKING_START_DATE} ${CHECK_IN_TIME} (check in)`,
           `${BookingUtils.addOneDay(BOOKING_END_DATE)} ${CHECK_OUT_TIME} (check out)`
         )
-      } catch (e) {
+      } catch {
         console.error(
           `Was unable to send a confirmation email for manual booking`
         )
@@ -357,13 +358,13 @@ export class AdminController extends Controller {
     const { bookingID } = requestBody
     // Validate and check if the booking actually exists
     const bookingDataService = new BookingDataService()
-    let user_id
-    let booking_slot_id
+    let user_id: string
+    let booking_slot_id: string
     try {
       const booking = await bookingDataService.getBookingById(bookingID)
       user_id = booking.user_id
       booking_slot_id = booking.booking_slot_id
-    } catch (err) {
+    } catch {
       this.setStatus(StatusCodes.NOT_FOUND)
       return { message: "Booking not found with that booking ID." }
     }
@@ -415,7 +416,7 @@ export class AdminController extends Controller {
     try {
       const userDataService = new UserDataService()
 
-      let snapshot
+      let snapshot: DocumentSnapshot
       if (cursor) {
         snapshot = await userDataService.getUserDocumentSnapshot(cursor)
       }
@@ -450,7 +451,7 @@ export class AdminController extends Controller {
       })
 
       // If there is explicitly no more users we return an `undefined` next cursor
-      let nextCursor
+      let nextCursor: string
       if (combinedUserData.length === USERS_TO_FETCH) {
         nextCursor = lastUid
       }
@@ -680,7 +681,7 @@ export class AdminController extends Controller {
       await Promise.all(couponPromises)
 
       this.setStatus(StatusCodes.OK)
-    } catch (e) {
+    } catch {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
@@ -701,7 +702,10 @@ export class AdminController extends Controller {
     try {
       const bookingHistoryService = new BookingHistoryService()
 
-      let snapshot
+      let snapshot: DocumentSnapshot<
+        BookingHistoryEvent,
+        FirebaseFirestore.DocumentData
+      >
       if (cursor) {
         snapshot =
           await bookingHistoryService.getBookingHistoryEventSnapshot(cursor)
@@ -849,7 +853,7 @@ export class AdminController extends Controller {
       }
 
       return { data: event }
-    } catch (e) {
+    } catch {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR)
       return {
         error: "Something went wrong when fetching the event, please try again"

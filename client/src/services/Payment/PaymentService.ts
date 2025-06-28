@@ -1,12 +1,12 @@
-import { Timestamp } from "firebase/firestore"
-import { MembershipTypes } from "@/models/Payment"
+import type { Timestamp } from "firebase/firestore"
+import type { MembershipTypes } from "@/models/Payment"
 import fetchClient from "@/services/OpenApiFetchClient"
 import { UnavailableBookingError } from "@/services/Utils/Errors"
 
 const PaymentService = {
-  getMembershipPaymentClientSecret: async function (
+  getMembershipPaymentClientSecret: async (
     membershipType?: MembershipTypes
-  ) {
+  ) => {
     const { data } = await fetchClient.POST("/payment/membership", {
       body: {
         membershipType
@@ -19,10 +19,10 @@ const PaymentService = {
     }
     return data
   },
-  getBookingPaymentClientSecret: async function (vars: {
+  getBookingPaymentClientSecret: async (vars: {
     startDate?: Timestamp
     endDate?: Timestamp
-  }) {
+  }) => {
     const { data, response } = await fetchClient.POST("/payment/booking", {
       body: {
         startDate: vars.startDate,

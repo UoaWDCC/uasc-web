@@ -1,15 +1,18 @@
+import {
+  HOME_PAGE_GROQ_QUERY,
+  type HomePage
+} from "@/models/sanity/HomePage/Utils"
 import AppDataService, {
-  MembershipPrices
+  type MembershipPrices
 } from "@/services/AppData/AppDataService"
-import HomeComponent from "./HomeComponent"
 import { sanityQuery } from "../../sanity/lib/utils"
-import { HOME_PAGE_GROQ_QUERY, HomePage } from "@/models/sanity/HomePage/Utils"
+import HomeComponent from "./HomeComponent"
 
 const Home = async () => {
   let pricingData: MembershipPrices[]
   try {
     pricingData = await AppDataService.getMembershipPricingDetails()
-  } catch (e) {
+  } catch {
     pricingData = []
   }
 
@@ -18,13 +21,11 @@ const Home = async () => {
   const [content] = await sanityQuery<HomePage[]>(HOME_PAGE_GROQ_QUERY)
 
   return (
-    <>
-      <HomeComponent
-        membershipPricingData={pricingData}
-        content={content}
-        lodgePricing={lodgePricing}
-      />
-    </>
+    <HomeComponent
+      membershipPricingData={pricingData}
+      content={content}
+      lodgePricing={lodgePricing}
+    />
   )
 }
 

@@ -1,25 +1,25 @@
-import UserDataService from "data-layer/services/UserDataService"
 import AuthService from "business-layer/services/AuthService"
-import {
+import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
+import UserDataService from "data-layer/services/UserDataService"
+import { getReasonPhrase, StatusCodes } from "http-status-codes"
+import type {
+  DeleteUserRequestBody,
   EditSelfRequestBody,
-  SelfRequestModel,
   EditSelfRequestModel,
-  DeleteUserRequestBody
+  SelfRequestModel
 } from "service-layer/request-models/UserRequests"
-import { CommonResponse } from "service-layer/response-models/CommonResponse"
+import type { CommonResponse } from "service-layer/response-models/CommonResponse"
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Patch,
+  Request,
   Route,
   Security,
-  SuccessResponse,
-  Request,
-  Patch,
-  Delete
+  SuccessResponse
 } from "tsoa"
-import { AuthServiceClaims } from "business-layer/utils/AuthServiceClaims"
-import { StatusCodes, getReasonPhrase } from "http-status-codes"
 
 @Route("users")
 export class UsersController extends Controller {
@@ -88,13 +88,13 @@ export class UsersController extends Controller {
         const authService = new AuthService()
         const userDataService = new UserDataService()
 
-        let userClaims
+        let userClaims: Record<string, unknown>
         try {
           userClaims = await authService.getCustomerUserClaim(userUid)
         } catch (e) {
           console.info(`Couldn't fetch user claims for ${userUid}. ${e}`)
         }
-        if (userClaims && userClaims[AuthServiceClaims.ADMIN]) {
+        if (userClaims?.[AuthServiceClaims.ADMIN]) {
           this.setStatus(StatusCodes.FORBIDDEN)
           return {
             error: getReasonPhrase(StatusCodes.FORBIDDEN),
