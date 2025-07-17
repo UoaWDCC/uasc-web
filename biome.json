@@ -35,7 +35,18 @@
     "enabled": true,
     "rules": {
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "@portabletext/react": {
+                "importNames": ["PortableText"],
+                "message": "DO NOT import PortableText directly from '@portabletext/react'. Use PortableTextRenderer instead for consistent styling and accessibility"
+              }
+            }
+          }
+        }
       },
       "recommended": true,
       "correctness": {
