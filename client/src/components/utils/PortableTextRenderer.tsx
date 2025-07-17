@@ -2,10 +2,10 @@
 // import { PortableText } from "@portabletext/react" // Restricted: Use PortableTextRenderer
 
 import {
+  // biome-ignore lint/style/noRestrictedImports: this is the only place it is allowed to be used
   PortableText,
   type PortableTextBlock,
   type PortableTextComponents
-  // biome-ignore lint/style/noRestrictedImports: this is the only place it is allowed to be used
 } from "@portabletext/react"
 
 interface PortableTextRendererProps {

@@ -40,7 +40,10 @@
           "level": "error",
           "options": {
             "paths": {
-              "@portabletext/react": "DO NOT import PortableText directly from '@portabletext/react'. Use PortableTextRenderer instead for consistent styling and accessibility"
+              "@portabletext/react": {
+                "importNames": ["PortableText"],
+                "message": "DO NOT import PortableText directly from '@portabletext/react'. Use PortableTextRenderer instead for consistent styling and accessibility"
+              }
             }
           }
         }
