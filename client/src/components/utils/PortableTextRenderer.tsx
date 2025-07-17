@@ -121,6 +121,20 @@ const getComponents = (
   }
 })
 
+/**
+ * Renders portable text content with custom components.
+ *
+ * @param value - Portable text value to render.
+ * @param headerColorClass - Optional. Override for header color Tailwind class. Defaults to "text-dark-blue-100".
+ * @param textColorClass - Optional. Override for text color Tailwind class. Defaults to "text-black".
+ *
+ * @example
+ * <PortableTextRenderer
+ *   value={portableTextValue}
+ *   headerColorClass="text-blue-600" // optional override
+ *   textColorClass="text-gray-800"   // optional override
+ * />
+ */
 export default function PortableTextRenderer({
   value,
   headerColorClass,
