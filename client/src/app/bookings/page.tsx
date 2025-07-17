@@ -1,4 +1,4 @@
-import PortableTextRenderer from "@/components/utils/PortableTextRenderer"
+import PortableTextRenderer from "@/components/utils/PortableTextRender/PortableTextRenderer"
 import type { PolicyWithTextBlocks } from "@/components/composite/Booking/BookingContext"
 import BookingInformationAndCreation from "@/components/composite/Booking/BookingInformationAndCreation/BookingInformationAndCreation"
 import {

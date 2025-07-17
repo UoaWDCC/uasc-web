@@ -41,6 +41,26 @@ const getComponents = (
       >
         {children}
       </a>
+    ),
+    del: ({ children }) => (
+      <del className={`line-through ${getTextColor(textColorClass)}`}>
+        {children}
+      </del>
+    ),
+    ins: ({ children }) => (
+      <ins className={`underline ${getTextColor(textColorClass)}`}>
+        {children}
+      </ins>
+    ),
+    sub: ({ children }) => (
+      <sub className={`align-sub ${getTextColor(textColorClass)}`}>
+        {children}
+      </sub>
+    ),
+    sup: ({ children }) => (
+      <sup className={`align-super ${getTextColor(textColorClass)}`}>
+        {children}
+      </sup>
     )
   },
   block: {
@@ -79,13 +99,42 @@ const getComponents = (
         {children}
       </h5>
     ),
+    h6: ({ children }) => (
+      <h6
+        className={`text-h6 font-medium mb-2 ${getHeaderColor(headerColorClass)}`}
+      >
+        {children}
+      </h6>
+    ),
     normal: ({ children }) => (
       <p
         className={`text-p mb-2 leading-relaxed ${getTextColor(textColorClass)}`}
       >
         {children}
       </p>
-    )
+    ),
+    blockquote: ({ children }) => (
+      <blockquote
+        className={`border-l-4 pl-4 italic mb-2 ${getTextColor(textColorClass)}`}
+      >
+        {children}
+      </blockquote>
+    ),
+    pre: ({ children }) => (
+      <pre
+        className={`bg-gray-100 p-2 rounded mb-2 ${getTextColor(textColorClass)}`}
+      >
+        <code>{children}</code>
+      </pre>
+    ),
+    code: ({ children }) => (
+      <code
+        className={`bg-gray-200 px-1 rounded ${getTextColor(textColorClass)}`}
+      >
+        {children}
+      </code>
+    ),
+    hr: () => <hr className="my-4 border-gray-300" />
   },
   list: {
     bullet: ({ children }) => (
