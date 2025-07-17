@@ -1,4 +1,4 @@
-import { PortableText } from "@portabletext/react"
+import PortableTextRenderer from "@/components/utils/PortableTextRenderer"
 import type { PolicyWithTextBlocks } from "@/components/composite/Booking/BookingContext"
 import BookingInformationAndCreation from "@/components/composite/Booking/BookingInformationAndCreation/BookingInformationAndCreation"
 import {
@@ -30,7 +30,7 @@ const BookingPage = async () => {
   const RenderedContent = () => {
     return (
       lodgeInfoSingleton?.information && (
-        <PortableText value={lodgeInfoSingleton.information} />
+        <PortableTextRenderer value={lodgeInfoSingleton.information} />
       )
     )
   }
@@ -49,7 +49,13 @@ const BookingPage = async () => {
     return {
       ...policy,
       information: policy.information ? (
-        <PortableText value={policy.information} />
+        <span className="text-white">
+          <PortableTextRenderer
+            value={policy.information}
+            headerColorClass={"white"}
+            textColorClass={"white"}
+          />
+        </span>
       ) : (
         <></>
       )
