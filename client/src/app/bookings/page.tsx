@@ -49,7 +49,7 @@ const BookingPage = async () => {
     return {
       ...policy,
       information: policy.information ? (
-        <span className="text-white">
+        <span>
           <PortableTextRenderer
             value={policy.information}
             headerColorClass={"white"}
