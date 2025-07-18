@@ -114,10 +114,15 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
       <div className="border-gray-3 mt-4 flex w-full flex-col gap-4 rounded-md border bg-white p-4 ">
         <div className="flex w-full">
           <h3 className="text-dark-blue-100">{title}</h3>{" "}
-          <CloseButton
+          <button
+            type="button"
+            aria-label="Close"
             onClick={onClose}
-            className="hover:fill-light-blue-100 ml-auto w-[15px] cursor-pointer"
-          />
+            className="hover:fill-light-blue-100 ml-auto w-[15px] cursor-pointer bg-transparent border-none p-0"
+            style={{ background: "none", border: 0 }}
+          >
+            <CloseButton />
+          </button>
         </div>
         <form
           onSubmit={(e) => {
@@ -126,7 +131,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
             setCurrentFormState(undefined)
           }}
         >
-          {fields.map((field) => {
+          {fields.map((field, idx) => {
             const defaultValue = field.defaultFieldValue
             const isDate = field.fieldName === "date_of_birth"
             const isTel = field.fieldName === "phone_number"
@@ -134,9 +139,12 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
               field.fieldName === "does_snowboarding" ||
               field.fieldName === "does_ski" ||
               field.fieldName === "has_whakapapa_season_pass"
+            // Generate a unique id for each field
+            const inputId = `profile-edit-${String(field.fieldName)}-${idx}`
             return (
               <TextInput
                 key={field.fieldName.toString()}
+                id={inputId}
                 label={nameTransformer(
                   field.fieldName as keyof ReducedUserAdditionalInfo
                 )}
@@ -171,6 +179,7 @@ const ProfileEdit = <T extends Partial<ReducedUserAdditionalInfo>>({
                       )
                     : (defaultValue as string)
                 }
+                defaultChecked={isBool ? Boolean(defaultValue) : undefined}
               />
             )
           })}
