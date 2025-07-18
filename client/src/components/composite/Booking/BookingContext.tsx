@@ -1,6 +1,6 @@
 import { fireAnalytics } from "@/firebase"
 import type { Timestamp } from "firebase/firestore"
-import { createContext, useState } from "react"
+import { createContext, useCallback, useMemo, useState } from "react"
 import { BOOKING_AVAILABLITY_KEY } from "@/services/Booking/BookingQueries"
 import { useBookingPaymentClientSecretMutation } from "@/services/Payment/PaymentMutations"
 import queryClient from "@/services/QueryClient"
@@ -71,6 +71,8 @@ export const BookingContextProvider = ({
   children: React.ReactNode
 }) => {
   const router = useRouter()
+
+  // Memoize the mutation related values
   const {
     data: bookingPaymentData,
     mutateAsync,
@@ -79,12 +81,12 @@ export const BookingContextProvider = ({
   } = useBookingPaymentClientSecretMutation()
 
   const [policies, setPolicies] = useState<PolicyWithTextBlocks[]>([])
-
   const [allergies, setAllergies] = useState<string>("")
 
   const { mutateAsync: updateAllergies } = useEditSelfMutation()
 
-  const getExistingSession = async () => {
+  // Memoize callback functions
+  const getExistingSession = useCallback(async () => {
     if (bookingPaymentData?.stripeClientSecret) router.push("/bookings/payment")
     await mutateAsync(
       {},
@@ -94,43 +96,57 @@ export const BookingContextProvider = ({
         }
       }
     )
-  }
-  const forceRefreshBookings = () => {
-    queryClient.invalidateQueries({ queryKey: [BOOKING_AVAILABLITY_KEY] })
-  }
+  }, [bookingPaymentData?.stripeClientSecret, mutateAsync, router])
 
-  const handleBookingCreation = async (
-    startDate?: Timestamp,
-    endDate?: Timestamp
-  ) => {
-    await updateAllergies({ dietary_requirements: allergies })
-    await mutateAsync(
-      { startDate, endDate },
-      {
-        onSuccess() {
-          router.push("/bookings/payment")
+  const forceRefreshBookings = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: [BOOKING_AVAILABLITY_KEY] })
+  }, [])
+
+  const handleBookingCreation = useCallback(
+    async (startDate?: Timestamp, endDate?: Timestamp) => {
+      await updateAllergies({ dietary_requirements: allergies })
+      await mutateAsync(
+        { startDate, endDate },
+        {
+          onSuccess() {
+            router.push("/bookings/payment")
+          }
         }
-      }
-    )
-    fireAnalytics("add_to_cart", { payment_type: "booking" })
-  }
+      )
+      fireAnalytics("add_to_cart", { payment_type: "booking" })
+    },
+    [allergies, mutateAsync, router, updateAllergies]
+  )
+
+  // Memoize the context value
+  const contextValue = useMemo(
+    () => ({
+      clientSecret: bookingPaymentData?.stripeClientSecret,
+      message: bookingPaymentData?.message,
+      handleBookingCreation,
+      getExistingSession,
+      isPending,
+      setAllergies,
+      forceRefreshBookings,
+      policies,
+      setPolicies,
+      errorMessage:
+        error?.name === "UnavailableBookingError" ? error?.message : undefined
+    }),
+    [
+      bookingPaymentData?.stripeClientSecret,
+      bookingPaymentData?.message,
+      handleBookingCreation,
+      getExistingSession,
+      isPending,
+      policies,
+      error?.name,
+      error?.message
+    ]
+  )
 
   return (
-    <BookingContext.Provider
-      value={{
-        clientSecret: bookingPaymentData?.stripeClientSecret,
-        message: bookingPaymentData?.message,
-        handleBookingCreation,
-        getExistingSession,
-        isPending,
-        setAllergies,
-        forceRefreshBookings,
-        policies,
-        setPolicies,
-        errorMessage:
-          error?.name === "UnavailableBookingError" ? error?.message : undefined
-      }}
-    >
+    <BookingContext.Provider value={contextValue}>
       {children}
     </BookingContext.Provider>
   )
