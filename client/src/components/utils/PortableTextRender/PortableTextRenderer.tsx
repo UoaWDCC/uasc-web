@@ -7,6 +7,7 @@ import {
   type PortableTextBlock,
   type PortableTextComponents
 } from "@portabletext/react"
+import React from "react"
 
 interface PortableTextRendererProps {
   value: PortableTextBlock[]
@@ -184,7 +185,7 @@ const getComponents = (
  *   textColorClass="text-gray-800"   // optional override
  * />
  */
-export default function PortableTextRenderer({
+const PortableTextRenderer = React.memo(function PortableTextRenderer({
   value,
   headerColorClass,
   textColorClass
@@ -195,4 +196,6 @@ export default function PortableTextRenderer({
       components={getComponents(headerColorClass, textColorClass)}
     />
   )
-}
+})
+
+export default PortableTextRenderer
