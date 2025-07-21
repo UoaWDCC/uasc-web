@@ -17,11 +17,12 @@ type IBookingLayout = Readonly<{
 }>
 
 const InnerBookingLayout = ({ children }: IBookingLayout) => {
-  const { getExistingSession, policies } = useContext(BookingContext)
+  const { getExistingSession, policies, clientSecret } =
+    useContext(BookingContext)
 
   const getExistingSessionCallback = useCallback(() => {
-    getExistingSession?.()
-  }, [getExistingSession])
+    if (!clientSecret) getExistingSession?.()
+  }, [clientSecret, getExistingSession])
 
   useUserLoggedInCallback(getExistingSessionCallback)
 
