@@ -7,7 +7,7 @@ import {
 import { stripePromise } from "@/services/Stripe"
 
 interface IPaymentFormProps {
-  clientSecret: string
+  clientSecret: string | null
   onComplete: () => void
 }
 
