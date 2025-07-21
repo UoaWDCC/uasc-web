@@ -54,12 +54,11 @@ const BookingInformationAndCreation = ({
 }: IBookingInformationAndCreation) => {
   const params = useSearchParams()
 
-  const defaultStage: BookingStages =
+  const [currentStage, setCurrentStage] = useState<BookingStages>(() =>
     params.get("skip-info") === "true"
       ? "booking-creation"
       : "booking-information"
-
-  const [currentStage, setCurrentStage] = useState<BookingStages>(defaultStage)
+  )
 
   switch (currentStage) {
     case "booking-information":
