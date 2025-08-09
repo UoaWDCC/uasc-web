@@ -32,9 +32,9 @@ const FAQPanel = ({ items }: IFAQPanel) => {
               {category}
             </h3>
             <div className="flex flex-col">
-              {categorizedItems[category].map((item, index) => (
+              {categorizedItems[category].map((item) => (
                 <FAQItem
-                  key={`${category}-${index}`}
+                  key={`${category}`}
                   question={item.question}
                   answer={item.answer}
                   category={item.category}
