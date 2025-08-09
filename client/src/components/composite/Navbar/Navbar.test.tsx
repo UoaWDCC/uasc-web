@@ -1,12 +1,12 @@
 import { useState } from "react"
-import Navbar, { type INavbarProps } from "./Navbar"
+import Navbar, { type INavbar } from "./Navbar"
 import { act, render, screen } from "@testing-library/react"
 
 const TestNavbar = ({
   defaultState,
   signInHandler = () => {},
   signOutHandler = () => {}
-}: { defaultState: boolean } & Partial<INavbarProps>) => {
+}: { defaultState: boolean } & Partial<INavbar>) => {
   const [isSignedIn, setIsSignedIn] = useState(defaultState)
   const signOut = () => {
     signInHandler()
