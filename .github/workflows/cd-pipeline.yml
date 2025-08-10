@@ -58,7 +58,7 @@ jobs:
           FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
           NODE_MAILER_EMAIL: ${{ secrets.NODE_MAILER_EMAIL }}
           NODE_MAILER_PASSWORD: ${{ secrets.NODE_MAILER_PASSWORD }}
-          REDIRECT_MEMBERS_GOOGLE_SHEET_LINK: https://google.com
+          REDIRECT_MEMBERS_GOOGLE_SHEET_LINK: ${{ secrets.REDIRECT_MEMBERS_GOOGLE_SHEET_LINK }}
           HTTPS_SERVER_CERTIFICATE: ${{ secrets.HTTPS_SERVER_CERTIFICATE }}
           HTTPS_SERVER_KEY: ${{ secrets.HTTPS_SERVER_KEY }}
           NEW_RELIC_APP_NAME: ${{ secrets.NEW_RELIC_APP_NAME }}
