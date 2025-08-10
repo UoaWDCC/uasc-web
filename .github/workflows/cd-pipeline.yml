@@ -30,7 +30,7 @@ on:
 jobs:
   deploy-server:
     name: Deploy Server
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'deploy-server')
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.workflow == 'deploy-server'
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment  || 'server-staging' }}
