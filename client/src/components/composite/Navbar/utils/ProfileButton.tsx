@@ -1,6 +1,6 @@
 import MenuList from "@/components/generic/MenuList/MenuList"
 import ProfileIcon from "@/assets/icons/profile.svg"
-import type { INavbarProps } from "../Navbar"
+import type { INavbar } from "../Navbar"
 import { useRef, useState } from "react"
 import { useClickOutside } from "@/components/utils/Utils"
 import Link from "next/link"
@@ -8,7 +8,7 @@ import Link from "next/link"
 const ProfileButton = ({
   signOutHandler,
   isAdmin
-}: Pick<INavbarProps, "signOutHandler" | "isAdmin">) => {
+}: Pick<INavbar, "signOutHandler" | "isAdmin">) => {
   const [isOpened, setIsOpened] = useState<boolean>(false)
   const menuRef = useRef<HTMLDivElement>(null)
   useClickOutside(menuRef, () => {

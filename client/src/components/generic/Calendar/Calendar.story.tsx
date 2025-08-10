@@ -31,6 +31,7 @@ export const NoWeekendBookings: Story = {
   args: {
     returnValue: "range",
     value: new Date("2002-12-16"),
-    tileDisabled: ({ date }) => date.getDay() === 6 || date.getDay() === 0
+    tileDisabled: ({ date }: { date: Date }) =>
+      date.getDay() === 6 || date.getDay() === 0
   }
 }

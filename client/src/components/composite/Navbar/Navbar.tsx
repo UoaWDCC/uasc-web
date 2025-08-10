@@ -8,7 +8,7 @@ import LoginIndicator from "./utils/LoginIndicator"
 import WrappedMenuTab from "./utils/WrappedMenuTab"
 import { WrappedTab } from "./utils/WrappedTab"
 
-export interface INavbarProps {
+export interface INavbar {
   signInHandler: () => void
   signOutHandler: () => void
   isLoggedIn: boolean
@@ -26,7 +26,12 @@ const Logo = () => {
 }
 
 const AboutMenuItemsFull = () => {
-  return <Link href="/contact">Contact</Link>
+  return (
+    <>
+      <Link href="/contact">Contact</Link>
+      <Link href="/about/faq">FAQ</Link>
+    </>
+  )
 }
 
 const AboutMenuItemsMobile = () => {
@@ -34,6 +39,7 @@ const AboutMenuItemsMobile = () => {
     <div className="flex w-full flex-col gap-2 md:hidden">
       <WrappedTab to="/about">About</WrappedTab>
       <WrappedTab to="/contact">Contact</WrappedTab>
+      <WrappedTab to="/about/faq">FAQ</WrappedTab>
     </div>
   )
 }
@@ -43,7 +49,7 @@ const Navbar = ({
   signOutHandler,
   isLoggedIn,
   isAdmin
-}: INavbarProps) => {
+}: INavbar) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const pathname = usePathname()

@@ -1,5 +1,5 @@
 import Button from "@/components/generic/FigmaButtons/FigmaButton"
-import type { INavbarProps } from "../Navbar"
+import type { INavbar } from "../Navbar"
 import ProfileButton from "./ProfileButton"
 import { WrappedTab } from "./WrappedTab"
 
@@ -8,7 +8,7 @@ const LoginIndicator = ({
   signOutHandler,
   isLoggedIn,
   isAdmin
-}: INavbarProps) => {
+}: INavbar) => {
   if (isLoggedIn) {
     return (
       <>
