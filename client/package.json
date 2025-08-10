@@ -15,6 +15,7 @@
   "dependencies": {
     "@portabletext/react": "^3.1.0",
     "@sanity/image-url": "1",
+    "@sanity/orderable-document-list": "^1.4.0",
     "@sanity/vision": "3",
     "@stripe/react-stripe-js": "^2.7.3",
     "@stripe/stripe-js": "^4.1.0",
@@ -30,7 +31,7 @@
     "react-csv": "^2.2.2",
     "react-dom": "^18",
     "react-sweet-state": "^2.7.1",
-    "sanity": "~3.39.0",
+    "sanity": "~4.3.0",
     "scheduler": "^0.23.2",
     "styled-components": "6"
   },

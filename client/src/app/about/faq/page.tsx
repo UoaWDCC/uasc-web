@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import FAQ from "@/components/composite/FAQ/FAQ"
 import {
-  FAQ_ITEMS_GROQ_QUERY,
-  type FAQItem
-} from "@/models/sanity/FAQItem/Utils"
+  FAQ_CATEGORIES_GROQ_QUERY,
+  type FAQCategory
+} from "@/models/sanity/FAQCategory/Utils"
 import { sanityQuery } from "../../../../sanity/lib/utils"
 
 export const metadata: Metadata = {
@@ -13,9 +13,11 @@ export const metadata: Metadata = {
 }
 
 const FAQPage = async () => {
-  const faqItems = await sanityQuery<FAQItem[]>(FAQ_ITEMS_GROQ_QUERY)
+  const faqCategories = await sanityQuery<FAQCategory[]>(
+    FAQ_CATEGORIES_GROQ_QUERY
+  )
 
-  return <FAQ items={faqItems} />
+  return <FAQ categories={faqCategories} />
 }
 
 export default FAQPage

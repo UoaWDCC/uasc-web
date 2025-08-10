@@ -3,7 +3,7 @@ import FAQPanel, { type IFAQPanel } from "./FAQPanel/FAQPanel"
 
 interface IFAQ extends IFAQPanel {}
 
-const FAQ = ({ items }: IFAQ) => {
+const FAQ = ({ categories }: IFAQ) => {
   return (
     <>
       <div
@@ -15,7 +15,7 @@ const FAQ = ({ items }: IFAQ) => {
           <h2 className="text-dark-blue-100 mr-auto italic">
             Frequently Asked Questions
           </h2>
-          <FAQPanel items={items} />
+          <FAQPanel categories={categories} />
         </div>
       </div>
 

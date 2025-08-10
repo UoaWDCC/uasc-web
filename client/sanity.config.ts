@@ -4,6 +4,7 @@
  * This configuration is used to for the Sanity Studio that’s mounted on the `\src\app\studio\[[...tool]]\page.tsx` route
  */
 
+import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list"
 import { visionTool } from "@sanity/vision"
 import { defineConfig } from "sanity"
 import { structureTool } from "sanity/structure"
@@ -30,7 +31,7 @@ export default defineConfig({
   },
   plugins: [
     structureTool({
-      structure: (S) =>
+      structure: (S, context) =>
         S.list()
           .title("Content")
           .items([
@@ -56,6 +57,12 @@ export default defineConfig({
                   .documentId("lodge-information")
               ),
 
+            orderableDocumentListDeskItem({
+              type: "faq-category",
+              title: "FAQ Categories",
+              S,
+              context
+            }),
             // Regular document types
             S.documentTypeListItem("shop-item").title("Shop Item"),
             S.documentTypeListItem("about-item").title("About Item"),
@@ -64,8 +71,7 @@ export default defineConfig({
             S.documentTypeListItem("committee-member").title(
               "Committee Member"
             ),
-            S.documentTypeListItem("policies").title("Policies"),
-            S.documentTypeListItem("faq-item").title("FAQ Item")
+            S.documentTypeListItem("policies").title("Policies")
           ])
     }),
     // Vision is a tool that lets you query your content with GROQ in the studio
