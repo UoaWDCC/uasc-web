@@ -132,7 +132,7 @@ runs:
       if: inputs.strategy == 'cloudflare'
       uses: cloudflare/wrangler-action@v3
       with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        apiToken: ${{ inputs.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
         command: pages deploy client/out --project-name=uasc
-        gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        gitHubToken: ${{ inputs.GITHUB_TOKEN }}
