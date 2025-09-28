@@ -8,19 +8,6 @@ on:
       - master
   workflow_dispatch:
 
-env:
-  NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.VITE_FIREBASE_API_KEY}}
-  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{secrets.VITE_FIREBASE_AUTH_DOMAIN}}
-  NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{secrets.VITE_FIREBASE_PROJECT_ID}}
-  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{secrets.VITE_FIREBASE_STORAGE_BUCKET}}
-  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{secrets.VITE_FIREBASE_MESSAGING_SENDER_ID}}
-  NEXT_PUBLIC_FIREBASE_APP_ID: ${{secrets.VITE_FIREBASE_APP_ID}}
-  NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.VITE_BACKEND_BASE_URL}}
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{secrets.TEST_STRIPE_PK}}
-  NEXT_PUBLIC_SANITY_PROJECT_ID: ${{secrets.PROD_SANITY_PROJECT_ID}}
-  NEXT_PUBLIC_SANITY_DATASET: production
-  NEXT_CONFIG_ENV: staging
-
 jobs:
   setup:
     name: Setup
@@ -33,46 +20,42 @@ jobs:
       - name: Run Setup Composite Action
         uses: ./.github/ci-actions/setup/
 
-  build-and-deploy:
+  deploy-client-staging:
+    name: Deploy Client Staging
     needs: [setup]
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      checks: write
+    environment:
+      name: client-staging
+      url: ${{ vars.DEPLOYMENT_URL }}
+    concurrency:
+      group: deploy-client-staging
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Enable Corepack
-        shell: bash
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          version: latest
-          run_install: false
+          fetch-depth: 2
 
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: cache-node-modules
+      - name: Run Client Deployment Composite Action
+        uses: ./.github/cd-actions/deploy-client/
         with:
-          path: |
-            server/node_modules
-            client/node_modules
-            node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            node-modules-${{ runner.os }}-
-
-      - name: Install dependencies if cache misses
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: pnpm install
-        shell: bash
-
-      - name: Build client
-        run: pnpm build --filter client
-
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}"
-          channelId: live
-          projectId: uasc-ceebc
-          entryPoint: client
+          strategy: firebase
+          environment: staging
+          # Firebase/Common Environment Variables
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          BACKEND_BASE_URL: ${{ secrets.BACKEND_BASE_URL }}
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PK }}
+          SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+          # Firebase Deployment Secrets
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_UASC_CEEBC }}
+          FIREBASE_PROJECT_ID_DEPLOY: uasc-ceebc
+          # Common Secrets
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

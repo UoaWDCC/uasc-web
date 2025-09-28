@@ -1,0 +1,138 @@
+name: "Deploy Client"
+description: Deploys the client application using either Firebase or Cloudflare
+
+inputs:
+  strategy:
+    description: 'Deployment strategy (firebase or cloudflare)'
+    required: true
+  environment:
+    description: 'Environment (staging or production)'
+    required: true
+  # Firebase Environment Variables
+  FIREBASE_API_KEY:
+    description: Firebase API Key
+    required: false
+  FIREBASE_AUTH_DOMAIN:
+    description: Firebase Auth Domain
+    required: false
+  FIREBASE_PROJECT_ID:
+    description: Firebase Project ID
+    required: false
+  FIREBASE_STORAGE_BUCKET:
+    description: Firebase Storage Bucket
+    required: false
+  FIREBASE_MESSAGING_SENDER_ID:
+    description: Firebase Messaging Sender ID
+    required: false
+  FIREBASE_APP_ID:
+    description: Firebase App ID
+    required: false
+  BACKEND_BASE_URL:
+    description: Backend Base URL
+    required: true
+  FIREBASE_MEASUREMENT_ID:
+    description: Firebase Measurement ID (production only)
+    required: false
+  STRIPE_PUBLISHABLE_KEY:
+    description: Stripe Publishable Key
+    required: true
+  SANITY_PROJECT_ID:
+    description: Sanity Project ID
+    required: true
+  SANITY_DATASET:
+    description: Sanity Dataset
+    required: false
+    default: 'production'
+  FRONTEND_BASE_URL:
+    description: Frontend Base URL (production only)
+    required: false
+  # Firebase Deployment Secrets
+  FIREBASE_SERVICE_ACCOUNT:
+    description: Firebase Service Account JSON (for Firebase strategy)
+    required: false
+  FIREBASE_PROJECT_ID_DEPLOY:
+    description: Firebase Project ID for deployment (for Firebase strategy)
+    required: false
+  # Cloudflare Deployment Secrets
+  CLOUDFLARE_API_TOKEN:
+    description: Cloudflare API Token (for Cloudflare strategy)
+    required: false
+  CLOUDFLARE_ACCOUNT_ID:
+    description: Cloudflare Account ID (for Cloudflare strategy)
+    required: false
+  CLOUDFLARE_PROJECT_NAME:
+    description: Cloudflare Project Name (for Cloudflare strategy)
+    required: false
+    default: 'uasc'
+  # Common Secrets
+  GITHUB_TOKEN:
+    description: GitHub Token
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+        run_install: |
+          - args: [--global, wrangler@3.90.0]
+
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      id: cache-node-modules
+      with:
+        path: |
+          server/node_modules
+          client/node_modules
+          node_modules
+        key: node-modules-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          node-modules-${{ runner.os }}-
+
+    - name: Install dependencies if cache misses
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: pnpm install
+      shell: bash
+
+    - name: Build client
+      run: pnpm build --filter client
+      shell: bash
+      env:
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${{ inputs.FIREBASE_API_KEY }}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ inputs.FIREBASE_AUTH_DOMAIN }}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ inputs.FIREBASE_PROJECT_ID }}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ inputs.FIREBASE_STORAGE_BUCKET }}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ inputs.FIREBASE_MESSAGING_SENDER_ID }}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${{ inputs.FIREBASE_APP_ID }}
+        NEXT_PUBLIC_BACKEND_BASE_URL: ${{ inputs.BACKEND_BASE_URL }}
+        NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ inputs.FIREBASE_MEASUREMENT_ID }}
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ inputs.STRIPE_PUBLISHABLE_KEY }}
+        NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ inputs.SANITY_PROJECT_ID }}
+        NEXT_PUBLIC_SANITY_DATASET: ${{ inputs.SANITY_DATASET }}
+        NEXT_CONFIG_ENV: ${{ inputs.environment }}
+        FRONTEND_BASE_URL: ${{ inputs.FRONTEND_BASE_URL }}
+
+    - name: Deploy to Firebase
+      if: inputs.strategy == 'firebase'
+      uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: ${{ inputs.GITHUB_TOKEN }}
+        firebaseServiceAccount: ${{ inputs.FIREBASE_SERVICE_ACCOUNT }}
+        channelId: live
+        projectId: ${{ inputs.FIREBASE_PROJECT_ID_DEPLOY }}
+        entryPoint: client
+
+    - name: Deploy to Cloudflare
+      if: inputs.strategy == 'cloudflare'
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        command: pages deploy client/out --project-name=uasc
+        gitHubToken: ${{ secrets.GITHUB_TOKEN }}
