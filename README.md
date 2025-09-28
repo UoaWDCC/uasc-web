@@ -1,5 +1,8 @@
 # UOA Snowsports Club Website & Booking System
 
+> [!CAUTION] For the latest updates and active development, please visit our new repository [here](https://github.com/WDCC-Shelter/UoA-Snowsports-Club).
+> Thanks to everyone who contributed to this project!
+
 Project initiated by WDCC in 2023.
 
 ## 2024 Team Leadership
