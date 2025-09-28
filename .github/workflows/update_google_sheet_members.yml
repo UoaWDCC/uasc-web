@@ -6,17 +6,18 @@ on:
     # Updates every hour
     - cron: "0 * * * *"
 
-env:
-  NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.PROD_BACKEND_BASE_URL}}
-  MEMBERS_GOOGLE_SPREADSHEET_ID: ${{secrets.MEMBERS_GOOGLE_SPREADSHEET_ID}}
-  MEMBERS_GOOGLE_SHEET_ID: ${{secrets.MEMBERS_GOOGLE_SHEET_ID}}
-  GOOGLE_SERVICE_ACCOUNT_JSON: ${{secrets.CRON_JOB_GOOGLE_SERVICE_ACCOUNT_JSON}}
-  NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.PROD_FIREBASE_API_KEY}}
 
 jobs:
   update_google_sheet_members:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    environment: google-cron-job
+    env:
+      NEXT_PUBLIC_BACKEND_BASE_URL: ${{secrets.BACKEND_BASE_URL}}
+      MEMBERS_GOOGLE_SPREADSHEET_ID: ${{secrets.MEMBERS_GOOGLE_SPREADSHEET_ID}}
+      MEMBERS_GOOGLE_SHEET_ID: ${{secrets.MEMBERS_GOOGLE_SHEET_ID}}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{secrets.GOOGLE_SERVICE_ACCOUNT_JSON}}
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${{secrets.FIREBASE_API_KEY}}
 
     steps:
       - uses: actions/checkout@v4

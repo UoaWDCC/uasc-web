@@ -9,6 +9,8 @@ on:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    # TODO: maybe delete the deployment after this job
+    environment: client-production
 
     steps:
       - uses: actions/checkout@v4
